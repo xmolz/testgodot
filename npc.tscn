@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://c34r3tmuut3h6"]
+
+[ext_resource type="Script" uid="uid://ddxsjoyft48w7" path="res://npc.gd" id="1_h31eo"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nvh0d"]
+size = Vector2(32, 64)
+
+[node name="NPC" type="Area2D"]
+script = ExtResource("1_h31eo")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_right = 32.0
+offset_bottom = 64.0
+color = Color(0.545098, 1, 0, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(16, 32)
+shape = SubResource("RectangleShape2D_nvh0d")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]

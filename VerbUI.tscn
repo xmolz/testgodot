@@ -1,0 +1,42 @@
+[gd_scene load_steps=2 format=3 uid="uid://bigouorladqds"]
+
+[ext_resource type="Script" uid="uid://npn3pmma7jfq" path="res://VerbUI.gd" id="1_fpe4u"]
+
+[node name="VerbUI_CanvasLayer" type="CanvasLayer"]
+script = ExtResource("1_fpe4u")
+
+[node name="ActionBubbleLabel" type="Label" parent="."]
+visible = false
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="VerbGridPanel" type="Panel" parent="."]
+anchors_preset = -1
+anchor_left = 0.006
+anchor_top = 0.805
+anchor_right = 0.5
+anchor_bottom = 0.99
+grow_vertical = 0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="GridContainer" type="GridContainer" parent="VerbGridPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+columns = 3
+
+[node name="ActionsLabel" type="Label" parent="."]
+anchors_preset = -1
+anchor_left = 0.012
+anchor_top = 0.781
+anchor_right = 0.052
+anchor_bottom = 0.803
+offset_left = 0.959999
+offset_top = -0.480042
+offset_right = -0.959999
+offset_bottom = -0.480042
+text = "ACTIONS"

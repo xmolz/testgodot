@@ -1,0 +1,17 @@
+# res://dialogue/talkto.dialogue
+
+~ burger
+Player: talk to a burger, I can't
+
+=> END
+
+~ soup
+Player: hello soup! you're not feeling very talkative today are you?
+
+=> END
+
+# If an object's ID doesn't match any title above,
+# the Dialogue Manager will not find a line and won't display anything.
+# You can leave this out if you intend for all "talkable" objects to have specific lines.
+# ~ default_object_talk
+# Player: I can't talk to that.[next=auto]

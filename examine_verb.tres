@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="VerbData" load_steps=2 format=3 uid="uid://dhmxbhyhr4erb"]
+
+[ext_resource type="Script" uid="uid://cn3ln508qp8dm" path="res://VerbData.gd" id="1_ef2nr"]
+
+[resource]
+script = ExtResource("1_ef2nr")
+verb_id = "examine"
+display_text = "Examine"
+unlocked_by_default = true
+requires_target_object = true
+metadata/_custom_type_script = "uid://cn3ln508qp8dm"

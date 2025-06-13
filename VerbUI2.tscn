@@ -1,0 +1,94 @@
+[gd_scene load_steps=2 format=3 uid="uid://dnjpbjvyhscp8"]
+
+[ext_resource type="Script" uid="uid://cwgwv7i1sx5jn" path="res://verb_ui_2.gd" id="1_ut48v"]
+
+[node name="VerbUI" type="CanvasLayer"]
+script = ExtResource("1_ut48v")
+
+[node name="UI_Root" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(10.3565, 1)
+
+[node name="ActionsPanel_Container" type="MarginContainer" parent="UI_Root"]
+custom_minimum_size = Vector2(960, 200)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -240.0
+offset_right = 960.0
+grow_vertical = 0
+scale = Vector2(0.0872046, 1.03686)
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI_Root/ActionsPanel_Container"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI_Root/ActionsPanel_Container/VBoxContainer"]
+layout_mode = 2
+text = "ACTIONS"
+
+[node name="VerbGridContainer" type="GridContainer" parent="UI_Root/ActionsPanel_Container/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+columns = 3
+
+[node name="Button" type="Button" parent="UI_Root/ActionsPanel_Container/VBoxContainer/VerbGridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "-"
+
+[node name="Button2" type="Button" parent="UI_Root/ActionsPanel_Container/VBoxContainer/VerbGridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "-"
+
+[node name="Button3" type="Button" parent="UI_Root/ActionsPanel_Container/VBoxContainer/VerbGridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "-"
+
+[node name="Button4" type="Button" parent="UI_Root/ActionsPanel_Container/VBoxContainer/VerbGridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "-"
+
+[node name="Button5" type="Button" parent="UI_Root/ActionsPanel_Container/VBoxContainer/VerbGridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "-"
+
+[node name="Button6" type="Button" parent="UI_Root/ActionsPanel_Container/VBoxContainer/VerbGridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "-"
+
+[node name="Button7" type="Button" parent="UI_Root/ActionsPanel_Container/VBoxContainer/VerbGridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "-"
+
+[node name="Button8" type="Button" parent="UI_Root/ActionsPanel_Container/VBoxContainer/VerbGridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "-"
+
+[node name="Button9" type="Button" parent="UI_Root/ActionsPanel_Container/VBoxContainer/VerbGridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "-"

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3 uid="uid://cywl5aqwmqhx1"]
+
+[ext_resource type="Texture2D" uid="uid://dr0u72qbmp7jc" path="res://key.png" id="1_143eb"]
+[ext_resource type="Script" uid="uid://by8o1t3tdwrep" path="res://ItemData.gd" id="1_i5x1n"]
+
+[resource]
+script = ExtResource("1_i5x1n")
+item_id = "key_rusty"
+display_name = "Rusty Key"
+icon = ExtResource("1_143eb")
+description = "An old, very rusty key. It looks like it might fit a simple lock."
+is_stackable = false
+max_stack_size = 1
+metadata/_custom_type_script = "uid://by8o1t3tdwrep"

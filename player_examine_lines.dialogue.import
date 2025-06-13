@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://b8lrdd4rpfml6"
+path="res://.godot/imported/player_examine_lines.dialogue-5a88076610c9faf8dd67da8da6a26939.tres"
+
+[deps]
+
+source_file="res://player_examine_lines.dialogue"
+dest_files=["res://.godot/imported/player_examine_lines.dialogue-5a88076610c9faf8dd67da8da6a26939.tres"]
+
+[params]
+
+defaults=true

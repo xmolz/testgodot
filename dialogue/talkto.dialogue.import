@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://bs01nglwwhavy"
+path="res://.godot/imported/talkto.dialogue-d5bcc78103b08d3d59f7637bfe353875.tres"
+
+[deps]
+
+source_file="res://dialogue/talkto.dialogue"
+dest_files=["res://.godot/imported/talkto.dialogue-d5bcc78103b08d3d59f7637bfe353875.tres"]
+
+[params]
+
+defaults=true

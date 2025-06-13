@@ -1,0 +1,120 @@
+[gd_scene load_steps=11 format=3 uid="uid://cqtgjhr5nepn1"]
+
+[ext_resource type="PackedScene" uid="uid://bigouorladqds" path="res://VerbUI.tscn" id="1_1bvp3"]
+[ext_resource type="PackedScene" uid="uid://ba2cgdy2q1csl" path="res://player.tscn" id="1_pgf6g"]
+[ext_resource type="Script" uid="uid://dljo5cmv24o5h" path="res://camera_2d.gd" id="2_h2yge"]
+[ext_resource type="PackedScene" uid="uid://c34r3tmuut3h6" path="res://npc.tscn" id="2_huwxj"]
+[ext_resource type="PackedScene" uid="uid://cud6uaak7lo18" path="res://InventoryUI.tscn" id="2_kek77"]
+[ext_resource type="PackedScene" uid="uid://c3shvlwnp4663" path="res://interactable.tscn" id="2_lquwl"]
+[ext_resource type="Texture2D" uid="uid://dh30l02tu32mv" path="res://png-clipart-hamburger-cheeseburger-fast-food-pixel-art-burger-king-food-cheese.png" id="3_7mycd"]
+[ext_resource type="PackedScene" uid="uid://7s7wp2v87sa4" path="res://CharacterConversationOverlay.tscn" id="4_5vw27"]
+[ext_resource type="Texture2D" uid="uid://bq7kyq7jiojwq" path="res://faye.png" id="7_272bh"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pjluw"]
+size = Vector2(1500, 50)
+
+[node name="Main" type="Node2D"]
+
+[node name="VerbUI_CanvasLayer" parent="." instance=ExtResource("1_1bvp3")]
+
+[node name="InventoryUI_CanvasLayer" parent="." instance=ExtResource("2_kek77")]
+
+[node name="Burger" parent="." instance=ExtResource("2_lquwl")]
+position = Vector2(271, -63)
+object_display_name = "Burger"
+object_id = "burger"
+verb_actions = {
+"examine": {
+"action_type": "say_line",
+"line": "ooooo......burger!",
+"requires_walk": false
+},
+"talk_to": {
+"action_type": "say_line",
+"line": "Hello inanimate object - can I fancy you for some conversation today?...no?",
+"requires_walk": true
+}
+}
+
+[node name="ObjectSprite" parent="Burger" index="0"]
+scale = Vector2(0.0377778, 0.0377778)
+texture = ExtResource("3_7mycd")
+
+[node name="Floor" type="StaticBody2D" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="Floor"]
+offset_left = -662.0
+offset_top = -26.0
+offset_right = 838.0
+offset_bottom = 66.69
+color = Color(0.798765, 0.852571, 0.973313, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
+position = Vector2(88, -1)
+shape = SubResource("RectangleShape2D_pjluw")
+debug_color = Color(0.581501, 0.477937, 0.264005, 0.419608)
+
+[node name="faye" parent="." instance=ExtResource("2_lquwl")]
+position = Vector2(470, -63)
+object_display_name = "Faye"
+object_id = "faye"
+verb_actions = {
+"examine": {
+"action_type": "say_line",
+"line": "ooooo......burger!",
+"requires_walk": false
+},
+"talk_to": {
+"action_type": "",
+"line": "",
+"requires_walk": true
+}
+}
+category = 1
+character_conversation_overlay_scene = ExtResource("4_5vw27")
+
+[node name="ObjectSprite" parent="faye" index="0"]
+scale = Vector2(0.0377778, 0.0377778)
+texture = ExtResource("7_272bh")
+
+[node name="WalkToPoint" parent="faye" index="2"]
+position = Vector2(-1, 11)
+
+[node name="Left wall" type="StaticBody2D" parent="."]
+position = Vector2(-30, 31)
+scale = Vector2(0.0427764, 8.83949)
+
+[node name="ColorRect" type="ColorRect" parent="Left wall"]
+offset_left = -662.0
+offset_top = -26.0
+offset_right = 838.0
+offset_bottom = 24.0
+color = Color(0.868005, 0.54504, 0.37512, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Left wall"]
+position = Vector2(88, -1)
+shape = SubResource("RectangleShape2D_pjluw")
+debug_color = Color(0.581501, 0.477937, 0.264005, 0.419608)
+
+[node name="Player" parent="." instance=ExtResource("1_pgf6g")]
+position = Vector2(188, -58)
+scale = Vector2(1.37, 1.37)
+
+[node name="NPC" parent="." instance=ExtResource("2_huwxj")]
+z_index = -1
+position = Vector2(349, -97)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(209, -473)
+offset = Vector2(0, -15)
+zoom = Vector2(6, 6)
+process_callback = 0
+limit_left = 0
+limit_top = -180
+limit_right = 750
+position_smoothing_enabled = true
+script = ExtResource("2_h2yge")
+target_path = NodePath("../Player")
+
+[editable path="Burger"]
+[editable path="faye"]

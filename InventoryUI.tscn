@@ -1,0 +1,63 @@
+[gd_scene load_steps=2 format=3 uid="uid://cud6uaak7lo18"]
+
+[ext_resource type="Script" uid="uid://bqkeu73kdy6ue" path="res://InventoryUI.gd" id="1_dsn3v"]
+
+[node name="InventoryUI_CanvasLayer" type="CanvasLayer"]
+script = ExtResource("1_dsn3v")
+
+[node name="InventoryGridPanel" type="Panel" parent="."]
+anchors_preset = -1
+anchor_left = 0.504
+anchor_top = 0.805
+anchor_right = 0.788
+anchor_bottom = 0.99
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1, 1.02276)
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="InventoryGridContainer" type="GridContainer" parent="InventoryGridPanel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.037
+anchor_top = 0.069
+anchor_right = 0.806
+anchor_bottom = 0.933
+columns = 3
+
+[node name="InventoryLabel" type="Label" parent="InventoryGridPanel"]
+layout_mode = 0
+offset_left = 2.0
+offset_top = -24.0
+offset_right = 42.0
+offset_bottom = -1.0
+text = "Inventory"
+
+[node name="UpButton" type="Button" parent="InventoryGridPanel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.854
+anchor_top = 0.108
+anchor_right = 0.953
+anchor_bottom = 0.321
+text = "UP"
+
+[node name="DownButton" type="Button" parent="InventoryGridPanel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.857
+anchor_top = 0.615
+anchor_right = 0.956
+anchor_bottom = 0.828
+offset_bottom = -0.0720367
+text = "DOWN"
+
+[node name="ExamineItemLabel" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="ItemNameHoverLabel" type="Label" parent="."]
+offset_right = 87.0
+offset_bottom = 23.0
+text = "Item Name"

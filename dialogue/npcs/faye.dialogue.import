@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://b7jdbk4b0natj"
+path="res://.godot/imported/faye.dialogue-8f0b57b78d3159d26944a519cdcd2ccf.tres"
+
+[deps]
+
+source_file="res://dialogue/npcs/faye.dialogue"
+dest_files=["res://.godot/imported/faye.dialogue-8f0b57b78d3159d26944a519cdcd2ccf.tres"]
+
+[params]
+
+defaults=true

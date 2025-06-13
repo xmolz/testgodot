@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://bi8kmgyj7i5jv"]
+
+[ext_resource type="Script" uid="uid://cmd0717xa6kc3" path="res://character_conversation_scene.gd" id="1_skmet"]
+[ext_resource type="Texture2D" uid="uid://dh30l02tu32mv" path="res://png-clipart-hamburger-cheeseburger-fast-food-pixel-art-burger-king-food-cheese.png" id="2_76yhx"]
+[ext_resource type="Resource" uid="uid://b7jdbk4b0natj" path="res://dialogue/npcs/faye.dialogue" id="2_jk88t"]
+
+[node name="CharacterConversationScene" type="Node2D"]
+script = ExtResource("1_skmet")
+conversation_dialogue_file = ExtResource("2_jk88t")
+scene_character_sprite_texture = ExtResource("2_76yhx")
+
+[node name="Background" type="TextureRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CharacterMainSprite" type="Sprite2D" parent="."]
+position = Vector2(1011, 527)
