@@ -118,6 +118,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 text = "Dialogue..."
+seconds_per_step = 0.035
 
 [node name="Responses" type="MarginContainer" parent="Balloon"]
 layout_mode = 1
@@ -126,10 +127,10 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -986.0
-offset_top = -1163.0
-offset_right = -345.0
-offset_bottom = -759.0
+offset_left = -795.0
+offset_top = -1080.0
+offset_right = -154.0
+offset_bottom = -676.0
 grow_horizontal = 2
 grow_vertical = 0
 

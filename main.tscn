@@ -1,6 +1,7 @@
-[gd_scene load_steps=11 format=3 uid="uid://cqtgjhr5nepn1"]
+[gd_scene load_steps=13 format=3 uid="uid://cqtgjhr5nepn1"]
 
 [ext_resource type="PackedScene" uid="uid://bigouorladqds" path="res://VerbUI.tscn" id="1_1bvp3"]
+[ext_resource type="Script" uid="uid://suh4s1w73ooy" path="res://Main.gd" id="1_efxa6"]
 [ext_resource type="PackedScene" uid="uid://ba2cgdy2q1csl" path="res://player.tscn" id="1_pgf6g"]
 [ext_resource type="Script" uid="uid://dljo5cmv24o5h" path="res://camera_2d.gd" id="2_h2yge"]
 [ext_resource type="PackedScene" uid="uid://c34r3tmuut3h6" path="res://npc.tscn" id="2_huwxj"]
@@ -9,11 +10,13 @@
 [ext_resource type="Texture2D" uid="uid://dh30l02tu32mv" path="res://png-clipart-hamburger-cheeseburger-fast-food-pixel-art-burger-king-food-cheese.png" id="3_7mycd"]
 [ext_resource type="PackedScene" uid="uid://7s7wp2v87sa4" path="res://CharacterConversationOverlay.tscn" id="4_5vw27"]
 [ext_resource type="Texture2D" uid="uid://bq7kyq7jiojwq" path="res://faye.png" id="7_272bh"]
+[ext_resource type="Script" uid="uid://bs05cyo72v37l" path="res://LevelStateManager.gd" id="10_4c57u"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pjluw"]
 size = Vector2(1500, 50)
 
 [node name="Main" type="Node2D"]
+script = ExtResource("1_efxa6")
 
 [node name="VerbUI_CanvasLayer" parent="." instance=ExtResource("1_1bvp3")]
 
@@ -33,10 +36,68 @@ verb_actions = {
 "action_type": "say_line",
 "line": "Hello inanimate object - can I fancy you for some conversation today?...no?",
 "requires_walk": true
+},
+"use_on_target": {
+"default_item_reaction": {
+"action_type": "say_line",
+"line": "That doesn't seem to do much to the Burger"
+},
+"item_specific_actions": {
+"key_rusty": {
+"action_type": "sequence",
+"steps": [{
+"action_type": "say_line",
+"line": "You try to use the Rusty Key on the Burger. It's a bit greasy now."
+}, {
+"action_type": "request_set_level_flag",
+"flag_name": "key_used_on_burger",
+"value": true
+}]
+}
+},
+"requires_walk": true
 }
 }
 
 [node name="ObjectSprite" parent="Burger" index="0"]
+scale = Vector2(0.0377778, 0.0377778)
+texture = ExtResource("3_7mycd")
+
+[node name="Rusty Key" parent="." instance=ExtResource("2_lquwl")]
+position = Vector2(101, -64)
+object_display_name = "Rusty Key"
+object_id = "key_rusty_world"
+verb_actions = {
+"examine": {
+"action_type": "say_line",
+"line": "ooooo......burger!",
+"requires_walk": false
+},
+"pickup": {
+"action_type": "sequence",
+"requires_walk": true,
+"steps": [{
+"action_type": "say_line",
+"line": "I picked up the %object"
+}, {
+"action_type": "request_add_item",
+"item_id": "key_rusty"
+}, {
+"action_type": "request_set_level_flag",
+"flag_name": "rusty_key_picked_up",
+"value": true
+}, {
+"action_type": "destroy"
+}]
+},
+"talk_to": {
+"action_type": "say_line",
+"line": "Hello inanimate object - can I fancy you for some conversation today?...no?",
+"requires_walk": true
+}
+}
+
+[node name="ObjectSprite" parent="Rusty Key" index="0"]
 scale = Vector2(0.0377778, 0.0377778)
 texture = ExtResource("3_7mycd")
 
@@ -116,5 +177,9 @@ position_smoothing_enabled = true
 script = ExtResource("2_h2yge")
 target_path = NodePath("../Player")
 
+[node name="LevelStateManager" type="Node" parent="."]
+script = ExtResource("10_4c57u")
+
 [editable path="Burger"]
+[editable path="Rusty Key"]
 [editable path="faye"]

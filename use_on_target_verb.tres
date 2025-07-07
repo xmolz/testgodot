@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="VerbData" load_steps=2 format=3 uid="uid://hs2nkbv1s6yx"]
+
+[ext_resource type="Script" uid="uid://cn3ln508qp8dm" path="res://VerbData.gd" id="1_djdtg"]
+
+[resource]
+script = ExtResource("1_djdtg")
+verb_id = "use_on_target"
+display_text = "Use Item"
+unlocked_by_default = true
+requires_target_object = true
+metadata/_custom_type_script = "uid://cn3ln508qp8dm"

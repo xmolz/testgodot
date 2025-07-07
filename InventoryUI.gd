@@ -6,10 +6,12 @@ extends CanvasLayer
 @onready var inventory_grid_container: GridContainer = $InventoryGridPanel/InventoryGridContainer
 @onready var up_button: Button = $InventoryGridPanel/UpButton
 @onready var down_button: Button = $InventoryGridPanel/DownButton
-# @onready var examine_item_label: Label = $ExamineItemLabel # Uncomment if you have this
 
 # --- Configuration ---
 const ITEMS_PER_PAGE: int = 6 # 3 columns * 2 rows
+const EQUIPPED_INDICATOR_NODE_NAME: String = "EquippedIndicator"
+const ITEM_ICON_NODE_NAME: String = "ItemIcon"
+
 
 # --- State Variables ---
 var all_inventory_slots: Array[Button] = [] # Will hold the 6 Button nodes for slots
@@ -17,7 +19,6 @@ var current_player_inventory_cache: Array[ItemData] = [] # Local cache of player
 var current_page_index: int = 0
 var total_pages: int = 0
 
-# To avoid constant reallocation for hover label background if using a StyleBoxFlat
 var _hover_label_stylebox: StyleBoxFlat = null
 
 
@@ -29,7 +30,7 @@ func _ready():
 	if not down_button: print_rich("[color=red]InventoryUI: DownButton not found![/color]")
 
 	if inventory_grid_container:
-		inventory_grid_container.columns = 3 # Ensuring 3 columns for 3x2 layout
+		inventory_grid_container.columns = 3 # Ensure 3 columns for 3x2 layout
 
 	# --- Initialize Hover Label ---
 	if item_name_hover_label:
@@ -44,6 +45,7 @@ func _ready():
 		item_name_hover_label.add_theme_stylebox_override("panel", _hover_label_stylebox)
 
 	# --- Initialize exactly ITEMS_PER_PAGE slot buttons ---
+	# Clear any existing children from the editor (good practice)
 	for child in inventory_grid_container.get_children():
 		inventory_grid_container.remove_child(child)
 		child.queue_free()
@@ -52,19 +54,60 @@ func _ready():
 	for i in range(ITEMS_PER_PAGE):
 		var slot_button = Button.new()
 		slot_button.name = "InventorySlotButton_" + str(i)
-		slot_button.custom_minimum_size = Vector2(50, 50)
+		slot_button.custom_minimum_size = Vector2(60, 60) # Adjusted for label space
 		slot_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		slot_button.size_flags_vertical = Control.SIZE_EXPAND_FILL
-		slot_button.disabled = true
-		slot_button.focus_mode = Control.FOCUS_NONE
+		slot_button.disabled = true # Start disabled
+		slot_button.focus_mode = Control.FOCUS_NONE # Prevent keyboard focus unless desired
+		slot_button.clip_text = true # Might be useful if text ever overflows
 
+		# Add a TextureRect inside the button for the icon
 		var icon_rect = TextureRect.new()
-		icon_rect.name = "ItemIcon"
+		icon_rect.name = ITEM_ICON_NODE_NAME
 		icon_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		icon_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		icon_rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_MINSIZE, 2)
 		icon_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		slot_button.add_child(icon_rect)
+
+		# Add "Equipped" Indicator Label to each slot
+		var equipped_label = Label.new()
+		equipped_label.name = EQUIPPED_INDICATOR_NODE_NAME
+		equipped_label.text = "Selected" # Changed text to "Selected" for clarity
+		equipped_label.visible = false # Initially hidden
+		equipped_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		equipped_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		equipped_label.autowrap_mode = TextServer.AUTOWRAP_WORD
+		equipped_label.clip_text = true
+
+		var label_stylebox = StyleBoxFlat.new()
+		label_stylebox.bg_color = Color(0.9, 0.9, 0.9, 0.85) # Light gray, slightly transparent
+		label_stylebox.border_width_left = 1
+		label_stylebox.border_width_right = 1
+		label_stylebox.border_width_top = 1
+		label_stylebox.border_width_bottom = 1
+		label_stylebox.border_color = Color(0.3, 0.3, 0.3, 0.9)
+		label_stylebox.set_content_margin_all(1) # Smaller margin
+		label_stylebox.corner_radius_top_left = 3
+		label_stylebox.corner_radius_bottom_right = 3
+		equipped_label.add_theme_stylebox_override("normal", label_stylebox)
+		equipped_label.add_theme_color_override("font_color", Color.BLACK)
+		equipped_label.add_theme_font_size_override("font_size", 10) # Smaller font
+
+		# Positioning the "Equipped" label at the top right of the button.
+		# This uses anchors to make it relative to the button's size.
+		# Adjust these values as needed for your desired look.
+		equipped_label.set_anchor(SIDE_LEFT, 0.55)   # Start from 55% from the left
+		equipped_label.set_anchor(SIDE_TOP, 0.05)    # Start 5% from the top
+		equipped_label.set_anchor(SIDE_RIGHT, 0.95)  # End at 95% from the left (making it 40% wide)
+		equipped_label.set_anchor(SIDE_BOTTOM, 0.30) # End at 30% from the top (making it 25% tall)
+		# Ensure offsets are zero if using anchors like this for full control by anchors
+		equipped_label.offset_left = 0
+		equipped_label.offset_top = 0
+		equipped_label.offset_right = 0
+		equipped_label.offset_bottom = 0
+
+		slot_button.add_child(equipped_label)
 
 		all_inventory_slots.append(slot_button)
 		inventory_grid_container.add_child(slot_button)
@@ -86,7 +129,7 @@ func _ready():
 	if up_button: up_button.pressed.connect(_on_up_button_pressed)
 	if down_button: down_button.pressed.connect(_on_down_button_pressed)
 
-	_update_pagination_buttons_state()
+	_update_pagination_buttons_state() # Initial state
 
 
 func _process(_delta: float) -> void:
@@ -95,12 +138,14 @@ func _process(_delta: float) -> void:
 
 
 func _on_game_manager_inventory_updated(full_inventory_data: Array[ItemData]):
-	current_player_inventory_cache = full_inventory_data.duplicate()
+	current_player_inventory_cache = full_inventory_data.duplicate() # Store a copy
+
 	total_pages = 1 if current_player_inventory_cache.is_empty() else ceil(float(current_player_inventory_cache.size()) / ITEMS_PER_PAGE)
 	current_page_index = clamp(current_page_index, 0, max(0, total_pages - 1))
-	_render_current_page()
+
+	_render_current_page() # This will also update selected state via its call to _update_slot_selected_visual_state
 	_update_pagination_buttons_state()
-	_update_slot_selected_visual_state(GameManager.current_selected_item_data if GameManager else null)
+	# _update_slot_selected_visual_state is called at the end of _render_current_page
 
 
 func _render_current_page():
@@ -117,9 +162,8 @@ func _render_current_page():
 		var slot_button: Button = all_inventory_slots[i]
 		if not is_instance_valid(slot_button): continue
 
-		var icon_rect: TextureRect = slot_button.get_node_or_null("ItemIcon")
+		var icon_rect: TextureRect = slot_button.get_node_or_null(ITEM_ICON_NODE_NAME)
 
-		# --- CORRECTED SIGNAL DISCONNECTION ---
 		# Disconnect old signals using string names
 		var pressed_callable = Callable(self, "_on_inventory_slot_pressed")
 		if slot_button.is_connected("pressed", pressed_callable):
@@ -132,7 +176,6 @@ func _render_current_page():
 		var mouse_exited_callable = Callable(self, "_on_slot_mouse_exited")
 		if slot_button.is_connected("mouse_exited", mouse_exited_callable):
 			slot_button.disconnect("mouse_exited", mouse_exited_callable)
-		# --- END CORRECTED SIGNAL DISCONNECTION ---
 
 		var inventory_item_index = start_index + i
 		if inventory_item_index < current_player_inventory_cache.size():
@@ -143,6 +186,8 @@ func _render_current_page():
 				slot_button.disabled = true
 				slot_button.set_meta("item_data", null)
 				if icon_rect: icon_rect.texture = null; icon_rect.visible = false
+				var equipped_label: Label = slot_button.get_node_or_null(EQUIPPED_INDICATOR_NODE_NAME)
+				if equipped_label: equipped_label.visible = false
 				slot_button.text = "ERR"
 				continue
 
@@ -154,7 +199,7 @@ func _render_current_page():
 				icon_rect.visible = (item_data.icon != null)
 
 				if icon_rect.visible:
-					slot_button.text = "" # <<--- FIX: Clear button text if icon is visible
+					slot_button.text = "" # Clear button text if icon is visible
 				else:
 					slot_button.text = item_data.display_name.substr(0, 3) if item_data.display_name else "???"
 			else:
@@ -165,22 +210,28 @@ func _render_current_page():
 			slot_button.mouse_entered.connect(_on_slot_mouse_entered.bind(item_data, slot_button))
 			slot_button.mouse_exited.connect(_on_slot_mouse_exited)
 		else:
+			# This slot is empty for the current page
 			slot_button.disabled = true
 			slot_button.set_meta("item_data", null)
 			if icon_rect:
 				icon_rect.texture = null
 				icon_rect.visible = false
+			var equipped_label: Label = slot_button.get_node_or_null(EQUIPPED_INDICATOR_NODE_NAME)
+			if equipped_label: equipped_label.visible = false # Hide for empty slots
 			slot_button.text = "-" # Placeholder for empty slot
 
+	# After rendering all slots, update visual state for selected item (modulation and "Selected" label)
 	if GameManager:
 		_update_slot_selected_visual_state(GameManager.current_selected_item_data)
 	else:
-		_update_slot_selected_visual_state(null)
+		_update_slot_selected_visual_state(null) # Ensure no selection if GM missing
 
 
 func _on_inventory_slot_pressed(item_data_pressed: ItemData):
-	if GameManager and item_data_pressed:
+	if GameManager and item_data_pressed: # Ensure item_data_pressed is not null
 		GameManager.select_inventory_item(item_data_pressed)
+	elif GameManager and not item_data_pressed: # If somehow an empty slot button was pressed (should be disabled)
+		GameManager.select_inventory_item(null) # Explicitly deselect
 
 
 func _on_slot_mouse_entered(item_data_hovered: ItemData, _slot_button_node: Button):
@@ -194,25 +245,49 @@ func _on_slot_mouse_exited():
 		item_name_hover_label.visible = false
 
 
-func _on_game_manager_selected_item_changed(selected_item: ItemData):
-	_update_slot_selected_visual_state(selected_item)
-	if item_name_hover_label and selected_item == null :
+func _on_game_manager_selected_item_changed(selected_item_data: ItemData):
+	# This function is called when GameManager's selected_inventory_item_changed signal is emitted.
+	# It's responsible for updating the visual state of all slots.
+	_update_slot_selected_visual_state(selected_item_data)
+
+	# Also, if no item is selected, ensure the general item hover label is hidden.
+	if item_name_hover_label and selected_item_data == null :
 		item_name_hover_label.visible = false
 
 
 func _on_interaction_complete():
+	# When an interaction cycle completes, the item is usually deselected from "hand".
+	# GameManager's selected_inventory_item_changed signal will be emitted (with null),
+	# so _update_slot_selected_visual_state will handle hiding the "Selected" label.
+	# We might still want to hide the general item hover label if it was somehow stuck.
 	if item_name_hover_label:
 		item_name_hover_label.visible = false
 
 
 func _update_slot_selected_visual_state(selected_item_data: ItemData):
+	# This function updates both the button modulation (highlight) AND the "Selected" label visibility.
 	for slot_button in all_inventory_slots:
 		if not is_instance_valid(slot_button): continue
+
 		var slot_item_data = slot_button.get_meta("item_data", null)
-		if slot_item_data and selected_item_data and slot_item_data.item_id == selected_item_data.item_id:
-			slot_button.modulate = Color(0.7, 0.7, 1.0, 1.0)
+		var equipped_indicator: Label = slot_button.get_node_or_null(EQUIPPED_INDICATOR_NODE_NAME)
+
+		var is_this_slot_selected = false
+		if slot_item_data and selected_item_data: # Both must be valid
+			if slot_item_data.item_id == selected_item_data.item_id:
+				is_this_slot_selected = true
+
+		# Update modulation (highlight)
+		if is_this_slot_selected:
+			slot_button.modulate = Color(0.7, 0.7, 1.0, 1.0) # Highlight color
 		else:
-			slot_button.modulate = Color(1.0, 1.0, 1.0, 1.0)
+			slot_button.modulate = Color(1.0, 1.0, 1.0, 1.0) # Default color
+
+		# Update "Selected" indicator visibility
+		if equipped_indicator:
+			equipped_indicator.visible = is_this_slot_selected
+		elif slot_item_data and not equipped_indicator: # Log if label is missing but there's an item in slot
+			print_rich("[color=orange]InventoryUI: '%s' label missing in slot for item '%s'[/color]" % [EQUIPPED_INDICATOR_NODE_NAME, slot_item_data.display_name])
 
 
 # --- Pagination Logic ---

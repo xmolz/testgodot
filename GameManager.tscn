@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://xspnhif2n7ak"]
+[gd_scene load_steps=11 format=3 uid="uid://xspnhif2n7ak"]
 
 [ext_resource type="Script" uid="uid://cuj755ptbe4e0" path="res://GameManager.gd" id="1_108xg"]
 [ext_resource type="Script" uid="uid://cn3ln508qp8dm" path="res://VerbData.gd" id="2_dxunw"]
@@ -6,7 +6,8 @@
 [ext_resource type="Resource" uid="uid://bs01nglwwhavy" path="res://dialogue/talkto.dialogue" id="3_iyray"]
 [ext_resource type="Resource" uid="uid://dhmxbhyhr4erb" path="res://examine_verb.tres" id="3_pdxvr"]
 [ext_resource type="Resource" uid="uid://bnekusymfhc2d" path="res://talk_to_verb.tres" id="4_iyray"]
-[ext_resource type="Resource" uid="uid://ltlqtdnj1qnt" path="res://test_action.tres" id="7_iyray"]
+[ext_resource type="Resource" uid="uid://k8ha62365syy" path="res://pick_up_verb.tres" id="7_0145d"]
+[ext_resource type="Resource" uid="uid://hs2nkbv1s6yx" path="res://use_on_target_verb.tres" id="8_0q1rh"]
 [ext_resource type="Script" uid="uid://by8o1t3tdwrep" path="res://ItemData.gd" id="8_0145d"]
 [ext_resource type="Resource" uid="uid://cywl5aqwmqhx1" path="res://key_rusty_item.tres" id="9_0q1rh"]
 
@@ -14,5 +15,5 @@
 script = ExtResource("1_108xg")
 player_examine_lines = ExtResource("2_pdxvr")
 player_talk_to_lines = ExtResource("3_iyray")
-all_verb_data_resources = Array[ExtResource("2_dxunw")]([ExtResource("3_pdxvr"), ExtResource("4_iyray"), ExtResource("7_iyray")])
+all_verb_data_resources = Array[ExtResource("2_dxunw")]([ExtResource("3_pdxvr"), ExtResource("4_iyray"), ExtResource("7_0145d"), ExtResource("8_0q1rh")])
 all_item_data_resources = Array[ExtResource("8_0145d")]([ExtResource("9_0q1rh"), null])

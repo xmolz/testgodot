@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://b8uah06h8o6v"]
+[gd_scene load_steps=6 format=3 uid="uid://b8uah06h8o6v"]
 
 [ext_resource type="FontFile" uid="uid://dp4mppnkvijv" path="res://CherryBomb-Regular.ttf" id="1_l8pnb"]
+[ext_resource type="Script" uid="uid://duejqbmx520g" path="res://LogoSplash.gd" id="1_lh0uv"]
 
 [sub_resource type="Animation" id="Animation_aj0d6"]
 length = 0.001
@@ -46,6 +47,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_lh0uv")
 
 [node name="BackgroundRect" type="ColorRect" parent="."]
 layout_mode = 1
