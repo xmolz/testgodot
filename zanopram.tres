@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3 uid="uid://dle6p4hlq4yos"]
+
+[ext_resource type="Texture2D" uid="uid://bjuaurrw0logr" path="res://zanopram.png" id="1_s6e58"]
+[ext_resource type="Script" uid="uid://by8o1t3tdwrep" path="res://ItemData.gd" id="2_0lxtp"]
+
+[resource]
+script = ExtResource("2_0lxtp")
+item_id = "zanopram"
+display_name = "Zzzanopram"
+icon = ExtResource("1_s6e58")
+description = "An old, very rusty key. It looks like it might fit a simple lock."
+is_stackable = false
+max_stack_size = 1
+metadata/_custom_type_script = "uid://by8o1t3tdwrep"

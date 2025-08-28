@@ -1,0 +1,19 @@
+[gd_scene load_steps=5 format=3 uid="uid://b62u5pt3ijljy"]
+
+[ext_resource type="Texture2D" uid="uid://dk1p47yk7kbuu" path="res://cannathink.png" id="1_qu3px"]
+[ext_resource type="Script" uid="uid://hm12uesh52vl" path="res://ui_interactable.gd" id="1_ulfeh"]
+[ext_resource type="BitMap" uid="uid://bpt71cksmt7mb" path="res://cannathink_map.png" id="2_esg17"]
+[ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactable.gd" id="2_jjqks"]
+
+[node name="TextureButton" type="TextureButton"]
+texture_normal = ExtResource("1_qu3px")
+texture_click_mask = ExtResource("2_esg17")
+script = ExtResource("1_ulfeh")
+
+[node name="Interactable" type="Area2D" parent="."]
+script = ExtResource("2_jjqks")
+object_display_name = "CannaThink"
+object_id = "cannathink"
+metadata/_custom_type_script = "uid://dwldhrx7leysr"
+
+[node name="Sprite2D" type="Sprite2D" parent="Interactable"]

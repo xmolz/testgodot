@@ -1,0 +1,75 @@
+[gd_scene load_steps=6 format=3 uid="uid://bjnf6egwtuqv5"]
+
+[ext_resource type="Script" uid="uid://dgi247xxwu7j3" path="res://object_zoom_overlay.gd" id="1_3gkd5"]
+[ext_resource type="Texture2D" uid="uid://vnyvksmwhjys" path="res://medcabinetzoomed.png" id="2_mvlbe"]
+[ext_resource type="PackedScene" uid="uid://b62u5pt3ijljy" path="res://UI_cannathink.tscn" id="3_34wwt"]
+[ext_resource type="PackedScene" uid="uid://b8jbh3bghi1rb" path="res://UI_Zanopram.tscn" id="5_oa20e"]
+[ext_resource type="PackedScene" uid="uid://rtrpjravoxw4" path="res://UI_Invigirol.tscn" id="6_oa20e"]
+
+[node name="ObjectZoomOverlay" type="CanvasLayer"]
+process_mode = 3
+script = ExtResource("1_3gkd5")
+background_texture = ExtResource("2_mvlbe")
+
+[node name="RootContainer" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="BackgroundRect" type="ColorRect" parent="RootContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 0)
+
+[node name="ZoomBackground" type="TextureRect" parent="RootContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+texture = ExtResource("2_mvlbe")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="InteractableContainer" type="Node2D" parent="RootContainer"]
+
+[node name="TextureButton" parent="RootContainer/InteractableContainer" instance=ExtResource("3_34wwt")]
+offset_left = 825.0
+offset_top = 127.0
+offset_right = 1525.0
+offset_bottom = 1027.0
+scale = Vector2(0.45, 0.45)
+
+[node name="TextureButton2" parent="RootContainer/InteractableContainer" instance=ExtResource("6_oa20e")]
+offset_left = 339.0
+offset_top = 122.0
+offset_right = 1039.0
+offset_bottom = 1022.0
+scale = Vector2(0.45, 0.45)
+
+[node name="TextureButton3" parent="RootContainer/InteractableContainer" instance=ExtResource("5_oa20e")]
+offset_left = 1309.0
+offset_top = 125.0
+offset_right = 2009.0
+offset_bottom = 1025.0
+scale = Vector2(0.45, 0.45)
+
+[node name="CloseButton" type="Button" parent="RootContainer"]
+layout_mode = 0
+offset_left = 22.0
+offset_top = 26.0
+offset_right = 130.0
+offset_bottom = 83.0
+text = "BACK LOL"

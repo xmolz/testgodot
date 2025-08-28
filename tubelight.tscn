@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://3rnka5lbsieb"]
+
+[ext_resource type="Texture2D" uid="uid://dapp6nlti67to" path="res://tubelight.png" id="1_hipca"]
+
+[node name="Tubelight" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_hipca")
+centered = false

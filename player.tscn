@@ -33,7 +33,7 @@
 [ext_resource type="Texture2D" uid="uid://douixtsb4bdpn" path="res://Draft walk/Draft walk_0009.png" id="31_331ug"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_keght"]
-size = Vector2(21, 61)
+size = Vector2(236, 881)
 
 [sub_resource type="Animation" id="Animation_ny14h"]
 length = 0.001
@@ -97,11 +97,10 @@ script = ExtResource("1_6ubl7")
 
 [node name="Sprite" type="Sprite2D" parent="."]
 position = Vector2(8.19647, -8.59983)
-scale = Vector2(0.0684136, 0.0684136)
 texture = ExtResource("2_5tmop")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(9.5, -9.5)
+position = Vector2(35, -14.5)
 shape = SubResource("RectangleShape2D_keght")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]

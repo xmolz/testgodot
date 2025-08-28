@@ -1,0 +1,32 @@
+[gd_scene load_steps=5 format=3 uid="uid://b8jbh3bghi1rb"]
+
+[ext_resource type="Script" uid="uid://hm12uesh52vl" path="res://ui_interactable.gd" id="1_82e07"]
+[ext_resource type="Texture2D" uid="uid://bjuaurrw0logr" path="res://zanopram.png" id="1_582fx"]
+[ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactable.gd" id="2_5mir5"]
+[ext_resource type="BitMap" uid="uid://dlj2f3klm7wtl" path="res://zanopram_map.png" id="2_ftjr1"]
+
+[node name="TextureButton" type="TextureButton"]
+texture_normal = ExtResource("1_582fx")
+texture_click_mask = ExtResource("2_ftjr1")
+script = ExtResource("1_82e07")
+
+[node name="Interactable" type="Area2D" parent="."]
+script = ExtResource("2_5mir5")
+object_display_name = "Zzzanopram"
+object_id = "zanopram"
+verb_actions = {
+"false": "false",
+"pickup": {
+"action_type": "sequence",
+"requires_walk": false,
+"steps": [{
+"action_type": "request_add_item",
+"item_id": "zanopram"
+}, {
+"action_type": "destroy"
+}]
+}
+}
+metadata/_custom_type_script = "uid://dwldhrx7leysr"
+
+[node name="Sprite2D" type="Sprite2D" parent="Interactable"]

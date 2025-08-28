@@ -1,0 +1,15 @@
+~ start
+An ancient man stares at you intently. 
+Old Man: Well now, hello there, sugar. Back among the livin’, are ye?
+~ hub
+So tell me darling how can i help ya
+- How long was I out?
+	Old Man: Shoot, couldn’t rightly tell ya. Ya been layin’ here a-sleepin’ since I got here, like some kinda sleepin’ beauty, I reckon. => hub
+- Who are you?
+	Old Man: Name’s Gary. Been stuck up in here ever since my ticker give out on me.
+	Reckon lookin’ at you, it might give out all over again.
+	- What's a ticker?
+		Aw, sweet darlin’ angel o’ mine, that’s what we call a heart back where I come from.
+		- Oh okay => hub
+		
+- I need to go [Leave] => END

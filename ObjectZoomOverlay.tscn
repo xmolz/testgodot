@@ -1,0 +1,48 @@
+[gd_scene load_steps=2 format=3 uid="uid://b5y6x40wshw3c"]
+
+[ext_resource type="Script" uid="uid://dgi247xxwu7j3" path="res://object_zoom_overlay.gd" id="1_flpt1"]
+
+[node name="ObjectZoomOverlay" type="CanvasLayer"]
+layer = 2
+script = ExtResource("1_flpt1")
+
+[node name="RootContainer" type="Control" parent="."]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BackgroundRect" type="ColorRect" parent="RootContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ZoomBackground" type="TextureRect" parent="RootContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="InteractableContainer" type="Node2D" parent="RootContainer"]
+
+[node name="Button" type="Button" parent="RootContainer"]
+layout_mode = 0
+offset_left = 22.0
+offset_top = 26.0
+offset_right = 130.0
+offset_bottom = 83.0
+text = "BACK LOL"

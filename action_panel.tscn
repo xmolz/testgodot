@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://b548w1pnhoun6"]
+
+[ext_resource type="Texture2D" uid="uid://ku705x18lumh" path="res://Action panel(1).PNG" id="1_7buhs"]
+
+[node name="ActionPanel" type="Node2D"]
+
+[node name="ActionPanelSprite" type="Sprite2D" parent="."]
+texture = ExtResource("1_7buhs")
+centered = false

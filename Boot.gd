@@ -3,38 +3,23 @@ extends Node
 
 # --- CONFIGURE THESE PATHS ---
 # Paths to your main scenes and assets.
-const LOGO_SPLASH_SCENE_PATH = "res://logo_splash.tscn" # Path to your new logo splash scene
+const LOGO_SPLASH_SCENE_PATH = "res://logo_splash.tscn"
 const INTRO_OVERLAY_SCENE_PATH = "res://CharacterConversationOverlay.tscn"
-const MAIN_GAME_SCENE_PATH = "res://main.tscn" #
+const MAIN_GAME_SCENE_PATH = "res://main.tscn"
 
 # Configuration for your specific intro overlay
-const INTRO_DIALOGUE_FILE_PATH = "res://dialogue/npcs/faye.dialogue" # Or your intro dialogue
+const INTRO_DIALOGUE_FILE_PATH = "res://dialogue/npcs/faye.dialogue"
 const INTRO_BACKGROUND_ANIMATIONS_PATH = "res://conversation_backgrounds.tres"
 const INTRO_INITIAL_ANIMATION_NAME = "float_loop"
 # --- END OF CONFIGURATION ---
 
 
 func _ready():
-	# This function runs once when the game starts.
-
-	# 1. Load the main game scene but keep it hidden.
-	var main_game_packed_scene = load(MAIN_GAME_SCENE_PATH)
-	if not main_game_packed_scene:
-		print_rich("[color=red]Boot Error: Failed to load Main Game Scene at path: %s[/color]" % MAIN_GAME_SCENE_PATH)
-		return
-
-	var main_game_scene = main_game_packed_scene.instantiate()
-	main_game_scene.visible = false
-	add_child(main_game_scene)
-
-	# 2. Give the GameManager a direct reference to the main game scene instance.
-	if GameManager:
-		GameManager.main_game_scene_instance = main_game_scene
-	else:
+	# We no longer load the main scene here. We go straight to the splash.
+	if not GameManager:
 		print_rich("[color=red]Boot Error: GameManager not found! Cannot proceed.[/color]")
 		return
 
-	# 3. Start the entire sequence, beginning with the logo splash.
 	start_logo_splash()
 
 
@@ -49,17 +34,13 @@ func start_logo_splash():
 	var logo_splash_packed_scene = load(LOGO_SPLASH_SCENE_PATH)
 	if not logo_splash_packed_scene:
 		print_rich("[color=red]Boot Error: Failed to load Logo Splash Scene at path: %s[/color]" % LOGO_SPLASH_SCENE_PATH)
-		# If the splash fails, maybe we should just skip to the intro?
 		start_intro()
 		return
 
 	var logo_splash_instance = logo_splash_packed_scene.instantiate()
 
-	# We need to know when the splash is finished.
-	# This requires your LogoSplash scene to have a signal called "splash_finished".
 	if not logo_splash_instance.has_signal("splash_finished"):
 		print_rich("[color=red]Boot Error: LogoSplash scene does not have a 'splash_finished' signal. Cannot proceed automatically.[/color]")
-		# Clean up and just show the broken splash screen.
 		add_child(logo_splash_instance)
 		return
 
@@ -70,7 +51,6 @@ func start_logo_splash():
 
 func _on_logo_splash_finished():
 	print_rich("[color=yellow]Boot: Logo splash finished. Starting intro sequence...[/color]")
-	# Now we call the function to start the next part of the sequence.
 	start_intro()
 
 

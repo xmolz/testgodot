@@ -1,6 +1,7 @@
 # GameManager.gd
 extends Node
 
+const MAIN_GAME_SCENE_PATH = "res://main.tscn"
 # --- Signals ---
 signal verb_changed(new_verb_id: String)
 signal sentence_line_updated(text: String)
@@ -22,6 +23,23 @@ enum GameState {
 	PAUSED
 }
 
+
+
+# --- Interaction Context Management ---
+# This enum tracks what the player is currently focused on.
+enum InteractionState {
+	WORLD,
+	CONVERSATION,
+	ZOOM_VIEW
+}
+var current_interaction_state: InteractionState = InteractionState.WORLD
+
+# These references are crucial. We need to tell the GameManager where the UI nodes are.
+# IMPORTANT: Verify these paths match the node structure in your main game scene!
+var verb_ui: CanvasLayer = null
+var inventory_ui: CanvasLayer = null
+
+# --- END of Interaction Context Management ---
 # 2. Create a variable to hold the current state.
 var current_game_state: GameState = GameState.BOOTING
 
@@ -29,7 +47,7 @@ var current_game_state: GameState = GameState.BOOTING
 #    The Boot.gd script will set this reference for us later.
 var main_game_scene_instance: Node = null
 # --- END of High-Level Game State Management ---
-
+var input_blocker_layer: CanvasLayer = null
 # --- State Variables ---
 var current_verb_id: String = ""
 var current_selected_item_data: ItemData = null # "In Hand" / "Selected" item
@@ -100,7 +118,34 @@ func _ready():
 
 	print_rich("[color=green]GM: Item data map initialized. %s items mapped.[/color]" % _item_data_map.size())
 	print_rich("[color=cyan]GM: GameManager initialization complete.[/color]")
+	if current_game_state == GameState.BOOTING:
+		var potential_player = get_tree().get_first_node_in_group("player")
+		if is_instance_valid(potential_player):
+			print_rich("[color=purple]GM: Direct scene run detected (player found on boot).[/color]")
+			print_rich("[color=purple]GM: Manually setting state to IN_GAME_PLAY and assigning nodes.[/color]")
 
+			# 1. Manually assign the player node
+			player_node = potential_player
+
+			# 2. Assign the main scene instance (assuming player is a child of the main scene)
+			main_game_scene_instance = player_node.get_owner()
+			if not is_instance_valid(main_game_scene_instance):
+				# Fallback if owner is not set correctly
+				main_game_scene_instance = get_tree().get_root().get_child(-1)
+
+			# Find and assign the UI nodes now that the main scene is confirmed to exist.
+			_find_and_assign_ui_nodes()
+
+			print_rich("[color=green]GM: Found player: %s[/color]" % player_node.name)
+			print_rich("[color=green]GM: Assigned main scene: %s[/color]" % main_game_scene_instance.name)
+
+			# 3. Manually set the state. We don't call change_game_state() because
+			#    that would try to load the scene again.
+			current_game_state = GameState.IN_GAME_PLAY
+
+			# 4. Ensure the player can move
+			if player_node.has_method("set_can_move"):
+				player_node.set_can_move(true)
 
 func change_game_state(new_state: GameState):
 	# Don't do anything if we are already in the target state.
@@ -126,11 +171,39 @@ func change_game_state(new_state: GameState):
 				player_node.set_can_move(false)
 
 		GameState.IN_GAME_PLAY:
-			# When the main game starts, we want to show the main game scene
-			# and enable player input.
+			# If the main scene already exists for some reason, we're done.
 			if is_instance_valid(main_game_scene_instance):
-				main_game_scene_instance.visible = true
+				return
 
+			# 1. Load the main game scene resource
+			var main_packed_scene = load(MAIN_GAME_SCENE_PATH)
+			if not main_packed_scene:
+				print_rich("[color=red]GameManager Error: Failed to load Main Game Scene.[/color]")
+				return
+
+			# 2. Instantiate it
+			main_game_scene_instance = main_packed_scene.instantiate()
+
+			# 3. Find the Boot node to add the scene to the tree
+			var boot_node = get_tree().root.get_node("Boot")
+			if not is_instance_valid(boot_node):
+				print_rich("[color=red]GameManager Error: Could not find 'Boot' node in scene tree to add main scene.[/color]")
+				# Fallback to adding to root, but this is not ideal
+				get_tree().root.add_child(main_game_scene_instance)
+			else:
+				boot_node.add_child(main_game_scene_instance)
+
+			_find_and_assign_ui_nodes()
+			# 4. Initialize the player (this logic can stay the same)
+			if not is_instance_valid(player_node):
+				player_node = get_tree().get_first_node_in_group("player")
+				if not is_instance_valid(player_node):
+					print_rich("[color=red]GM: Player node not found in group 'player' or is invalid![/color]")
+				else:
+					print_rich("[color=green]GM: Found player: %s[/color]" % player_node.name)
+
+			if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
+				player_node.set_can_move(true)
 			# --- PASTE THE CODE HERE AND ADD A CHECK ---
 			# We only need to find the player node once.
 			if not is_instance_valid(player_node):
@@ -388,6 +461,9 @@ func _perform_actual_interaction(interactable_node: Interactable, verb_to_use_id
 	if verb_to_use_id == "talk_to":
 		if interactable_node.category == Interactable.ObjectCategory.CHARACTER:
 			if not interactable_node.character_conversation_overlay_scene: print_rich("[color=red]GM: Character '%s' (ID: %s) has no 'character_conversation_overlay_scene'![/color]" % [interactable_node.object_display_name, interactable_node.object_id]); _complete_interaction_cycle(); return
+
+			enter_conversation_state() # Tell GM to hide the main UI
+
 			_current_character_conversation_overlay_instance = interactable_node.character_conversation_overlay_scene.instantiate()
 			get_tree().root.add_child(_current_character_conversation_overlay_instance)
 			if not _current_character_conversation_overlay_instance.conversation_finished.is_connected(_on_character_conversation_finished):
@@ -422,19 +498,41 @@ func _on_dialogue_started(_resource: Resource):
 	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
 		player_node.set_can_move(false)
 
+	# --- ADD THIS BLOCK ---
+	# Hide the main UI whenever any dialogue line appears.
+	# This handles both in-world dialogue and character conversations.
+	if is_instance_valid(verb_ui):
+		verb_ui.visible = false
+	if is_instance_valid(inventory_ui):
+		inventory_ui.visible = false
+
+
 func _on_dialogue_ended_for_object_dialogue(_resource: Resource):
 	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
 		player_node.set_can_move(true)
+
+	# --- THIS IS THE FIX ---
+	# Restore the main UI as long as we are NOT in a full-screen conversation.
+	# This now correctly handles both the WORLD and the ZOOM_VIEW states.
+	if current_interaction_state != InteractionState.CONVERSATION:
+		if is_instance_valid(verb_ui):
+			verb_ui.visible = true
+		if is_instance_valid(inventory_ui):
+			inventory_ui.visible = true
+
 	_complete_interaction_cycle()
 
 func _on_character_conversation_finished(_resource: DialogueResource):
+	exit_to_world_state()
+
 	if _current_character_conversation_overlay_instance:
 		_current_character_conversation_overlay_instance.queue_free()
 		_current_character_conversation_overlay_instance = null
+
 	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
 		player_node.set_can_move(true)
-	_complete_interaction_cycle()
 
+	_complete_interaction_cycle()
 # --- Interactable Signal Handlers ---
 func _on_interactable_display_dialogue_console(text: String):
 	print_rich("[color=yellow]GM (via Interactable Console): %s[/color]" % text)
@@ -626,3 +724,75 @@ func set_game_flag(flag_name: String, value: bool):
 
 func get_game_flag(flag_name: String) -> bool:
 	return game_flags.get(flag_name, false)
+
+# ADD THESE THREE NEW FUNCTIONS
+
+func enter_conversation_state():
+	if current_interaction_state == InteractionState.CONVERSATION: return
+	print_rich("[color=Plum]GM: Entering CONVERSATION state.[/color]")
+	current_interaction_state = InteractionState.CONVERSATION
+
+	# Show the blocker on layer 1 to stop clicks to the world (layer 0)
+	if is_instance_valid(input_blocker_layer):
+		input_blocker_layer.visible = true
+
+	# Hide the game UI
+	if is_instance_valid(verb_ui): verb_ui.visible = false
+	if is_instance_valid(inventory_ui): inventory_ui.visible = false
+
+func enter_zoom_view_state():
+	if current_interaction_state == InteractionState.ZOOM_VIEW: return
+	print_rich("[color=Plum]GM: Entering ZOOM_VIEW state.[/color]")
+	current_interaction_state = InteractionState.ZOOM_VIEW
+
+	# Show the blocker on layer 1 to stop clicks to the world (layer 0)
+	if is_instance_valid(input_blocker_layer):
+		input_blocker_layer.visible = true
+
+	# Move the game UI to layer 3 so it's on top of the overlay (which will be on layer 2)
+	if is_instance_valid(verb_ui):
+		verb_ui.layer = 3
+		verb_ui.visible = true
+	if is_instance_valid(inventory_ui):
+		inventory_ui.layer = 3
+		inventory_ui.visible = true
+
+func exit_to_world_state():
+	print_rich("[color=Plum]GM: Exiting overlay, returning to WORLD state.[/color]")
+	current_interaction_state = InteractionState.WORLD
+
+	# Hide the blocker
+	if is_instance_valid(input_blocker_layer):
+		input_blocker_layer.visible = false
+
+	# Restore the game UI to its default layer 1
+	if is_instance_valid(verb_ui):
+		verb_ui.layer = 1
+		verb_ui.visible = true
+	if is_instance_valid(inventory_ui):
+		inventory_ui.layer = 1
+		inventory_ui.visible = true
+func _find_and_assign_ui_nodes():
+	# Check if we even have a main scene to search in.
+	if not is_instance_valid(main_game_scene_instance):
+		print_rich("[color=red]GM: Cannot find UI nodes because main_game_scene_instance is not valid.[/color]")
+		return
+
+	# Tell Godot to look INSIDE the main scene for these nodes.
+	verb_ui = main_game_scene_instance.get_node_or_null("%VerbUI_CanvasLayer")
+	inventory_ui = main_game_scene_instance.get_node_or_null("%InventoryUI_CanvasLayer")
+
+	if is_instance_valid(verb_ui):
+		print_rich("[color=green]GM: Successfully found and assigned VerbUI.[/color]")
+	else:
+		print_rich("[color=red]GM: FAILED to find VerbUI. Check it has a Unique Name and is named 'VerbUI_CanvasLayer' in main.tscn.[/color]")
+
+	if is_instance_valid(inventory_ui):
+		print_rich("[color=green]GM: Successfully found and assigned InventoryUI.[/color]")
+	else:
+		print_rich("[color=red]GM: FAILED to find InventoryUI. Check it has a Unique Name and its name is 'InventoryUI_CanvasLayer' in main.tscn.[/color]")
+	input_blocker_layer = main_game_scene_instance.get_node_or_null("%InputBlockerLayer")
+	if is_instance_valid(input_blocker_layer):
+		print_rich("[color=green]GM: Successfully found and assigned InputBlockerLayer.[/color]")
+	else:
+		print_rich("[color=red]GM: FAILED to find InputBlockerLayer.[/color]")

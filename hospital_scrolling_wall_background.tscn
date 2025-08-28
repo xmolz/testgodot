@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://b4cos75vkxhkv"]
+
+[ext_resource type="Texture2D" uid="uid://bd4myudxd6nqe" path="res://Hospital wall bg.PNG" id="1_cfd1v"]
+
+[node name="ParallaxBackground" type="ParallaxBackground"]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0.8, 0.8)
+motion_mirroring = Vector2(1920, 0)
+
+[node name="WallTile" type="Sprite2D" parent="ParallaxLayer"]
+texture = ExtResource("1_cfd1v")
+centered = false

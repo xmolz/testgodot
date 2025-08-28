@@ -1,0 +1,16 @@
+[remap]
+
+importer="bitmap"
+type="BitMap"
+uid="uid://bpt71cksmt7mb"
+path="res://.godot/imported/cannathink_map.png-b309f4a65c697068f2395d600f5dceb5.res"
+
+[deps]
+
+source_file="res://cannathink_map.png"
+dest_files=["res://.godot/imported/cannathink_map.png-b309f4a65c697068f2395d600f5dceb5.res"]
+
+[params]
+
+create_from=0
+threshold=0.5

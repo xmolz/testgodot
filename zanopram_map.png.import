@@ -1,0 +1,16 @@
+[remap]
+
+importer="bitmap"
+type="BitMap"
+uid="uid://dlj2f3klm7wtl"
+path="res://.godot/imported/zanopram_map.png-809dfc7e56ccc6478bd1140d6e7137d1.res"
+
+[deps]
+
+source_file="res://zanopram_map.png"
+dest_files=["res://.godot/imported/zanopram_map.png-809dfc7e56ccc6478bd1140d6e7137d1.res"]
+
+[params]
+
+create_from=0
+threshold=0.5

@@ -3,12 +3,18 @@
 [ext_resource type="Script" uid="uid://npn3pmma7jfq" path="res://VerbUI.gd" id="1_fpe4u"]
 
 [node name="VerbUI_CanvasLayer" type="CanvasLayer"]
+process_mode = 3
 script = ExtResource("1_fpe4u")
 
 [node name="ActionBubbleLabel" type="Label" parent="."]
 visible = false
 offset_right = 40.0
 offset_bottom = 23.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_constants/shadow_outline_size = 3
+theme_override_font_sizes/font_size = 20
 
 [node name="VerbGridPanel" type="Panel" parent="."]
 anchors_preset = -1
@@ -39,4 +45,8 @@ offset_left = 0.959999
 offset_top = -0.480042
 offset_right = -0.959999
 offset_bottom = -0.480042
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_constants/shadow_outline_size = 3
+theme_override_font_sizes/font_size = 20
 text = "ACTIONS"

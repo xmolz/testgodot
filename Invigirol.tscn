@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://bbxktfo2natla"]
+
+[ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactable.gd" id="1_evh2x"]
+
+[node name="Invigirol" type="Area2D"]
+script = ExtResource("1_evh2x")
+object_display_name = "Invigirol"
+object_id = "invigirol"
+
+[node name="ObjectSprite" type="Sprite2D" parent="."]
+
+[node name="WalkToPoint" type="Marker2D" parent="."]
+position = Vector2(0, 381)

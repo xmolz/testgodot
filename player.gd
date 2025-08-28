@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-const SPEED = 150.0
+const SPEED = 700.0
 const GRAVITY = 800.0 # Make sure this matches your project settings if you use built-in gravity
 const WALK_TO_THRESHOLD_X = 5.0 # How close on X axis to stop
 const INTERACTION_OFFSET_X = 30.0 # Horizontal offset from the interactable's actual WalkToPoint.x

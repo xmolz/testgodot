@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://p5o3770cpyst"]
+
+[ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactable.gd" id="1_eu5w5"]
+[ext_resource type="Texture2D" uid="uid://dk1p47yk7kbuu" path="res://cannathink.png" id="2_eu5w5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rhf3t"]
+size = Vector2(613, 728)
+
+[node name="CannaThink" type="Area2D"]
+script = ExtResource("1_eu5w5")
+object_display_name = "CannaThink"
+object_id = "cannathink"
+
+[node name="ObjectSprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_eu5w5")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-3.5, -1)
+shape = SubResource("RectangleShape2D_rhf3t")
+
+[node name="WalkToPoint" type="Marker2D" parent="."]
+position = Vector2(0, 381)

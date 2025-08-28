@@ -1,0 +1,16 @@
+[remap]
+
+importer="bitmap"
+type="BitMap"
+uid="uid://b20nrgyq3yjvp"
+path="res://.godot/imported/invigirol.png-0dd294f7473eb6cc914de182f0b2160c.res"
+
+[deps]
+
+source_file="res://invigirol.png"
+dest_files=["res://.godot/imported/invigirol.png-0dd294f7473eb6cc914de182f0b2160c.res"]
+
+[params]
+
+create_from=0
+threshold=0.5

@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://bqkeu73kdy6ue" path="res://InventoryUI.gd" id="1_dsn3v"]
 
 [node name="InventoryUI_CanvasLayer" type="CanvasLayer"]
+process_mode = 3
 script = ExtResource("1_dsn3v")
 
 [node name="InventoryGridPanel" type="Panel" parent="."]

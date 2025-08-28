@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://c4pi0l0rcx5jd"]
+
+[ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactable.gd" id="2_npg0b"]
+[ext_resource type="Script" uid="uid://hm12uesh52vl" path="res://ui_interactable.gd" id="3_u7fb0"]
+
+[node name="TextureButton" type="TextureButton"]
+script = ExtResource("3_u7fb0")
+
+[node name="Interactable" type="Area2D" parent="."]
+script = ExtResource("2_npg0b")
+metadata/_custom_type_script = "uid://dwldhrx7leysr"
+
+[node name="Sprite2D" type="Sprite2D" parent="Interactable"]

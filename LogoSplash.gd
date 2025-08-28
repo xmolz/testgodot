@@ -14,7 +14,7 @@ func _ready():
 	logo_animator.animation_finished.connect(_on_animation_finished)
 
 	# Start playing the logo animation (assuming it's named "play_logo")
-	logo_animator.play("play_logo")
+	logo_animator.play("splash_animation")
 
 func _on_animation_finished(_anim_name: String):
 	# The animation is done. Now we emit our custom signal.
