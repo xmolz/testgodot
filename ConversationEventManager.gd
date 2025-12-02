@@ -8,3 +8,7 @@ signal change_conversation_background(new_background_texture_path: String)
 
 # You can add more conversation-related signals here later if needed,
 # e.g., for character sprite changes, sound effects, etc.
+var show_special_response: bool = false
+
+#Sergey's variables
+var has_heard_fresh_start_line: bool = false

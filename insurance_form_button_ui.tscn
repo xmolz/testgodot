@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://cn3wt8p41equ0"]
+
+[ext_resource type="Script" uid="uid://ccgy2wd4maav6" path="res://insurance_form_button_ui.gd" id="1_2vgf4"]
+[ext_resource type="Texture2D" uid="uid://cfkvy6v701sh1" path="res://icon.svg" id="2_hxfq5"]
+
+[node name="InsuranceFormButtonUI" type="CanvasLayer"]
+process_mode = 3
+script = ExtResource("1_2vgf4")
+
+[node name="TextureButton" type="TextureButton" parent="."]
+anchors_preset = -1
+anchor_left = 0.796
+anchor_top = 0.842
+anchor_right = 0.873
+anchor_bottom = 0.973
+offset_left = -2.32007
+offset_top = -2.36005
+offset_right = 2.83997
+offset_bottom = 4.15991
+pivot_offset = Vector2(76, 78.0001)
+texture_normal = ExtResource("2_hxfq5")
+stretch_mode = 0

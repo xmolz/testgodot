@@ -1,0 +1,196 @@
+~ start
+A man in his mid-forties sits upright on his bed. 
+His sharp eyes track you as you stir. He looks Slavic.
+Sergey: Ah. You wake. Good. Was not sure you ever would. 
+
+~ hub
+Sergey: So then… tell me. How can Sergey help?
+
+- How long was I out? 
+	Sergey: Hard to say. You sleep long time. Since I arrive here, you do not move. Like statue. 
+	- I can't recall anything
+		Sergey: Hm. That is… not good. 
+		Sergey: You truly remember nothing?
+		- Nope. Nothing at all.
+			Sergey: Then maybe this is fresh start, da? Clean page. 
+			Sergey: In Russia we say… sometimes forgetting is gift. 
+			He gives a small shrug, as if to brush off the heaviness of his words.
+			set ConversationEventManager.has_heard_fresh_start_line = true 
+			=> hub
+
+- Who are you?
+	Sergey: Name is Sergey. Heart had attack, so now I sit here.
+	Sergey: It happen when I try to escape prison too. Bad timing. 
+	- Prison?
+		Sergey: Yes. Sergey get 4 years for crossing border illegally. No like, try to run.
+		Sergey: Felt pain in arm when out and fell. Was over then.
+		- Oh...okay
+		Sergey sits back, folding his hands, eyes calm but watchful.
+		Sergey: So tell me, how about you?
+		# --- ADD THIS CONDITIONAL BLOCK (indented once and twice) ---
+		if ConversationEventManager.has_heard_fresh_start_line == true
+			Sergey: Oh wait. Just remember. No memories, da? Sorry. => hub
+		else
+			He wants to know about your background
+			- I can't recall anything.
+				set ConversationEventManager.has_heard_fresh_start_line = true 
+				Sergey: Really? that is not good.
+				Sergey: Did the Nurse tell you anything?
+				- They said I am here because of a drug overdose.
+					Sergey: Boze Moy. Sergey is sorry about that.
+					Sergey: Hope you find peace in your new life. => hub
+
+- How can I use the MemoryBox ™? 
+	Sergey: That machine? Simple. Just put in your TechPass™, turn the machine on, and put your hand on the scanner. Boom, you can access your memories. 
+	Sergey: I tried once. Helps if you feel lost… or lonely. 
+	He pauses, then shakes his head. 
+	Sergey: But I do not look backward anymore. Only forward.
+	It's a lie, but he wants to believe it.
+	What do you want to say to Sergey?
+
+	- What's a TechPass™?.
+		Sergey: Hah. You really must have hit your head hard. Everyone has TechPass™.
+		Sergey: See here.
+		Sergey: It is… how to say… your key to the world. Without it, you cannot use public tech. No terminals, no dispensers, no doors that scan ID.
+
+		He taps the side of his neck, where a faint, square imprint sits under the skin.
+
+		Sergey: It has your identity, your permissions, your biometrics… all tied together. 
+		Sergey: I think it too annoying. Lose it, and suddenly you are nobody.
+
+		He shrugs, though there’s a frustrated edge to it.
+
+		Sergey: But rules are rules. Machine will not work for you unless you put your TechPass™ inside. MemoryBox™ is very strict with the permissions.
+
+		He looks at you more carefully now.
+
+		Sergey: You really do not remember having one?
+		Sergey: …That is not good.
+		~ techpass_hub
+		What do you want to say to Sergey?
+		- Is there any way to get a new one?
+			Sergey: Maybe. But replacement is slow. HAVEMORE will send a representative to verify your address.
+			Sergey: Don't think you can do that with your... forgetting condition.
+			- Could I… borrow yours? Just for a moment?
+				Sergey raises both eyebrows.
+				Sergey: Borrow? Moya devushka, this is not phone charger.
+				Sergey: If someone else uses my Techpass, system records it against my my name.
+				Sergey: It is..risky. I'm sorry.
+				Sergey: I cannot do that.
+				He looks away, as if uncomfortable with how blunt he sounded.
+				You tilt your head, studying him.
+				He’s rattled. Nervous. Easy.
+				Whatever your past was, you know one thing -  you’ve swayed men and women like him before.
+				He mentioned he used to feel lonely...maybe start there.
+				- So, You got any family?
+					Sergey: Hm. Family is....complication. Children live far, we do not speak much.
+					Sergey: Wife passed away long ago.
+					Sergey: I suppose this is punishment for being difficult man in younger years.
+					He looks down in sorrow.
+					Hah! Dead wife, separated from kids? Boy, he must be lonely.
+					You can fix that. 
+					....at least till he gives you what you want from him.
+					What do you do?
+					- Make a move on him
+						You take a step closer to his bed.
+						Sergey watches you carefully, confusion tightening his brow.  
+						Not fear. Not discomfort. Just… uncertainty.
+						Sergey: Devushka… why are you looking at me like that?
+						You take a look at him. A good look.
+						His immaculate posture, even while seated.
+						His kind eyes.
+						His large hands.
+						How he's looking at you nervously.
+						You’re half his size, yet he looks at you like a schoolboy who’s just realized his teacher knows exactly what he’s thinking.
+						This feels...powerful?
+						What do you say to him?
+						- You said you were lonely. I can tell it’s true.
+							Sergey looks down at his blanket.
+							Sergey: Maybe. Loneliness makes strange things of people.
+						- You don’t have to pretend you don’t want company.
+							Sergey: Company, yes. But… what kind of company you mean?
+						- I’m just… curious about you, Sergey.
+							Sergey: Curious? About me?
+							He laughs softly.
+							Sergey: You are funny, woman.
+							Sergey: Don't know anything about you but want to know Sergei.
+							He shakes his head, though he can’t quite hide the smile tugging at his mouth.
+						You move a little closer to him. Close enough for him to feel your presence.
+						You study his guarded expression, the softness beneath it.  
+						He’s trying so hard to stay composed
+						You place your hand gently on his thigh — warm through the blanket
+						For a moment, nothing happens. 
+						Then he looks at you as if he's trying to figure out what you want from him.
+						You can tell his heart's beating faster.
+						Sergey: You..comforting me?
+						He says it carefully, like he’s not certain if that’s what you meant or if he’s misunderstanding something important.
+						Sergey: I do not want to read wrong meaning.
+						- I want you, Sergei.
+						Sergey: You want ..me?
+						This is it. 
+						The moment to take things further.
+						You let your hand disappear beneath the blanket, seeking the space beneath his gown.
+						His skin feels so warm in contrast to your cold, cold hands.
+						You know way better than to get straight to business.
+						Your hand roams slowly along his inner thigh, mapping the shape of him through warmth and tension.
+						Just warming your fingers… and warming him up with them.
+						His breath catches — barely, but you feel it.
+						A small tightening of his thigh beneath your hand.
+						A quick, involuntary twitch runs through the muscle — like his body realized what you were doing before he did.
+						He’s trying not to react, but his body betrays him.
+						You move closer, slow and deliberate.
+						You want to see his face — really see it — while your hand explores him
+						You want to see him up close for what comes next. 
+						You're looking straight into his eyes. He's breathing unevenly.
+						Now's the time.  you move your hands towards his... but then..
+						Old Man McBucket: REEEEEEEEEEEEEEEEE~~~~~~~~
+						The patient across the room screams, shattering the moment.
+						Both you and Sergei flinch and pull back
+						Sergey looks at you apologetically.
+						- I'm sorry, I got carried away.
+							Sergey: No, it is okay. Don't apologize. Sergey got carried away too.
+							Sergey: This Old Man has lost it. Can't do nothing in front of him. 
+							~ interrupted_hub
+							Sergey has a defeated look in his eyes.
+							- Who is that guy?
+								Sergey: I do not know. I think his name is McBucket.
+								Sergey: I try to make conversation once. But he only screams. Never talks.
+								Sergey: Must be very bad case.
+								- Have you tried asking the Nurse about him?
+									Sergey: The Nurse is an AI. She does not share patient details with other patient.
+									Sergey: I didn't know anything about you until you wake up either. => interrupted_hub
+							- But, I still want to continue!
+								Good choice. You still need that TechPass™.
+								You pull out your best puppy face and tell him you want to continue.
+								He speaks softly and shyly.
+								Sergey: I...I do too.
+								Sergey: It is just..this guy. I cannot do anything in front of him.
+								Sergey: If only there was anything that could calm him down for a little while..
+								Sergey continues to look defeated.
+								- Don't worry, I will take care of it [Leave].
+									Sergey: eh? You will? 
+									Sergey: I do not know about that... But I hope you can figure this out.
+									Sergey: I would really like that.
+									'And I would really like your TechPass™, sweetheart' is what you want to say.
+									'Me too! Sergei' is what you end up saying instead.
+									Okay then, comatose girl. Lets get this bread.
+									=> END
+- Nevermind [Leave] => END
+~ some_other_thing_I_will_include_other_time
+- I bet you miss your wife. I can fill the part.
+Suddenly, Sergey's face goes blank.
+He pushes your hand away.
+Sergey: Anna was good wife. She would not like this. I am sorry.
+Sergey pulls away from you. 
+He seems upset.
+- I'm sorry Sergey. I didn't mean to upset you.
+	if ConversationEventManager.has_heard_fresh_start_line == true
+		Sergey: It is okay Devushka. You are waking up after long time.
+		Sergey: Maybe you forgot that these thing take some time.
+	if ConversationEventManager.has_heard_fresh_start_line == false
+		Sergey: It is okay, Devushka. Let's forget it.
+- No, not doing that. Must be another way. (Leave)
+Sergey: All the best, Devushka. 
+- Nevermind [Back]
+
+

@@ -1,16 +1,14 @@
-[gd_scene load_steps=5 format=3 uid="uid://c4v86fmondjfo"]
+[gd_scene load_steps=4 format=3 uid="uid://c4v86fmondjfo"]
 
 [ext_resource type="Script" uid="uid://cy1g0xpb3u0e2" path="res://character_conversation_overlay.gd" id="1_2hui6"]
 [ext_resource type="Resource" uid="uid://ccyinn2ynsx1p" path="res://AIda.dialogue" id="2_2hui6"]
-[ext_resource type="SpriteFrames" uid="uid://w63ywvs0833i" path="res://conversation_backgrounds.tres" id="3_xavcm"]
-[ext_resource type="Texture2D" uid="uid://dy3ncsp5fixia" path="res://Protag.png" id="4_mos2u"]
+[ext_resource type="Texture2D" uid="uid://cpbqty51mjfsj" path="res://Backgrounds/Aida/aida_hospital_base.png" id="3_5kjlo"]
 
 [node name="CharacterConversationOverlay" type="CanvasLayer"]
 process_mode = 2
 script = ExtResource("1_2hui6")
 conversation_dialogue_file = ExtResource("2_2hui6")
-background_animations = ExtResource("3_xavcm")
-scene_character_sprite_texture = ExtResource("4_mos2u")
+initial_animation_name = ""
 
 [node name="RootContainer" type="Control" parent="."]
 layout_mode = 3
@@ -28,9 +26,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Sprite2D" type="Sprite2D" parent="RootContainer"]
-position = Vector2(962, 457)
-scale = Vector2(0.308889, 0.308889)
+[node name="BackgroundSprite" type="Sprite2D" parent="RootContainer"]
+position = Vector2(959, 540)
+scale = Vector2(0.498958, 0.500926)
+texture = ExtResource("3_5kjlo")
 
 [node name="AnimatedBackground" type="TextureRect" parent="RootContainer"]
 layout_mode = 1

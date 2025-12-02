@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="MemoryChapterData" load_steps=3 format=3 uid="uid://o8gogh6pfshr"]
+
+[ext_resource type="Texture2D" uid="uid://dojc3s6o4ulnp" path="res://1080test1.jpg" id="1_u2wlr"]
+[ext_resource type="Script" uid="uid://bfrll5vc6bmcg" path="res://MemoryChapterData.gd" id="2_jst8x"]
+
+[resource]
+script = ExtResource("2_jst8x")
+chapter_name = "chapter 3"
+chapter_image = ExtResource("1_u2wlr")
+scene_path_to_load = ""
+unlock_flag = ""
+metadata/_custom_type_script = "uid://bfrll5vc6bmcg"

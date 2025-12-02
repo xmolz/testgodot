@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://b8mle40ah8hb3"
+path="res://.godot/imported/mcbucket_invigirol.dialogue-7876a9e5cfe9080e3a00adbc8f72913a.tres"
+
+[deps]
+
+source_file="res://mcbucket_invigirol.dialogue"
+dest_files=["res://.godot/imported/mcbucket_invigirol.dialogue-7876a9e5cfe9080e3a00adbc8f72913a.tres"]
+
+[params]
+
+defaults=true

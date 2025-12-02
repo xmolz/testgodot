@@ -1,0 +1,138 @@
+~ start
+An ancient man leans back in his hospital chair. 
+The squint in his eyes seems to have relaxed. 
+What do you say to him?
+~ hub 
+- Hey, how are you?
+	do change_background_sprite("res://Backgrounds/McBucket/high/mcbucket_high_happy.png")
+	Old Man McBucket: I...am. Yes.
+	- Excuse me?
+		do change_background_sprite("res://Backgrounds/McBucket/high/mcbucket_high_explaining_eyes_closed_mouth_closed.png")
+		Old Man McBucket: I would never accuse you of anything, friend.
+		do change_background_sprite("res://Backgrounds/McBucket/high/mcbucket_high_happy.png")
+		Old Man McBucket: I think you are just...[i] splendid[/i].
+		It seems the medicine has taken its effect on the old man. Maybe he won't distrub you and Sergei now.
+		Is there anything else you want to say to him?
+		=> hub
+
+- Nice eyes, old man.
+	do change_background_sprite("res://Backgrounds/McBucket/high/mcbucket_high_happy.png")
+	Old Man McBucket: Thanks! Got ’em from my sister’s side of the family, I think.
+	- Your..sister's side? 
+		do change_background_sprite("res://Backgrounds/McBucket/high/mcbucket_high_explaining_eyes_closed_mouth_closed.png")
+		Hehehe...Yeah. She's got great knees too. That woman. 
+		The medicine has certainly had an effect on him, you think. He probably won't disturb you and Sergei now.
+		Is there anything else you want to say to him?
+		=> hub
+
+- Tell me something about yourself, old man.
+	Old Man McBucket: Something about.....me? 
+	do change_background_sprite("res://Backgrounds/McBucket/high/mcbucket_high_happy.png")
+	Old Man McBucket: What d’ya wanna know?
+	~ hub2
+	- What’s your name?
+		do change_background_sprite("res://Backgrounds/McBucket/high/mcbucket_high_explaining_eyes_open_mouth_open.png")
+		Old Man McBucket: Sure! Do you wanna know my [i]worldly[/i] name... or my [i]real[/i] name?
+
+		- Your worldly name.
+			do change_background_sprite("res://Backgrounds/McBucket/high/mcbucket_high_explaining_eyes_closed_mouth_clsoed.png")
+			Old Man McBucket: That would be... Mr. Turtle.
+			- Mr. Turtle?
+				Old Man McBucket: Yes. I rarely come outta my shell. And I swim. I always swim.
+				- Okay… what’s your real name then?
+					=> love
+
+		- Your real name.
+			~ love
+			Old Man McBucket: That would be...
+			do change_background_sprite("res://Backgrounds/McBucket/high/mcbucket_high_hand_up.png")
+			Old Man McBucket: Love.
+			- Love? What do you mean?
+				do change_background_sprite("res://Backgrounds/McBucket/high/mcbucket_high_explaining_eyes_closed_mouth_closed.png")
+				Old Man McBucket: I mean the only real thing in this world [i]is[/i] love.
+				do change_background_sprite("res://Backgrounds/McBucket/high/mcbucket_high_explaining_eyes_open_mouth_clsoed.png")
+				Old Man McBucket: Say, kid… you ever loved anyone before?
+
+				- Yes.
+					do change_background_sprite("res://Backgrounds/McBucket/high/mcbucket_high_happy.png")
+					Old Man McBucket: Hah! Then you already know what I’m talking about!
+					Old Man McBucket: Hold onto it, kid. It’s rarer than a polite seagull.
+					Old Man McBucket: And when you find it again… feed it something nice.
+					do change_background_sprite("res://Backgrounds/McBucket/high/mcbucket_high_base.png")
+					You see the old man drift away into his own thoughts.
+					Is there anything else you'd like to say to the old man?
+					=> hub2
+
+				- Not really.
+					do change_background_sprite("res://Backgrounds/McBucket/high/mcbucket_high_happy.png")
+					Old Man McBucket: Then I hope it finds you soon! It’s the most wonderful thing.
+					Old Man McBucket: Once you’re in love… you see it everywhere.
+					do change_background_sprite("res://Backgrounds/McBucket/high/mcbucket_high_hand_up.png")
+					Old Man McBucket: In the grass. In the tiles. On the screen. Even in the chips.
+
+					- The chips?
+						do change_background_sprite("res://Backgrounds/McBucket/high/mcbucket_high_explaining_eyes_open_mouth_clsoed.png")
+						Old Man McBucket: Yeah. You got any on ya? I’m gettin’ kinda hungry for some reason.
+						The old man makes none and all the sense in the world at the same time.
+
+						- Have you ever been in love?
+							do change_background_sprite("res://Backgrounds/McBucket/high/mcbucket_high_explaining_eyes_closed_mouth_open.png")
+							Old Man McBucket: Who? Me?
+							do change_background_sprite("res://Backgrounds/McBucket/high/mcbucket_high_hand_up.png")
+							Old Man McBucket: I am [i]always[/i] in love.
+							do change_background_sprite("res://Backgrounds/McBucket/high/mcbucket_high_explaining_eyes_closed_mouth_closed.png")
+							Old Man McBucket: It’s not possible for me to [i]not[/i] be in it.
+							Old Man McBucket: I only forget sometimes.
+							do change_background_sprite("res://Backgrounds/McBucket/high/mcbucket_high_happy.png")
+							Old Man McBucket: Once, I was walking down the street, and this RoboCop comes up to me and says...
+							Old Man McBucket: ...
+							do change_background_sprite("res://Backgrounds/McBucket/high/mcbucket_high_base.png")
+							Old Man McBucket: Wait—what was I talking about?
+						- I'd like to ask something else [Back]
+							=> hub2
+						- Nevermind [Leave].
+							=> leave
+				- I can't recall. I have no memories.
+					do change_background_sprite("res://Backgrounds/McBucket/high/mcbucket_high_base.png")
+					Old Man McBucket: Oh boy, no memories huh?
+					do change_background_sprite("res://Backgrounds/McBucket/high/mcbucket_high_eyes_open_mouth_closed.png")
+					Old Man McBucket: Who took 'em from ya? Did you check the fridge?
+					You are reminded that you are talking to a person high out of their mind.
+					do change_background_sprite("res://Backgrounds/McBucket/high/mcbucket_high_eyes_closed_mouth_open.png")
+					Old Man McBucket: Don't worry kiddo. Maybe they are just out for a swim.
+					do change_background_sprite("res://Backgrounds/McBucket/high/mcbucket_high_happy.png")
+					Old Man McBucket: Maybe one day they'll swim right back to ya.
+					# do change_background_sprite(add image of protag reflecting)
+					The old man's words penetrate you deeply.
+					Do you [i] want [/i] the memories to swim back to you?
+					Why did you overdose yourself into unconsciousness anyway?
+					You push away the thought.
+					Is there anything else you'd like to say to the old man?
+					=> hub2
+	- How'd you end up here?
+		do change_background_sprite("res://Backgrounds/McBucket/high/mcbucket_high_base.png")
+		Old Man McBucket: Here?
+		Old Man McBucket: Where are we anyway?
+		- We're at a hospital?
+			do change_background_sprite("res://Backgrounds/McBucket/high/mcbucket_high_happy.png")
+			Old Man McBucket: A hospital? Hahaha. Well I don't know how I ended up here.
+			do change_background_sprite("res://Backgrounds/McBucket/high/mcbucket_high_explaining_eyes_closed_mouth_open.png")
+			Old Man McBucket: But I can tell ya one thing for sure - they're wasting their time having me here!
+			Old Man McBucket: There ain't a damn thing wrong with Ol' McBucket over here.
+			do change_background_sprite("res://Backgrounds/McBucket/high/mcbucket_high_explaining_eyes_closed_mouth_closed.png")
+			Old Man McBucket: Well, except for my severe case of...
+			- Of what?
+				do change_background_sprite("res://Backgrounds/McBucket/high/mcbucket_high_base.png")
+				Old Man McBucket: Eh? What?
+				The old man seems to have lost his train of thought.
+				Do you want to talk about something else?
+				=> hub2
+	- I'd like to ask some other questions [Back].
+		What do you wanna say to him?
+		=> hub
+	- Nevermind [Leave]
+		=> leave
+- Nevermind. [Leave]
+	~ leave
+	"Goodbye old man" you say to the character in front of you. => END 
+	=> END

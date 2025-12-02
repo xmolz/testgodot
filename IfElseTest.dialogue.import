@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://d2pl4wtpenxoj"
+path="res://.godot/imported/IfElseTest.dialogue-c27eaf9bfe29c94ab95b1a08e02d59e9.tres"
+
+[deps]
+
+source_file="res://IfElseTest.dialogue"
+dest_files=["res://.godot/imported/IfElseTest.dialogue-c27eaf9bfe29c94ab95b1a08e02d59e9.tres"]
+
+[params]
+
+defaults=true

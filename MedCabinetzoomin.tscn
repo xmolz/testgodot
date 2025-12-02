@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" uid="uid://dgi247xxwu7j3" path="res://object_zoom_overlay.gd" id="1_3gkd5"]
 [ext_resource type="Texture2D" uid="uid://vnyvksmwhjys" path="res://medcabinetzoomed.png" id="2_mvlbe"]
-[ext_resource type="PackedScene" uid="uid://b62u5pt3ijljy" path="res://UI_cannathink.tscn" id="3_34wwt"]
+[ext_resource type="PackedScene" uid="uid://b5eqmwcgkinbv" path="res://UI_Cannathink.tscn" id="3_34wwt"]
 [ext_resource type="PackedScene" uid="uid://b8jbh3bghi1rb" path="res://UI_Zanopram.tscn" id="5_oa20e"]
-[ext_resource type="PackedScene" uid="uid://rtrpjravoxw4" path="res://UI_Invigirol.tscn" id="6_oa20e"]
+[ext_resource type="PackedScene" uid="uid://bi8u415ulvhb" path="res://UI_Invigirol.tscn" id="6_oa20e"]
 
 [node name="ObjectZoomOverlay" type="CanvasLayer"]
 process_mode = 3

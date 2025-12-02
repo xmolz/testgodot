@@ -1,0 +1,42 @@
+[gd_scene load_steps=10 format=3 uid="uid://dq4pkbax7ni44"]
+
+[ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactable.gd" id="1_weaf5"]
+[ext_resource type="Script" uid="uid://bmq0s1nqhqi4j" path="res://InteractionResponse.gd" id="2_6k5h2"]
+[ext_resource type="Texture2D" uid="uid://faqm8qmqqx3f" path="res://med dispenser.png" id="2_xo2a3"]
+[ext_resource type="Resource" uid="uid://bivfrghh084ym" path="res://interactions/DefaultExamineResponse.tres" id="3_gaeqw"]
+[ext_resource type="Script" uid="uid://dltqnu07oiff" path="res://action.gd" id="4_wn268"]
+[ext_resource type="Script" uid="uid://7xsscyp60ilq" path="res://interactions/actions/CallMethodAction.gd" id="5_gaeqw"]
+
+[sub_resource type="Resource" id="Resource_gaeqw"]
+resource_local_to_scene = true
+script = ExtResource("5_gaeqw")
+target_node_path = NodePath("")
+method_name = ""
+arguments = []
+metadata/_custom_type_script = "uid://7xsscyp60ilq"
+
+[sub_resource type="Resource" id="Resource_34au0"]
+script = ExtResource("2_6k5h2")
+verb_id = "use_on_target"
+required_item_id = "cannathink"
+actions_to_perform = Array[ExtResource("4_wn268")]([SubResource("Resource_gaeqw")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rhf3t"]
+size = Vector2(293, 370)
+
+[node name="McbucketMedicineDispenser" type="Area2D"]
+script = ExtResource("1_weaf5")
+object_display_name = "Medicine Dispenser"
+object_id = "mcbucket_medicine_dispenser"
+interactions = Array[ExtResource("2_6k5h2")]([ExtResource("3_gaeqw"), SubResource("Resource_34au0")])
+
+[node name="ObjectSprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_xo2a3")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(13.5, -192)
+shape = SubResource("RectangleShape2D_rhf3t")
+
+[node name="WalkToPoint" type="Marker2D" parent="."]
+position = Vector2(11, 385)

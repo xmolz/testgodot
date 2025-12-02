@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://xspnhif2n7ak"]
+[gd_scene load_steps=15 format=3 uid="uid://xspnhif2n7ak"]
 
 [ext_resource type="Script" uid="uid://cuj755ptbe4e0" path="res://GameManager.gd" id="1_108xg"]
 [ext_resource type="Script" uid="uid://cn3ln508qp8dm" path="res://VerbData.gd" id="2_dxunw"]
@@ -11,10 +11,13 @@
 [ext_resource type="Script" uid="uid://by8o1t3tdwrep" path="res://ItemData.gd" id="8_0145d"]
 [ext_resource type="Resource" uid="uid://cywl5aqwmqhx1" path="res://key_rusty_item.tres" id="9_0q1rh"]
 [ext_resource type="Resource" uid="uid://dle6p4hlq4yos" path="res://zanopram.tres" id="11_5me18"]
+[ext_resource type="Resource" uid="uid://xmq2iq7j8nup" path="res://cannathink.tres" id="12_dm6qn"]
+[ext_resource type="Resource" uid="uid://lr7bq8edhdbr" path="res://invigirol.tres" id="13_lhkyk"]
+[ext_resource type="Resource" uid="uid://f3at4vpof4bj" path="res://testbox.tres" id="14_lk78y"]
 
 [node name="GameManager" type="Node"]
 script = ExtResource("1_108xg")
 player_examine_lines = ExtResource("2_pdxvr")
 player_talk_to_lines = ExtResource("3_iyray")
 all_verb_data_resources = Array[ExtResource("2_dxunw")]([ExtResource("3_pdxvr"), ExtResource("4_iyray"), ExtResource("7_0145d"), ExtResource("8_0q1rh")])
-all_item_data_resources = Array[ExtResource("8_0145d")]([ExtResource("9_0q1rh"), ExtResource("11_5me18")])
+all_item_data_resources = Array[ExtResource("8_0145d")]([ExtResource("9_0q1rh"), ExtResource("11_5me18"), ExtResource("12_dm6qn"), ExtResource("13_lhkyk"), ExtResource("14_lk78y")])

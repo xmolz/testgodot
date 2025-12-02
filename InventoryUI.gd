@@ -228,6 +228,7 @@ func _render_current_page():
 
 
 func _on_inventory_slot_pressed(item_data_pressed: ItemData):
+	SoundManager.play_sfx("ui_click", 1.5)
 	if GameManager and item_data_pressed: # Ensure item_data_pressed is not null
 		GameManager.select_inventory_item(item_data_pressed)
 	elif GameManager and not item_data_pressed: # If somehow an empty slot button was pressed (should be disabled)
@@ -292,12 +293,14 @@ func _update_slot_selected_visual_state(selected_item_data: ItemData):
 
 # --- Pagination Logic ---
 func _on_up_button_pressed():
+	SoundManager.play_sfx("ui_click", 1.5)
 	if current_page_index > 0:
 		current_page_index -= 1
 		_render_current_page()
 		_update_pagination_buttons_state()
 
 func _on_down_button_pressed():
+	SoundManager.play_sfx("ui_click", 1.5)
 	if current_page_index < total_pages - 1:
 		current_page_index += 1
 		_render_current_page()

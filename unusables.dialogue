@@ -1,0 +1,16 @@
+~ start
+That doesn't seem to work.
+=> END
+
+
+~ exit_door
+You place your hand on the hand sensor in an attempt to exit.
+Suddenly, you hear a noise from the speaker above. 
+"Hello patient #122. Please fill in your insurance details before attempting to leave. Thank you!"
+=>
+
+
+~ mcbucket_item_cannathink
+
+Dickhead.
+=> END

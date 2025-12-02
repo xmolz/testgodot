@@ -1,0 +1,450 @@
+[gd_scene load_steps=70 format=3 uid="uid://cqtgjhr5nepn1"]
+
+[ext_resource type="PackedScene" uid="uid://bigouorladqds" path="res://VerbUI.tscn" id="1_1bvp3"]
+[ext_resource type="Script" uid="uid://suh4s1w73ooy" path="res://Main.gd" id="1_efxa6"]
+[ext_resource type="PackedScene" uid="uid://ba2cgdy2q1csl" path="res://player.tscn" id="1_pgf6g"]
+[ext_resource type="PackedScene" uid="uid://d3c3oshbfjh6w" path="res://static_wall_background.tscn" id="2_dg77c"]
+[ext_resource type="Resource" uid="uid://d3deg4gqysr72" path="res://ExplanationData.tres" id="2_gngh3"]
+[ext_resource type="Script" uid="uid://dljo5cmv24o5h" path="res://camera_2d.gd" id="2_h2yge"]
+[ext_resource type="PackedScene" uid="uid://c34r3tmuut3h6" path="res://npc.tscn" id="2_huwxj"]
+[ext_resource type="PackedScene" uid="uid://cud6uaak7lo18" path="res://InventoryUI.tscn" id="2_kek77"]
+[ext_resource type="PackedScene" uid="uid://c3shvlwnp4663" path="res://interactable.tscn" id="2_lquwl"]
+[ext_resource type="Texture2D" uid="uid://dh30l02tu32mv" path="res://png-clipart-hamburger-cheeseburger-fast-food-pixel-art-burger-king-food-cheese.png" id="3_7mycd"]
+[ext_resource type="Texture2D" uid="uid://dn3ft28gbqw1g" path="res://table.png" id="4_lswn8"]
+[ext_resource type="Texture2D" uid="uid://bq7kyq7jiojwq" path="res://faye.png" id="7_272bh"]
+[ext_resource type="Resource" uid="uid://bivfrghh084ym" path="res://interactions/DefaultExamineResponse.tres" id="7_jq2sk"]
+[ext_resource type="PackedScene" uid="uid://oy53tf8tvxe5" path="res://aida.tscn" id="8_vivmo"]
+[ext_resource type="Script" uid="uid://bapryqa2s86c5" path="res://interactions/actions/SayLineAction.gd" id="9_4k2k6"]
+[ext_resource type="Script" uid="uid://nvyqoryt5sbh" path="res://interactions/actions/AddItemAction.gd" id="10_0rl1p"]
+[ext_resource type="Script" uid="uid://bs05cyo72v37l" path="res://LevelStateManager.gd" id="10_4c57u"]
+[ext_resource type="PackedScene" uid="uid://frycmvsnkt3j" path="res://Sergei.tscn" id="10_getpj"]
+[ext_resource type="Script" uid="uid://c5bw6trnybm71" path="res://interactions/actions/DestroyAction.gd" id="11_ok6jj"]
+[ext_resource type="PackedScene" uid="uid://dq4pkbax7ni44" path="res://mcbucket_med_dispenser.tscn" id="12_a6jrf"]
+[ext_resource type="PackedScene" uid="uid://xspnhif2n7ak" path="res://GameManager.tscn" id="13_0cp0l"]
+[ext_resource type="PackedScene" uid="uid://c8w3xusvs4d7d" path="res://mcbucket.tscn" id="13_0odxb"]
+[ext_resource type="PackedScene" uid="uid://bjnf6egwtuqv5" path="res://MedCabinetzoomin.tscn" id="14_cegan"]
+[ext_resource type="PackedScene" uid="uid://3rnka5lbsieb" path="res://tubelight.tscn" id="14_w48qg"]
+[ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactable.gd" id="16_2cqfq"]
+[ext_resource type="PackedScene" uid="uid://c4v86fmondjfo" path="res://AidaDialogue.tscn" id="16_come4"]
+[ext_resource type="PackedScene" uid="uid://crcjecrrvndr2" path="res://medicine_cabinet.tscn" id="17_074og"]
+[ext_resource type="PackedScene" uid="uid://b7dat8bd2cm67" path="res://have_more_logo.tscn" id="18_d13ii"]
+[ext_resource type="Script" uid="uid://7xsscyp60ilq" path="res://interactions/actions/CallMethodAction.gd" id="19_4k2k6"]
+[ext_resource type="Script" uid="uid://b4i2dd2kqpmun" path="res://interactions/actions/RemoveItemAction.gd" id="20_0rl1p"]
+[ext_resource type="PackedScene" uid="uid://c2mnsensqkur6" path="res://Sergei_Conversation.tscn" id="20_h8e4i"]
+[ext_resource type="Script" uid="uid://h83nrnu1277x" path="res://interactions/actions/StartConversationAction.gd" id="22_b1qrp"]
+[ext_resource type="PackedScene" uid="uid://ckc058if0px63" path="res://mcbucket_default_conversation.tscn" id="22_facbu"]
+[ext_resource type="PackedScene" uid="uid://bpk8g8k1r5vb6" path="res://test_box.tscn" id="23_0odxb"]
+[ext_resource type="Script" uid="uid://dosqfqbexlf5k" path="res://interactions/actions/OpenZoomViewAction.gd" id="24_ok6jj"]
+[ext_resource type="Script" uid="uid://bmq0s1nqhqi4j" path="res://InteractionResponse.gd" id="24_qsp4k"]
+[ext_resource type="Texture2D" uid="uid://ccmtxvigy17ff" path="res://memorybox.png" id="25_0odxb"]
+[ext_resource type="Script" uid="uid://dltqnu07oiff" path="res://action.gd" id="25_kq58d"]
+[ext_resource type="Resource" uid="uid://xp53l3fuethr" path="res://examinables.dialogue" id="26_seu75"]
+[ext_resource type="PackedScene" uid="uid://dg2mtprp1wybv" path="res://sergei_med_dispenser.tscn" id="27_a6jrf"]
+[ext_resource type="Script" uid="uid://bmuxd8k0o3aw7" path="res://interactions/actions/ShowDialogueActiont.gd" id="27_htxhm"]
+[ext_resource type="PackedScene" uid="uid://cymg2dkrvsnfy" path="res://explanation_layer.tscn" id="38_d2t1y"]
+[ext_resource type="PackedScene" uid="uid://7pg2anuhtleb" path="res://hospital_door.tscn" id="40_h8e4i"]
+[ext_resource type="PackedScene" uid="uid://cn3wt8p41equ0" path="res://insurance_form_button_ui.tscn" id="41_4lmeg"]
+
+[sub_resource type="Resource" id="Resource_facbu"]
+script = ExtResource("9_4k2k6")
+line_to_say = "picked up the rusty key"
+metadata/_custom_type_script = "uid://bapryqa2s86c5"
+
+[sub_resource type="Resource" id="Resource_b1qrp"]
+script = ExtResource("10_0rl1p")
+item_id_to_add = "key_rusty"
+metadata/_custom_type_script = "uid://nvyqoryt5sbh"
+
+[sub_resource type="Resource" id="Resource_come4"]
+script = ExtResource("11_ok6jj")
+message_on_destroy = ""
+metadata/_custom_type_script = "uid://c5bw6trnybm71"
+
+[sub_resource type="Resource" id="Resource_h8e4i"]
+script = ExtResource("24_qsp4k")
+verb_id = "pickup"
+required_item_id = ""
+actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_facbu"), SubResource("Resource_b1qrp"), SubResource("Resource_come4")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pjluw"]
+size = Vector2(9583, 90.4065)
+
+[sub_resource type="Resource" id="Resource_qnost"]
+script = ExtResource("22_b1qrp")
+metadata/_custom_type_script = "uid://h83nrnu1277x"
+
+[sub_resource type="Resource" id="Resource_wnkbs"]
+script = ExtResource("24_qsp4k")
+verb_id = "talk_to"
+required_item_id = ""
+actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_qnost")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="Resource" id="Resource_seu75"]
+script = ExtResource("27_htxhm")
+dialogue_resource = ExtResource("26_seu75")
+metadata/_custom_type_script = "uid://bmuxd8k0o3aw7"
+
+[sub_resource type="Resource" id="Resource_htxhm"]
+script = ExtResource("24_qsp4k")
+verb_id = "examine"
+required_item_id = ""
+actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_seu75")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="Resource" id="Resource_f6a44"]
+script = ExtResource("22_b1qrp")
+metadata/_custom_type_script = "uid://h83nrnu1277x"
+
+[sub_resource type="Resource" id="Resource_0cbny"]
+script = ExtResource("24_qsp4k")
+verb_id = "talk_to"
+required_item_id = ""
+actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_f6a44")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="Resource" id="Resource_0rl1p"]
+script = ExtResource("19_4k2k6")
+target_node_path = NodePath("../McBucket_Path/McBucket")
+method_name = "on_player_used_cannathink"
+arguments = []
+metadata/_custom_type_script = "uid://7xsscyp60ilq"
+
+[sub_resource type="Resource" id="Resource_4lmeg"]
+script = ExtResource("20_0rl1p")
+item_id_to_remove = "cannathink"
+metadata/_custom_type_script = "uid://b4i2dd2kqpmun"
+
+[sub_resource type="Resource" id="Resource_ok6jj"]
+script = ExtResource("24_qsp4k")
+verb_id = "use_item"
+required_item_id = "cannathink"
+actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_0rl1p"), SubResource("Resource_4lmeg")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="Resource" id="Resource_gngh3"]
+script = ExtResource("22_b1qrp")
+metadata/_custom_type_script = "uid://h83nrnu1277x"
+
+[sub_resource type="Resource" id="Resource_0n3wm"]
+script = ExtResource("24_qsp4k")
+verb_id = "talk_to"
+required_item_id = ""
+actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_gngh3")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="Resource" id="Resource_qsp4k"]
+script = ExtResource("27_htxhm")
+dialogue_resource = ExtResource("26_seu75")
+metadata/_custom_type_script = "uid://bmuxd8k0o3aw7"
+
+[sub_resource type="Resource" id="Resource_kq58d"]
+script = ExtResource("24_qsp4k")
+verb_id = "examine"
+required_item_id = ""
+actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_qsp4k")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="Resource" id="Resource_0cp0l"]
+script = ExtResource("24_ok6jj")
+metadata/_custom_type_script = "uid://dosqfqbexlf5k"
+
+[sub_resource type="Resource" id="Resource_d2t1y"]
+script = ExtResource("24_qsp4k")
+verb_id = "use"
+required_item_id = ""
+actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_0cp0l")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="Resource" id="Resource_jq2sk"]
+script = ExtResource("27_htxhm")
+dialogue_resource = ExtResource("26_seu75")
+metadata/_custom_type_script = "uid://bmuxd8k0o3aw7"
+
+[sub_resource type="Resource" id="Resource_4k2k6"]
+script = ExtResource("24_qsp4k")
+verb_id = "examine"
+required_item_id = ""
+actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_jq2sk")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="Resource" id="Resource_hrvbo"]
+script = ExtResource("10_0rl1p")
+item_id_to_add = "testbox"
+metadata/_custom_type_script = "uid://nvyqoryt5sbh"
+
+[sub_resource type="Resource" id="Resource_blkrb"]
+script = ExtResource("11_ok6jj")
+message_on_destroy = ""
+metadata/_custom_type_script = "uid://c5bw6trnybm71"
+
+[sub_resource type="Resource" id="Resource_uypp3"]
+script = ExtResource("24_qsp4k")
+verb_id = "pickup"
+required_item_id = ""
+actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_hrvbo"), SubResource("Resource_blkrb")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+script = ExtResource("1_efxa6")
+test_explanation = ExtResource("2_gngh3")
+
+[node name="BackgroundContainer" type="Node2D" parent="."]
+z_index = -30
+
+[node name="ColorRect" type="ColorRect" parent="BackgroundContainer"]
+z_index = -21
+offset_left = -4985.0
+offset_top = -2527.0
+offset_right = 22008.6
+offset_bottom = 4691.0
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="WallContainer" type="Node2D" parent="."]
+z_index = -11
+position = Vector2(-817, -540)
+
+[node name="StaticWallBackground" parent="WallContainer" instance=ExtResource("2_dg77c")]
+position = Vector2(-144.444, 0)
+
+[node name="StaticWallBackground2" parent="WallContainer" instance=ExtResource("2_dg77c")]
+position = Vector2(1774, 0)
+
+[node name="StaticWallBackground3" parent="WallContainer" instance=ExtResource("2_dg77c")]
+position = Vector2(3694, 0)
+
+[node name="StaticWallBackground4" parent="WallContainer" instance=ExtResource("2_dg77c")]
+position = Vector2(5614, 0)
+
+[node name="StaticWallBackground5" parent="WallContainer" instance=ExtResource("2_dg77c")]
+position = Vector2(7533, 0)
+
+[node name="Table" type="Sprite2D" parent="WallContainer"]
+position = Vector2(6556.74, 696.375)
+scale = Vector2(0.253462, 0.253462)
+texture = ExtResource("4_lswn8")
+
+[node name="Burger" parent="." instance=ExtResource("2_lquwl")]
+position = Vector2(-699, 755)
+object_display_name = "Burger"
+object_id = "burger"
+
+[node name="ObjectSprite" parent="Burger" index="0"]
+scale = Vector2(0.0377778, 0.0377778)
+texture = ExtResource("3_7mycd")
+
+[node name="Rusty Key" parent="." instance=ExtResource("2_lquwl")]
+z_index = 1805
+position = Vector2(3307, 28)
+scale = Vector2(4.125, 4.125)
+object_display_name = "Rusty Key"
+object_id = "key_rusty_world"
+interactions = Array[ExtResource("24_qsp4k")]([ExtResource("7_jq2sk"), SubResource("Resource_h8e4i")])
+
+[node name="ObjectSprite" parent="Rusty Key" index="0"]
+scale = Vector2(0.0377778, 0.0377778)
+texture = ExtResource("3_7mycd")
+
+[node name="CollisionShape2D" parent="Rusty Key" index="1"]
+z_index = 15
+
+[node name="Floor" type="StaticBody2D" parent="."]
+position = Vector2(220, -515)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
+position = Vector2(3609.5, 834)
+shape = SubResource("RectangleShape2D_pjluw")
+debug_color = Color(0.581501, 0.477937, 0.264005, 0.419608)
+
+[node name="faye" parent="." instance=ExtResource("2_lquwl")]
+position = Vector2(921, -355)
+scale = Vector2(6.595, 6.595)
+object_display_name = "Faye"
+object_id = "faye"
+category = 1
+
+[node name="ObjectSprite" parent="faye" index="0"]
+scale = Vector2(0.0377778, 0.0377778)
+texture = ExtResource("7_272bh")
+
+[node name="WalkToPoint" parent="faye" index="2"]
+position = Vector2(-1, 11)
+
+[node name="Left wall" type="StaticBody2D" parent="."]
+position = Vector2(-974, 49)
+scale = Vector2(0.0427764, 8.83949)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Left wall"]
+position = Vector2(-4114.42, -21.1551)
+shape = SubResource("RectangleShape2D_pjluw")
+debug_color = Color(0.581501, 0.477937, 0.264005, 0.419608)
+
+[node name="Right Wall" type="StaticBody2D" parent="."]
+position = Vector2(8989, 61)
+scale = Vector2(0.0427764, 8.83949)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Right Wall"]
+position = Vector2(-4114.42, -21.1551)
+shape = SubResource("RectangleShape2D_pjluw")
+debug_color = Color(0.581501, 0.477937, 0.264005, 0.419608)
+
+[node name="GameManager" parent="." instance=ExtResource("13_0cp0l")]
+
+[node name="Aida_Path" type="Node2D" parent="."]
+position = Vector2(-25, 54)
+scale = Vector2(0.5, 0.5)
+
+[node name="AIda" parent="Aida_Path" instance=ExtResource("8_vivmo")]
+position = Vector2(9658, -52)
+scale = Vector2(0.98, 0.98)
+
+[node name="MovementController" parent="Aida_Path/AIda" index="1"]
+movement_speed = 150.0
+wait_duration = 15.0
+waypoints = Array[NodePath]([NodePath("../../Waypoint1"), NodePath("../../Waypoint2")])
+
+[node name="InteractionArea" parent="Aida_Path/AIda" index="2"]
+script = ExtResource("16_2cqfq")
+object_display_name = "AIda"
+object_id = "AIda"
+category = 1
+interactions = Array[ExtResource("24_qsp4k")]([ExtResource("7_jq2sk"), SubResource("Resource_wnkbs")])
+character_conversation_overlay_scene = ExtResource("16_come4")
+
+[node name="Waypoint1" type="Marker2D" parent="Aida_Path"]
+position = Vector2(10646, -32)
+
+[node name="Waypoint2" type="Marker2D" parent="Aida_Path"]
+position = Vector2(5456, -32)
+
+[node name="Sergei_Path" type="Node2D" parent="."]
+z_index = 1
+position = Vector2(2354, 156)
+scale = Vector2(0.5, 0.5)
+
+[node name="Sergei" parent="Sergei_Path" instance=ExtResource("10_getpj")]
+position = Vector2(11404, 0)
+
+[node name="InteractionArea" parent="Sergei_Path/Sergei" index="2"]
+script = ExtResource("16_2cqfq")
+object_display_name = "Sergei"
+object_id = "sergei"
+category = 1
+interactions = Array[ExtResource("24_qsp4k")]([SubResource("Resource_htxhm"), SubResource("Resource_0cbny")])
+character_conversation_overlay_scene = ExtResource("20_h8e4i")
+
+[node name="MedicineCabinet2" parent="." instance=ExtResource("12_a6jrf")]
+position = Vector2(890, 3)
+scale = Vector2(0.735, 0.735)
+interactions = Array[ExtResource("24_qsp4k")]([ExtResource("7_jq2sk"), SubResource("Resource_ok6jj")])
+
+[node name="McBucket_Path" type="Node2D" parent="."]
+position = Vector2(770, 91)
+scale = Vector2(0.6, 0.6)
+
+[node name="McBucket" parent="McBucket_Path" instance=ExtResource("13_0odxb")]
+
+[node name="InteractionArea" parent="McBucket_Path/McBucket" index="2"]
+script = ExtResource("16_2cqfq")
+object_display_name = "mcbucket"
+object_id = "mcbucket"
+category = 1
+interactions = Array[ExtResource("24_qsp4k")]([ExtResource("7_jq2sk"), SubResource("Resource_0n3wm")])
+character_conversation_overlay_scene = ExtResource("22_facbu")
+
+[node name="MedicineCabinet" parent="." instance=ExtResource("17_074og")]
+position = Vector2(2543, -23)
+scale = Vector2(0.73, 0.73)
+interactions = Array[ExtResource("24_qsp4k")]([SubResource("Resource_kq58d"), SubResource("Resource_d2t1y")])
+object_zoom_overlay_scene = ExtResource("14_cegan")
+
+[node name="Player" parent="." instance=ExtResource("1_pgf6g")]
+position = Vector2(4373, 90)
+scale = Vector2(0.5, 0.5)
+
+[node name="NPC" parent="." instance=ExtResource("2_huwxj")]
+z_index = -1
+position = Vector2(-621, 735)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(4394, 0)
+process_callback = 0
+limit_left = -100000
+limit_top = -100000
+limit_right = 100000
+limit_bottom = 100000
+limit_smoothed = true
+position_smoothing_enabled = true
+script = ExtResource("2_h2yge")
+target_path = NodePath("../Player")
+
+[node name="HaveMoreLogo" parent="." instance=ExtResource("18_d13ii")]
+position = Vector2(2535, -329)
+scale = Vector2(0.16, 0.16)
+
+[node name="LevelStateManager" type="Node" parent="."]
+script = ExtResource("10_4c57u")
+
+[node name="Tubelight" parent="." instance=ExtResource("14_w48qg")]
+position = Vector2(-396, -551)
+scale = Vector2(0.76, 0.76)
+
+[node name="VerbUI_CanvasLayer" parent="." instance=ExtResource("1_1bvp3")]
+unique_name_in_owner = true
+layer = 2
+
+[node name="InventoryUI_CanvasLayer" parent="." instance=ExtResource("2_kek77")]
+unique_name_in_owner = true
+layer = 2
+
+[node name="ExplanationLayer" parent="." instance=ExtResource("38_d2t1y")]
+
+[node name="TestBox" parent="." instance=ExtResource("23_0odxb")]
+position = Vector2(3165, 25)
+object_display_name = "testbox"
+object_id = "testbox"
+interactions = Array[ExtResource("24_qsp4k")]([SubResource("Resource_4k2k6"), SubResource("Resource_uypp3")])
+
+[node name="Memorybox" type="Sprite2D" parent="."]
+position = Vector2(5737.74, 7.37499)
+scale = Vector2(0.273744, 0.273745)
+texture = ExtResource("25_0odxb")
+
+[node name="SergeiMedicineDispenser" parent="." instance=ExtResource("27_a6jrf")]
+position = Vector2(7870, -32)
+scale = Vector2(0.735, 0.735)
+
+[node name="ExitDoor" parent="." instance=ExtResource("40_h8e4i")]
+z_index = -1
+position = Vector2(72, -34)
+scale = Vector2(0.8, 0.8)
+
+[node name="InsuranceFormButtonUI" parent="." instance=ExtResource("41_4lmeg")]
+unique_name_in_owner = true
+
+[node name="NotificationContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -144.0
+offset_top = 72.0
+offset_right = -104.0
+offset_bottom = 112.0
+grow_horizontal = 0
+
+[connection signal="form_button_pressed" from="InsuranceFormButtonUI" to="GameManager" method="_on_insurance_form_button_pressed"]
+
+[editable path="Burger"]
+[editable path="Rusty Key"]
+[editable path="faye"]
+[editable path="Aida_Path/AIda"]
+[editable path="Sergei_Path/Sergei"]
+[editable path="McBucket_Path/McBucket"]
+[editable path="InventoryUI_CanvasLayer"]

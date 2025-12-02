@@ -1,0 +1,57 @@
+[gd_scene load_steps=14 format=3 uid="uid://bpk8g8k1r5vb6"]
+
+[ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactable.gd" id="1_i5csg"]
+[ext_resource type="Script" uid="uid://bmq0s1nqhqi4j" path="res://InteractionResponse.gd" id="2_faxy5"]
+[ext_resource type="Texture2D" uid="uid://cfkvy6v701sh1" path="res://icon.svg" id="2_po7q6"]
+[ext_resource type="Script" uid="uid://dltqnu07oiff" path="res://action.gd" id="3_gyrdm"]
+[ext_resource type="Script" uid="uid://bapryqa2s86c5" path="res://interactions/actions/SayLineAction.gd" id="4_yy0q5"]
+[ext_resource type="Script" uid="uid://nvyqoryt5sbh" path="res://interactions/actions/AddItemAction.gd" id="5_gyrdm"]
+[ext_resource type="Script" uid="uid://c5bw6trnybm71" path="res://interactions/actions/DestroyAction.gd" id="6_yy0q5"]
+
+[sub_resource type="Resource" id="Resource_hgn4j"]
+script = ExtResource("4_yy0q5")
+line_to_say = "I am examining a box!"
+metadata/_custom_type_script = "uid://bapryqa2s86c5"
+
+[sub_resource type="Resource" id="Resource_0qfd0"]
+script = ExtResource("2_faxy5")
+verb_id = "examine"
+required_item_id = ""
+actions_to_perform = Array[ExtResource("3_gyrdm")]([SubResource("Resource_hgn4j"), null])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="Resource" id="Resource_yy0q5"]
+script = ExtResource("5_gyrdm")
+item_id_to_add = "test_box"
+metadata/_custom_type_script = "uid://nvyqoryt5sbh"
+
+[sub_resource type="Resource" id="Resource_d6e5j"]
+script = ExtResource("6_yy0q5")
+message_on_destroy = ""
+metadata/_custom_type_script = "uid://c5bw6trnybm71"
+
+[sub_resource type="Resource" id="Resource_ppfqe"]
+script = ExtResource("2_faxy5")
+verb_id = "pickup"
+required_item_id = ""
+actions_to_perform = Array[ExtResource("3_gyrdm")]([SubResource("Resource_yy0q5"), SubResource("Resource_d6e5j")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_buv8t"]
+size = Vector2(127, 127)
+
+[node name="TestBox" type="Area2D"]
+script = ExtResource("1_i5csg")
+object_display_name = "Test Box"
+object_id = "test_box"
+interactions = Array[ExtResource("2_faxy5")]([SubResource("Resource_0qfd0"), SubResource("Resource_ppfqe")])
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_po7q6")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-0.5, -0.5)
+shape = SubResource("RectangleShape2D_buv8t")
+
+[node name="WalkToPoint" type="Marker2D" parent="."]
+position = Vector2(1, 63)

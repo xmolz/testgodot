@@ -1,0 +1,114 @@
+[gd_scene load_steps=10 format=3 uid="uid://btapuvtuo8pu6"]
+
+[ext_resource type="Script" uid="uid://dxg1w2hmijjfa" path="res://LocationRow.gd" id="1_d7ebr"]
+[ext_resource type="StyleBox" uid="uid://dxdc82o7pmbig" path="res://memoryboxbackbutton.tres" id="1_uocnp"]
+[ext_resource type="FontFile" uid="uid://blg6ol8nf4fgs" path="res://RobotoMono-VariableFont_wght.ttf" id="2_3w4a0"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uocnp"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.133333, 0.141176, 0.2, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d7ebr"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.133333, 0.141176, 0.2, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_d7ebr"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3w4a0"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.376471, 0.376471, 0.376471, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_uocnp"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3w4a0"]
+
+[node name="LocationRow" type="HBoxContainer"]
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.139
+offset_bottom = -0.12001
+size_flags_horizontal = 3
+script = ExtResource("1_d7ebr")
+
+[node name="LocationInfoPanel" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(220, 150)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_uocnp")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="LocationInfoPanel"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="LocationInfoPanel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="LocationInfoPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_3w4a0")
+text = "Location 1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ChaptersAreaPanel" type="PanelContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_d7ebr")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ChaptersAreaPanel"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="LeftArrowButton" type="Button" parent="ChaptersAreaPanel/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 44
+theme_override_styles/focus = SubResource("StyleBoxEmpty_d7ebr")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_3w4a0")
+theme_override_styles/normal = ExtResource("1_uocnp")
+text = "  <  "
+
+[node name="ViewportPanel" type="Panel" parent="ChaptersAreaPanel/HBoxContainer"]
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxEmpty_uocnp")
+
+[node name="ChapterListContainer" type="HBoxContainer" parent="ChaptersAreaPanel/HBoxContainer/ViewportPanel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.995
+anchor_bottom = 0.963
+offset_right = -0.360107
+offset_bottom = -0.0420074
+theme_override_constants/separation = 50
+
+[node name="RightArrowButton" type="Button" parent="ChaptersAreaPanel/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 44
+theme_override_styles/focus = SubResource("StyleBoxEmpty_3w4a0")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_3w4a0")
+theme_override_styles/normal = ExtResource("1_uocnp")
+text = "  >  "

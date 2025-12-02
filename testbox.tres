@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3 uid="uid://f3at4vpof4bj"]
+
+[ext_resource type="Texture2D" uid="uid://cfkvy6v701sh1" path="res://icon.svg" id="1_xv73e"]
+[ext_resource type="Script" uid="uid://by8o1t3tdwrep" path="res://ItemData.gd" id="2_gssqw"]
+
+[resource]
+script = ExtResource("2_gssqw")
+item_id = "testbox"
+display_name = "Test Box"
+icon = ExtResource("1_xv73e")
+description = "woah. A testBox. I have seen god."
+is_stackable = false
+max_stack_size = 1
+metadata/_custom_type_script = "uid://by8o1t3tdwrep"

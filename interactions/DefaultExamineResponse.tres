@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="InteractionResponse" load_steps=6 format=3 uid="uid://bivfrghh084ym"]
+
+[ext_resource type="Script" uid="uid://dltqnu07oiff" path="res://action.gd" id="1_lfll4"]
+[ext_resource type="Script" uid="uid://bmq0s1nqhqi4j" path="res://InteractionResponse.gd" id="2_c1lka"]
+[ext_resource type="Resource" uid="uid://xp53l3fuethr" path="res://examinables.dialogue" id="2_xf3dq"]
+[ext_resource type="Script" uid="uid://bmuxd8k0o3aw7" path="res://interactions/actions/ShowDialogueActiont.gd" id="3_5nuw4"]
+
+[sub_resource type="Resource" id="Resource_fpm7e"]
+script = ExtResource("3_5nuw4")
+dialogue_resource = ExtResource("2_xf3dq")
+metadata/_custom_type_script = "uid://bmuxd8k0o3aw7"
+
+[resource]
+script = ExtResource("2_c1lka")
+verb_id = "examine"
+required_item_id = ""
+required_flag_id = ""
+required_flag_value = true
+actions_to_perform = Array[ExtResource("1_lfll4")]([SubResource("Resource_fpm7e")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"

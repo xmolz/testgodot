@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="OpenMemoryBoxAction" load_steps=2 format=3 uid="uid://c3tq5l5jdua2v"]
+
+[ext_resource type="Script" uid="uid://bvfc7q2g4fum1" path="res://interactions/actions/OpenMemoryBoxAction.gd" id="1_1enx2"]
+
+[resource]
+script = ExtResource("1_1enx2")
+metadata/_custom_type_script = "uid://bvfc7q2g4fum1"

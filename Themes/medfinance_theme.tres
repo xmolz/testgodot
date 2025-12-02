@@ -1,0 +1,38 @@
+[gd_resource type="Theme" load_steps=5 format=3 uid="uid://bxpy47r6xqv38"]
+
+[ext_resource type="FontFile" uid="uid://bov28yugyj55s" path="res://hiragino-kaku-gothic-std-w8.otf" id="1_frahn"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_frahn"]
+bg_color = Color(0.71, 0.71, 0.71, 1)
+border_width_bottom = 4
+border_color = Color(0.32, 0.32, 0.32, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cvcxg"]
+border_width_bottom = 4
+border_color = Color(0.32, 0.32, 0.32, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_65cgs"]
+border_color = Color(0.32, 0.32, 0.32, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[resource]
+Button/colors/font_color = Color(1, 1, 1, 0.901961)
+Button/fonts/font = ExtResource("1_frahn")
+Button/styles/hover = SubResource("StyleBoxFlat_frahn")
+Button/styles/normal = SubResource("StyleBoxFlat_cvcxg")
+Button/styles/pressed = SubResource("StyleBoxFlat_65cgs")
+Label/colors/font_outline_color = Color(0, 0, 0, 1)
+Label/constants/outline_size = 7
+Label/font_sizes/font_size = 19
+Label/fonts/font = ExtResource("1_frahn")

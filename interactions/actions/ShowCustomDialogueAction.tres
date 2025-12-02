@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="ShowCustomDialogueAction" load_steps=2 format=3 uid="uid://covtx6x3h5vpq"]
+
+[ext_resource type="Script" uid="uid://8c6cnm8lo25p" path="res://interactions/actions/ShowCustomDialogueAction.gd" id="1_7mtq5"]
+
+[resource]
+script = ExtResource("1_7mtq5")
+dialogue_checkpoint = ""
+metadata/_custom_type_script = "uid://8c6cnm8lo25p"
