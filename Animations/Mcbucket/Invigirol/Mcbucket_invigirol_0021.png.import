@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dm8241jyg45k1"
-path="res://.godot/imported/2160test2.jpg-4a111c16adfbc71ccfb21d28bbdd8811.ctex"
+uid="uid://db4xmcok4ve4u"
+path="res://.godot/imported/Mcbucket_invigirol_0021.png-602addda939742eaa278557428364dc0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://2160test2.jpg"
-dest_files=["res://.godot/imported/2160test2.jpg-4a111c16adfbc71ccfb21d28bbdd8811.ctex"]
+source_file="res://Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0021.png"
+dest_files=["res://.godot/imported/Mcbucket_invigirol_0021.png-602addda939742eaa278557428364dc0.ctex"]
 
 [params]
 

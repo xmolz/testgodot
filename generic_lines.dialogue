@@ -1,0 +1,20 @@
+#memory box
+
+~ memory_box_unlocked
+The rusty key fits the lock. *click*
+=> END
+
+~ memory_box_locked
+It seems to be locked. I might need some kind of key.
+=> END
+
+#mcbucket
+
+~ mcbucket_sleeping_talk_to_response
+McBucket: Zzzzzzz....
+The old man seems to be fast asleep. He won't get in your way now.
+=> END
+
+~ mcbucket_med_given_after_zanopram
+Hmmm. The old man seems unaffected. His sleep is deep.
+=> END

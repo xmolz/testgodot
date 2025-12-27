@@ -1,0 +1,199 @@
+[gd_scene load_steps=19 format=3 uid="uid://dxh3iucevq7uw"]
+
+[ext_resource type="Script" uid="uid://3ljv44t6bc3i" path="res://MemoryBoxOverlay.gd" id="1_nw7nd"]
+[ext_resource type="Theme" uid="uid://dn3c6kdmu6tyb" path="res://memorybox.tres" id="1_rxlxx"]
+[ext_resource type="Script" uid="uid://coccmochs1n0s" path="res://MemoryGroupData.gd" id="2_2chyr"]
+[ext_resource type="StyleBox" uid="uid://dxdc82o7pmbig" path="res://memoryboxbackbutton.tres" id="2_ut4ol"]
+[ext_resource type="FontFile" uid="uid://blg6ol8nf4fgs" path="res://RobotoMono-VariableFont_wght.ttf" id="3_2j1ub"]
+[ext_resource type="ButtonGroup" uid="uid://hfwad7vwdjea" path="res://story_spicy_button_group.tres" id="3_kaas7"]
+[ext_resource type="Resource" uid="uid://dstoitdqjd6hj" path="res://location_university.tres" id="3_myt65"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ut4ol"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kaas7"]
+bg_color = Color(0.537255, 0.866667, 1, 0.196078)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.537255, 0.866667, 1, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2j1ub"]
+bg_color = Color(0.537255, 0.866667, 1, 0.392157)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kaas7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nw7nd"]
+bg_color = Color(0.537255, 0.866667, 1, 0.117647)
+border_width_left = 1
+border_width_top = 1
+border_width_bottom = 1
+border_color = Color(0.537255, 0.866667, 1, 1)
+corner_radius_top_left = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xqacp"]
+bg_color = Color(0.537255, 0.866667, 1, 1)
+corner_radius_top_left = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qkydy"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_bottom = 1
+border_color = Color(0.537255, 0.866667, 1, 1)
+corner_radius_top_left = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2j1ub"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xhuc4"]
+bg_color = Color(0.537255, 0.866667, 1, 0.117647)
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.537255, 0.866667, 1, 1)
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2chyr"]
+bg_color = Color(0.537255, 0.866667, 1, 1)
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_myt65"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.537255, 0.866667, 1, 1)
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+
+[node name="MemoryBoxOverlay" type="CanvasLayer"]
+script = ExtResource("1_nw7nd")
+all_memory_data = Array[ExtResource("2_2chyr")]([ExtResource("3_myt65")])
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.101961, 0.109804, 0.172549, 1)
+
+[node name="Panel" type="Panel" parent="."]
+anchors_preset = -1
+anchor_left = 0.019
+anchor_top = 0.051
+anchor_right = 0.981
+anchor_bottom = 0.939
+offset_left = 0.519997
+offset_top = -0.0800018
+offset_right = 0.479858
+offset_bottom = -0.120056
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_rxlxx")
+
+[node name="TitleLabel" type="Label" parent="Panel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.405
+anchor_top = 0.028
+anchor_right = 0.611
+anchor_bottom = 0.088
+offset_left = -0.0350342
+offset_top = 0.148001
+offset_right = 0.483032
+offset_bottom = -0.391998
+theme_override_colors/font_shadow_color = Color(0.537255, 0.866667, 1, 0.588235)
+theme_override_font_sizes/font_size = 30
+text = "M E M O R Y  B O X™"
+horizontal_alignment = 1
+
+[node name="BackButton" type="Button" parent="Panel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.022
+anchor_top = 0.029
+anchor_right = 0.058
+anchor_bottom = 0.084
+offset_left = -0.633991
+offset_top = 0.189009
+offset_right = 0.874008
+offset_bottom = 0.444008
+theme_override_font_sizes/font_size = 38
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ut4ol")
+theme_override_styles/hover = SubResource("StyleBoxFlat_kaas7")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_2j1ub")
+theme_override_styles/normal = ExtResource("2_ut4ol")
+text = "<"
+
+[node name="TabContainer" type="HBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.451
+anchor_top = 0.103
+anchor_right = 0.564
+anchor_bottom = 0.186
+offset_left = 0.00299072
+offset_top = 0.223
+offset_right = -88.708
+offset_bottom = -0.373993
+theme_override_constants/separation = -1
+
+[node name="StoryButton" type="Button" parent="Panel/TabContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_2j1ub")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_kaas7")
+theme_override_styles/hover = SubResource("StyleBoxFlat_nw7nd")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_xqacp")
+theme_override_styles/normal = SubResource("StyleBoxFlat_qkydy")
+toggle_mode = true
+button_pressed = true
+button_group = ExtResource("3_kaas7")
+text = " Story  📖 "
+
+[node name="SpicyButton" type="Button" parent="Panel/TabContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_2j1ub")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_2j1ub")
+theme_override_styles/hover = SubResource("StyleBoxFlat_xhuc4")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_2chyr")
+theme_override_styles/normal = SubResource("StyleBoxFlat_myt65")
+toggle_mode = true
+button_group = ExtResource("3_kaas7")
+text = " Spicy 🌶️ "
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.026
+anchor_top = 0.194
+anchor_right = 0.979
+anchor_bottom = 0.967
+offset_left = -0.0219994
+offset_top = -0.0460052
+offset_right = 0.786987
+offset_bottom = -0.353088
+
+[node name="LocationListContainer" type="VBoxContainer" parent="Panel/ScrollContainer"]
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 20

@@ -1,0 +1,60 @@
+[gd_scene load_steps=7 format=3 uid="uid://d4agulio3tpco"]
+
+[ext_resource type="Script" uid="uid://cy1g0xpb3u0e2" path="res://character_conversation_overlay.gd" id="1_fjuih"]
+[ext_resource type="Resource" uid="uid://b8mle40ah8hb3" path="res://mcbucket_invigirol.dialogue" id="2_fjuih"]
+[ext_resource type="Texture2D" uid="uid://cx4r1a1ci7vpj" path="res://sergei.PNG" id="3_csurk"]
+[ext_resource type="Texture2D" uid="uid://coo5k2phjvc1e" path="res://Protag.png" id="4_tjmot"]
+[ext_resource type="Texture2D" uid="uid://xra4dmomvu43" path="res://Backgrounds/McBucket/invigirol/mcbucket_ivigirol_base.png" id="5_2kt3p"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jy7bi"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_csurk")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="CharacterConversationOverlay" type="CanvasLayer"]
+process_mode = 3
+layer = 2
+script = ExtResource("1_fjuih")
+conversation_dialogue_file = ExtResource("2_fjuih")
+background_animations = SubResource("SpriteFrames_jy7bi")
+initial_animation_name = ""
+scene_character_sprite_texture = ExtResource("4_tjmot")
+
+[node name="RootContainer" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BackgroundRect" type="ColorRect" parent="RootContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BackgroundSprite" type="Sprite2D" parent="RootContainer"]
+position = Vector2(957, 540.5)
+scale = Vector2(0.497917, 0.498611)
+texture = ExtResource("5_2kt3p")
+
+[node name="AnimatedBackground" type="TextureRect" parent="RootContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+expand_mode = 1
+stretch_mode = 6

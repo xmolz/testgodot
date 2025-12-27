@@ -1,0 +1,43 @@
+[gd_scene load_steps=5 format=3 uid="uid://bn35sormknu1w"]
+
+[ext_resource type="Theme" uid="uid://dwcpu0kxyu7pq" path="res://chapter_button.tres" id="1_fmhaq"]
+[ext_resource type="Script" uid="uid://b242dhfjrtyue" path="res://ChapterButton.gd" id="1_v0ptq"]
+[ext_resource type="Texture2D" uid="uid://dmy1iixmc7uvn" path="res://1080test1.jpg" id="3_3xave"]
+[ext_resource type="FontFile" uid="uid://blg6ol8nf4fgs" path="res://RobotoMono-VariableFont_wght.ttf" id="3_v8c6v"]
+
+[node name="ChapterButton" type="Button"]
+custom_minimum_size = Vector2(180, 120)
+anchors_preset = -1
+anchor_right = 0.094
+anchor_bottom = 0.111
+offset_right = -180.48
+offset_bottom = -119.88
+theme = ExtResource("1_fmhaq")
+script = ExtResource("1_v0ptq")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_top = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("3_3xave")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(180, 20)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_v8c6v")
+text = "Chapter 1"
+horizontal_alignment = 1
+autowrap_mode = 3

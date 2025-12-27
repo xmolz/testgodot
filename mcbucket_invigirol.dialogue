@@ -1,0 +1,8 @@
+~ start
+do shake(-1, 20.0)
+Old Man McBucket: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
+ - What?
+	=> start
+- Leave
+	"GOODBYE OLD MAN!" You say to the creature in front of you.
+	=> END

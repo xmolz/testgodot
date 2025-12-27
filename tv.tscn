@@ -1,0 +1,27 @@
+[gd_scene load_steps=6 format=3 uid="uid://b8abif6uqojn4"]
+
+[ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactable.gd" id="1_06tmt"]
+[ext_resource type="Shader" uid="uid://cyp05p5euwm50" path="res://television_screen.gdshader" id="1_rlxh4"]
+[ext_resource type="Texture2D" uid="uid://dqyuerm7dscue" path="res://tv_sprite.png" id="2_rlxh4"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_arbd3"]
+shader = ExtResource("1_rlxh4")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_arbd3"]
+size = Vector2(474, 261)
+
+[node name="television_screen" type="Area2D"]
+script = ExtResource("1_06tmt")
+object_display_name = "Television Screen"
+object_id = "television_screen"
+metadata/_custom_type_script = "uid://dwldhrx7leysr"
+
+[node name="ObjectSprite" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_arbd3")
+texture = ExtResource("2_rlxh4")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_arbd3")
+
+[node name="WalkToPoint" type="Marker2D" parent="."]
