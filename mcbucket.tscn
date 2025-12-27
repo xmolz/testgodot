@@ -1,0 +1,206 @@
+[gd_scene load_steps=39 format=3 uid="uid://c8w3xusvs4d7d"]
+
+[ext_resource type="Script" uid="uid://criacytdq5a44" path="res://mcbucket.gd" id="1_71fhx"]
+[ext_resource type="Script" uid="uid://d3ltdedfvykko" path="res://WaypointMovement.gd" id="1_rp6bs"]
+[ext_resource type="Texture2D" uid="uid://bv0ip3d4sg3dp" path="res://image0(6).png" id="2_74ntj"]
+[ext_resource type="Texture2D" uid="uid://dtsr7w7eankia" path="res://character animations/Mcbucket anims/Mcbucket snims/Timeline 1_0001.png" id="4_qxfbv"]
+[ext_resource type="Texture2D" uid="uid://chjqd5n8qphqe" path="res://character animations/Mcbucket anims/Mcbucket snims/Timeline 1_0003.png" id="5_443qn"]
+[ext_resource type="Texture2D" uid="uid://b0kirqg7ctrop" path="res://character animations/Mcbucket anims/Mcbucket snims/Timeline 1_0002.png" id="6_u2w06"]
+[ext_resource type="Texture2D" uid="uid://c28ywthunw0h6" path="res://character animations/Mcbucket anims/Mcbucket snims/Timeline 1_0004.png" id="7_lhr5h"]
+[ext_resource type="Texture2D" uid="uid://cxevfjocngy8k" path="res://character animations/Mcbucket anims/Mcbucket snims/Timeline 1_0005.png" id="8_74a6j"]
+[ext_resource type="Texture2D" uid="uid://dt8xm50nhl2" path="res://character animations/Mcbucket anims/Mcbucket snims/Timeline 1_0007.png" id="9_qyaou"]
+[ext_resource type="Texture2D" uid="uid://c0ncb8j5uikuj" path="res://character animations/Mcbucket anims/Mcbucket snims/Timeline 1_0008.png" id="10_214r7"]
+[ext_resource type="Texture2D" uid="uid://deif122w28gs2" path="res://character animations/Mcbucket anims/Mcbucket snims/Timeline 1_0006.png" id="11_snvge"]
+[ext_resource type="Texture2D" uid="uid://da084e08h8hqi" path="res://character animations/Mcbucket anims/Mcbucket snims/Timeline 1_0009.png" id="12_0tdub"]
+[ext_resource type="Texture2D" uid="uid://cgwx52u8h78xu" path="res://character animations/Mcbucket anims/Mcbucket snims/Timeline 1_0010.png" id="13_auinh"]
+[ext_resource type="Texture2D" uid="uid://db1vvdbe3g2ve" path="res://character animations/Mcbucket anims/Mcbucket snims/Timeline 1_0011.png" id="14_dqx4y"]
+[ext_resource type="Texture2D" uid="uid://mo6rkc7ov65d" path="res://character animations/Mcbucket anims/Mcbucket snims/Timeline 1_0012.png" id="15_octvt"]
+[ext_resource type="Texture2D" uid="uid://bn7o0jmp1qing" path="res://character animations/Mcbucket anims/Mcbucket snims/Timeline 1_0013.png" id="16_t2mai"]
+[ext_resource type="Texture2D" uid="uid://d1bu5j71bxeyo" path="res://character animations/Mcbucket anims/Mcbucket snims/Timeline 1_0014.png" id="17_ppi45"]
+[ext_resource type="Texture2D" uid="uid://c6j64bsw7tf2k" path="res://character animations/Mcbucket anims/Mcbucket snims/Timeline 1_0015.png" id="18_m3dpd"]
+[ext_resource type="Texture2D" uid="uid://wmc8qrp22c61" path="res://character animations/Mcbucket anims/Mcbucket snims/Timeline 1_0016.png" id="19_s6jdf"]
+[ext_resource type="Texture2D" uid="uid://dc2uf10156ww" path="res://character animations/Mcbucket anims/Mcbucket snims/Timeline 1_0017.png" id="20_v7spw"]
+[ext_resource type="Texture2D" uid="uid://bkkkaxr435hwe" path="res://character animations/Mcbucket anims/Mcbucket snims/Timeline 1_0018.png" id="21_joblu"]
+[ext_resource type="Texture2D" uid="uid://dbx47v1y22v24" path="res://character animations/Mcbucket anims/Mcbucket snims/Timeline 1_0019.png" id="22_2cx86"]
+[ext_resource type="Texture2D" uid="uid://ck2kqii7kq2bv" path="res://character animations/Mcbucket anims/Mcbucket snims/Timeline 1_0020.png" id="23_majvw"]
+[ext_resource type="Texture2D" uid="uid://c5xff768aw4h" path="res://character animations/Mcbucket anims/Mcbucket snims/Timeline 1_0021.png" id="24_h4acy"]
+[ext_resource type="Texture2D" uid="uid://cq81kvuf5fnrv" path="res://character animations/Mcbucket anims/Mcbucket snims/Timeline 1_0022.png" id="25_cg6dl"]
+[ext_resource type="Texture2D" uid="uid://d0c1r5mvic54f" path="res://character animations/Mcbucket anims/Mcbucket snims/Timeline 1_0023.png" id="26_8rew4"]
+[ext_resource type="Texture2D" uid="uid://birce4jxrb08g" path="res://character animations/Mcbucket anims/Mcbucket snims/Timeline 1_0024.png" id="27_xo18r"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hsqv2"]
+size = Vector2(493, 571)
+
+[sub_resource type="Animation" id="Animation_71fhx"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("2_74ntj")]
+}
+
+[sub_resource type="Animation" id="Animation_3ye72"]
+resource_name = "idle"
+length = 3.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1, 1.125, 1.25, 1.375, 1.5, 1.63333, 1.75, 1.875, 2, 2.125, 2.25, 2.375, 2.5, 2.625, 2.75, 2.85),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("4_qxfbv"), ExtResource("5_443qn"), ExtResource("6_u2w06"), ExtResource("7_lhr5h"), ExtResource("8_74a6j"), ExtResource("9_qyaou"), ExtResource("10_214r7"), ExtResource("11_snvge"), ExtResource("12_0tdub"), ExtResource("13_auinh"), ExtResource("14_dqx4y"), ExtResource("15_octvt"), ExtResource("16_t2mai"), ExtResource("17_ppi45"), ExtResource("18_m3dpd"), ExtResource("19_s6jdf"), ExtResource("20_v7spw"), ExtResource("21_joblu"), ExtResource("22_2cx86"), ExtResource("23_majvw"), ExtResource("24_h4acy"), ExtResource("25_cg6dl"), ExtResource("26_8rew4"), ExtResource("27_xo18r")]
+}
+
+[sub_resource type="Animation" id="Animation_74ntj"]
+resource_name = "idle_default"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.366667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("2_74ntj"), ExtResource("2_74ntj")]
+}
+
+[sub_resource type="Animation" id="Animation_562c1"]
+resource_name = "idle_high"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.366667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("2_74ntj"), ExtResource("2_74ntj")]
+}
+
+[sub_resource type="Animation" id="Animation_i8dlw"]
+resource_name = "idle_hyper"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.366667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("2_74ntj"), ExtResource("2_74ntj")]
+}
+
+[sub_resource type="Animation" id="Animation_vp1ij"]
+resource_name = "idle_sleeping"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.366667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("2_74ntj"), ExtResource("2_74ntj")]
+}
+
+[sub_resource type="Animation" id="Animation_riif7"]
+resource_name = "react_chaos"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.366667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("2_74ntj"), ExtResource("2_74ntj")]
+}
+
+[sub_resource type="Animation" id="Animation_c64w3"]
+resource_name = "react_injection"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.366667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("2_74ntj"), ExtResource("2_74ntj")]
+}
+
+[sub_resource type="Animation" id="Animation_qcxj6"]
+resource_name = "react_thinking"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.366667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("2_74ntj"), ExtResource("2_74ntj")]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_562c1"]
+_data = {
+&"RESET": SubResource("Animation_71fhx"),
+&"idle": SubResource("Animation_3ye72"),
+&"idle_default": SubResource("Animation_74ntj"),
+&"idle_high": SubResource("Animation_562c1"),
+&"idle_hyper": SubResource("Animation_i8dlw"),
+&"idle_sleeping": SubResource("Animation_vp1ij"),
+&"react_chaos": SubResource("Animation_riif7"),
+&"react_injection": SubResource("Animation_c64w3"),
+&"react_thinking": SubResource("Animation_qcxj6")
+}
+
+[node name="McBucket" type="CharacterBody2D"]
+script = ExtResource("1_71fhx")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+animation = &""
+autoplay = "idle"
+
+[node name="MovementController" type="Node" parent="."]
+script = ExtResource("1_rp6bs")
+
+[node name="InteractionArea" type="Area2D" parent="."]
+
+[node name="InteractionClickShape" type="CollisionShape2D" parent="InteractionArea"]
+position = Vector2(-116.5, 36.5)
+shape = SubResource("RectangleShape2D_hsqv2")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-8.49999, 2.99997)
+texture = ExtResource("2_74ntj")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_562c1")
+}

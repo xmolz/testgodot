@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://d2jpsne6k1xfa"]
+
+[node name="Node2D" type="ColorRect"]
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.064
+offset_bottom = -0.120003
+grow_horizontal = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color(0.946587, 0.962104, 0.984834, 1)

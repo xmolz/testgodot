@@ -18,6 +18,8 @@ class_name VerbData # Makes it usable as a type hint
 ## (e.g., "Examine" might sometimes be used on the general scene, but mostly on objects)
 @export var requires_target_object: bool = true
 
-# You could add more properties later, like:
-# @export var sfx_on_select: AudioStream = null
-# @export var cursor_to_use: Texture2D = null
+# --- ADD THIS NEW LINE ---
+## The dialogue file to use as a fallback if no specific interaction is defined for this verb.
+@export var fallback_dialogue_file: DialogueResource
+# --- END OF ADDITION ---
+# i can add new properties here later!

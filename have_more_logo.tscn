@@ -1,0 +1,53 @@
+[gd_scene load_steps=11 format=3 uid="uid://b7dat8bd2cm67"]
+
+[ext_resource type="Texture2D" uid="uid://7etrb6a0mhdf" path="res://HavemoreLogoAnims/HavemoreLogo_0001.png" id="1_fwvy4"]
+[ext_resource type="Texture2D" uid="uid://dtew73ad5g83k" path="res://HavemoreLogoAnims/HavemoreLogo_0002.png" id="2_0fhey"]
+[ext_resource type="Texture2D" uid="uid://3gcd12thb3dt" path="res://HavemoreLogoAnims/HavemoreLogo_0004.png" id="3_wccbv"]
+[ext_resource type="Texture2D" uid="uid://dqfhq24m0syoh" path="res://HavemoreLogoAnims/HavemoreLogo_0003.png" id="4_32ijw"]
+[ext_resource type="Texture2D" uid="uid://bshe37846sx31" path="res://HavemoreLogoAnims/HavemoreLogo_0005.png" id="5_4bmte"]
+[ext_resource type="Texture2D" uid="uid://2e3uap0gv3vs" path="res://HavemoreLogoAnims/HavemoreLogo_0006.png" id="6_sx0pc"]
+[ext_resource type="Texture2D" uid="uid://bn4x835cqhyai" path="res://HavemoreLogoAnims/HavemoreLogo_0007.png" id="7_5r1u2"]
+[ext_resource type="Texture2D" uid="uid://cstyl7n1n63qw" path="res://HavemoreLogoAnims/HavemoreLogo_0008.png" id="8_iwr3t"]
+[ext_resource type="Texture2D" uid="uid://cabh6xj18bu6s" path="res://HavemoreLogoAnims/HavemoreLogo_0009.png" id="9_uytcx"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_3sbhv"]
+animations = [{
+"frames": [{
+"duration": 1.5,
+"texture": ExtResource("1_fwvy4")
+}, {
+"duration": 1.5,
+"texture": ExtResource("2_0fhey")
+}, {
+"duration": 1.5,
+"texture": ExtResource("3_wccbv")
+}, {
+"duration": 1.5,
+"texture": ExtResource("4_32ijw")
+}, {
+"duration": 1.5,
+"texture": ExtResource("5_4bmte")
+}, {
+"duration": 1.5,
+"texture": ExtResource("6_sx0pc")
+}, {
+"duration": 1.5,
+"texture": ExtResource("7_5r1u2")
+}, {
+"duration": 1.5,
+"texture": ExtResource("8_iwr3t")
+}, {
+"duration": 1.5,
+"texture": ExtResource("9_uytcx")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="HaveMoreLogo" type="Node2D"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_3sbhv")
+autoplay = "default"
+frame_progress = 0.880328

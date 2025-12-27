@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://cv8to4jygkg5i"
+path="res://.godot/imported/mcbucket_default_dialogue.dialogue-8b76afa8bc3c609c63ca9179e7cbcd9e.tres"
+
+[deps]
+
+source_file="res://mcbucket_default_dialogue.dialogue"
+dest_files=["res://.godot/imported/mcbucket_default_dialogue.dialogue-8b76afa8bc3c609c63ca9179e7cbcd9e.tres"]
+
+[params]
+
+defaults=true

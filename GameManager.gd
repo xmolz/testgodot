@@ -2,11 +2,27 @@
 extends Node
 
 const MAIN_GAME_SCENE_PATH = "res://main.tscn"
+const INSURANCE_FORM_SCENE = preload("res://insurance_form.tscn")
+const MAIN_MENU_SCENE_PATH = "res://main_menu.tscn"
+# --- ADD THIS LINE ---
+# Make sure this path is correct for your project structure!
+# In Boot.gd - CUT THESE LINES
+const INTRO_OVERLAY_SCENE_PATH = "res://CharacterConversationOverlay.tscn"
+const INTRO_DIALOGUE_FILE_PATH = "res://dialogue/npcs/faye.dialogue"
+const INTRO_BACKGROUND_ANIMATIONS_PATH = "res://conversation_backgrounds.tres"
+const INTRO_INITIAL_ANIMATION_NAME = "float_loop"
+
+var _insurance_form_instance: CanvasLayer = null # To keep track of the form
 # --- Signals ---
 signal verb_changed(new_verb_id: String)
 signal sentence_line_updated(text: String)
 signal interaction_complete # For VerbUI to reset its state
 signal available_verbs_changed(available_verb_data_array: Array[VerbData])
+signal item_picked_up(item_name: String)
+signal notification_requested(message: String)
+
+# character conversation ended signal
+signal character_conversation_ended(dialogue_resource: DialogueResource)
 
 # Inventory Signals
 signal inventory_updated(inventory_items: Array[ItemData])
@@ -15,12 +31,15 @@ signal selected_inventory_item_changed(selected_item_data: ItemData) # "In Hand"
 # --- High-Level Game State Management ---
 # 1. Define the game states using an enum for clarity and safety.
 # In GameManager.gd
+# In GameManager.gd
 enum GameState {
 	BOOTING,
-	LOGO_SPLASH,            # <-- NEW STATE
+	LOGO_SPLASH,
+	MAIN_MENU,
 	INTRO_CONVERSATION,
 	IN_GAME_PLAY,
-	PAUSED
+	PAUSED,
+	EXPLANATION # Add this new state
 }
 
 
@@ -36,8 +55,12 @@ var current_interaction_state: InteractionState = InteractionState.WORLD
 
 # These references are crucial. We need to tell the GameManager where the UI nodes are.
 # IMPORTANT: Verify these paths match the node structure in your main game scene!
+# These references are crucial. We link them in the Inspector.
 var verb_ui: CanvasLayer = null
 var inventory_ui: CanvasLayer = null
+var insurance_form_button_ui: CanvasLayer = null
+var explanation_layer: CanvasLayer = null
+
 
 # --- END of Interaction Context Management ---
 # 2. Create a variable to hold the current state.
@@ -46,6 +69,7 @@ var current_game_state: GameState = GameState.BOOTING
 # 3. Reference to your main game scene instance.
 #    The Boot.gd script will set this reference for us later.
 var main_game_scene_instance: Node = null
+var main_menu_scene_instance: Control = null
 # --- END of High-Level Game State Management ---
 var input_blocker_layer: CanvasLayer = null
 # --- State Variables ---
@@ -54,10 +78,13 @@ var current_selected_item_data: ItemData = null # "In Hand" / "Selected" item
 var hovered_interactable: Interactable = null
 var player_node: CharacterBody2D
 
+var _is_player_walking: bool = false
 var _current_character_conversation_overlay_instance: CharacterConversationOverlay = null
 var _signals_connected_to_interactable: Interactable = null # Tracks interactable for signal cleanup
 
 var current_level_state_manager: LevelStateManager = null # For current level's state
+
+
 
 # --- Verb Management ---
 @export var player_examine_lines: DialogueResource
@@ -71,12 +98,18 @@ var active_scene_verb_ids: Array[String] = []
 var player_inventory: Array[ItemData] = []
 var _item_data_map: Dictionary = {} # item_id -> ItemData
 
+
+
+
 # --- Game Flags (Global) ---
 var game_flags: Dictionary = {} # For flags that persist across levels
 
 # --- Verb ID Constants ---
-const IMPLICIT_USE_ITEM_VERB_ID: String = "use_item" # For direct item click on interactable
-const USE_ON_TARGET_VERB_ID: String = "use_on_target" # For "Use Item X WITH Y" verb
+
+const IMPLICIT_USE_ITEM_VERB_ID: String = "use_item" # BACK TO "use_item"
+const USE_ON_TARGET_VERB_ID: String = "use_on_target" # BACK TO "use_on_target"
+# --- NEW CONSTANT ---
+const WALK_TO_VERB_ID: String = "walk_to"
 
 
 func _ready():
@@ -147,54 +180,92 @@ func _ready():
 			if player_node.has_method("set_can_move"):
 				player_node.set_can_move(true)
 
+
+# --- NEW FUNCTION ---
+# This function captures mouse clicks that haven't been handled by any UI elements or Interactables.
+# In GameManager.gd
+
+func _unhandled_input(event: InputEvent):
+	# If the player is already walking, ignore all new click commands.
+	if _is_player_walking:
+		return
+
+	if not (event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed()):
+		return
+
+	if current_game_state != GameState.IN_GAME_PLAY or current_interaction_state != InteractionState.WORLD:
+		return
+
+	if current_verb_id != "" or current_selected_item_data != null or hovered_interactable != null:
+		return
+
+	if is_instance_valid(player_node) and player_node.has_method("walk_to_point"):
+		# Set the lock flag to true before telling the player to walk.
+		_is_player_walking = true
+		# THIS IS THE FINAL, CORRECTED LINE:
+		player_node.walk_to_point(player_node.get_global_mouse_position())
+# Replace the entire existing function with this one.
+# In GameManager.gd
+# Replace the entire existing function with this one.
 func change_game_state(new_state: GameState):
-	# Don't do anything if we are already in the target state.
 	if new_state == current_game_state:
 		return
 
-	# Print a clear log message for debugging.
-	# GameState.keys()[current_game_state] gets the string name of the enum value.
+	# --- THIS IS THE FIX ---
+	# Wait for the end of the current frame before doing anything else.
+	# This gives the engine a chance to redraw the UI (like un-pressing a button)
+	# before we start a heavy loading operation that will cause a pause.
+	await get_tree().process_frame
+	# --- END OF FIX ---
+
+	match current_game_state:
+		GameState.MAIN_MENU:
+			if is_instance_valid(main_menu_scene_instance):
+				print_rich("[color=yellow]GM: Cleaning up Main Menu scene.[/color]")
+				main_menu_scene_instance.queue_free()
+				main_menu_scene_instance = null
+		GameState.IN_GAME_PLAY:
+			pass
+
 	print_rich("[color=yellow]GameManager: Changing state from %s to %s[/color]" % [GameState.keys()[current_game_state], GameState.keys()[new_state]])
 	current_game_state = new_state
 
-	# This 'match' statement is like a big 'if/elif/else' block.
-	# It handles what to do when we ENTER a new state.
 	match current_game_state:
-		GameState.INTRO_CONVERSATION:
-			# When the intro starts, we want to make sure the main game is hidden
-			# and that player input is disabled.
-			if is_instance_valid(main_game_scene_instance):
-				main_game_scene_instance.visible = false
+		GameState.MAIN_MENU:
+			if is_instance_valid(main_menu_scene_instance):
+				return
 
-			# Disable player movement (you already have similar logic elsewhere)
-			if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
-				player_node.set_can_move(false)
+			var menu_packed_scene = load(MAIN_MENU_SCENE_PATH)
+			if not menu_packed_scene:
+				print_rich("[color=red]GameManager Error: Failed to load Main Menu Scene.[/color]")
+				return
+
+			main_menu_scene_instance = menu_packed_scene.instantiate()
+			main_menu_scene_instance.new_game_requested.connect(_on_main_menu_new_game_requested)
+			main_menu_scene_instance.quit_game_requested.connect(_on_main_menu_quit_requested)
+
+			get_tree().root.add_child(main_menu_scene_instance)
+			print_rich("[color=green]GM: Main Menu scene loaded and initialized.[/color]")
+
+		GameState.EXPLANATION:
+			pass
+
+		GameState.INTRO_CONVERSATION:
+			_start_intro_conversation()
 
 		GameState.IN_GAME_PLAY:
-			# If the main scene already exists for some reason, we're done.
 			if is_instance_valid(main_game_scene_instance):
 				return
 
-			# 1. Load the main game scene resource
 			var main_packed_scene = load(MAIN_GAME_SCENE_PATH)
 			if not main_packed_scene:
 				print_rich("[color=red]GameManager Error: Failed to load Main Game Scene.[/color]")
 				return
 
-			# 2. Instantiate it
 			main_game_scene_instance = main_packed_scene.instantiate()
-
-			# 3. Find the Boot node to add the scene to the tree
-			var boot_node = get_tree().root.get_node("Boot")
-			if not is_instance_valid(boot_node):
-				print_rich("[color=red]GameManager Error: Could not find 'Boot' node in scene tree to add main scene.[/color]")
-				# Fallback to adding to root, but this is not ideal
-				get_tree().root.add_child(main_game_scene_instance)
-			else:
-				boot_node.add_child(main_game_scene_instance)
-
+			get_tree().root.add_child(main_game_scene_instance)
 			_find_and_assign_ui_nodes()
-			# 4. Initialize the player (this logic can stay the same)
+
 			if not is_instance_valid(player_node):
 				player_node = get_tree().get_first_node_in_group("player")
 				if not is_instance_valid(player_node):
@@ -202,31 +273,14 @@ func change_game_state(new_state: GameState):
 				else:
 					print_rich("[color=green]GM: Found player: %s[/color]" % player_node.name)
 
-			if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
-				player_node.set_can_move(true)
-			# --- PASTE THE CODE HERE AND ADD A CHECK ---
-			# We only need to find the player node once.
-			if not is_instance_valid(player_node):
-				player_node = get_tree().get_first_node_in_group("player")
-				if not is_instance_valid(player_node):
-					print_rich("[color=red]GM: Player node not found in group 'player' or is invalid![/color]")
-				else:
-					print_rich("[color=green]GM: Found player: %s[/color]" % player_node.name)
-
-			# Enable player movement
 			if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
 				player_node.set_can_move(true)
 
 		GameState.PAUSED:
-			# We can add logic for a pause menu here later.
-			# For example: get_tree().paused = true
 			pass
 
 		GameState.BOOTING:
-			# This is the initial state, not much to do here as Boot.gd handles it.
 			pass
-
-# --- Core Functions: Verb and Item Selection (MODIFIED FOR USE_ON_TARGET_VERB_ID) ---
 func select_verb(verb_id_to_select: String):
 	var previously_selected_verb_id = current_verb_id
 	var new_verb_id = ""
@@ -298,10 +352,14 @@ func select_inventory_item(item_data_to_select: ItemData):
 
 # --- UI and Interaction Flow ---
 func set_hovered_object(interactable: Interactable):
+	if _is_player_walking:
+		return
 	hovered_interactable = interactable
 	update_sentence_line_ui()
 
 func clear_hovered_object():
+	if _is_player_walking:
+		return
 	hovered_interactable = null
 	update_sentence_line_ui()
 
@@ -352,13 +410,21 @@ func update_sentence_line_ui():
 			else:
 				line_text += ":" # Add colon if no target, like "Examine:"
 
+	# --- MODIFIED BLOCK ---
+	# This now checks the object's location before creating the "Walk to" text.
+	elif hovered_interactable and hovered_interactable.interaction_location == Interactable.InteractionLocation.WORLD:
+		line_text = "Walk to: " + hovered_interactable.object_display_name
+
 	# If line_text is still empty, it means no verb or item is selected, and nothing is hovered.
 	# The UI should handle an empty string appropriately (e.g., hide the sentence line label).
 	sentence_line_updated.emit(line_text)
-	# Optional: print for debugging sentence line changes
-	# print_rich("[color=DarkTurquoise]GM UI: Sentence line updated to: '%s'[/color]" % line_text if line_text else "[color=DarkTurquoise]GM UI: Sentence line cleared[/color]")
+
 
 func process_interaction_click(interactable_node: Interactable):
+	# If the player is already walking, ignore all new click commands.
+	if _is_player_walking:
+		return
+
 	if not is_instance_valid(interactable_node):
 		print_rich("[color=red]GM: process_interaction_click with null or invalid interactable.[/color]")
 		return
@@ -378,11 +444,6 @@ func process_interaction_click(interactable_node: Interactable):
 		else:
 			# "Use With" verb is active, but no source item selected. Inform player.
 			print_rich("[color=orange]GM: Cannot 'Use With' on '%s'. No source item selected from inventory.[/color]" % interactable_node.object_display_name)
-			# Optionally, emit a signal here for a UI to display this message to the player
-			# display_game_message.emit("Select an item from inventory to use with that.")
-			# For now, we just log it and do nothing further with the interaction.
-			# We don't complete the interaction cycle here as the player might want to select an item next.
-			# The sentence line UI should already reflect "Use With: None Selected ON [Target]".
 			return
 
 	elif current_selected_item_data != null: # No specific verb, but an item is "in hand" (implicit use)
@@ -394,10 +455,16 @@ func process_interaction_click(interactable_node: Interactable):
 		_initiate_interaction_flow(interactable_node, current_verb_id, null)
 
 	else: # No verb and no item selected.
-		print_rich("[color=yellow]GM: No verb or item selected for interaction with '%s'.[/color]" % interactable_node.object_display_name)
-		# Optionally, you could make this default to an "examine" action on the interactable_node
-		# e.g., _initiate_interaction_flow(interactable_node, "examine", null)
-		return
+		# --- MODIFIED BLOCK ---
+		# The default "Walk to" action should ONLY apply to objects in the main world.
+		if interactable_node.interaction_location == Interactable.InteractionLocation.WORLD:
+			print_rich("[color=green]GM: Processing default 'Walk to' on Target '%s'[/color]" % interactable_node.object_display_name)
+			_initiate_interaction_flow(interactable_node, WALK_TO_VERB_ID, null)
+		else:
+			# For UI objects, do nothing if no verb/item is selected. This is the desired behavior.
+			print_rich("[color=yellow]GM: No verb/item selected for interaction with UI object '%s'. Ignoring click.[/color]" % interactable_node.object_display_name)
+			return
+
 
 func _initiate_interaction_flow(interactable_node: Interactable, verb_to_use_id: String, item_data_to_use: ItemData):
 	if not is_instance_valid(interactable_node):
@@ -405,16 +472,24 @@ func _initiate_interaction_flow(interactable_node: Interactable, verb_to_use_id:
 		_complete_interaction_cycle(); return
 
 	var walk_needed = true
-	if interactable_node.has_method("does_verb_require_walk"):
-		walk_needed = interactable_node.does_verb_require_walk(verb_to_use_id, item_data_to_use)
+
+	if interactable_node.interaction_location == Interactable.InteractionLocation.UI_OVERLAY:
+		walk_needed = false
 	else:
-		print_rich("[color=yellow]GM: Interactable '%s' no 'does_verb_require_walk'. Assuming walk needed.[/color]" % interactable_node.name)
+		if interactable_node.has_method("does_verb_require_walk"):
+			walk_needed = interactable_node.does_verb_require_walk(verb_to_use_id, item_data_to_use)
+		else:
+			print_rich("[color=yellow]GM: Interactable '%s' no 'does_verb_require_walk'. Assuming walk needed.[/color]" % interactable_node.name)
+			walk_needed = true
 
 	var item_name_for_log = "None"
 	if item_data_to_use: item_name_for_log = item_data_to_use.display_name
 	print_rich("[color=aqua]GM: Initiating flow: Verb '%s' on '%s' with item '%s'. Requires walk: %s[/color]" % [verb_to_use_id, interactable_node.object_display_name, item_name_for_log, str(walk_needed)])
 
 	if walk_needed:
+		# --- THIS IS THE FIX ---
+		# Set the lock flag to true before telling the player to walk.
+		_is_player_walking = true
 		if not is_instance_valid(player_node):
 			print_rich("[color=red]GM: Player node not set or invalid. Interacting immediately (if possible).[/color]")
 			_perform_actual_interaction(interactable_node, verb_to_use_id, item_data_to_use)
@@ -427,8 +502,15 @@ func _initiate_interaction_flow(interactable_node: Interactable, verb_to_use_id:
 			_perform_actual_interaction(interactable_node, verb_to_use_id, item_data_to_use)
 	else:
 		if is_instance_valid(player_node) and player_node.has_method("face_target"):
-			player_node.face_target(interactable_node.global_position)
+			if interactable_node.interaction_location == Interactable.InteractionLocation.WORLD:
+				player_node.face_target(interactable_node.global_position)
 		_perform_actual_interaction(interactable_node, verb_to_use_id, item_data_to_use)
+
+# --- ADD THIS ENTIRE NEW FUNCTION ---
+# The player will call this function to "unlock" input once they have stopped moving.
+func player_has_finished_walk_command():
+	_is_player_walking = false
+
 
 func player_reached_interaction_target(interactable_node: Interactable, verb_to_use_id: String, item_data_to_use: ItemData):
 	print_rich("[color=aqua]GM: Player has reached target '%s'. Performing interaction.[/color]" % interactable_node.object_display_name if is_instance_valid(interactable_node) else "[color=red]INVALID TARGET[/color]")
@@ -451,28 +533,6 @@ func _perform_actual_interaction(interactable_node: Interactable, verb_to_use_id
 	print_rich("[color=aqua]GM: Performing actual interaction: Verb '%s' on '%s' with 'in-hand' item: '%s' (ID: '%s')[/color]" % [verb_to_use_id, interactable_node.object_display_name, item_name_for_log, item_id_for_interaction])
 
 	_disconnect_interactable_request_signals()
-
-	if verb_to_use_id == "examine":
-		if not player_examine_lines: print_rich("[color=red]GM: player_examine_lines DialogueResource not set![/color]"); _complete_interaction_cycle(); return
-		if DialogueManager: DialogueManager.dialogue_ended.connect(_on_dialogue_ended_for_object_dialogue, CONNECT_ONE_SHOT); DialogueManager.show_dialogue_balloon(player_examine_lines, interactable_node.object_id)
-		else: print_rich("[color=red]GM: DialogueManager missing, cannot show examine lines.[/color]"); _complete_interaction_cycle()
-		return
-
-	if verb_to_use_id == "talk_to":
-		if interactable_node.category == Interactable.ObjectCategory.CHARACTER:
-			if not interactable_node.character_conversation_overlay_scene: print_rich("[color=red]GM: Character '%s' (ID: %s) has no 'character_conversation_overlay_scene'![/color]" % [interactable_node.object_display_name, interactable_node.object_id]); _complete_interaction_cycle(); return
-
-			enter_conversation_state() # Tell GM to hide the main UI
-
-			_current_character_conversation_overlay_instance = interactable_node.character_conversation_overlay_scene.instantiate()
-			get_tree().root.add_child(_current_character_conversation_overlay_instance)
-			if not _current_character_conversation_overlay_instance.conversation_finished.is_connected(_on_character_conversation_finished):
-				_current_character_conversation_overlay_instance.conversation_finished.connect(_on_character_conversation_finished)
-		else:
-			if not player_talk_to_lines: print_rich("[color=red]GM: player_talk_to_lines DialogueResource not set![/color]"); _complete_interaction_cycle(); return
-			if DialogueManager: DialogueManager.dialogue_ended.connect(_on_dialogue_ended_for_object_dialogue, CONNECT_ONE_SHOT); DialogueManager.show_dialogue_balloon(player_talk_to_lines, interactable_node.object_id)
-			else: print_rich("[color=red]GM: DialogueManager missing, cannot show talk_to lines for object.[/color]"); _complete_interaction_cycle()
-		return
 
 	_signals_connected_to_interactable = interactable_node
 	print_rich("[color=gray]GM: Connecting signals to Interactable: %s for non-dialogue interaction.[/color]" % interactable_node.name)
@@ -522,7 +582,9 @@ func _on_dialogue_ended_for_object_dialogue(_resource: Resource):
 
 	_complete_interaction_cycle()
 
-func _on_character_conversation_finished(_resource: DialogueResource):
+# Replace the entire existing function with this one.
+func _on_character_conversation_finished(resource: DialogueResource):
+	# First, perform all the necessary cleanup and state changes.
 	exit_to_world_state()
 
 	if _current_character_conversation_overlay_instance:
@@ -533,6 +595,12 @@ func _on_character_conversation_finished(_resource: DialogueResource):
 		player_node.set_can_move(true)
 
 	_complete_interaction_cycle()
+
+	# Now, simply announce that a conversation ended, and pass along which one.
+	# The Main scene will be listening for this.
+	character_conversation_ended.emit(resource)
+
+
 # --- Interactable Signal Handlers ---
 func _on_interactable_display_dialogue_console(text: String):
 	print_rich("[color=yellow]GM (via Interactable Console): %s[/color]" % text)
@@ -609,9 +677,24 @@ func get_current_level_flag(flag_name: String) -> bool:
 
 
 # --- Verb Data and Availability ---
+# In GameManager.gd
+
 func get_verb_data_by_id(verb_id_to_find: String) -> VerbData:
+	var id_for_lookup = verb_id_to_find
+
+	# --- NEW LOGIC: DATA MAPPING ---
+	# If the game's internal logic asks for an implicit or target-based "use" verb,
+	# we remap it to the single, public "use" verb ID. This ensures that all "use"
+	# actions correctly find the data stored in "use_verb.tres".
+	if verb_id_to_find == IMPLICIT_USE_ITEM_VERB_ID or verb_id_to_find == USE_ON_TARGET_VERB_ID:
+		id_for_lookup = "use"
+
+	# The rest of the function remains the same. It now searches for "use".
 	for verb_data_res in all_verb_data_resources:
-		if verb_data_res and verb_data_res.verb_id == verb_id_to_find: return verb_data_res
+		if verb_data_res and verb_data_res.verb_id == id_for_lookup:
+			return verb_data_res
+
+	# If nothing is found, return null as before.
 	return null
 
 func get_currently_displayable_verbs() -> Array[VerbData]:
@@ -670,6 +753,7 @@ func add_item_to_inventory(item_id_to_add: String):
 	player_inventory.append(item_data)
 	inventory_updated.emit(player_inventory.duplicate())
 	print_rich("[color=green]GM: Successfully added item '%s' (Name: %s) to inventory. Player now has %s items.[/color]" % [item_id_to_add, item_data.display_name, player_inventory.size()])
+	show_notification("Picked up: " + item_data.display_name)
 
 func remove_item_from_inventory(item_id_to_remove: String):
 	print_rich("[color=aqua]GM: Attempting remove_item_from_inventory for ID: '%s'[/color]" % item_id_to_remove)
@@ -732,6 +816,11 @@ func enter_conversation_state():
 	print_rich("[color=Plum]GM: Entering CONVERSATION state.[/color]")
 	current_interaction_state = InteractionState.CONVERSATION
 
+	# --- DEBUGGING STEP ---
+	# Let's see if the GameManager can actually see your button node.
+	print("Attempting to hide button UI. Node is: ", insurance_form_button_ui)
+	# --- END DEBUGGING STEP ---
+
 	# Show the blocker on layer 1 to stop clicks to the world (layer 0)
 	if is_instance_valid(input_blocker_layer):
 		input_blocker_layer.visible = true
@@ -739,17 +828,16 @@ func enter_conversation_state():
 	# Hide the game UI
 	if is_instance_valid(verb_ui): verb_ui.visible = false
 	if is_instance_valid(inventory_ui): inventory_ui.visible = false
+	if is_instance_valid(insurance_form_button_ui): insurance_form_button_ui.visible = false
 
 func enter_zoom_view_state():
 	if current_interaction_state == InteractionState.ZOOM_VIEW: return
 	print_rich("[color=Plum]GM: Entering ZOOM_VIEW state.[/color]")
 	current_interaction_state = InteractionState.ZOOM_VIEW
 
-	# Show the blocker on layer 1 to stop clicks to the world (layer 0)
+	# ... (existing code for input blocker and UI layers) ...
 	if is_instance_valid(input_blocker_layer):
 		input_blocker_layer.visible = true
-
-	# Move the game UI to layer 3 so it's on top of the overlay (which will be on layer 2)
 	if is_instance_valid(verb_ui):
 		verb_ui.layer = 3
 		verb_ui.visible = true
@@ -757,42 +845,266 @@ func enter_zoom_view_state():
 		inventory_ui.layer = 3
 		inventory_ui.visible = true
 
+	# --- THIS IS STILL IMPORTANT ---
+	# Explicitly disabling player movement prevents weird input bugs on un-pause.
+	if is_instance_valid(player_node):
+		player_node.set_can_move(false)
+	# -----------------------------
+
+	# --- PAUSE THE ENTIRE GAME ---
+	# This stops _process and _physics_process for all nodes unless their
+	# process_mode is set to "Always".
+	get_tree().paused = true
+	# -----------------------------
+
 func exit_to_world_state():
 	print_rich("[color=Plum]GM: Exiting overlay, returning to WORLD state.[/color]")
 	current_interaction_state = InteractionState.WORLD
 
-	# Hide the blocker
 	if is_instance_valid(input_blocker_layer):
 		input_blocker_layer.visible = false
-
-	# Restore the game UI to its default layer 1
 	if is_instance_valid(verb_ui):
 		verb_ui.layer = 1
 		verb_ui.visible = true
 	if is_instance_valid(inventory_ui):
 		inventory_ui.layer = 1
 		inventory_ui.visible = true
+
+	# --- THIS IS THE FIX (APPLIED HERE AS WELL) ---
+	# Check the flag here too, so the button reappears after future conversations.
+	if is_instance_valid(insurance_form_button_ui):
+		var should_be_visible = get_current_level_flag("insurance_button_unlocked")
+		insurance_form_button_ui.visible = should_be_visible
+	# --- END OF FIX ---
+
+	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
+		player_node.set_can_move(true)
+
+	get_tree().paused = false
+
+
+# In GameManager.gd
+# Replace your entire _find_and_assign_ui_nodes function with this one.
+
+# In GameManager.gd
+# Replace the entire function.
+
 func _find_and_assign_ui_nodes():
 	# Check if we even have a main scene to search in.
 	if not is_instance_valid(main_game_scene_instance):
 		print_rich("[color=red]GM: Cannot find UI nodes because main_game_scene_instance is not valid.[/color]")
 		return
 
-	# Tell Godot to look INSIDE the main scene for these nodes.
+	# Tell Godot to look INSIDE the main scene for these nodes using their Unique Scene Names.
 	verb_ui = main_game_scene_instance.get_node_or_null("%VerbUI_CanvasLayer")
 	inventory_ui = main_game_scene_instance.get_node_or_null("%InventoryUI_CanvasLayer")
+	insurance_form_button_ui = main_game_scene_instance.get_node_or_null("%InsuranceFormButtonUI")
+	input_blocker_layer = main_game_scene_instance.get_node_or_null("%InputBlockerLayer")
+	explanation_layer = main_game_scene_instance.get_node_or_null("%ExplanationLayer")
 
+	# --- Verification Logging ---
 	if is_instance_valid(verb_ui):
 		print_rich("[color=green]GM: Successfully found and assigned VerbUI.[/color]")
 	else:
-		print_rich("[color=red]GM: FAILED to find VerbUI. Check it has a Unique Name and is named 'VerbUI_CanvasLayer' in main.tscn.[/color]")
+		print_rich("[color=red]GM: FAILED to find VerbUI.[/color]")
 
 	if is_instance_valid(inventory_ui):
 		print_rich("[color=green]GM: Successfully found and assigned InventoryUI.[/color]")
 	else:
-		print_rich("[color=red]GM: FAILED to find InventoryUI. Check it has a Unique Name and its name is 'InventoryUI_CanvasLayer' in main.tscn.[/color]")
-	input_blocker_layer = main_game_scene_instance.get_node_or_null("%InputBlockerLayer")
+		print_rich("[color=red]GM: FAILED to find InventoryUI.[/color]")
+
+	if is_instance_valid(insurance_form_button_ui):
+		print_rich("[color=green]GM: Successfully found and assigned InsuranceFormButtonUI.[/color]")
+		# --- THIS IS THE CORRECTED LINE ---
+		# We now connect to the 'form_button_pressed' signal that your script emits.
+		if not insurance_form_button_ui.form_button_pressed.is_connected(_on_insurance_form_button_pressed):
+			insurance_form_button_ui.form_button_pressed.connect(_on_insurance_form_button_pressed)
+	else:
+		print_rich("[color=red]GM: FAILED to find InsuranceFormButtonUI.[/color]")
+
 	if is_instance_valid(input_blocker_layer):
 		print_rich("[color=green]GM: Successfully found and assigned InputBlockerLayer.[/color]")
 	else:
 		print_rich("[color=red]GM: FAILED to find InputBlockerLayer.[/color]")
+
+	if is_instance_valid(explanation_layer):
+		print_rich("[color=green]GM: Successfully found and assigned ExplanationLayer.[/color]")
+		if not explanation_layer.explanation_finished.is_connected(exit_explanation_state):
+			explanation_layer.explanation_finished.connect(exit_explanation_state)
+	else:
+		print_rich("[color=red]GM: FAILED to find ExplanationLayer.[/color]")
+func _on_form_field_submitted(field_id: String, value):
+	# Log the incoming data for debugging.
+	print_rich("[color=Cyan]GM: Received submission for field '%s' with value: %s[/color]" % [field_id, value])
+
+	# Use a 'match' statement to cleanly handle each field's data.
+	match field_id:
+		"first_name":
+			# --- YOUR GAME LOGIC FOR THE NAME GOES HERE ---
+			if value.to_lower() == "jane": # Example correct answer
+				print_rich("[color=Green]GM Feedback: That name sounds familiar.[/color]")
+				# TODO: Play a 'correct' sound, set a flag, etc.
+				# set_game_flag("first_name_correct", true)
+			else:
+				print_rich("[color=Orange]GM Feedback: That name doesn't seem right...[/color]")
+				# TODO: Play an 'incorrect' sound.
+
+		"date_of_birth":
+			# --- YOUR GAME LOGIC FOR THE DATE OF BIRTH GOES HERE ---
+			if value == "12/05/2003": # Example correct answer
+				print_rich("[color=Green]GM Feedback: The date has a certain significance.[/color]")
+				# TODO: Play a 'correct' sound, set a flag, etc.
+				# set_game_flag("dob_correct", true)
+			else:
+				print_rich("[color=Orange]GM Feedback: That date means nothing to me.[/color]")
+				# TODO: Play an 'incorrect' sound.
+# This function is called ONLY when the "Close Form" button is pressed.
+func _on_insurance_form_closed():
+	print_rich("[color=Yellow]GM: Insurance form was closed by the player.[/color]")
+
+	# Clean up our reference to the form instance. This is important.
+	_insurance_form_instance = null
+
+	# Return control to the player and un-pause the game.
+	exit_to_world_state()
+
+
+# Add these new functions to the end of GameManager.gd
+# In GameManager.gd
+# Replace the entire existing function with this one.
+
+func start_explanation(data: ExplanationData, root_node_to_search: Node):
+	if current_game_state == GameState.EXPLANATION or not is_instance_valid(explanation_layer):
+		return
+
+	change_game_state(GameState.EXPLANATION)
+
+	# --- THIS IS THE NEW, SMARTER HIDING LOGIC ---
+	var nodes_to_keep_visible = []
+
+	# --- THIS IS THE FIX ---
+	# A Resource doesn't have a ".has()" method. The correct way to check for a property
+	# is using the 'in' keyword.
+	if "exceptions_to_hide" in data:
+	# --- END OF FIX ---
+		for node_path in data.exceptions_to_hide:
+			var node = root_node_to_search.get_node_or_null(node_path)
+			if is_instance_valid(node):
+				nodes_to_keep_visible.append(node)
+
+	if is_instance_valid(verb_ui) and not verb_ui in nodes_to_keep_visible:
+		verb_ui.hide()
+
+	if is_instance_valid(inventory_ui) and not inventory_ui in nodes_to_keep_visible:
+		inventory_ui.hide()
+
+	if is_instance_valid(insurance_form_button_ui):
+		if insurance_form_button_ui in nodes_to_keep_visible:
+			insurance_form_button_ui.show()
+		else:
+			insurance_form_button_ui.hide()
+	# --- END OF NEW LOGIC ---
+
+	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
+		player_node.set_can_move(false)
+
+	get_tree().paused = true
+	explanation_layer.show_explanation(data, root_node_to_search)
+
+func exit_explanation_state():
+	if current_game_state != GameState.EXPLANATION:
+		return
+
+	print_rich("[color=Plum]GM: Exiting EXPLANATION, returning to IN_GAME_PLAY state.[/color]")
+
+	get_tree().paused = false
+
+	# Show the main game UI
+	if is_instance_valid(verb_ui): verb_ui.visible = true
+	if is_instance_valid(inventory_ui): inventory_ui.visible = true
+
+	# --- THIS IS THE FIX ---
+	# Instead of just showing the button, check if it has been unlocked.
+	if is_instance_valid(insurance_form_button_ui):
+		var should_be_visible = get_current_level_flag("insurance_button_unlocked")
+		insurance_form_button_ui.visible = should_be_visible
+	# --- END OF FIX ---
+
+	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
+		player_node.set_can_move(true)
+
+	change_game_state(GameState.IN_GAME_PLAY)
+
+# In GameManager.gd
+# Add these three missing functions to the end of the script.
+
+# This function runs when the main UI button (on the game screen) is pressed.
+func _on_insurance_form_button_pressed():
+	# If a form is already open, do nothing. Prevents opening multiple forms.
+	if is_instance_valid(_insurance_form_instance):
+		return
+
+	print_rich("[color=LawnGreen]GM: Opening insurance form...[/color]")
+
+	# Create a new instance of our form scene.
+	_insurance_form_instance = INSURANCE_FORM_SCENE.instantiate()
+
+	# --- CONNECT TO THE NEW SIGNALS ---
+	# Connect to the signal that's emitted when ANY "OK" button is pressed.
+	_insurance_form_instance.field_submitted.connect(_on_form_field_submitted)
+	# Connect to the signal that's emitted ONLY when the "Close Form" button is pressed.
+	_insurance_form_instance.form_closed.connect(_on_insurance_form_closed)
+	# ----------------------------------
+
+	# Add the form to the main scene tree so it becomes visible.
+	get_tree().root.add_child(_insurance_form_instance)
+
+	# The form's own script hides it by default, so we show it now.
+	_insurance_form_instance.show()
+
+	# Pause the game world and disable player movement.
+	enter_zoom_view_state()
+
+# This function receives data from ANY "OK" button on the form.
+func show_notification(message: String):
+	notification_requested.emit(message)
+
+
+func _on_main_menu_new_game_requested():
+	print_rich("[color=LawnGreen]GM: 'New Game' requested. Starting intro sequence...[/color]")
+	# We simply change the state. The change_game_state function will handle
+	# cleaning up the menu and starting the next part of the game.
+	change_game_state(GameState.INTRO_CONVERSATION)
+
+
+func _on_main_menu_quit_requested():
+	print_rich("[color=LawnGreen]GM: 'Quit Game' requested. Closing application.[/color]")
+	get_tree().quit()
+
+
+func _start_intro_conversation():
+	print_rich("[color=yellow]GM: Starting intro sequence...[/color]")
+
+	var intro_overlay_packed_scene = load(INTRO_OVERLAY_SCENE_PATH)
+	if not intro_overlay_packed_scene:
+		print_rich("[color=red]GM Error: Failed to load Intro Overlay Scene at path: %s[/color]" % INTRO_OVERLAY_SCENE_PATH)
+		return
+
+	var intro_overlay = intro_overlay_packed_scene.instantiate()
+
+	# Configure its exported variables from code.
+	intro_overlay.conversation_dialogue_file = load(INTRO_DIALOGUE_FILE_PATH)
+	intro_overlay.background_animations = load(INTRO_BACKGROUND_ANIMATIONS_PATH)
+	intro_overlay.initial_animation_name = INTRO_INITIAL_ANIMATION_NAME
+
+	# Connect to its 'conversation_finished' signal.
+	intro_overlay.conversation_finished.connect(_on_intro_conversation_finished, CONNECT_ONE_SHOT)
+
+	# Add it to the scene tree so it becomes visible and starts running.
+	get_tree().root.add_child(intro_overlay)
+
+
+func _on_intro_conversation_finished(_dialogue_resource):
+	print_rich("[color=yellow]GM: Intro conversation finished. Transitioning to main game...[/color]")
+	# The intro is over, so we tell the GameManager to load the main game world.
+	change_game_state(GameState.IN_GAME_PLAY)

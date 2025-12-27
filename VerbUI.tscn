@@ -1,20 +1,29 @@
-[gd_scene load_steps=2 format=3 uid="uid://bigouorladqds"]
+[gd_scene load_steps=4 format=3 uid="uid://bigouorladqds"]
 
 [ext_resource type="Script" uid="uid://npn3pmma7jfq" path="res://VerbUI.gd" id="1_fpe4u"]
+[ext_resource type="Theme" uid="uid://bbh4rjwcxnama" path="res://Themes/verb_and_inventory_theme.tres" id="2_5r43t"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5r43t"]
+bg_color = Color(0.79258, 0.870945, 0.954734, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.627399, 0.826419, 0.989882, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [node name="VerbUI_CanvasLayer" type="CanvasLayer"]
 process_mode = 3
 script = ExtResource("1_fpe4u")
 
 [node name="ActionBubbleLabel" type="Label" parent="."]
-visible = false
 offset_right = 40.0
 offset_bottom = 23.0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 1
-theme_override_constants/shadow_outline_size = 3
-theme_override_font_sizes/font_size = 20
+theme = ExtResource("2_5r43t")
+theme_override_styles/normal = SubResource("StyleBoxFlat_5r43t")
 
 [node name="VerbGridPanel" type="Panel" parent="."]
 anchors_preset = -1
@@ -25,6 +34,7 @@ anchor_bottom = 0.99
 grow_vertical = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme = ExtResource("2_5r43t")
 
 [node name="GridContainer" type="GridContainer" parent="VerbGridPanel"]
 layout_mode = 1
@@ -33,20 +43,26 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("2_5r43t")
 columns = 3
 
-[node name="ActionsLabel" type="Label" parent="."]
+[node name="Panel" type="Panel" parent="."]
+offset_left = 15.0
+offset_top = 829.0
+offset_right = 173.0
+offset_bottom = 869.0
+theme = ExtResource("2_5r43t")
+
+[node name="ActionsLabel" type="Label" parent="Panel"]
+layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.012
-anchor_top = 0.781
-anchor_right = 0.052
-anchor_bottom = 0.803
-offset_left = 0.959999
-offset_top = -0.480042
-offset_right = -0.959999
-offset_bottom = -0.480042
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 2
-theme_override_constants/shadow_outline_size = 3
-theme_override_font_sizes/font_size = 20
+anchor_left = 0.138
+anchor_top = 0.118
+anchor_right = 0.854
+anchor_bottom = 0.853
+offset_left = 9.196
+offset_top = 2.27999
+offset_right = 9.116
+offset_bottom = 2.28999
+theme = ExtResource("2_5r43t")
 text = "ACTIONS"

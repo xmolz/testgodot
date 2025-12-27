@@ -108,12 +108,16 @@ func _on_available_verbs_changed(available_verb_data_array: Array[VerbData]):
 
 
 # Renamed to avoid conflict if an old _on_verb_button_pressed was connected from editor
+# In VerbUI.gd
+
 func _on_verb_button_pressed_dynamic(verb_id_pressed: String):
+	# Play the sound 20% faster. Experiment with this value! Try 1.1, 1.3, etc.
+	SoundManager.play_sfx("ui_click", 1.5)
+
 	if GameManager and verb_id_pressed != "":
 		GameManager.select_verb(verb_id_pressed)
 	else:
 		print("VerbUI: GameManager not found or empty verb_id pressed.")
-
 
 func _on_game_manager_verb_changed(new_verb_id: String): # Unchanged from previous version
 	if new_verb_id == "":
@@ -128,12 +132,22 @@ func _on_game_manager_verb_changed(new_verb_id: String): # Unchanged from previo
 			action_bubble_label.visible = true
 	_update_button_selected_visual_state(new_verb_id)
 
-func _on_game_manager_sentence_line_updated(full_sentence: String): # Unchanged
+# In VerbUI.gd
+
+func _on_game_manager_sentence_line_updated(full_sentence: String):
+	# ADD THIS LINE FOR DEBUGGING
+	print("VerbUI received sentence: '", full_sentence, "'")
+
 	if GameManager and GameManager.current_verb_id != "":
 		action_bubble_label.text = full_sentence
 		action_bubble_label.visible = true
 	else:
-		action_bubble_label.visible = false
+		# Let's modify this part to handle the "implicit use" case
+		if full_sentence != "":
+			action_bubble_label.text = full_sentence
+			action_bubble_label.visible = true
+		else:
+			action_bubble_label.visible = false
 
 func _on_interaction_complete(): # Unchanged
 	action_bubble_label.visible = false

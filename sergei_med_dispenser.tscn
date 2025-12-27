@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://dg2mtprp1wybv"]
+
+[ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactable.gd" id="1_4a56b"]
+[ext_resource type="Texture2D" uid="uid://faqm8qmqqx3f" path="res://med dispenser.png" id="2_a2hnt"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rhf3t"]
+size = Vector2(293, 370)
+
+[node name="SergeiMedicineDispenser" type="Area2D"]
+script = ExtResource("1_4a56b")
+object_display_name = "Medicine Dispenser"
+object_id = "sergei_medicine_dispenser"
+
+[node name="ObjectSprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_a2hnt")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(13.5, -192)
+shape = SubResource("RectangleShape2D_rhf3t")
+
+[node name="WalkToPoint" type="Marker2D" parent="."]
+position = Vector2(0, 381)

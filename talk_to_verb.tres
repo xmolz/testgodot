@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="VerbData" load_steps=2 format=3 uid="uid://bnekusymfhc2d"]
+[gd_resource type="Resource" script_class="VerbData" load_steps=3 format=3 uid="uid://bnekusymfhc2d"]
 
 [ext_resource type="Script" uid="uid://cn3ln508qp8dm" path="res://VerbData.gd" id="1_lx5kn"]
+[ext_resource type="Resource" uid="uid://b37t5tvw1wce5" path="res://untalkables.dialogue" id="1_wyfv5"]
 
 [resource]
 script = ExtResource("1_lx5kn")
@@ -8,4 +9,5 @@ verb_id = "talk_to"
 display_text = "Talk to"
 unlocked_by_default = true
 requires_target_object = true
+fallback_dialogue_file = ExtResource("1_wyfv5")
 metadata/_custom_type_script = "uid://cn3ln508qp8dm"

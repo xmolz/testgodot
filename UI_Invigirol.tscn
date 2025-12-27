@@ -1,9 +1,37 @@
-[gd_scene load_steps=5 format=3 uid="uid://rtrpjravoxw4"]
+[gd_scene load_steps=15 format=3 uid="uid://bi8u415ulvhb"]
 
 [ext_resource type="Texture2D" uid="uid://bqbbirvssvi8t" path="res://invigirol_sprite.png" id="1_mmg5h"]
 [ext_resource type="Script" uid="uid://hm12uesh52vl" path="res://ui_interactable.gd" id="1_t6val"]
 [ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactable.gd" id="2_bbeln"]
 [ext_resource type="BitMap" uid="uid://b20nrgyq3yjvp" path="res://invigirol.png" id="2_jwtrt"]
+[ext_resource type="Script" uid="uid://bmq0s1nqhqi4j" path="res://InteractionResponse.gd" id="5_ylk1r"]
+[ext_resource type="Resource" uid="uid://bivfrghh084ym" path="res://interactions/DefaultExamineResponse.tres" id="6_4ra0u"]
+[ext_resource type="Script" uid="uid://dltqnu07oiff" path="res://action.gd" id="7_quqnq"]
+[ext_resource type="Script" uid="uid://bapryqa2s86c5" path="res://interactions/actions/SayLineAction.gd" id="8_yystr"]
+[ext_resource type="Script" uid="uid://nvyqoryt5sbh" path="res://interactions/actions/AddItemAction.gd" id="9_qx4ii"]
+[ext_resource type="Script" uid="uid://c5bw6trnybm71" path="res://interactions/actions/DestroyAction.gd" id="10_xamdo"]
+
+[sub_resource type="Resource" id="Resource_noxll"]
+script = ExtResource("8_yystr")
+line_to_say = "I have picked up invigirol"
+metadata/_custom_type_script = "uid://bapryqa2s86c5"
+
+[sub_resource type="Resource" id="Resource_ykc8w"]
+script = ExtResource("9_qx4ii")
+item_id_to_add = "invigirol"
+metadata/_custom_type_script = "uid://nvyqoryt5sbh"
+
+[sub_resource type="Resource" id="Resource_t1m4h"]
+script = ExtResource("10_xamdo")
+message_on_destroy = "invigirol destroyed"
+metadata/_custom_type_script = "uid://c5bw6trnybm71"
+
+[sub_resource type="Resource" id="Resource_hxs5m"]
+script = ExtResource("5_ylk1r")
+verb_id = "pickup"
+required_item_id = ""
+actions_to_perform = Array[ExtResource("7_quqnq")]([SubResource("Resource_noxll"), SubResource("Resource_ykc8w"), SubResource("Resource_t1m4h")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
 [node name="TextureButton" type="TextureButton"]
 texture_normal = ExtResource("1_mmg5h")
@@ -14,6 +42,8 @@ script = ExtResource("1_t6val")
 script = ExtResource("2_bbeln")
 object_display_name = "Invigirol"
 object_id = "invigirol"
+state_flag_id = "invigirol_taken"
+interactions = Array[ExtResource("5_ylk1r")]([ExtResource("6_4ra0u"), SubResource("Resource_hxs5m")])
 metadata/_custom_type_script = "uid://dwldhrx7leysr"
 
 [node name="Sprite2D" type="Sprite2D" parent="Interactable"]

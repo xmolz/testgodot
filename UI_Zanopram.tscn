@@ -1,9 +1,31 @@
-[gd_scene load_steps=5 format=3 uid="uid://b8jbh3bghi1rb"]
+[gd_scene load_steps=13 format=3 uid="uid://b8jbh3bghi1rb"]
 
 [ext_resource type="Script" uid="uid://hm12uesh52vl" path="res://ui_interactable.gd" id="1_82e07"]
 [ext_resource type="Texture2D" uid="uid://bjuaurrw0logr" path="res://zanopram.png" id="1_582fx"]
 [ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactable.gd" id="2_5mir5"]
 [ext_resource type="BitMap" uid="uid://dlj2f3klm7wtl" path="res://zanopram_map.png" id="2_ftjr1"]
+[ext_resource type="Script" uid="uid://bmq0s1nqhqi4j" path="res://InteractionResponse.gd" id="5_vot75"]
+[ext_resource type="Resource" uid="uid://bivfrghh084ym" path="res://interactions/DefaultExamineResponse.tres" id="6_7tucb"]
+[ext_resource type="Script" uid="uid://dltqnu07oiff" path="res://action.gd" id="7_v03ym"]
+[ext_resource type="Script" uid="uid://nvyqoryt5sbh" path="res://interactions/actions/AddItemAction.gd" id="8_sb6td"]
+[ext_resource type="Script" uid="uid://c5bw6trnybm71" path="res://interactions/actions/DestroyAction.gd" id="9_kicyk"]
+
+[sub_resource type="Resource" id="Resource_12wmw"]
+script = ExtResource("8_sb6td")
+item_id_to_add = "zanopram"
+metadata/_custom_type_script = "uid://nvyqoryt5sbh"
+
+[sub_resource type="Resource" id="Resource_5yl0c"]
+script = ExtResource("9_kicyk")
+message_on_destroy = ""
+metadata/_custom_type_script = "uid://c5bw6trnybm71"
+
+[sub_resource type="Resource" id="Resource_6nd1o"]
+script = ExtResource("5_vot75")
+verb_id = "pickup"
+required_item_id = ""
+actions_to_perform = Array[ExtResource("7_v03ym")]([SubResource("Resource_12wmw"), SubResource("Resource_5yl0c")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
 [node name="TextureButton" type="TextureButton"]
 texture_normal = ExtResource("1_582fx")
@@ -14,19 +36,9 @@ script = ExtResource("1_82e07")
 script = ExtResource("2_5mir5")
 object_display_name = "Zzzanopram"
 object_id = "zanopram"
-verb_actions = {
-"false": "false",
-"pickup": {
-"action_type": "sequence",
-"requires_walk": false,
-"steps": [{
-"action_type": "request_add_item",
-"item_id": "zanopram"
-}, {
-"action_type": "destroy"
-}]
-}
-}
+state_flag_id = "zanopram_taken"
+interaction_location = 1
+interactions = Array[ExtResource("5_vot75")]([ExtResource("6_7tucb"), SubResource("Resource_6nd1o")])
 metadata/_custom_type_script = "uid://dwldhrx7leysr"
 
 [node name="Sprite2D" type="Sprite2D" parent="Interactable"]

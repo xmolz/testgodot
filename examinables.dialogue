@@ -35,5 +35,30 @@ A medicine container. 11 months from expiry.
 Label provides no description.
 => END
 
+~ sergei
+A large man lays on a hospital bed. You think he has kind eyes.
+Kind, but sad.
+=> END
+
+~ mcbucket
+An old man hooked up to a machine.
+You see not a single thought behind those googly eyes of his. 
+=> END
+
+~ mcbucket_medicine_dispenser
+A large balloon-like device. Seems to be connected to the Old Man's wrist.
+=> END
+
+~ sergei_medicine_dispenser
+A large balloon-like device. Seems to display a patient's vitals.
+=> END
+
+~ testbox
+let me see me or let me be. these guys try to shut me off on MTV - but it feels so empty without  me
+
+~ exit_door
+
+An exit! I can get out of here!
+
 => END
 

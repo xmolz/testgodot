@@ -10,6 +10,7 @@ size = Vector2(613, 728)
 script = ExtResource("1_xr87r")
 object_display_name = "Zzzanopram"
 object_id = "zanopram"
+interaction_location = 1
 
 [node name="ObjectSprite" type="Sprite2D" parent="."]
 texture = ExtResource("2_xr87r")

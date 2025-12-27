@@ -1,0 +1,58 @@
+[gd_scene load_steps=3 format=3 uid="uid://blho0mfhjkbi3"]
+
+[ext_resource type="Script" uid="uid://cdprstfi6xb0c" path="res://DateInputWidget.gd" id="1_t7n42"]
+[ext_resource type="PackedScene" uid="uid://b1jaqkwuy32ds" path="res://DigitSpinner.tscn" id="2_hhyfm"]
+
+[node name="DateInputWidget" type="Control"]
+layout_mode = 3
+anchor_right = 0.27
+anchor_bottom = 0.111
+offset_right = -518.4
+offset_bottom = -119.88
+script = ExtResource("1_t7n42")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/separation = 10
+
+[node name="Day1" parent="HBoxContainer" instance=ExtResource("2_hhyfm")]
+layout_mode = 2
+
+[node name="Day2" parent="HBoxContainer" instance=ExtResource("2_hhyfm")]
+layout_mode = 2
+
+[node name="Separator" type="Label" parent="HBoxContainer"]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+theme_override_font_sizes/font_size = 35
+text = "/"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Month1" parent="HBoxContainer" instance=ExtResource("2_hhyfm")]
+layout_mode = 2
+
+[node name="Month2" parent="HBoxContainer" instance=ExtResource("2_hhyfm")]
+layout_mode = 2
+
+[node name="Separator2" type="Label" parent="HBoxContainer"]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+theme_override_font_sizes/font_size = 35
+text = "/"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Year1" parent="HBoxContainer" instance=ExtResource("2_hhyfm")]
+layout_mode = 2
+
+[node name="Year2" parent="HBoxContainer" instance=ExtResource("2_hhyfm")]
+layout_mode = 2
+
+[node name="Year3" parent="HBoxContainer" instance=ExtResource("2_hhyfm")]
+layout_mode = 2
+
+[node name="Year4" parent="HBoxContainer" instance=ExtResource("2_hhyfm")]
+layout_mode = 2

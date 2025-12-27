@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ExplanationData" load_steps=2 format=3 uid="uid://d3deg4gqysr72"]
+
+[ext_resource type="Script" uid="uid://cr0j46qoir3gj" path="res://explanation_data.gd" id="1_gov5d"]
+
+[resource]
+script = ExtResource("1_gov5d")
+target_node_path = NodePath("InsuranceFormButtonUI/TextureButton")
+explanation_lines = PackedStringArray("You have received the insurance form from AIda", "If you want to ever exit the hospital building without incurring a lifetime of debt, you must fill out this form.", "Doing so is key to the completion of your journey.")
+exceptions_to_hide = Array[NodePath]([NodePath("InsuranceFormButtonUI")])
+metadata/_custom_type_script = "uid://cr0j46qoir3gj"

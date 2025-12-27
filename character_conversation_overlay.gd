@@ -12,6 +12,8 @@ signal conversation_finished(dialogue_resource: DialogueResource)
 # --- NODE REFERENCES ---
 @onready var animated_background: TextureRect = $RootContainer/AnimatedBackground
 @onready var character_main_sprite: Sprite2D = $RootContainer/CharacterMainSprite
+@onready var background_sprite: Sprite2D = $RootContainer/BackgroundSprite
+
 
 # --- ANIMATION STATE VARIABLES ---
 var _current_anim_name: String = ""
@@ -33,9 +35,6 @@ func _ready():
 
 	# --- Signal Connections ---
 	DialogueManager.dialogue_ended.connect(_on_dialogue_ended_from_manager)
-
-	# NOTE: We no longer connect to ConversationEventManager directly here.
-	# The new function below will handle it.
 
 	# --- Start Initial Animation and Dialogue ---
 	if background_animations:
@@ -106,17 +105,33 @@ func update_frame():
 		animated_background.texture = texture
 
 
-# --- NEW FUNCTION FOR DIALOGUE ---
-# The dialogue file will call this function using 'do change_background_animation("...")'
+# --- FUNCTION FOR ANIMATED BACKGROUNDS (UNCHANGED) ---
 func change_background_animation(animation_name: String):
-	# We call our existing play_animation function.
-	# This keeps the logic clean and separates the "how" from the "what".
 	play_animation(animation_name)
-	# NOTE: We are NOT using ConversationEventManager at all with this method,
-	# as it's simpler to have the dialogue talk directly to this overlay which owns the visuals.
 
 
-# --- Cleanup Functions ---
+# --- NEW FUNCTION TO CHANGE THE STATIC BACKGROUND SPRITE ---
+# Call this from dialogue: do change_background_sprite("res://path/to/image.png")
+func change_background_sprite(texture_path: String):
+	if not background_sprite:
+		print_rich("[color=red]Cannot change background: 'BackgroundSprite' node not found.[/color]")
+		return
+
+	if texture_path.is_empty():
+		background_sprite.visible = false
+		print_rich("[color=orange]BackgroundSprite hidden.[/color]")
+		return
+
+	var new_texture = load(texture_path)
+	if new_texture is Texture2D:
+		background_sprite.texture = new_texture
+		background_sprite.visible = true
+		print_rich("[color=green]BackgroundSprite texture updated to: " + texture_path + "[/color]")
+	else:
+		print_rich("[color=red]Failed to load texture for BackgroundSprite at path: " + texture_path + "[/color]")
+
+
+# --- Cleanup Functions (UNCHANGED) ---
 func _on_dialogue_ended_from_manager(resource: DialogueResource):
 	if resource == conversation_dialogue_file:
 		conversation_finished.emit(resource)
@@ -125,10 +140,8 @@ func _on_dialogue_ended_from_manager(resource: DialogueResource):
 func _cleanup_and_queue_free():
 	if DialogueManager.is_connected("dialogue_ended", _on_dialogue_ended_from_manager):
 		DialogueManager.disconnect("dialogue_ended", _on_dialogue_ended_from_manager)
-
-	# No longer need to disconnect from ConversationEventManager as we removed the connection
-
 	queue_free()
 
+
 func _exit_tree():
-	_cleanup_and_queue_free()
+	_cleanup_and_queue_free() # The original typo was "_cleanup_and_queue()"

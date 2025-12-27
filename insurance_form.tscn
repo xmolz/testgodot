@@ -1,0 +1,252 @@
+[gd_scene load_steps=7 format=3 uid="uid://cp46m7fekq0br"]
+
+[ext_resource type="Script" uid="uid://b512h764u3gd2" path="res://insurance_form.gd" id="1_u10l7"]
+[ext_resource type="Texture2D" uid="uid://bl3s30lkgiord" path="res://insurance form bg.png" id="3_a7jub"]
+[ext_resource type="FontFile" uid="uid://dybhfcuqdaiov" path="res://hiragino-kaku-gothic-std-w8.otf" id="3_bhfgh"]
+[ext_resource type="Theme" uid="uid://bxpy47r6xqv38" path="res://Themes/medfinance_theme.tres" id="4_oj0y3"]
+[ext_resource type="Theme" uid="uid://e650fn5dy145" path="res://insurance_form_field_font.tres" id="5_yunj8"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oj0y3"]
+bg_color = Color(0.67, 0.1474, 0.15611, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+expand_margin_left = 6.0
+expand_margin_top = 6.0
+expand_margin_right = 6.0
+expand_margin_bottom = 6.0
+
+[node name="InsuranceForm" type="CanvasLayer"]
+process_mode = 3
+script = ExtResource("1_u10l7")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.392157)
+
+[node name="TabletFrame" type="NinePatchRect" parent="."]
+anchors_preset = -1
+anchor_left = 0.182
+anchor_top = 0.142
+anchor_right = 0.826
+anchor_bottom = 0.704556
+offset_left = -0.440033
+offset_top = -0.360001
+offset_right = -0.920044
+offset_bottom = 0.0799561
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_a7jub")
+region_rect = Rect2(46.978, 52.8306, 2460.63, 1327.46)
+metadata/_edit_use_anchors_ = true
+
+[node name="Padding" type="MarginContainer" parent="TabletFrame"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 30
+
+[node name="ContentCanvas" type="Control" parent="TabletFrame/Padding"]
+layout_mode = 2
+
+[node name="HavemoreLabel" type="Label" parent="TabletFrame/Padding/ContentCanvas"]
+layout_mode = 2
+anchor_left = 0.009
+anchor_top = 0.022
+anchor_right = 0.214
+anchor_bottom = 0.089
+offset_left = -0.34401
+offset_top = -0.220994
+offset_right = 0.575958
+offset_bottom = 0.0630074
+theme_override_fonts/font = ExtResource("3_bhfgh")
+theme_override_font_sizes/font_size = 36
+theme_override_styles/normal = SubResource("StyleBoxFlat_oj0y3")
+text = "HAVEMORE"
+
+[node name="Label2" type="Label" parent="TabletFrame/Padding/ContentCanvas"]
+layout_mode = 2
+anchor_left = 0.226
+anchor_top = 0.051
+anchor_right = 0.34
+anchor_bottom = 0.092
+offset_left = 0.0580139
+offset_top = -0.257999
+offset_right = -0.00598145
+offset_bottom = 0.273998
+size_flags_vertical = 8
+theme = ExtResource("4_oj0y3")
+text = "MedFinance"
+
+[node name="Label" type="Label" parent="TabletFrame/Padding/ContentCanvas"]
+visible = false
+layout_mode = 2
+text = "Insurance Claim Form"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="TabletFrame/Padding/ContentCanvas"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.238
+anchor_top = 0.146
+anchor_right = 0.804
+anchor_bottom = 0.177
+offset_left = 0.11203
+offset_top = -6.008
+offset_right = -0.504028
+offset_bottom = 0.0039978
+theme = ExtResource("5_yunj8")
+text = "Please enter your credentials below to access your insurance account:"
+
+[node name="LabelsContainer" type="VBoxContainer" parent="TabletFrame/Padding/ContentCanvas"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.132
+anchor_top = 0.234
+anchor_right = 0.383
+anchor_bottom = 0.77
+offset_left = -0.0999756
+offset_top = -0.23201
+offset_right = -0.0249939
+offset_bottom = 0.039978
+theme_override_constants/separation = 37
+
+[node name="FirstName_Label" type="Label" parent="TabletFrame/Padding/ContentCanvas/LabelsContainer"]
+layout_mode = 2
+theme = ExtResource("5_yunj8")
+text = "First Name:"
+
+[node name="MiddleName_Label" type="Label" parent="TabletFrame/Padding/ContentCanvas/LabelsContainer"]
+layout_mode = 2
+theme = ExtResource("5_yunj8")
+text = "Middle Name:"
+
+[node name="LastName_Label" type="Label" parent="TabletFrame/Padding/ContentCanvas/LabelsContainer"]
+layout_mode = 2
+theme = ExtResource("5_yunj8")
+text = "Last Name:"
+
+[node name="DOB_Label" type="Label" parent="TabletFrame/Padding/ContentCanvas/LabelsContainer"]
+layout_mode = 2
+theme = ExtResource("5_yunj8")
+text = "Date of Birth:"
+
+[node name="PhoneNumber_Label" type="Label" parent="TabletFrame/Padding/ContentCanvas/LabelsContainer"]
+layout_mode = 2
+theme = ExtResource("5_yunj8")
+text = "Phone Number:"
+
+[node name="AccountNumber_Label" type="Label" parent="TabletFrame/Padding/ContentCanvas/LabelsContainer"]
+layout_mode = 2
+theme = ExtResource("5_yunj8")
+text = "Account Number:"
+
+[node name="LineEditContainer" type="VBoxContainer" parent="TabletFrame/Padding/ContentCanvas"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.328
+anchor_top = 0.23
+anchor_right = 0.719
+anchor_bottom = 0.768
+offset_left = -0.399994
+offset_top = -0.0400009
+offset_right = 0.174927
+offset_bottom = 0.135986
+theme_override_constants/separation = 22
+
+[node name="FirstName_Edit" type="LineEdit" parent="TabletFrame/Padding/ContentCanvas/LineEditContainer"]
+layout_mode = 2
+theme = ExtResource("5_yunj8")
+placeholder_text = "Enter First Name...."
+
+[node name="MiddleName_Edit" type="LineEdit" parent="TabletFrame/Padding/ContentCanvas/LineEditContainer"]
+layout_mode = 2
+theme = ExtResource("5_yunj8")
+placeholder_text = "Enter Middle Name..."
+
+[node name="LastName_Edit" type="LineEdit" parent="TabletFrame/Padding/ContentCanvas/LineEditContainer"]
+layout_mode = 2
+theme = ExtResource("5_yunj8")
+placeholder_text = "Enter Last Name..."
+
+[node name="DOB_Edit" type="LineEdit" parent="TabletFrame/Padding/ContentCanvas/LineEditContainer"]
+layout_mode = 2
+theme = ExtResource("5_yunj8")
+placeholder_text = "Enter Date of Birth..."
+
+[node name="PhoneNumber_Edit" type="LineEdit" parent="TabletFrame/Padding/ContentCanvas/LineEditContainer"]
+layout_mode = 2
+theme = ExtResource("5_yunj8")
+placeholder_text = "Enter Phone Number..."
+
+[node name="AccountNumber_Edit" type="LineEdit" parent="TabletFrame/Padding/ContentCanvas/LineEditContainer"]
+layout_mode = 2
+theme = ExtResource("5_yunj8")
+placeholder_text = "Enter Account Number..."
+
+[node name="ButtonContainer" type="VBoxContainer" parent="TabletFrame/Padding/ContentCanvas"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.751
+anchor_top = 0.223
+anchor_right = 0.894
+anchor_bottom = 0.776
+offset_left = 0.574951
+offset_top = -0.204002
+offset_right = 0.549927
+offset_bottom = -0.248016
+theme_override_constants/separation = 35
+
+[node name="FirstName_Button" type="Button" parent="TabletFrame/Padding/ContentCanvas/ButtonContainer"]
+layout_mode = 2
+theme = ExtResource("4_oj0y3")
+text = "Okay"
+
+[node name="MiddleName_Button" type="Button" parent="TabletFrame/Padding/ContentCanvas/ButtonContainer"]
+layout_mode = 2
+theme = ExtResource("4_oj0y3")
+text = "Okay"
+
+[node name="LastName_Button" type="Button" parent="TabletFrame/Padding/ContentCanvas/ButtonContainer"]
+layout_mode = 2
+theme = ExtResource("4_oj0y3")
+text = "Okay"
+
+[node name="DOB_Button" type="Button" parent="TabletFrame/Padding/ContentCanvas/ButtonContainer"]
+layout_mode = 2
+theme = ExtResource("4_oj0y3")
+text = "Okay"
+
+[node name="PhoneNumber_Button" type="Button" parent="TabletFrame/Padding/ContentCanvas/ButtonContainer"]
+layout_mode = 2
+theme = ExtResource("4_oj0y3")
+text = "Okay"
+
+[node name="AccountNumber_Button" type="Button" parent="TabletFrame/Padding/ContentCanvas/ButtonContainer"]
+layout_mode = 2
+theme = ExtResource("4_oj0y3")
+text = "Okay"
+
+[node name="Submit_Button" type="Button" parent="TabletFrame/Padding/ContentCanvas"]
+layout_mode = 2
+anchor_left = 0.49
+anchor_top = 0.861
+anchor_right = 0.533
+anchor_bottom = 0.918
+offset_left = 0.25
+offset_top = 0.171967
+offset_right = -0.275085
+offset_bottom = -0.0640259
+theme = ExtResource("4_oj0y3")
+text = "Submit"

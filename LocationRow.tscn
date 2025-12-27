@@ -1,0 +1,12 @@
+=offset_right = 0.229858
+offset_bottom = -6.0
+theme_override_constants/separation = 50
+
+[node name="RightArrowButton" type="Button" parent="PanelContainer2/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+theme_override_styles/focus = SubResource("StyleBoxEmpty_7rvhq")
+theme_override_styles/hover = SubResource("StyleBoxFlat_0yfax")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_oiaj5")
+theme_override_styles/normal = ExtResource("3_3nqlb")
+text = ">"

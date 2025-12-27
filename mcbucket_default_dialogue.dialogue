@@ -1,0 +1,96 @@
+~ start
+An ancient man stares at you intently. 
+Or at least, you think. The squint makes it hard to tell.
+What do you want to say him?
+~ hub 
+- Hey, how are you?
+	The old man is still and silent.
+	Then, almost instantly and possibly with intent to deafen, he screams:
+	do change_background_sprite("res://mcbucketRee.PNG")
+	Old Man McBucket: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
+	do change_background_sprite("res://mcbucket.PNG")
+	Wow, that was quite something. What do you wanna say to him?
+	- What?
+		do change_background_sprite("res://mcbucketRee.PNG")
+		Old Man McBucket: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
+		do change_background_sprite("res://mcbucket.PNG")
+		The old man seems to know only one response.
+		What would you like to do?
+		- Scream back at him
+			That's it. Only one way to tell the bastard who's in charge.
+			You put on your work face.
+			Suck all the air you can in - into your stomach.
+			You're gonna do it. Scream it back at him.
+			3...2...1..
+			do change_background_sprite("res://mcbucketRee.PNG")
+			Old Man McBucket: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
+			do change_background_sprite("res://mcbucket.PNG")
+			You let all that air out.
+			Fucker beat you to it, it seems.
+			~ ree_hub
+			do change_background_sprite("res://mcbucketRee.PNG")
+			Old Man McBucket: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
+			- REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!! => ree_hub
+			- Leave
+				"Goodbye old man" you say to the character in front of you. => END
+		- Leave
+			"Goodbye old man" you say to the character in front of you. => END
+	- Sir, are you okay?
+		Old Man McBucket: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
+		The old man seems to know only one response.
+		What would you like to do?
+		- Scream back at him
+			That's it. Only one way to tell the bastard who's in charge.
+			You put on your work face.
+			Suck all the air you can in - into your stomach.
+			You're gonna do it. Scream it back at him.
+			3...2...1..
+			Old Man McBucket: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
+			You let all that air out.
+			Fucker beat you to it, it seems.
+			Old Man McBucket: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
+			- REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!! => ree_hub
+			- Leave
+				"Goodbye old man" you say to the character in front of you. => END
+		- Leave
+			"Goodbye old man" you say to the character in front of you. => END
+	- Fuck was that, dickhead?
+		Old Man McBucket: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
+		The old man seems to know only one response.
+		What would you like to do?
+		- Scream back at him
+			That's it. Only one way to tell the bastard who's in charge.
+			You put on your work face.
+			Suck all the air you can in - into your stomach.
+			You're gonna do it. Scream it back at him.
+			3...2...1..
+			Old Man McBucket: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
+			You let all that air out.
+			Fucker beat you to it, it seems.
+			Old Man McBucket: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
+			- REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!! => ree_hub
+			- Leave
+		- Leave
+			"Goodbye old man" you say to the character in front of you. => END
+- Nice eyes, old man.
+	The old man is still and silent.
+	Then, almost instantly and possibly with intent to deafen, he screams:
+	Old Man McBucket: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
+	The old man seems to know only one response.
+	What would you like to do?
+	- Scream back at him
+		That's it. Only one way to tell the bastard who's in charge.
+		You put on your work face.
+		Suck all the air you can in - into your stomach.
+		You're gonna do it. Scream it back at him.
+		3...2...1..
+		Old Man McBucket: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
+		You let all that air out.
+		Fucker beat you to it, it seems.
+		Old Man McBucket: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
+		- REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!! => ree_hub
+		- Leave => END
+	- Leave
+		"Goodbye old man" you say to the character in front of you. => END
+- Nevermind. [Leave] => END
+	

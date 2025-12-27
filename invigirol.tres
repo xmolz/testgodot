@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3 uid="uid://lr7bq8edhdbr"]
+
+[ext_resource type="Texture2D" uid="uid://bqbbirvssvi8t" path="res://invigirol_sprite.png" id="1_sguit"]
+[ext_resource type="Script" uid="uid://by8o1t3tdwrep" path="res://ItemData.gd" id="2_sqqev"]
+
+[resource]
+script = ExtResource("2_sqqev")
+item_id = "invigirol"
+display_name = "Invigirol"
+icon = ExtResource("1_sguit")
+description = ""
+is_stackable = false
+max_stack_size = 1
+metadata/_custom_type_script = "uid://by8o1t3tdwrep"

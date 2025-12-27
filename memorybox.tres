@@ -1,0 +1,9 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://dn3c6kdmu6tyb"]
+
+[ext_resource type="FontFile" uid="uid://c8wjxokn4xjck" path="res://RobotoMono-VariableFont_wght.ttf" id="1_isyqk"]
+
+[resource]
+Button/colors/font_color = Color(0.878431, 0.878431, 0.878431, 1)
+Button/fonts/font = ExtResource("1_isyqk")
+Label/colors/font_color = Color(0.878431, 0.878431, 0.878431, 1)
+Label/fonts/font = ExtResource("1_isyqk")

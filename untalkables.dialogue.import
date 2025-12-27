@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://b37t5tvw1wce5"
+path="res://.godot/imported/untalkables.dialogue-3421f51d1ec2e94f126948b5c54951c4.tres"
+
+[deps]
+
+source_file="res://untalkables.dialogue"
+dest_files=["res://.godot/imported/untalkables.dialogue-3421f51d1ec2e94f126948b5c54951c4.tres"]
+
+[params]
+
+defaults=true

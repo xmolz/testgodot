@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3 uid="uid://frycmvsnkt3j"]
+
+[ext_resource type="Texture2D" uid="uid://cgo5udsv1su58" path="res://sergei test.png" id="2_3hibr"]
+[ext_resource type="Script" uid="uid://d3ltdedfvykko" path="res://WaypointMovement.gd" id="13_2vcks"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hsqv2"]
+size = Vector2(593, 790)
+
+[node name="Sergei" type="CharacterBody2D"]
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+animation = &""
+autoplay = "idle"
+
+[node name="MovementController" type="Node" parent="."]
+script = ExtResource("13_2vcks")
+
+[node name="InteractionArea" type="Area2D" parent="."]
+
+[node name="InteractionClickShape" type="CollisionShape2D" parent="InteractionArea"]
+position = Vector2(348, -287)
+shape = SubResource("RectangleShape2D_hsqv2")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-8.49999, 2.99997)
+scale = Vector2(-1, 1)
+texture = ExtResource("2_3hibr")

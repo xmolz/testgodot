@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://ff07w20q21uo"]
+
+[ext_resource type="Script" uid="uid://u132a54bhi87" path="res://NotificationManager.gd" id="1_7jvge"]
+
+[node name="NotificationManager" type="CanvasLayer"]
+layer = 10
+script = ExtResource("1_7jvge")
+
+[node name="NotificationContainer" type="VBoxContainer" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -161.18
+offset_top = 56.54
+offset_right = -121.18
+offset_bottom = 96.54
+grow_horizontal = 0

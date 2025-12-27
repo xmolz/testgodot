@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://c3ide4uljt8hs"]
+
+[ext_resource type="Theme" uid="uid://bo15lb6dkn0a2" path="res://Themes/general_theme.tres" id="1_017wr"]
+[ext_resource type="Script" uid="uid://dsvh3fnvh8lt8" path="res://Notification.gd" id="1_rer52"]
+
+[node name="Notification" type="PanelContainer"]
+offset_right = 1.0
+offset_bottom = 23.0
+theme = ExtResource("1_017wr")
+script = ExtResource("1_rer52")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+
+[node name="Timer" type="Timer" parent="."]
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
