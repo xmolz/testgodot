@@ -14,6 +14,9 @@ class_name LevelStateManager
 @export var aida_explanation_shown: bool = false
 @export var insurance_button_unlocked: bool = false
 @export var mcbucket_cannathink_used: bool = false
+@export var memory_box_unlocked: bool = false
+@export var mcbucket_invigirol_used: bool = false
+@export var mcbucket_zanopram_used: bool = false
 
 # Example of other potential flags for a level:
 # @export var generator_online: bool = false

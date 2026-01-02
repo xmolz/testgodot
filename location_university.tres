@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="MemoryGroupData" load_steps=9 format=3 uid="uid://dstoitdqjd6hj"]
+[gd_resource type="Resource" script_class="MemoryGroupData" load_steps=10 format=3 uid="uid://dstoitdqjd6hj"]
 
 [ext_resource type="Script" uid="uid://bfrll5vc6bmcg" path="res://MemoryChapterData.gd" id="1_rnoe7"]
 [ext_resource type="Resource" uid="uid://etyqyvpqbws" path="res://chapter_university_1.tres" id="2_8anm8"]
@@ -8,10 +8,12 @@
 [ext_resource type="Resource" uid="uid://bkwnupwlp84j7" path="res://chapter_university_4.tres" id="5_ay72h"]
 [ext_resource type="Resource" uid="uid://j60hdqi30bat" path="res://chapter_university_5.tres" id="6_yud4r"]
 [ext_resource type="Resource" uid="uid://cdwhaqqb1gb2j" path="res://chapter_university_6.tres" id="7_hthor"]
+[ext_resource type="Texture2D" uid="uid://dmy1iixmc7uvn" path="res://1080test1.jpg" id="8_4odj1"]
 
 [resource]
 script = ExtResource("2_ayeaq")
 group_name = "University"
+group_image = ExtResource("8_4odj1")
 category = 0
 chapters = Array[ExtResource("1_rnoe7")]([ExtResource("2_8anm8"), ExtResource("3_4odj1"), ExtResource("4_25bq5"), ExtResource("5_ay72h"), ExtResource("6_yud4r"), ExtResource("7_hthor")])
 metadata/_custom_type_script = "uid://coccmochs1n0s"

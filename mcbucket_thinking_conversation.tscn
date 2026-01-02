@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" uid="uid://cy1g0xpb3u0e2" path="res://character_conversation_overlay.gd" id="1_g3y2i"]
 [ext_resource type="Resource" uid="uid://fxlpt5jaaje7" path="res://mcbucket_cannathink.dialogue" id="2_g3y2i"]
-[ext_resource type="Texture2D" uid="uid://ij27xt1yb7y3" path="res://sergei.PNG" id="3_awfyy"]
-[ext_resource type="Texture2D" uid="uid://dy3ncsp5fixia" path="res://Protag.png" id="4_6hk7o"]
-[ext_resource type="Texture2D" uid="uid://cg86pt8j73x3m" path="res://mcbucket.png" id="5_0wf0w"]
+[ext_resource type="Texture2D" uid="uid://cx4r1a1ci7vpj" path="res://sergei.PNG" id="3_awfyy"]
+[ext_resource type="Texture2D" uid="uid://coo5k2phjvc1e" path="res://Protag.png" id="4_6hk7o"]
+[ext_resource type="Texture2D" uid="uid://dkfxelpqykxt6" path="res://Backgrounds/McBucket/high/mcbucket_high_base.png" id="5_g3y2i"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_jy7bi"]
 animations = [{
@@ -45,7 +45,7 @@ grow_vertical = 2
 [node name="BackgroundSprite" type="Sprite2D" parent="RootContainer"]
 position = Vector2(957, 540.5)
 scale = Vector2(0.497917, 0.498611)
-texture = ExtResource("5_0wf0w")
+texture = ExtResource("5_g3y2i")
 
 [node name="AnimatedBackground" type="TextureRect" parent="RootContainer"]
 layout_mode = 1

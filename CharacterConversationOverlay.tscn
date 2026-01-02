@@ -29,6 +29,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="MentalImageSprite" type="Sprite2D" parent="RootContainer"]
+position = Vector2(962, 457)
+scale = Vector2(0.308889, 0.308889)
+
 [node name="BackgroundSprite" type="Sprite2D" parent="RootContainer"]
 position = Vector2(962, 457)
 scale = Vector2(0.308889, 0.308889)

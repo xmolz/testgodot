@@ -24,6 +24,8 @@ metadata/_custom_type_script = "uid://c5bw6trnybm71"
 script = ExtResource("5_vot75")
 verb_id = "pickup"
 required_item_id = ""
+required_flag_id = ""
+required_flag_value = true
 actions_to_perform = Array[ExtResource("7_v03ym")]([SubResource("Resource_12wmw"), SubResource("Resource_5yl0c")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 

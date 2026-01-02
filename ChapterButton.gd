@@ -1,13 +1,23 @@
 # ChapterButton.gd
 extends Button
 
+# This signal is emitted when the button is pressed, sending its own data along.
+signal chapter_selected(data: MemoryChapterData)
+
 # --- NODE REFERENCES ---
 @onready var chapter_name_label: Label = $MarginContainer/VBoxContainer/Label
 @onready var chapter_image_rect: TextureRect = $MarginContainer/VBoxContainer/TextureRect
 
 # --- DATA ---
 var chapter_data: MemoryChapterData
+func _ready():
+	# Connect our own "pressed" signal to a handler function.
+	self.pressed.connect(_on_pressed)
 
+func _on_pressed():
+	# When this button is pressed, emit our custom signal,
+	# passing our own chapter_data along with it.
+	emit_signal("chapter_selected", chapter_data)
 
 ## This function takes MemoryChapterData and configures the button's UI.
 func populate(data: MemoryChapterData):

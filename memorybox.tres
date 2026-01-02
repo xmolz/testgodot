@@ -1,9 +1,18 @@
-[gd_resource type="Theme" load_steps=2 format=3 uid="uid://dn3c6kdmu6tyb"]
+[gd_resource type="Theme" load_steps=3 format=3 uid="uid://dn3c6kdmu6tyb"]
 
-[ext_resource type="FontFile" uid="uid://c8wjxokn4xjck" path="res://RobotoMono-VariableFont_wght.ttf" id="1_isyqk"]
+[ext_resource type="FontFile" uid="uid://blg6ol8nf4fgs" path="res://RobotoMono-VariableFont_wght.ttf" id="1_isyqk"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_isyqk"]
+bg_color = Color(0.172549, 0.184314, 0.266667, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.537255, 0.866667, 1, 1)
 
 [resource]
 Button/colors/font_color = Color(0.878431, 0.878431, 0.878431, 1)
 Button/fonts/font = ExtResource("1_isyqk")
 Label/colors/font_color = Color(0.878431, 0.878431, 0.878431, 1)
 Label/fonts/font = ExtResource("1_isyqk")
+Panel/styles/panel = SubResource("StyleBoxFlat_isyqk")

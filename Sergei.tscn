@@ -1,12 +1,75 @@
-[gd_scene load_steps=4 format=3 uid="uid://frycmvsnkt3j"]
+[gd_scene load_steps=31 format=3 uid="uid://frycmvsnkt3j"]
 
-[ext_resource type="Texture2D" uid="uid://cgo5udsv1su58" path="res://sergei test.png" id="2_3hibr"]
+[ext_resource type="Script" uid="uid://hk0fo4fyepak" path="res://sergey.gd" id="1_li012"]
+[ext_resource type="Texture2D" uid="uid://duhu5w16u7jsh" path="res://Animations/Sergey/Idle/Sergey_idle_0001.png" id="2_3hibr"]
+[ext_resource type="Texture2D" uid="uid://vjvm2vltq5yf" path="res://Animations/Sergey/Idle/Sergey_idle_0002.png" id="4_tx2cy"]
+[ext_resource type="Texture2D" uid="uid://xagusqxllgml" path="res://Animations/Sergey/Idle/Sergey_idle_0003.png" id="5_8qdt4"]
+[ext_resource type="Texture2D" uid="uid://bdkoybqywx5pu" path="res://Animations/Sergey/Idle/Sergey_idle_0004.png" id="6_xy0ev"]
+[ext_resource type="Texture2D" uid="uid://dsm4i1rlu76xf" path="res://Animations/Sergey/Idle/Sergey_idle_0005.png" id="7_oq4m0"]
+[ext_resource type="Texture2D" uid="uid://dupsfhdvt16j6" path="res://Animations/Sergey/Idle/Sergey_idle_0006.png" id="8_pmp40"]
+[ext_resource type="Texture2D" uid="uid://ttt2oxfu8xna" path="res://Animations/Sergey/Idle/Sergey_idle_0007.png" id="9_c7832"]
+[ext_resource type="Texture2D" uid="uid://qvm73xm5xg4t" path="res://Animations/Sergey/Idle/Sergey_idle_0008.png" id="10_qqmrf"]
+[ext_resource type="Texture2D" uid="uid://c7pcphc3h380v" path="res://Animations/Sergey/Idle/Sergey_idle_0009.png" id="11_0rrqv"]
+[ext_resource type="Texture2D" uid="uid://ba4nd1gkqmts3" path="res://Animations/Sergey/Idle/Sergey_idle_0010.png" id="12_trjii"]
 [ext_resource type="Script" uid="uid://d3ltdedfvykko" path="res://WaypointMovement.gd" id="13_2vcks"]
+[ext_resource type="Texture2D" uid="uid://csnqa7wb6t6fg" path="res://Animations/Sergey/Idle/Sergey_idle_0011.png" id="13_5y5j0"]
+[ext_resource type="Texture2D" uid="uid://dop8hm85s6ff5" path="res://Animations/Sergey/Idle/Sergey_idle_0012.png" id="14_3a84v"]
+[ext_resource type="Texture2D" uid="uid://du11rc30gu8w3" path="res://Animations/Sergey/Idle/Sergey_idle_0013.png" id="15_8mu2b"]
+[ext_resource type="Texture2D" uid="uid://o3ekd2vmvwi7" path="res://Animations/Sergey/Idle/Sergey_idle_0014.png" id="16_v7x2n"]
+[ext_resource type="Texture2D" uid="uid://3qhhq7okuwrt" path="res://Animations/Sergey/Idle/Sergey_idle_0015.png" id="17_1e0mo"]
+[ext_resource type="Texture2D" uid="uid://dh78yn2ehgiuf" path="res://Animations/Sergey/Idle/Sergey_idle_0016.png" id="18_i8ysh"]
+[ext_resource type="Texture2D" uid="uid://dyud13rt7u572" path="res://Animations/Sergey/Idle/Sergey_idle_0017.png" id="19_5r1mv"]
+[ext_resource type="Texture2D" uid="uid://cgd56pkviyny2" path="res://Animations/Sergey/Idle/Sergey_idle_0018.png" id="20_c76b6"]
+[ext_resource type="Texture2D" uid="uid://bymtvwyig5ma5" path="res://Animations/Sergey/Idle/Sergey_idle_0019.png" id="21_1qawx"]
+[ext_resource type="Texture2D" uid="uid://c56dyl8egu8pi" path="res://Animations/Sergey/Idle/Sergey_idle_0020.png" id="22_mj0xp"]
+[ext_resource type="Texture2D" uid="uid://isxoilgj2duw" path="res://Animations/Sergey/Idle/Sergey_idle_0021.png" id="23_o0q68"]
+[ext_resource type="Texture2D" uid="uid://de75xs6unswdb" path="res://Animations/Sergey/Idle/Sergey_idle_0022.png" id="24_jo2rn"]
+[ext_resource type="Texture2D" uid="uid://kt2bnx5uocdq" path="res://Animations/Sergey/Idle/Sergey_idle_0023.png" id="25_clmv0"]
+[ext_resource type="Texture2D" uid="uid://bmconsgliybfb" path="res://Animations/Sergey/Idle/Sergey_idle_0024.png" id="26_v52hy"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hsqv2"]
-size = Vector2(593, 790)
+size = Vector2(250, 508)
 
-[node name="Sergei" type="CharacterBody2D"]
+[sub_resource type="Animation" id="Animation_3hibr"]
+resource_name = "idle"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.0833, 0.1667, 0.25, 0.333, 0.417, 0.5, 0.583, 0.667, 0.75, 0.833, 0.917, 1, 1.083, 1.167, 1.25, 1.333, 1.4, 1.5, 1.583, 1.667, 1.75, 1.833, 1.917, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("4_tx2cy"), ExtResource("5_8qdt4"), ExtResource("6_xy0ev"), ExtResource("7_oq4m0"), ExtResource("8_pmp40"), ExtResource("9_c7832"), ExtResource("10_qqmrf"), ExtResource("11_0rrqv"), ExtResource("12_trjii"), ExtResource("13_5y5j0"), ExtResource("14_3a84v"), ExtResource("15_8mu2b"), ExtResource("16_v7x2n"), ExtResource("17_1e0mo"), ExtResource("18_i8ysh"), ExtResource("19_5r1mv"), ExtResource("20_c76b6"), ExtResource("21_1qawx"), ExtResource("22_mj0xp"), ExtResource("23_o0q68"), ExtResource("24_jo2rn"), ExtResource("25_clmv0"), ExtResource("26_v52hy"), ExtResource("2_3hibr")]
+}
+
+[sub_resource type="Animation" id="Animation_f2i0d"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("2_3hibr")]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_7jyp4"]
+_data = {
+&"RESET": SubResource("Animation_f2i0d"),
+&"idle": SubResource("Animation_3hibr")
+}
+
+[node name="Sergey" type="CharacterBody2D"]
+script = ExtResource("1_li012")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 animation = &""
@@ -18,10 +81,14 @@ script = ExtResource("13_2vcks")
 [node name="InteractionArea" type="Area2D" parent="."]
 
 [node name="InteractionClickShape" type="CollisionShape2D" parent="InteractionArea"]
-position = Vector2(348, -287)
+position = Vector2(162, -28)
 shape = SubResource("RectangleShape2D_hsqv2")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(-8.49999, 2.99997)
-scale = Vector2(-1, 1)
 texture = ExtResource("2_3hibr")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_7jyp4")
+}

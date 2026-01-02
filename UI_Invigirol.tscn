@@ -30,6 +30,8 @@ metadata/_custom_type_script = "uid://c5bw6trnybm71"
 script = ExtResource("5_ylk1r")
 verb_id = "pickup"
 required_item_id = ""
+required_flag_id = ""
+required_flag_value = true
 actions_to_perform = Array[ExtResource("7_quqnq")]([SubResource("Resource_noxll"), SubResource("Resource_ykc8w"), SubResource("Resource_t1m4h")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
@@ -43,6 +45,7 @@ script = ExtResource("2_bbeln")
 object_display_name = "Invigirol"
 object_id = "invigirol"
 state_flag_id = "invigirol_taken"
+interaction_location = 1
 interactions = Array[ExtResource("5_ylk1r")]([ExtResource("6_4ra0u"), SubResource("Resource_hxs5m")])
 metadata/_custom_type_script = "uid://dwldhrx7leysr"
 

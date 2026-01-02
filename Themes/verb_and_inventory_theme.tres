@@ -1,6 +1,6 @@
 [gd_resource type="Theme" load_steps=7 format=3 uid="uid://bbh4rjwcxnama"]
 
-[ext_resource type="FontFile" uid="uid://bigf8s5nb0o1d" path="res://Fonts/Lato-Regular.ttf" id="1_d2ikq"]
+[ext_resource type="FontFile" uid="uid://c13xcyopybcgi" path="res://Fonts/Lato-Regular.ttf" id="1_d2ikq"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d2ikq"]
 bg_color = Color(0.85, 0.85, 0.85, 0.588235)

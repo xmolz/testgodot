@@ -1,6 +1,6 @@
 [gd_scene load_steps=15 format=3 uid="uid://b5eqmwcgkinbv"]
 
-[ext_resource type="Texture2D" uid="uid://dk1p47yk7kbuu" path="res://cannathink.png" id="1_mtq27"]
+[ext_resource type="Texture2D" uid="uid://cwwpjjh8g2oys" path="res://cannathink.png" id="1_mtq27"]
 [ext_resource type="BitMap" uid="uid://dlj2f3klm7wtl" path="res://zanopram_map.png" id="2_waoth"]
 [ext_resource type="Script" uid="uid://hm12uesh52vl" path="res://ui_interactable.gd" id="3_kfii6"]
 [ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactable.gd" id="4_lndah"]
@@ -30,6 +30,8 @@ metadata/_custom_type_script = "uid://c5bw6trnybm71"
 script = ExtResource("5_jssx0")
 verb_id = "pickup"
 required_item_id = ""
+required_flag_id = ""
+required_flag_value = true
 actions_to_perform = Array[ExtResource("7_ljjww")]([SubResource("Resource_ookji"), SubResource("Resource_ktyjx"), SubResource("Resource_a2j4x")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 

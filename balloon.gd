@@ -64,6 +64,7 @@ func _ready() -> void:
 	add_child(mutation_cooldown)
 
 
+
 func _unhandled_input(_event: InputEvent) -> void:
 	# Only the balloon is allowed to handle input while it's showing
 	get_viewport().set_input_as_handled()
@@ -163,14 +164,29 @@ func _on_balloon_gui_input(event: InputEvent) -> void:
 	# When there are no response options the balloon itself is the clickable thing
 	get_viewport().set_input_as_handled()
 
+	# --- MODIFIED SECTION BELOW ---
 	if event is InputEventMouseButton and event.is_pressed() and event.button_index == MOUSE_BUTTON_LEFT:
+		# Play the sound when clicking to go next
+		SoundManager.play_sfx("dialogue_advance")
 		next(dialogue_line.next_id)
+
 	elif event.is_action_pressed(next_action) and get_viewport().gui_get_focus_owner() == balloon:
+		# Play the sound when pressing Space/Enter to go next
+		SoundManager.play_sfx("dialogue_advance")
 		next(dialogue_line.next_id)
 
 
 func _on_responses_menu_response_selected(response: DialogueResponse) -> void:
+	# Play the sound when clicking a choice button
+	SoundManager.play_sfx("dialogue_advance")
 	next(response.next_id)
 
+# --- ADD THIS FUNCTION ---
+func _on_dialogue_label_spoke(letter: String, letter_index: int, speed: float) -> void:
+	# Don't play sound for spaces
+	if letter == " ":
+		return
+
+	SoundManager.play_dialogue_blip()
 
 #endregion

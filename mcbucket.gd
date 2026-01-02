@@ -1,42 +1,60 @@
 extends Node2D
 
-# Make sure this path is correct.
+enum State { IDLE, HIGH, INVIGIROL, SLEEPING }
+
+# --- Step 1: Define a constant for the new dialogue scene ---
+# Make sure the path "res://mcbucket_invigirol_conversation.tscn" is correct for your project.
 const THINKING_DIALOGUE_SCENE = preload("res://mcbucket_thinking_conversation.tscn")
+const INVIGIROL_DIALOGUE_SCENE = preload("res://mcbucket_invigirol_conversation.tscn") # ADD THIS LINE
+const DEFAULT_DIALOGUE_SCENE = preload("res://mcbucket_default_conversation.tscn")
 
-# --- CORRECTED NODE PATHS ---
-# Get the AnimationPlayer by looking inside the InteractionArea child.
-@onready var animation_player: AnimationPlayer = $InteractionArea/AnimationPlayer
 
-# Get the Interactable component from the child named InteractionArea.
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var interactable_component: Interactable = $InteractionArea
 
 
-# This runs when the level loads to restore McBucket's state if the item was already used.
 func _ready():
 	await get_tree().process_frame
+	if not GameManager: return
 
-	# First, check our "memory" flag
-	if GameManager and GameManager.get_current_level_flag("mcbucket_cannathink_used"):
-		print_rich("[color=cyan]McBucket (_ready): Flag is true. Restoring 'thinking' state.[/color]")
+	if GameManager.get_current_level_flag("mcbucket_cannathink_used"):
+		change_state(State.HIGH)
+	elif GameManager.get_current_level_flag("mcbucket_invigirol_used"):
+		change_state(State.INVIGIROL)
+	elif GameManager.get_current_level_flag("mcbucket_zanopram_used"):
+		change_state(State.SLEEPING)
+	else:
+		change_state(State.IDLE)
 
-		# Now that 'animation_player' has the correct path, this will work.
-		if animation_player:
-			animation_player.play("idle_high")
 
-		# And 'interactable_component' also has the correct path.
-		if interactable_component:
+func change_state(new_state: State):
+	if not animation_player or not interactable_component:
+		push_warning("McBucket script is missing node references!")
+		return
+
+	# --- (No changes needed in this logic block) ---
+	if GameManager:
+		GameManager.set_current_level_flag("mcbucket_cannathink_used", new_state == State.HIGH)
+		GameManager.set_current_level_flag("mcbucket_invigirol_used", new_state == State.INVIGIROL)
+		GameManager.set_current_level_flag("mcbucket_zanopram_used", new_state == State.SLEEPING)
+	# ---
+
+	match new_state:
+		State.IDLE:
+			animation_player.play("idle")
+			# (RECOMMENDED ADDITION) Reset to default dialogue behavior
+			interactable_component.character_conversation_overlay_scene = DEFAULT_DIALOGUE_SCENE
+		State.HIGH:
+			animation_player.play("high")
 			interactable_component.character_conversation_overlay_scene = THINKING_DIALOGUE_SCENE
-
-
-# This is called by the CallMethodAction in the Inspector for the immediate change.
-func on_player_used_cannathink():
-	print_rich("[color=yellow]McBucket: I'm feeling... philosophical.[/color]")
-
-	# This 'if' check will now succeed.
-	if animation_player:
-		animation_player.play("idle_high")
-
-	# This 'if' check will also succeed, and the scene will be changed.
-	if interactable_component:
-		interactable_component.character_conversation_overlay_scene = THINKING_DIALOGUE_SCENE
-		print_rich("[color=green]McBucket SUCCESS: Changed conversation scene to 'thinking' version.[/color]")
+			print_rich("[color=cyan]McBucket state changed to HIGH.[/color]")
+		State.INVIGIROL:
+			animation_player.play("invigirol", -1, 4.0)
+			# --- Step 2: Assign the conversation scene when the state changes ---
+			interactable_component.character_conversation_overlay_scene = INVIGIROL_DIALOGUE_SCENE # ADD THIS LINE
+			print_rich("[color=cyan]McBucket state changed to INVIGIROL.[/color]")
+		State.SLEEPING:
+			animation_player.play("sleeping")
+			# (Optional) You could also clear the conversation here if a sleeping character can't talk
+			interactable_component.character_conversation_overlay_scene = null
+			print_rich("[color=cyan]McBucket state changed to SLEEPING.[/color]")

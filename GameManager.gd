@@ -112,8 +112,13 @@ const USE_ON_TARGET_VERB_ID: String = "use_on_target" # BACK TO "use_on_target"
 const WALK_TO_VERB_ID: String = "walk_to"
 
 
+# In GameManager.gd
+
+# In GameManager.gd
+
 func _ready():
 	print_rich("[color=cyan]GM: GameManager is Ready! Starting initialization...[/color]")
+
 	if DialogueManager:
 		DialogueManager.dialogue_started.connect(_on_dialogue_started)
 		print_rich("[color=green]GM: Connected to DialogueManager.dialogue_started.[/color]")
@@ -151,8 +156,11 @@ func _ready():
 
 	print_rich("[color=green]GM: Item data map initialized. %s items mapped.[/color]" % _item_data_map.size())
 	print_rich("[color=cyan]GM: GameManager initialization complete.[/color]")
+
+	# --- DIRECT SCENE RUN CHECK ---
 	if current_game_state == GameState.BOOTING:
 		var potential_player = get_tree().get_first_node_in_group("player")
+
 		if is_instance_valid(potential_player):
 			print_rich("[color=purple]GM: Direct scene run detected (player found on boot).[/color]")
 			print_rich("[color=purple]GM: Manually setting state to IN_GAME_PLAY and assigning nodes.[/color]")
@@ -172,23 +180,27 @@ func _ready():
 			print_rich("[color=green]GM: Found player: %s[/color]" % player_node.name)
 			print_rich("[color=green]GM: Assigned main scene: %s[/color]" % main_game_scene_instance.name)
 
-			# 3. Manually set the state. We don't call change_game_state() because
-			#    that would try to load the scene again.
+			# 3. Manually set the state.
 			current_game_state = GameState.IN_GAME_PLAY
 
 			# 4. Ensure the player can move
 			if player_node.has_method("set_can_move"):
 				player_node.set_can_move(true)
 
+			# --- THIS IS THE FIX ---
+			# We wait one frame to ensure the Scene Tree and AudioServer are fully stable
+			# before trying to create and play the audio player.
+			await get_tree().process_frame
+			print_rich("[color=purple]GM: Starting music now...[/color]")
+			SoundManager.play_music()
 
-# --- NEW FUNCTION ---
-# This function captures mouse clicks that haven't been handled by any UI elements or Interactables.
-# In GameManager.gd
-
+		else:
+			# This Else block is new - it warns you if the Player Group is missing
+			print_rich("[color=red]GM: Direct run detected, BUT no node in group 'player' was found.[/color]")
+			print_rich("[color=red]GM: Music did not start because the initialization block was skipped.[/color]")
+			print_rich("[color=red]GM: Please select your Player node -> Node Tab -> Groups -> Add 'player'.[/color]")
 func _unhandled_input(event: InputEvent):
-	# If the player is already walking, ignore all new click commands.
-	if _is_player_walking:
-		return
+	# The initial check for _is_player_walking has been removed.
 
 	if not (event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed()):
 		return
@@ -201,9 +213,11 @@ func _unhandled_input(event: InputEvent):
 
 	if is_instance_valid(player_node) and player_node.has_method("walk_to_point"):
 		# Set the lock flag to true before telling the player to walk.
+		# This is still important so that hover events are blocked correctly.
 		_is_player_walking = true
-		# THIS IS THE FINAL, CORRECTED LINE:
 		player_node.walk_to_point(player_node.get_global_mouse_position())
+
+
 # Replace the entire existing function with this one.
 # In GameManager.gd
 # Replace the entire existing function with this one.
@@ -225,6 +239,9 @@ func change_game_state(new_state: GameState):
 				main_menu_scene_instance.queue_free()
 				main_menu_scene_instance = null
 		GameState.IN_GAME_PLAY:
+			# --- ADD THIS LINE ---
+			SoundManager.stop_music() # Stop the music when we leave the main game
+			# --------------------
 			pass
 
 	print_rich("[color=yellow]GameManager: Changing state from %s to %s[/color]" % [GameState.keys()[current_game_state], GameState.keys()[new_state]])
@@ -265,6 +282,9 @@ func change_game_state(new_state: GameState):
 			main_game_scene_instance = main_packed_scene.instantiate()
 			get_tree().root.add_child(main_game_scene_instance)
 			_find_and_assign_ui_nodes()
+			# --- ADD THIS LINE ---
+			SoundManager.play_music() # Play the music when we enter the main game
+			# --------------------
 
 			if not is_instance_valid(player_node):
 				player_node = get_tree().get_first_node_in_group("player")
@@ -421,9 +441,7 @@ func update_sentence_line_ui():
 
 
 func process_interaction_click(interactable_node: Interactable):
-	# If the player is already walking, ignore all new click commands.
-	if _is_player_walking:
-		return
+	# The initial check for _is_player_walking has been removed.
 
 	if not is_instance_valid(interactable_node):
 		print_rich("[color=red]GM: process_interaction_click with null or invalid interactable.[/color]")
@@ -455,7 +473,6 @@ func process_interaction_click(interactable_node: Interactable):
 		_initiate_interaction_flow(interactable_node, current_verb_id, null)
 
 	else: # No verb and no item selected.
-		# --- MODIFIED BLOCK ---
 		# The default "Walk to" action should ONLY apply to objects in the main world.
 		if interactable_node.interaction_location == Interactable.InteractionLocation.WORLD:
 			print_rich("[color=green]GM: Processing default 'Walk to' on Target '%s'[/color]" % interactable_node.object_display_name)

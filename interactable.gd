@@ -76,11 +76,19 @@ func attempt_interaction(verb_id: String, item_id_used_with: String = ""):
 		if not response or response.verb_id.is_empty():
 			continue
 
+		# --- THIS IS THE MODIFIED LOGIC ---
 		var verb_matches: bool = (response.verb_id == verb_id)
 		var item_matches: bool = (response.required_item_id == item_id_used_with)
 
-		if verb_matches and item_matches:
-			print_rich("[color=LimeGreen]Found matching InteractionResponse for Verb '%s' and Item '%s'.[/color]" % [verb_id, item_id_used_with])
+		# Now, we also check the flag condition.
+		var flag_matches: bool = true # Assume it matches by default.
+		if not response.required_flag_id.is_empty():
+			# If a flag ID is specified, we must check it.
+			flag_matches = (GameManager.get_current_level_flag(response.required_flag_id) == response.required_flag_value)
+		# --- END OF MODIFIED LOGIC ---
+
+		if verb_matches and item_matches and flag_matches:
+			print_rich("[color=LimeGreen]Found matching InteractionResponse for Verb '%s' and Item '%s' with Flag Condition Met.[/color]" % [verb_id, item_id_used_with])
 
 			var should_complete_cycle: bool = true
 			for action in response.actions_to_perform:
@@ -105,6 +113,7 @@ func attempt_interaction(verb_id: String, item_id_used_with: String = ""):
 	print_rich("[color=Red]No interaction response and no fallback file found for verb '%s'.[/color]" % verb_id)
 	display_dialogue.emit("I can't seem to do that.")
 	interaction_processed.emit()
+
 
 func get_walk_to_position() -> Vector2:
 	if walk_to_point: return walk_to_point.global_position

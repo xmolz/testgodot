@@ -1,73 +1,78 @@
-[gd_scene load_steps=16 format=3 uid="uid://oy53tf8tvxe5"]
+[gd_scene load_steps=31 format=3 uid="uid://oy53tf8tvxe5"]
 
-[ext_resource type="Texture2D" uid="uid://bwdwdgw1c4sai" path="res://addons/characteranims/Aida idle/Timeline 1_0001.png" id="1_hsqv2"]
-[ext_resource type="Texture2D" uid="uid://hwbadyc56xb3" path="res://addons/characteranims/Aida idle/Timeline 1_0002.png" id="2_5x1vy"]
-[ext_resource type="Texture2D" uid="uid://cmbbyxn4mrfsu" path="res://addons/characteranims/Aida idle/Timeline 1_0003.png" id="3_6moa0"]
-[ext_resource type="Texture2D" uid="uid://ktmcknys2th4" path="res://addons/characteranims/Aida idle/Timeline 1_0004.png" id="4_gv65k"]
-[ext_resource type="Texture2D" uid="uid://dqc8hioujej2" path="res://addons/characteranims/Aida idle/Timeline 1_0005.png" id="5_hgxuc"]
-[ext_resource type="Texture2D" uid="uid://dqm332agvxyf5" path="res://addons/characteranims/Aida idle/Timeline 1_0006.png" id="6_fx0ii"]
-[ext_resource type="Texture2D" uid="uid://cpslhl5dn3hph" path="res://addons/characteranims/Aida idle/Timeline 1_0007.png" id="7_hitaq"]
-[ext_resource type="Texture2D" uid="uid://cxi5mega6u7t5" path="res://addons/characteranims/Aida idle/Timeline 1_0008.png" id="8_nlrmm"]
-[ext_resource type="Texture2D" uid="uid://bmi1d3jg61t7f" path="res://addons/characteranims/Aida idle/Timeline 1_0009.png" id="9_fx4lg"]
-[ext_resource type="Texture2D" uid="uid://dq2qbjblp77j0" path="res://addons/characteranims/Aida idle/Timeline 1_0010.png" id="10_p03vq"]
-[ext_resource type="Texture2D" uid="uid://co57w4w0aaamn" path="res://addons/characteranims/Aida idle/Timeline 1_0011.png" id="11_f2bmu"]
-[ext_resource type="Texture2D" uid="uid://bevl3n3y6pjmq" path="res://addons/characteranims/Aida idle/Timeline 1_0012.png" id="12_md4og"]
+[ext_resource type="Script" uid="uid://dgdtb6o10kuyr" path="res://aida.gd" id="1_c6jtv"]
+[ext_resource type="Texture2D" uid="uid://2om663l1jjvd" path="res://Animations/AIda/Idle/AIda_idle_0001.png" id="1_rbbfu"]
+[ext_resource type="Texture2D" uid="uid://dssecnye0c5ww" path="res://Animations/AIda/Idle/AIda_idle_0002.png" id="4_a1bqy"]
+[ext_resource type="Texture2D" uid="uid://cgad6gyr5cx57" path="res://Animations/AIda/Idle/AIda_idle_0003.png" id="5_4dvv0"]
+[ext_resource type="Texture2D" uid="uid://bd7pgwyg2t0lm" path="res://Animations/AIda/Idle/AIda_idle_0004.png" id="6_mruqf"]
+[ext_resource type="Texture2D" uid="uid://bcc1qhncd1ouw" path="res://Animations/AIda/Idle/AIda_idle_0005.png" id="7_yi4fc"]
+[ext_resource type="Texture2D" uid="uid://br1vtso3pedmq" path="res://Animations/AIda/Idle/AIda_idle_0006.png" id="8_d3mpw"]
+[ext_resource type="Texture2D" uid="uid://te3e8xrcgn0i" path="res://Animations/AIda/Idle/AIda_idle_0007.png" id="9_o60a8"]
+[ext_resource type="Texture2D" uid="uid://ch6bvd2lu6ppa" path="res://Animations/AIda/Idle/AIda_idle_0008.png" id="10_5xdnd"]
+[ext_resource type="Texture2D" uid="uid://b00hfmno02lyj" path="res://Animations/AIda/Idle/AIda_idle_0009.png" id="11_b36qa"]
+[ext_resource type="Texture2D" uid="uid://cujmek6s8rxfm" path="res://Animations/AIda/Idle/AIda_idle_0010.png" id="12_xoi07"]
 [ext_resource type="Script" uid="uid://d3ltdedfvykko" path="res://WaypointMovement.gd" id="13_5x1vy"]
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_hsqv2"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("1_hsqv2")
-}, {
-"duration": 1.0,
-"texture": ExtResource("2_5x1vy")
-}, {
-"duration": 1.0,
-"texture": ExtResource("3_6moa0")
-}, {
-"duration": 1.0,
-"texture": ExtResource("4_gv65k")
-}, {
-"duration": 1.0,
-"texture": ExtResource("5_hgxuc")
-}, {
-"duration": 1.0,
-"texture": ExtResource("6_fx0ii")
-}, {
-"duration": 1.0,
-"texture": ExtResource("7_hitaq")
-}, {
-"duration": 1.0,
-"texture": ExtResource("8_nlrmm")
-}, {
-"duration": 1.0,
-"texture": ExtResource("9_fx4lg")
-}, {
-"duration": 1.0,
-"texture": ExtResource("10_p03vq")
-}, {
-"duration": 1.0,
-"texture": ExtResource("11_f2bmu")
-}, {
-"duration": 1.0,
-"texture": ExtResource("12_md4og")
-}],
-"loop": true,
-"name": &"idle",
-"speed": 12.0
-}]
+[ext_resource type="Texture2D" uid="uid://6v2shbe06i71" path="res://Animations/AIda/Idle/AIda_idle_0011.png" id="13_f5e6k"]
+[ext_resource type="Texture2D" uid="uid://dt3jmatxocest" path="res://Animations/AIda/Idle/AIda_idle_0012.png" id="14_pvvs7"]
+[ext_resource type="Texture2D" uid="uid://ch5if0l2fcoba" path="res://Animations/AIda/Idle/AIda_idle_0013.png" id="15_0qbb8"]
+[ext_resource type="Texture2D" uid="uid://cndevya51bhhc" path="res://Animations/AIda/Idle/AIda_idle_0014.png" id="16_fqh8o"]
+[ext_resource type="Texture2D" uid="uid://caavnkngupuoa" path="res://Animations/AIda/Idle/AIda_idle_0015.png" id="17_j51ha"]
+[ext_resource type="Texture2D" uid="uid://b5olom0amk7g2" path="res://Animations/AIda/Idle/AIda_idle_0016.png" id="18_2wnib"]
+[ext_resource type="Texture2D" uid="uid://tfhnugby7yxq" path="res://Animations/AIda/Idle/AIda_idle_0017.png" id="19_mhq4g"]
+[ext_resource type="Texture2D" uid="uid://c7t2rxc3k4x2f" path="res://Animations/AIda/Idle/AIda_idle_0018.png" id="20_6eamu"]
+[ext_resource type="Texture2D" uid="uid://bq2uphnww10m5" path="res://Animations/AIda/Idle/AIda_idle_0019.png" id="21_fj1q1"]
+[ext_resource type="Texture2D" uid="uid://dn7nomdjm26yk" path="res://Animations/AIda/Idle/AIda_idle_0020.png" id="22_r1p7p"]
+[ext_resource type="Texture2D" uid="uid://okq8fkonytxm" path="res://Animations/AIda/Idle/AIda_idle_0021.png" id="23_g6pxa"]
+[ext_resource type="Texture2D" uid="uid://dmpbp2ycpme0d" path="res://Animations/AIda/Idle/AIda_idle_0022.png" id="24_ob116"]
+[ext_resource type="Texture2D" uid="uid://bjs8bxv1kkp1j" path="res://Animations/AIda/Idle/AIda_idle_0023.png" id="25_dxcwj"]
+[ext_resource type="Texture2D" uid="uid://w8qcsrcpfibn" path="res://Animations/AIda/Idle/AIda_idle_0024.png" id="26_joril"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hsqv2"]
 size = Vector2(275, 1010)
 
-[node name="AIda" type="CharacterBody2D"]
+[sub_resource type="Animation" id="Animation_eyku3"]
+resource_name = "idle"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.083, 0.167, 0.25, 0.333, 0.417, 0.5, 0.583, 0.667, 0.75, 0.833, 0.917, 1, 1.083, 1.167, 1.25, 1.333, 1.417, 1.5, 1.583, 1.667, 1.75, 1.833, 1.917, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("4_a1bqy"), ExtResource("5_4dvv0"), ExtResource("6_mruqf"), ExtResource("7_yi4fc"), ExtResource("8_d3mpw"), ExtResource("9_o60a8"), ExtResource("10_5xdnd"), ExtResource("11_b36qa"), ExtResource("12_xoi07"), ExtResource("13_f5e6k"), ExtResource("14_pvvs7"), ExtResource("15_0qbb8"), ExtResource("16_fqh8o"), ExtResource("17_j51ha"), ExtResource("18_2wnib"), ExtResource("19_mhq4g"), ExtResource("20_6eamu"), ExtResource("21_fj1q1"), ExtResource("22_r1p7p"), ExtResource("23_g6pxa"), ExtResource("24_ob116"), ExtResource("25_dxcwj"), ExtResource("26_joril"), ExtResource("1_rbbfu")]
+}
 
-[node name="Sprite" type="AnimatedSprite2D" parent="."]
-sprite_frames = SubResource("SpriteFrames_hsqv2")
-animation = &"idle"
-autoplay = "idle"
-frame_progress = 0.363398
+[sub_resource type="Animation" id="Animation_wanmg"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("1_rbbfu")]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_cvq8c"]
+_data = {
+&"RESET": SubResource("Animation_wanmg"),
+&"idle": SubResource("Animation_eyku3")
+}
+
+[node name="AIda" type="CharacterBody2D"]
+script = ExtResource("1_c6jtv")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_rbbfu")
 
 [node name="MovementController" type="Node" parent="."]
 script = ExtResource("13_5x1vy")
@@ -77,3 +82,8 @@ script = ExtResource("13_5x1vy")
 [node name="InteractionClickShape" type="CollisionShape2D" parent="InteractionArea"]
 position = Vector2(-9.5, 7)
 shape = SubResource("RectangleShape2D_hsqv2")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_cvq8c")
+}

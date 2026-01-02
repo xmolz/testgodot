@@ -6,10 +6,10 @@ extends CanvasLayer
 @export var all_memory_data: Array[MemoryGroupData] = []
 
 ## NODE REFERENCES
-@onready var location_list_container: VBoxContainer = $Panel/ScrollContainer/VBoxContainer
-@onready var story_button: Button = $Panel/HBoxContainer/StoryButton
-@onready var spicy_button: Button = $Panel/HBoxContainer/SpicyButton
-@onready var back_button: Button = $Panel/Button # Or whatever you named your back button
+@onready var location_list_container: VBoxContainer = $Panel/ScrollContainer/LocationListContainer
+@onready var story_button: Button = $Panel/TabContainer/StoryButton
+@onready var spicy_button: Button = $Panel/TabContainer/SpicyButton
+@onready var back_button: Button = $Panel/BackButton
 
 ## PRELOADS
 const LocationRowScene = preload("res://LocationRow.tscn") # <-- IMPORTANT: Verify this path!
@@ -25,7 +25,6 @@ func _ready():
 	_populate_list(MemoryGroupData.MemoryCategory.STORY)
 
 
-## This is the main function that builds the UI.
 func _populate_list(category_to_show: MemoryGroupData.MemoryCategory):
 	# First, clear any location rows that are already there.
 	for child in location_list_container.get_children():
@@ -42,6 +41,9 @@ func _populate_list(category_to_show: MemoryGroupData.MemoryCategory):
 			# And tell the new row to populate itself with this data.
 			new_row.populate(memory_group)
 
+			# --- THIS IS THE CRITICAL LINE, CORRECTLY INDENTED ---
+			# It MUST be inside this 'if' block to access 'new_row'.
+			new_row.chapter_selected.connect(_on_chapter_selected)
 
 # --- Signal Handlers ---
 
@@ -56,7 +58,22 @@ func _on_spicy_button_pressed():
 
 
 func _on_back_button_pressed():
-	# When the back button is pressed, close this overlay.
-	# We can add a GameManager call here later if needed.
+
+	if GameManager:
+		GameManager.exit_to_world_state()
+
+
 	print("Back button pressed, closing overlay.")
 	queue_free()
+
+
+func _on_chapter_selected(data: MemoryChapterData):
+	print("Chapter selected in main overlay!")
+	print("  - Name: ", data.chapter_name)
+	print("  - Scene to load: ", data.scene_path_to_load)
+
+	# --- TODO: FUTURE LOGIC GOES HERE ---
+	# For example:
+	# if not data.scene_path_to_load.is_empty():
+	#     get_tree().change_scene_to_file(data.scene_path_to_load)
+	# self.queue_free() # Close the memory box

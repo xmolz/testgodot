@@ -1,17 +1,17 @@
-[gd_scene load_steps=74 format=3 uid="uid://cqtgjhr5nepn1"]
+[gd_scene load_steps=96 format=3 uid="uid://cqtgjhr5nepn1"]
 
 [ext_resource type="PackedScene" uid="uid://bigouorladqds" path="res://VerbUI.tscn" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://suh4s1w73ooy" path="res://Main.gd" id="1_efxa6"]
 [ext_resource type="PackedScene" uid="uid://ba2cgdy2q1csl" path="res://player.tscn" id="1_pgf6g"]
-[ext_resource type="Resource" uid="uid://ccyinn2ynsx1p" path="res://AIda.dialogue" id="2_0n3wm"]
+[ext_resource type="Resource" uid="uid://ccyinn2ynsx1p" path="res://AIda.dialogue" id="2_0cbny"]
 [ext_resource type="PackedScene" uid="uid://d3c3oshbfjh6w" path="res://static_wall_background.tscn" id="2_dg77c"]
-[ext_resource type="Resource" uid="uid://d3deg4gqysr72" path="res://ExplanationData.tres" id="2_gngh3"]
 [ext_resource type="Script" uid="uid://dljo5cmv24o5h" path="res://camera_2d.gd" id="2_h2yge"]
 [ext_resource type="PackedScene" uid="uid://c34r3tmuut3h6" path="res://npc.tscn" id="2_huwxj"]
 [ext_resource type="PackedScene" uid="uid://cud6uaak7lo18" path="res://InventoryUI.tscn" id="2_kek77"]
 [ext_resource type="PackedScene" uid="uid://c3shvlwnp4663" path="res://interactable.tscn" id="2_lquwl"]
-[ext_resource type="Texture2D" uid="uid://dh30l02tu32mv" path="res://png-clipart-hamburger-cheeseburger-fast-food-pixel-art-burger-king-food-cheese.png" id="3_7mycd"]
-[ext_resource type="Texture2D" uid="uid://bq7kyq7jiojwq" path="res://faye.png" id="7_272bh"]
+[ext_resource type="Texture2D" uid="uid://smwtb1ho1c5j" path="res://png-clipart-hamburger-cheeseburger-fast-food-pixel-art-burger-king-food-cheese.png" id="3_7mycd"]
+[ext_resource type="Resource" uid="uid://d3deg4gqysr72" path="res://ExplanationData.tres" id="3_hrvbo"]
+[ext_resource type="Texture2D" uid="uid://dj4qqp4dhq5l4" path="res://faye.png" id="7_272bh"]
 [ext_resource type="Resource" uid="uid://bivfrghh084ym" path="res://interactions/DefaultExamineResponse.tres" id="7_jq2sk"]
 [ext_resource type="PackedScene" uid="uid://oy53tf8tvxe5" path="res://aida.tscn" id="8_vivmo"]
 [ext_resource type="Script" uid="uid://bapryqa2s86c5" path="res://interactions/actions/SayLineAction.gd" id="9_4k2k6"]
@@ -36,14 +36,19 @@
 [ext_resource type="Script" uid="uid://dosqfqbexlf5k" path="res://interactions/actions/OpenZoomViewAction.gd" id="24_ok6jj"]
 [ext_resource type="Script" uid="uid://bmq0s1nqhqi4j" path="res://InteractionResponse.gd" id="24_qsp4k"]
 [ext_resource type="Script" uid="uid://dltqnu07oiff" path="res://action.gd" id="25_kq58d"]
-[ext_resource type="Resource" uid="uid://xp53l3fuethr" path="res://examinables.dialogue" id="26_seu75"]
 [ext_resource type="Script" uid="uid://8n5g87ifbnd5" path="res://interactions/actions/SetLevelFlagAction.gd" id="27_0n3wm"]
 [ext_resource type="PackedScene" uid="uid://dg2mtprp1wybv" path="res://sergei_med_dispenser.tscn" id="27_a6jrf"]
-[ext_resource type="Script" uid="uid://bmuxd8k0o3aw7" path="res://interactions/actions/ShowDialogueActiont.gd" id="27_htxhm"]
+[ext_resource type="Resource" uid="uid://xp53l3fuethr" path="res://examinables.dialogue" id="27_gngh3"]
+[ext_resource type="Script" uid="uid://bmuxd8k0o3aw7" path="res://interactions/actions/ShowDialogueActiont.gd" id="28_0n3wm"]
 [ext_resource type="PackedScene" uid="uid://cymg2dkrvsnfy" path="res://explanation_layer.tscn" id="38_d2t1y"]
-[ext_resource type="PackedScene" uid="uid://7pg2anuhtleb" path="res://hospital_door.tscn" id="40_h8e4i"]
+[ext_resource type="PackedScene" uid="uid://cxo2auakscy0h" path="res://hospital_door.tscn" id="40_h8e4i"]
 [ext_resource type="PackedScene" uid="uid://cn3wt8p41equ0" path="res://insurance_form_button_ui.tscn" id="41_4lmeg"]
 [ext_resource type="PackedScene" uid="uid://cpvtyvf4t8pht" path="res://memory_box.tscn" id="44_gngh3"]
+[ext_resource type="Resource" uid="uid://bom2aj2a6w76n" path="res://generic_lines.dialogue" id="45_qnost"]
+[ext_resource type="Script" uid="uid://bvfc7q2g4fum1" path="res://interactions/actions/OpenMemoryBoxAction.gd" id="45_wnkbs"]
+[ext_resource type="Script" uid="uid://8c6cnm8lo25p" path="res://interactions/actions/ShowCustomDialogueAction.gd" id="46_wnkbs"]
+[ext_resource type="Texture2D" uid="uid://dxrfme6ebfa8c" path="res://hospital bed.png" id="47_wnkbs"]
+[ext_resource type="PackedScene" uid="uid://b8abif6uqojn4" path="res://tv.tscn" id="48_f6a44"]
 
 [sub_resource type="Resource" id="Resource_facbu"]
 script = ExtResource("9_4k2k6")
@@ -57,13 +62,11 @@ metadata/_custom_type_script = "uid://nvyqoryt5sbh"
 
 [sub_resource type="Resource" id="Resource_come4"]
 script = ExtResource("11_ok6jj")
-message_on_destroy = ""
 metadata/_custom_type_script = "uid://c5bw6trnybm71"
 
 [sub_resource type="Resource" id="Resource_h8e4i"]
 script = ExtResource("24_qsp4k")
 verb_id = "pickup"
-required_item_id = ""
 actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_facbu"), SubResource("Resource_b1qrp"), SubResource("Resource_come4")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
@@ -77,20 +80,12 @@ metadata/_custom_type_script = "uid://h83nrnu1277x"
 [sub_resource type="Resource" id="Resource_wnkbs"]
 script = ExtResource("24_qsp4k")
 verb_id = "talk_to"
-required_item_id = ""
 actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_qnost")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
-
-[sub_resource type="Resource" id="Resource_seu75"]
-script = ExtResource("27_htxhm")
-dialogue_resource = ExtResource("26_seu75")
-metadata/_custom_type_script = "uid://bmuxd8k0o3aw7"
 
 [sub_resource type="Resource" id="Resource_htxhm"]
 script = ExtResource("24_qsp4k")
 verb_id = "examine"
-required_item_id = ""
-actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_seu75")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
 [sub_resource type="Resource" id="Resource_f6a44"]
@@ -100,51 +95,116 @@ metadata/_custom_type_script = "uid://h83nrnu1277x"
 [sub_resource type="Resource" id="Resource_0cbny"]
 script = ExtResource("24_qsp4k")
 verb_id = "talk_to"
-required_item_id = ""
 actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_f6a44")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
-
-[sub_resource type="Resource" id="Resource_0rl1p"]
-script = ExtResource("19_4k2k6")
-target_node_path = NodePath("../McBucket_Path/McBucket")
-method_name = "on_player_used_cannathink"
-arguments = []
-metadata/_custom_type_script = "uid://7xsscyp60ilq"
 
 [sub_resource type="Resource" id="Resource_4lmeg"]
 script = ExtResource("20_0rl1p")
 item_id_to_remove = "cannathink"
 metadata/_custom_type_script = "uid://b4i2dd2kqpmun"
 
+[sub_resource type="Resource" id="Resource_ntx8l"]
+script = ExtResource("46_wnkbs")
+dialogue_resource = ExtResource("45_qnost")
+dialogue_checkpoint = "mcbucket_med_given_after_zanopram"
+metadata/_custom_type_script = "uid://8c6cnm8lo25p"
+
+[sub_resource type="Resource" id="Resource_1vm84"]
+script = ExtResource("24_qsp4k")
+verb_id = "use_item"
+required_item_id = "cannathink"
+required_flag_id = "mcbucket_zanopram_used"
+actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_4lmeg"), SubResource("Resource_ntx8l")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="Resource" id="Resource_rqtf5"]
+script = ExtResource("20_0rl1p")
+item_id_to_remove = "invigirol"
+metadata/_custom_type_script = "uid://b4i2dd2kqpmun"
+
+[sub_resource type="Resource" id="Resource_kkkcx"]
+script = ExtResource("46_wnkbs")
+dialogue_resource = ExtResource("45_qnost")
+dialogue_checkpoint = "mcbucket_med_given_after_zanopram"
+metadata/_custom_type_script = "uid://8c6cnm8lo25p"
+
+[sub_resource type="Resource" id="Resource_5dllo"]
+script = ExtResource("24_qsp4k")
+verb_id = "use_item"
+required_item_id = "invigirol"
+required_flag_id = "mcbucket_zanopram_used"
+actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_rqtf5"), SubResource("Resource_kkkcx")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="Resource" id="Resource_0dhbp"]
+script = ExtResource("20_0rl1p")
+item_id_to_remove = "zanopram"
+metadata/_custom_type_script = "uid://b4i2dd2kqpmun"
+
+[sub_resource type="Resource" id="Resource_34ol3"]
+script = ExtResource("19_4k2k6")
+target_node_path = NodePath("../McBucket_Path/McBucket")
+method_name = "change_state"
+arguments = [3]
+metadata/_custom_type_script = "uid://7xsscyp60ilq"
+
+[sub_resource type="Resource" id="Resource_jx0wj"]
+script = ExtResource("24_qsp4k")
+verb_id = "use_item"
+required_item_id = "zanopram"
+actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_0dhbp"), SubResource("Resource_34ol3")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="Resource" id="Resource_uatky"]
+script = ExtResource("19_4k2k6")
+target_node_path = NodePath("../McBucket_Path/McBucket")
+method_name = "change_state"
+arguments = [1]
+metadata/_custom_type_script = "uid://7xsscyp60ilq"
+
 [sub_resource type="Resource" id="Resource_ok6jj"]
 script = ExtResource("24_qsp4k")
 verb_id = "use_item"
 required_item_id = "cannathink"
-actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_0rl1p"), SubResource("Resource_4lmeg")])
+actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_4lmeg"), SubResource("Resource_uatky")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
-[sub_resource type="Resource" id="Resource_gngh3"]
-script = ExtResource("22_b1qrp")
-metadata/_custom_type_script = "uid://h83nrnu1277x"
+[sub_resource type="Resource" id="Resource_cyx1q"]
+script = ExtResource("19_4k2k6")
+target_node_path = NodePath("../McBucket_Path/McBucket")
+method_name = "change_state"
+arguments = [2]
+metadata/_custom_type_script = "uid://7xsscyp60ilq"
+
+[sub_resource type="Resource" id="Resource_wu3dr"]
+script = ExtResource("24_qsp4k")
+verb_id = "use_item"
+required_item_id = "invigirol"
+actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_rqtf5"), SubResource("Resource_cyx1q")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="Resource" id="Resource_gx4rg"]
+script = ExtResource("46_wnkbs")
+dialogue_resource = ExtResource("45_qnost")
+dialogue_checkpoint = "mcbucket_sleeping_talk_to_response"
+metadata/_custom_type_script = "uid://8c6cnm8lo25p"
 
 [sub_resource type="Resource" id="Resource_0n3wm"]
 script = ExtResource("24_qsp4k")
 verb_id = "talk_to"
-required_item_id = ""
-actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_gngh3")])
+required_flag_id = "mcbucket_zanopram_used"
+actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_gx4rg")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
 [sub_resource type="Resource" id="Resource_6iyjs"]
 script = ExtResource("27_0n3wm")
 flag_name = "mcbucket_cannathink_used"
-flag_value = true
 metadata/_custom_type_script = "uid://8n5g87ifbnd5"
 
 [sub_resource type="Resource" id="Resource_4w656"]
 script = ExtResource("19_4k2k6")
 target_node_path = NodePath("..")
 method_name = "on_player_used_cannathink"
-arguments = []
 metadata/_custom_type_script = "uid://7xsscyp60ilq"
 
 [sub_resource type="Resource" id="Resource_e71vb"]
@@ -159,16 +219,25 @@ required_item_id = "cannathink"
 actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_6iyjs"), SubResource("Resource_4w656"), SubResource("Resource_e71vb")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
-[sub_resource type="Resource" id="Resource_qsp4k"]
-script = ExtResource("27_htxhm")
-dialogue_resource = ExtResource("26_seu75")
+[sub_resource type="Resource" id="Resource_c2n8d"]
+script = ExtResource("22_b1qrp")
+metadata/_custom_type_script = "uid://h83nrnu1277x"
+
+[sub_resource type="Resource" id="Resource_wy5fy"]
+script = ExtResource("24_qsp4k")
+verb_id = "talk_to"
+required_flag_value = false
+actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_c2n8d")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="Resource" id="Resource_rnkwl"]
+script = ExtResource("28_0n3wm")
 metadata/_custom_type_script = "uid://bmuxd8k0o3aw7"
 
 [sub_resource type="Resource" id="Resource_kq58d"]
 script = ExtResource("24_qsp4k")
 verb_id = "examine"
-required_item_id = ""
-actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_qsp4k")])
+actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_rnkwl")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
 [sub_resource type="Resource" id="Resource_0cp0l"]
@@ -178,20 +247,12 @@ metadata/_custom_type_script = "uid://dosqfqbexlf5k"
 [sub_resource type="Resource" id="Resource_d2t1y"]
 script = ExtResource("24_qsp4k")
 verb_id = "use"
-required_item_id = ""
 actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_0cp0l")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
-
-[sub_resource type="Resource" id="Resource_jq2sk"]
-script = ExtResource("27_htxhm")
-dialogue_resource = ExtResource("26_seu75")
-metadata/_custom_type_script = "uid://bmuxd8k0o3aw7"
 
 [sub_resource type="Resource" id="Resource_4k2k6"]
 script = ExtResource("24_qsp4k")
 verb_id = "examine"
-required_item_id = ""
-actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_jq2sk")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
 [sub_resource type="Resource" id="Resource_hrvbo"]
@@ -201,14 +262,53 @@ metadata/_custom_type_script = "uid://nvyqoryt5sbh"
 
 [sub_resource type="Resource" id="Resource_blkrb"]
 script = ExtResource("11_ok6jj")
-message_on_destroy = ""
 metadata/_custom_type_script = "uid://c5bw6trnybm71"
 
 [sub_resource type="Resource" id="Resource_uypp3"]
 script = ExtResource("24_qsp4k")
 verb_id = "pickup"
-required_item_id = ""
 actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_hrvbo"), SubResource("Resource_blkrb")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="Resource" id="Resource_vke2r"]
+script = ExtResource("45_wnkbs")
+metadata/_custom_type_script = "uid://bvfc7q2g4fum1"
+
+[sub_resource type="Resource" id="Resource_b17eg"]
+script = ExtResource("24_qsp4k")
+verb_id = "use"
+required_flag_id = "memory_box_unlocked"
+actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_vke2r")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="Resource" id="Resource_uit24"]
+script = ExtResource("46_wnkbs")
+dialogue_resource = ExtResource("45_qnost")
+dialogue_checkpoint = "memory_box_unlocked"
+metadata/_custom_type_script = "uid://8c6cnm8lo25p"
+
+[sub_resource type="Resource" id="Resource_rm4vd"]
+script = ExtResource("27_0n3wm")
+flag_name = "memory_box_unlocked"
+metadata/_custom_type_script = "uid://8n5g87ifbnd5"
+
+[sub_resource type="Resource" id="Resource_ruth0"]
+script = ExtResource("24_qsp4k")
+verb_id = "use_item"
+required_item_id = "key_rusty"
+actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_uit24"), SubResource("Resource_rm4vd")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="Resource" id="Resource_pjyto"]
+script = ExtResource("46_wnkbs")
+dialogue_resource = ExtResource("45_qnost")
+dialogue_checkpoint = "memory_box_locked"
+metadata/_custom_type_script = "uid://8c6cnm8lo25p"
+
+[sub_resource type="Resource" id="Resource_sm6fg"]
+script = ExtResource("24_qsp4k")
+verb_id = "use"
+actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_pjyto")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
 [node name="Main" type="Control"]
@@ -216,8 +316,8 @@ layout_mode = 3
 anchors_preset = 0
 mouse_filter = 2
 script = ExtResource("1_efxa6")
-aida_dialogue_resource = ExtResource("2_0n3wm")
-aida_explanation_data = ExtResource("2_gngh3")
+aida_dialogue_resource = ExtResource("2_0cbny")
+aida_explanation_data = ExtResource("3_hrvbo")
 
 [node name="BackgroundContainer" type="Node2D" parent="."]
 z_index = -30
@@ -249,6 +349,7 @@ position = Vector2(3694, 0)
 position = Vector2(5614, 0)
 
 [node name="StaticWallBackground5" parent="WallContainer" instance=ExtResource("2_dg77c")]
+z_index = 1
 position = Vector2(7533, 0)
 
 [node name="Burger" parent="." instance=ExtResource("2_lquwl")]
@@ -262,7 +363,7 @@ texture = ExtResource("3_7mycd")
 
 [node name="Rusty Key" parent="." instance=ExtResource("2_lquwl")]
 z_index = 1805
-position = Vector2(3307, 28)
+position = Vector2(-339, 28)
 scale = Vector2(4.125, 4.125)
 object_display_name = "Rusty Key"
 object_id = "key_rusty_world"
@@ -344,11 +445,10 @@ position = Vector2(5456, -32)
 
 [node name="Sergei_Path" type="Node2D" parent="."]
 z_index = 1
-position = Vector2(2354, 156)
-scale = Vector2(0.5, 0.5)
+position = Vector2(-3413, 201)
 
 [node name="Sergei" parent="Sergei_Path" instance=ExtResource("10_getpj")]
-position = Vector2(11404, 0)
+position = Vector2(11404, 86)
 
 [node name="InteractionArea" parent="Sergei_Path/Sergei" index="2"]
 script = ExtResource("16_2cqfq")
@@ -358,10 +458,16 @@ category = 1
 interactions = Array[ExtResource("24_qsp4k")]([SubResource("Resource_htxhm"), SubResource("Resource_0cbny")])
 character_conversation_overlay_scene = ExtResource("20_h8e4i")
 
+[node name="InteractionClickShape" parent="Sergei_Path/Sergei/InteractionArea" index="0"]
+position = Vector2(159, -196)
+
+[node name="Sprite2D" parent="Sergei_Path/Sergei" index="3"]
+position = Vector2(-27.99999, -172)
+
 [node name="MedicineCabinet2" parent="." instance=ExtResource("12_a6jrf")]
 position = Vector2(890, 3)
 scale = Vector2(0.735, 0.735)
-interactions = Array[ExtResource("24_qsp4k")]([ExtResource("7_jq2sk"), SubResource("Resource_ok6jj")])
+interactions = Array[ExtResource("24_qsp4k")]([ExtResource("7_jq2sk"), SubResource("Resource_1vm84"), SubResource("Resource_5dllo"), SubResource("Resource_jx0wj"), SubResource("Resource_ok6jj"), SubResource("Resource_wu3dr")])
 
 [node name="McBucket_Path" type="Node2D" parent="."]
 position = Vector2(770, 91)
@@ -374,8 +480,11 @@ script = ExtResource("16_2cqfq")
 object_display_name = "mcbucket"
 object_id = "mcbucket"
 category = 1
-interactions = Array[ExtResource("24_qsp4k")]([ExtResource("7_jq2sk"), SubResource("Resource_0n3wm"), SubResource("Resource_abqjc")])
+interactions = Array[ExtResource("24_qsp4k")]([ExtResource("7_jq2sk"), SubResource("Resource_0n3wm"), SubResource("Resource_abqjc"), SubResource("Resource_wy5fy")])
 character_conversation_overlay_scene = ExtResource("22_facbu")
+
+[node name="Sprite2D" parent="McBucket_Path/McBucket" index="3"]
+z_index = 1
 
 [node name="MedicineCabinet" parent="." instance=ExtResource("17_074og")]
 position = Vector2(2543, -23)
@@ -384,7 +493,7 @@ interactions = Array[ExtResource("24_qsp4k")]([SubResource("Resource_kq58d"), Su
 object_zoom_overlay_scene = ExtResource("14_cegan")
 
 [node name="Player" parent="." instance=ExtResource("1_pgf6g")]
-position = Vector2(4373, 90)
+position = Vector2(3950, 90)
 scale = Vector2(0.5, 0.5)
 
 [node name="NPC" parent="." instance=ExtResource("2_huwxj")]
@@ -426,12 +535,13 @@ layer = 2
 unique_name_in_owner = true
 
 [node name="TestBox" parent="." instance=ExtResource("23_0odxb")]
-position = Vector2(3165, 25)
+position = Vector2(-507, 18)
 object_display_name = "testbox"
 object_id = "testbox"
 interactions = Array[ExtResource("24_qsp4k")]([SubResource("Resource_4k2k6"), SubResource("Resource_uypp3")])
 
 [node name="SergeiMedicineDispenser" parent="." instance=ExtResource("27_a6jrf")]
+z_index = -1
 position = Vector2(7870, -32)
 scale = Vector2(0.735, 0.735)
 
@@ -456,10 +566,21 @@ grow_horizontal = 0
 
 [node name="MemoryBox" parent="." instance=ExtResource("44_gngh3")]
 z_index = -10
-position = Vector2(5927, 32)
+position = Vector2(5918, 9)
 scale = Vector2(0.8, 0.8)
 object_display_name = "Memory Box"
-object_id = "memeory_box"
+object_id = "MemoryBox"
+interactions = Array[ExtResource("24_qsp4k")]([ExtResource("7_jq2sk"), SubResource("Resource_b17eg"), SubResource("Resource_ruth0"), SubResource("Resource_sm6fg")])
+
+[node name="television_screen" parent="." instance=ExtResource("48_f6a44")]
+z_index = -1
+position = Vector2(1359, -162)
+scale = Vector2(0.8, 0.8)
+
+[node name="HospitalBed" type="Sprite2D" parent="."]
+position = Vector2(3832, 181)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("47_wnkbs")
 
 [editable path="Burger"]
 [editable path="Rusty Key"]

@@ -1,4 +1,6 @@
-[gd_resource type="Theme" load_steps=5 format=3 uid="uid://dwcpu0kxyu7pq"]
+[gd_resource type="Theme" load_steps=6 format=3 uid="uid://dwcpu0kxyu7pq"]
+
+[ext_resource type="FontFile" uid="uid://blg6ol8nf4fgs" path="res://RobotoMono-VariableFont_wght.ttf" id="1_xyx01"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_n6icb"]
 
@@ -39,6 +41,7 @@ corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
 [resource]
+Button/fonts/font = ExtResource("1_xyx01")
 Button/styles/focus = SubResource("StyleBoxEmpty_n6icb")
 Button/styles/hover = SubResource("StyleBoxFlat_xyx01")
 Button/styles/normal = SubResource("StyleBoxFlat_n6icb")
