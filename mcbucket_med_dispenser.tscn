@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactable.gd" id="1_weaf5"]
 [ext_resource type="Script" uid="uid://bmq0s1nqhqi4j" path="res://InteractionResponse.gd" id="2_6k5h2"]
-[ext_resource type="Texture2D" uid="uid://faqm8qmqqx3f" path="res://med dispenser.png" id="2_xo2a3"]
-[ext_resource type="Resource" uid="uid://bivfrghh084ym" path="res://interactions/DefaultExamineResponse.tres" id="3_gaeqw"]
+[ext_resource type="Texture2D" uid="uid://dx6p4253tam3g" path="res://med dispenser.png" id="2_xo2a3"]
+[ext_resource type="Resource" uid="uid://bivfrghh084ym" path="res://interactions/actions/DefaultExamineResponse.tres" id="3_gaeqw"]
 [ext_resource type="Script" uid="uid://dltqnu07oiff" path="res://action.gd" id="4_wn268"]
 [ext_resource type="Script" uid="uid://7xsscyp60ilq" path="res://interactions/actions/CallMethodAction.gd" id="5_gaeqw"]
 

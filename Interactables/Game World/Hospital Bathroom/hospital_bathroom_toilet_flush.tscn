@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3 uid="uid://dwqwwrmp7uisr"]
+
+[ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactable.gd" id="1_leo2j"]
+[ext_resource type="Texture2D" uid="uid://b6l5j3t3qweui" path="res://Sprites/Hospital Bathroom/hospital_bathroom_toilet_flush.png" id="2_leo2j"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5u6mx"]
+size = Vector2(334, 105.5)
+
+[node name="HospitalBathroomToiletPaper" type="Area2D"]
+script = ExtResource("1_leo2j")
+metadata/_custom_type_script = "uid://dwldhrx7leysr"
+
+[node name="ContactShadow" type="Sprite2D" parent="."]
+modulate = Color(0.33, 0.132, 0.19800003, 0.18039216)
+z_index = -1
+texture = ExtResource("2_leo2j")
+offset = Vector2(2.845, 2.5)
+
+[node name="ObjectSprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_leo2j")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(1, 0.25)
+shape = SubResource("RectangleShape2D_5u6mx")
+
+[node name="WalkToPoint" type="Marker2D" parent="."]
+position = Vector2(3, -4)

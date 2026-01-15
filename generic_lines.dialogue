@@ -18,3 +18,14 @@ The old man seems to be fast asleep. He won't get in your way now.
 ~ mcbucket_med_given_after_zanopram
 Hmmm. The old man seems unaffected. His sleep is deep.
 => END
+
+~ toilet_flush_weak
+
+You flush the toilet. It seems to have a weak flow.
+
+~ medicine_cabinet_interrupt
+
+AIda: Hey patient #122, that cabinet is reserved for clinical staff. 
+AIda: If you are experiencing discomfort, I can assist with approved medication.
+Huh. Looks like I can’t open the medicine cabinet while she’s here…
+=> END

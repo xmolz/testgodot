@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3 uid="uid://c2o4m1lmeyqpn"]
+
+[ext_resource type="Texture2D" uid="uid://cfkvy6v701sh1" path="res://icon.svg" id="1_c4033"]
+[ext_resource type="Script" uid="uid://by8o1t3tdwrep" path="res://ItemData.gd" id="2_c6qe0"]
+
+[resource]
+script = ExtResource("2_c6qe0")
+item_id = "hospital_toilet_paper"
+display_name = "Toilet Paper"
+icon = ExtResource("1_c4033")
+description = "A very thick piece of toilet paper. Can get your ass mighty clean."
+metadata/_custom_type_script = "uid://by8o1t3tdwrep"

@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactable.gd" id="2_5mir5"]
 [ext_resource type="BitMap" uid="uid://dlj2f3klm7wtl" path="res://zanopram_map.png" id="2_ftjr1"]
 [ext_resource type="Script" uid="uid://bmq0s1nqhqi4j" path="res://InteractionResponse.gd" id="5_vot75"]
-[ext_resource type="Resource" uid="uid://bivfrghh084ym" path="res://interactions/DefaultExamineResponse.tres" id="6_7tucb"]
+[ext_resource type="Resource" uid="uid://bivfrghh084ym" path="res://interactions/actions/DefaultExamineResponse.tres" id="6_7tucb"]
 [ext_resource type="Script" uid="uid://dltqnu07oiff" path="res://action.gd" id="7_v03ym"]
 [ext_resource type="Script" uid="uid://nvyqoryt5sbh" path="res://interactions/actions/AddItemAction.gd" id="8_sb6td"]
 [ext_resource type="Script" uid="uid://c5bw6trnybm71" path="res://interactions/actions/DestroyAction.gd" id="9_kicyk"]

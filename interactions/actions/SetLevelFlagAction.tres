@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="SetLevelFlagAction" load_steps=2 format=3 uid="uid://c1hxay36twxac"]
+
+[ext_resource type="Script" uid="uid://8n5g87ifbnd5" path="res://interactions/actions/SetLevelFlagAction.gd" id="1_kqdei"]
+
+[resource]
+script = ExtResource("1_kqdei")
+metadata/_custom_type_script = "uid://8c6cnm8lo25p"

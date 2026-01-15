@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://mbqo64idf1si"]
+
+[ext_resource type="Texture2D" uid="uid://bhj2e6pwkymsb" path="res://Backgrounds/Levels/static_hospital_background_ventless.png" id="1_oq061"]
+
+[node name="StaticWallBackground" type="Node2D"]
+
+[node name="WallTile1" type="Sprite2D" parent="."]
+texture = ExtResource("1_oq061")
+centered = false

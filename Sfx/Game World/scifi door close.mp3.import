@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://e15nh3tp32s5"
+path="res://.godot/imported/scifi door close.mp3-2615ac06c006cf54afc7f44f366c15a4.mp3str"
+
+[deps]
+
+source_file="res://Sfx/Game World/scifi door close.mp3"
+dest_files=["res://.godot/imported/scifi door close.mp3-2615ac06c006cf54afc7f44f366c15a4.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

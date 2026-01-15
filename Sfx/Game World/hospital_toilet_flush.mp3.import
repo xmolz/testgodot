@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://msf7033jcw0j"
+path="res://.godot/imported/hospital_toilet_flush.mp3-efa115970cec8e7a2b83fe4828589d39.mp3str"
+
+[deps]
+
+source_file="res://Sfx/Game World/hospital_toilet_flush.mp3"
+dest_files=["res://.godot/imported/hospital_toilet_flush.mp3-efa115970cec8e7a2b83fe4828589d39.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

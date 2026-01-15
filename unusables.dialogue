@@ -7,10 +7,26 @@ That doesn't seem to work.
 You place your hand on the hand sensor in an attempt to exit.
 Suddenly, you hear a noise from the speaker above. 
 "Hello patient #122. Please fill in your insurance details before attempting to leave. Thank you!"
-=>
+=> END
 
 
 ~ mcbucket_item_cannathink
+nah.
+=> END
 
-Dickhead.
+~ hospital_toilet_regular_use
+We'll... You don't really need to go right now.
+=> END
+
+~ hospital_toilet_already_dropped
+You've already dropped a lot of toilet paper in.
+=> END 
+
+~ hospital_toilet_already_clogged
+This is already broken.
+Adding more buttpaper would be futile.
+=> END
+
+~ hospital_toilet_already_broken
+You can't reuse this until it gets fixed.
 => END

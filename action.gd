@@ -2,8 +2,9 @@
 class_name Action
 extends Resource
 
-# MODIFIED LINE: Changed -> void to -> bool
-func execute(interactable_node: Interactable) -> bool:
+# CHANGE: Removed "-> bool" and replaced with "-> Variant"
+# This allows the function to handle both instant returns AND async "await" returns.
+func execute(interactable_node: Interactable) -> Variant:
 	push_warning("An Action resource did not override the execute() method!")
-	# MODIFIED LINE: Return true by default.
+	# Return true by default.
 	return true

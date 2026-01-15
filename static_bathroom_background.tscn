@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://btku3hrvme7k6"]
+
+[ext_resource type="Texture2D" uid="uid://cigj6loe88g6u" path="res://Backgrounds/Levels/static_hospital_bathroom_background.PNG" id="1_2wpbe"]
+
+[node name="StaticWallBackground" type="Node2D"]
+
+[node name="WallTile1" type="Sprite2D" parent="."]
+texture = ExtResource("1_2wpbe")
+centered = false

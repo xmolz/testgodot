@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="TeleportAction" load_steps=2 format=3 uid="uid://oendrkbacvny"]
+
+[ext_resource type="Script" uid="uid://dm3vji871klli" path="res://interactions/actions/TeleportAction.gd" id="1_tlxi8"]
+
+[resource]
+script = ExtResource("1_tlxi8")
+metadata/_custom_type_script = "uid://8c6cnm8lo25p"

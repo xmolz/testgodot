@@ -1,0 +1,113 @@
+[gd_scene load_steps=7 format=3 uid="uid://bj3w6acg6sb7g"]
+
+[ext_resource type="Script" uid="uid://ctc8mysw5ic3e" path="res://MainMenu.gd" id="1_jix8l"]
+[ext_resource type="Texture2D" uid="uid://dj36rtbdioqh3" path="res://Backgrounds/Game Images/Template Background 2.jpg" id="2_glbon"]
+[ext_resource type="FontFile" uid="uid://6fxwb86ujy6q" path="res://Fonts/IBMPlexSans-SemiBold.ttf" id="3_nlkkf"]
+[ext_resource type="FontFile" uid="uid://b1iquuxsqnjah" path="res://Fonts/RubikGlitch-Regular.ttf" id="4_qe12f"]
+
+[sub_resource type="Gradient" id="Gradient_eiy7p"]
+colors = PackedColorArray(0, 0, 0, 0, 0, 0, 0, 0.85882354)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_h7a2f"]
+gradient = SubResource("Gradient_eiy7p")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[node name="MainMenu" type="CanvasLayer"]
+script = ExtResource("1_jix8l")
+
+[node name="Content" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="TextureRect" parent="Content"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_glbon")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Vignette" type="TextureRect" parent="Content"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_h7a2f")
+
+[node name="TitleBlock" type="VBoxContainer" parent="Content"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.05
+anchor_top = 0.70000005
+anchor_right = 0.5
+anchor_bottom = 0.95100003
+offset_top = -6.1035156e-05
+offset_bottom = -0.080078125
+
+[node name="Label" type="Label" parent="Content/TitleBlock"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9411765, 0.9411765, 0.9411765, 1)
+theme_override_fonts/font = ExtResource("3_nlkkf")
+theme_override_font_sizes/font_size = 71
+text = "I F   I   R E M E M B E R"
+
+[node name="Label2" type="Label" parent="Content/TitleBlock"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5921569, 0.8627451, 0.92156863, 1)
+theme_override_fonts/font = ExtResource("4_qe12f")
+theme_override_font_sizes/font_size = 122
+text = "CORRECTLY"
+
+[node name="ButtonBlock" type="VBoxContainer" parent="Content"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.6
+anchor_top = 0.4
+anchor_right = 0.89100003
+anchor_bottom = 0.606
+offset_right = -0.7200928
+offset_bottom = 0.52001953
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="StartButton" type="Button" parent="Content/ButtonBlock"]
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.93333334, 0.93333334, 0.93333334, 1)
+theme_override_colors/font_pressed_color = Color(0.2684, 0.4335066, 0.61, 1)
+theme_override_colors/font_hover_color = Color(0.5921569, 0.8627451, 0.92156863, 1)
+theme_override_fonts/font = ExtResource("3_nlkkf")
+theme_override_font_sizes/font_size = 36
+text = "START DEMO"
+flat = true
+alignment = 2
+
+[node name="QuitButton" type="Button" parent="Content/ButtonBlock"]
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.93333334, 0.93333334, 0.93333334, 1)
+theme_override_colors/font_pressed_color = Color(0.2684, 0.4335066, 0.61, 1)
+theme_override_colors/font_hover_color = Color(0.5921569, 0.8627451, 0.92156863, 1)
+theme_override_fonts/font = ExtResource("3_nlkkf")
+theme_override_font_sizes/font_size = 36
+text = "QUIT
+"
+flat = true
+alignment = 2
+
+[connection signal="pressed" from="Content/ButtonBlock/StartButton" to="." method="_on_new_game_button_pressed"]
+[connection signal="pressed" from="Content/ButtonBlock/StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="Content/ButtonBlock/QuitButton" to="." method="_on_quit_button_pressed"]

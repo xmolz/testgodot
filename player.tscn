@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://ba2cgdy2q1csl"]
+[gd_scene load_steps=41 format=3 uid="uid://ba2cgdy2q1csl"]
 
 [ext_resource type="Script" uid="uid://j0sis8eh01lr" path="res://player.gd" id="1_6ubl7"]
 [ext_resource type="Texture2D" uid="uid://djey74n526wpc" path="res://protag_idle/protag_idle_0000.png" id="2_5tmop"]
@@ -33,6 +33,17 @@
 [ext_resource type="Texture2D" uid="uid://rqxgg4tmupi7" path="res://Animations/Protag/Walk/Protag_walk_0006.png" id="31_b88wv"]
 [ext_resource type="Texture2D" uid="uid://mjbdo0wg3ng8" path="res://Animations/Protag/Walk/Protag_walk_0007.png" id="32_pgbbb"]
 [ext_resource type="Texture2D" uid="uid://b8tp1ueq7uncy" path="res://Animations/Protag/Walk/Protag_walk_0008.png" id="33_331ug"]
+
+[sub_resource type="Gradient" id="Gradient_hiqhm"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0, 0.6041096)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_hiqhm"]
+gradient = SubResource("Gradient_hiqhm")
+fill = 1
+fill_from = Vector2(0.50427353, 0.5)
+fill_to = Vector2(0.008547009, 0.014957265)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_keght"]
 size = Vector2(220, 935)
@@ -96,6 +107,12 @@ _data = {
 
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 script = ExtResource("1_6ubl7")
+
+[node name="FloorShadow" type="Sprite2D" parent="."]
+modulate = Color(0.16546667, 0.126, 0.2, 0.32941177)
+position = Vector2(-2.4999847, 525)
+scale = Vector2(8.453125, 1.7708337)
+texture = SubResource("GradientTexture2D_hiqhm")
 
 [node name="Sprite" type="Sprite2D" parent="."]
 position = Vector2(8.19647, -8.59983)

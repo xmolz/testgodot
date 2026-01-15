@@ -6,7 +6,14 @@ var sfx_library: Dictionary = {
 	"ui_click": preload("res://ui_click.wav"),
 	"notification_ping": preload("res://notification_ping.wav"),
 	"dialogue_advance": preload("res://Sfx/Dialog/Dialog_sfx.wav"),
-	"swish": preload("res://Sfx/Dialog/swish_effect.wav")
+	"swish": preload("res://Sfx/Dialog/swish_effect.wav"),
+	
+	# --- NEW DOOR SOUNDS ---
+	"door_close": preload("res://Sfx/Game World/scifi door close.mp3"),
+	"door_open": preload("res://Sfx/Game World/scifi door open.mp3"),
+	
+	# --- HOSPITAL BATHROOM ---
+	"hospital_toilet_flush": preload("res://Sfx/Game World/hospital_toilet_flush.mp3")
 }
 
 # --- Music Library & Player ---
@@ -40,11 +47,10 @@ func _initialize_music_player():
 		audio_stream_wav.loop_mode = AudioStreamWAV.LOOP_FORWARD
 
 
-# --- SFX Function (Unchanged) ---
-func play_sfx(sound_name: String, pitch: float = 1.0, volume_db: float = 0.0):
+func play_sfx(sound_name: String, pitch: float = 1.0, volume_db: float = 0.0) -> AudioStreamPlayer:
 	if not sfx_library.has(sound_name):
 		print_rich("[color=red]SoundManager Error: Tried to play non-existent SFX: '%s'[/color]" % sound_name)
-		return
+		return null # Return null if failed
 
 	var player = AudioStreamPlayer.new()
 	add_child(player)
@@ -52,7 +58,11 @@ func play_sfx(sound_name: String, pitch: float = 1.0, volume_db: float = 0.0):
 	player.pitch_scale = pitch
 	player.volume_db = volume_db
 	player.play()
+	
+	# We still queue_free automatically, but we also return the reference
 	player.finished.connect(player.queue_free)
+	
+	return player
 
 
 # --- Public Music Functions (Now with Safety Checks) ---

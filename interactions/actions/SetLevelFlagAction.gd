@@ -2,18 +2,18 @@
 class_name SetLevelFlagAction
 extends Action
 
-## The name of the level flag to set. Must match a flag in the LevelStateManager.
 @export var flag_name: String = ""
-## The value to set the flag to.
 @export var flag_value: bool = true
 
-
-func execute(interactable_node: Interactable) -> bool:
-	if flag_name.is_empty():
-		push_warning("SetLevelFlagAction executed with an empty flag_name.")
+func execute(_interactable_node: Interactable) -> Variant:
+	if flag_name == "":
+		push_warning("SetLevelFlagAction: No flag_name specified.")
 		return true
 
-	# Again, we use the interactable_node to emit the signal that the
-	# GameManager is already listening for.
-	interactable_node.request_set_level_flag.emit(flag_name, flag_value)
+	if GameManager:
+		# This calls the function you already set up in GameManager
+		# which routes it to the current LevelStateManager
+		GameManager.set_current_level_flag(flag_name, flag_value)
+		print("Action: Set Level Flag '%s' to %s" % [flag_name, str(flag_value)])
+	
 	return true

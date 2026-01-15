@@ -71,6 +71,36 @@ Reporter: So, Mr. Voss, congratulations on securing the new federal contract! Wi
 CEO Voss: Oh, we don’t run the country.
 CEO Voss: We simply maintain it. The country runs through us.
 
+=> END
+
+
+
+#HOSPITAL BATHROOM
+
+~ toilet_paper_dispenser
+
+An automatic toilet paper dispenser.
+The paper seems to be quite thick. Must be of premium quality.
+
+=> END
+
+~ bathroom_mirror
+
+Wow, now this is a fancy mirror.
+Seems to be displaying the date and time on the top right.
+
+=> END
+
+~ hospital_toilet
+
+This is where I could take a dump, if I needed to.. 
+
+=> END
+
+~ toilet_flush
+
+Looks like a fancy ass..toilet flush?
+And wait, what are those holes for on the sides?
 
 => END
 

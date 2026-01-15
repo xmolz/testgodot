@@ -1,0 +1,26 @@
+~ start
+#HOSPITAL BATHROOM
+
+~ toilet_flush_normal_use_1
+
+You push the flush button.
+
+=> END
+
+~ toilet_flush_normal_use_2
+
+Hmm. It seems to be rather weak.
+Maybe maintenance is due. 
+
+=> END
+
+~ toilet_clog_success
+
+You dropped the thick toilet paper into the toilet.
+
+=> END
+
+~ toilet_flushed_stuck
+Uh oh... that didn't sound good
+
+=> END

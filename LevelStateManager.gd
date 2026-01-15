@@ -17,6 +17,10 @@ class_name LevelStateManager
 @export var memory_box_unlocked: bool = false
 @export var mcbucket_invigirol_used: bool = false
 @export var mcbucket_zanopram_used: bool = false
+@export var toilet_clogged:bool = false
+@export var aida_in_main_room:bool = false
+@export var toilet_has_paper: bool = false # Stage 1: Paper dropped
+
 
 # Example of other potential flags for a level:
 # @export var generator_online: bool = false

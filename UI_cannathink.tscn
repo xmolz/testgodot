@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://hm12uesh52vl" path="res://ui_interactable.gd" id="3_kfii6"]
 [ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactable.gd" id="4_lndah"]
 [ext_resource type="Script" uid="uid://bmq0s1nqhqi4j" path="res://InteractionResponse.gd" id="5_jssx0"]
-[ext_resource type="Resource" uid="uid://bivfrghh084ym" path="res://interactions/DefaultExamineResponse.tres" id="6_loee1"]
+[ext_resource type="Resource" uid="uid://bivfrghh084ym" path="res://interactions/actions/DefaultExamineResponse.tres" id="6_loee1"]
 [ext_resource type="Script" uid="uid://dltqnu07oiff" path="res://action.gd" id="7_ljjww"]
 [ext_resource type="Script" uid="uid://bapryqa2s86c5" path="res://interactions/actions/SayLineAction.gd" id="8_1sodi"]
 [ext_resource type="Script" uid="uid://nvyqoryt5sbh" path="res://interactions/actions/AddItemAction.gd" id="9_cx2wj"]

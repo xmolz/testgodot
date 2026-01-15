@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://nkrnpxjymyfa"
+path="res://.godot/imported/scifi door open.mp3-5789de8ad9b36dd45d7954aaee03fe2e.mp3str"
+
+[deps]
+
+source_file="res://Sfx/Game World/scifi door open.mp3"
+dest_files=["res://.godot/imported/scifi door open.mp3-5789de8ad9b36dd45d7954aaee03fe2e.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

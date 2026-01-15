@@ -60,6 +60,7 @@ var verb_ui: CanvasLayer = null
 var inventory_ui: CanvasLayer = null
 var insurance_form_button_ui: CanvasLayer = null
 var explanation_layer: CanvasLayer = null
+var transition_layer: CanvasLayer = null
 
 
 # --- END of Interaction Context Management ---
@@ -69,7 +70,7 @@ var current_game_state: GameState = GameState.BOOTING
 # 3. Reference to your main game scene instance.
 #    The Boot.gd script will set this reference for us later.
 var main_game_scene_instance: Node = null
-var main_menu_scene_instance: Control = null
+var main_menu_scene_instance: CanvasLayer = null
 # --- END of High-Level Game State Management ---
 var input_blocker_layer: CanvasLayer = null
 # --- State Variables ---
@@ -372,16 +373,21 @@ func select_inventory_item(item_data_to_select: ItemData):
 
 # --- UI and Interaction Flow ---
 func set_hovered_object(interactable: Interactable):
-	if _is_player_walking:
-		return
+	# Update the internal data immediately. 
+	# This ensures the game knows exactly what is under the mouse, even while the camera is moving.
 	hovered_interactable = interactable
-	update_sentence_line_ui()
+	
+	# Only update the visual UI text if the player isn't currently locked in a walk animation.
+	if not _is_player_walking:
+		update_sentence_line_ui()
 
 func clear_hovered_object():
-	if _is_player_walking:
-		return
+	# Clear the internal data immediately.
 	hovered_interactable = null
-	update_sentence_line_ui()
+	
+	# Only update the visual UI text if the player isn't currently locked in a walk animation.
+	if not _is_player_walking:
+		update_sentence_line_ui()
 
 func update_sentence_line_ui():
 	var line_text = ""
@@ -487,6 +493,12 @@ func _initiate_interaction_flow(interactable_node: Interactable, verb_to_use_id:
 	if not is_instance_valid(interactable_node):
 		print_rich("[color=red]GM: _initiate_interaction_flow called with invalid interactable_node.[/color]")
 		_complete_interaction_cycle(); return
+
+	# --- NEW LINE ADDED HERE ---
+	# Tell the object (Aida) that an interaction is coming so she can stop walking immediately
+	if interactable_node.has_method("notify_interaction_pending"):
+		interactable_node.notify_interaction_pending()
+	# ---------------------------
 
 	var walk_needed = true
 
@@ -663,6 +675,23 @@ func _complete_interaction_cycle():
 	if current_selected_item_data:
 		current_selected_item_data = null
 		selected_inventory_item_changed.emit(null)
+
+	# --- FIX START: Restore Player Control and UI ---
+	# Since we removed the unfreeze logic from the individual Dialogue actions,
+	# we must ensure the player is un-frozen here, at the absolute end of the chain.
+	
+	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
+		# Only unfreeze if we are in the normal gameplay state (not a full cutscene/zoom)
+		if current_interaction_state == InteractionState.WORLD:
+			player_node.set_can_move(true)
+
+	# Restore UI visibility (Verbs and Inventory)
+	if current_interaction_state != InteractionState.CONVERSATION:
+		if is_instance_valid(verb_ui):
+			verb_ui.visible = true
+		if is_instance_valid(inventory_ui):
+			inventory_ui.visible = true
+	# --- FIX END ---
 
 	update_sentence_line_ui()
 
@@ -950,6 +979,12 @@ func _find_and_assign_ui_nodes():
 			explanation_layer.explanation_finished.connect(exit_explanation_state)
 	else:
 		print_rich("[color=red]GM: FAILED to find ExplanationLayer.[/color]")
+	transition_layer = main_game_scene_instance.get_node_or_null("%TransitionLayer")
+	if is_instance_valid(transition_layer):
+		print_rich("[color=green]GM: Found TransitionLayer.[/color]")
+	else:
+		print_rich("[color=red]GM: FAILED to find TransitionLayer.[/color]")
+		
 func _on_form_field_submitted(field_id: String, value):
 	# Log the incoming data for debugging.
 	print_rich("[color=Cyan]GM: Received submission for field '%s' with value: %s[/color]" % [field_id, value])

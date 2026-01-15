@@ -1,10 +1,10 @@
 [gd_scene load_steps=4 format=3 uid="uid://cxo2auakscy0h"]
 
 [ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactable.gd" id="1_qr4xx"]
-[ext_resource type="Texture2D" uid="uid://ceqekvkan42q4" path="res://hospital door.png" id="2_qr4xx"]
+[ext_resource type="Texture2D" uid="uid://dp8i02xba8j7y" path="res://Sprites/Hospital Room/hospital_room_door.png" id="2_qr4xx"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rhf3t"]
-size = Vector2(465, 737)
+size = Vector2(697, 1259)
 
 [node name="ExitDoor" type="Area2D"]
 script = ExtResource("1_qr4xx")
@@ -15,7 +15,7 @@ object_id = "exit_door"
 texture = ExtResource("2_qr4xx")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0.5, 1.5)
+position = Vector2(-2.5, 1.5)
 shape = SubResource("RectangleShape2D_rhf3t")
 
 [node name="WalkToPoint" type="Marker2D" parent="."]

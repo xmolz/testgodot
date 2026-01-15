@@ -20,3 +20,23 @@ func _process(delta): # Or _physics_process, matching player
 		# Simply update the camera's position to the target.
 		# Let the built-in limits and position smoothing handle the rest.
 		global_position = target_node.global_position
+
+
+# Add this to camera_2d.gd
+
+func snap_to_target():
+	if not target_node: return
+	
+	# 1. Disable smoothing temporarily
+	var previous_smoothing = position_smoothing_enabled
+	position_smoothing_enabled = false
+	
+	# 2. Force position update immediately
+	global_position = target_node.global_position
+	
+	# 3. We need to wait for the physics engine to acknowledge the move
+	# before turning smoothing back on, otherwise it might still jitter.
+	await get_tree().process_frame
+	
+	# 4. Re-enable smoothing
+	position_smoothing_enabled = previous_smoothing

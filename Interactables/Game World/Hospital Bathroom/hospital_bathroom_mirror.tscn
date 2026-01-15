@@ -1,0 +1,93 @@
+[gd_scene load_steps=8 format=3 uid="uid://bkjbta25aa1fj"]
+
+[ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactable.gd" id="1_ovcbv"]
+[ext_resource type="Texture2D" uid="uid://c87trugw56gd4" path="res://Sprites/Hospital Bathroom/hospital_bathroom_mirror.png" id="2_mjm7d"]
+[ext_resource type="FontFile" uid="uid://6fxwb86ujy6q" path="res://Fonts/IBMPlexSans-SemiBold.ttf" id="3_5u6mx"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5u6mx"]
+size = Vector2(1049, 529)
+
+[sub_resource type="Animation" id="Animation_5u6mx"]
+resource_name = "idle"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Control/Label:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1.0271568, 1.0271568, 1.0271568, 1), Color(1.0271568, 1.0271568, 1.0271568, 0.54901963), Color(1.0271568, 1.0271568, 1.0271568, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_ybetr"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Control/Label:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1.0271568, 1.0271568, 1.0271568, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ue00j"]
+_data = {
+&"RESET": SubResource("Animation_ybetr"),
+&"idle": SubResource("Animation_5u6mx")
+}
+
+[node name="HospitalBathroomMirror" type="Area2D"]
+script = ExtResource("1_ovcbv")
+metadata/_custom_type_script = "uid://dwldhrx7leysr"
+
+[node name="ObjectSprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_mjm7d")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+shape = SubResource("RectangleShape2D_5u6mx")
+
+[node name="WalkToPoint" type="Marker2D" parent="."]
+position = Vector2(0, 254)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_ue00j")
+}
+autoplay = "idle"
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="Control"]
+modulate = Color(1.0271568, 1.0271568, 1.0271568, 1)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 4.275
+anchor_top = -6.275
+anchor_right = 12.575001
+anchor_bottom = -2.6000001
+offset_right = -3.0517578e-05
+theme_override_colors/font_color = Color(0.39999998, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.12012003, 0.09239999, 0.33, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 4
+theme_override_constants/shadow_outline_size = 2
+theme_override_fonts/font = ExtResource("3_5u6mx")
+theme_override_font_sizes/font_size = 36
+text = "17 Septmeber 2094
+7:00 PM
+98.6°"

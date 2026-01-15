@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://oy53tf8tvxe5"]
+[gd_scene load_steps=42 format=3 uid="uid://oy53tf8tvxe5"]
 
 [ext_resource type="Script" uid="uid://dgdtb6o10kuyr" path="res://aida.gd" id="1_c6jtv"]
 [ext_resource type="Texture2D" uid="uid://2om663l1jjvd" path="res://Animations/AIda/Idle/AIda_idle_0001.png" id="1_rbbfu"]
@@ -26,33 +26,35 @@
 [ext_resource type="Texture2D" uid="uid://dmpbp2ycpme0d" path="res://Animations/AIda/Idle/AIda_idle_0022.png" id="24_ob116"]
 [ext_resource type="Texture2D" uid="uid://bjs8bxv1kkp1j" path="res://Animations/AIda/Idle/AIda_idle_0023.png" id="25_dxcwj"]
 [ext_resource type="Texture2D" uid="uid://w8qcsrcpfibn" path="res://Animations/AIda/Idle/AIda_idle_0024.png" id="26_joril"]
+[ext_resource type="Texture2D" uid="uid://p3xfl3qi0yt" path="res://Animations/AIda/Walk/Aida_walking_0001.png" id="27_b36qa"]
+[ext_resource type="Texture2D" uid="uid://cm6wdi1xu3axm" path="res://Animations/AIda/Walk/Aida_walking_0002.png" id="28_xoi07"]
+[ext_resource type="Texture2D" uid="uid://cs8knrftlrb27" path="res://Animations/AIda/Walk/Aida_walking_0003.png" id="29_f5e6k"]
+[ext_resource type="Texture2D" uid="uid://yf5wvort68sq" path="res://Animations/AIda/Walk/Aida_walking_0004.png" id="30_pvvs7"]
+[ext_resource type="Texture2D" uid="uid://erlbr055rc0h" path="res://Animations/AIda/Walk/Aida_walking_0005.png" id="31_0qbb8"]
+[ext_resource type="Texture2D" uid="uid://bbi4iwca7a1ix" path="res://Animations/AIda/Walk/Aida_walking_0006.png" id="32_fqh8o"]
+[ext_resource type="Texture2D" uid="uid://c1l4ago0mrn7i" path="res://Animations/AIda/Walk/Aida_walking_0007.png" id="33_j51ha"]
+[ext_resource type="Texture2D" uid="uid://c6a2cjojiwtxa" path="res://Animations/AIda/Walk/Aida_walking_0008.png" id="34_2wnib"]
+
+[sub_resource type="Gradient" id="Gradient_sqtfq"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0, 0.6041096)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_mhq4g"]
+gradient = SubResource("Gradient_sqtfq")
+fill = 1
+fill_from = Vector2(0.50427353, 0.5)
+fill_to = Vector2(0.008547009, 0.014957265)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hsqv2"]
 size = Vector2(275, 1010)
-
-[sub_resource type="Animation" id="Animation_eyku3"]
-resource_name = "idle"
-length = 2.0
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0.083, 0.167, 0.25, 0.333, 0.417, 0.5, 0.583, 0.667, 0.75, 0.833, 0.917, 1, 1.083, 1.167, 1.25, 1.333, 1.417, 1.5, 1.583, 1.667, 1.75, 1.833, 1.917, 2),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [ExtResource("4_a1bqy"), ExtResource("5_4dvv0"), ExtResource("6_mruqf"), ExtResource("7_yi4fc"), ExtResource("8_d3mpw"), ExtResource("9_o60a8"), ExtResource("10_5xdnd"), ExtResource("11_b36qa"), ExtResource("12_xoi07"), ExtResource("13_f5e6k"), ExtResource("14_pvvs7"), ExtResource("15_0qbb8"), ExtResource("16_fqh8o"), ExtResource("17_j51ha"), ExtResource("18_2wnib"), ExtResource("19_mhq4g"), ExtResource("20_6eamu"), ExtResource("21_fj1q1"), ExtResource("22_r1p7p"), ExtResource("23_g6pxa"), ExtResource("24_ob116"), ExtResource("25_dxcwj"), ExtResource("26_joril"), ExtResource("1_rbbfu")]
-}
 
 [sub_resource type="Animation" id="Animation_wanmg"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/path = NodePath("Sprite:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -62,16 +64,57 @@ tracks/0/keys = {
 "values": [ExtResource("1_rbbfu")]
 }
 
+[sub_resource type="Animation" id="Animation_eyku3"]
+resource_name = "idle"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.083, 0.167, 0.25, 0.333, 0.417, 0.5, 0.583, 0.667, 0.75, 0.833, 0.917, 1, 1.083, 1.167, 1.25, 1.333, 1.417, 1.5, 1.583, 1.667, 1.75, 1.833, 1.917, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("4_a1bqy"), ExtResource("5_4dvv0"), ExtResource("6_mruqf"), ExtResource("7_yi4fc"), ExtResource("8_d3mpw"), ExtResource("9_o60a8"), ExtResource("10_5xdnd"), ExtResource("11_b36qa"), ExtResource("12_xoi07"), ExtResource("13_f5e6k"), ExtResource("14_pvvs7"), ExtResource("15_0qbb8"), ExtResource("16_fqh8o"), ExtResource("17_j51ha"), ExtResource("18_2wnib"), ExtResource("19_mhq4g"), ExtResource("20_6eamu"), ExtResource("21_fj1q1"), ExtResource("22_r1p7p"), ExtResource("23_g6pxa"), ExtResource("24_ob116"), ExtResource("25_dxcwj"), ExtResource("26_joril"), ExtResource("1_rbbfu")]
+}
+
+[sub_resource type="Animation" id="Animation_6eamu"]
+resource_name = "walk"
+length = 0.666
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0833, 0.1667, 0.25, 0.33333334, 0.4167, 0.5, 0.5833, 0.666),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("27_b36qa"), ExtResource("28_xoi07"), ExtResource("29_f5e6k"), ExtResource("30_pvvs7"), ExtResource("31_0qbb8"), ExtResource("32_fqh8o"), ExtResource("33_j51ha"), ExtResource("34_2wnib"), ExtResource("27_b36qa")]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_cvq8c"]
 _data = {
 &"RESET": SubResource("Animation_wanmg"),
-&"idle": SubResource("Animation_eyku3")
+&"idle": SubResource("Animation_eyku3"),
+&"walk": SubResource("Animation_6eamu")
 }
 
 [node name="AIda" type="CharacterBody2D"]
 script = ExtResource("1_c6jtv")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="FloorShadow" type="Sprite2D" parent="."]
+modulate = Color(0.16546667, 0.126, 0.2, 0.32941177)
+position = Vector2(-2.4999847, 525)
+scale = Vector2(8.453125, 1.7708337)
+texture = SubResource("GradientTexture2D_mhq4g")
+
+[node name="Sprite" type="Sprite2D" parent="."]
 texture = ExtResource("1_rbbfu")
 
 [node name="MovementController" type="Node" parent="."]
