@@ -1,0 +1,67 @@
+[gd_scene load_steps=8 format=3 uid="uid://dojqgskjk44nk"]
+
+[ext_resource type="Script" uid="uid://cy1g0xpb3u0e2" path="res://character_conversation_overlay.gd" id="1_irlht"]
+[ext_resource type="Resource" uid="uid://bdwme0ug677oq" path="res://testdialogue.dialogue" id="2_irlht"]
+[ext_resource type="Texture2D" uid="uid://cx4r1a1ci7vpj" path="res://sergei.PNG" id="3_pqeca"]
+[ext_resource type="Texture2D" uid="uid://coo5k2phjvc1e" path="res://Protag.png" id="4_h5ikw"]
+[ext_resource type="Material" uid="uid://dek82a5tuykas" path="res://Shaders/grayscale_material.tres" id="5_gt5sx"]
+[ext_resource type="Texture2D" uid="uid://dg6a8t20eu1yu" path="res://Backgrounds/Sergey/sergey_neutral.png" id="6_l02a4"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jy7bi"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_pqeca")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="CharacterConversationOverlay" type="CanvasLayer"]
+process_mode = 3
+script = ExtResource("1_irlht")
+conversation_dialogue_file = ExtResource("2_irlht")
+background_animations = SubResource("SpriteFrames_jy7bi")
+initial_animation_name = ""
+scene_character_sprite_texture = ExtResource("4_h5ikw")
+mental_image_shader = ExtResource("5_gt5sx")
+
+[node name="RootContainer" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BackgroundRect" type="ColorRect" parent="RootContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BackgroundSprite" type="Sprite2D" parent="RootContainer"]
+position = Vector2(960.9997, 540.5)
+scale = Vector2(0.5000002, 0.498611)
+texture = ExtResource("6_l02a4")
+centered = false
+
+[node name="AnimatedBackground" type="TextureRect" parent="RootContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+expand_mode = 1
+stretch_mode = 6
+
+[node name="MentalImageSprite" type="Sprite2D" parent="RootContainer"]
+position = Vector2(960.9997, 540.5)
+scale = Vector2(0.5000002, 0.498611)
+texture = ExtResource("6_l02a4")

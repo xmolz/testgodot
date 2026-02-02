@@ -39,7 +39,8 @@ enum GameState {
 	INTRO_CONVERSATION,
 	IN_GAME_PLAY,
 	PAUSED,
-	EXPLANATION # Add this new state
+	EXPLANATION,
+	CUTSCENE # <--- Add this line
 }
 
 
@@ -226,28 +227,31 @@ func change_game_state(new_state: GameState):
 	if new_state == current_game_state:
 		return
 
-	# --- THIS IS THE FIX ---
-	# Wait for the end of the current frame before doing anything else.
-	# This gives the engine a chance to redraw the UI (like un-pressing a button)
-	# before we start a heavy loading operation that will cause a pause.
+	# Wait for the end of the current frame so UI interactions clear
 	await get_tree().process_frame
-	# --- END OF FIX ---
 
+	# =========================================================
+	# 1. LEAVING THE OLD STATE (Cleanup)
+	# =========================================================
 	match current_game_state:
 		GameState.MAIN_MENU:
 			if is_instance_valid(main_menu_scene_instance):
 				print_rich("[color=yellow]GM: Cleaning up Main Menu scene.[/color]")
 				main_menu_scene_instance.queue_free()
 				main_menu_scene_instance = null
+				
 		GameState.IN_GAME_PLAY:
-			# --- ADD THIS LINE ---
-			SoundManager.stop_music() # Stop the music when we leave the main game
-			# --------------------
-			pass
+			# When LEAVING the game (e.g. to Menu), stop music.
+			# If going to CUTSCENE, we usually want music to keep playing.
+			if new_state != GameState.CUTSCENE:
+				SoundManager.stop_music()
 
 	print_rich("[color=yellow]GameManager: Changing state from %s to %s[/color]" % [GameState.keys()[current_game_state], GameState.keys()[new_state]])
 	current_game_state = new_state
 
+	# =========================================================
+	# 2. ENTERING THE NEW STATE (Setup)
+	# =========================================================
 	match current_game_state:
 		GameState.MAIN_MENU:
 			if is_instance_valid(main_menu_scene_instance):
@@ -272,36 +276,70 @@ func change_game_state(new_state: GameState):
 			_start_intro_conversation()
 
 		GameState.IN_GAME_PLAY:
-			if is_instance_valid(main_game_scene_instance):
-				return
+			# --- A. LOADING PHASE ---
+			# Only load the scene if it doesn't exist (e.g. fresh boot)
+			if not is_instance_valid(main_game_scene_instance):
+				var main_packed_scene = load(MAIN_GAME_SCENE_PATH)
+				if not main_packed_scene:
+					print_rich("[color=red]GameManager Error: Failed to load Main Game Scene.[/color]")
+					return
 
-			var main_packed_scene = load(MAIN_GAME_SCENE_PATH)
-			if not main_packed_scene:
-				print_rich("[color=red]GameManager Error: Failed to load Main Game Scene.[/color]")
-				return
+				main_game_scene_instance = main_packed_scene.instantiate()
+				get_tree().root.add_child(main_game_scene_instance)
+				_find_and_assign_ui_nodes()
+				
+				# Play music if we just loaded the game
+				SoundManager.play_music() 
 
-			main_game_scene_instance = main_packed_scene.instantiate()
-			get_tree().root.add_child(main_game_scene_instance)
-			_find_and_assign_ui_nodes()
-			# --- ADD THIS LINE ---
-			SoundManager.play_music() # Play the music when we enter the main game
-			# --------------------
+			# --- B. RESTORATION PHASE (Run this EVERY time we enter IN_GAME_PLAY) ---
+			
+			# 1. Ensure UI nodes are found (in case of re-linking)
+			if not is_instance_valid(verb_ui): _find_and_assign_ui_nodes()
 
+			# 2. Find Player if missing
 			if not is_instance_valid(player_node):
 				player_node = get_tree().get_first_node_in_group("player")
-				if not is_instance_valid(player_node):
-					print_rich("[color=red]GM: Player node not found in group 'player' or is invalid![/color]")
-				else:
-					print_rich("[color=green]GM: Found player: %s[/color]" % player_node.name)
 
+			# 3. Restore Main UI Visibility
+			if is_instance_valid(verb_ui): verb_ui.visible = true
+			if is_instance_valid(inventory_ui): inventory_ui.visible = true
+			
+			# 4. Restore Insurance Button (Logic Check)
+			if is_instance_valid(insurance_form_button_ui):
+				var should_be_visible = get_current_level_flag("insurance_button_unlocked")
+				insurance_form_button_ui.visible = should_be_visible
+
+			# 5. Unblock Input (Remove the gray blocker)
+			if is_instance_valid(input_blocker_layer):
+				input_blocker_layer.visible = false
+
+			# 6. Unlock Player Movement
 			if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
 				player_node.set_can_move(true)
+				
+			print_rich("[color=green]GM: IN_GAME_PLAY state active. UI restored, Player unlocked.[/color]")
 
 		GameState.PAUSED:
 			pass
 
 		GameState.BOOTING:
 			pass
+			
+		GameState.CUTSCENE:
+			# 1. Hide the UI
+			if is_instance_valid(verb_ui): verb_ui.visible = false
+			if is_instance_valid(inventory_ui): inventory_ui.visible = false
+			if is_instance_valid(insurance_form_button_ui): insurance_form_button_ui.visible = false
+			
+			# 2. Block Input (Clicking on things in the world)
+			if is_instance_valid(input_blocker_layer):
+				input_blocker_layer.visible = true
+				
+			# 3. Stop the Player from moving
+			if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
+				player_node.set_can_move(false)
+				
+			print_rich("[color=Plum]GM: Entered CUTSCENE state. UI hidden, Input blocked.[/color]")
 func select_verb(verb_id_to_select: String):
 	var previously_selected_verb_id = current_verb_id
 	var new_verb_id = ""

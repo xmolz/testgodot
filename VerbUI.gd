@@ -136,7 +136,7 @@ func _on_game_manager_verb_changed(new_verb_id: String): # Unchanged from previo
 
 func _on_game_manager_sentence_line_updated(full_sentence: String):
 	# ADD THIS LINE FOR DEBUGGING
-	print("VerbUI received sentence: '", full_sentence, "'")
+	#print("VerbUI received sentence: '", full_sentence, "'")
 
 	if GameManager and GameManager.current_verb_id != "":
 		action_bubble_label.text = full_sentence

@@ -2,6 +2,10 @@
 extends Node
 class_name LevelStateManager
 
+# --- ADD THIS SIGNAL ---
+signal level_flag_changed(flag_name: String, new_value: bool)
+
+
 # --- EXPORTED LEVEL-SPECIFIC FLAGS ---
 # Add flags relevant to THIS level here.
 # For our test:
@@ -18,8 +22,10 @@ class_name LevelStateManager
 @export var mcbucket_invigirol_used: bool = false
 @export var mcbucket_zanopram_used: bool = false
 @export var toilet_clogged:bool = false
-@export var aida_in_main_room:bool = false
+@export var aida_in_main_room:bool = true
+@export var has_spoken_to_sergey_once: bool =  false
 @export var toilet_has_paper: bool = false # Stage 1: Paper dropped
+@export var aida_fixing_toilet: bool = false # Acts as a lock preventing re-trigger
 
 
 # Example of other potential flags for a level:
@@ -62,6 +68,7 @@ func set_level_flag(flag_name: String, value: bool):
 
 	set(flag_name, value) # Use set() to modify exported vars by string name
 	print_rich("[color=LawnGreen]LevelStateManager ('%s'): Level Flag Set -> %s = %s[/color]" % [get_parent().name if get_parent() else "", flag_name, value])
+	level_flag_changed.emit(flag_name, value)
 
 	# You could add logic here to check for level completion or trigger other events
 	# based on this flag change. For example:

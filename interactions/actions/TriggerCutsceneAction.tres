@@ -1,0 +1,7 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://cs7a3n1wvwjab"]
+
+[ext_resource type="Script" uid="uid://bjrpwaag6vx20" path="res://interactions/actions/TriggerCutsceneAction.gd" id="1_pmtep"]
+
+[resource]
+script = ExtResource("1_pmtep")
+metadata/_custom_type_script = "uid://8c6cnm8lo25p"

@@ -1,15 +1,17 @@
-[gd_scene load_steps=6 format=3 uid="uid://bjnf6egwtuqv5"]
+[gd_scene load_steps=7 format=3 uid="uid://bjnf6egwtuqv5"]
 
-[ext_resource type="Script" uid="uid://dgi247xxwu7j3" path="res://object_zoom_overlay.gd" id="1_3gkd5"]
-[ext_resource type="Texture2D" uid="uid://vnyvksmwhjys" path="res://medcabinetzoomed.png" id="2_mvlbe"]
-[ext_resource type="PackedScene" uid="uid://b5eqmwcgkinbv" path="res://UI_Cannathink.tscn" id="3_34wwt"]
+[ext_resource type="Script" uid="uid://dk4awdnwdvbr6" path="res://Scripts/MedicineCabinetZoom.gd" id="1_34wwt"]
+[ext_resource type="Texture2D" uid="uid://dp1cbodca3siq" path="res://medcabinetzoomed.png" id="2_mvlbe"]
+[ext_resource type="Resource" uid="uid://dmkt054qdywph" path="res://test.dialogue" id="2_oa20e"]
+[ext_resource type="PackedScene" uid="uid://b5eqmwcgkinbv" path="res://UI_cannathink.tscn" id="3_34wwt"]
 [ext_resource type="PackedScene" uid="uid://b8jbh3bghi1rb" path="res://UI_Zanopram.tscn" id="5_oa20e"]
 [ext_resource type="PackedScene" uid="uid://bi8u415ulvhb" path="res://UI_Invigirol.tscn" id="6_oa20e"]
 
 [node name="ObjectZoomOverlay" type="CanvasLayer"]
 process_mode = 3
-script = ExtResource("1_3gkd5")
-background_texture = ExtResource("2_mvlbe")
+script = ExtResource("1_34wwt")
+caught_dialogue_resource = ExtResource("2_oa20e")
+caught_dialogue_start_id = "test"
 
 [node name="RootContainer" type="Control" parent="."]
 layout_mode = 3

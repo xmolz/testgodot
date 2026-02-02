@@ -115,3 +115,67 @@ func pause_movement():
 func resume_movement():
 	_wait_timer.paused = false # Unpauses the timer
 	set_physics_process(true)  # Resumes the loop
+	
+# --- CUTSCENE CONTROL ---
+
+# This function is a "Coroutine". We can 'await' it!
+func move_to_position_async(target_pos: Vector2, stop_distance: float = 5.0, timeout: float = 8.0) -> void:
+	pause_movement()
+	
+	print_rich("[color=orange]AidaMove: START. From %s to %s. Timeout: %ss[/color]" % [_target_node.global_position, target_pos, timeout])
+	
+	var start_time = Time.get_ticks_msec()
+	var arrived = false
+	
+	while not arrived:
+		if not is_instance_valid(_target_node): return
+
+		# --- DEBUGGING EVERY SECOND ---
+		# We use modulo to print only occasionally, otherwise console floods
+		if Time.get_ticks_msec() % 1000 < 20: 
+			var dist = _target_node.global_position.distance_to(target_pos)
+			print("AidaMove: Dist: %.2f | Velocity: %s | TargetY: %.2f vs MyY: %.2f" % [dist, _target_node.velocity, target_pos.y, _target_node.global_position.y])
+
+		# 1. CHECK TIMEOUT (The Safety Net)
+		var elapsed = (Time.get_ticks_msec() - start_time) / 1000.0
+		if elapsed > timeout:
+			print_rich("[color=red]AidaMove: TIMEOUT! Force teleporting.[/color]")
+			_target_node.global_position = target_pos
+			arrived = true
+			break
+
+		# 2. CALCULATE HORIZONTAL DISTANCE ONLY (The Logic Fix)
+		# We only care about X distance, ignoring Y height differences
+		var x_distance = abs(_target_node.global_position.x - target_pos.x)
+		
+		if x_distance <= stop_distance:
+			arrived = true
+			_target_node.velocity = Vector2.ZERO
+			if _animation_player: _animation_player.play("idle")
+			print_rich("[color=green]AidaMove: Arrived at X coordinate.[/color]")
+		else:
+			# 3. MOVE HORIZONTALLY ONLY
+			# Determine direction: 1.0 (Right) or -1.0 (Left)
+			var direction_x = sign(target_pos.x - _target_node.global_position.x)
+			
+			# Apply velocity only to X. Leave Y alone (or apply gravity if needed)
+			_target_node.velocity.x = direction_x * movement_speed
+			_target_node.velocity.y = 0 # Or apply gravity here if she needs it
+			
+			_target_node.move_and_slide()
+			
+			if _animation_player and _animation_player.current_animation != "walk":
+				_animation_player.play("walk")
+			
+			if _sprite_2d:
+				if _target_node.velocity.x > 0.1: _sprite_2d.flip_h = false
+				elif _target_node.velocity.x < -0.1: _sprite_2d.flip_h = true
+		
+		await get_tree().physics_frame
+		
+func set_target_waypoint_index(index: int):
+	if waypoints.is_empty(): return
+	
+	# Clamp ensures we don't crash if you give a bad number
+	_current_waypoint_index = clamp(index, 0, waypoints.size() - 1)
+	print("WaypointMovement: Manually reset target to waypoint index %s" % _current_waypoint_index)

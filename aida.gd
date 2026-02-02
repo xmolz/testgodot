@@ -4,7 +4,7 @@ extends CharacterBody2D
 # Add these variables at the top of Aida.gd
 const ROOM_THRESHOLD_Y: float = 1000.0 # ADJUST THIS NUMBER to the Y coordinate of the floor between rooms
 var _was_in_main_room: bool = true # To track state changes
-
+var _is_interacting_with_me: bool = false
 
 # --- References ---
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
@@ -46,6 +46,11 @@ func _ready():
 		if not interactable_component.interaction_processed.is_connected(_on_interaction_finished):
 			interactable_component.interaction_processed.connect(_on_interaction_finished)
 
+	# Listen for the global "Interaction Complete" signal from GameManager
+	if GameManager:
+		GameManager.interaction_complete.connect(_on_global_interaction_complete)
+	# --- NEW CODE END ---
+	
 	# 3. Start default state
 	if animation_player:
 		animation_player.play("idle")
@@ -54,6 +59,9 @@ func _ready():
 
 func _on_interaction_pending():
 	print("Aida: Player clicked me. Stopping movement immediately.")
+		# --- NEW LINE ---
+	_is_interacting_with_me = true 
+	# ----------------
 	
 	# Stop the resume timer if it was already counting down
 	_resume_walk_timer.stop()
@@ -102,3 +110,10 @@ func _on_resume_timer_timeout():
 	print("Aida: 5 seconds passed. Resuming patrol.")
 	if movement_controller:
 		movement_controller.resume_movement()
+
+func _on_global_interaction_complete():
+	# If the interaction that just finished was with ME, then start the countdown
+	if _is_interacting_with_me:
+		print("Aida: Global interaction complete. Starting resume countdown.")
+		_is_interacting_with_me = false # Reset the flag
+		_start_resume_countdown()
