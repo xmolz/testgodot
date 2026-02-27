@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://ci8pnkj1cu7h7"
+path="res://.godot/imported/Unnatural City.ogg-5b122c7d2aa9255d5ce4a6fda519d147.oggvorbisstr"
+
+[deps]
+
+source_file="res://Sfx/Music/Unnatural City.ogg"
+dest_files=["res://.godot/imported/Unnatural City.ogg-5b122c7d2aa9255d5ce4a6fda519d147.oggvorbisstr"]
+
+[params]
+
+loop=true
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,0 +1,14 @@
+[gd_scene load_steps=4 format=3 uid="uid://c4dlvtuw8navn"]
+
+[ext_resource type="PackedScene" uid="uid://7s7wp2v87sa4" path="res://CharacterConversationOverlay.tscn" id="1_fhspe"]
+[ext_resource type="Resource" uid="uid://ca8aat6hp02sh" path="res://sergei_dialogue_2.dialogue" id="2_bavds"]
+[ext_resource type="Texture2D" uid="uid://dg6a8t20eu1yu" path="res://Backgrounds/Sergey/sergey_neutral.png" id="2_qck0b"]
+
+[node name="CharacterConversationOverlay" instance=ExtResource("1_fhspe")]
+conversation_dialogue_file = ExtResource("2_bavds")
+background_animations = null
+initial_animation_name = ""
+scene_character_sprite_texture = null
+
+[node name="BackgroundSprite" parent="RootContainer" index="1"]
+texture = ExtResource("2_qck0b")

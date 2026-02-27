@@ -48,25 +48,25 @@ stretch_mode = 6
 [node name="InteractableContainer" type="Node2D" parent="RootContainer"]
 
 [node name="TextureButton" parent="RootContainer/InteractableContainer" instance=ExtResource("3_34wwt")]
-offset_left = 825.0
-offset_top = 127.0
-offset_right = 1525.0
-offset_bottom = 1027.0
-scale = Vector2(0.45, 0.45)
+offset_left = 787.0
+offset_top = 52.0
+offset_right = 1089.2223
+offset_bottom = 952.0
+scale = Vector2(0.5, 0.5)
 
 [node name="TextureButton2" parent="RootContainer/InteractableContainer" instance=ExtResource("6_oa20e")]
-offset_left = 339.0
-offset_top = 122.0
-offset_right = 1039.0
-offset_bottom = 1022.0
-scale = Vector2(0.45, 0.45)
+offset_left = 407.0
+offset_top = 53.0
+offset_right = 1107.0
+offset_bottom = 953.0
+scale = Vector2(0.5, 0.5)
 
 [node name="TextureButton3" parent="RootContainer/InteractableContainer" instance=ExtResource("5_oa20e")]
-offset_left = 1309.0
-offset_top = 125.0
-offset_right = 2009.0
-offset_bottom = 1025.0
-scale = Vector2(0.45, 0.45)
+offset_left = 1158.0
+offset_top = 52.0
+offset_right = 1858.0
+offset_bottom = 952.0
+scale = Vector2(0.5, 0.5)
 
 [node name="CloseButton" type="Button" parent="RootContainer"]
 layout_mode = 0

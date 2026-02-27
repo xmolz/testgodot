@@ -1,0 +1,16 @@
+[remap]
+
+importer="bitmap"
+type="BitMap"
+uid="uid://b24mjadkwhb8w"
+path="res://.godot/imported/Cannathink_Mask.png-5da5352cec17696d75d9dd3bebf7b509.res"
+
+[deps]
+
+source_file="res://Sprites/Cabinet Medicines/Cannathink_Mask.png"
+dest_files=["res://.godot/imported/Cannathink_Mask.png-5da5352cec17696d75d9dd3bebf7b509.res"]
+
+[params]
+
+create_from=0
+threshold=0.5

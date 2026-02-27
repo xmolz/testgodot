@@ -10,9 +10,6 @@
 [sub_resource type="Resource" id="Resource_gaeqw"]
 resource_local_to_scene = true
 script = ExtResource("5_gaeqw")
-target_node_path = NodePath("")
-method_name = ""
-arguments = []
 metadata/_custom_type_script = "uid://7xsscyp60ilq"
 
 [sub_resource type="Resource" id="Resource_34au0"]
@@ -28,7 +25,7 @@ size = Vector2(293, 370)
 [node name="McbucketMedicineDispenser" type="Area2D"]
 script = ExtResource("1_weaf5")
 object_display_name = "Medicine Dispenser"
-object_id = "mcbucket_medicine_dispenser"
+object_id = "poop"
 interactions = Array[ExtResource("2_6k5h2")]([ExtResource("3_gaeqw"), SubResource("Resource_34au0")])
 
 [node name="ObjectSprite" type="Sprite2D" parent="."]

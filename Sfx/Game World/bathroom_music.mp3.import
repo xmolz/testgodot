@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cy8syrd23db10"
+path="res://.godot/imported/bathroom_music.mp3-acd6f3968e745b0ba1f733d74b892cdc.mp3str"
+
+[deps]
+
+source_file="res://Sfx/Game World/bathroom_music.mp3"
+dest_files=["res://.godot/imported/bathroom_music.mp3-acd6f3968e745b0ba1f733d74b892cdc.mp3str"]
+
+[params]
+
+loop=true
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

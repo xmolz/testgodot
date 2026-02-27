@@ -1,14 +1,32 @@
 ~ start
-Nathan: [[Hi|Hello|Howdy]], this is some dialogue.
-Nathan: Here are some choices.
-- First one
-	Nathan: You picked the first one.
-- Second one
-	Nathan: You picked the second one.
-- Start again => start
-- End the conversation => END
-- Take me to church => hub
-Nathan: For more information see the online documentation.
+
+# 1. Normal Dialogue
+Aida: I'm going to play the tape now.
+
+# 2. Start Cinematic (Cutscene Mode)
+# Args: "default", HideBalloon=true, ForceLock=true, "dissolve"
+do play_cinematic("default", true, true, "dissolve")
+
+# 3. The Pause (The "Continue" button handles this)
+...
+
+# --- AT THIS POINT, THE PLAYER CLICKED CONTINUE ---
+# The script showed the Balloon again. The video is STILL playing.
+
+Aida: Do you see that shadow moving?
+Aida: It looks like someone is walking in the hallway.
+Aida: But the timestamp says 3:00 AM.
+
+# 4. The Switch (Sneaky Trick!)
+# We change the background sprite NOW, while the Cinematic is still covering it.
+# Use "none" for effect so it changes instantly behind the black screen.
+do change_background_sprite("res://Backgrounds/Aida/aida_hospital_base.png", "none")
+
+# 5. Stop Cinematic (Reveal the new BG)
+# The video fades out, revealing the NEW background we just set.
+do stop_cinematic("dissolve")
+
+Aida: And then the camera cuts out.
+Aida: Creepy, right?
+
 => END
-~ hub
-Nathan: Oh, you understand now, eh? => start

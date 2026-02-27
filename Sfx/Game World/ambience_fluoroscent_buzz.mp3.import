@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://pvyjbrcxel0c"
+path="res://.godot/imported/ambience_fluoroscent_buzz.mp3-aaad676ba5fbe8c5de0a4871dc692097.mp3str"
+
+[deps]
+
+source_file="res://Sfx/Game World/ambience_fluoroscent_buzz.mp3"
+dest_files=["res://.godot/imported/ambience_fluoroscent_buzz.mp3-aaad676ba5fbe8c5de0a4871dc692097.mp3str"]
+
+[params]
+
+loop=true
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

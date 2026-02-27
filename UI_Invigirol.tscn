@@ -1,9 +1,9 @@
 [gd_scene load_steps=15 format=3 uid="uid://bi8u415ulvhb"]
 
-[ext_resource type="Texture2D" uid="uid://bqbbirvssvi8t" path="res://invigirol_sprite.png" id="1_mmg5h"]
 [ext_resource type="Script" uid="uid://hm12uesh52vl" path="res://ui_interactable.gd" id="1_t6val"]
+[ext_resource type="Texture2D" uid="uid://455oyn0jubr2" path="res://Sprites/Cabinet Medicines/Invigirol.png" id="1_ylk1r"]
+[ext_resource type="BitMap" uid="uid://b0o0srjm8oqv7" path="res://Sprites/Cabinet Medicines/Invigirol_Mask.png" id="2_4ra0u"]
 [ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactable.gd" id="2_bbeln"]
-[ext_resource type="BitMap" uid="uid://b20nrgyq3yjvp" path="res://invigirol.png" id="2_jwtrt"]
 [ext_resource type="Script" uid="uid://bmq0s1nqhqi4j" path="res://InteractionResponse.gd" id="5_ylk1r"]
 [ext_resource type="Resource" uid="uid://bivfrghh084ym" path="res://interactions/actions/DefaultExamineResponse.tres" id="6_4ra0u"]
 [ext_resource type="Script" uid="uid://dltqnu07oiff" path="res://action.gd" id="7_quqnq"]
@@ -29,15 +29,12 @@ metadata/_custom_type_script = "uid://c5bw6trnybm71"
 [sub_resource type="Resource" id="Resource_hxs5m"]
 script = ExtResource("5_ylk1r")
 verb_id = "pickup"
-required_item_id = ""
-required_flag_id = ""
-required_flag_value = true
 actions_to_perform = Array[ExtResource("7_quqnq")]([SubResource("Resource_noxll"), SubResource("Resource_ykc8w"), SubResource("Resource_t1m4h")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
 [node name="TextureButton" type="TextureButton"]
-texture_normal = ExtResource("1_mmg5h")
-texture_click_mask = ExtResource("2_jwtrt")
+texture_normal = ExtResource("1_ylk1r")
+texture_click_mask = ExtResource("2_4ra0u")
 script = ExtResource("1_t6val")
 
 [node name="Interactable" type="Area2D" parent="."]

@@ -45,9 +45,6 @@ An old man hooked up to a machine.
 You see not a single thought behind those googly eyes of his. 
 => END
 
-~ mcbucket_medicine_dispenser
-A large balloon-like device. Seems to be connected to the Old Man's wrist.
-=> END
 
 ~ sergei_medicine_dispenser
 A large balloon-like device. Seems to display a patient's vitals.
@@ -101,6 +98,12 @@ This is where I could take a dump, if I needed to..
 
 Looks like a fancy ass..toilet flush?
 And wait, what are those holes for on the sides?
+
+~ mcbucket_medicine_dispenser
+
+Seems like some sort of a... medical care device?
+There is a capsule-shaped slot in the center.
+The old man seems to be hooked up to it. 
 
 => END
 

@@ -11,6 +11,7 @@ signal request_add_item_to_inventory(item_id_to_add: String)
 signal request_set_game_flag(flag_name: String, value: bool)
 signal request_set_level_flag(flag_name: String, value: bool)
 signal interaction_pending # Fired when the player clicks, but is still walking over
+signal interaction_started
 
 enum ObjectCategory { OBJECT, CHARACTER }
 # --- NEW ENUM TO DEFINE WHERE THE INTERACTABLE EXISTS ---
@@ -70,6 +71,7 @@ func _on_input_event(_v: Viewport, event: InputEvent, _sidx: int):
 
 # --- FULLY REFACTORED CORE LOGIC ---
 func attempt_interaction(verb_id: String, item_id_used_with: String = ""):
+	interaction_started.emit()
 	# --- FIX: NORMALIZE "USE" VERBS ---
 	# If GameManager sends "use_item" (because you have an item selected),
 	# we treat it as "use" so you can simply type "use" in the Inspector.
@@ -80,6 +82,38 @@ func attempt_interaction(verb_id: String, item_id_used_with: String = ""):
 
 	print_rich("[color=Orchid]--- Interactable '%s': attempt_interaction --- Verb: '%s' (Effective: '%s'), ItemID: '%s'[/color]" % [object_display_name, verb_id, effective_verb_id, item_id_used_with])
 
+		# --- CHANGE START: Use an index counter ---
+	for i in range(interactions.size()): 
+		var response = interactions[i] # Get the response by index
+		
+		if not response or response.verb_id.is_empty():
+			continue
+
+		var verb_matches: bool = (response.verb_id == effective_verb_id)
+		var item_matches: bool = (response.required_item_id == item_id_used_with)
+
+		var flag_matches: bool = true 
+		if not response.required_flag_id.is_empty():
+			if GameManager:
+				flag_matches = (GameManager.get_current_level_flag(response.required_flag_id) == response.required_flag_value)
+			else:
+				flag_matches = false
+
+		if verb_matches and item_matches and flag_matches:
+			# --- DEBUG PRINT THE INDEX ---
+			print_rich("[color=red]!!! MATCH FOUND AT INDEX: %s !!![/color]" % i)
+			# -----------------------------
+			
+			print_rich("[color=LimeGreen]Found matching InteractionResponse for Verb '%s' and Item '%s'.[/color]" % [effective_verb_id, item_id_used_with])
+
+			for action in response.actions_to_perform:
+				if action:
+					await action.execute(self)
+
+			interaction_processed.emit()
+			return
+	# --- CHANGE END ---
+	
 	# Check for a matching interaction in our resource array.
 	for response in interactions:
 		if not response or response.verb_id.is_empty():

@@ -10,7 +10,11 @@ signal conversation_finished(dialogue_resource: DialogueResource)
 @export var scene_character_sprite_texture: Texture2D
 # Assign your grayscale_material.tres here in Inspector
 @export var mental_image_shader: ShaderMaterial
-var _background_tween: Tween
+
+# --- NEW AUDIO EXPORT ---
+@export_group("Audio")
+## Assign a name (Key) and an AudioStream (Value) to play in dialogue.
+@export var music_tracks: Dictionary[String, AudioStream]
 
 # --- NODE REFERENCES ---
 @onready var root_container: Control = $RootContainer
@@ -19,10 +23,20 @@ var _background_tween: Tween
 @onready var background_sprite: Sprite2D = $RootContainer/BackgroundSprite
 @onready var mental_image_sprite: Sprite2D = $RootContainer/MentalImageSprite
 
-# --- TWEEN VARIABLE (NEW) ---
-# We store the tween reference here so we can stop it if a new command comes in.
+# --- CINEMATIC NODES ---
+# Ensure these exist in your scene inside RootContainer
+@onready var cinematic_bg: ColorRect = $RootContainer/CinematicBackground
+@onready var cinematic_sprite: AnimatedSprite2D = $RootContainer/CinematicSprite
+# [NEW] The button for manual cinematic advancement
+@onready var continue_button: Button = $RootContainer/CinematicContinueButton 
+@onready var fade_overlay: ColorRect = $RootContainer/FadeOverlay
+
+# --- TWEEN VARIABLES ---
+var _background_tween: Tween
 var _mental_image_tween: Tween
 
+# --- NEW AUDIO VARIABLE ---
+var _music_player: AudioStreamPlayer
 
 # --- SHAKE VARIABLES ---
 var _is_shaking: bool = false
@@ -31,14 +45,26 @@ var _shake_strength: float = 10.0
 var _shake_rng := RandomNumberGenerator.new()
 var _is_persistent_shake: bool = false
 var _ignore_next_got_dialogue_signal: bool = false
+
 # --- ANIMATION VARIABLES ---
 var _current_anim_name: String = ""
 var _current_frame_index: int = 0
 var _time_since_last_frame: float = 0.0
 var _is_playing: bool = false
 
+# --- CINEMATIC STATE ---
+# Accessed by the Balloon script to block input
+var is_cinematic_lock_active: bool = false
+# [NEW] Holds the reference to the active dialogue balloon
+var current_balloon: Node = null
+
 
 func _ready():
+	# --- NEW AUDIO SETUP ---
+	_music_player = AudioStreamPlayer.new()
+	_music_player.bus = "Slow Music" # Routes it to your Music bus!
+	add_child(_music_player)
+	# 1. Setup Character Sprite
 	if character_main_sprite:
 		if scene_character_sprite_texture:
 			character_main_sprite.texture = scene_character_sprite_texture
@@ -48,10 +74,24 @@ func _ready():
 	else:
 		print_rich("[color=orange]CharacterConversationOverlay: 'CharacterMainSprite' node not found.[/color]")
 
+	# 2. Setup Cinematic Nodes (Hide by default)
+	if cinematic_bg: cinematic_bg.hide()
+	if cinematic_sprite: cinematic_sprite.hide()
+	
+	# [NEW] Setup Continue Button
+	if continue_button:
+		continue_button.hide()
+		if not continue_button.pressed.is_connected(_on_cinematic_continue_pressed):
+			continue_button.pressed.connect(_on_cinematic_continue_pressed)
+	else:
+		print_rich("[color=orange]Warning: 'CinematicContinueButton' not found in RootContainer.[/color]")
+
+	# 3. Connect Dialogue Manager Signals
 	DialogueManager.dialogue_ended.connect(_on_dialogue_ended_from_manager)
 	DialogueManager.got_dialogue.connect(_on_got_dialogue)
 	_shake_rng.randomize()
 
+	# 4. Start Background Animation
 	if background_animations:
 		play_animation(initial_animation_name)
 	else:
@@ -60,12 +100,14 @@ func _ready():
 	# Ensure mental image sprite is hidden at start
 	mental_image_sprite.visible = false
 
+	# 5. Launch Dialogue Balloon & CAPTURE IT
 	if conversation_dialogue_file:
-		DialogueManager.show_dialogue_balloon_scene(
+		# [UPDATED] We capture the return value into 'current_balloon'
+		current_balloon = DialogueManager.show_dialogue_balloon_scene(
 			"res://conversationballoon.tscn",
 			conversation_dialogue_file,
 			"start",
-			[self]
+			[self] # Pass 'self' as extra_game_state so balloon can find us
 		)
 	else:
 		print_rich("[color=red]No 'conversation_dialogue_file' assigned![/color]")
@@ -74,8 +116,13 @@ func _ready():
 
 	if background_sprite:
 		# Force the background to align to the top-left corner on startup
-		background_sprite.centered = false  # Just in case you forgot to uncheck it
+		background_sprite.centered = false 
 		background_sprite.position = Vector2.ZERO
+	if fade_overlay:
+		fade_overlay.color = Color.BLACK
+		fade_overlay.modulate.a = 0.0 # Start transparent
+		fade_overlay.show() # Keep it "visible" but transparent so we can tween it
+
 func _process(delta: float):
 	# --- Shake Logic ---
 	if _is_shaking:
@@ -112,7 +159,122 @@ func _process(delta: float):
 		update_frame()
 
 
-# --- MENTAL IMAGE FUNCTIONS (UPDATED FOR GODOT 4) ---
+# ---------------------------------------------------------
+# NEW: CINEMATIC FUNCTIONS (With Transitions)
+# ---------------------------------------------------------
+
+# Arguments:
+# 1. animation_name: Name of animation in SpriteFrames
+# 2. hide_balloon: If true, hides the text box
+# 3. force_one_loop: If true, locks input until loop finishes (not used if using Continue Button)
+# 4. transition_effect: "none", "dissolve", or "fade"
+func play_cinematic(animation_name: String = "default", hide_balloon: bool = true, force_one_loop: bool = false, transition_effect: String = "none"):
+	
+	# 1. Setup Initial Visibility based on Effect
+	if transition_effect == "dissolve" or transition_effect == "fade":
+		# Start invisible so we can fade in
+		if cinematic_bg: 
+			cinematic_bg.modulate.a = 0.0
+			cinematic_bg.show()
+		if cinematic_sprite: 
+			cinematic_sprite.modulate.a = 0.0
+			cinematic_sprite.show()
+			cinematic_sprite.play(animation_name)
+		
+		# Create the Fade-In Tween
+		var tween = create_tween().set_parallel(true)
+		if cinematic_bg:
+			tween.tween_property(cinematic_bg, "modulate:a", 1.0, 0.5).set_trans(Tween.TRANS_SINE)
+		if cinematic_sprite:
+			tween.tween_property(cinematic_sprite, "modulate:a", 1.0, 0.5).set_trans(Tween.TRANS_SINE)
+			
+	else:
+		# INSTANT (Default)
+		if cinematic_bg: 
+			cinematic_bg.modulate.a = 1.0 # Ensure fully visible
+			cinematic_bg.show()
+		if cinematic_sprite: 
+			cinematic_sprite.modulate.a = 1.0 # Ensure fully visible
+			cinematic_sprite.show()
+			cinematic_sprite.play(animation_name)
+	
+	# 2. Lock Input (Prevent Spacebar skipping)
+	is_cinematic_lock_active = true
+	
+	# 3. Handle UI Visibility
+	if hide_balloon and current_balloon:
+		current_balloon.hide() 
+	
+	if continue_button:
+		# If fading in, maybe delay the button slightly? 
+		# For now, let's just show it.
+		continue_button.show()
+
+# Called when the on-screen "Continue" button is clicked
+func _on_cinematic_continue_pressed():
+	# 1. Release Lock
+	is_cinematic_lock_active = false
+	
+	# 2. Hide The Button
+	if continue_button:
+		continue_button.hide()
+	
+	# 3. SHOW THE BALLOON (This is the key!)
+	if current_balloon:
+		current_balloon.show() 
+		
+		# 4. Advance Dialogue Manually
+		# This jumps over the "..." line in your dialogue file
+		if current_balloon.has_method("next") and current_balloon.dialogue_line:
+			current_balloon.next(current_balloon.dialogue_line.next_id)
+		else:
+			# Fallback
+			stop_cinematic()
+
+# Called via dialogue: do ConversationOverlay.stop_cinematic()
+# Called via dialogue: do stop_cinematic("dissolve")
+func stop_cinematic(transition_effect: String = "none"):
+	
+	is_cinematic_lock_active = false
+	if continue_button: continue_button.hide()
+	
+	# 1. Handle the Visual Exit
+	if transition_effect == "dissolve" or transition_effect == "fade":
+		var tween = create_tween().set_parallel(true)
+		
+		# Fade out
+		if cinematic_bg:
+			tween.tween_property(cinematic_bg, "modulate:a", 0.0, 0.5)
+		if cinematic_sprite:
+			tween.tween_property(cinematic_sprite, "modulate:a", 0.0, 0.5)
+		
+		# Wait for tween to finish before actually hiding logic
+		await tween.finished
+		
+		if cinematic_bg: cinematic_bg.hide()
+		if cinematic_sprite: 
+			cinematic_sprite.stop()
+			cinematic_sprite.hide()
+			
+	else:
+		# INSTANT
+		if cinematic_bg: cinematic_bg.hide()
+		if cinematic_sprite: 
+			cinematic_sprite.stop()
+			cinematic_sprite.hide()
+	
+	# 2. Restore Balloon Visibility
+	if current_balloon:
+		current_balloon.show()
+	
+	# 3. Restore Standard Visuals
+	if background_sprite: background_sprite.show()
+	if character_main_sprite: character_main_sprite.show()
+	if animated_background: animated_background.show()
+# ---------------------------------------------------------
+
+
+# --- MENTAL IMAGE FUNCTIONS ---
 # Added 'start_scale' parameter at the end (defaults to 1.0)
 func start_mental_image(texture_path: String, fade_duration: float = 0.5, tint: Color = Color.WHITE, final_opacity: float = 0.6, start_scale: float = 1.0):
 	# 1. Setup Grayscale Shader
@@ -150,10 +312,7 @@ func start_mental_image(texture_path: String, fade_duration: float = 0.5, tint: 
 			_mental_image_tween.tween_property(root_container.material, "shader_parameter/strength", 1.0, fade_duration)\
 				.set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)
 
-		# C: The "Infinite" Slow Zoom (UPDATED)
-		# We add 0.5 to the scale (a huge increase) over 100 seconds (a huge time).
-		# This keeps the speed slow and steady, but ensures it doesn't "stop"
-		# while the player is reading.
+		# C: The "Infinite" Slow Zoom
 		var zoom_amount = 0.5
 		var target_scale_vec = Vector2(start_scale + zoom_amount, start_scale + zoom_amount)
 
@@ -163,6 +322,7 @@ func start_mental_image(texture_path: String, fade_duration: float = 0.5, tint: 
 		print_rich("[color=lightblue]Starting mental image (Infinite Zoom).[/color]")
 	else:
 		print_rich("[color=red]Mental Image Error: Failed to load texture at path: " + texture_path + "[/color]")
+
 func stop_mental_image(fade_duration: float = 0.5):
 	# 1. Kill any running fade-ins
 	if _mental_image_tween:
@@ -175,7 +335,7 @@ func stop_mental_image(fade_duration: float = 0.5):
 	_mental_image_tween.tween_property(mental_image_sprite, "modulate:a", 0.0, fade_duration)\
 		.set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_IN)
 
-	# B: Fade out the Grayscale Shader (1.0 back to 0.0)
+	# B: Fade out the Grayscale Shader
 	if root_container.material:
 		_mental_image_tween.tween_property(root_container.material, "shader_parameter/strength", 0.0, fade_duration)\
 			.set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_IN)
@@ -188,13 +348,10 @@ func stop_mental_image(fade_duration: float = 0.5):
 	root_container.material = null # Remove the shader entirely
 	print_rich("[color=lightblue]Mental image fade-out complete.[/color]")
 
-# --- (Existing helper functions below) ---
 
-# --- NEW BACKGROUND ZOOM FUNCTIONS ---
+# --- BACKGROUND ZOOM FUNCTIONS ---
 
 # Call this to start the slow zoom on the background.
-# Default: Adds 0.2 to the scale (20% zoom) over 40 seconds.
-# This creates a very slow, cinematic "creep" in.
 func start_background_zoom(zoom_amount: float = 0.2, duration: float = 40.0):
 	if not background_sprite: return
 
@@ -233,6 +390,9 @@ func stop_background_zoom(reset_duration: float = 0.5):
 
 	print_rich("[color=lightblue]Resetting background zoom.[/color]")
 
+
+# --- GENERAL HELPER FUNCTIONS ---
+
 func _on_got_dialogue(_line: DialogueLine):
 	if _ignore_next_got_dialogue_signal:
 		_ignore_next_got_dialogue_signal = false
@@ -270,7 +430,8 @@ func update_frame():
 func change_background_animation(animation_name: String):
 	play_animation(animation_name)
 
-# MODIFIED FUNCTION
+
+# --- BACKGROUND SWITCHING LOGIC ---
 func change_background_sprite(texture_path: String, effect: String = ""):
 	if not background_sprite: return
 
@@ -294,7 +455,6 @@ func change_background_sprite(texture_path: String, effect: String = ""):
 	# --- CASE 2: DISSOLVE TRANSITION (Cross-fade) ---
 	if effect == "dissolve":
 		# 1. Create a "Ghost" of the OLD image
-		# We put it ON TOP of the main sprite so we can fade it out to reveal the new one.
 		var temp_old_sprite = background_sprite.duplicate()
 		root_container.add_child(temp_old_sprite)
 		root_container.move_child(temp_old_sprite, background_sprite.get_index() + 1)
@@ -304,17 +464,17 @@ func change_background_sprite(texture_path: String, effect: String = ""):
 		temp_old_sprite.position = background_sprite.position
 		temp_old_sprite.scale = background_sprite.scale
 
-		# 3. Set the MAIN sprite to the NEW image immediately (it's hidden under the ghost)
+		# 3. Set the MAIN sprite to the NEW image immediately
 		background_sprite.texture = new_texture
 		background_sprite.visible = true
 
-		# 4. Tween the Ghost's Opacity to 0 (Transparent)
-		var fade_duration = 0.5 # Adjust speed here if needed
+		# 4. Tween the Ghost's Opacity to 0
+		var fade_duration = 0.5 
 		var dissolve_tween = create_tween()
 		dissolve_tween.tween_property(temp_old_sprite, "modulate:a", 0.0, fade_duration)\
 			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
-		# 5. Cleanup the ghost when done
+		# 5. Cleanup the ghost
 		dissolve_tween.tween_callback(temp_old_sprite.queue_free)
 		return
 
@@ -367,6 +527,7 @@ func change_background_sprite(texture_path: String, effect: String = ""):
 	# 7. Cleanup
 	slide_tween.chain().tween_callback(temp_old_sprite.queue_free)
 
+
 func _on_dialogue_ended_from_manager(resource: DialogueResource):
 	if resource == conversation_dialogue_file:
 		conversation_finished.emit(resource)
@@ -378,8 +539,9 @@ func _cleanup_and_queue_free():
 	if DialogueManager.is_connected("got_dialogue", _on_got_dialogue):
 		DialogueManager.disconnect("got_dialogue", _on_got_dialogue)
 	queue_free()
+
+
 # NEW FUNCTION: Play a sequence of images with a dissolve effect
-# usage: do play_dissolve_sequence(["res://img1.png", "res://img2.png"], 2.0, 1.0)
 func play_dissolve_sequence(image_paths: Array, hold_duration: float = 2.0, fade_duration: float = 1.0):
 	if not background_sprite: return
 
@@ -433,7 +595,151 @@ func play_dissolve_sequence(image_paths: Array, hold_duration: float = 2.0, fade
 		# We don't wait after the very last image
 		if i < image_paths.size() - 1:
 			await get_tree().create_timer(hold_duration).timeout
+			
+# ---------------------------------------------------------
+# NEW: FADE FUNCTIONS
+# ---------------------------------------------------------
 
+# Called via dialogue: do fade_to_black(1.0)
+func fade_to_black(duration: float = 1.0):
+	print("--- DEBUG: fade_to_black called! Duration: ", duration, " ---")
+	
+	if not fade_overlay:
+		print("--- ERROR: fade_overlay node is MISSING! Check your Scene Tree. ---")
+		return
+	
+	# 1. Force it to be visible
+	fade_overlay.visible = true
+	
+	# 2. Force it to be on top of EVERYTHING (The Nuclear Option)
+	fade_overlay.z_index = 100 
+	# If using CanvasLayer, make sure this node is last, or use z_index
+	
+	# 3. Ensure color is black
+	fade_overlay.color = Color.BLACK
+	
+	# 4. Run the Tween
+	print("--- DEBUG: Starting Tween... ---")
+	var tween = create_tween()
+	tween.tween_property(fade_overlay, "modulate:a", 1.0, duration)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	
+	await tween.finished
+	print("--- DEBUG: Fade complete. ---")
+	
+# Called via dialogue: do fade_from_black(1.0)
+func fade_from_black(duration: float = 1.0):
+	if not fade_overlay: return
+	
+	# Create a tween to fade alpha from Current -> 0.0 (Transparent)
+	var tween = create_tween()
+	tween.tween_property(fade_overlay, "modulate:a", 0.0, duration)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	
+	await tween.finished
+
+# Instant reset if needed
+func clear_fade():
+	if fade_overlay:
+		fade_overlay.modulate.a = 0.0
+		
+# ---------------------------------------------------------
+# SHOCK SWITCH FUNCTION
+# ---------------------------------------------------------
+
+# Called via dialogue: do shock_switch_background("res://face_shock.png", 20.0, Color.WHITE)
+# 1. texture_path: The image to switch TO (The realization/shock face)
+# 2. shake_power: How hard to shake (20-30 is good for shocks)
+# 3. flash_color: Color.WHITE (flashbang) or Color.RED (pain/danger) or Color.TRANSPARENT (just shake)
+func shock_switch_background(texture_path: String, shake_power: float = 25.0, flash_color: Color = Color.WHITE):
+	# 1. Start the Violence (Shake)
+	# We shake for 0.5 seconds so it settles after the switch
+	shake(0.5, shake_power)
+	
+	# 2. The Flash (Masks the transition)
+	if fade_overlay:
+		# A. Instant Flash ON
+		fade_overlay.color = flash_color
+		fade_overlay.modulate.a = 0.8 # Not fully opaque, so we see the shake underneath
+		fade_overlay.show()
+		
+		# B. Swap the Sprite BEHIND the flash
+		# We use a tiny delay so the swap happens exactly when the flash is brightest
+		var timer = get_tree().create_timer(0.05)
+		await timer.timeout
+		change_background_sprite(texture_path, "none")
+		
+		# C. Fast Fade Out (The Reveal)
+		var tween = create_tween()
+		tween.tween_property(fade_overlay, "modulate:a", 0.0, 0.2)\
+			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	else:
+		# Fallback if no overlay exists
+		change_background_sprite(texture_path, "none")
+
+# ---------------------------------------------------------
+
+# ---------------------------------------------------------
+# REVEAL SHOCK FUNCTION
+# Use this when the screen is ALREADY black and you want to 
+# suddenly reveal an image with a flash/shake.
+# ---------------------------------------------------------
+func reveal_shock_from_black(texture_path: String, shake_power: float = 25.0):
+	# 1. Change the sprite BEHIND the darkness
+	change_background_sprite(texture_path, "none")
+	
+	# 2. Start the violence (Shake)
+	shake(0.5, shake_power)
+	
+	if fade_overlay:
+		# 3. THE FLASHBANG EFFECT
+		# Instantly turn the Black screen into a White Flash
+		fade_overlay.color = Color.WHITE
+		fade_overlay.modulate.a = 1.0 
+		
+		# 4. Fade the White Flash away quickly (0.2s) to reveal the image
+		var tween = create_tween()
+		tween.tween_property(fade_overlay, "modulate:a", 0.0, 0.2)\
+			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	else:
+		# Fallback if no overlay
+		pass
+# ---------------------------------------------------------
+# NEW: AUDIO FUNCTIONS (Called from .dialogue)
+# ---------------------------------------------------------
+
+# Called via dialogue: do play_music("track_name", 1.5)
+func play_music(track_name: String, fade_duration: float = 1.0):
+	if not music_tracks.has(track_name):
+		print_rich("[color=red]ConversationOverlay: Track '%s' not found in inspector list![/color]" % track_name)
+		return
+		
+	var stream = music_tracks[track_name]
+	
+	# Don't restart the track if it's already playing
+	if _music_player.stream == stream and _music_player.playing:
+		return
+		
+	_music_player.stream = stream
+	
+	if fade_duration > 0.0:
+		_music_player.volume_db = -80.0
+		_music_player.play()
+		var tween = create_tween()
+		# Fades up to 0.0 dB (normal volume)
+		tween.tween_property(_music_player, "volume_db", 0.0, fade_duration).set_trans(Tween.TRANS_SINE)
+	else:
+		_music_player.volume_db = 0.0
+		_music_player.play()
+
+# Called via dialogue: do stop_music(1.5)
+func stop_music(fade_duration: float = 1.0):
+	if fade_duration > 0.0:
+		var tween = create_tween()
+		tween.tween_property(_music_player, "volume_db", -80.0, fade_duration).set_trans(Tween.TRANS_SINE)
+		tween.tween_callback(_music_player.stop)
+	else:
+		_music_player.stop()
 
 func _exit_tree():
 	_cleanup_and_queue_free()

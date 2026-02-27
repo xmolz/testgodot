@@ -1,9 +1,9 @@
 [gd_scene load_steps=13 format=3 uid="uid://b8jbh3bghi1rb"]
 
 [ext_resource type="Script" uid="uid://hm12uesh52vl" path="res://ui_interactable.gd" id="1_82e07"]
-[ext_resource type="Texture2D" uid="uid://bjuaurrw0logr" path="res://zanopram.png" id="1_582fx"]
+[ext_resource type="Texture2D" uid="uid://xpk4o7ei1qa1" path="res://Sprites/Cabinet Medicines/Zanopram.png" id="1_vot75"]
 [ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactable.gd" id="2_5mir5"]
-[ext_resource type="BitMap" uid="uid://dlj2f3klm7wtl" path="res://zanopram_map.png" id="2_ftjr1"]
+[ext_resource type="BitMap" uid="uid://bwed1gxfgrxya" path="res://Sprites/Cabinet Medicines/Zanopram_Mask.png" id="2_7tucb"]
 [ext_resource type="Script" uid="uid://bmq0s1nqhqi4j" path="res://InteractionResponse.gd" id="5_vot75"]
 [ext_resource type="Resource" uid="uid://bivfrghh084ym" path="res://interactions/actions/DefaultExamineResponse.tres" id="6_7tucb"]
 [ext_resource type="Script" uid="uid://dltqnu07oiff" path="res://action.gd" id="7_v03ym"]
@@ -17,21 +17,17 @@ metadata/_custom_type_script = "uid://nvyqoryt5sbh"
 
 [sub_resource type="Resource" id="Resource_5yl0c"]
 script = ExtResource("9_kicyk")
-message_on_destroy = ""
 metadata/_custom_type_script = "uid://c5bw6trnybm71"
 
 [sub_resource type="Resource" id="Resource_6nd1o"]
 script = ExtResource("5_vot75")
 verb_id = "pickup"
-required_item_id = ""
-required_flag_id = ""
-required_flag_value = true
 actions_to_perform = Array[ExtResource("7_v03ym")]([SubResource("Resource_12wmw"), SubResource("Resource_5yl0c")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
 [node name="TextureButton" type="TextureButton"]
-texture_normal = ExtResource("1_582fx")
-texture_click_mask = ExtResource("2_ftjr1")
+texture_normal = ExtResource("1_vot75")
+texture_click_mask = ExtResource("2_7tucb")
 script = ExtResource("1_82e07")
 
 [node name="Interactable" type="Area2D" parent="."]

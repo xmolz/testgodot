@@ -1,0 +1,16 @@
+[remap]
+
+importer="bitmap"
+type="BitMap"
+uid="uid://bwed1gxfgrxya"
+path="res://.godot/imported/Zanopram_Mask.png-2a09896bc31d21f6ef985db5f930e59f.res"
+
+[deps]
+
+source_file="res://Sprites/Cabinet Medicines/Zanopram_Mask.png"
+dest_files=["res://.godot/imported/Zanopram_Mask.png-2a09896bc31d21f6ef985db5f930e59f.res"]
+
+[params]
+
+create_from=0
+threshold=0.5

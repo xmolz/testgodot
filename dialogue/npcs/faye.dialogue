@@ -1,163 +1,117 @@
 ~ start
+do play_music("unnatural_city", 5.0)
 ???: A darkness folds over you like a sea.
 ???: You wake up to nothing.
-???: You see nothing. 
-???: You hear nothing. 
-???: You [i]feel[/i] nothing. 
+???: You see nothing.
+???: You hear nothing.
+???: You [i]feel[/i] nothing.
 ???: The sea of Dark is vast and heavy. You sink under its pressure.
 ???: Going back to sleep wouldn't be so bad. Would it?
-???: [speed=0.5]It's what you wanted originally, anyway.
+???: [speed=0.5]It's what you wanted originally, anyway.[/speed]
 - Go to sleep
-	???: You body feels heavier. It's comforting.
-	???: You'd like this. The darkness is enticing. There's no uncertainity to it. It just..is. And you're in it.
+	???: Your body feels heavier. It's comforting.
+	???: You'd like this. The darkness is enticing.
+	???: There's no uncertainty to it. It just... is.
+	???: And you're in it.
 	???: Are you sure you want to sleep?
 	- I'm sure. Goodnight.
 		???: GAME OVER SCREEN
-	- Actually, no. There's got to be more for me here. => first_struggle
-- Struggle against the darkness
-	~ first_struggle
-	???: You cut through still water. Something stirs.
-	do change_background_animation("dread_loop")
-	???: You come across [color=#FF00FF]Dread[/color].
-	???: Somehow, this doesn't feel like a discovery to you.
-	- Talk to Dread
-		[color=#FF00FF]Dread[/color]: Hello friend.
-		Dread: It's been a while hasn't it?
-		Dread: You'd been asleep a while too.
-		Dread: I can still see you're not fully awake.
-		Dread: Why don't you go back to sleep again? It's easier, in that state.
-		Dread: See Nothing. Hear nothing....feel nothing.
-		Dread: It saves us so much pain.
-		Dread: Come, I'll help you sleep again.
-		- Okay. I'll sleep
-			???: You body feels heavier. It's comforting.
-			???: You'd like this. The darkness is enticing. There's no uncertainity to it. It just..is. And you're in it.
-			???: Are you sure you want to sleep?
-			- I'm sure. Goodnight.
-				???: GAME OVER SCREEN
-			- Actually, no. There's got to be more for me here. 
-				???: You continue with your struggle => second_struggle
-		- No. I don't wanna sleep again.
-			~ second_struggle
-			Dread: But......... [wave amp=50.0 freq=5.0 connected=1][speed=0.25]whyyyyyy?[/wave]
-			Dread: Look around you! Do you see anyone here?
-			Dread: They all left you. They only wanted to use you.
-			Dread: There is nothing for us to look forward to. Please listen to what I'm telling you.
-			Dread: You. Don't. Wanna. Wake up. 
-			- Okay fine, I'll sleep.
-				???: You body feels heavier. It's comforting.
-				???: You'd like this. The darkness is enticing. There's no uncertainity to it. It just..is. And you're in it.
-				???: Are you sure you want to sleep?
-				- I'm sure. Goodnight.
-					???: GAME OVER SCREEN
-				- Actually, no. There's got to be more for me here. 
-					???: You continue with your struggle.
-					???: "I don't believe you" you say to Dread. =>  third_struggle
-			- I don't believe you. 
-				~ third_struggle
-				Dread: Oh friend, you [i]never[/i] did.
-				Dread: You still listened though. You [i]always[/i] listened. [speed=0.25] Belief was never the point.
-				Dread: I'll ask you one last time.
-				Dread: Go back to sleep friend. Come, enter eternal slumber with me.
-				- Give in. Go to sleep.
-					[color=#FF00FF]Dread[/color]: [speed=0.25]Yeeeees.[/speed] You get it now!				???: You body feels heavier. It's comforting.
-					???: You'd like this. The darkness is enticing. There's no uncertainity to it. It just..is. And you're in it.
-					???: Are you sure you want to sleep?
-					- I'm sure. Goodnight.
-						???: GAME OVER SCREEN
-					- Actually, no. There's got to be more for me here. 
-						???: You continue with your struggle and leave Dread behind. =>  nth_struggle
-				- Leave Dread behind and swim further into darkness.
-					~ nth_struggle
-					do change_background_animation("float_loop")
-					???: You decide to leave [color=#FF00FF]Dread[/color] alone and venture further into the darkness of the sea.
-					???: Nothing appears. There seems to be no one else here in this vast ocean with you. 
-					???:  [speed=0.25] What do you do?
-					- Sleep. Dread was correct. You must sleep.
-						???: You body feels heavier. It's comforting.
-						???: You'd like this. The darkness is enticing. There's no uncertainity to it. It just..is. And you're in it.
-						???: Are you sure you want to sleep?
-						- I'm sure. Goodnight.
-							???: GAME OVER SCREEN
-						- Actually, no. There's got to be more for me here. 
-							???: You continue with your struggle =>  fourth_struggle
-					- Swim futher into the darkness.
-						~ fourth_struggle
-						???: You leave [color=#FF00FF]Dread[/color] further behind. But the pressure doesn't lessen. 
-						???: The dark stretches on endlessly. Not the faintest particle of light is close to you.
-						???: To continue might be dangerous.
-						???: What do you do?
-						- Can't risk it. I'll just sleep here.
-							???: You'd like this. The darkness is enticing. There's no uncertainity to it. It just..is. And you're in it.
-							???: Are you sure you want to sleep?
-							- I'm sure. Goodnight.
-								???: GAME OVER SCREEN
-							- Actually, no. There's got to be more for me here. 
-								???: You continue with your struggle =>  fifth_struggle
-						- Keep fighting, even if it kills me
-							~ fifth_struggle
-							???: Courageous decision. You worry if it might be futile though. 
-							???: You push on...and on.. and on.
-							???: You've been swimming a while now. You wonder what it would be like to...rest.
-							???: To [i] truly [/i] rest.
-							???: To no longer be a slave to the human condition. To no longer want. To no longer need. To no longer feel.
-							???: You begin to really wonder. 
-							???: What do you do next?
-							- Go to sleep. Rest, finally and forever.
-								???: You'd like this. The darkness is enticing. There's no uncertainity to it. It just..is. And you're in it.
-								???: Are you sure you want to sleep?
-								- I'm sure. Goodnight.
-									???: GAME OVER SCREEN
-								- Actually, no. There's got to be more for me here. 
-									???: You continue with your struggle =>  sixth_struggle
-							- Swim. Push. SWIM.
-								~ sixth_struggle
-								???: If anyone was watching you right now, they'd commend your bravery.
-								???: Sadly, bravery doesn't amount to much here.
-								???: You've pressed as much as you can, but your body begins to give out.
-								???: You're still now. You cant press on anymore.
-								???: You begin to sink.
-								???: "This is good" you think to yourself. 
-								???: You tried your best.
-								???: You tried your b...!!!!
-								???: Suddenly - A warm presence grabs your hand.
-								do change_background_animation("hope_loop")
-								[color=#FFC8E3]Hope[/color]: I'm sorry it took me this long.
-								???: Late as always, it seems [color=#FFC8E3]Hope[/color] finally found you.
-								[color=#FFC8E3]Hope[/color]: It's okay, Love. Breathe. Just Breathe.
-								???: Instinct screams against it. Breathe in when you're sinking in this heavy ocean? 
-								???: However, something in Hope's voice compels you.
-								???: You relax... and take a deep, shuddering breath.
-								[color=#FFC8E3]Hope[/color]: It's okay. You're okay.
-								???: Around you, something changes.
-								???: You see a singular ray of light in the far distance.
-								???: "A way out?" You think to yourself. 
-								???: But it's so far away. You think you'll [i] never[/i] reach it.
-								???: Suddenly, Hope wraps you in her warmth.
-								do change_background_animation("envelop_loop")
-								???: You begin your journey towards the light.
-								[color=#FFC8E3]Hope[/color]: This is gonna take us a while, you know.
-								[color=#FFC8E3]Hope[/color]: But we got this. Just hold on. Just hold on.
-								???: Golly, would you look at that?
-								???: The dark folds over you like a sea — [speed=0.25]but something in you still floats!
-								[color=#FFC8E3]Hope[/color]: First, we need to see the [color=#A8D5BA] Nurse[/color].
-								???: The darkness around you starts to thin, replaced by faint, unfamiliar sensations...
-								[color=#FFC8E3]Hope[/color]: From there on out, you'll know what to do.
-								???: "The Nurse?" you think to youself. "What nurse?"
-								???: Regardless of your worries, you continue to float up in [color=#FFC8E3]Hope[/color].
-								???: The Nurse..
-								???: You don't know what that means. But you want to.
-								???: You feel your beating heart again.
-								???: [speed=0.25] Welcome back.
-	- Go to sleep
-		???: You'd like this. The darkness is enticing. There's no uncertainity to it. It just..is. And you're in it.
-		???: Are you sure you want to sleep?
-		- I'm sure. Goodnight.
-			???: GAME OVER SCREEN
-		- Actually, no. There's got to be more for me here. 
-			???: You continue with your struggle =>  first_struggle
-	
+	- Actually, no. There's got to be more for me here. => meet_dread
+- Struggle against the darkness => meet_dread
 
+~ meet_dread
+???: You cut through still water. Something stirs.
+do change_background_animation("dread_loop")
+???: You come across [color=#FF00FF]Dread[/color].
+???: Somehow, this doesn't feel like a discovery to you.
+[color=#FF00FF]Dread[/color]: Hello, friend.
+[color=#FF00FF]Dread[/color]: It's been a while, hasn't it? You've been asleep for some time, too.
+[color=#FF00FF]Dread[/color]: Why don't you go back to sleep again? It's easier down there.
+[color=#FF00FF]Dread[/color]: See nothing. Hear nothing... feel nothing.
+[color=#FF00FF]Dread[/color]: It saves us so much pain.
+[color=#FF00FF]Dread[/color]: Come, I'll help you sleep again.
+- Okay. I'll sleep.
+	???: Your body feels heavier. It's comforting.
+	???: You'd like this. The darkness is enticing. Escaping the pain is easy.
+	???: Are you sure you want to sleep?
+	- I'm sure. Goodnight.
+		???: GAME OVER SCREEN
+	- Actually, no. I can't. => defy_dread
+- No. I don't want to sleep again. => defy_dread
 
+~ defy_dread
+[color=#FF00FF]Dread[/color]: But... [wave amp=50.0 freq=5.0 connected=1][speed=0.25]whyyyyyy?[/speed][/wave]
+[color=#FF00FF]Dread[/color]: You desolate pup.
+[color=#FF00FF]Dread[/color]: He left. She died.
+[color=#FF00FF]Dread[/color]: Ain't nobody looking out for Little Miss Melancholy.
+[color=#FF00FF]Dread[/color]: You. Don't. Wanna. Wake up.
+[color=#FF00FF]Dread[/color]: Go back to sleep, friend. Come, enter eternal slumber with me.
+- Okay, fine. I'll sleep. I believe you.
+	[color=#FF00FF]Dread[/color]: [speed=0.25]Yeeeees.[/speed] You get it now!
+	???: Your body grows paralyzingly heavy, dragged down by old grief.
+	???: There is no uncertainty to it anymore.
+	???: The dark claims you entirely.
+	???: GAME OVER SCREEN
+- I don't believe you. Leave Dread and swim further into the darkness. => endless_dark
+
+~ endless_dark
+do change_background_animation("float_loop")
+???: You decide to leave [color=#FF00FF]Dread[/color] alone and venture further into the vast ocean.
+???: But the pressure doesn't lessen.
+???: The dark stretches on endlessly. Not the faintest glimmer of light is close to you.
+???: You've been swimming a while now. Your limbs burn.
+???: You begin to wonder what it would be like to... rest.
+???: To [i]truly[/i] rest.
+???: To no longer be a slave to the human condition.
+???: To no longer want. To no longer need.
+???: [speed=0.25]No longer feel.[/speed]
+???: [speed=0.25]What do you do next?[/speed]
+- The exhaustion is too much. I'll just sleep here.
+	???: Your arms stop moving. Your legs grow entirely still.
+	???: You let the heavy abyss pull you under once and for all.
+	???: GAME OVER SCREEN
+- Just... keep... pushing... => breaking_point
+
+~ breaking_point
+???: If anyone were watching you right now, they'd commend your bravery.
+???: Sadly, bravery doesn't amount to much here.
+???: You've pushed as hard as you can, but your body finally begins to give out.
+???: You're still now. You can't press on anymore.
+???: You begin to sink.
+???: "This is good," you think to yourself.
+???: You tried your best.
+???: You tried your be—!!!
+???: Suddenly—a warm presence grabs your hand.
+do change_background_animation("hope_loop")
+[color=#FFC8E3]Hope[/color]: I'm sorry it took me this long.
+???: Late as always, it seems [color=#FFC8E3]Hope[/color] finally found you.
+[color=#FFC8E3]Hope[/color]: It's okay, love. Breathe. Just breathe.
+???: Instinct screams against it. Breathe in when you're sinking in this heavy ocean?
+???: However, something in Hope's voice compels you.
+???: You relax... and take a deep, shuddering breath.
+[color=#FFC8E3]Hope[/color]: It's okay. You're okay.
+???: Around you, something changes.
+???: You see a singular ray of light in the far distance.
+???: "A way out?" you think to yourself.
+???: But it's so far away. You think you'll [i]never[/i] reach it.
+???: Suddenly, Hope wraps you in her warmth.
+do change_background_animation("envelop_loop")
+???: You begin your journey toward the light.
+[color=#FFC8E3]Hope[/color]: This is gonna take us a while, you know.
+[color=#FFC8E3]Hope[/color]: But we got this. Just hold on. Just hold on.
+???: Well, would you look at that...
+???: The dark folds over you like a sea.
+???: [speed=0.25]But something in you still floats![/speed]
+[color=#FFC8E3]Hope[/color]: First, we need to see the [color=#A8D5BA]Nurse[/color].
+???: The darkness around you starts to thin, replaced by faint, unfamiliar sensations...
+[color=#FFC8E3]Hope[/color]: Once we're there, you'll know what to do.
+???: "The Nurse?" you think to yourself. "What nurse?"
+???: Regardless of your worries, you continue to float upward, held warmly by [color=#FFC8E3]Hope[/color].
+???: The Nurse...
+???: You don't know what that means. But you want to.
+???: You feel your beating heart again.
+do stop_music(3.0)
+???: [speed=0.25]Welcome back.[/speed]
+~ END
 
 

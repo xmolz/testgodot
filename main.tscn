@@ -1,4 +1,4 @@
-[gd_scene load_steps=144 format=3 uid="uid://cqtgjhr5nepn1"]
+[gd_scene load_steps=156 format=3 uid="uid://cqtgjhr5nepn1"]
 
 [ext_resource type="PackedScene" uid="uid://bigouorladqds" path="res://VerbUI.tscn" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://suh4s1w73ooy" path="res://Main.gd" id="1_efxa6"]
@@ -19,6 +19,7 @@
 [ext_resource type="Texture2D" uid="uid://dj4qqp4dhq5l4" path="res://faye.png" id="7_272bh"]
 [ext_resource type="Resource" uid="uid://bivfrghh084ym" path="res://interactions/actions/DefaultExamineResponse.tres" id="7_jq2sk"]
 [ext_resource type="PackedScene" uid="uid://dwqwwrmp7uisr" path="res://Interactables/Game World/Hospital Bathroom/hospital_bathroom_toilet_flush.tscn" id="7_rnkwl"]
+[ext_resource type="AudioStream" uid="uid://cy8syrd23db10" path="res://Sfx/Game World/bathroom_music.mp3" id="7_wu3dr"]
 [ext_resource type="PackedScene" uid="uid://oy53tf8tvxe5" path="res://aida.tscn" id="8_vivmo"]
 [ext_resource type="Script" uid="uid://bapryqa2s86c5" path="res://interactions/actions/SayLineAction.gd" id="9_4k2k6"]
 [ext_resource type="Texture2D" uid="uid://bcxknipqlnnip" path="res://Sprites/Hospital Bathroom/hospital_bathroom_sink.png" id="9_4w656"]
@@ -65,6 +66,9 @@
 [ext_resource type="PackedScene" uid="uid://b7ruec2vo6haw" path="res://Non Interactables/hospital_bathroom_sink.tscn" id="53_abqjc"]
 [ext_resource type="Script" uid="uid://c2cuhw0y84tao" path="res://Cutscenes/ToiletClogCutscene.gd" id="63_sm6fg"]
 [ext_resource type="Resource" uid="uid://dmkt054qdywph" path="res://test.dialogue" id="64_b17eg"]
+[ext_resource type="PackedScene" uid="uid://uq5whvtm0m2i" path="res://Interactables/Game World/Hospital Room/medicine_dispenser.tscn" id="66_uatky"]
+[ext_resource type="Resource" uid="uid://xp53l3fuethr" path="res://examinables.dialogue" id="67_1vm84"]
+[ext_resource type="Script" uid="uid://bmuxd8k0o3aw7" path="res://interactions/actions/ShowDialogueActiont.gd" id="68_wu3dr"]
 
 [sub_resource type="Resource" id="Resource_4obbf"]
 script = ExtResource("10_0rl1p")
@@ -335,7 +339,7 @@ metadata/_custom_type_script = "uid://b4i2dd2kqpmun"
 
 [sub_resource type="Resource" id="Resource_34ol3"]
 script = ExtResource("19_4k2k6")
-target_node_path = NodePath("../McBucket_Path/McBucket")
+target_node_path = NodePath("../../McBucket_Path/McBucket")
 method_name = "change_state"
 arguments = [3]
 metadata/_custom_type_script = "uid://7xsscyp60ilq"
@@ -349,7 +353,7 @@ metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
 [sub_resource type="Resource" id="Resource_uatky"]
 script = ExtResource("19_4k2k6")
-target_node_path = NodePath("../McBucket_Path/McBucket")
+target_node_path = NodePath("../../McBucket_Path/McBucket")
 method_name = "change_state"
 arguments = [1]
 metadata/_custom_type_script = "uid://7xsscyp60ilq"
@@ -361,9 +365,16 @@ required_item_id = "cannathink"
 actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_4lmeg"), SubResource("Resource_uatky")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
+[sub_resource type="Resource" id="Resource_8dc3g"]
+script = ExtResource("19_4k2k6")
+target_node_path = NodePath("..")
+method_name = "on_drug_used"
+arguments = ["invigirol"]
+metadata/_custom_type_script = "uid://7xsscyp60ilq"
+
 [sub_resource type="Resource" id="Resource_cyx1q"]
 script = ExtResource("19_4k2k6")
-target_node_path = NodePath("../McBucket_Path/McBucket")
+target_node_path = NodePath("../../McBucket_Path/McBucket")
 method_name = "change_state"
 arguments = [2]
 metadata/_custom_type_script = "uid://7xsscyp60ilq"
@@ -372,7 +383,7 @@ metadata/_custom_type_script = "uid://7xsscyp60ilq"
 script = ExtResource("24_qsp4k")
 verb_id = "use"
 required_item_id = "invigirol"
-actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_rqtf5"), SubResource("Resource_cyx1q")])
+actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_rqtf5"), SubResource("Resource_8dc3g"), SubResource("Resource_cyx1q")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
 [sub_resource type="Resource" id="Resource_gx4rg"]
@@ -522,6 +533,52 @@ verb_id = "use"
 actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_pjyto")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
+[sub_resource type="Resource" id="Resource_fpm7e"]
+script = ExtResource("68_wu3dr")
+metadata/_custom_type_script = "uid://bmuxd8k0o3aw7"
+
+[sub_resource type="Resource" id="Resource_ywjan"]
+script = ExtResource("24_qsp4k")
+verb_id = "examine"
+actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_fpm7e")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="Resource" id="Resource_m74q3"]
+script = ExtResource("24_qsp4k")
+verb_id = "use"
+required_item_id = "cannathink"
+required_flag_id = "mcbucket_zanopram_used"
+actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_4lmeg"), SubResource("Resource_ntx8l")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="Resource" id="Resource_htgcl"]
+script = ExtResource("19_4k2k6")
+target_node_path = NodePath("..")
+method_name = "on_drug_used"
+arguments = ["zanopram"]
+metadata/_custom_type_script = "uid://7xsscyp60ilq"
+
+[sub_resource type="Resource" id="Resource_tko6h"]
+script = ExtResource("24_qsp4k")
+verb_id = "use"
+required_item_id = "zanopram"
+actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_0dhbp"), SubResource("Resource_htgcl"), SubResource("Resource_34ol3")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="Resource" id="Resource_smeu8"]
+script = ExtResource("19_4k2k6")
+target_node_path = NodePath("..")
+method_name = "on_drug_used"
+arguments = ["cannathink"]
+metadata/_custom_type_script = "uid://7xsscyp60ilq"
+
+[sub_resource type="Resource" id="Resource_am8a1"]
+script = ExtResource("24_qsp4k")
+verb_id = "use"
+required_item_id = "cannathink"
+actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_4lmeg"), SubResource("Resource_smeu8"), SubResource("Resource_uatky")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
 [node name="Main" type="Control" node_paths=PackedStringArray("sergei_interactable")]
 layout_mode = 3
 anchors_preset = 0
@@ -638,7 +695,6 @@ scale = Vector2(0.0377778, 0.0377778)
 texture = ExtResource("3_7mycd")
 
 [node name="Rusty Key" parent="." instance=ExtResource("2_lquwl")]
-visible = false
 z_index = 1805
 position = Vector2(-339, 28)
 scale = Vector2(4.125, 4.125)
@@ -780,7 +836,20 @@ position = Vector2(159, -196)
 [node name="Sprite2D" parent="Sergei_Path/Sergei" index="3"]
 position = Vector2(-27.99999, -172)
 
+[node name="MedicalTube" type="Line2D" parent="."]
+z_index = -2
+position = Vector2(858, -53)
+points = PackedVector2Array(0, -4, -2, -3, -3, -2, -4, -1, -6, 5, -6, 200)
+width = 5.0
+default_color = Color(0.3647059, 0.3647059, 0.3647059, 0.68235296)
+texture_mode = 2
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+antialiased = true
+
 [node name="MedicineCabinet2" parent="." instance=ExtResource("12_a6jrf")]
+visible = false
 position = Vector2(890, 3)
 scale = Vector2(0.735, 0.735)
 interactions = Array[ExtResource("24_qsp4k")]([ExtResource("7_jq2sk"), SubResource("Resource_1vm84"), SubResource("Resource_5dllo"), SubResource("Resource_jx0wj"), SubResource("Resource_ok6jj"), SubResource("Resource_wu3dr")])
@@ -859,6 +928,7 @@ object_id = "testbox"
 interactions = Array[ExtResource("24_qsp4k")]([SubResource("Resource_4k2k6"), SubResource("Resource_uypp3")])
 
 [node name="SergeiMedicineDispenser" parent="." instance=ExtResource("27_a6jrf")]
+visible = false
 z_index = -1
 position = Vector2(7870, -32)
 scale = Vector2(0.735, 0.735)
@@ -926,6 +996,32 @@ fix_duration = 15.0
 [node name="AidaDoorWaitPos" type="Marker2D" parent="."]
 position = Vector2(279, 0)
 
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+z_index = 1
+position = Vector2(149, 1551)
+scale = Vector2(0.5, 0.5)
+stream = ExtResource("7_wu3dr")
+autoplay = true
+max_distance = 1307.0
+bus = &"Bathroom Music"
+
+[node name="MedicineDispenser" parent="." instance=ExtResource("66_uatky")]
+z_index = -1
+position = Vector2(962, -22)
+scale = Vector2(0.5, 0.5)
+
+[node name="PulseOverlay" parent="MedicineDispenser" index="5"]
+offset_left = -186.0
+offset_top = -414.0
+offset_right = 19.0
+offset_bottom = -247.0
+
+[node name="InteractionArea" parent="MedicineDispenser" index="7"]
+interactions = Array[ExtResource("24_qsp4k")]([SubResource("Resource_ywjan"), SubResource("Resource_m74q3"), SubResource("Resource_5dllo"), SubResource("Resource_tko6h"), SubResource("Resource_am8a1"), SubResource("Resource_wu3dr")])
+
+[node name="InteractionClickShape" parent="MedicineDispenser/InteractionArea" index="0"]
+visible = true
+
 [editable path="HospitalToilet"]
 [editable path="HospitalBathroomSink"]
 [editable path="Burger"]
@@ -936,3 +1032,4 @@ position = Vector2(279, 0)
 [editable path="McBucket_Path/McBucket"]
 [editable path="InventoryUI_CanvasLayer"]
 [editable path="InsuranceFormButtonUI"]
+[editable path="MedicineDispenser"]

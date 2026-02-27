@@ -193,14 +193,21 @@ func _ready():
 			# We wait one frame to ensure the Scene Tree and AudioServer are fully stable
 			# before trying to create and play the audio player.
 			await get_tree().process_frame
-			print_rich("[color=purple]GM: Starting music now...[/color]")
-			SoundManager.play_music()
+			print_rich("[color=purple]GM: Starting music/ambience now...[/color]")
+			
+			# Music is currently commented out as per your request
+			# SoundManager.play_music()
+			
+			# --- START AMBIENCE FOR TEST SCENE ---
+			SoundManager.play_ambience("room_tone_air", -5.0) 
+			SoundManager.play_ambience("room_tone_electric", -15.0)
 
 		else:
 			# This Else block is new - it warns you if the Player Group is missing
 			print_rich("[color=red]GM: Direct run detected, BUT no node in group 'player' was found.[/color]")
 			print_rich("[color=red]GM: Music did not start because the initialization block was skipped.[/color]")
 			print_rich("[color=red]GM: Please select your Player node -> Node Tab -> Groups -> Add 'player'.[/color]")
+
 func _unhandled_input(event: InputEvent):
 	# The initial check for _is_player_walking has been removed.
 
@@ -241,10 +248,12 @@ func change_game_state(new_state: GameState):
 				main_menu_scene_instance = null
 				
 		GameState.IN_GAME_PLAY:
-			# When LEAVING the game (e.g. to Menu), stop music.
-			# If going to CUTSCENE, we usually want music to keep playing.
+			# When LEAVING the game (e.g. to Menu), stop music and ambience.
+			# If going to CUTSCENE, we usually want music/ambience to keep playing.
 			if new_state != GameState.CUTSCENE:
 				SoundManager.stop_music()
+				# --- STOP AMBIENCE HERE ---
+				SoundManager.stop_all_ambience()
 
 	print_rich("[color=yellow]GameManager: Changing state from %s to %s[/color]" % [GameState.keys()[current_game_state], GameState.keys()[new_state]])
 	current_game_state = new_state
@@ -289,7 +298,11 @@ func change_game_state(new_state: GameState):
 				_find_and_assign_ui_nodes()
 				
 				# Play music if we just loaded the game
-				SoundManager.play_music() 
+				# SoundManager.play_music() 
+				
+				# --- START AMBIENCE FOR MAIN GAME ---
+				SoundManager.play_ambience("room_tone_air", -5.0) 
+				SoundManager.play_ambience("room_tone_electric", -15.0)
 
 			# --- B. RESTORATION PHASE (Run this EVERY time we enter IN_GAME_PLAY) ---
 			
@@ -340,6 +353,7 @@ func change_game_state(new_state: GameState):
 				player_node.set_can_move(false)
 				
 			print_rich("[color=Plum]GM: Entered CUTSCENE state. UI hidden, Input blocked.[/color]")
+
 func select_verb(verb_id_to_select: String):
 	var previously_selected_verb_id = current_verb_id
 	var new_verb_id = ""

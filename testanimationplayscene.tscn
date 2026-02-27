@@ -1,0 +1,104 @@
+[gd_scene load_steps=25 format=3 uid="uid://cbwwnvfq7tg2v"]
+
+[ext_resource type="PackedScene" uid="uid://7s7wp2v87sa4" path="res://CharacterConversationOverlay.tscn" id="1_mnivt"]
+[ext_resource type="Resource" uid="uid://bdwme0ug677oq" path="res://testdialogue.dialogue" id="2_6s41t"]
+[ext_resource type="Texture2D" uid="uid://d2ntha7kwjixc" path="res://Animations/Hj frames/Hj frames _0001.png" id="2_burb0"]
+[ext_resource type="Texture2D" uid="uid://shvhccg8n4yi" path="res://Animations/Hj frames/Hj frames _0002.png" id="3_usw4h"]
+[ext_resource type="Texture2D" uid="uid://bk6ygxl6t7ppm" path="res://Animations/Hj frames/Hj frames _0003.png" id="4_6s41t"]
+[ext_resource type="Texture2D" uid="uid://c8jr7u7bw5f5b" path="res://Animations/Hj frames/Hj frames _0004.png" id="5_kwss1"]
+[ext_resource type="Texture2D" uid="uid://cxcn3vpjvmjb" path="res://Animations/Hj frames/Hj frames _0005.png" id="6_3i1ge"]
+[ext_resource type="Texture2D" uid="uid://c4tngbqvpfsuf" path="res://Animations/Hj frames/Hj frames _0006.png" id="7_ncmfe"]
+[ext_resource type="Texture2D" uid="uid://qqobs5n8kp2p" path="res://Animations/Hj frames/Hj frames _0007.png" id="8_ouc0t"]
+[ext_resource type="Texture2D" uid="uid://caokanmgbph6i" path="res://Animations/Hj frames/Hj frames _0008.png" id="9_mpd8l"]
+[ext_resource type="Texture2D" uid="uid://8h6h8gy8ybyn" path="res://Animations/Hj frames/Hj frames _0009.png" id="10_r54h8"]
+[ext_resource type="Texture2D" uid="uid://vb8kobo4wbrj" path="res://Animations/Hj frames/Hj frames _0010.png" id="11_w2ra8"]
+[ext_resource type="Texture2D" uid="uid://byk7yf6v4psbk" path="res://Animations/Hj frames/Hj frames _0011.png" id="12_jwfsh"]
+[ext_resource type="Texture2D" uid="uid://ce34whsdmogcw" path="res://Animations/Hj frames/Hj frames _0012.png" id="13_ieltx"]
+[ext_resource type="Texture2D" uid="uid://lfoes1gpecye" path="res://Animations/Hj frames/Hj frames _0013.png" id="14_qa8s0"]
+[ext_resource type="Texture2D" uid="uid://lpmpj4ydkao2" path="res://Animations/Hj frames/Hj frames _0014.png" id="15_7mgln"]
+[ext_resource type="Texture2D" uid="uid://b8fo8v47fmya1" path="res://Animations/Hj frames/Hj frames _0015.png" id="16_s0mhj"]
+[ext_resource type="Texture2D" uid="uid://bjjotnbm4x55" path="res://Animations/Hj frames/Hj frames _0016.png" id="17_783t1"]
+[ext_resource type="Texture2D" uid="uid://si1ggwmblqxm" path="res://Animations/Hj frames/Hj frames _0017.png" id="18_vne7f"]
+[ext_resource type="Texture2D" uid="uid://cvpotlaoir54k" path="res://Animations/Hj frames/Hj frames _0018.png" id="19_hdb3x"]
+[ext_resource type="Texture2D" uid="uid://dmqfgnpfil8yg" path="res://Animations/Hj frames/Hj frames _0019.png" id="20_2d2f2"]
+[ext_resource type="Texture2D" uid="uid://ba2w703gxwaug" path="res://Animations/Hj frames/Hj frames _0020.png" id="21_6jfq1"]
+[ext_resource type="Texture2D" uid="uid://dg6a8t20eu1yu" path="res://Backgrounds/Sergey/sergey_neutral.png" id="22_usw4h"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_5p1cj"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_burb0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_usw4h")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_6s41t")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_kwss1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_3i1ge")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_ncmfe")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_ouc0t")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_mpd8l")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_r54h8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_w2ra8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_jwfsh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_ieltx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_qa8s0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_7mgln")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_s0mhj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_783t1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_vne7f")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_hdb3x")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_2d2f2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_6jfq1")
+}],
+"loop": true,
+"name": &"default",
+"speed": 12.0
+}]
+
+[node name="CharacterConversationOverlay" instance=ExtResource("1_mnivt")]
+conversation_dialogue_file = ExtResource("2_6s41t")
+background_animations = null
+
+[node name="BackgroundSprite" parent="RootContainer" index="1"]
+position = Vector2(962, 536)
+texture = ExtResource("22_usw4h")
+
+[node name="CinematicSprite" parent="RootContainer" index="4"]
+sprite_frames = SubResource("SpriteFrames_5p1cj")

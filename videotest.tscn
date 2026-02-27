@@ -1,0 +1,106 @@
+[gd_scene load_steps=22 format=3 uid="uid://rp7wwievm5ue"]
+
+[ext_resource type="Texture2D" uid="uid://d2ntha7kwjixc" path="res://Animations/Hj frames/Hj frames _0001.png" id="1_2w45q"]
+[ext_resource type="Texture2D" uid="uid://shvhccg8n4yi" path="res://Animations/Hj frames/Hj frames _0002.png" id="2_005ce"]
+[ext_resource type="Texture2D" uid="uid://bk6ygxl6t7ppm" path="res://Animations/Hj frames/Hj frames _0003.png" id="3_plgih"]
+[ext_resource type="Texture2D" uid="uid://c8jr7u7bw5f5b" path="res://Animations/Hj frames/Hj frames _0004.png" id="4_56fuj"]
+[ext_resource type="Texture2D" uid="uid://cxcn3vpjvmjb" path="res://Animations/Hj frames/Hj frames _0005.png" id="5_a6kmk"]
+[ext_resource type="Texture2D" uid="uid://c4tngbqvpfsuf" path="res://Animations/Hj frames/Hj frames _0006.png" id="6_ae5ff"]
+[ext_resource type="Texture2D" uid="uid://qqobs5n8kp2p" path="res://Animations/Hj frames/Hj frames _0007.png" id="7_2n6uy"]
+[ext_resource type="Texture2D" uid="uid://caokanmgbph6i" path="res://Animations/Hj frames/Hj frames _0008.png" id="8_fkxe8"]
+[ext_resource type="Texture2D" uid="uid://8h6h8gy8ybyn" path="res://Animations/Hj frames/Hj frames _0009.png" id="9_hmbpk"]
+[ext_resource type="Texture2D" uid="uid://vb8kobo4wbrj" path="res://Animations/Hj frames/Hj frames _0010.png" id="10_dn4qa"]
+[ext_resource type="Texture2D" uid="uid://byk7yf6v4psbk" path="res://Animations/Hj frames/Hj frames _0011.png" id="11_eocn0"]
+[ext_resource type="Texture2D" uid="uid://ce34whsdmogcw" path="res://Animations/Hj frames/Hj frames _0012.png" id="12_o2nkf"]
+[ext_resource type="Texture2D" uid="uid://lfoes1gpecye" path="res://Animations/Hj frames/Hj frames _0013.png" id="13_c15c0"]
+[ext_resource type="Texture2D" uid="uid://lpmpj4ydkao2" path="res://Animations/Hj frames/Hj frames _0014.png" id="14_yes0f"]
+[ext_resource type="Texture2D" uid="uid://b8fo8v47fmya1" path="res://Animations/Hj frames/Hj frames _0015.png" id="15_u2j0r"]
+[ext_resource type="Texture2D" uid="uid://bjjotnbm4x55" path="res://Animations/Hj frames/Hj frames _0016.png" id="16_vx88e"]
+[ext_resource type="Texture2D" uid="uid://si1ggwmblqxm" path="res://Animations/Hj frames/Hj frames _0017.png" id="17_ej37m"]
+[ext_resource type="Texture2D" uid="uid://cvpotlaoir54k" path="res://Animations/Hj frames/Hj frames _0018.png" id="18_7btt0"]
+[ext_resource type="Texture2D" uid="uid://dmqfgnpfil8yg" path="res://Animations/Hj frames/Hj frames _0019.png" id="19_70xm4"]
+[ext_resource type="Texture2D" uid="uid://ba2w703gxwaug" path="res://Animations/Hj frames/Hj frames _0020.png" id="20_oyxge"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_di6xe"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_2w45q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_005ce")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_plgih")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_56fuj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_a6kmk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_ae5ff")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_2n6uy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_fkxe8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_hmbpk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_dn4qa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_eocn0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_o2nkf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_c15c0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_yes0f")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_u2j0r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_vx88e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_ej37m")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_7btt0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_70xm4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_oyxge")
+}],
+"loop": true,
+"name": &"default",
+"speed": 12.0
+}]
+
+[node name="Videotest" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(960.00006, 540.00006)
+scale = Vector2(0.938, 0.938)
+sprite_frames = SubResource("SpriteFrames_di6xe")
+autoplay = "default"

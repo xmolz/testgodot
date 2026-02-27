@@ -24,14 +24,22 @@ var locals: Dictionary = {}
 
 var _locale: String = TranslationServer.get_locale()
 
-# --- ADDED: Character Color Lookup Table ---
-# Alda: Cyan (Hair)
-# Sergey: Gold/Cream (HSV 43, 44, 100 -> #FFDF8F)
+# --- Character Background Color Lookup Table ---
 var character_colors: Dictionary = {
-	"AIda": Color("#42f5e0"),
-	"Sergey": Color("#FFDF8F")
+	"AIda": Color("#20B2AA"),   # Light Sea Green
+	"Sergey": Color("#DAA520"), # Goldenrod
+	"McBucket": Color("#6B8E23"), # Olive Drab
+	"Nathan": Color("#FF69B4"),  # Hot Pink
+	"Dread": Color("#4B0082")    # Indigo (Example for your screenshot)
 }
-# -------------------------------------------
+
+# --- Character Portrait Lookup Table ---
+var character_portraits: Dictionary = {
+	"AIda": preload("res://test_character_portrait.jpg"), 
+	"Sergey": preload("res://sergei.PNG"),
+	"McBucket": preload("res://mcbucket.png"),
+	"Nathan": preload("res://icon.svg")
+}
 
 ## The current line
 var dialogue_line: DialogueLine:
@@ -40,7 +48,6 @@ var dialogue_line: DialogueLine:
 			dialogue_line = value
 			apply_dialogue_line()
 		else:
-			# The dialogue has finished so close the balloon
 			queue_free()
 	get:
 		return dialogue_line
@@ -60,12 +67,20 @@ var mutation_cooldown: Timer = Timer.new()
 ## The menu of responses
 @onready var responses_menu: DialogueResponsesMenu = %ResponsesMenu
 
+## Reference to the Portrait TextureRect
+@onready var portrait_rect: TextureRect = %PortraitRect
+
+## Reference to the Name Panel Container
+@onready var name_panel: PanelContainer = $Balloon/NamePanel
+
+## Reference to the Dialogue Container
+@onready var dialogue_container: MarginContainer = $Balloon/Dialogue
+
 
 func _ready() -> void:
 	balloon.hide()
 	Engine.get_singleton("DialogueManager").mutated.connect(_on_mutated)
 
-	# If the responses menu doesn't have a next action set, use this one
 	if responses_menu.next_action.is_empty():
 		responses_menu.next_action = next_action
 
@@ -74,12 +89,10 @@ func _ready() -> void:
 
 
 func _unhandled_input(_event: InputEvent) -> void:
-	# Only the balloon is allowed to handle input while it's showing
 	get_viewport().set_input_as_handled()
 
 
 func _notification(what: int) -> void:
-	## Detect a change of locale and update the current dialogue line to show the new language
 	if what == NOTIFICATION_TRANSLATION_CHANGED and _locale != TranslationServer.get_locale() and is_instance_valid(dialogue_label):
 		_locale = TranslationServer.get_locale()
 		var visible_ratio = dialogue_label.visible_ratio
@@ -104,17 +117,61 @@ func apply_dialogue_line() -> void:
 	balloon.focus_mode = Control.FOCUS_ALL
 	balloon.grab_focus()
 
-	character_label.visible = not dialogue_line.character.is_empty()
-	character_label.text = tr(dialogue_line.character, "dialogue")
-
-	# --- MODIFIED: Character Color Logic ---
-	var char_name = dialogue_line.character
-	if character_colors.has(char_name):
-		character_label.add_theme_color_override("default_color", character_colors[char_name])
+	# 1. Get the Raw name (includes BBCode like [color]...)
+	var raw_name_with_tags = dialogue_line.character
+	
+	# 2. Create a "Clean" name (No Tags) for Dictionary lookups
+	var regex = RegEx.new()
+	regex.compile("\\[.*?\\]") # Matches anything inside [ ]
+	var lookup_key = regex.sub(raw_name_with_tags, "", true).strip_edges() # "Dread"
+	
+	# 3. Handle Name Panel Visibility and Color
+	if raw_name_with_tags.is_empty():
+		name_panel.visible = false
 	else:
-		# Default to White (or whatever standard color you prefer) if not in the list
+		name_panel.visible = true
+		
+		# --- SMART SPACE INSERTER LOGIC ---
+		var spaced_name = ""
+		var inside_tag = false
+		
+		for i in range(raw_name_with_tags.length()):
+			var char = raw_name_with_tags[i]
+			
+			if char == "[":
+				inside_tag = true
+			
+			spaced_name += char
+			
+			if char == "]":
+				inside_tag = false
+				
+			# If we are NOT inside a tag, and it's not a bracket, add a space
+			if not inside_tag and char != "[" and char != "]":
+				# Only add space if the NEXT char isn't a tag opener
+				if i < raw_name_with_tags.length() - 1 and raw_name_with_tags[i+1] != "[":
+					spaced_name += " "
+		# ----------------------------------
+
+		character_label.text = "[center][b]" + spaced_name + "[/b][/center]"
 		character_label.add_theme_color_override("default_color", Color.WHITE)
-	# ---------------------------------------
+		
+		# Update Background Panel Color using the CLEAN lookup key
+		var new_style = name_panel.get_theme_stylebox("panel").duplicate()
+		if character_colors.has(lookup_key):
+			new_style.bg_color = character_colors[lookup_key]
+		else:
+			new_style.bg_color = Color(0.2, 0.2, 0.2, 0.9)
+		name_panel.add_theme_stylebox_override("panel", new_style)
+
+	# 4. Update Portrait using CLEAN lookup key
+	if character_portraits.has(lookup_key):
+		portrait_rect.texture = character_portraits[lookup_key]
+		portrait_rect.visible = true
+		dialogue_container.add_theme_constant_override("margin_left", 230)
+	else:
+		portrait_rect.visible = false
+		dialogue_container.add_theme_constant_override("margin_left", 30)
 
 	dialogue_label.hide()
 	dialogue_label.dialogue_line = dialogue_line
@@ -122,7 +179,6 @@ func apply_dialogue_line() -> void:
 	responses_menu.hide()
 	responses_menu.responses = dialogue_line.responses
 
-	# Show our balloon
 	balloon.show()
 	will_hide_balloon = false
 
@@ -131,7 +187,6 @@ func apply_dialogue_line() -> void:
 		dialogue_label.type_out()
 		await dialogue_label.finished_typing
 
-	# Wait for input
 	if dialogue_line.responses.size() > 0:
 		balloon.focus_mode = Control.FOCUS_NONE
 		responses_menu.show()
@@ -152,21 +207,17 @@ func next(next_id: String) -> void:
 
 #region Signals
 
-
 func _on_mutation_cooldown_timeout() -> void:
 	if will_hide_balloon:
 		will_hide_balloon = false
 		balloon.hide()
-
 
 func _on_mutated(_mutation: Dictionary) -> void:
 	is_waiting_for_input = false
 	will_hide_balloon = true
 	mutation_cooldown.start(0.1)
 
-
 func _on_balloon_gui_input(event: InputEvent) -> void:
-	# See if we need to skip typing of the dialogue
 	if dialogue_label.is_typing:
 		var mouse_was_clicked: bool = event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed()
 		var skip_button_was_pressed: bool = event.is_action_pressed(skip_action)
@@ -178,23 +229,22 @@ func _on_balloon_gui_input(event: InputEvent) -> void:
 	if not is_waiting_for_input: return
 	if dialogue_line.responses.size() > 0: return
 
-	# When there are no response options the balloon itself is the clickable thing
 	get_viewport().set_input_as_handled()
 
 	if event is InputEventMouseButton and event.is_pressed() and event.button_index == MOUSE_BUTTON_LEFT:
-		# Play the advance sound
-		SoundManager.play_sfx("dialogue_advance")
-		next(dialogue_line.next_id)
-	elif event.is_action_pressed(next_action) and get_viewport().gui_get_focus_owner() == balloon:
-		# Play the advance sound
-		SoundManager.play_sfx("dialogue_advance")
+		if SoundManager: SoundManager.play_sfx("dialogue_advance")
 		next(dialogue_line.next_id)
 
+	elif event.is_action_pressed(next_action) and get_viewport().gui_get_focus_owner() == balloon:
+		if SoundManager: SoundManager.play_sfx("dialogue_advance")
+		next(dialogue_line.next_id)
 
 func _on_responses_menu_response_selected(response: DialogueResponse) -> void:
-	# Play the advance sound
-	SoundManager.play_sfx("dialogue_advance")
+	if SoundManager: SoundManager.play_sfx("dialogue_advance")
 	next(response.next_id)
 
+func _on_dialogue_label_spoke(letter: String, letter_index: int, speed: float) -> void:
+	if letter == " ": return
+	# if SoundManager: SoundManager.play_dialogue_blip()
 
 #endregion

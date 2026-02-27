@@ -97,6 +97,23 @@ tracks/0/keys = {
 "update": 1,
 "values": [ExtResource("26_hiqhm"), ExtResource("27_tkwlq"), ExtResource("28_hl5qd"), ExtResource("29_ek41f"), ExtResource("30_khis8"), ExtResource("31_b88wv"), ExtResource("32_pgbbb"), ExtResource("33_331ug"), ExtResource("26_hiqhm")]
 }
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.33333334),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"on_footstep_frame"
+}, {
+"args": [],
+"method": &"on_footstep_frame"
+}]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_hqtel"]
 _data = {

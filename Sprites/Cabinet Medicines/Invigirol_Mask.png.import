@@ -1,0 +1,16 @@
+[remap]
+
+importer="bitmap"
+type="BitMap"
+uid="uid://b0o0srjm8oqv7"
+path="res://.godot/imported/Invigirol_Mask.png-f2b05a0a0c6cc8a6eaac62a83f182139.res"
+
+[deps]
+
+source_file="res://Sprites/Cabinet Medicines/Invigirol_Mask.png"
+dest_files=["res://.godot/imported/Invigirol_Mask.png-f2b05a0a0c6cc8a6eaac62a83f182139.res"]
+
+[params]
+
+create_from=0
+threshold=0.5

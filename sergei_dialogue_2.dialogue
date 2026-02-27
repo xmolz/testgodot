@@ -1,24 +1,289 @@
+~ start
+#sergey neutral
 Having put the old man to sleep, you return to Sergey.
-He seems to have cooled down in the meanwhile.
-The blanket is back over his legs
+He has retreated back into his shell during your absence.
+The blanket is pulled up tight, hiding his legs again.
 
+#protag thinking face
+do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_closeup_curious.png")
+Let's make this quick.
+You need to get the fuck out of here.
+And he is holding the key.
+#back on bed sprite
+do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_brushing_hair_on_bed.PNG")
+You put your game face on and prop yourself back up on his bed.
+
+- Missed me?
+
+#sergey talking sprite
+do change_background_sprite("res://Backgrounds/Sergey/sergey_hand_behind_head.png")
 Sergey: Ah... You are back.
 Sergey: It is... very quiet now.
 Sergey: What did you do to him?
 
-- I just helped him sleep.
-	Sergey: Wow. You are... Capable woman... I see.
-- He won't bother us again.
-	Sergey nods his head with a half smile. 
+- I just helped him find some peace.
+	#sergey eyebrows raised / impressed
+	do change_background_sprite("res://Backgrounds/Sergey/sergei_closeup_laughing.png")
+	Sergey: Peace... yes. That is one rarity in this place.
+	Sergey: You are... very capable woman, I see.
+	#sergey shy smile
+	He looks at you with a new kind of respect. And hunger.
 
-Sergey: You knowm, I was half afriad you might not return..
-Sergey: Leave old Sergey right where he was. 
+- Don't worry about him. Look at me.
+	#sergey blush / obedient
+	do change_background_sprite("res://Backgrounds/Sergey/sergei_closeup_surprised_blush.png")
+	Sergey does not ask again. He simply nods.
+	The noise is gone, and so are the excuses.
+	Now, it is just him. And you. 
 
+#sergey looking down / shy
+do change_background_sprite("res://Backgrounds/Sergey/sergei_closeup_lookaway_sad_mouth_open.png")
+Sergey: You know, I was half afraid you might not return...
+Sergey: That you would leave old Sergey... hanging.
+
+#protag smirk / internal monologue
+do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_closeup_domme.png")
 Aw, how CUTE.
 Lil' Sergey isn't afraid of what you did to the old man.
-Instead, he was afraid you wouldn't come back and get him off.
-Well then, better give him what he wants.
-And get what YOU want from him as well.
+He was afraid you wouldn't come back to finish the 'job'.
 
- - So, shall we continue where we left off, Sergey?
+Well then, the quest is nearly complete.
+Time to get ready for the loot.
 
+- Leave a handsome guy like you hanging? NEVER.
+
+#knees touching image
+You pull up closer to the gentle giant.
+Your knees touch again.
+do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_sergey_knees_touching.png")
+This time, you don't need to ask for permission.
+do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_sergey_gown only.png", "dissolve")
+
+
+You notice Sergey open his mouth again, presumably to speak.
+God knows you don't have the time for that though.
+So you did what any woman respecting her time would do. 
+
+# finger on sergey's mouth.
+#need to make a drawing for this. 
+You shut him up.
+That's right lil' baby.
+No more crying.
+Mama's here.
+
+#protag neutral
+You run a finger down the glowing haptic strip on the bed frame.
+
+#sergey surprised
+Sergey: Wait, what are you—
+
+#bed reclining animation
+*Vzzzzzt*
+The servos engage instantly. 
+The backrest drops, pulling him down until he lies flat beneath you.
+He's too stunned to speak.
+
+Well. You have him where you want him. 
+Time to resume from where you left off last time.
+do fade_to_black(2.0)
+You put your hand on his gown and remove it.
+
+#fade to black / The Reveal
+Two things happen immediately.
+First, you notice that he is... *very* happy to see you.
+But that's no surprise. You pushed every right button. In the exact right order. 
+His erection was granted. 
+
+And second, a phrase pops into your head.
+Something from a language class you took a lifetime ago.
+
+#reveal what's underneath (CG or Text emphasis)
+do reveal_shock_from_black("res://haluwa.png", 25.0)
+[i]"Ooki Desu."[/i]
+
+Sergey is huge.
+Much bigger than you calculated.
+
+And you know what?
+If you're being completely honest...
+You only need to get the TechPass from him. That is the mission.
+
+But... it feels almost unfair for him to be the only one exposed.
+Or rather, you know that's what *he* is thinking.
+He feels vulnerable.
+
+do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_touching_sergey.png")
+[i]"Best give him the proper experience,"[/i] you think to yourself.
+[i]"The least I could do for this poor baby is show him some tits."[/i]
+
+You reach behind your neck, fingers finding the knot of your hospital gown.
+One tug is all it takes.
+
+#protag reveal boobs
+do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_top_off.png")
+The fabric slides down your shoulders, pooling at your waist and leaving you undone.
+#sergey blush / awestruck
+Sergey: Wow... Devushka...
+Sergey: You are... extraordinarily beautiful.
+
+- This is for your eyes only, Sergey.
+
+Sergey looks down, his face burning.
+It’s cute, really.
+Men will believe just about anything you say about them.
+... As long as you have your tits out.
+
+Well. Time to get to it.
+You slide down by his side and take his huge dick in your hands.
+You can barely fit him in your hand. 
+
+Sergey is warm.
+[b]Feverishly[/b] warm.
+You are so close now, you can see every micro-expression, every twitch of muscle.
+
+The rise and fall of his chest as he struggles to breathe.
+His hand loosely clutching the sheets.
+The way he is barely able to meet your gaze.
+
+[i]"Interesting,"[/i] you think.
+
+Perhaps in another life, you would have treated Sergey fairly.
+Maybe you would have given him a chance to be known.
+Maybe you would have let yourself be known by him.
+
+But in this life?
+You just need him for a minute.
+A single, breathless minute.
+
+Best get that minute started.
+#switch to cinematic
+#cinematic plays for a while (until player clicks on continue)
+
+Sergey's hips begin to hitch, chasing the rhythm of your hand.
+He's close. You can feel the tension coiling tight inside him.
+You tighten your grip - ever so slightly. 
+
+Soon, his movements turn desperate. Forceful.
+He isn't just lying there anymore. He is thrusting into your grip.
+So you let him.
+You let him drive his dick into your palm.
+
+#protag face
+Men.
+So predictable.
+You know exactly when he is going to break.
+
+3...
+2...
+1...
+
+#end of climax image
+Sergey unravels completely.
+It is a heavy, desperate release. 
+The kind of pressure that has been building up inside him for years, finally bursting the dam.
+
+But wait... what's this?
+
+#Sergey face (messy)
+Lil' Sergey got some of his own [noun] on his cheek.
+He is so lost in the aftershocks that he doesn't even notice.
+His body is still twitching, his eyes rolled back in bliss.
+How cute. 
+
+You grab a tissue from the side table and reach out.
+Gently, efficiently, you wipe his face clean.
+
+The touch snaps him back to reality.
+As soon as he realizes what happened—and where the mess came from—he turns a deep, burning crimson.
+He opens his mouth to apologize, but you don't let him.
+
+#haptic strip sound / bed raising
+*Vzzzzzt*
+You slide your finger up the haptic strip, bringing the bed back to an upright position.
+Sergey sits up, dizzy and flushed.
+You simply rest your hand over his trembling one.
+A silent signal. *It's okay. You did good.*
+
+#fade to black
+The room falls silent, save for the sound of rustling fabric.
+You take a moment to fix your gown.
+Sergey tries to compose himself, wiping his face with the back of his hand.
+
+#sergey back to normal, neutral, shy
+Sergey: Devushka... I... don't know what to say.
+
+- You don't need to say anything, Sergey.
+
+He looks at you with the same shy, doe-eyed expression he had before you wrecked him.
+He is soft. Malleable.
+Time to break him fully.
+
+You reach up to his forehead. There is a long strand of your hair sticking to his sweat-dampened skin.
+You pinch it and peel it off slowly.
+
+#protag shy smile (fake)
+You: Oops. Sorry about this.
+
+#sergey close up eyes looking to the side, shy.
+Sergey: T-Thanks, Devushka. 
+
+#start mental image / protag calculating
+That's it.
+He's primed.
+All you gotta do now is let him soak in the silence. 
+
+3...
+2...
+1...
+
+#sergey talking / nervous
+Sergey: Devushka... so you wanted to use the MemoryBox, right?
+Sergey: Now that I think... the process to get new pass might be too long.
+Sergey: HAVEMORE bureaucracy is... nightmare. Your bill will increase a lot if you wait.
+
+
+
+Sergey: You can... use mine if you want. Just for a while.
+Sergey: If HAVEMORE raises a query, I hope they will let me off easy.
+Sergey: I gave them twenty years of my life, after all!
+
+#protag internal monologue
+Bam. Wham. Thank you, Ma'am.
+
+- Fake refuse the offering.
+#protag sad / virtuous face
+You: Sergey... thank you. But I cannot take this.
+You: I do not want you to feel pressured into giving me anything just because of... what we just did.
+You: It feels... unethical.
+#change protag expression to sly looking (internal)
+Hook, line and sinker, baby!
+
+#back to sergey / panicked earnestness
+Sergey's eyes widen. He looks horrified that you would think that.
+Sergey: Unethical? No! No, please. Do not think like that.
+Sergey: This is not... payment.
+
+He reaches out and clumsily grabs your hand, pressing the warm plastic card into your palm.
+
+Sergey: This is... gift. From friend to friend.
+Sergey: Please. I insist.
+Sergey: If you do not take it, I will feel... bad. Like I took advantage of *you*.
+
+#protag neutral smile
+You look at the card in your hand.
+He's practically begging you to take his security clearance.
+
+You: Well... if you put it that way.
+You: Thank you, Sergey.
+
+#item get animation / sound
+*You acquired: Sergey's TechPass™*
+The air in the room returns back to normal.
+You: Stay put Sergey, let me figure out who I am and come see you again?
+Sergey: Of course Devushka, I've got no where to go.
+
+Well, guess it's time to finally get to it, huh?
+
+- Leave
+
+~ END

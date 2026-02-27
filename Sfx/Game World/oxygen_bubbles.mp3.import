@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dig8cwti6fyxl"
+path="res://.godot/imported/oxygen_bubbles.mp3-045dfcd6022dba805de3193ee0416e3b.mp3str"
+
+[deps]
+
+source_file="res://Sfx/Game World/oxygen_bubbles.mp3"
+dest_files=["res://.godot/imported/oxygen_bubbles.mp3-045dfcd6022dba805de3193ee0416e3b.mp3str"]
+
+[params]
+
+loop=true
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
