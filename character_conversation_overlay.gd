@@ -53,6 +53,7 @@ var _time_since_last_frame: float = 0.0
 var _is_playing: bool = false
 
 # --- CINEMATIC STATE ---
+var is_intro_sequence: bool = false
 # Accessed by the Balloon script to block input
 var is_cinematic_lock_active: bool = false
 # [NEW] Holds the reference to the active dialogue balloon
@@ -538,8 +539,12 @@ func _cleanup_and_queue_free():
 		DialogueManager.disconnect("dialogue_ended", _on_dialogue_ended_from_manager)
 	if DialogueManager.is_connected("got_dialogue", _on_got_dialogue):
 		DialogueManager.disconnect("got_dialogue", _on_got_dialogue)
+	
+	# Only delay the destruction if this is the Intro sequence!
+	if is_intro_sequence:
+		await get_tree().create_timer(2.0).timeout
+		
 	queue_free()
-
 
 # NEW FUNCTION: Play a sequence of images with a dissolve effect
 func play_dissolve_sequence(image_paths: Array, hold_duration: float = 2.0, fade_duration: float = 1.0):

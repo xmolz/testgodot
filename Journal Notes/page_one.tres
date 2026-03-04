@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="JournalPageData" format=3 uid="uid://b2tr722u3livt"]
+
+[ext_resource type="Texture2D" uid="uid://dhtl2e5562emf" path="res://Journal Notes/page_one.png" id="1_rwn4e"]
+[ext_resource type="Script" uid="uid://cxrhtr8seaits" path="res://Scripts/JournalPageData.gd" id="1_vr5vh"]
+
+[resource]
+script = ExtResource("1_vr5vh")
+page_texture = ExtResource("1_rwn4e")
+metadata/_custom_type_script = "uid://cxrhtr8seaits"

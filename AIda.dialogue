@@ -10,7 +10,7 @@ AIda: Welcome back to the waking world!
 
 - Where am I? 
 	do change_background_sprite("res://Backgrounds/Aida/aida_hospital_explaining_confident.png")
-	AIda: You are currently located at HAVEMORE Inc.'s Multispecialty Recovery Facility — Greendale Avenue branch.
+	AIda: You are currently located at HAVEMORE Inc's Multispecialty Recovery Facility — Greendale Avenue branch.
 	do change_background_sprite("res://Backgrounds/Aida/aida_hospital_happy.png") 
 	AIda: Congratulations! You’re receiving the most advanced care legally permitted in this precinct.
 	#expression = happy neutral
@@ -90,8 +90,8 @@ AIda: Thank you patient #122. Unfortunately, findings indicate substantial damag
 do change_background_sprite("res://Backgrounds/Aida/aida_hospital_thinking.png")
 AIda: That would explain your current inability to access long-term autobiographical memory.
 do change_background_sprite("res://Backgrounds/Aida/aida_hospital_surprised.png")
-AIda: Fortunately! HAVEMORE Inc. now offers proprietary MemoryBox™ therapy — a revolutionary tool for memory stimulation and reconstruction.
-AIda: Luckily, we have a MemoryBox ™ installed right here in this very unit. You may find it in the corner to the right. 
+AIda: Fortunately! HAVEMORE Inc now offers proprietary MemoryBox™ therapy — a revolutionary tool for memory stimulation and reconstruction.
+AIda: Luckily, we have a MemoryBox ™ installed right here in this very unit. You may find it towards the right. 
 
 - How am I supposed to use this 'MemoryBox'?
 	do change_background_sprite("res://Backgrounds/Aida/aida_hospital_happy.png")

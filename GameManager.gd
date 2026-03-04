@@ -3,6 +3,7 @@ extends Node
 
 const MAIN_GAME_SCENE_PATH = "res://main.tscn"
 const INSURANCE_FORM_SCENE = preload("res://insurance_form.tscn")
+const JOURNAL_OVERLAY_SCENE = preload("res://journal_overlay.tscn") # <--- ADD THIS 
 const MAIN_MENU_SCENE_PATH = "res://main_menu.tscn"
 # --- ADD THIS LINE ---
 # Make sure this path is correct for your project structure!
@@ -13,6 +14,13 @@ const INTRO_BACKGROUND_ANIMATIONS_PATH = "res://conversation_backgrounds.tres"
 const INTRO_INITIAL_ANIMATION_NAME = "float_loop"
 
 var _insurance_form_instance: CanvasLayer = null # To keep track of the form
+var _journal_overlay_instance: CanvasLayer = null # <--- ADD THIS
+
+# --- Cached Scenes ---
+var cached_main_menu_scene: PackedScene = null
+var cached_intro_overlay_scene: PackedScene = null
+var cached_main_game_scene: PackedScene = null
+
 # --- Signals ---
 signal verb_changed(new_verb_id: String)
 signal sentence_line_updated(text: String)
@@ -58,6 +66,7 @@ var current_interaction_state: InteractionState = InteractionState.WORLD
 # IMPORTANT: Verify these paths match the node structure in your main game scene!
 # These references are crucial. We link them in the Inspector.
 var verb_ui: CanvasLayer = null
+var journal_button_ui: CanvasLayer = null # <--- ADD THIS LINE
 var inventory_ui: CanvasLayer = null
 var insurance_form_button_ui: CanvasLayer = null
 var explanation_layer: CanvasLayer = null
@@ -120,6 +129,10 @@ const WALK_TO_VERB_ID: String = "walk_to"
 
 func _ready():
 	print_rich("[color=cyan]GM: GameManager is Ready! Starting initialization...[/color]")
+	# Spawn our Global Transition Layer immediately
+	var transition_scene = preload("res://TransitionLayer.tscn")
+	transition_layer = transition_scene.instantiate()
+	add_child(transition_layer)
 
 	if DialogueManager:
 		DialogueManager.dialogue_started.connect(_on_dialogue_started)
@@ -266,7 +279,8 @@ func change_game_state(new_state: GameState):
 			if is_instance_valid(main_menu_scene_instance):
 				return
 
-			var menu_packed_scene = load(MAIN_MENU_SCENE_PATH)
+			# Replace: var menu_packed_scene = load(MAIN_MENU_SCENE_PATH)
+			var menu_packed_scene = cached_main_menu_scene
 			if not menu_packed_scene:
 				print_rich("[color=red]GameManager Error: Failed to load Main Menu Scene.[/color]")
 				return
@@ -288,7 +302,8 @@ func change_game_state(new_state: GameState):
 			# --- A. LOADING PHASE ---
 			# Only load the scene if it doesn't exist (e.g. fresh boot)
 			if not is_instance_valid(main_game_scene_instance):
-				var main_packed_scene = load(MAIN_GAME_SCENE_PATH)
+				# Replace: var main_packed_scene = load(MAIN_GAME_SCENE_PATH)
+				var main_packed_scene = cached_main_game_scene
 				if not main_packed_scene:
 					print_rich("[color=red]GameManager Error: Failed to load Main Game Scene.[/color]")
 					return
@@ -316,6 +331,7 @@ func change_game_state(new_state: GameState):
 			# 3. Restore Main UI Visibility
 			if is_instance_valid(verb_ui): verb_ui.visible = true
 			if is_instance_valid(inventory_ui): inventory_ui.visible = true
+			if is_instance_valid(journal_button_ui): journal_button_ui.visible = true # <--- ADD THIS LINE
 			
 			# 4. Restore Insurance Button (Logic Check)
 			if is_instance_valid(insurance_form_button_ui):
@@ -343,6 +359,7 @@ func change_game_state(new_state: GameState):
 			if is_instance_valid(verb_ui): verb_ui.visible = false
 			if is_instance_valid(inventory_ui): inventory_ui.visible = false
 			if is_instance_valid(insurance_form_button_ui): insurance_form_button_ui.visible = false
+			if is_instance_valid(journal_button_ui): journal_button_ui.visible = false # <--- ADD THIS LINE
 			
 			# 2. Block Input (Clicking on things in the world)
 			if is_instance_valid(input_blocker_layer):
@@ -927,6 +944,7 @@ func enter_conversation_state():
 	if is_instance_valid(verb_ui): verb_ui.visible = false
 	if is_instance_valid(inventory_ui): inventory_ui.visible = false
 	if is_instance_valid(insurance_form_button_ui): insurance_form_button_ui.visible = false
+	if is_instance_valid(journal_button_ui): journal_button_ui.visible = false # <--- ADD THIS LINE
 
 func enter_zoom_view_state():
 	if current_interaction_state == InteractionState.ZOOM_VIEW: return
@@ -967,6 +985,8 @@ func exit_to_world_state():
 	if is_instance_valid(inventory_ui):
 		inventory_ui.layer = 1
 		inventory_ui.visible = true
+	if is_instance_valid(journal_button_ui): # <--- ADD THIS BLOCK
+		journal_button_ui.visible = true     # <---
 
 	# --- THIS IS THE FIX (APPLIED HERE AS WELL) ---
 	# Check the flag here too, so the button reappears after future conversations.
@@ -997,6 +1017,7 @@ func _find_and_assign_ui_nodes():
 	verb_ui = main_game_scene_instance.get_node_or_null("%VerbUI_CanvasLayer")
 	inventory_ui = main_game_scene_instance.get_node_or_null("%InventoryUI_CanvasLayer")
 	insurance_form_button_ui = main_game_scene_instance.get_node_or_null("%InsuranceFormButtonUI")
+	journal_button_ui = main_game_scene_instance.get_node_or_null("%JournalButtonUI") # <--- NEW
 	input_blocker_layer = main_game_scene_instance.get_node_or_null("%InputBlockerLayer")
 	explanation_layer = main_game_scene_instance.get_node_or_null("%ExplanationLayer")
 
@@ -1013,12 +1034,20 @@ func _find_and_assign_ui_nodes():
 
 	if is_instance_valid(insurance_form_button_ui):
 		print_rich("[color=green]GM: Successfully found and assigned InsuranceFormButtonUI.[/color]")
-		# --- THIS IS THE CORRECTED LINE ---
-		# We now connect to the 'form_button_pressed' signal that your script emits.
 		if not insurance_form_button_ui.form_button_pressed.is_connected(_on_insurance_form_button_pressed):
 			insurance_form_button_ui.form_button_pressed.connect(_on_insurance_form_button_pressed)
 	else:
 		print_rich("[color=red]GM: FAILED to find InsuranceFormButtonUI.[/color]")
+
+	# --- JOURNAL VALIDATION ---
+	if is_instance_valid(journal_button_ui):
+		print_rich("[color=green]GM: Successfully found and assigned JournalButtonUI.[/color]")
+		# Connect the signal from the button to the GameManager!
+		if not journal_button_ui.journal_button_pressed.is_connected(_on_journal_button_pressed):
+			journal_button_ui.journal_button_pressed.connect(_on_journal_button_pressed)
+		else:
+			print_rich("[color=red]GM: FAILED to find JournalButtonUI.[/color]")
+	# --------------------------
 
 	if is_instance_valid(input_blocker_layer):
 		print_rich("[color=green]GM: Successfully found and assigned InputBlockerLayer.[/color]")
@@ -1031,11 +1060,6 @@ func _find_and_assign_ui_nodes():
 			explanation_layer.explanation_finished.connect(exit_explanation_state)
 	else:
 		print_rich("[color=red]GM: FAILED to find ExplanationLayer.[/color]")
-	transition_layer = main_game_scene_instance.get_node_or_null("%TransitionLayer")
-	if is_instance_valid(transition_layer):
-		print_rich("[color=green]GM: Found TransitionLayer.[/color]")
-	else:
-		print_rich("[color=red]GM: FAILED to find TransitionLayer.[/color]")
 		
 func _on_form_field_submitted(field_id: String, value):
 	# Log the incoming data for debugging.
@@ -1143,6 +1167,7 @@ func exit_explanation_state():
 # Add these three missing functions to the end of the script.
 
 # This function runs when the main UI button (on the game screen) is pressed.
+# This function runs when the main UI button (on the game screen) is pressed.
 func _on_insurance_form_button_pressed():
 	# If a form is already open, do nothing. Prevents opening multiple forms.
 	if is_instance_valid(_insurance_form_instance):
@@ -1153,22 +1178,20 @@ func _on_insurance_form_button_pressed():
 	# Create a new instance of our form scene.
 	_insurance_form_instance = INSURANCE_FORM_SCENE.instantiate()
 
-	# --- CONNECT TO THE NEW SIGNALS ---
-	# Connect to the signal that's emitted when ANY "OK" button is pressed.
+	# Connect to the signals
 	_insurance_form_instance.field_submitted.connect(_on_form_field_submitted)
-	# Connect to the signal that's emitted ONLY when the "Close Form" button is pressed.
 	_insurance_form_instance.form_closed.connect(_on_insurance_form_closed)
-	# ----------------------------------
 
 	# Add the form to the main scene tree so it becomes visible.
 	get_tree().root.add_child(_insurance_form_instance)
-
-	# The form's own script hides it by default, so we show it now.
 	_insurance_form_instance.show()
 
-	# Pause the game world and disable player movement.
-	enter_zoom_view_state()
-
+	# --- THE FIX FOR THE OVERLAPPING UI ---
+	# We use the conversation state instead of the zoom state because 
+	# the conversation state is specifically designed to hide the bottom UI!
+	enter_conversation_state()
+	get_tree().paused = true # Make sure the game world halts in the background
+	
 # This function receives data from ANY "OK" button on the form.
 func show_notification(message: String):
 	notification_requested.emit(message)
@@ -1176,9 +1199,16 @@ func show_notification(message: String):
 
 func _on_main_menu_new_game_requested():
 	print_rich("[color=LawnGreen]GM: 'New Game' requested. Starting intro sequence...[/color]")
-	# We simply change the state. The change_game_state function will handle
-	# cleaning up the menu and starting the next part of the game.
+	
+	if is_instance_valid(transition_layer):
+		await transition_layer.play_iris_close()
+		
 	change_game_state(GameState.INTRO_CONVERSATION)
+	
+	if is_instance_valid(transition_layer):
+		# Optional: Wait half a second in the blackness before opening
+		await get_tree().create_timer(0.5).timeout
+		transition_layer.play_iris_open()
 
 
 func _on_main_menu_quit_requested():
@@ -1189,12 +1219,15 @@ func _on_main_menu_quit_requested():
 func _start_intro_conversation():
 	print_rich("[color=yellow]GM: Starting intro sequence...[/color]")
 
-	var intro_overlay_packed_scene = load(INTRO_OVERLAY_SCENE_PATH)
+	# Replace: var intro_overlay_packed_scene = load(INTRO_OVERLAY_SCENE_PATH)
+	var intro_overlay_packed_scene = cached_intro_overlay_scene
 	if not intro_overlay_packed_scene:
 		print_rich("[color=red]GM Error: Failed to load Intro Overlay Scene at path: %s[/color]" % INTRO_OVERLAY_SCENE_PATH)
 		return
 
 	var intro_overlay = intro_overlay_packed_scene.instantiate()
+	# --- ADD THIS LINE ---
+	intro_overlay.is_intro_sequence = true
 
 	# Configure its exported variables from code.
 	intro_overlay.conversation_dialogue_file = load(INTRO_DIALOGUE_FILE_PATH)
@@ -1210,5 +1243,41 @@ func _start_intro_conversation():
 
 func _on_intro_conversation_finished(_dialogue_resource):
 	print_rich("[color=yellow]GM: Intro conversation finished. Transitioning to main game...[/color]")
-	# The intro is over, so we tell the GameManager to load the main game world.
+	
+	if is_instance_valid(transition_layer):
+		await transition_layer.play_iris_close()
+		
+	# This loads the scene and starts the ambient hospital audio!
 	change_game_state(GameState.IN_GAME_PLAY)
+	
+	if is_instance_valid(transition_layer):
+		# Wait 3 full seconds in the dark to let the player hear the environment
+		await get_tree().create_timer(3.0).timeout
+		
+		# Now open the eyes
+		transition_layer.play_iris_open()
+
+# --- JOURNAL FUNCTIONS ---
+func _on_journal_button_pressed():
+	if is_instance_valid(_journal_overlay_instance):
+		return
+
+	print_rich("[color=LawnGreen]GM: Opening Journal...[/color]")
+
+	_journal_overlay_instance = JOURNAL_OVERLAY_SCENE.instantiate()
+	_journal_overlay_instance.journal_closed.connect(_on_journal_closed)
+
+	get_tree().root.add_child(_journal_overlay_instance)
+
+	# Hide the main UI using the conversation state
+	enter_conversation_state()
+	get_tree().paused = true
+
+func _on_journal_closed():
+	print_rich("[color=Yellow]GM: Journal closed.[/color]")
+	if is_instance_valid(_journal_overlay_instance):
+		_journal_overlay_instance.queue_free()
+		_journal_overlay_instance = null
+		
+	# Restore UI and unpause
+	exit_to_world_state()

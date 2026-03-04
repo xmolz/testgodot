@@ -1,17 +1,42 @@
-[gd_scene load_steps=3 format=3 uid="uid://c3ide4uljt8hs"]
+[gd_scene load_steps=4 format=3 uid="uid://c3ide4uljt8hs"]
 
-[ext_resource type="Theme" uid="uid://bo15lb6dkn0a2" path="res://Themes/general_theme.tres" id="1_017wr"]
 [ext_resource type="Script" uid="uid://dsvh3fnvh8lt8" path="res://Notification.gd" id="1_rer52"]
+[ext_resource type="FontFile" uid="uid://bd58xbyix7r6p" path="res://Fonts/VarelaRound-Regular.ttf" id="2_font"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_capsule"]
+content_margin_left = 25.0
+content_margin_top = 12.0
+content_margin_right = 25.0
+content_margin_bottom = 12.0
+bg_color = Color(0, 0, 0, 0.745098)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.2, 0.85, 1, 1)
+corner_radius_top_left = 50
+corner_radius_top_right = 50
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
+shadow_color = Color(0.2, 0.85, 1, 0.15)
+shadow_size = 8
 
 [node name="Notification" type="PanelContainer"]
-offset_right = 1.0
-offset_bottom = 23.0
-theme = ExtResource("1_017wr")
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_capsule")
 script = ExtResource("1_rer52")
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.5)
+theme_override_constants/shadow_outline_size = 1
+theme_override_fonts/font = ExtResource("2_font")
 theme_override_font_sizes/font_size = 24
+text = "Notification Text"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Timer" type="Timer" parent="."]
 

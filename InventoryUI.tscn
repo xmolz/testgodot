@@ -1,19 +1,32 @@
-[gd_scene load_steps=4 format=3 uid="uid://cud6uaak7lo18"]
+[gd_scene load_steps=5 format=3 uid="uid://cud6uaak7lo18"]
 
 [ext_resource type="Script" uid="uid://bqkeu73kdy6ue" path="res://InventoryUI.gd" id="1_dsn3v"]
 [ext_resource type="Theme" uid="uid://bbh4rjwcxnama" path="res://Themes/verb_and_inventory_theme.tres" id="2_xlonu"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xlonu"]
-bg_color = Color(0.792157, 0.870588, 0.952941, 1)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-border_color = Color(0.627451, 0.827451, 0.988235, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hover"]
+content_margin_left = 15.0
+content_margin_top = 8.0
+content_margin_right = 15.0
+content_margin_bottom = 8.0
+bg_color = Color(0, 0, 0, 0.745098)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tab"]
+bg_color = Color(0, 0, 0, 0.5)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
 
 [node name="InventoryUI_CanvasLayer" type="CanvasLayer"]
 process_mode = 3
@@ -21,85 +34,84 @@ script = ExtResource("1_dsn3v")
 
 [node name="InventoryGridPanel" type="Panel" parent="."]
 anchors_preset = -1
-anchor_left = 0.504
-anchor_top = 0.805
-anchor_right = 0.788
-anchor_bottom = 0.991
-offset_left = 0.320007
-offset_top = -0.400024
-offset_right = 0.039917
-offset_bottom = -4.28003
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(1, 1.02276)
-size_flags_horizontal = 3
-size_flags_vertical = 3
+anchor_left = 0.50
+anchor_top = 0.82
+anchor_right = 0.78
+anchor_bottom = 0.98
 theme = ExtResource("2_xlonu")
+
+[node name="TabPanel" type="Panel" parent="InventoryGridPanel"]
+layout_mode = 1
+anchors_preset = -1
+offset_left = 15.0
+offset_top = -40.0
+offset_right = 185.0
+offset_bottom = 0.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_tab")
+
+[node name="InventoryLabel" type="Label" parent="InventoryGridPanel/TabPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+text = "INVENTORY"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="InventoryGridContainer" type="GridContainer" parent="InventoryGridPanel"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.037
-anchor_top = 0.069
-anchor_right = 0.806
-anchor_bottom = 0.933
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.82
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = -4.0
+offset_bottom = -12.0
 theme = ExtResource("2_xlonu")
 columns = 3
-
-[node name="Panel" type="Panel" parent="InventoryGridPanel"]
-layout_mode = 1
-anchors_preset = -1
-anchor_top = -0.203
-anchor_right = 0.294
-offset_left = 2.0
-offset_top = -0.00899887
-offset_right = -0.229965
-
-[node name="InventoryLabel" type="Label" parent="InventoryGridPanel/Panel"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.127
-anchor_top = 0.169
-anchor_right = 0.848
-anchor_bottom = 0.794
-offset_left = -0.066
-offset_top = -0.00334787
-offset_right = 0.0159912
-offset_bottom = -0.0033493
-theme = ExtResource("2_xlonu")
-text = "INVENTORY"
 
 [node name="UpButton" type="Button" parent="InventoryGridPanel"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.863
-anchor_top = 0.108
-anchor_right = 0.962
-anchor_bottom = 0.321
-offset_left = 0.0949707
-offset_right = 0.0949707
+anchor_left = 0.82
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 4.0
+offset_top = 12.0
+offset_right = -12.0
+offset_bottom = -4.0
+focus_mode = 0
 theme = ExtResource("2_xlonu")
 text = "UP"
 
 [node name="DownButton" type="Button" parent="InventoryGridPanel"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.857
-anchor_top = 0.615
-anchor_right = 0.956
-anchor_bottom = 0.828
-offset_bottom = -0.0720367
+anchor_left = 0.82
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -12.0
+offset_bottom = -12.0
+focus_mode = 0
 theme = ExtResource("2_xlonu")
-text = "DOWN"
+text = "DN"
 
 [node name="ExamineItemLabel" type="Label" parent="."]
 offset_right = 40.0
 offset_bottom = 23.0
 theme = ExtResource("2_xlonu")
+visible = false
 
 [node name="ItemNameHoverLabel" type="Label" parent="."]
 offset_right = 87.0
 offset_bottom = 23.0
 theme = ExtResource("2_xlonu")
-theme_override_styles/normal = SubResource("StyleBoxFlat_xlonu")
+theme_override_styles/normal = SubResource("StyleBoxFlat_hover")
 text = "Item Name"
+visible = false

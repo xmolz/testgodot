@@ -1,22 +1,29 @@
 extends CanvasLayer
 
-# This is the signal that the GameManager will listen for.
 signal form_button_pressed
 
-# Get a reference to the actual button node in the scene.
-@onready var texture_button: TextureButton = $TextureButton
-
+# We updated the node path to match the new panel structure
+@onready var texture_button: TextureButton = $FormPanel/MarginContainer/TextureButton
 
 func _ready():
-	# Connect the child button's 'pressed' signal to a function in THIS script.
-	# We are essentially "listening" to our own child.
 	texture_button.pressed.connect(_on_texture_button_pressed)
+	
+	# Add hover effects to make it feel responsive
+	texture_button.mouse_entered.connect(_on_hover_enter)
+	texture_button.mouse_exited.connect(_on_hover_exit)
 
+func _on_hover_enter():
+	# Tint it bright cyan when hovered
+	texture_button.modulate = Color(0.2, 0.85, 1.0, 1.0)
+
+func _on_hover_exit():
+	# Return to normal colors
+	texture_button.modulate = Color(1.0, 1.0, 1.0, 1.0)
 
 func _on_texture_button_pressed():
-	# This function runs when the child button is clicked.
-	print("The insurance form was clicked on! (Signal from inside the scene)")
-
-	# Now, we emit our OWN signal to notify the outside world (like GameManager).
-	# This is called "bubbling up" a signal.
+	# Play a UI click sound
+	if SoundManager:
+		SoundManager.play_sfx("ui_click", 1.5)
+		
+	print("The insurance form was clicked on!")
 	emit_signal("form_button_pressed")

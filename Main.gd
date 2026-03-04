@@ -67,6 +67,10 @@ func _on_character_conversation_ended(resource: DialogueResource):
 		if just_spoke_to_aida and not explanation_shown:
 			level_state_manager.set_level_flag("aida_explanation_shown", true)
 			level_state_manager.set_level_flag("insurance_button_unlocked", true)
+			
+			# Add a slight delay to let the game world "breathe" before the pop-up
+			await get_tree().create_timer(0.5).timeout
+			
 			GameManager.start_explanation(aida_explanation_data, self)
 
 

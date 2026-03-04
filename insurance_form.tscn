@@ -1,21 +1,118 @@
-[gd_scene load_steps=7 format=3 uid="uid://cp46m7fekq0br"]
+[gd_scene load_steps=13 format=3 uid="uid://cp46m7fekq0br"]
 
 [ext_resource type="Script" uid="uid://b512h764u3gd2" path="res://insurance_form.gd" id="1_u10l7"]
-[ext_resource type="Texture2D" uid="uid://bl3s30lkgiord" path="res://insurance form bg.png" id="3_a7jub"]
-[ext_resource type="FontFile" uid="uid://dybhfcuqdaiov" path="res://hiragino-kaku-gothic-std-w8.otf" id="3_bhfgh"]
-[ext_resource type="Theme" uid="uid://bxpy47r6xqv38" path="res://Themes/medfinance_theme.tres" id="4_oj0y3"]
-[ext_resource type="Theme" uid="uid://e650fn5dy145" path="res://insurance_form_field_font.tres" id="5_yunj8"]
+[ext_resource type="FontFile" uid="uid://bd58xbyix7r6p" path="res://Fonts/VarelaRound-Regular.ttf" id="2_font"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oj0y3"]
-bg_color = Color(0.67, 0.1474, 0.15611, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-expand_margin_left = 6.0
-expand_margin_top = 6.0
-expand_margin_right = 6.0
-expand_margin_bottom = 6.0
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_TabletBg"]
+bg_color = Color(0.0705882, 0.0862745, 0.121569, 0.98)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.2, 0.85, 1, 0.3)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0, 0, 0, 0.6)
+shadow_size = 25
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Logo"]
+content_margin_left = 15.0
+content_margin_top = 6.0
+content_margin_right = 15.0
+content_margin_bottom = 6.0
+bg_color = Color(0.12, 0.17, 0.22, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.25, 0.88, 1, 0.5)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_LineEdit"]
+content_margin_left = 15.0
+content_margin_right = 15.0
+bg_color = Color(0, 0, 0, 0.4)
+border_width_bottom = 2
+border_color = Color(0.2, 0.85, 1, 0.4)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_LineEditFocus"]
+content_margin_left = 15.0
+content_margin_right = 15.0
+bg_color = Color(0, 0, 0, 0.7)
+border_width_bottom = 2
+border_color = Color(0.2, 0.85, 1, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_BtnNormal"]
+bg_color = Color(0.1, 0.15, 0.2, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.2, 0.85, 1, 0.4)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_BtnHover"]
+bg_color = Color(0.2, 0.85, 1, 0.2)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.2, 0.85, 1, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_BackNormal"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_SubmitBtn"]
+bg_color = Color(0.2, 0.85, 1, 0.85)
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_SubmitBtnHover"]
+bg_color = Color(0.4, 0.95, 1, 1)
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+shadow_color = Color(0.2, 0.85, 1, 0.4)
+shadow_size = 12
+
+[sub_resource type="Theme" id="Theme_Modern"]
+default_font = ExtResource("2_font")
+default_font_size = 24
+Button/colors/font_color = Color(0.8, 0.9, 0.95, 1)
+Button/colors/font_hover_color = Color(1, 1, 1, 1)
+Button/font_sizes/font_size = 22
+Button/styles/hover = SubResource("StyleBoxFlat_BtnHover")
+Button/styles/normal = SubResource("StyleBoxFlat_BtnNormal")
+Button/styles/pressed = SubResource("StyleBoxFlat_BtnHover")
+Label/colors/font_color = Color(0.85098, 0.901961, 0.952941, 1)
+Label/font_sizes/font_size = 24
+LineEdit/colors/font_color = Color(1, 1, 1, 1)
+LineEdit/colors/font_placeholder_color = Color(0.5, 0.5, 0.55, 1)
+LineEdit/font_sizes/font_size = 22
+LineEdit/styles/focus = SubResource("StyleBoxFlat_LineEditFocus")
+LineEdit/styles/normal = SubResource("StyleBoxFlat_LineEdit")
 
 [node name="InsuranceForm" type="CanvasLayer"]
 process_mode = 3
@@ -27,23 +124,18 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0.392157)
+color = Color(0, 0, 0, 0.784314)
 
-[node name="TabletFrame" type="NinePatchRect" parent="."]
+[node name="TabletFrame" type="Panel" parent="."]
 anchors_preset = -1
-anchor_left = 0.182
-anchor_top = 0.142
-anchor_right = 0.826
-anchor_bottom = 0.704556
-offset_left = -0.440033
-offset_top = -0.360001
-offset_right = -0.920044
-offset_bottom = 0.0799561
+anchor_left = 0.18
+anchor_top = 0.08
+anchor_right = 0.82
+anchor_bottom = 0.92
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("3_a7jub")
-region_rect = Rect2(46.978, 52.8306, 2460.63, 1327.46)
-metadata/_edit_use_anchors_ = true
+theme = SubResource("Theme_Modern")
+theme_override_styles/panel = SubResource("StyleBoxFlat_TabletBg")
 
 [node name="Padding" type="MarginContainer" parent="TabletFrame"]
 layout_mode = 1
@@ -52,201 +144,209 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 30
+theme_override_constants/margin_left = 40
 theme_override_constants/margin_top = 30
-theme_override_constants/margin_right = 30
+theme_override_constants/margin_right = 40
 theme_override_constants/margin_bottom = 30
 
 [node name="ContentCanvas" type="Control" parent="TabletFrame/Padding"]
 layout_mode = 2
 
-[node name="HavemoreLabel" type="Label" parent="TabletFrame/Padding/ContentCanvas"]
-layout_mode = 2
-anchor_left = 0.009
-anchor_top = 0.022
-anchor_right = 0.214
-anchor_bottom = 0.089
-offset_left = -0.34401
-offset_top = -0.220994
-offset_right = 0.575958
-offset_bottom = 0.0630074
-theme_override_fonts/font = ExtResource("3_bhfgh")
-theme_override_font_sizes/font_size = 36
-theme_override_styles/normal = SubResource("StyleBoxFlat_oj0y3")
-text = "HAVEMORE"
+[node name="Back_Button" type="Button" parent="TabletFrame/Padding/ContentCanvas"]
+layout_mode = 1
+offset_top = -10.0
+offset_right = 80.0
+offset_bottom = 30.0
+focus_mode = 0
+theme_override_colors/font_hover_color = Color(0.2, 0.85, 1, 1)
+theme_override_colors/font_pressed_color = Color(0.4, 0.95, 1, 1)
+theme_override_styles/normal = SubResource("StyleBoxEmpty_BackNormal")
+text = "< Back"
 
-[node name="Label2" type="Label" parent="TabletFrame/Padding/ContentCanvas"]
+[node name="HeaderContainer" type="HBoxContainer" parent="TabletFrame/Padding/ContentCanvas"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 10.0
+offset_bottom = 60.0
+grow_horizontal = 2
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="HavemoreLabel" type="Label" parent="TabletFrame/Padding/ContentCanvas/HeaderContainer"]
 layout_mode = 2
-anchor_left = 0.226
-anchor_top = 0.051
-anchor_right = 0.34
-anchor_bottom = 0.092
-offset_left = 0.0580139
-offset_top = -0.257999
-offset_right = -0.00598145
-offset_bottom = 0.273998
-size_flags_vertical = 8
-theme = ExtResource("4_oj0y3")
+theme_override_colors/font_color = Color(0.25, 0.88, 1, 1)
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxFlat_Logo")
+text = "havemore"
+
+[node name="Label2" type="Label" parent="TabletFrame/Padding/ContentCanvas/HeaderContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.75, 0.8, 1)
+theme_override_font_sizes/font_size = 28
 text = "MedFinance"
-
-[node name="Label" type="Label" parent="TabletFrame/Padding/ContentCanvas"]
-visible = false
-layout_mode = 2
-text = "Insurance Claim Form"
-horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Subtitle" type="Label" parent="TabletFrame/Padding/ContentCanvas"]
 layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.238
-anchor_top = 0.146
-anchor_right = 0.804
-anchor_bottom = 0.177
-offset_left = 0.11203
-offset_top = -6.008
-offset_right = -0.504028
-offset_bottom = 0.0039978
-theme = ExtResource("5_yunj8")
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 85.0
+offset_bottom = 115.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.6, 0.65, 0.7, 1)
+theme_override_font_sizes/font_size = 20
 text = "Please enter your credentials below to access your insurance account:"
+horizontal_alignment = 1
 
 [node name="LabelsContainer" type="VBoxContainer" parent="TabletFrame/Padding/ContentCanvas"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.132
-anchor_top = 0.234
-anchor_right = 0.383
-anchor_bottom = 0.77
-offset_left = -0.0999756
-offset_top = -0.23201
-offset_right = -0.0249939
-offset_bottom = 0.039978
-theme_override_constants/separation = 37
+anchor_left = 0.02
+anchor_top = 0.20
+anchor_right = 0.28
+anchor_bottom = 0.84
+theme_override_constants/separation = 15
 
 [node name="FirstName_Label" type="Label" parent="TabletFrame/Padding/ContentCanvas/LabelsContainer"]
+custom_minimum_size = Vector2(0, 55)
 layout_mode = 2
-theme = ExtResource("5_yunj8")
 text = "First Name:"
+horizontal_alignment = 2
+vertical_alignment = 1
 
 [node name="MiddleName_Label" type="Label" parent="TabletFrame/Padding/ContentCanvas/LabelsContainer"]
+custom_minimum_size = Vector2(0, 55)
 layout_mode = 2
-theme = ExtResource("5_yunj8")
 text = "Middle Name:"
+horizontal_alignment = 2
+vertical_alignment = 1
 
 [node name="LastName_Label" type="Label" parent="TabletFrame/Padding/ContentCanvas/LabelsContainer"]
+custom_minimum_size = Vector2(0, 55)
 layout_mode = 2
-theme = ExtResource("5_yunj8")
 text = "Last Name:"
+horizontal_alignment = 2
+vertical_alignment = 1
 
 [node name="DOB_Label" type="Label" parent="TabletFrame/Padding/ContentCanvas/LabelsContainer"]
+custom_minimum_size = Vector2(0, 55)
 layout_mode = 2
-theme = ExtResource("5_yunj8")
 text = "Date of Birth:"
+horizontal_alignment = 2
+vertical_alignment = 1
 
 [node name="PhoneNumber_Label" type="Label" parent="TabletFrame/Padding/ContentCanvas/LabelsContainer"]
+custom_minimum_size = Vector2(0, 55)
 layout_mode = 2
-theme = ExtResource("5_yunj8")
 text = "Phone Number:"
+horizontal_alignment = 2
+vertical_alignment = 1
 
 [node name="AccountNumber_Label" type="Label" parent="TabletFrame/Padding/ContentCanvas/LabelsContainer"]
+custom_minimum_size = Vector2(0, 55)
 layout_mode = 2
-theme = ExtResource("5_yunj8")
-text = "Account Number:"
+text = "Account Num:"
+horizontal_alignment = 2
+vertical_alignment = 1
 
 [node name="LineEditContainer" type="VBoxContainer" parent="TabletFrame/Padding/ContentCanvas"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.328
-anchor_top = 0.23
-anchor_right = 0.719
-anchor_bottom = 0.768
-offset_left = -0.399994
-offset_top = -0.0400009
-offset_right = 0.174927
-offset_bottom = 0.135986
-theme_override_constants/separation = 22
+anchor_left = 0.30
+anchor_top = 0.20
+anchor_right = 0.76
+anchor_bottom = 0.84
+theme_override_constants/separation = 15
 
 [node name="FirstName_Edit" type="LineEdit" parent="TabletFrame/Padding/ContentCanvas/LineEditContainer"]
+custom_minimum_size = Vector2(0, 55)
 layout_mode = 2
-theme = ExtResource("5_yunj8")
-placeholder_text = "Enter First Name...."
+placeholder_text = "Enter First Name..."
 
 [node name="MiddleName_Edit" type="LineEdit" parent="TabletFrame/Padding/ContentCanvas/LineEditContainer"]
+custom_minimum_size = Vector2(0, 55)
 layout_mode = 2
-theme = ExtResource("5_yunj8")
 placeholder_text = "Enter Middle Name..."
 
 [node name="LastName_Edit" type="LineEdit" parent="TabletFrame/Padding/ContentCanvas/LineEditContainer"]
+custom_minimum_size = Vector2(0, 55)
 layout_mode = 2
-theme = ExtResource("5_yunj8")
 placeholder_text = "Enter Last Name..."
 
 [node name="DOB_Edit" type="LineEdit" parent="TabletFrame/Padding/ContentCanvas/LineEditContainer"]
+custom_minimum_size = Vector2(0, 55)
 layout_mode = 2
-theme = ExtResource("5_yunj8")
-placeholder_text = "Enter Date of Birth..."
+placeholder_text = "Enter Date of Birth (MM/DD/YYYY)..."
 
 [node name="PhoneNumber_Edit" type="LineEdit" parent="TabletFrame/Padding/ContentCanvas/LineEditContainer"]
+custom_minimum_size = Vector2(0, 55)
 layout_mode = 2
-theme = ExtResource("5_yunj8")
 placeholder_text = "Enter Phone Number..."
 
 [node name="AccountNumber_Edit" type="LineEdit" parent="TabletFrame/Padding/ContentCanvas/LineEditContainer"]
+custom_minimum_size = Vector2(0, 55)
 layout_mode = 2
-theme = ExtResource("5_yunj8")
 placeholder_text = "Enter Account Number..."
 
 [node name="ButtonContainer" type="VBoxContainer" parent="TabletFrame/Padding/ContentCanvas"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.751
-anchor_top = 0.223
-anchor_right = 0.894
-anchor_bottom = 0.776
-offset_left = 0.574951
-offset_top = -0.204002
-offset_right = 0.549927
-offset_bottom = -0.248016
-theme_override_constants/separation = 35
+anchor_left = 0.79
+anchor_top = 0.20
+anchor_right = 0.98
+anchor_bottom = 0.84
+theme_override_constants/separation = 15
 
 [node name="FirstName_Button" type="Button" parent="TabletFrame/Padding/ContentCanvas/ButtonContainer"]
+custom_minimum_size = Vector2(0, 55)
 layout_mode = 2
-theme = ExtResource("4_oj0y3")
-text = "Okay"
+focus_mode = 0
+text = "Confirm"
 
 [node name="MiddleName_Button" type="Button" parent="TabletFrame/Padding/ContentCanvas/ButtonContainer"]
+custom_minimum_size = Vector2(0, 55)
 layout_mode = 2
-theme = ExtResource("4_oj0y3")
-text = "Okay"
+focus_mode = 0
+text = "Confirm"
 
 [node name="LastName_Button" type="Button" parent="TabletFrame/Padding/ContentCanvas/ButtonContainer"]
+custom_minimum_size = Vector2(0, 55)
 layout_mode = 2
-theme = ExtResource("4_oj0y3")
-text = "Okay"
+focus_mode = 0
+text = "Confirm"
 
 [node name="DOB_Button" type="Button" parent="TabletFrame/Padding/ContentCanvas/ButtonContainer"]
+custom_minimum_size = Vector2(0, 55)
 layout_mode = 2
-theme = ExtResource("4_oj0y3")
-text = "Okay"
+focus_mode = 0
+text = "Confirm"
 
 [node name="PhoneNumber_Button" type="Button" parent="TabletFrame/Padding/ContentCanvas/ButtonContainer"]
+custom_minimum_size = Vector2(0, 55)
 layout_mode = 2
-theme = ExtResource("4_oj0y3")
-text = "Okay"
+focus_mode = 0
+text = "Confirm"
 
 [node name="AccountNumber_Button" type="Button" parent="TabletFrame/Padding/ContentCanvas/ButtonContainer"]
+custom_minimum_size = Vector2(0, 55)
 layout_mode = 2
-theme = ExtResource("4_oj0y3")
-text = "Okay"
+focus_mode = 0
+text = "Confirm"
 
 [node name="Submit_Button" type="Button" parent="TabletFrame/Padding/ContentCanvas"]
-layout_mode = 2
-anchor_left = 0.49
-anchor_top = 0.861
-anchor_right = 0.533
-anchor_bottom = 0.918
-offset_left = 0.25
-offset_top = 0.171967
-offset_right = -0.275085
-offset_bottom = -0.0640259
-theme = ExtResource("4_oj0y3")
-text = "Submit"
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.35
+anchor_top = 0.88
+anchor_right = 0.65
+anchor_bottom = 0.98
+focus_mode = 0
+theme_override_colors/font_color = Color(0.06, 0.08, 0.12, 1)
+theme_override_colors/font_hover_color = Color(0.06, 0.08, 0.12, 1)
+theme_override_colors/font_focus_color = Color(0.06, 0.08, 0.12, 1)
+theme_override_font_sizes/font_size = 28
+theme_override_styles/hover = SubResource("StyleBoxFlat_SubmitBtnHover")
+theme_override_styles/normal = SubResource("StyleBoxFlat_SubmitBtn")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_SubmitBtnHover")
+text = "Submit Application"

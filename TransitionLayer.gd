@@ -1,62 +1,90 @@
 # TransitionLayer.gd
 extends CanvasLayer
 
-signal transition_halfway # Emitted when doors are fully closed
-signal transition_finished # Emitted when doors are fully open again
+signal transition_halfway 
+signal transition_finished
 
-@onready var left_shutter = $LeftShutter
-@onready var right_shutter = $RightShutter
+@onready var left_shutter = get_node_or_null("LeftShutter")
+@onready var right_shutter = get_node_or_null("RightShutter")
+@onready var iris_rect = get_node_or_null("IrisColorRect")
 
 func _ready():
-	# Ensure they start invisible/off-screen
 	open_instant()
 
 func open_instant():
+	# If Godot runs this before the screen is ready, safely abort to prevent crashes.
+	if not left_shutter or not right_shutter: return
+	
 	var viewport_width = get_viewport().get_visible_rect().size.x
 	left_shutter.position.x = -left_shutter.size.x
 	right_shutter.position.x = viewport_width
+	
+	if iris_rect and iris_rect.material:
+		iris_rect.material.set_shader_parameter("circle_size", 1.5)
+		iris_rect.visible = false
 
-# This function plays the full sequence: Close -> Wait -> Open
+# --- 1. SCI-FI DOOR TRANSITION (Used for Teleporting) ---
 func play_transition_sequence():
+	if not left_shutter or not right_shutter: return
+	
 	var viewport_width = get_viewport().get_visible_rect().size.x
 	var center_x = viewport_width / 2.0
 	
-	# --- PLAY CLOSE SOUND ---
-	# We play this immediately as the shutters start moving in.
 	SoundManager.play_sfx("door_close")
 	
-	var tween = create_tween()
-	# Parallel animation: Both doors slide in at the same time
-	tween.set_parallel(true)
-	tween.set_trans(Tween.TRANS_QUART) # Nice smooth sci-fi motion
-	tween.set_ease(Tween.EASE_OUT)
-	
-	# Slide Left Shutter to 0 (Left edge)
+	var tween = create_tween().set_parallel(true)
+	tween.set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
 	tween.tween_property(left_shutter, "position:x", 0.0, 0.5)
-	# Slide Right Shutter to center (Right edge moves left)
 	tween.tween_property(right_shutter, "position:x", center_x, 0.5)
-	
-	# Wait for animation to finish
 	await tween.finished
 	
-	emit_signal("transition_halfway") # TELL THE GAME TO TELEPORT NOW
+	emit_signal("transition_halfway")
 	
-	# Optional: Small pause while screen is black
-	await get_tree().create_timer(0.2).timeout
+	# 1.2 second delay while screen is black (1 second longer)
+	await get_tree().create_timer(1.2).timeout
 	
-	# --- PLAY OPEN SOUND ---
-	# We play this right before the shutters start opening.
 	SoundManager.play_sfx("door_open")
 	
-	# Open the doors
-	var open_tween = create_tween()
-	open_tween.set_parallel(true)
-	open_tween.set_trans(Tween.TRANS_QUART)
-	open_tween.set_ease(Tween.EASE_IN)
-	
-	# Slide back out
+	var open_tween = create_tween().set_parallel(true)
+	open_tween.set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_IN)
 	open_tween.tween_property(left_shutter, "position:x", -left_shutter.size.x, 0.5)
 	open_tween.tween_property(right_shutter, "position:x", viewport_width, 0.5)
 	
 	await open_tween.finished
+	emit_signal("transition_finished")
+
+
+# --- 2. IRIS "EYE" TRANSITIONS (Used for loading states) ---
+func play_iris_close(duration: float = 1.0):
+	if not iris_rect or not iris_rect.material: 
+		await get_tree().create_timer(duration).timeout
+		emit_signal("transition_halfway")
+		return
+	
+	iris_rect.visible = true
+	iris_rect.material.set_shader_parameter("circle_size", 1.5) # Start wide open
+	
+	var tween = create_tween()
+	# Tween to -0.1 to completely swallow the soft edge!
+	tween.tween_property(iris_rect.material, "shader_parameter/circle_size", -0.1, duration)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	
+	await tween.finished
+	emit_signal("transition_halfway")
+
+func play_iris_open(duration: float = 1.0):
+	if not iris_rect or not iris_rect.material: 
+		await get_tree().create_timer(duration).timeout
+		emit_signal("transition_finished")
+		return
+	
+	iris_rect.visible = true
+	iris_rect.material.set_shader_parameter("circle_size", -0.1) # Start completely closed
+	
+	var tween = create_tween()
+	tween.tween_property(iris_rect.material, "shader_parameter/circle_size", 1.5, duration)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	
+	await tween.finished
+	iris_rect.visible = false
 	emit_signal("transition_finished")

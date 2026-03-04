@@ -37,6 +37,9 @@ func start_logo_splash():
 
 
 func _on_logo_splash_finished():
-	print_rich("[color=yellow]Boot: Logo splash finished. Transitioning to main menu...[/color]")
-	if GameManager:
-		GameManager.change_game_state(GameManager.GameState.MAIN_MENU)
+	print_rich("[color=yellow]Boot: Logo splash finished. Transitioning to loading screen...[/color]")
+	
+	# Load and instance the loading screen
+	var loading_screen_scene = load("res://loading_screen.tscn")
+	var loading_instance = loading_screen_scene.instantiate()
+	add_child(loading_instance)

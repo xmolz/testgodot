@@ -3,14 +3,11 @@ extends CanvasLayer
 signal field_submitted(field_id: String, value)
 signal form_closed
 
-# --- NEW, CORRECT NODE PATHS FOR YOUR ORGANIZED SCENE ---
-# We get a reference to every single input and button.
-
 # Inputs from LineEditContainer
 @onready var first_name_edit: LineEdit = $TabletFrame/Padding/ContentCanvas/LineEditContainer/FirstName_Edit
 @onready var middle_name_edit: LineEdit = $TabletFrame/Padding/ContentCanvas/LineEditContainer/MiddleName_Edit
 @onready var last_name_edit: LineEdit = $TabletFrame/Padding/ContentCanvas/LineEditContainer/LastName_Edit
-@onready var dob_edit: LineEdit = $TabletFrame/Padding/ContentCanvas/LineEditContainer/DOB_Edit # Now a LineEdit
+@onready var dob_edit: LineEdit = $TabletFrame/Padding/ContentCanvas/LineEditContainer/DOB_Edit
 @onready var phone_number_edit: LineEdit = $TabletFrame/Padding/ContentCanvas/LineEditContainer/PhoneNumber_Edit
 @onready var account_number_edit: LineEdit = $TabletFrame/Padding/ContentCanvas/LineEditContainer/AccountNumber_Edit
 
@@ -22,9 +19,9 @@ signal form_closed
 @onready var phone_number_button: Button = $TabletFrame/Padding/ContentCanvas/ButtonContainer/PhoneNumber_Button
 @onready var account_number_button: Button = $TabletFrame/Padding/ContentCanvas/ButtonContainer/AccountNumber_Button
 
-# The final submit button (renamed from close_button)
+# The Submit and Back buttons
 @onready var submit_button: Button = $TabletFrame/Padding/ContentCanvas/Submit_Button
-
+@onready var back_button: Button = $TabletFrame/Padding/ContentCanvas/Back_Button
 
 func _ready():
 	hide()
@@ -36,7 +33,8 @@ func _ready():
 	phone_number_button.pressed.connect(_on_phone_number_submit)
 	account_number_button.pressed.connect(_on_account_number_submit)
 
-	submit_button.pressed.connect(_on_submit_form) # This is your old close button
+	submit_button.pressed.connect(_on_submit_form)
+	back_button.pressed.connect(_on_submit_form) # Route the back button to close the form!
 
 # --- HANDLER FUNCTIONS FOR EACH "OKAY" BUTTON ---
 

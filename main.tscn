@@ -1,4 +1,4 @@
-[gd_scene load_steps=156 format=3 uid="uid://cqtgjhr5nepn1"]
+[gd_scene format=3 uid="uid://cqtgjhr5nepn1"]
 
 [ext_resource type="PackedScene" uid="uid://bigouorladqds" path="res://VerbUI.tscn" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://suh4s1w73ooy" path="res://Main.gd" id="1_efxa6"]
@@ -55,7 +55,6 @@
 [ext_resource type="PackedScene" uid="uid://cymg2dkrvsnfy" path="res://explanation_layer.tscn" id="38_d2t1y"]
 [ext_resource type="PackedScene" uid="uid://cxo2auakscy0h" path="res://hospital_door.tscn" id="40_h8e4i"]
 [ext_resource type="PackedScene" uid="uid://cn3wt8p41equ0" path="res://insurance_form_button_ui.tscn" id="41_4lmeg"]
-[ext_resource type="PackedScene" uid="uid://dk7b3f3vitmx1" path="res://TransitionLayer.tscn" id="41_hrvbo"]
 [ext_resource type="Script" uid="uid://dm3vji871klli" path="res://interactions/actions/TeleportAction.gd" id="44_0cbny"]
 [ext_resource type="PackedScene" uid="uid://cpvtyvf4t8pht" path="res://memory_box.tscn" id="44_gngh3"]
 [ext_resource type="Resource" uid="uid://bom2aj2a6w76n" path="res://generic_lines.dialogue" id="45_qnost"]
@@ -64,6 +63,7 @@
 [ext_resource type="Texture2D" uid="uid://dxrfme6ebfa8c" path="res://hospital bed.png" id="47_wnkbs"]
 [ext_resource type="PackedScene" uid="uid://b8abif6uqojn4" path="res://tv.tscn" id="48_f6a44"]
 [ext_resource type="PackedScene" uid="uid://b7ruec2vo6haw" path="res://Non Interactables/hospital_bathroom_sink.tscn" id="53_abqjc"]
+[ext_resource type="PackedScene" uid="uid://cd01yo706pdq1" path="res://journal_button_ui.tscn" id="58_wu3dr"]
 [ext_resource type="Script" uid="uid://c2cuhw0y84tao" path="res://Cutscenes/ToiletClogCutscene.gd" id="63_sm6fg"]
 [ext_resource type="Resource" uid="uid://dmkt054qdywph" path="res://test.dialogue" id="64_b17eg"]
 [ext_resource type="PackedScene" uid="uid://uq5whvtm0m2i" path="res://Interactables/Game World/Hospital Room/medicine_dispenser.tscn" id="66_uatky"]
@@ -579,7 +579,7 @@ required_item_id = "cannathink"
 actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_4lmeg"), SubResource("Resource_smeu8"), SubResource("Resource_uatky")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
-[node name="Main" type="Control" node_paths=PackedStringArray("sergei_interactable")]
+[node name="Main" type="Control" unique_id=1988882771 node_paths=PackedStringArray("sergei_interactable")]
 layout_mode = 3
 anchors_preset = 0
 offset_left = -5752.0
@@ -593,10 +593,10 @@ aida_explanation_data = ExtResource("3_hrvbo")
 sergei_after_drug_overlay_scene = ExtResource("4_ntx8l")
 sergei_interactable = NodePath("Sergei_Path/Sergei/InteractionArea")
 
-[node name="BackgroundContainer" type="Node2D" parent="."]
+[node name="BackgroundContainer" type="Node2D" parent="." unique_id=1746717277]
 z_index = -30
 
-[node name="ColorRect" type="ColorRect" parent="BackgroundContainer"]
+[node name="ColorRect" type="ColorRect" parent="BackgroundContainer" unique_id=1452768093]
 z_index = -21
 offset_left = -5533.0
 offset_top = -2549.0
@@ -606,50 +606,50 @@ mouse_filter = 2
 color = Color(0, 0, 0, 1)
 metadata/_edit_use_anchors_ = true
 
-[node name="WallContainer" type="Node2D" parent="."]
+[node name="WallContainer" type="Node2D" parent="." unique_id=1646467629]
 z_index = -11
 position = Vector2(-817, -540.07)
 scale = Vector2(0.5, 0.5)
 
-[node name="StaticWallBackground6" parent="WallContainer" instance=ExtResource("4_rm4vd")]
+[node name="StaticWallBackground6" parent="WallContainer" unique_id=599779895 instance=ExtResource("4_rm4vd")]
 position = Vector2(-160, 2)
 
-[node name="StaticWallBackground2" parent="WallContainer" instance=ExtResource("2_dg77c")]
+[node name="StaticWallBackground2" parent="WallContainer" unique_id=939640353 instance=ExtResource("2_dg77c")]
 position = Vector2(3680, 2)
 
-[node name="StaticWallBackground3" parent="WallContainer" instance=ExtResource("2_dg77c")]
+[node name="StaticWallBackground3" parent="WallContainer" unique_id=1413972582 instance=ExtResource("2_dg77c")]
 position = Vector2(7520, 0)
 
-[node name="StaticWallBackground4" parent="WallContainer" instance=ExtResource("2_dg77c")]
+[node name="StaticWallBackground4" parent="WallContainer" unique_id=895660033 instance=ExtResource("2_dg77c")]
 position = Vector2(11360, 0)
 
-[node name="StaticWallBackground5" parent="WallContainer" instance=ExtResource("2_dg77c")]
+[node name="StaticWallBackground5" parent="WallContainer" unique_id=760311599 instance=ExtResource("2_dg77c")]
 z_index = 1
 position = Vector2(15194, 0)
 
-[node name="BathroomContainer" type="Node2D" parent="."]
+[node name="BathroomContainer" type="Node2D" parent="." unique_id=2107083072]
 unique_name_in_owner = true
 z_index = -5
 position = Vector2(-817, 1500)
 scale = Vector2(0.5, 0.5)
 
-[node name="StaticWallBackground" parent="BathroomContainer" instance=ExtResource("5_f6a44")]
+[node name="StaticWallBackground" parent="BathroomContainer" unique_id=1218314128 instance=ExtResource("5_f6a44")]
 
-[node name="HospitalBathroomToiletPaper" parent="." instance=ExtResource("6_e71vb")]
+[node name="HospitalBathroomToiletPaper" parent="." unique_id=1834044328 instance=ExtResource("6_e71vb")]
 position = Vector2(462, 2066)
 scale = Vector2(0.5, 0.5)
 object_display_name = "Toilet Paper Dispenser"
 object_id = "toilet_paper_dispenser"
 interactions = Array[ExtResource("24_qsp4k")]([ExtResource("7_jq2sk"), SubResource("Resource_f1p13")])
 
-[node name="HospitalBathroomToiletPaper2" parent="." instance=ExtResource("7_rnkwl")]
+[node name="HospitalBathroomToiletPaper2" parent="." unique_id=665203384 instance=ExtResource("7_rnkwl")]
 position = Vector2(643, 1931)
 scale = Vector2(0.4, 0.4)
 object_display_name = "Toilet Flush"
 object_id = "toilet_flush"
 interactions = Array[ExtResource("24_qsp4k")]([ExtResource("7_jq2sk"), SubResource("Resource_1yv1y"), SubResource("Resource_sn1fb"), SubResource("Resource_vieuh")])
 
-[node name="HospitalToilet" parent="." instance=ExtResource("6_uypp3")]
+[node name="HospitalToilet" parent="." unique_id=1147919713 instance=ExtResource("6_uypp3")]
 position = Vector2(641, 2120)
 scale = Vector2(0.6, 0.6)
 
@@ -658,33 +658,39 @@ object_display_name = "Toilet"
 object_id = "hospital_toilet"
 interactions = Array[ExtResource("24_qsp4k")]([ExtResource("7_jq2sk"), SubResource("Resource_ovcoh"), SubResource("Resource_swlj1"), SubResource("Resource_53bls"), SubResource("Resource_41lik")])
 
-[node name="WallShadow" type="Sprite2D" parent="HospitalToilet"]
+[node name="AnimationPlayer" parent="HospitalToilet" index="4"]
+autoplay = &"idle"
+
+[node name="WallShadow" type="Sprite2D" parent="HospitalToilet" unique_id=1849691546]
 modulate = Color(0.33, 0.132, 0.19800003, 0.11764706)
 z_index = -1
 texture = ExtResource("7_6iyjs")
 offset = Vector2(7, 6)
 
-[node name="ToiletFloorShadow" type="Sprite2D" parent="HospitalToilet"]
+[node name="ToiletFloorShadow" type="Sprite2D" parent="HospitalToilet" unique_id=1808167327]
 position = Vector2(-3.3333335, 198.33333)
 scale = Vector2(5.885404, 1.7708337)
 texture = SubResource("GradientTexture2D_abqjc")
 
-[node name="HospitalBathroomSink" parent="." instance=ExtResource("53_abqjc")]
+[node name="HospitalBathroomSink" parent="." unique_id=1413267211 instance=ExtResource("53_abqjc")]
 position = Vector2(-497, 2038)
 scale = Vector2(0.5, 0.5)
 
-[node name="Wallshadow" type="Sprite2D" parent="HospitalBathroomSink"]
+[node name="AnimationPlayer" parent="HospitalBathroomSink" index="2"]
+autoplay = &"idle"
+
+[node name="Wallshadow" type="Sprite2D" parent="HospitalBathroomSink" unique_id=2035353133]
 modulate = Color(0.33, 0.132, 0.19800003, 0.22352941)
 z_index = -1
 texture = ExtResource("9_4w656")
 offset = Vector2(7, 6)
 
-[node name="SinkFloorShadow" type="Sprite2D" parent="HospitalBathroomSink"]
+[node name="SinkFloorShadow" type="Sprite2D" parent="HospitalBathroomSink" unique_id=538529499]
 position = Vector2(4.9997253, 416)
 scale = Vector2(12.0937605, 2.1250005)
 texture = SubResource("GradientTexture2D_abqjc")
 
-[node name="Burger" parent="." instance=ExtResource("2_lquwl")]
+[node name="Burger" parent="." unique_id=1116473219 instance=ExtResource("2_lquwl")]
 visible = false
 position = Vector2(-699, 755)
 object_display_name = "Burger"
@@ -694,7 +700,7 @@ object_id = "burger"
 scale = Vector2(0.0377778, 0.0377778)
 texture = ExtResource("3_7mycd")
 
-[node name="Rusty Key" parent="." instance=ExtResource("2_lquwl")]
+[node name="Rusty Key" parent="." unique_id=1162515410 instance=ExtResource("2_lquwl")]
 z_index = 1805
 position = Vector2(-339, 28)
 scale = Vector2(4.125, 4.125)
@@ -709,22 +715,22 @@ texture = ExtResource("3_7mycd")
 [node name="CollisionShape2D" parent="Rusty Key" index="1"]
 z_index = 15
 
-[node name="Floor" type="StaticBody2D" parent="."]
+[node name="Floor" type="StaticBody2D" parent="." unique_id=762936804]
 position = Vector2(220, -515)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor" unique_id=727329027]
 position = Vector2(3609.5, 834)
 shape = SubResource("RectangleShape2D_pjluw")
 debug_color = Color(0.581501, 0.477937, 0.264005, 0.419608)
 
-[node name="StaticBody2D" type="StaticBody2D" parent="."]
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1081023759]
 position = Vector2(0, 2338)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=2010094436]
 position = Vector2(53.5, 12)
 shape = SubResource("RectangleShape2D_0cbny")
 
-[node name="faye" parent="." instance=ExtResource("2_lquwl")]
+[node name="faye" parent="." unique_id=637108794 instance=ExtResource("2_lquwl")]
 visible = false
 position = Vector2(921, -355)
 scale = Vector2(6.595, 6.595)
@@ -739,60 +745,60 @@ texture = ExtResource("7_272bh")
 [node name="WalkToPoint" parent="faye" index="2"]
 position = Vector2(-1, 11)
 
-[node name="HospitalBathroomMirror" parent="." instance=ExtResource("16_blkrb")]
+[node name="HospitalBathroomMirror" parent="." unique_id=1986123831 instance=ExtResource("16_blkrb")]
 position = Vector2(-495, 1879)
 scale = Vector2(0.5, 0.5)
 object_display_name = "Bathroom Mirror"
 object_id = "bathroom_mirror"
 
-[node name="Left wall" type="StaticBody2D" parent="."]
+[node name="Left wall" type="StaticBody2D" parent="." unique_id=1260212273]
 position = Vector2(-974, 49)
 scale = Vector2(0.0427764, 8.83949)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Left wall"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Left wall" unique_id=824909160]
 position = Vector2(-2641.6563, -21.1551)
 shape = SubResource("RectangleShape2D_pjluw")
 debug_color = Color(0.581501, 0.477937, 0.264005, 0.419608)
 
-[node name="Bathroom Left wall" type="StaticBody2D" parent="."]
+[node name="Bathroom Left wall" type="StaticBody2D" parent="." unique_id=157413242]
 unique_name_in_owner = true
 position = Vector2(-860, 2104)
 scale = Vector2(0.0427764, 8.83949)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Bathroom Left wall"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bathroom Left wall" unique_id=1395035009]
 position = Vector2(-2641.6563, -22.06013)
 shape = SubResource("RectangleShape2D_pjluw")
 debug_color = Color(0.581501, 0.477937, 0.264005, 0.419608)
 
-[node name="Right Wall" type="StaticBody2D" parent="."]
+[node name="Right Wall" type="StaticBody2D" parent="." unique_id=1896424065]
 position = Vector2(8989, 61)
 scale = Vector2(0.0427764, 8.83949)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Right Wall"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Right Wall" unique_id=1032628808]
 position = Vector2(-4114.42, -21.1551)
 shape = SubResource("RectangleShape2D_pjluw")
 debug_color = Color(0.581501, 0.477937, 0.264005, 0.419608)
 
-[node name="ExitDoor2" parent="." instance=ExtResource("30_pjyto")]
+[node name="ExitDoor2" parent="." unique_id=1741932018 instance=ExtResource("30_pjyto")]
 position = Vector2(143, 1948)
 scale = Vector2(0.43, 0.43)
 interactions = Array[ExtResource("24_qsp4k")]([ExtResource("7_jq2sk"), SubResource("Resource_wat4s"), SubResource("Resource_dij0e"), SubResource("Resource_inymm")])
 
-[node name="Bathroom Right Wall" type="StaticBody2D" parent="."]
+[node name="Bathroom Right Wall" type="StaticBody2D" parent="." unique_id=1954065778]
 unique_name_in_owner = true
 position = Vector2(1422, 2110)
 scale = Vector2(0.0427764, 8.83949)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Bathroom Right Wall"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bathroom Right Wall" unique_id=1876292725]
 position = Vector2(-3857.2656, -22.85203)
 shape = SubResource("RectangleShape2D_pjluw")
 debug_color = Color(0.581501, 0.477937, 0.264005, 0.419608)
 
-[node name="Aida_Path" type="Node2D" parent="."]
+[node name="Aida_Path" type="Node2D" parent="." unique_id=2049438850]
 position = Vector2(-25, 54)
 scale = Vector2(0.5, 0.5)
 
-[node name="AIda" parent="Aida_Path" instance=ExtResource("8_vivmo")]
+[node name="AIda" parent="Aida_Path" unique_id=611238266 instance=ExtResource("8_vivmo")]
 position = Vector2(9658, -52)
 scale = Vector2(0.98, 0.98)
 
@@ -809,17 +815,17 @@ category = 1
 interactions = Array[ExtResource("24_qsp4k")]([ExtResource("7_jq2sk"), SubResource("Resource_wnkbs")])
 character_conversation_overlay_scene = ExtResource("16_come4")
 
-[node name="Waypoint1" type="Marker2D" parent="Aida_Path"]
+[node name="Waypoint1" type="Marker2D" parent="Aida_Path" unique_id=2135275449]
 position = Vector2(10646, -32)
 
-[node name="Waypoint2" type="Marker2D" parent="Aida_Path"]
+[node name="Waypoint2" type="Marker2D" parent="Aida_Path" unique_id=2086599172]
 position = Vector2(5456, -32)
 
-[node name="Sergei_Path" type="Node2D" parent="."]
+[node name="Sergei_Path" type="Node2D" parent="." unique_id=1914266714]
 z_index = 1
 position = Vector2(-3413, 201)
 
-[node name="Sergei" parent="Sergei_Path" instance=ExtResource("10_getpj")]
+[node name="Sergei" parent="Sergei_Path" unique_id=600106462 instance=ExtResource("10_getpj")]
 position = Vector2(11404, 86)
 
 [node name="InteractionArea" parent="Sergei_Path/Sergei" index="2"]
@@ -836,7 +842,7 @@ position = Vector2(159, -196)
 [node name="Sprite2D" parent="Sergei_Path/Sergei" index="3"]
 position = Vector2(-27.99999, -172)
 
-[node name="MedicalTube" type="Line2D" parent="."]
+[node name="MedicalTube" type="Line2D" parent="." unique_id=1970149638]
 z_index = -2
 position = Vector2(858, -53)
 points = PackedVector2Array(0, -4, -2, -3, -3, -2, -4, -1, -6, 5, -6, 200)
@@ -848,17 +854,17 @@ begin_cap_mode = 2
 end_cap_mode = 2
 antialiased = true
 
-[node name="MedicineCabinet2" parent="." instance=ExtResource("12_a6jrf")]
+[node name="MedicineCabinet2" parent="." unique_id=1232388093 instance=ExtResource("12_a6jrf")]
 visible = false
 position = Vector2(890, 3)
 scale = Vector2(0.735, 0.735)
 interactions = Array[ExtResource("24_qsp4k")]([ExtResource("7_jq2sk"), SubResource("Resource_1vm84"), SubResource("Resource_5dllo"), SubResource("Resource_jx0wj"), SubResource("Resource_ok6jj"), SubResource("Resource_wu3dr")])
 
-[node name="McBucket_Path" type="Node2D" parent="."]
+[node name="McBucket_Path" type="Node2D" parent="." unique_id=2021721745]
 position = Vector2(770, 91)
 scale = Vector2(0.6, 0.6)
 
-[node name="McBucket" parent="McBucket_Path" instance=ExtResource("13_0odxb")]
+[node name="McBucket" parent="McBucket_Path" unique_id=1931002188 instance=ExtResource("13_0odxb")]
 
 [node name="InteractionArea" parent="McBucket_Path/McBucket" index="2"]
 script = ExtResource("16_2cqfq")
@@ -871,18 +877,18 @@ character_conversation_overlay_scene = ExtResource("22_facbu")
 [node name="Sprite2D" parent="McBucket_Path/McBucket" index="3"]
 z_index = 1
 
-[node name="MedicineCabinet" parent="." instance=ExtResource("17_074og")]
+[node name="MedicineCabinet" parent="." unique_id=436608159 instance=ExtResource("17_074og")]
 z_index = -1
 position = Vector2(2605.0002, -114.99999)
 scale = Vector2(0.45, 0.45)
 interactions = Array[ExtResource("24_qsp4k")]([SubResource("Resource_kq58d"), SubResource("Resource_0arob"), SubResource("Resource_d2t1y")])
 object_zoom_overlay_scene = ExtResource("14_cegan")
 
-[node name="Player" parent="." instance=ExtResource("1_pgf6g")]
+[node name="Player" parent="." unique_id=1441086909 instance=ExtResource("1_pgf6g")]
 position = Vector2(3950, 90)
 scale = Vector2(0.5, 0.5)
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1739213564]
 position = Vector2(4394, 0)
 process_callback = 0
 limit_left = -100000
@@ -894,55 +900,63 @@ position_smoothing_enabled = true
 script = ExtResource("2_h2yge")
 target_path = NodePath("../Player")
 
-[node name="HaveMoreLogo" parent="." instance=ExtResource("18_d13ii")]
+[node name="HaveMoreLogo" parent="." unique_id=1659323556 instance=ExtResource("18_d13ii")]
 visible = false
 position = Vector2(2535, -329)
 scale = Vector2(0.16, 0.16)
 
-[node name="LevelStateManager" type="Node" parent="."]
+[node name="LevelStateManager" type="Node" parent="." unique_id=1325462510]
 script = ExtResource("10_4c57u")
 
-[node name="Tubelight" parent="." instance=ExtResource("14_w48qg")]
+[node name="Tubelight" parent="." unique_id=1788805950 instance=ExtResource("14_w48qg")]
 position = Vector2(-416, -549)
 scale = Vector2(0.76, 0.76)
 
-[node name="VerbUI_CanvasLayer" parent="." instance=ExtResource("1_1bvp3")]
+[node name="VerbUI_CanvasLayer" parent="." unique_id=1400491569 instance=ExtResource("1_1bvp3")]
 unique_name_in_owner = true
 layer = 2
 
-[node name="InventoryUI_CanvasLayer" parent="." instance=ExtResource("2_kek77")]
+[node name="InventoryUI_CanvasLayer" parent="." unique_id=314516422 instance=ExtResource("2_kek77")]
 unique_name_in_owner = true
 layer = 2
 
-[node name="ExplanationLayer" parent="." instance=ExtResource("38_d2t1y")]
+[node name="InventoryLabel" parent="InventoryUI_CanvasLayer/InventoryGridPanel/TabPanel" index="0"]
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ExplanationLayer" parent="." unique_id=1090476282 instance=ExtResource("38_d2t1y")]
 unique_name_in_owner = true
 
-[node name="TransitionLayer" parent="." instance=ExtResource("41_hrvbo")]
-unique_name_in_owner = true
-
-[node name="TestBox" parent="." instance=ExtResource("23_0odxb")]
+[node name="TestBox" parent="." unique_id=1039895551 instance=ExtResource("23_0odxb")]
 visible = false
 position = Vector2(-507, 18)
 object_display_name = "testbox"
 object_id = "testbox"
 interactions = Array[ExtResource("24_qsp4k")]([SubResource("Resource_4k2k6"), SubResource("Resource_uypp3")])
 
-[node name="SergeiMedicineDispenser" parent="." instance=ExtResource("27_a6jrf")]
+[node name="SergeiMedicineDispenser" parent="." unique_id=1698310979 instance=ExtResource("27_a6jrf")]
 visible = false
 z_index = -1
 position = Vector2(7870, -32)
 scale = Vector2(0.735, 0.735)
 
-[node name="ExitDoor" parent="." instance=ExtResource("40_h8e4i")]
+[node name="ExitDoor" parent="." unique_id=471086616 instance=ExtResource("40_h8e4i")]
 z_index = -1
 position = Vector2(40, -91)
 scale = Vector2(0.43, 0.43)
 interactions = Array[ExtResource("24_qsp4k")]([ExtResource("7_jq2sk"), SubResource("Resource_rnkwl")])
 
-[node name="InsuranceFormButtonUI" parent="." instance=ExtResource("41_4lmeg")]
+[node name="JournalButtonUI" parent="." unique_id=1650026667 instance=ExtResource("58_wu3dr")]
 unique_name_in_owner = true
 
-[node name="NotificationContainer" type="VBoxContainer" parent="."]
+[node name="InsuranceFormButtonUI" parent="." unique_id=293195305 instance=ExtResource("41_4lmeg")]
+unique_name_in_owner = true
+
+[node name="Label" parent="InsuranceFormButtonUI/FormPanel/TabPanel" index="0"]
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="NotificationContainer" type="VBoxContainer" parent="." unique_id=937521291]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -953,7 +967,7 @@ offset_right = -104.0
 offset_bottom = 112.0
 grow_horizontal = 0
 
-[node name="MemoryBox" parent="." instance=ExtResource("44_gngh3")]
+[node name="MemoryBox" parent="." unique_id=1529332697 instance=ExtResource("44_gngh3")]
 z_index = -10
 position = Vector2(5643, 6.0000005)
 scale = Vector2(0.8, 0.8)
@@ -961,25 +975,25 @@ object_display_name = "Memory Box"
 object_id = "MemoryBox"
 interactions = Array[ExtResource("24_qsp4k")]([ExtResource("7_jq2sk"), SubResource("Resource_b17eg"), SubResource("Resource_ruth0"), SubResource("Resource_sm6fg")])
 
-[node name="television_screen" parent="." instance=ExtResource("48_f6a44")]
+[node name="television_screen" parent="." unique_id=1366258808 instance=ExtResource("48_f6a44")]
 z_index = -1
 position = Vector2(1551, -207)
 scale = Vector2(0.8, 0.8)
 
-[node name="HospitalBed" type="Sprite2D" parent="."]
+[node name="HospitalBed" type="Sprite2D" parent="." unique_id=1969725779]
 position = Vector2(3832, 181)
 scale = Vector2(0.8, 0.8)
 texture = ExtResource("47_wnkbs")
 
-[node name="BathroomSpawnPoint" type="Marker2D" parent="."]
+[node name="BathroomSpawnPoint" type="Marker2D" parent="." unique_id=891169033]
 position = Vector2(132, 2092)
 
-[node name="ClinicSpawnPoint1" type="Marker2D" parent="."]
+[node name="ClinicSpawnPoint1" type="Marker2D" parent="." unique_id=1942365361]
 position = Vector2(40, -17)
 
-[node name="Cutscenes" type="Node" parent="."]
+[node name="Cutscenes" type="Node" parent="." unique_id=1719232342]
 
-[node name="ToiletClogCutscene" type="Node" parent="Cutscenes" node_paths=PackedStringArray("aida_npc", "player", "toilet_interactable", "main_room_door_pos", "player_spawn_pos", "bathroom_entry_pos", "toilet_fix_pos", "main_room_return_pos")]
+[node name="ToiletClogCutscene" type="Node" parent="Cutscenes" unique_id=248899658 node_paths=PackedStringArray("aida_npc", "player", "toilet_interactable", "main_room_door_pos", "player_spawn_pos", "bathroom_entry_pos", "toilet_fix_pos", "main_room_return_pos")]
 script = ExtResource("63_sm6fg")
 aida_npc = NodePath("../../Aida_Path/AIda")
 player = NodePath("../../Player")
@@ -993,10 +1007,10 @@ aida_scold_dialogue = ExtResource("64_b17eg")
 scold_dialogue_start_id = "test"
 fix_duration = 15.0
 
-[node name="AidaDoorWaitPos" type="Marker2D" parent="."]
+[node name="AidaDoorWaitPos" type="Marker2D" parent="." unique_id=773119389]
 position = Vector2(279, 0)
 
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1143480734]
 z_index = 1
 position = Vector2(149, 1551)
 scale = Vector2(0.5, 0.5)
@@ -1005,7 +1019,7 @@ autoplay = true
 max_distance = 1307.0
 bus = &"Bathroom Music"
 
-[node name="MedicineDispenser" parent="." instance=ExtResource("66_uatky")]
+[node name="MedicineDispenser" parent="." unique_id=1842379895 instance=ExtResource("66_uatky")]
 z_index = -1
 position = Vector2(962, -22)
 scale = Vector2(0.5, 0.5)
@@ -1021,6 +1035,15 @@ interactions = Array[ExtResource("24_qsp4k")]([SubResource("Resource_ywjan"), Su
 
 [node name="InteractionClickShape" parent="MedicineDispenser/InteractionArea" index="0"]
 visible = true
+
+[node name="AnimationPlayerGlow" parent="MedicineDispenser" index="9"]
+autoplay = &"idle"
+
+[node name="AnimationPlayerSprite" parent="MedicineDispenser" index="10"]
+autoplay = &"idle"
+
+[node name="AnimationPlayerScreen" parent="MedicineDispenser" index="11"]
+autoplay = &"screen_pulse"
 
 [editable path="HospitalToilet"]
 [editable path="HospitalBathroomSink"]

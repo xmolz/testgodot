@@ -1,7 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://cn3wt8p41equ0"]
+[gd_scene format=3 uid="uid://cd01yo706pdq1"]
 
-[ext_resource type="Script" uid="uid://ccgy2wd4maav6" path="res://insurance_form_button_ui.gd" id="1_2vgf4"]
-[ext_resource type="Texture2D" uid="uid://6rxirp1vpl7s" path="res://Icons/insurance_form_icon.png" id="2_2vgf4"]
+[ext_resource type="Script" uid="uid://dv0tguat1o543" path="res://journal_button_ui.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://cfjr0h20128di" path="res://Icons/journal_icon.png" id="2_icon"]
 [ext_resource type="Theme" uid="uid://bbh4rjwcxnama" path="res://Themes/verb_and_inventory_theme.tres" id="3_theme"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tab"]
@@ -13,37 +13,38 @@ border_color = Color(1, 1, 1, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 
-[node name="InsuranceFormButtonUI" type="CanvasLayer"]
+[node name="JournalButtonUI" type="CanvasLayer" unique_id=1512083434]
 process_mode = 3
-script = ExtResource("1_2vgf4")
+script = ExtResource("1_script")
 
-[node name="FormPanel" type="Panel" parent="."]
+[node name="JournalPanel" type="Panel" parent="." unique_id=1131062186]
 anchors_preset = -1
-anchor_left = 0.90
+anchor_left = 0.8
 anchor_top = 0.82
-anchor_right = 0.98
+anchor_right = 0.88
 anchor_bottom = 0.98
 theme = ExtResource("3_theme")
 
-[node name="TabPanel" type="Panel" parent="FormPanel"]
+[node name="TabPanel" type="Panel" parent="JournalPanel" unique_id=1062235104]
 layout_mode = 1
 anchors_preset = -1
 offset_left = 15.0
 offset_top = -40.0
 offset_right = 115.0
-offset_bottom = 0.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_tab")
 
-[node name="Label" type="Label" parent="FormPanel/TabPanel"]
+[node name="Label" type="Label" parent="JournalPanel/TabPanel" unique_id=1738791675]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-text = "FORM"
+grow_horizontal = 2
+grow_vertical = 2
+text = "NOTES"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="FormPanel"]
+[node name="MarginContainer" type="MarginContainer" parent="JournalPanel" unique_id=824570835]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -55,10 +56,10 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 15
 theme_override_constants/margin_bottom = 15
 
-[node name="TextureButton" type="TextureButton" parent="FormPanel/MarginContainer"]
+[node name="TextureButton" type="TextureButton" parent="JournalPanel/MarginContainer" unique_id=656877072]
 layout_mode = 2
 focus_mode = 0
 mouse_default_cursor_shape = 2
-texture_normal = ExtResource("2_2vgf4")
+texture_normal = ExtResource("2_icon")
 ignore_texture_size = true
 stretch_mode = 5

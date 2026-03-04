@@ -1,0 +1,326 @@
+[gd_scene format=3 uid="uid://dxemdxqyop7n1"]
+
+[ext_resource type="Script" uid="uid://bgpw83gkli6pl" path="res://journal_overlay.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://cxrhtr8seaits" path="res://Scripts/JournalPageData.gd" id="2_42b17"]
+[ext_resource type="FontFile" uid="uid://bd58xbyix7r6p" path="res://Fonts/VarelaRound-Regular.ttf" id="2_font"]
+[ext_resource type="Resource" uid="uid://b2tr722u3livt" path="res://Journal Notes/page_one.tres" id="3_8nv1y"]
+[ext_resource type="Texture2D" uid="uid://c7fta1fbm43hf" path="res://Icons/up_arrow.png" id="3_arrow"]
+[ext_resource type="Texture2D" uid="uid://dk4771r3h2cag" path="res://old_paper.jpg" id="4_paper"]
+[ext_resource type="Resource" uid="uid://yu75mdvsr8tw" path="res://Journal Notes/page_two.tres" id="4_u06fs"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_BtnDisabled"]
+content_margin_left = 20.0
+content_margin_top = 5.0
+content_margin_right = 20.0
+content_margin_bottom = 5.0
+bg_color = Color(0.1, 0.1, 0.1, 0.5)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.2, 0.2, 0.2, 0.5)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_Focus"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_BtnHover"]
+content_margin_left = 20.0
+content_margin_top = 5.0
+content_margin_right = 20.0
+content_margin_bottom = 5.0
+bg_color = Color(0.3, 0.3, 0.3, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_BtnNormal"]
+content_margin_left = 20.0
+content_margin_top = 5.0
+content_margin_right = 20.0
+content_margin_bottom = 5.0
+bg_color = Color(0.15, 0.15, 0.15, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.4, 0.4, 0.4, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="Theme" id="Theme_Journal"]
+default_font = ExtResource("2_font")
+Button/colors/font_color = Color(0.9, 0.9, 0.9, 1)
+Button/colors/font_disabled_color = Color(0.4, 0.4, 0.4, 1)
+Button/styles/disabled = SubResource("StyleBoxFlat_BtnDisabled")
+Button/styles/focus = SubResource("StyleBoxEmpty_Focus")
+Button/styles/hover = SubResource("StyleBoxFlat_BtnHover")
+Button/styles/normal = SubResource("StyleBoxFlat_BtnNormal")
+Button/styles/pressed = SubResource("StyleBoxFlat_BtnHover")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_CloseNormal"]
+content_margin_left = 15.0
+content_margin_top = 5.0
+content_margin_right = 15.0
+content_margin_bottom = 5.0
+bg_color = Color(0.85, 0.15, 0.15, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 0.5)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_CloseHover"]
+content_margin_left = 15.0
+content_margin_top = 5.0
+content_margin_right = 15.0
+content_margin_bottom = 5.0
+bg_color = Color(1, 0.3, 0.3, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_BookCover"]
+bg_color = Color(0.12, 0.12, 0.12, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.05, 0.05, 0.05, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0, 0, 0, 0.8)
+shadow_size = 40
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_Pages"]
+texture = ExtResource("4_paper")
+modulate_color = Color(0.95, 0.95, 0.95, 1)
+
+[node name="JournalOverlay" type="CanvasLayer" unique_id=742046901]
+process_mode = 3
+layer = 50
+script = ExtResource("1_script")
+journal_entries = Array[ExtResource("2_42b17")]([ExtResource("3_8nv1y"), ExtResource("4_u06fs")])
+
+[node name="DimBackground" type="ColorRect" parent="." unique_id=2081382940]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.784314)
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1932486696]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_Journal")
+
+[node name="LayoutAnchor" type="Control" parent="CenterContainer" unique_id=1256329933]
+custom_minimum_size = Vector2(1200, 750)
+layout_mode = 2
+
+[node name="CloseButton" type="Button" parent="CenterContainer/LayoutAnchor" unique_id=594081067]
+unique_name_in_owner = true
+layout_mode = 1
+offset_top = -60.0
+offset_right = 60.0
+offset_bottom = -10.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource("StyleBoxFlat_CloseNormal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_CloseHover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_CloseHover")
+text = "X"
+
+[node name="PaginationContainer" type="HBoxContainer" parent="CenterContainer/LayoutAnchor" unique_id=394815949]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -120.0
+offset_top = -60.0
+offset_right = 120.0
+offset_bottom = -10.0
+grow_horizontal = 2
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="PrevButton" type="Button" parent="CenterContainer/LayoutAnchor/PaginationContainer" unique_id=1661919580]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(60, 50)
+layout_mode = 2
+
+[node name="IconRect" type="TextureRect" parent="CenterContainer/LayoutAnchor/PaginationContainer/PrevButton" unique_id=186999980]
+clip_children = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = -1.57079
+pivot_offset = Vector2(16, 16)
+texture = ExtResource("3_arrow")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ColorRect" type="ColorRect" parent="CenterContainer/LayoutAnchor/PaginationContainer/PrevButton/IconRect" unique_id=2129721403]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="PageIndicatorLabel" type="Label" parent="CenterContainer/LayoutAnchor/PaginationContainer" unique_id=2014637138]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 28
+text = "1 / 1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NextButton" type="Button" parent="CenterContainer/LayoutAnchor/PaginationContainer" unique_id=1296753436]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(60, 50)
+layout_mode = 2
+
+[node name="IconRect" type="TextureRect" parent="CenterContainer/LayoutAnchor/PaginationContainer/NextButton" unique_id=307323932]
+clip_children = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 1.57079
+pivot_offset = Vector2(16, 16)
+texture = ExtResource("3_arrow")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ColorRect" type="ColorRect" parent="CenterContainer/LayoutAnchor/PaginationContainer/NextButton/IconRect" unique_id=2088607634]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="BookCover" type="Panel" parent="CenterContainer/LayoutAnchor" unique_id=321558791]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_BookCover")
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/LayoutAnchor/BookCover" unique_id=1254879734]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="PagesBackground" type="Panel" parent="CenterContainer/LayoutAnchor/BookCover/MarginContainer" unique_id=525671697]
+clip_children = 2
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_Pages")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/LayoutAnchor/BookCover/MarginContainer/PagesBackground" unique_id=1171352314]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="LeftPageMargin" type="MarginContainer" parent="CenterContainer/LayoutAnchor/BookCover/MarginContainer/PagesBackground/HBoxContainer" unique_id=758310587]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 50
+
+[node name="LeftPageLayers" type="Control" parent="CenterContainer/LayoutAnchor/BookCover/MarginContainer/PagesBackground/HBoxContainer/LeftPageMargin" unique_id=683548473]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+
+[node name="SpineShadow" type="ColorRect" parent="CenterContainer/LayoutAnchor/BookCover/MarginContainer/PagesBackground/HBoxContainer" unique_id=1702762560]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+color = Color(0, 0, 0, 0.15)
+
+[node name="SpineLine" type="ColorRect" parent="CenterContainer/LayoutAnchor/BookCover/MarginContainer/PagesBackground/HBoxContainer/SpineShadow" unique_id=1901890347]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -1.0
+offset_right = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.25)
+
+[node name="RightPageMargin" type="MarginContainer" parent="CenterContainer/LayoutAnchor/BookCover/MarginContainer/PagesBackground/HBoxContainer" unique_id=1334872385]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 50
+
+[node name="RightPageLayers" type="Control" parent="CenterContainer/LayoutAnchor/BookCover/MarginContainer/PagesBackground/HBoxContainer/RightPageMargin" unique_id=1898815593]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2

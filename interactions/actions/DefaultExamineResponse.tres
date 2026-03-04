@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="InteractionResponse" load_steps=6 format=3 uid="uid://bivfrghh084ym"]
+[gd_resource type="Resource" script_class="InteractionResponse" format=3 uid="uid://bivfrghh084ym"]
 
 [ext_resource type="Script" uid="uid://dltqnu07oiff" path="res://action.gd" id="1_lfll4"]
 [ext_resource type="Script" uid="uid://bmq0s1nqhqi4j" path="res://InteractionResponse.gd" id="2_c1lka"]
