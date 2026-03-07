@@ -952,10 +952,6 @@ unique_name_in_owner = true
 [node name="InsuranceFormButtonUI" parent="." unique_id=293195305 instance=ExtResource("41_4lmeg")]
 unique_name_in_owner = true
 
-[node name="Label" parent="InsuranceFormButtonUI/FormPanel/TabPanel" index="0"]
-grow_horizontal = 2
-grow_vertical = 2
-
 [node name="NotificationContainer" type="VBoxContainer" parent="." unique_id=937521291]
 layout_mode = 1
 anchors_preset = 1

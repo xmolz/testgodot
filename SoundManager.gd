@@ -63,6 +63,10 @@ func play_sfx(sound_name: String, pitch: float = 1.0, volume_db: float = 0.0, bu
 		return null 
 
 	var player = AudioStreamPlayer.new()
+	
+	# --- FIX: Ensure SFX continues playing even when the game pauses ---
+	player.process_mode = Node.PROCESS_MODE_ALWAYS
+	
 	add_child(player)
 	player.stream = sfx_library[sound_name]
 	player.pitch_scale = pitch
@@ -94,6 +98,10 @@ func play_ambience(sound_name: String, volume_db: float = 0.0):
 		return
 
 	var player = AudioStreamPlayer.new()
+	
+	# --- FIX: Ensure Ambience continues playing even when the game pauses ---
+	player.process_mode = Node.PROCESS_MODE_ALWAYS
+	
 	add_child(player)
 	player.stream = sfx_library[sound_name]
 	player.volume_db = volume_db

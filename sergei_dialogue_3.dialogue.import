@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://ca8aat6hp02sh"
+path="res://.godot/imported/sergei_dialogue_3.dialogue-8d69e41205f4765492eb021a3ef0241e.tres"
+
+[deps]
+
+source_file="res://sergei_dialogue_3.dialogue"
+dest_files=["res://.godot/imported/sergei_dialogue_3.dialogue-8d69e41205f4765492eb021a3ef0241e.tres"]
+
+[params]
+
+defaults=true

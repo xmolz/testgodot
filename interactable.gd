@@ -82,17 +82,16 @@ func attempt_interaction(verb_id: String, item_id_used_with: String = ""):
 
 	print_rich("[color=Orchid]--- Interactable '%s': attempt_interaction --- Verb: '%s' (Effective: '%s'), ItemID: '%s'[/color]" % [object_display_name, verb_id, effective_verb_id, item_id_used_with])
 
-		# --- CHANGE START: Use an index counter ---
-	for i in range(interactions.size()): 
-		var response = interactions[i] # Get the response by index
-		
+	for i in range(interactions.size()):
+		var response = interactions[i]
+
 		if not response or response.verb_id.is_empty():
 			continue
 
 		var verb_matches: bool = (response.verb_id == effective_verb_id)
 		var item_matches: bool = (response.required_item_id == item_id_used_with)
 
-		var flag_matches: bool = true 
+		var flag_matches: bool = true
 		if not response.required_flag_id.is_empty():
 			if GameManager:
 				flag_matches = (GameManager.get_current_level_flag(response.required_flag_id) == response.required_flag_value)
@@ -100,53 +99,12 @@ func attempt_interaction(verb_id: String, item_id_used_with: String = ""):
 				flag_matches = false
 
 		if verb_matches and item_matches and flag_matches:
-			# --- DEBUG PRINT THE INDEX ---
-			print_rich("[color=red]!!! MATCH FOUND AT INDEX: %s !!![/color]" % i)
-			# -----------------------------
-			
-			print_rich("[color=LimeGreen]Found matching InteractionResponse for Verb '%s' and Item '%s'.[/color]" % [effective_verb_id, item_id_used_with])
+			print_rich("[color=LimeGreen]Match found at index %s for Verb '%s' and Item '%s'.[/color]" % [i, effective_verb_id, item_id_used_with])
 
 			for action in response.actions_to_perform:
 				if action:
 					await action.execute(self)
 
-			interaction_processed.emit()
-			return
-	# --- CHANGE END ---
-	
-	# Check for a matching interaction in our resource array.
-	for response in interactions:
-		if not response or response.verb_id.is_empty():
-			continue
-
-		# 1. CHECK AGAINST EFFECTIVE VERB ID
-		var verb_matches: bool = (response.verb_id == effective_verb_id)
-		
-		# 2. CHECK ITEM ID
-		var item_matches: bool = (response.required_item_id == item_id_used_with)
-
-		# 3. CHECK FLAG CONDITIONS
-		var flag_matches: bool = true 
-		if not response.required_flag_id.is_empty():
-			# This checks the LevelStateManager via GameManager to see if the flag matches your Inspector setting
-			if GameManager:
-				flag_matches = (GameManager.get_current_level_flag(response.required_flag_id) == response.required_flag_value)
-			else:
-				flag_matches = false # Safety check
-
-		# IF ALL CONDITIONS MET:
-		if verb_matches and item_matches and flag_matches:
-			print_rich("[color=LimeGreen]Found matching InteractionResponse for Verb '%s' and Item '%s' with Flag Condition Met.[/color]" % [effective_verb_id, item_id_used_with])
-
-			# Execute the actions in order
-			for action in response.actions_to_perform:
-				if action:
-					# Await the action execution. 
-					# This handles the timing for Dialogue (Wait for close) and Sounds (Wait for finish).
-					await action.execute(self)
-
-			# Signal to GameManager that the entire sequence is done.
-			# This triggers the "Unfreeze Player" and "Restore UI" logic in GameManager.
 			interaction_processed.emit()
 			return
 

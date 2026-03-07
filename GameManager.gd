@@ -253,6 +253,9 @@ func change_game_state(new_state: GameState):
 	# =========================================================
 	# 1. LEAVING THE OLD STATE (Cleanup)
 	# =========================================================
+# =========================================================
+	# 1. LEAVING THE OLD STATE (Cleanup)
+	# =========================================================
 	match current_game_state:
 		GameState.MAIN_MENU:
 			if is_instance_valid(main_menu_scene_instance):
@@ -262,8 +265,8 @@ func change_game_state(new_state: GameState):
 				
 		GameState.IN_GAME_PLAY:
 			# When LEAVING the game (e.g. to Menu), stop music and ambience.
-			# If going to CUTSCENE, we usually want music/ambience to keep playing.
-			if new_state != GameState.CUTSCENE:
+			# If going to CUTSCENE or EXPLANATION, we usually want music/ambience to keep playing.
+			if new_state != GameState.CUTSCENE and new_state != GameState.EXPLANATION and new_state != GameState.PAUSED:
 				SoundManager.stop_music()
 				# --- STOP AMBIENCE HERE ---
 				SoundManager.stop_all_ambience()
@@ -1125,6 +1128,11 @@ func start_explanation(data: ExplanationData, root_node_to_search: Node):
 
 	if is_instance_valid(inventory_ui) and not inventory_ui in nodes_to_keep_visible:
 		inventory_ui.hide()
+		
+	# --- FIX: Hide the journal button as well ---
+	if is_instance_valid(journal_button_ui) and not journal_button_ui in nodes_to_keep_visible:
+		journal_button_ui.hide()
+	# --------------------------------------------
 
 	if is_instance_valid(insurance_form_button_ui):
 		if insurance_form_button_ui in nodes_to_keep_visible:
@@ -1150,6 +1158,10 @@ func exit_explanation_state():
 	# Show the main game UI
 	if is_instance_valid(verb_ui): verb_ui.visible = true
 	if is_instance_valid(inventory_ui): inventory_ui.visible = true
+	
+	# --- FIX: Ensure the Journal comes back after the explanation finishes ---
+	if is_instance_valid(journal_button_ui): journal_button_ui.visible = true
+	# -----------------------------------------------------------------------
 
 	# --- THIS IS THE FIX ---
 	# Instead of just showing the button, check if it has been unlocked.

@@ -4,7 +4,7 @@ A woman in a Nurse's attire is busy at work.
 She notices you approaching before you could call for her.
 
 do change_background_sprite("res://Backgrounds/Aida/aida_hospital_surprised.png")
-AIda: Oh, patient #122! You're finally awake. That is statistically encourgaing!
+AIda: Oh, patient #122! You're finally awake. That is statistically encouraging!
 AIda: Welcome back to the waking world!
 
 
@@ -14,11 +14,11 @@ AIda: Welcome back to the waking world!
 	do change_background_sprite("res://Backgrounds/Aida/aida_hospital_happy.png") 
 	AIda: Congratulations! You’re receiving the most advanced care legally permitted in this precinct.
 	#expression = happy neutral
-	AIda: I am AIda - Assigned Intelligence for Diagnostic Assistance! But you can just call me Nurse AIda
+	AIda: I am AIda - Assigned Intelligence for Diagnostic Assistance! But you can just call me Nurse AIda.
 	- Condition? What Condition?
 	do change_background_sprite("res://Backgrounds/Aida/aida_hospital_thinking.png")
 	AIda: You were found unconscious on Christie Street.
-	AIda: According to preliminary scans and street-level bio-analytics, the cause appears to be a drug overdose.
+	AIda: We couldn't determine a definite cause through our preliminary scans.
 	AIda: Can you recall what happened?
 	- I can't. I don't remember a thing!
 		do change_background_sprite("res://Backgrounds/Aida/aida_hospital_concerned_thinking.png")
@@ -35,11 +35,12 @@ AIda: Welcome back to the waking world!
 		AIda: Memory loss confirmed.
 		AIda: Would you be willing to consent to a non-invasive HAVEMORE Inc. Neural Integrity Scan?
 		AIda: I can do it on the spot. It will allow us to see if you've suffered any major injuries in the regions of the brain associated with semantic and epsodic memories.
-		AIda: Based on the results, we mught be able to devise a plan to recover your memories.
+		AIda: Based on the results, we might be able to devise a plan to recover your memories.
 
 		- How much will it cost me?
 			do change_background_sprite("res://Backgrounds/Aida/aida_hospital_happy.png")
-			AIda: $2000. The amount will be automatically billed to your insurance provider... assuming we can locate one!
+			AIda: $2000. The amount will be automatically billed to your insurance provider.
+			AIda: ... Assuming we can locate one.
 			- How much have I incurred till now?
 			#expression	: Eyes clsoed, smiling. 
 				AIda: Approximately $546,780.
@@ -47,13 +48,14 @@ AIda: Welcome back to the waking world!
 				A shiver runs down your spine.
 				You may not remember who you are, but you [i]know[/i] in your bones that amount's a problem.
 				do change_background_sprite("res://Backgrounds/Aida/aida_hospital_surprised.png")
-				AIda: But good news! If you're properly insured, your out-of-pocket cost *might* be as low as $20,000 USD!
+				AIda: But good news! If you're properly insured, your out-of-pocket cost might be as low as $20,000 USD!
 				do change_background_sprite("res://Backgrounds/Aida/aida_hospital_concerned_thinking.png")
 				AIda: The problem is... there was no phone, wallet, ID, or wearable device found on your person at intake.  
-				AIda: In short: to access your insurance, we need to know who you are.  
+				AIda: In short - to access your insurance, we need to know who you are.  
 				AIda: And to know who you are… well, we need access to your memories.
 				do change_background_sprite("res://Backgrounds/Aida/aida_hospital_explaining_confident.png")
-				AIda: That’s why I recommend proceeding with the Neural Integrity Scan™. It’s your best chance to... *reconnect* with yourself.
+				AIda: That’s why I recommend proceeding with the Neural Integrity Scan™. 
+				AIda: It’s your best chance to... [i]reconnect[/i] with yourself.
 				- Fine, please begin the scan. 
 					=> begin_scan
 		- No, thanks.
@@ -108,9 +110,11 @@ AIda: Luckily, we have a MemoryBox ™ installed right here in this very unit. Y
 			do GameManager.show_notification("Insurace Form Added!")
 			do change_background_sprite("res://Backgrounds/Aida/aida_hospital_base.png")
 			AIda: Once you piece your memory together using the MemoryBox™, fill out your personal details in the insurance form open in the tablet.  
-			AIda: Doing so ensures HAVEMORE Inc. can verify your identity, reconnect you with your coverage plan, and — most importantly — prevent your current balance from being transferred to our Collections Department.  
+			AIda: Doing so ensures HAVEMORE Inc. can verify your identity and reconnect you with your coverage plan.
+			AIda: More importantly - it'll prevent your current balance from being transferred to our Collections Department. 
 			AIda: Consider it your lifeline back to solvency! Keep the form close, and update it whenever a missing piece of "you" resurfaces. 
 			do change_background_sprite("res://Backgrounds/Aida/aida_hospital_happy.png") 
-			AIda: The more complete your profile, the faster we can process your claim… and the lower your personal liability becomes.
+			AIda: The more complete your profile, the faster we can process your claim.
+			AIda: ... and the lower your personal liability becomes.
 			do GameManager.set_current_level_flag("has_spoken_to_aida", true)
 				=> END!

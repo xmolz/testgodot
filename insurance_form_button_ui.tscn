@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://cn3wt8p41equ0"]
+[gd_scene format=3 uid="uid://cn3wt8p41equ0"]
 
 [ext_resource type="Script" uid="uid://ccgy2wd4maav6" path="res://insurance_form_button_ui.gd" id="1_2vgf4"]
 [ext_resource type="Texture2D" uid="uid://6rxirp1vpl7s" path="res://Icons/insurance_form_icon.png" id="2_2vgf4"]
@@ -13,37 +13,38 @@ border_color = Color(1, 1, 1, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 
-[node name="InsuranceFormButtonUI" type="CanvasLayer"]
+[node name="InsuranceFormButtonUI" type="CanvasLayer" unique_id=25941586]
 process_mode = 3
 script = ExtResource("1_2vgf4")
 
-[node name="FormPanel" type="Panel" parent="."]
+[node name="FormPanel" type="Panel" parent="." unique_id=860167816]
 anchors_preset = -1
-anchor_left = 0.90
+anchor_left = 0.9
 anchor_top = 0.82
 anchor_right = 0.98
 anchor_bottom = 0.98
 theme = ExtResource("3_theme")
 
-[node name="TabPanel" type="Panel" parent="FormPanel"]
+[node name="TabPanel" type="Panel" parent="FormPanel" unique_id=110914876]
 layout_mode = 1
 anchors_preset = -1
 offset_left = 15.0
 offset_top = -40.0
 offset_right = 115.0
-offset_bottom = 0.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_tab")
 
-[node name="Label" type="Label" parent="FormPanel/TabPanel"]
+[node name="Label" type="Label" parent="FormPanel/TabPanel" unique_id=387180183]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 text = "FORM"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="FormPanel"]
+[node name="MarginContainer" type="MarginContainer" parent="FormPanel" unique_id=928061455]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -55,7 +56,7 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 15
 theme_override_constants/margin_bottom = 15
 
-[node name="TextureButton" type="TextureButton" parent="FormPanel/MarginContainer"]
+[node name="TextureButton" type="TextureButton" parent="FormPanel/MarginContainer" unique_id=867517901]
 layout_mode = 2
 focus_mode = 0
 mouse_default_cursor_shape = 2
