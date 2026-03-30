@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://bmq0s1nqhqi4j" path="res://InteractionResponse.gd" id="2_faxy5"]
 [ext_resource type="Texture2D" uid="uid://cfkvy6v701sh1" path="res://icon.svg" id="2_po7q6"]
 [ext_resource type="Script" uid="uid://dltqnu07oiff" path="res://action.gd" id="3_gyrdm"]
+[ext_resource type="Material" uid="uid://dww3d0txyl18g" path="res://interactions/actions/interactable_outline.tres" id="OutlineMaterial"]
 [ext_resource type="Script" uid="uid://bapryqa2s86c5" path="res://interactions/actions/SayLineAction.gd" id="4_yy0q5"]
 [ext_resource type="Script" uid="uid://nvyqoryt5sbh" path="res://interactions/actions/AddItemAction.gd" id="5_gyrdm"]
 [ext_resource type="Script" uid="uid://c5bw6trnybm71" path="res://interactions/actions/DestroyAction.gd" id="6_yy0q5"]
@@ -46,7 +47,8 @@ object_display_name = "Test Box"
 object_id = "test_box"
 interactions = Array[ExtResource("2_faxy5")]([SubResource("Resource_0qfd0"), SubResource("Resource_ppfqe")])
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="ObjectSprite" type="Sprite2D" parent="."]
+material = ExtResource("OutlineMaterial")
 texture = ExtResource("2_po7q6")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

@@ -25,8 +25,8 @@ var _can_move: bool = true
 var _stuck_timer: float = 0.0 # To track how long we've been stuck
 
 func _ready():
-	if not sprite_2d: print_rich("[color=red]Player: Sprite2D node not found![/color]")
-	if not animation_player: print_rich("[color=red]Player: AnimationPlayer node not found![/color]")
+	#if not sprite_2d: print_rich("[color=red]Player: Sprite2D node not found![/color]")
+	#if not animation_player: print_rich("[color=red]Player: AnimationPlayer node not found![/color]")
 	
 	# --- AUTO-CALCULATE WIDTH ---
 	# This makes the wall-stopping logic screen-size and scale independent.
@@ -34,9 +34,10 @@ func _ready():
 		var shape_w = collision_shape_2d.shape.size.x
 		# Formula: (Shape Width / 2) * Object Scale + Buffer
 		player_half_width = (shape_w * global_scale.x / 2.0) + 15.0
-		print("Player: Auto-calculated stopping distance: ", player_half_width)
+		#print("Player: Auto-calculated stopping distance: ", player_half_width)
 	else:
-		print_rich("[color=yellow]Player: Could not calc width (Shape missing or not Rectangle). Using default 65.0[/color]")
+		pass
+		#print_rich("[color=yellow]Player: Could not calc width (Shape missing or not Rectangle). Using default 65.0[/color]")
 	# ----------------------------
 	
 	play_animation("idle")
@@ -71,7 +72,7 @@ func _physics_process(delta: float):
 			
 		# If we've been stuck for 0.2 seconds, give up.
 		if _stuck_timer > 0.2:
-			print_rich("[color=orange]Player: Stuck against obstacle for %.2fs. Stopping.[/color]" % _stuck_timer)
+			#print_rich("[color=orange]Player: Stuck against obstacle for %.2fs. Stopping.[/color]" % _stuck_timer)
 			_stop_walking()
 			return
 		# ----------------------
@@ -142,7 +143,7 @@ func walk_to_point(destination_pos: Vector2):
 	var result = space_state.intersect_ray(query)
 
 	if result:
-		print_rich("[color=green]Hit Wall at %s. Adjusting destination.[/color]" % result.position)
+		#print_rich("[color=green]Hit Wall at %s. Adjusting destination.[/color]" % result.position)
 		var direction_back = (global_position - result.position).normalized()
 		
 		# --- DYNAMIC STOPPING DISTANCE ---

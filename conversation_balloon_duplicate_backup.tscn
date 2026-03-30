@@ -1,10 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://dmfq0fjxxjgay"]
+[gd_scene format=3 uid="uid://dmfq0fjxxjgay"]
 
 [ext_resource type="Script" uid="uid://cynyquih1wama" path="res://conversationballoon.gd" id="1_313u1"]
 [ext_resource type="PackedScene" uid="uid://ckvgyvclnwggo" path="res://addons/dialogue_manager/dialogue_label.tscn" id="2_313u1"]
 [ext_resource type="FontFile" uid="uid://bd58xbyix7r6p" path="res://Fonts/VarelaRound-Regular.ttf" id="3_313u1"]
 [ext_resource type="Script" uid="uid://bb52rsfwhkxbn" path="res://addons/dialogue_manager/dialogue_responses_menu.gd" id="3_ibrr4"]
-[ext_resource type="Texture2D" uid="uid://cx4r1a1ci7vpj" path="res://sergei.PNG" id="4_placeholder"]
+[ext_resource type="Texture2D" uid="uid://cx4r1a1ci7vpj" path="res://sergey.PNG" id="4_placeholder"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oijet"]
 bg_color = Color(0, 0, 0, 0.745098)

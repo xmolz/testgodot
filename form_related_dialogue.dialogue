@@ -1,0 +1,19 @@
+~ incomplete_submit
+Player: I need to fill out all the fields before I submit this.
+Player: Better get to that memory box. 
+=> END
+
+~ complete_submit
+Player: Access granted. Finally.
+=> END
+
+~ first_name_correct
+Player: Fi...ona?
+Player: Fiona! That's it! That's my name!
+Player: I remember!
+=> END
+
+~ first_name_incorrect
+Player: {{wrong_name}}?
+Player: What a trash name. Surely I wasn't named that!
+=> END

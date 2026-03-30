@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactable.gd" id="1_niuas"]
 [ext_resource type="Texture2D" uid="uid://t7yho2m7tt4m" path="res://Sprites/Hospital Room/medicine_cabinet.png" id="2_shog1"]
 [ext_resource type="Texture2D" uid="uid://xwufbgcjblgc" path="res://Sprites/Hospital Room/medicine_cabinet_glow.png" id="3_shoix"]
+[ext_resource type="Material" uid="uid://dww3d0txyl18g" path="res://interactions/actions/interactable_outline.tres" id="OutlineMaterial"]
 
 [sub_resource type="Gradient" id="Gradient_hiqhm"]
 interpolation_mode = 2
@@ -67,6 +68,7 @@ texture = ExtResource("2_shog1")
 offset = Vector2(20.16, 15.235)
 
 [node name="ObjectSprite" type="Sprite2D" parent="."]
+material = ExtResource("OutlineMaterial")
 texture = ExtResource("2_shog1")
 
 [node name="glow" type="Sprite2D" parent="."]

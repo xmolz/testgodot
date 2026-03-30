@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://d3wyrwv44q3fh"]
+
+[ext_resource type="Texture2D" uid="uid://c8ajowofpcgc8" path="res://Sprites/inventory_items/techpass_inventory_item.png" id="1_y3q0f"]
+[ext_resource type="Script" uid="uid://by8o1t3tdwrep" path="res://ItemData.gd" id="2_script"]
+
+[resource]
+script = ExtResource("2_script")
+item_id = "techpass"
+display_name = "Sergey's TechPass™"
+icon = ExtResource("1_y3q0f")
+description = "A high-tech access card belonging to Sergey. It looks like it can interface with the Memory Box."
+metadata/_custom_type_script = "uid://by8o1t3tdwrep"

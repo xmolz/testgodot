@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="VerbData" load_steps=3 format=3]
+
+[ext_resource type="Resource" path="res://giveables.dialogue" id="1_dialogue"]
+[ext_resource type="Script" path="res://VerbData.gd" id="2_script"]
+
+[resource]
+script = ExtResource("2_script")
+verb_id = "give"
+display_text = "Give"
+unlocked_by_default = true
+requires_target_object = true
+fallback_dialogue_file = ExtResource("1_dialogue")

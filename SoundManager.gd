@@ -8,6 +8,9 @@ var sfx_library: Dictionary = {
 	"notification_ping": preload("res://notification_ping.wav"),
 	"dialogue_advance": preload("res://Sfx/Dialog/Dialog_sfx.wav"),
 	"swish": preload("res://Sfx/Dialog/swish_effect.wav"),
+	"form_correct_input": preload("res://Sfx/form_correct_input.mp3"),
+	"form_incorrect_input": preload("res://Sfx/form_incorrect_input.mp3"),
+	"mcbucket_scream": preload("res://Sfx/Dialog/mcbucket_scream.mp3"),
 	
 	# Game World
 	"door_close": preload("res://Sfx/Game World/scifi door close.mp3"),
@@ -19,28 +22,53 @@ var sfx_library: Dictionary = {
 	"step_2": preload("res://Sfx/Player/squeak_02.wav"),
 	"step_3": preload("res://Sfx/Player/squeak_03.wav"),
 
-	# --- NEW: AMBIENCE ---
-	# I mapped your files to logical names. 
-	# CHECK THESE PATHS MATCH YOUR FOLDER STRUCTURE!
+	# Ambience
 	"room_tone_air": preload("res://Sfx/Game World/ambience_spaceship.mp3"),
 	"room_tone_electric": preload("res://Sfx/Game World/ambience_fluoroscent_buzz.mp3"),
-	"room_tone_traffic": preload("res://Sfx/Game World/ambience_distant_highway.mp3")
+	"room_tone_traffic": preload("res://Sfx/Game World/ambience_distant_highway.mp3"),
+	
+	# Looping SFX
+	"heavy_breathing": preload("res://Sfx/Dialog/heavy_breathing.mp3") # <-- Update this path to where your file actually is!
 }
 
-# --- Music Library & Player ---
-const MAIN_THEME = null # Disabled for now
+# --- Music Library ---
+var music_library: Dictionary = {
+	"aida_theme": preload("res://Sfx/Music/aida_corporate_theme.mp3"),
+	"unnatural_city": preload("res://Sfx/Music/Unnatural City.ogg"),
+	"sergey_sad_theme": preload("res://Sfx/Music/sergey_sad_theme.mp3"),
+	"mcbucket_normal_theme": preload("res://Sfx/Music/mcbucket_regular_theme.mp3"),
+	"mcbucket_cannathink_theme": preload("res://Sfx/Music/mcbucket_cannathink_theme.mp3"),
+	"sergey_hj_music":preload("res://Sfx/Music/snake_city_run_boy_run.mp3")
+}
 
 # A dedicated, persistent player for background music
 var _music_player: AudioStreamPlayer = null
+var _music_tween: Tween = null
 
-# NEW: Store active ambience players so we can stop them
+# --- NEW: Looping SFX Tracking ---
+var _looping_sfx_players: Dictionary = {}
+var _looping_sfx_tweens: Dictionary = {}
+
+
+# Store active ambience players so we can stop them
 var _active_ambience_players: Array[AudioStreamPlayer] = []
 
 # Variable to remember the previous footstep (for non-repeating logic)
 var _last_footstep_key: String = ""
 
+# --- Audio Ducking Variables ---
+var _ambience_bus_index: int = -1
+var _base_ambience_volume: float = 0.0
+
 
 # --- Initialization ---
+func _ready():
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	# Capture the Ambience bus index and its default volume so we can restore it later
+	_ambience_bus_index = AudioServer.get_bus_index("Ambience")
+	if _ambience_bus_index != -1:
+		_base_ambience_volume = AudioServer.get_bus_volume_db(_ambience_bus_index)
+
 func _initialize_music_player():
 	if is_instance_valid(_music_player):
 		return
@@ -48,12 +76,7 @@ func _initialize_music_player():
 	_music_player = AudioStreamPlayer.new()
 	add_child(_music_player)
 	_music_player.process_mode = Node.PROCESS_MODE_ALWAYS
-	
-	if MAIN_THEME:
-		_music_player.stream = MAIN_THEME
-		var audio_stream_wav = _music_player.stream as AudioStreamWAV
-		if audio_stream_wav:
-			audio_stream_wav.loop_mode = AudioStreamWAV.LOOP_FORWARD
+	_music_player.bus = "Slow Music"
 
 
 # --- SFX Functions ---
@@ -63,11 +86,9 @@ func play_sfx(sound_name: String, pitch: float = 1.0, volume_db: float = 0.0, bu
 		return null 
 
 	var player = AudioStreamPlayer.new()
-	
-	# --- FIX: Ensure SFX continues playing even when the game pauses ---
 	player.process_mode = Node.PROCESS_MODE_ALWAYS
-	
 	add_child(player)
+	
 	player.stream = sfx_library[sound_name]
 	player.pitch_scale = pitch
 	player.volume_db = volume_db
@@ -87,32 +108,24 @@ func play_random_footstep():
 	var chosen_step = valid_steps.pick_random()
 	_last_footstep_key = chosen_step
 	
-	# Lighter pitch and lower volume for female protagonist
 	play_sfx(chosen_step, randf_range(1.2, 1.4), -18.0, "Footsteps")
 
 
-# --- NEW: Ambience Functions ---
+# --- Ambience Functions ---
 func play_ambience(sound_name: String, volume_db: float = 0.0):
 	if not sfx_library.has(sound_name):
 		print("SoundManager: Ambience '%s' not found." % sound_name)
 		return
 
 	var player = AudioStreamPlayer.new()
-	
-	# --- FIX: Ensure Ambience continues playing even when the game pauses ---
 	player.process_mode = Node.PROCESS_MODE_ALWAYS
-	
 	add_child(player)
+	
 	player.stream = sfx_library[sound_name]
 	player.volume_db = volume_db
-	
-	# Send to "Ambience" bus if you created it, otherwise "SFX"
-	# I recommend creating an "Ambience" bus in the Audio tab!
 	player.bus = "Ambience" 
-	
 	player.play()
 	
-	# Store reference so we can kill it later
 	_active_ambience_players.append(player)
 
 func stop_all_ambience():
@@ -122,13 +135,147 @@ func stop_all_ambience():
 			player.queue_free()
 	_active_ambience_players.clear()
 
+# Helper function to let the Tween system change the bus volume
+func set_ambience_volume(vol: float):
+	if _ambience_bus_index != -1:
+		AudioServer.set_bus_volume_db(_ambience_bus_index, vol)
+
 
 # --- Music Functions ---
-func play_music():
-	_initialize_music_player()
-	if not _music_player.playing:
-		_music_player.play()
 
-func stop_music():
+# Called via dialogue: do SoundManager.play_music_track("aida_theme", 3.0)
+func play_music_track(track_name: String, fade_duration: float = 1.0):
 	_initialize_music_player()
-	_music_player.stop()
+	
+	if not music_library.has(track_name):
+		print_rich("[color=red]SoundManager: Music track '%s' not found![/color]" % track_name)
+		return
+
+	var stream = music_library[track_name]
+	
+	# Don't restart if it's already playing the same track
+	if _music_player.stream == stream and _music_player.playing:
+		return
+		
+	_music_player.stream = stream
+	
+	# Stop any current fade tweens
+	if _music_tween and _music_tween.is_valid():
+		_music_tween.kill()
+		
+	var current_ambience_vol = AudioServer.get_bus_volume_db(_ambience_bus_index)
+		
+	if fade_duration > 0.0:
+		_music_player.volume_db = -80.0
+		_music_player.play()
+		
+		# Set parallel to true so the music fades UP while the ambience fades DOWN
+		_music_tween = create_tween().set_parallel(true)
+		_music_tween.tween_property(_music_player, "volume_db", -5.0, fade_duration).set_trans(Tween.TRANS_SINE)
+		_music_tween.tween_method(set_ambience_volume, current_ambience_vol, _base_ambience_volume - 30.0, fade_duration).set_trans(Tween.TRANS_SINE)
+	else:
+		_music_player.volume_db = -5.0
+		_music_player.play()
+		set_ambience_volume(_base_ambience_volume - 30.0)
+
+# Called via dialogue: do SoundManager.fade_out_music(5.0)
+func fade_out_music(fade_duration: float = 2.0):
+	if not is_instance_valid(_music_player) or not _music_player.playing:
+		return
+		
+	if _music_tween and _music_tween.is_valid():
+		_music_tween.kill()
+
+	var current_ambience_vol = AudioServer.get_bus_volume_db(_ambience_bus_index)
+
+	if fade_duration > 0.0:
+		# Set parallel to true so the music fades DOWN while the ambience fades UP
+		_music_tween = create_tween().set_parallel(true)
+		_music_tween.tween_property(_music_player, "volume_db", -80.0, fade_duration).set_trans(Tween.TRANS_SINE)
+		_music_tween.tween_method(set_ambience_volume, current_ambience_vol, _base_ambience_volume, fade_duration).set_trans(Tween.TRANS_SINE)
+		
+		# Chain wait until both fades are done, then stop the player entirely
+		_music_tween.chain().tween_callback(_music_player.stop)
+	else:
+		_music_player.stop()
+		set_ambience_volume(_base_ambience_volume)
+
+# --- Looping SFX Functions ---
+
+# Called via dialogue: do SoundManager.play_looping_sfx("heavy_breathing", 2.0, 0.0)
+func play_looping_sfx(sound_name: String, fade_duration: float = 1.0, target_volume_db: float = 0.0):
+	if not sfx_library.has(sound_name):
+		print_rich("[color=red]SoundManager: Looping SFX '%s' not found![/color]" % sound_name)
+		return
+
+	var player: AudioStreamPlayer
+	
+	# Check if it's already playing
+	if _looping_sfx_players.has(sound_name) and is_instance_valid(_looping_sfx_players[sound_name]):
+		player = _looping_sfx_players[sound_name]
+		if player.playing: return # Already playing, do nothing
+	else:
+		# Create a new persistent player for this sound
+		player = AudioStreamPlayer.new()
+		player.process_mode = Node.PROCESS_MODE_ALWAYS
+		player.bus = "looping sfx" # Ensure you create this bus in the Audio tab!
+		add_child(player)
+		player.stream = sfx_library[sound_name]
+		_looping_sfx_players[sound_name] = player
+
+	# Kill any existing fade tweens for this specific sound
+	if _looping_sfx_tweens.has(sound_name) and _looping_sfx_tweens[sound_name].is_valid():
+		_looping_sfx_tweens[sound_name].kill()
+
+	var current_ambience_vol = AudioServer.get_bus_volume_db(_ambience_bus_index)
+
+	# Start the fade in
+	if fade_duration > 0.0:
+		player.volume_db = -80.0
+		player.play()
+		
+		# Set parallel to true so breathing fades UP while ambience fades DOWN
+		var tween = create_tween().set_parallel(true)
+		tween.tween_property(player, "volume_db", target_volume_db, fade_duration).set_trans(Tween.TRANS_SINE)
+		tween.tween_method(set_ambience_volume, current_ambience_vol, _base_ambience_volume - 30.0, fade_duration).set_trans(Tween.TRANS_SINE)
+		_looping_sfx_tweens[sound_name] = tween
+	else:
+		player.volume_db = target_volume_db
+		player.play()
+		set_ambience_volume(_base_ambience_volume - 30.0)
+
+# Called via dialogue: do SoundManager.stop_looping_sfx("heavy_breathing", 3.0)
+func stop_looping_sfx(sound_name: String, fade_duration: float = 1.0):
+	if not _looping_sfx_players.has(sound_name) or not is_instance_valid(_looping_sfx_players[sound_name]):
+		return
+
+	var player = _looping_sfx_players[sound_name]
+
+	if _looping_sfx_tweens.has(sound_name) and _looping_sfx_tweens[sound_name].is_valid():
+		_looping_sfx_tweens[sound_name].kill()
+
+	var current_ambience_vol = AudioServer.get_bus_volume_db(_ambience_bus_index)
+
+	# Start the fade out
+	if fade_duration > 0.0:
+		# Set parallel to true so breathing fades DOWN while ambience fades UP
+		var tween = create_tween().set_parallel(true)
+		tween.tween_property(player, "volume_db", -80.0, fade_duration).set_trans(Tween.TRANS_SINE)
+		tween.tween_method(set_ambience_volume, current_ambience_vol, _base_ambience_volume, fade_duration).set_trans(Tween.TRANS_SINE)
+		
+		# Clean up after fade finishes
+		tween.chain().tween_callback(func(): _cleanup_looping_sfx(sound_name))
+		_looping_sfx_tweens[sound_name] = tween
+	else:
+		_cleanup_looping_sfx(sound_name)
+		set_ambience_volume(_base_ambience_volume)
+
+# Internal helper to safely delete the audio player when it's done
+func _cleanup_looping_sfx(sound_name: String):
+	if _looping_sfx_players.has(sound_name):
+		var player = _looping_sfx_players[sound_name]
+		if is_instance_valid(player):
+			player.stop()
+			player.queue_free()
+		_looping_sfx_players.erase(sound_name)
+		_looping_sfx_tweens.erase(sound_name)

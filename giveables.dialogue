@@ -1,0 +1,30 @@
+~ start
+Player: (I don't think they want that.)
+=> END
+
+~ AIda_item_hospital_toilet_paper
+AIda: Thanks!
+do GameManager.remove_item_from_inventory("hospital_toilet_paper")
+do GameManager.show_notification("Toilet paper given to AIda.")
+=> END
+
+~ sergey_item_techpass
+
+Sergey: Devushka, I don't think you want to give this back to me just yet.
+Player: (He's right.)
+Player: (What am I thinking?)
+=> END
+
+~ sergey_item_hospital_toilet_paper
+Sergey: Oh. Toilet paper.
+Sergey: Ummm.. Thanks?
+Player: (Hmmm. Maybe this wasn't the most thoughtful gift.)
+=> END
+
+~ AIda_item_invigirol
+~ AIda_item_zanopram
+~ AIda_item_cannathink
+
+Player: (Sure, lemme just hand her the damn drugs I just stole from under her nose.)
+Player: (What could possibly go wrong?)
+=> END

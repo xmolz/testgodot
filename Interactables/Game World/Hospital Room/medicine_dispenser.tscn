@@ -23,6 +23,7 @@
 [ext_resource type="Texture2D" uid="uid://cwqcwhq1t3hr4" path="res://Animations/Game Objects/Hospital Room/Medicine Dispenser/Base Cyan Sprites/Medicine dispenser cyan_0006.png" id="14_0gql8"]
 [ext_resource type="AudioStream" uid="uid://bpfosxw70db3v" path="res://Sfx/Game World/monitor_pulse.mp3" id="22_esies"]
 [ext_resource type="AudioStream" uid="uid://dig8cwti6fyxl" path="res://Sfx/Game World/oxygen_bubbles.mp3" id="23_ywn6w"]
+[ext_resource type="Material" uid="uid://dww3d0txyl18g" path="res://interactions/actions/interactable_outline.tres" id="OutlineMaterial"]
 
 [sub_resource type="Gradient" id="Gradient_hiqhm"]
 interpolation_mode = 2
@@ -235,6 +236,7 @@ position = Vector2(7, -1)
 texture = ExtResource("9_tnebk")
 
 [node name="ObjectSprite" type="Sprite2D" parent="."]
+material = ExtResource("OutlineMaterial")
 texture = ExtResource("3_ipvca")
 
 [node name="glow" type="Sprite2D" parent="."]

@@ -1,11 +1,20 @@
 #memory box
 
 ~ memory_box_unlocked
-The rusty key fits the lock. *click*
-=> END
+You slide the TechPass into the card slot.
 
+Memory Box: Please place the headset on.
+
+You pick up the strange device and place it over your head.
+
+Player: (Alright… here goes.)
+Player: (If this thing works…)
+Player: (I might finally remember who I am.)
+
+=> END
 ~ memory_box_locked
 It seems to be locked. I might need some kind of key.
+do GameManager.set_current_level_flag("has_tried_memory_box", true)
 => END
 
 #mcbucket
@@ -22,10 +31,15 @@ Hmmm. The old man seems unaffected. His sleep is deep.
 ~ toilet_flush_weak
 
 You flush the toilet. It seems to have a weak flow.
-
+=> END
 ~ medicine_cabinet_interrupt
 
 AIda: Hey patient #122, that cabinet is reserved for clinical staff. 
 AIda: If you are experiencing discomfort, I can assist with approved medication.
-Huh. Looks like I can’t open the medicine cabinet while she’s here…
+Player: Huh. Looks like I can’t open the medicine cabinet while she’s here…
+=> END
+
+~ mcbucket_not_put_to_sleep
+Player: The Old Man still seems to be up.
+Player: I better take care him before returning to Sergey.
 => END

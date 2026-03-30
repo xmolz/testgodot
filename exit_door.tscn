@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://p2iroc5a0o8y"]
+
+[ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactable.gd" id="1_ti4c3"]
+[ext_resource type="Texture2D" uid="uid://v1wq5s3rq7nw" path="res://Sprites/Hospital Bathroom/hospital_bathroom_door.PNG" id="2_pix1l"]
+[ext_resource type="Material" uid="uid://dww3d0txyl18g" path="res://interactions/actions/interactable_outline.tres" id="OutlineMaterial"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rhf3t"]
+size = Vector2(697, 1259)
+
+[node name="ExitDoor" type="Area2D"]
+script = ExtResource("1_ti4c3")
+object_display_name = "Exit Door"
+object_id = "exit_door"
+
+[node name="ObjectSprite" type="Sprite2D" parent="."]
+material = ExtResource("OutlineMaterial")
+texture = ExtResource("2_pix1l")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-2.5, 1.5)
+shape = SubResource("RectangleShape2D_rhf3t")
+
+[node name="WalkToPoint" type="Marker2D" parent="."]
+position = Vector2(0, 381)

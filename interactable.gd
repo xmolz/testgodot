@@ -29,7 +29,7 @@ enum InteractionLocation { WORLD, UI_OVERLAY }
 # --- THE NEW SYSTEM IS NOW THE ONLY SYSTEM ---
 @export var interactions: Array[InteractionResponse] = [preload("res://interactions/actions/DefaultExamineResponse.tres")]
 
-@onready var object_sprite: Sprite2D = get_parent().get_node_or_null("ObjectSprite")
+@onready var object_sprite: Sprite2D = _find_object_sprite()
 @onready var walk_to_point: Marker2D = $WalkToPoint if has_node("WalkToPoint") else null
 var _is_mouse_over: bool = false
 
@@ -72,15 +72,7 @@ func _on_input_event(_v: Viewport, event: InputEvent, _sidx: int):
 # --- FULLY REFACTORED CORE LOGIC ---
 func attempt_interaction(verb_id: String, item_id_used_with: String = ""):
 	interaction_started.emit()
-	# --- FIX: NORMALIZE "USE" VERBS ---
-	# If GameManager sends "use_item" (because you have an item selected),
-	# we treat it as "use" so you can simply type "use" in the Inspector.
-	var effective_verb_id = verb_id
-	if verb_id == "use_item" or verb_id == "use_on_target":
-		effective_verb_id = "use"
-	# ----------------------------------
-
-	print_rich("[color=Orchid]--- Interactable '%s': attempt_interaction --- Verb: '%s' (Effective: '%s'), ItemID: '%s'[/color]" % [object_display_name, verb_id, effective_verb_id, item_id_used_with])
+	print_rich("[color=Orchid]--- Interactable '%s': attempt_interaction --- Verb: '%s', ItemID: '%s'[/color]" % [object_display_name, verb_id, item_id_used_with])
 
 	for i in range(interactions.size()):
 		var response = interactions[i]
@@ -88,7 +80,7 @@ func attempt_interaction(verb_id: String, item_id_used_with: String = ""):
 		if not response or response.verb_id.is_empty():
 			continue
 
-		var verb_matches: bool = (response.verb_id == effective_verb_id)
+		var verb_matches: bool = (response.verb_id == verb_id)
 		var item_matches: bool = (response.required_item_id == item_id_used_with)
 
 		var flag_matches: bool = true
@@ -99,7 +91,7 @@ func attempt_interaction(verb_id: String, item_id_used_with: String = ""):
 				flag_matches = false
 
 		if verb_matches and item_matches and flag_matches:
-			print_rich("[color=LimeGreen]Match found at index %s for Verb '%s' and Item '%s'.[/color]" % [i, effective_verb_id, item_id_used_with])
+			print_rich("[color=LimeGreen]Match found at index %s for Verb '%s' and Item '%s'.[/color]" % [i, verb_id, item_id_used_with])
 
 			for action in response.actions_to_perform:
 				if action:
@@ -175,3 +167,20 @@ func does_verb_require_walk(verb_id_to_check: String, item_data_used: ItemData =
 
 func notify_interaction_pending():
 	interaction_pending.emit()
+
+func _find_object_sprite() -> Sprite2D:
+	# Check children of the Area2D
+	if has_node("ObjectSprite"):
+		return $ObjectSprite as Sprite2D
+	if has_node("Sprite"):
+		return $Sprite as Sprite2D
+		
+	# Check siblings (children of the parent)
+	var p = get_parent()
+	if p:
+		if p.has_node("ObjectSprite"):
+			return p.get_node("ObjectSprite") as Sprite2D
+		if p.has_node("Sprite"):
+			return p.get_node("Sprite") as Sprite2D
+			
+	return null

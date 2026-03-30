@@ -1,8 +1,9 @@
-[gd_scene load_steps=110 format=3 uid="uid://c8w3xusvs4d7d"]
+[gd_scene format=3 uid="uid://c8w3xusvs4d7d"]
 
 [ext_resource type="Script" uid="uid://criacytdq5a44" path="res://mcbucket.gd" id="1_71fhx"]
 [ext_resource type="Script" uid="uid://d3ltdedfvykko" path="res://WaypointMovement.gd" id="1_rp6bs"]
 [ext_resource type="Texture2D" uid="uid://bmidi6l33bump" path="res://image0(6).png" id="2_74ntj"]
+[ext_resource type="Material" uid="uid://dww3d0txyl18g" path="res://interactions/actions/interactable_outline.tres" id="3_pr8uv"]
 [ext_resource type="Texture2D" uid="uid://cyo7mtlscpycq" path="res://Animations/Mcbucket/Idle/Mcbucket_idle_0002.png" id="4_nsoc5"]
 [ext_resource type="Texture2D" uid="uid://c64kqdpuvbxfm" path="res://Animations/Mcbucket/Idle/Mcbucket_idle_0003.png" id="5_qxfbv"]
 [ext_resource type="Texture2D" uid="uid://dflicmxsgke1b" path="res://Animations/Mcbucket/Idle/Mcbucket_idle_0004.png" id="6_443qn"]
@@ -107,7 +108,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/path = NodePath("ObjectSprite:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -124,7 +125,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/path = NodePath("ObjectSprite:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -141,7 +142,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/path = NodePath("ObjectSprite:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -156,7 +157,7 @@ resource_name = "idle_hyper"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/path = NodePath("ObjectSprite:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -173,7 +174,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/path = NodePath("ObjectSprite:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -188,7 +189,7 @@ resource_name = "react_chaos"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/path = NodePath("ObjectSprite:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -203,7 +204,7 @@ resource_name = "react_injection"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/path = NodePath("ObjectSprite:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -218,7 +219,7 @@ resource_name = "react_thinking"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/path = NodePath("ObjectSprite:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -235,7 +236,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/path = NodePath("ObjectSprite:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -258,26 +259,26 @@ _data = {
 &"sleeping": SubResource("Animation_gy5et")
 }
 
-[node name="McBucket" type="CharacterBody2D"]
+[node name="McBucket" type="CharacterBody2D" unique_id=1536366654]
 script = ExtResource("1_71fhx")
 
-[node name="Sprite" type="AnimatedSprite2D" parent="."]
+[node name="Sprite" type="AnimatedSprite2D" parent="." unique_id=1940408626]
 animation = &""
 
-[node name="MovementController" type="Node" parent="."]
+[node name="MovementController" type="Node" parent="." unique_id=1557230187]
 script = ExtResource("1_rp6bs")
 
-[node name="InteractionArea" type="Area2D" parent="."]
+[node name="InteractionArea" type="Area2D" parent="." unique_id=709105578]
+material = ExtResource("3_pr8uv")
 
-[node name="InteractionClickShape" type="CollisionShape2D" parent="InteractionArea"]
+[node name="InteractionClickShape" type="CollisionShape2D" parent="InteractionArea" unique_id=2124204946]
 position = Vector2(-116.5, 36.5)
 shape = SubResource("RectangleShape2D_hsqv2")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="ObjectSprite" type="Sprite2D" parent="." unique_id=1554080546]
+material = ExtResource("3_pr8uv")
 position = Vector2(-8.49999, 2.99997)
 texture = ExtResource("2_74ntj")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_562c1")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2115350100]
+libraries/ = SubResource("AnimationLibrary_562c1")

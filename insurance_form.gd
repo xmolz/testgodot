@@ -2,6 +2,7 @@ extends CanvasLayer
 
 signal field_submitted(field_id: String, value)
 signal form_closed
+signal form_submit_requested
 
 # Inputs from LineEditContainer
 @onready var first_name_edit: LineEdit = $TabletFrame/Padding/ContentCanvas/LineEditContainer/FirstName_Edit
@@ -33,8 +34,8 @@ func _ready():
 	phone_number_button.pressed.connect(_on_phone_number_submit)
 	account_number_button.pressed.connect(_on_account_number_submit)
 
-	submit_button.pressed.connect(_on_submit_form)
-	back_button.pressed.connect(_on_submit_form) # Route the back button to close the form!
+	submit_button.pressed.connect(_on_submit_application_pressed)
+	back_button.pressed.connect(_on_submit_form) # Route the back button to close the form
 
 # --- HANDLER FUNCTIONS FOR EACH "OKAY" BUTTON ---
 
@@ -51,7 +52,6 @@ func _on_last_name_submit():
 	emit_signal("field_submitted", "last_name", value)
 
 func _on_dob_submit():
-	# This now gets the text from the LineEdit, not the date spinner.
 	var value = dob_edit.text
 	emit_signal("field_submitted", "date_of_birth", value)
 
@@ -65,7 +65,31 @@ func _on_account_number_submit():
 
 # --- HANDLER FOR THE FINAL SUBMIT/CLOSE BUTTON ---
 
+func _on_submit_application_pressed():
+	# Tell the GameManager that we want to evaluate the whole form!
+	emit_signal("form_submit_requested")
+
 func _on_submit_form():
 	# This function simply closes the form.
 	emit_signal("form_closed")
 	queue_free()
+
+# --- UI LOCKING LOGIC ---
+
+func lock_field(field_id: String, corrected_value: String):
+	match field_id:
+		"first_name":
+			first_name_edit.text = corrected_value
+			first_name_edit.editable = false
+			first_name_edit.modulate = Color(0.5, 0.5, 0.5, 1.0) # Grey out text box
+			
+			first_name_button.disabled = true
+			first_name_button.modulate = Color(0.5, 0.5, 0.5, 1.0) # Grey out button
+			
+		# You can add additional fields here as you expand the logic!
+		# "last_name":
+		#     last_name_edit.text = corrected_value
+		#     last_name_edit.editable = false
+		#     last_name_edit.modulate = Color(0.5, 0.5, 0.5, 1.0)
+		#     last_name_button.disabled = true
+		#     last_name_button.modulate = Color(0.5, 0.5, 0.5, 1.0)

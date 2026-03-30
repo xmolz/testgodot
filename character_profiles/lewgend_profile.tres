@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="CharacterProfile" format=3 uid="uid://c6mm5dugk4j3s"]
+
+[ext_resource type="Texture2D" uid="uid://bi44v5ya48n0" path="res://Sprites/characters/lewgend/lewgend_arms_open.png" id="1_64n2h"]
+[ext_resource type="Texture2D" uid="uid://cfh3wx6f2meca" path="res://Sprites/characters/lewgend/lewgend_waving.png" id="2_a0yr3"]
+[ext_resource type="Texture2D" uid="uid://6skg6ewm5h1g" path="res://Sprites/characters/lewgend/lewgend_explaining.png" id="3_a0yr3"]
+[ext_resource type="Script" uid="uid://yiootngfe2lt" path="res://CharacterProfile.gd" id="3_i8xhp"]
+[ext_resource type="Texture2D" uid="uid://58fkn47an3i0" path="res://Sprites/characters/lewgend/lewgend_embarrassed.png" id="4_i8xhp"]
+[ext_resource type="Texture2D" uid="uid://4ywcdv05sgaj" path="res://Sprites/characters/lewgend/lewgend_determined.png" id="5_122ft"]
+
+[resource]
+script = ExtResource("3_i8xhp")
+actor_id = "Lewgend"
+default_scale = 0.8
+expressions = {
+"determined": ExtResource("5_122ft"),
+"embarrassed": ExtResource("4_i8xhp"),
+"explaining": ExtResource("3_a0yr3"),
+"open_arms": ExtResource("1_64n2h"),
+"waving": ExtResource("2_a0yr3")
+}

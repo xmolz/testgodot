@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://dww3d0txyl18g"]
+
+[ext_resource type="Shader" uid="uid://bi5b0454i0065" path="res://interactions/actions/interactable_outline.gdshader" id="1_dd5wt"]
+
+[resource]
+resource_local_to_scene = true
+shader = ExtResource("1_dd5wt")
+shader_parameter/enable_outline = false
+shader_parameter/outline_color = Color(0.2, 0.85, 1, 1)
+shader_parameter/outline_width = 7.0000003325

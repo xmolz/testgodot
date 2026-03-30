@@ -1,5 +1,7 @@
 shader_type canvas_item;
 
+uniform float progress : hint_range(0.0, 1.0) = 0.0;
+
 // A function to generate a pseudo-random number
 float random(vec2 uv) {
     return fract(sin(dot(uv.xy, vec2(12.9898, 78.233))) * 43758.5453123);
@@ -41,6 +43,7 @@ void fragment() {
         float noise = random(UV - TIME * 10.0) * 0.1;
         color += vec3(noise);
 
+        color = mix(color, vec3(0.0), progress);
         COLOR = vec4(color, 1.0);
         // --- TV EFFECT CODE END ---
 

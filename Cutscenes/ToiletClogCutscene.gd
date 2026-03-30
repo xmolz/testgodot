@@ -17,7 +17,9 @@ extends Cutscene
 
 @export_group("Dialogue")
 @export var aida_scold_dialogue: DialogueResource
-@export var scold_dialogue_start_id: String = "aida_toilet_clogged" 
+@export var scold_dialogue_start_id: String = "AIda" # Updated to match your inspector
+# --- NEW: Added the player's checkpoint ID here ---
+@export var player_monologue_start_id: String = "Player" 
 
 @export_group("Settings")
 @export var fix_duration: float = 25.0 
@@ -51,19 +53,34 @@ func _execution_steps():
 	if player and player.has_method("face_target"):
 		player.face_target(aida_npc.global_position)
 
-	# --- STEP 1: DIALOGUE ---
+	# --- STEP 1: AIDA DIALOGUE ---
 	if aida_scold_dialogue:
 		DialogueManager.show_dialogue_balloon_scene("res://conversationballoon.tscn", aida_scold_dialogue, scold_dialogue_start_id)
 		await DialogueManager.dialogue_ended
 	
 	# --- STEP 2: ENTER BATHROOM ---
-	aida_npc.visible = false 
-	await get_tree().create_timer(0.5).timeout 
+	if SoundManager: 
+		SoundManager.play_sfx("door_open")
 	
+	await get_tree().create_timer(0.2).timeout # Wait a split second to hear the door open
+	aida_npc.visible = false 
+	
+	if SoundManager: 
+		SoundManager.play_sfx("door_close")
+		
+	await get_tree().create_timer(0.3).timeout # Finish the original 0.5 second pause
+	
+	# --- NEW STEP 2.5: PLAYER MONOLOGUE ---
+	# Right after Aida disappears and we wait half a second, the player talks.
+	if aida_scold_dialogue and not player_monologue_start_id.is_empty():
+		DialogueManager.show_dialogue_balloon_scene("res://conversationballoon.tscn", aida_scold_dialogue, player_monologue_start_id)
+		await DialogueManager.dialogue_ended
+	
+	# Move Aida to her actual working position
 	aida_npc.global_position = bathroom_entry_pos.global_position
 	aida_npc.visible = true
 	
-	# EARLY RELEASE
+	# EARLY RELEASE (Player regains control here, while Aida works in the background)
 	print_rich("[color=magenta][Time: %s] Releasing Player Control.[/color]" % Time.get_ticks_msec())
 	GameManager.change_game_state(GameManager.GameState.IN_GAME_PLAY)
 	
@@ -103,25 +120,16 @@ func _execution_steps():
 	aida_npc.visible = true
 	
 	# ### MOVED FLAG RESET HERE ###
-	# She is back in the main room. She is technically "Available" again.
-	# If the player clogs the toilet NOW, we allow the cutscene to trigger, 
-	# which will just snap her back to the door position instantly.
 	GameManager.set_current_level_flag("aida_fixing_toilet", false)
 	# ---------------------------
 	
 	# --- STEP 7: RETURN TO PATROL ---
 	print_rich("[color=magenta][Time: %s] Aida returning to desk...[/color]" % Time.get_ticks_msec())
 	
-	# She is already physically at the Main Room Return Pos (due to teleport in Step 6).
-	# We just need to sync her "Brain" to match her location.
-	
 	if aida_mover:
-		# 1. Reset her internal target to the first waypoint (Desk)
-		# This ensures she starts her route fresh, rather than walking to some random old target.
 		if aida_mover.has_method("set_target_waypoint_index"):
 			aida_mover.set_target_waypoint_index(0)
 			
-		# 2. Resume logic
 		aida_mover.resume_movement()
 		
 	# Reset Busy Flag

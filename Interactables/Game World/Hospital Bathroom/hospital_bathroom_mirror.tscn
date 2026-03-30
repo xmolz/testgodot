@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactable.gd" id="1_ovcbv"]
 [ext_resource type="Texture2D" uid="uid://c87trugw56gd4" path="res://Sprites/Hospital Bathroom/hospital_bathroom_mirror.png" id="2_mjm7d"]
 [ext_resource type="FontFile" uid="uid://6fxwb86ujy6q" path="res://Fonts/IBMPlexSans-SemiBold.ttf" id="3_5u6mx"]
+[ext_resource type="Material" uid="uid://dww3d0txyl18g" path="res://interactions/actions/interactable_outline.tres" id="OutlineMaterial"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5u6mx"]
 size = Vector2(1049, 529)
@@ -50,6 +51,7 @@ script = ExtResource("1_ovcbv")
 metadata/_custom_type_script = "uid://dwldhrx7leysr"
 
 [node name="ObjectSprite" type="Sprite2D" parent="."]
+material = ExtResource("OutlineMaterial")
 texture = ExtResource("2_mjm7d")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

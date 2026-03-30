@@ -9,17 +9,8 @@ func _ready():
 	# For now, this just sets the shutdown progress to 0.
 	tv_material.set_shader_parameter("progress", 0.0)
 
-# This is a simple test to trigger the effect by pressing Spacebar.
-# You can call the turn_off() function from anywhere in your game!
-func _input(event):
-	if event.is_action_pressed("ui_accept"): # "ui_accept" is the Spacebar by default
-		turn_off()
 
-func turn_off():
-	# A Tween is the perfect tool to animate a value over time.
+func set_tv_state(is_off: bool):
 	var tween = create_tween()
-
-	# Tell the tween to animate the "progress" parameter inside our shader material.
-	# It will go from its current value to 1.0 in 0.6 seconds.
-	# The easing makes the animation start fast and end slow, which looks natural.
-	tween.tween_property(tv_material, "shader_parameter/progress", 1.0, 0.6).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
+	var target_val = 1.0 if is_off else 0.0
+	tween.tween_property(tv_material, "shader_parameter/progress", target_val, 0.6).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)

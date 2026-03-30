@@ -22,7 +22,7 @@ func trigger_fallback(verb_data: VerbData, object_id: String, item_id: String):
 	)
 
 	print_rich("[color=cyan]FallbackManager: Triggering fallback dialogue from '%s' with checkpoint '%s'.[/color]" % [fallback_resource.resource_path, checkpoint_to_use])
-	DialogueManager.show_dialogue_balloon(fallback_resource, checkpoint_to_use)
+	DialogueManager.show_dialogue_balloon_scene("res://conversationballoon.tscn", fallback_resource, checkpoint_to_use)
 
 
 # This function now uses the correct method to check for checkpoints.

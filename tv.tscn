@@ -1,27 +1,30 @@
-[gd_scene load_steps=6 format=3 uid="uid://b8abif6uqojn4"]
+[gd_scene format=3 uid="uid://b8abif6uqojn4"]
 
 [ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactable.gd" id="1_06tmt"]
 [ext_resource type="Shader" uid="uid://cyp05p5euwm50" path="res://television_screen.gdshader" id="1_rlxh4"]
 [ext_resource type="Texture2D" uid="uid://dqyuerm7dscue" path="res://tv_sprite.png" id="2_rlxh4"]
+[ext_resource type="Script" uid="uid://d2cc5akswvuo0" path="res://tv_controller.gd" id="4_arbd3"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_arbd3"]
 shader = ExtResource("1_rlxh4")
+shader_parameter/progress = 0.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_arbd3"]
 size = Vector2(474, 261)
 
-[node name="television_screen" type="Area2D"]
+[node name="television_screen" type="Area2D" unique_id=296554066]
 script = ExtResource("1_06tmt")
 object_display_name = "Television Screen"
 object_id = "television_screen"
 metadata/_custom_type_script = "uid://dwldhrx7leysr"
 
-[node name="ObjectSprite" type="Sprite2D" parent="."]
+[node name="ObjectSprite" type="Sprite2D" parent="." unique_id=1627579716]
 material = SubResource("ShaderMaterial_arbd3")
 texture = ExtResource("2_rlxh4")
+script = ExtResource("4_arbd3")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=718586317]
 position = Vector2(0, -0.5)
 shape = SubResource("RectangleShape2D_arbd3")
 
-[node name="WalkToPoint" type="Marker2D" parent="."]
+[node name="WalkToPoint" type="Marker2D" parent="." unique_id=897512396]

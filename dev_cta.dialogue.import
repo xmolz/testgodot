@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://bl0kuun15axhy"
+path="res://.godot/imported/dev_cta.dialogue-1af8ccd6fd31840739a19cf7e99932b0.tres"
+
+[deps]
+
+source_file="res://dev_cta.dialogue"
+dest_files=["res://.godot/imported/dev_cta.dialogue-1af8ccd6fd31840739a19cf7e99932b0.tres"]
+
+[params]
+
+defaults=true

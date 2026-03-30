@@ -10,13 +10,11 @@
 [ext_resource type="PackedScene" uid="uid://c3shvlwnp4663" path="res://interactable.tscn" id="2_lquwl"]
 [ext_resource type="Texture2D" uid="uid://smwtb1ho1c5j" path="res://png-clipart-hamburger-cheeseburger-fast-food-pixel-art-burger-king-food-cheese.png" id="3_7mycd"]
 [ext_resource type="Resource" uid="uid://d3deg4gqysr72" path="res://ExplanationData.tres" id="3_hrvbo"]
-[ext_resource type="PackedScene" uid="uid://dojqgskjk44nk" path="res://Test_Conversation.tscn" id="4_ntx8l"]
 [ext_resource type="PackedScene" uid="uid://mbqo64idf1si" path="res://static_wall_background_ventless.tscn" id="4_rm4vd"]
 [ext_resource type="PackedScene" uid="uid://btku3hrvme7k6" path="res://static_bathroom_background.tscn" id="5_f6a44"]
 [ext_resource type="PackedScene" uid="uid://cj8nc55uc3in" path="res://Interactables/Game World/Hospital Bathroom/hospital_bathroom_toilet_paper.tscn" id="6_e71vb"]
 [ext_resource type="PackedScene" uid="uid://dq1e26q2d8nix" path="res://Interactables/Game World/Hospital Bathroom/hospital_toilet.tscn" id="6_uypp3"]
 [ext_resource type="Texture2D" uid="uid://bl6sy4jw0eepu" path="res://Sprites/Hospital Bathroom/hospital_bathroom_commode.PNG" id="7_6iyjs"]
-[ext_resource type="Texture2D" uid="uid://dj4qqp4dhq5l4" path="res://faye.png" id="7_272bh"]
 [ext_resource type="Resource" uid="uid://bivfrghh084ym" path="res://interactions/actions/DefaultExamineResponse.tres" id="7_jq2sk"]
 [ext_resource type="PackedScene" uid="uid://dwqwwrmp7uisr" path="res://Interactables/Game World/Hospital Bathroom/hospital_bathroom_toilet_flush.tscn" id="7_rnkwl"]
 [ext_resource type="AudioStream" uid="uid://cy8syrd23db10" path="res://Sfx/Game World/bathroom_music.mp3" id="7_wu3dr"]
@@ -25,7 +23,7 @@
 [ext_resource type="Texture2D" uid="uid://bcxknipqlnnip" path="res://Sprites/Hospital Bathroom/hospital_bathroom_sink.png" id="9_4w656"]
 [ext_resource type="Script" uid="uid://nvyqoryt5sbh" path="res://interactions/actions/AddItemAction.gd" id="10_0rl1p"]
 [ext_resource type="Script" uid="uid://bs05cyo72v37l" path="res://LevelStateManager.gd" id="10_4c57u"]
-[ext_resource type="PackedScene" uid="uid://frycmvsnkt3j" path="res://Sergei.tscn" id="10_getpj"]
+[ext_resource type="PackedScene" uid="uid://frycmvsnkt3j" path="res://Sergey.tscn" id="10_getpj"]
 [ext_resource type="Resource" uid="uid://buvvctce1wr7t" path="res://use_item_accompanying_dialogue.dialogue" id="10_vke2r"]
 [ext_resource type="Script" uid="uid://c5bw6trnybm71" path="res://interactions/actions/DestroyAction.gd" id="11_ok6jj"]
 [ext_resource type="PackedScene" uid="uid://dq4pkbax7ni44" path="res://mcbucket_med_dispenser.tscn" id="12_a6jrf"]
@@ -41,7 +39,7 @@
 [ext_resource type="PackedScene" uid="uid://b7dat8bd2cm67" path="res://have_more_logo.tscn" id="18_d13ii"]
 [ext_resource type="Script" uid="uid://7xsscyp60ilq" path="res://interactions/actions/CallMethodAction.gd" id="19_4k2k6"]
 [ext_resource type="Script" uid="uid://b4i2dd2kqpmun" path="res://interactions/actions/RemoveItemAction.gd" id="20_0rl1p"]
-[ext_resource type="PackedScene" uid="uid://c2mnsensqkur6" path="res://Sergei_Conversation.tscn" id="20_h8e4i"]
+[ext_resource type="PackedScene" uid="uid://c2mnsensqkur6" path="res://sergey_conversation_1.tscn" id="20_h8e4i"]
 [ext_resource type="Script" uid="uid://h83nrnu1277x" path="res://interactions/actions/StartConversationAction.gd" id="22_b1qrp"]
 [ext_resource type="PackedScene" uid="uid://ckc058if0px63" path="res://mcbucket_default_conversation.tscn" id="22_facbu"]
 [ext_resource type="PackedScene" uid="uid://bpk8g8k1r5vb6" path="res://test_box.tscn" id="23_0odxb"]
@@ -49,9 +47,10 @@
 [ext_resource type="Script" uid="uid://bmq0s1nqhqi4j" path="res://InteractionResponse.gd" id="24_qsp4k"]
 [ext_resource type="Script" uid="uid://dltqnu07oiff" path="res://action.gd" id="25_kq58d"]
 [ext_resource type="Script" uid="uid://8n5g87ifbnd5" path="res://interactions/actions/SetLevelFlagAction.gd" id="27_0n3wm"]
-[ext_resource type="PackedScene" uid="uid://dg2mtprp1wybv" path="res://sergei_med_dispenser.tscn" id="27_a6jrf"]
+[ext_resource type="PackedScene" uid="uid://dg2mtprp1wybv" path="res://sergey_med_dispenser.tscn" id="27_a6jrf"]
 [ext_resource type="PackedScene" uid="uid://ctrgw5138xyjg" path="res://hospital_bathroom_door.tscn" id="30_pjyto"]
 [ext_resource type="Script" uid="uid://bjrpwaag6vx20" path="res://interactions/actions/TriggerCutsceneAction.gd" id="32_ntx8l"]
+[ext_resource type="Shader" uid="uid://bi5b0454i0065" path="res://interactions/actions/interactable_outline.gdshader" id="35_0dhbp"]
 [ext_resource type="PackedScene" uid="uid://cymg2dkrvsnfy" path="res://explanation_layer.tscn" id="38_d2t1y"]
 [ext_resource type="PackedScene" uid="uid://cxo2auakscy0h" path="res://hospital_door.tscn" id="40_h8e4i"]
 [ext_resource type="PackedScene" uid="uid://cn3wt8p41equ0" path="res://insurance_form_button_ui.tscn" id="41_4lmeg"]
@@ -64,11 +63,13 @@
 [ext_resource type="PackedScene" uid="uid://b8abif6uqojn4" path="res://tv.tscn" id="48_f6a44"]
 [ext_resource type="PackedScene" uid="uid://b7ruec2vo6haw" path="res://Non Interactables/hospital_bathroom_sink.tscn" id="53_abqjc"]
 [ext_resource type="PackedScene" uid="uid://cd01yo706pdq1" path="res://journal_button_ui.tscn" id="58_wu3dr"]
+[ext_resource type="Resource" uid="uid://c3tq5l5jdua2v" path="res://interactions/actions/OpenMemoryBoxAction.tres" id="62_0dhbp"]
 [ext_resource type="Script" uid="uid://c2cuhw0y84tao" path="res://Cutscenes/ToiletClogCutscene.gd" id="63_sm6fg"]
-[ext_resource type="Resource" uid="uid://dmkt054qdywph" path="res://test.dialogue" id="64_b17eg"]
+[ext_resource type="Resource" uid="uid://dmkt054qdywph" path="res://aida_toilet_assistance.dialogue" id="64_b17eg"]
 [ext_resource type="PackedScene" uid="uid://uq5whvtm0m2i" path="res://Interactables/Game World/Hospital Room/medicine_dispenser.tscn" id="66_uatky"]
 [ext_resource type="Resource" uid="uid://xp53l3fuethr" path="res://examinables.dialogue" id="67_1vm84"]
 [ext_resource type="Script" uid="uid://bmuxd8k0o3aw7" path="res://interactions/actions/ShowDialogueActiont.gd" id="68_wu3dr"]
+[ext_resource type="PackedScene" uid="uid://p2iroc5a0o8y" path="res://exit_door.tscn" id="70_cyx1q"]
 
 [sub_resource type="Resource" id="Resource_4obbf"]
 script = ExtResource("10_0rl1p")
@@ -97,6 +98,8 @@ metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 [sub_resource type="Resource" id="Resource_5yh34"]
 script = ExtResource("14_ruth0")
 sound_name = "hospital_toilet_flush"
+pitch = 0.5
+volume_db = -3.0
 metadata/_custom_type_script = "uid://bfn877nkjq8gv"
 
 [sub_resource type="Resource" id="Resource_pjuso"]
@@ -135,6 +138,13 @@ script = ExtResource("24_qsp4k")
 verb_id = "use"
 actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_yjja3"), SubResource("Resource_yvsr8")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cyx1q"]
+resource_local_to_scene = true
+shader = ExtResource("35_0dhbp")
+shader_parameter/enable_outline = false
+shader_parameter/outline_color = Color(0.2, 0.85, 1, 1)
+shader_parameter/outline_width = 7.0000003325
 
 [sub_resource type="Resource" id="Resource_ppx11"]
 script = ExtResource("46_wnkbs")
@@ -213,6 +223,13 @@ fill = 1
 fill_from = Vector2(0.50427353, 0.5)
 fill_to = Vector2(0.008547009, 0.014957265)
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0dhbp"]
+resource_local_to_scene = true
+shader = ExtResource("35_0dhbp")
+shader_parameter/enable_outline = false
+shader_parameter/outline_color = Color(0.2, 0.85, 1, 1)
+shader_parameter/outline_width = 7.0000003325
+
 [sub_resource type="Resource" id="Resource_facbu"]
 script = ExtResource("9_4k2k6")
 line_to_say = "picked up the rusty key"
@@ -232,6 +249,13 @@ script = ExtResource("24_qsp4k")
 verb_id = "pickup"
 actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_facbu"), SubResource("Resource_b1qrp"), SubResource("Resource_come4")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jx0wj"]
+resource_local_to_scene = true
+shader = ExtResource("35_0dhbp")
+shader_parameter/enable_outline = false
+shader_parameter/outline_color = Color(0.2, 0.85, 1, 1)
+shader_parameter/outline_width = 7.0000003325
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pjluw"]
 size = Vector2(9583, 90.4065)
@@ -269,6 +293,13 @@ verb_id = "use"
 actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_l0gw7")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kkkcx"]
+resource_local_to_scene = true
+shader = ExtResource("35_0dhbp")
+shader_parameter/enable_outline = false
+shader_parameter/outline_color = Color(0.2, 0.85, 1, 1)
+shader_parameter/outline_width = 7.0000003325
+
 [sub_resource type="Resource" id="Resource_qnost"]
 script = ExtResource("22_b1qrp")
 metadata/_custom_type_script = "uid://h83nrnu1277x"
@@ -284,6 +315,30 @@ script = ExtResource("24_qsp4k")
 verb_id = "examine"
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
+[sub_resource type="Resource" id="Resource_SergeyZanoConv"]
+script = ExtResource("22_b1qrp")
+metadata/_custom_type_script = "uid://h83nrnu1277x"
+
+[sub_resource type="Resource" id="Resource_SergeyZanoResp"]
+script = ExtResource("24_qsp4k")
+verb_id = "talk_to"
+required_flag_id = "mcbucket_zanopram_used"
+actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_SergeyZanoConv")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="Resource" id="Resource_SergeyBlockAct"]
+script = ExtResource("46_wnkbs")
+dialogue_resource = ExtResource("45_qnost")
+dialogue_checkpoint = "mcbucket_not_put_to_sleep"
+metadata/_custom_type_script = "uid://8c6cnm8lo25p"
+
+[sub_resource type="Resource" id="Resource_SergeyBlockResp"]
+script = ExtResource("24_qsp4k")
+verb_id = "talk_to"
+required_flag_id = "mcbucket_interruption_happened"
+actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_SergeyBlockAct")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
 [sub_resource type="Resource" id="Resource_f6a44"]
 script = ExtResource("22_b1qrp")
 metadata/_custom_type_script = "uid://h83nrnu1277x"
@@ -293,6 +348,13 @@ script = ExtResource("24_qsp4k")
 verb_id = "talk_to"
 actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_f6a44")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_34ol3"]
+resource_local_to_scene = true
+shader = ExtResource("35_0dhbp")
+shader_parameter/enable_outline = false
+shader_parameter/outline_color = Color(0.2, 0.85, 1, 1)
+shader_parameter/outline_width = 7.0000003325
 
 [sub_resource type="Resource" id="Resource_4lmeg"]
 script = ExtResource("20_0rl1p")
@@ -399,29 +461,6 @@ required_flag_id = "mcbucket_zanopram_used"
 actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_gx4rg")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
-[sub_resource type="Resource" id="Resource_6iyjs"]
-script = ExtResource("27_0n3wm")
-flag_name = "mcbucket_cannathink_used"
-metadata/_custom_type_script = "uid://8n5g87ifbnd5"
-
-[sub_resource type="Resource" id="Resource_4w656"]
-script = ExtResource("19_4k2k6")
-target_node_path = NodePath("..")
-method_name = "on_player_used_cannathink"
-metadata/_custom_type_script = "uid://7xsscyp60ilq"
-
-[sub_resource type="Resource" id="Resource_e71vb"]
-script = ExtResource("20_0rl1p")
-item_id_to_remove = "cannathink"
-metadata/_custom_type_script = "uid://b4i2dd2kqpmun"
-
-[sub_resource type="Resource" id="Resource_abqjc"]
-script = ExtResource("24_qsp4k")
-verb_id = "use_item"
-required_item_id = "cannathink"
-actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_6iyjs"), SubResource("Resource_4w656"), SubResource("Resource_e71vb")])
-metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
-
 [sub_resource type="Resource" id="Resource_c2n8d"]
 script = ExtResource("22_b1qrp")
 metadata/_custom_type_script = "uid://h83nrnu1277x"
@@ -433,10 +472,12 @@ required_flag_value = false
 actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_c2n8d")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
-[sub_resource type="Resource" id="Resource_kq58d"]
-script = ExtResource("24_qsp4k")
-verb_id = "examine"
-metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_c2n8d"]
+resource_local_to_scene = true
+shader = ExtResource("35_0dhbp")
+shader_parameter/enable_outline = false
+shader_parameter/outline_color = Color(0.2, 0.85, 1, 1)
+shader_parameter/outline_width = 7.0000003325
 
 [sub_resource type="Resource" id="Resource_jcxqu"]
 script = ExtResource("46_wnkbs")
@@ -516,9 +557,9 @@ metadata/_custom_type_script = "uid://8n5g87ifbnd5"
 
 [sub_resource type="Resource" id="Resource_ruth0"]
 script = ExtResource("24_qsp4k")
-verb_id = "use_item"
-required_item_id = "key_rusty"
-actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_uit24"), SubResource("Resource_rm4vd")])
+verb_id = "use"
+required_item_id = "techpass"
+actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_uit24"), SubResource("Resource_rm4vd"), ExtResource("62_0dhbp")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
 [sub_resource type="Resource" id="Resource_pjyto"]
@@ -532,6 +573,13 @@ script = ExtResource("24_qsp4k")
 verb_id = "use"
 actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_pjyto")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wy5fy"]
+resource_local_to_scene = true
+shader = ExtResource("35_0dhbp")
+shader_parameter/enable_outline = false
+shader_parameter/outline_color = Color(0.2, 0.85, 1, 1)
+shader_parameter/outline_width = 7.0000003325
 
 [sub_resource type="Resource" id="Resource_fpm7e"]
 script = ExtResource("68_wu3dr")
@@ -579,7 +627,19 @@ required_item_id = "cannathink"
 actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_4lmeg"), SubResource("Resource_smeu8"), SubResource("Resource_uatky")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
-[node name="Main" type="Control" unique_id=1988882771 node_paths=PackedStringArray("sergei_interactable")]
+[sub_resource type="Resource" id="Resource_f3y11"]
+script = ExtResource("46_wnkbs")
+dialogue_resource = ExtResource("15_uit24")
+dialogue_checkpoint = "exit_door"
+metadata/_custom_type_script = "uid://8c6cnm8lo25p"
+
+[sub_resource type="Resource" id="Resource_cpm2s"]
+script = ExtResource("24_qsp4k")
+verb_id = "use"
+actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_f3y11")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[node name="Main" type="Control" unique_id=1988882771]
 layout_mode = 3
 anchors_preset = 0
 offset_left = -5752.0
@@ -590,8 +650,6 @@ mouse_filter = 2
 script = ExtResource("1_efxa6")
 aida_dialogue_resource = ExtResource("2_0cbny")
 aida_explanation_data = ExtResource("3_hrvbo")
-sergei_after_drug_overlay_scene = ExtResource("4_ntx8l")
-sergei_interactable = NodePath("Sergei_Path/Sergei/InteractionArea")
 
 [node name="BackgroundContainer" type="Node2D" parent="." unique_id=1746717277]
 z_index = -30
@@ -653,6 +711,9 @@ interactions = Array[ExtResource("24_qsp4k")]([ExtResource("7_jq2sk"), SubResour
 position = Vector2(641, 2120)
 scale = Vector2(0.6, 0.6)
 
+[node name="ObjectSprite" parent="HospitalToilet" index="0"]
+material = SubResource("ShaderMaterial_cyx1q")
+
 [node name="InteractionArea" parent="HospitalToilet" index="2"]
 object_display_name = "Toilet"
 object_id = "hospital_toilet"
@@ -697,10 +758,12 @@ object_display_name = "Burger"
 object_id = "burger"
 
 [node name="ObjectSprite" parent="Burger" index="0"]
+material = SubResource("ShaderMaterial_0dhbp")
 scale = Vector2(0.0377778, 0.0377778)
 texture = ExtResource("3_7mycd")
 
 [node name="Rusty Key" parent="." unique_id=1162515410 instance=ExtResource("2_lquwl")]
+visible = false
 z_index = 1805
 position = Vector2(-339, 28)
 scale = Vector2(4.125, 4.125)
@@ -709,6 +772,7 @@ object_id = "key_rusty_world"
 interactions = Array[ExtResource("24_qsp4k")]([ExtResource("7_jq2sk"), SubResource("Resource_h8e4i")])
 
 [node name="ObjectSprite" parent="Rusty Key" index="0"]
+material = SubResource("ShaderMaterial_jx0wj")
 scale = Vector2(0.0377778, 0.0377778)
 texture = ExtResource("3_7mycd")
 
@@ -729,21 +793,6 @@ position = Vector2(0, 2338)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=2010094436]
 position = Vector2(53.5, 12)
 shape = SubResource("RectangleShape2D_0cbny")
-
-[node name="faye" parent="." unique_id=637108794 instance=ExtResource("2_lquwl")]
-visible = false
-position = Vector2(921, -355)
-scale = Vector2(6.595, 6.595)
-object_display_name = "Faye"
-object_id = "faye"
-category = 1
-
-[node name="ObjectSprite" parent="faye" index="0"]
-scale = Vector2(0.0377778, 0.0377778)
-texture = ExtResource("7_272bh")
-
-[node name="WalkToPoint" parent="faye" index="2"]
-position = Vector2(-1, 11)
 
 [node name="HospitalBathroomMirror" parent="." unique_id=1986123831 instance=ExtResource("16_blkrb")]
 position = Vector2(-495, 1879)
@@ -782,6 +831,8 @@ debug_color = Color(0.581501, 0.477937, 0.264005, 0.419608)
 [node name="ExitDoor2" parent="." unique_id=1741932018 instance=ExtResource("30_pjyto")]
 position = Vector2(143, 1948)
 scale = Vector2(0.43, 0.43)
+object_display_name = "Door to Main Room"
+object_id = "main_room_door"
 interactions = Array[ExtResource("24_qsp4k")]([ExtResource("7_jq2sk"), SubResource("Resource_wat4s"), SubResource("Resource_dij0e"), SubResource("Resource_inymm")])
 
 [node name="Bathroom Right Wall" type="StaticBody2D" parent="." unique_id=1954065778]
@@ -802,13 +853,15 @@ scale = Vector2(0.5, 0.5)
 position = Vector2(9658, -52)
 scale = Vector2(0.98, 0.98)
 
-[node name="MovementController" parent="Aida_Path/AIda" index="2"]
+[node name="ObjectSprite" parent="Aida_Path/AIda" index="1" unique_id=940694777]
+material = SubResource("ShaderMaterial_kkkcx")
+
+[node name="MovementController" parent="Aida_Path/AIda" index="2" unique_id=825057676]
 movement_speed = 250.0
 wait_duration = 15.0
 waypoints = Array[NodePath]([NodePath("../../Waypoint1"), NodePath("../../Waypoint2")])
 
-[node name="InteractionArea" parent="Aida_Path/AIda" index="3"]
-script = ExtResource("16_2cqfq")
+[node name="InteractionArea" parent="Aida_Path/AIda" index="3" unique_id=989885246]
 object_display_name = "AIda"
 object_id = "AIda"
 category = 1
@@ -828,18 +881,19 @@ position = Vector2(-3413, 201)
 [node name="Sergei" parent="Sergei_Path" unique_id=600106462 instance=ExtResource("10_getpj")]
 position = Vector2(11404, 86)
 
-[node name="InteractionArea" parent="Sergei_Path/Sergei" index="2"]
+[node name="InteractionArea" parent="Sergei_Path/Sergei" index="2" unique_id=81005604]
 script = ExtResource("16_2cqfq")
-object_display_name = "Sergei"
-object_id = "sergei"
+object_display_name = "Sergey"
+object_id = "sergey"
 category = 1
-interactions = Array[ExtResource("24_qsp4k")]([SubResource("Resource_htxhm"), SubResource("Resource_0cbny")])
+interactions = Array[ExtResource("24_qsp4k")]([SubResource("Resource_htxhm"), SubResource("Resource_SergeyZanoResp"), SubResource("Resource_SergeyBlockResp"), SubResource("Resource_0cbny")])
 character_conversation_overlay_scene = ExtResource("20_h8e4i")
 
-[node name="InteractionClickShape" parent="Sergei_Path/Sergei/InteractionArea" index="0"]
+[node name="InteractionClickShape" parent="Sergei_Path/Sergei/InteractionArea" index="0" unique_id=1610555801]
 position = Vector2(159, -196)
 
-[node name="Sprite2D" parent="Sergei_Path/Sergei" index="3"]
+[node name="ObjectSprite" parent="Sergei_Path/Sergei" index="3" unique_id=427518227]
+material = SubResource("ShaderMaterial_34ol3")
 position = Vector2(-27.99999, -172)
 
 [node name="MedicalTube" type="Line2D" parent="." unique_id=1970149638]
@@ -866,22 +920,24 @@ scale = Vector2(0.6, 0.6)
 
 [node name="McBucket" parent="McBucket_Path" unique_id=1931002188 instance=ExtResource("13_0odxb")]
 
-[node name="InteractionArea" parent="McBucket_Path/McBucket" index="2"]
+[node name="InteractionArea" parent="McBucket_Path/McBucket" index="2" unique_id=709105578]
+material = null
 script = ExtResource("16_2cqfq")
-object_display_name = "mcbucket"
+object_display_name = "Old Man"
 object_id = "mcbucket"
 category = 1
-interactions = Array[ExtResource("24_qsp4k")]([ExtResource("7_jq2sk"), SubResource("Resource_0n3wm"), SubResource("Resource_abqjc"), SubResource("Resource_wy5fy")])
+interactions = Array[ExtResource("24_qsp4k")]([ExtResource("7_jq2sk"), SubResource("Resource_0n3wm"), SubResource("Resource_wy5fy")])
 character_conversation_overlay_scene = ExtResource("22_facbu")
 
-[node name="Sprite2D" parent="McBucket_Path/McBucket" index="3"]
+[node name="ObjectSprite" parent="McBucket_Path/McBucket" index="3" unique_id=1554080546]
 z_index = 1
+material = SubResource("ShaderMaterial_c2n8d")
 
 [node name="MedicineCabinet" parent="." unique_id=436608159 instance=ExtResource("17_074og")]
 z_index = -1
 position = Vector2(2605.0002, -114.99999)
 scale = Vector2(0.45, 0.45)
-interactions = Array[ExtResource("24_qsp4k")]([SubResource("Resource_kq58d"), SubResource("Resource_0arob"), SubResource("Resource_d2t1y")])
+interactions = Array[ExtResource("24_qsp4k")]([SubResource("Resource_0arob"), SubResource("Resource_d2t1y")])
 object_zoom_overlay_scene = ExtResource("14_cegan")
 
 [node name="Player" parent="." unique_id=1441086909 instance=ExtResource("1_pgf6g")]
@@ -944,6 +1000,8 @@ scale = Vector2(0.735, 0.735)
 z_index = -1
 position = Vector2(40, -91)
 scale = Vector2(0.43, 0.43)
+object_display_name = "Bathroom Door"
+object_id = "bathroom_door"
 interactions = Array[ExtResource("24_qsp4k")]([ExtResource("7_jq2sk"), SubResource("Resource_rnkwl")])
 
 [node name="JournalButtonUI" parent="." unique_id=1650026667 instance=ExtResource("58_wu3dr")]
@@ -1000,7 +1058,6 @@ bathroom_entry_pos = NodePath("../../BathroomSpawnPoint")
 toilet_fix_pos = NodePath("../../HospitalToilet/WalkToPoint")
 main_room_return_pos = NodePath("../../ClinicSpawnPoint1")
 aida_scold_dialogue = ExtResource("64_b17eg")
-scold_dialogue_start_id = "test"
 fix_duration = 15.0
 
 [node name="AidaDoorWaitPos" type="Marker2D" parent="." unique_id=773119389]
@@ -1020,6 +1077,9 @@ z_index = -1
 position = Vector2(962, -22)
 scale = Vector2(0.5, 0.5)
 
+[node name="ObjectSprite" parent="MedicineDispenser" index="1"]
+material = SubResource("ShaderMaterial_wy5fy")
+
 [node name="PulseOverlay" parent="MedicineDispenser" index="5"]
 offset_left = -186.0
 offset_top = -414.0
@@ -1027,6 +1087,7 @@ offset_right = 19.0
 offset_bottom = -247.0
 
 [node name="InteractionArea" parent="MedicineDispenser" index="7"]
+object_display_name = "Bio-Regulator"
 interactions = Array[ExtResource("24_qsp4k")]([SubResource("Resource_ywjan"), SubResource("Resource_m74q3"), SubResource("Resource_5dllo"), SubResource("Resource_tko6h"), SubResource("Resource_am8a1"), SubResource("Resource_wu3dr")])
 
 [node name="InteractionClickShape" parent="MedicineDispenser/InteractionArea" index="0"]
@@ -1041,11 +1102,16 @@ autoplay = &"idle"
 [node name="AnimationPlayerScreen" parent="MedicineDispenser" index="11"]
 autoplay = &"screen_pulse"
 
+[node name="ExitDoor3" parent="." unique_id=42132707 instance=ExtResource("70_cyx1q")]
+z_index = -1
+position = Vector2(6695.9995, -92.000015)
+scale = Vector2(0.43, 0.43)
+interactions = Array[ExtResource("24_qsp4k")]([ExtResource("7_jq2sk"), SubResource("Resource_cpm2s")])
+
 [editable path="HospitalToilet"]
 [editable path="HospitalBathroomSink"]
 [editable path="Burger"]
 [editable path="Rusty Key"]
-[editable path="faye"]
 [editable path="Aida_Path/AIda"]
 [editable path="Sergei_Path/Sergei"]
 [editable path="McBucket_Path/McBucket"]

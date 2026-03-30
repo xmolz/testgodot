@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://clj8gjnqd22kl"
+path="res://.godot/imported/giveables.dialogue-20775bc9e19d5507c36deec9a3e5d973.tres"
+
+[deps]
+
+source_file="res://giveables.dialogue"
+dest_files=["res://.godot/imported/giveables.dialogue-20775bc9e19d5507c36deec9a3e5d973.tres"]
+
+[params]
+
+defaults=true

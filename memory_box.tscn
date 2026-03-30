@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactable.gd" id="1_13axh"]
 [ext_resource type="Texture2D" uid="uid://gnko17ua8soc" path="res://memory_box_sprite.png" id="2_5gyts"]
+[ext_resource type="Material" uid="uid://dww3d0txyl18g" path="res://interactions/actions/interactable_outline.tres" id="OutlineMaterial"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_13axh"]
 size = Vector2(281, 667)
@@ -13,6 +14,7 @@ object_id = "memory_box"
 metadata/_custom_type_script = "uid://dwldhrx7leysr"
 
 [node name="ObjectSprite" type="Sprite2D" parent="." unique_id=75773192]
+material = ExtResource("OutlineMaterial")
 texture = ExtResource("2_5gyts")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1277224753]

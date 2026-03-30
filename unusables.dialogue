@@ -1,5 +1,5 @@
 ~ start
-That doesn't seem to work.
+Player: That doesn't seem to work.
 => END
 
 
@@ -9,10 +9,29 @@ Suddenly, you hear a noise from the speaker above.
 "Hello patient #122. Please fill in your insurance details before attempting to leave. Thank you!"
 => END
 
+~ sergey
+
+Player: (Use? This hunk of a man?)
+Player: (Hmmmmm.)
+=> END
+
+~ sergey_item_cannathink
+=> character_item_wrong_med
+
+~ sergey_item_zanopram
+=> character_item_wrong_med
+
+~ sergey_item_invigirol
+=> character_item_wrong_med
 
 ~ mcbucket_item_cannathink
-nah.
-=> END
+=> character_item_wrong_med
+
+~ mcbucket_item_zanopram
+=> character_item_wrong_med
+
+~ mcbucket_item_invigirol
+=> character_item_wrong_med
 
 ~ hospital_toilet_regular_use
 We'll... You don't really need to go right now.
@@ -29,4 +48,48 @@ Adding more buttpaper would be futile.
 
 ~ hospital_toilet_already_broken
 You can't reuse this until it gets fixed.
+=> END
+
+
+
+~ AIda_item_invigirol
+~ AIda_item_zanopram
+~ AIda_item_cannathink
+
+Player: (I don't see a slot to insert a medicine cartridge in her.)
+Player: (Unless she's hiding one in that dumptruck of a robo-ass.)
+Player: (I wonder how she's programmed to respond to THAT kind of an interaction...)
+
+=> END
+
+~ AIda_item_techpass
+
+Player: I don't think that's the best idea...
+
+=> END
+
+
+~ character_item_wrong_med
+Player: (I don't think I can just shove these cartridges down someone's throat.)
+Player: (There's gotta be a better way to go about this.)
+
+=> END
+
+~ television_screen
+if GameManager.get_current_level_flag("tv_turned_off") == false
+	Player: (I'll just hit this switch here...)
+	do GameManager.main_game_scene_instance.get_node("television_screen/ObjectSprite").set_tv_state(true)
+	do GameManager.set_current_level_flag("tv_turned_off", true)
+	do wait(1.0)
+	Player: (The TV shut off. Wait...)
+	Player: (Why is McBucket suddenly vibrating?)
+	do GameManager.main_game_scene_instance.get_node("McBucket_Path/McBucket").change_state(2)
+else
+	Player: (Let's turn that back on.)
+	do GameManager.main_game_scene_instance.get_node("television_screen/ObjectSprite").set_tv_state(false)
+	do GameManager.set_current_level_flag("tv_turned_off", false)
+	do wait(1.0)
+	Player: (Ah, the soothing glow of static.)
+	Player: (McBucket seems to have calmed down, too.)
+	do GameManager.main_game_scene_instance.get_node("McBucket_Path/McBucket").change_state(0)
 => END

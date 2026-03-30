@@ -1,0 +1,193 @@
+[gd_scene format=3 uid="uid://c2mnsensqkur6"]
+
+[ext_resource type="Script" uid="uid://cy1g0xpb3u0e2" path="res://character_conversation_overlay.gd" id="1_y71nh"]
+[ext_resource type="Resource" uid="uid://ckg6wmvrckv0q" path="res://sergey_dialogue_1.dialogue" id="2_gvw3d"]
+[ext_resource type="Texture2D" uid="uid://cx4r1a1ci7vpj" path="res://sergey.PNG" id="3_y71nh"]
+[ext_resource type="Texture2D" uid="uid://coo5k2phjvc1e" path="res://Protag.png" id="4_qw1wr"]
+[ext_resource type="Material" uid="uid://dek82a5tuykas" path="res://Shaders/grayscale_material.tres" id="5_cwuwn"]
+[ext_resource type="Texture2D" uid="uid://dg6a8t20eu1yu" path="res://Backgrounds/Sergey/sergey_neutral.png" id="5_jy7bi"]
+[ext_resource type="Texture2D" uid="uid://d2ntha7kwjixc" path="res://Animations/Hj frames/Hj frames _0001.png" id="7_1fij5"]
+[ext_resource type="Texture2D" uid="uid://shvhccg8n4yi" path="res://Animations/Hj frames/Hj frames _0002.png" id="8_a8yjs"]
+[ext_resource type="Texture2D" uid="uid://bk6ygxl6t7ppm" path="res://Animations/Hj frames/Hj frames _0003.png" id="9_walu0"]
+[ext_resource type="Texture2D" uid="uid://c8jr7u7bw5f5b" path="res://Animations/Hj frames/Hj frames _0004.png" id="10_ttpjq"]
+[ext_resource type="Texture2D" uid="uid://cxcn3vpjvmjb" path="res://Animations/Hj frames/Hj frames _0005.png" id="11_gutfp"]
+[ext_resource type="Texture2D" uid="uid://c4tngbqvpfsuf" path="res://Animations/Hj frames/Hj frames _0006.png" id="12_bxhqs"]
+[ext_resource type="Texture2D" uid="uid://qqobs5n8kp2p" path="res://Animations/Hj frames/Hj frames _0007.png" id="13_l4plr"]
+[ext_resource type="Texture2D" uid="uid://caokanmgbph6i" path="res://Animations/Hj frames/Hj frames _0008.png" id="14_265wc"]
+[ext_resource type="Texture2D" uid="uid://8h6h8gy8ybyn" path="res://Animations/Hj frames/Hj frames _0009.png" id="15_3ovvn"]
+[ext_resource type="Texture2D" uid="uid://vb8kobo4wbrj" path="res://Animations/Hj frames/Hj frames _0010.png" id="16_nrfqg"]
+[ext_resource type="Texture2D" uid="uid://byk7yf6v4psbk" path="res://Animations/Hj frames/Hj frames _0011.png" id="17_iankj"]
+[ext_resource type="Texture2D" uid="uid://ce34whsdmogcw" path="res://Animations/Hj frames/Hj frames _0012.png" id="18_nsrcc"]
+[ext_resource type="Texture2D" uid="uid://lfoes1gpecye" path="res://Animations/Hj frames/Hj frames _0013.png" id="19_ni6nn"]
+[ext_resource type="Texture2D" uid="uid://lpmpj4ydkao2" path="res://Animations/Hj frames/Hj frames _0014.png" id="20_wj17v"]
+[ext_resource type="Texture2D" uid="uid://b8fo8v47fmya1" path="res://Animations/Hj frames/Hj frames _0015.png" id="21_mwjct"]
+[ext_resource type="Texture2D" uid="uid://bjjotnbm4x55" path="res://Animations/Hj frames/Hj frames _0016.png" id="22_nvyjv"]
+[ext_resource type="Texture2D" uid="uid://si1ggwmblqxm" path="res://Animations/Hj frames/Hj frames _0017.png" id="23_l3pwq"]
+[ext_resource type="Texture2D" uid="uid://cvpotlaoir54k" path="res://Animations/Hj frames/Hj frames _0018.png" id="24_uxbx1"]
+[ext_resource type="Texture2D" uid="uid://dmqfgnpfil8yg" path="res://Animations/Hj frames/Hj frames _0019.png" id="25_j0b5y"]
+[ext_resource type="Texture2D" uid="uid://ba2w703gxwaug" path="res://Animations/Hj frames/Hj frames _0020.png" id="26_yhb8a"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jy7bi"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_y71nh")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_o0n14"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_1fij5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_a8yjs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_walu0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_ttpjq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_gutfp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_bxhqs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_l4plr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_265wc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_3ovvn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_nrfqg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_iankj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_nsrcc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_ni6nn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_wj17v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_mwjct")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_nvyjv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_l3pwq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_uxbx1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_j0b5y")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_yhb8a")
+}],
+"loop": true,
+"name": &"default",
+"speed": 12.0
+}]
+
+[node name="CharacterConversationOverlay" type="CanvasLayer" unique_id=1553170717]
+process_mode = 3
+script = ExtResource("1_y71nh")
+conversation_dialogue_file = ExtResource("2_gvw3d")
+background_animations = SubResource("SpriteFrames_jy7bi")
+initial_animation_name = ""
+scene_character_sprite_texture = ExtResource("4_qw1wr")
+mental_image_shader = ExtResource("5_cwuwn")
+
+[node name="RootContainer" type="Control" parent="." unique_id=1417912886]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BackgroundRect" type="ColorRect" parent="RootContainer" unique_id=1509613512]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BackgroundSprite" type="Sprite2D" parent="RootContainer" unique_id=183511186]
+position = Vector2(960.9997, 540.5)
+scale = Vector2(0.5000002, 0.498611)
+texture = ExtResource("5_jy7bi")
+centered = false
+
+[node name="AnimatedBackground" type="TextureRect" parent="RootContainer" unique_id=875999487]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+expand_mode = 1
+stretch_mode = 6
+
+[node name="MentalImageSprite" type="Sprite2D" parent="RootContainer" unique_id=1340344923]
+position = Vector2(960.9997, 540.5)
+scale = Vector2(0.5000002, 0.498611)
+texture = ExtResource("5_jy7bi")
+
+[node name="CinematicBackground" type="ColorRect" parent="RootContainer" unique_id=1433959995]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="CinematicSprite" type="AnimatedSprite2D" parent="RootContainer" unique_id=1625901283]
+position = Vector2(961.00006, 540.00006)
+scale = Vector2(0.938, 0.938)
+sprite_frames = SubResource("SpriteFrames_o0n14")
+
+[node name="CinematicContinueButton" type="Button" parent="RootContainer" unique_id=440595723]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.916
+anchor_top = 0.463
+anchor_right = 0.985
+anchor_bottom = 0.506
+offset_left = -0.720093
+offset_top = -0.0400391
+offset_right = 0.799805
+offset_bottom = 0.519958
+text = "Continue"
+
+[node name="FadeOverlay" type="ColorRect" parent="RootContainer" unique_id=1056678227]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)

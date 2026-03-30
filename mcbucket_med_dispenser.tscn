@@ -6,6 +6,7 @@
 [ext_resource type="Resource" uid="uid://bivfrghh084ym" path="res://interactions/actions/DefaultExamineResponse.tres" id="3_gaeqw"]
 [ext_resource type="Script" uid="uid://dltqnu07oiff" path="res://action.gd" id="4_wn268"]
 [ext_resource type="Script" uid="uid://7xsscyp60ilq" path="res://interactions/actions/CallMethodAction.gd" id="5_gaeqw"]
+[ext_resource type="Material" uid="uid://dww3d0txyl18g" path="res://interactions/actions/interactable_outline.tres" id="OutlineMaterial"]
 
 [sub_resource type="Resource" id="Resource_gaeqw"]
 resource_local_to_scene = true
@@ -29,6 +30,7 @@ object_id = "poop"
 interactions = Array[ExtResource("2_6k5h2")]([ExtResource("3_gaeqw"), SubResource("Resource_34au0")])
 
 [node name="ObjectSprite" type="Sprite2D" parent="."]
+material = ExtResource("OutlineMaterial")
 texture = ExtResource("2_xo2a3")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

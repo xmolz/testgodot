@@ -1,6 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://c3shvlwnp4663"]
 
 [ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactable.gd" id="1_wh154"]
+[ext_resource type="Material" uid="uid://dww3d0txyl18g" path="res://interactions/actions/interactable_outline.tres" id="OutlineMaterial"]
 
 [sub_resource type="ImageTexture" id="ImageTexture_wh154"]
 
@@ -10,6 +11,7 @@
 script = ExtResource("1_wh154")
 
 [node name="ObjectSprite" type="Sprite2D" parent="."]
+material = ExtResource("OutlineMaterial")
 texture = SubResource("ImageTexture_wh154")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

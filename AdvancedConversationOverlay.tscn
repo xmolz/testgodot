@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://kfct0osfvolx"]
+
+[ext_resource type="Script" uid="uid://cqxevyi2fenpl" path="res://AdvancedConversationOverlay.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://yiootngfe2lt" path="res://CharacterProfile.gd" id="2_txusg"]
+[ext_resource type="Resource" uid="uid://c6mm5dugk4j3s" path="res://character_profiles/lewgend_profile.tres" id="3_2snxj"]
+[ext_resource type="Resource" uid="uid://txvb1qq5bx2s" path="res://character_profiles/layla_profile.tres" id="4_2snxj"]
+
+[node name="AdvancedConversationOverlay" type="CanvasLayer" unique_id=543555441]
+layer = 75
+script = ExtResource("1_script")
+character_roster = Array[ExtResource("2_txusg")]([ExtResource("3_2snxj"), ExtResource("4_2snxj")])
+
+[node name="DarkenBackdrop" type="ColorRect" parent="." unique_id=1365844061]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.6)
+
+[node name="ActorStage" type="Control" parent="." unique_id=1007007151]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="SlotLeft" type="Marker2D" parent="ActorStage" unique_id=289535773]
+position = Vector2(480, 1080)
+
+[node name="SlotCenter" type="Marker2D" parent="ActorStage" unique_id=341196472]
+position = Vector2(960, 1080)
+
+[node name="SlotRight" type="Marker2D" parent="ActorStage" unique_id=423892053]
+position = Vector2(1440, 1080)

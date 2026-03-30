@@ -1,11 +1,11 @@
-[gd_resource type="Resource" script_class="VerbData" load_steps=2 format=3 uid="uid://dhmxbhyhr4erb"]
+[gd_resource type="Resource" script_class="VerbData" format=3 uid="uid://dhmxbhyhr4erb"]
 
-[ext_resource type="Script" uid="uid://cn3ln508qp8dm" path="res://VerbData.gd" id="1_ef2nr"]
+[ext_resource type="Resource" uid="uid://xp53l3fuethr" path="res://examinables.dialogue" id="1_dialogue"]
+[ext_resource type="Script" uid="uid://cn3ln508qp8dm" path="res://VerbData.gd" id="2_script"]
 
 [resource]
-script = ExtResource("1_ef2nr")
+script = ExtResource("2_script")
 verb_id = "examine"
 display_text = "Examine"
-unlocked_by_default = true
-requires_target_object = true
+fallback_dialogue_file = ExtResource("1_dialogue")
 metadata/_custom_type_script = "uid://cn3ln508qp8dm"

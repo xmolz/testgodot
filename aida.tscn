@@ -1,9 +1,11 @@
-[gd_scene load_steps=43 format=3 uid="uid://oy53tf8tvxe5"]
+[gd_scene format=3 uid="uid://oy53tf8tvxe5"]
 
 [ext_resource type="Script" uid="uid://dgdtb6o10kuyr" path="res://aida.gd" id="1_c6jtv"]
 [ext_resource type="Texture2D" uid="uid://2om663l1jjvd" path="res://Animations/AIda/Idle/AIda_idle_0001.png" id="1_rbbfu"]
+[ext_resource type="Material" uid="uid://dww3d0txyl18g" path="res://interactions/actions/interactable_outline.tres" id="2_xoi07"]
 [ext_resource type="Texture2D" uid="uid://dssecnye0c5ww" path="res://Animations/AIda/Idle/AIda_idle_0002.png" id="4_a1bqy"]
 [ext_resource type="Texture2D" uid="uid://cgad6gyr5cx57" path="res://Animations/AIda/Idle/AIda_idle_0003.png" id="5_4dvv0"]
+[ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactable.gd" id="5_f5e6k"]
 [ext_resource type="Texture2D" uid="uid://bd7pgwyg2t0lm" path="res://Animations/AIda/Idle/AIda_idle_0004.png" id="6_mruqf"]
 [ext_resource type="Texture2D" uid="uid://bcc1qhncd1ouw" path="res://Animations/AIda/Idle/AIda_idle_0005.png" id="7_yi4fc"]
 [ext_resource type="Texture2D" uid="uid://br1vtso3pedmq" path="res://Animations/AIda/Idle/AIda_idle_0006.png" id="8_d3mpw"]
@@ -54,7 +56,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite:texture")
+tracks/0/path = NodePath("ObjectSprite:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -71,7 +73,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite:texture")
+tracks/0/path = NodePath("ObjectSprite:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -88,7 +90,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite:texture")
+tracks/0/path = NodePath("ObjectSprite:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -105,7 +107,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite:texture")
+tracks/0/path = NodePath("ObjectSprite:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -123,28 +125,28 @@ _data = {
 &"walk": SubResource("Animation_6eamu")
 }
 
-[node name="AIda" type="CharacterBody2D"]
+[node name="AIda" type="CharacterBody2D" unique_id=289342767]
 script = ExtResource("1_c6jtv")
 
-[node name="FloorShadow" type="Sprite2D" parent="."]
+[node name="FloorShadow" type="Sprite2D" parent="." unique_id=1744277729]
 modulate = Color(0.16546667, 0.126, 0.2, 0.32941177)
 position = Vector2(-2.4999847, 525)
 scale = Vector2(8.453125, 1.7708337)
 texture = SubResource("GradientTexture2D_mhq4g")
 
-[node name="Sprite" type="Sprite2D" parent="."]
+[node name="ObjectSprite" type="Sprite2D" parent="." unique_id=940694777]
+material = ExtResource("2_xoi07")
 texture = ExtResource("1_rbbfu")
 
-[node name="MovementController" type="Node" parent="."]
+[node name="MovementController" type="Node" parent="." unique_id=825057676]
 script = ExtResource("13_5x1vy")
 
-[node name="InteractionArea" type="Area2D" parent="."]
+[node name="InteractionArea" type="Area2D" parent="." unique_id=989885246]
+script = ExtResource("5_f5e6k")
 
-[node name="InteractionClickShape" type="CollisionShape2D" parent="InteractionArea"]
+[node name="InteractionClickShape" type="CollisionShape2D" parent="InteractionArea" unique_id=674429600]
 position = Vector2(-9.5, 7)
 shape = SubResource("RectangleShape2D_hsqv2")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_cvq8c")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=175000558]
+libraries/ = SubResource("AnimationLibrary_cvq8c")

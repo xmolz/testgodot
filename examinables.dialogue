@@ -26,8 +26,8 @@ Label provides no description.
 => END
 
 ~ MedicineCabinet
-A cabinet of sorts. Seems like its got drugs in it.
-oh boy.
+Player: (A cabinet of sorts. Seems like it's got an assortment of drugs inside.)
+Player: (Tee-hee.)
 => END
 
 ~ zanopram
@@ -53,9 +53,22 @@ A large balloon-like device. Seems to display a patient's vitals.
 ~ testbox
 let me see me or let me be. these guys try to shut me off on MTV - but it feels so empty without  me
 
-~ exit_door
+~ bathroom_door
 
-An exit! I can get out of here!
+A sliding door.
+Seems to be leading to the restroom.
+=> END
+
+~ main_room_door
+A sliding door.
+Seems to be leading back to the main room.
+=> END
+
+~ exit_door
+An exit!
+I can make it outta here!
+
+=> END
 
 ~ television_screen
 

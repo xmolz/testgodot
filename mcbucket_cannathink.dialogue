@@ -1,6 +1,7 @@
 ~ start
 An ancient man leans back in his hospital chair. 
-The squint in his eyes seems to have relaxed. 
+The squint in his eyes seems to have relaxed.
+do SoundManager.play_music_track("mcbucket_cannathink_theme", 5.0)
 What do you say to him?
 ~ hub 
 - Hey, how are you?
@@ -11,7 +12,6 @@ What do you say to him?
 		Old Man McBucket: I would never accuse you of anything, friend.
 		do change_background_sprite("res://Backgrounds/McBucket/high/mcbucket_high_happy.png")
 		Old Man McBucket: I think you are just...[i] splendid[/i].
-		It seems the medicine has taken its effect on the old man. Maybe he won't distrub you and Sergei now.
 		Is there anything else you want to say to him?
 		=> hub
 
@@ -21,7 +21,6 @@ What do you say to him?
 	- Your..sister's side? 
 		do change_background_sprite("res://Backgrounds/McBucket/high/mcbucket_high_explaining_eyes_closed_mouth_closed.png")
 		Hehehe...Yeah. She's got great knees too. That woman. 
-		The medicine has certainly had an effect on him, you think. He probably won't disturb you and Sergei now.
 		Is there anything else you want to say to him?
 		=> hub
 
@@ -88,6 +87,7 @@ What do you say to him?
 							Old Man McBucket: ...
 							do change_background_sprite("res://Backgrounds/McBucket/high/mcbucket_high_base.png")
 							Old Man McBucket: Wait—what was I talking about?
+							=> hub2
 						- I'd like to ask something else [Back]
 							=> hub2
 						- Nevermind [Leave].
@@ -134,5 +134,6 @@ What do you say to him?
 		=> leave
 - Nevermind. [Leave]
 	~ leave
-	"Goodbye old man" you say to the character in front of you. => END 
+	"Goodbye old man" you say to the character in front of you. 
+	do SoundManager.fade_out_music(3.0)
 	=> END

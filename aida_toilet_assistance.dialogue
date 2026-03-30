@@ -1,0 +1,14 @@
+~ AIda
+AIda: Hey Patient #122!
+AIda: It seems like you blocked the toilet - I receieved a maintenance alert!
+AIda: Gastro activity of this magnitude is a great sign during this phase of your recovery. 
+AIda: Most patients are unable to do that!
+=> END
+
+~ Player
+
+Player: Ah, amazing.
+Player: The Robo-Nurse thinks I just took a big boy shit.
+Player: Anyway... what was I gonna do?
+
+=> END

@@ -1,5 +1,5 @@
 ~ start
-do play_music("unnatural_city", 5.0)
+do SoundManager.play_music_track("unnatural_city", 5.0)
 ???: A darkness folds over you like a sea.
 ???: You wake up to nothing.
 ???: You see nothing.
@@ -110,7 +110,7 @@ do change_background_animation("envelop_loop")
 ???: The Nurse...
 ???: You don't know what that means. But you want to.
 ???: You feel your beating heart again.
-do stop_music(3.0)
+do SoundManager.fade_out_music(3.0)
 ???: [speed=0.25]Welcome back.[/speed]
 ~ END
 

@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://dmkt054qdywph"
+path="res://.godot/imported/aida_toilet_assistance.dialogue-18f58ce0c657fb087d89c3e000cdda37.tres"
+
+[deps]
+
+source_file="res://aida_toilet_assistance.dialogue"
+dest_files=["res://.godot/imported/aida_toilet_assistance.dialogue-18f58ce0c657fb087d89c3e000cdda37.tres"]
+
+[params]
+
+defaults=true

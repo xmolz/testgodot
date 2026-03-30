@@ -1,10 +1,12 @@
-[gd_scene load_steps=7 format=3 uid="uid://ba560cukc85ql"]
+[gd_scene load_steps=9 format=3 uid="uid://ba560cukc85ql"]
 
 [ext_resource type="Script" uid="uid://cy1g0xpb3u0e2" path="res://character_conversation_overlay.gd" id="1_ximbx"]
 [ext_resource type="Resource" uid="uid://cv8to4jygkg5i" path="res://mcbucket_default_dialogue.dialogue" id="2_lbsgd"]
 [ext_resource type="Texture2D" uid="uid://ij27xt1yb7y3" path="res://sergei.PNG" id="3_pkhah"]
 [ext_resource type="Texture2D" uid="uid://dy3ncsp5fixia" path="res://Protag.png" id="4_3gkl1"]
 [ext_resource type="Texture2D" uid="uid://cg86pt8j73x3m" path="res://mcbucket.png" id="5_8ds7v"]
+[ext_resource type="Material" uid="uid://dek82a5tuykas" path="res://Shaders/grayscale_material.tres" id="6_gray"]
+[ext_resource type="FontFile" uid="uid://bd58xbyix7r6p" path="res://Fonts/VarelaRound-Regular.ttf" id="7_font"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_jy7bi"]
 animations = [{
@@ -25,6 +27,7 @@ conversation_dialogue_file = ExtResource("2_lbsgd")
 background_animations = SubResource("SpriteFrames_jy7bi")
 initial_animation_name = ""
 scene_character_sprite_texture = ExtResource("4_3gkl1")
+mental_image_shader = ExtResource("6_gray")
 
 [node name="RootContainer" type="Control" parent="."]
 layout_mode = 3
@@ -58,3 +61,46 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 expand_mode = 1
 stretch_mode = 6
+
+[node name="MentalImageSprite" type="Sprite2D" parent="RootContainer"]
+position = Vector2(957, 540.5)
+scale = Vector2(0.497917, 0.498611)
+
+[node name="CinematicBackground" type="ColorRect" parent="RootContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="CinematicSprite" type="AnimatedSprite2D" parent="RootContainer"]
+position = Vector2(960, 540)
+scale = Vector2(0.938, 0.938)
+
+[node name="CinematicContinueButton" type="Button" parent="RootContainer"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.916
+anchor_top = 0.463
+anchor_right = 0.985
+anchor_bottom = 0.506
+offset_left = -0.720093
+offset_top = -0.0400391
+offset_right = 0.799805
+offset_bottom = 0.519958
+theme_override_fonts/font = ExtResource("7_font")
+theme_override_font_sizes/font_size = 28
+text = "Continue"
+
+[node name="FadeOverlay" type="ColorRect" parent="RootContainer"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)

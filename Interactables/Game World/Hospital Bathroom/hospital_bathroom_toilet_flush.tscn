@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactable.gd" id="1_leo2j"]
 [ext_resource type="Texture2D" uid="uid://b6l5j3t3qweui" path="res://Sprites/Hospital Bathroom/hospital_bathroom_toilet_flush.png" id="2_leo2j"]
+[ext_resource type="Material" uid="uid://dww3d0txyl18g" path="res://interactions/actions/interactable_outline.tres" id="OutlineMaterial"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5u6mx"]
 size = Vector2(334, 105.5)
@@ -17,6 +18,7 @@ texture = ExtResource("2_leo2j")
 offset = Vector2(2.845, 2.5)
 
 [node name="ObjectSprite" type="Sprite2D" parent="."]
+material = ExtResource("OutlineMaterial")
 texture = ExtResource("2_leo2j")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

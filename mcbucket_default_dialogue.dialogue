@@ -1,6 +1,7 @@
 ~ start
 An ancient man stares at you intently. 
 Or at least, you think. The squint makes it hard to tell.
+do SoundManager.play_music_track("mcbucket_normal_theme", 5.0)
 What do you want to say him?
 ~ hub 
 - Hey, how are you?
@@ -8,6 +9,7 @@ What do you want to say him?
 	Then, almost instantly and possibly with intent to deafen, he screams:
 	do change_background_sprite("res://Backgrounds/McBucket/default/mcbucket_normal_ree.png")
 	Old Man McBucket: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
+	do GameManager.set_current_level_flag("mcbucket_has_screamed_at_player", true)
 	do change_background_sprite("res://Backgrounds/McBucket/default/mcbucket_normal_base.png")
 	Wow, that was quite something. What do you wanna say to him?
 	- What?
@@ -33,9 +35,13 @@ What do you want to say him?
 			Old Man McBucket: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
 			- REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!! => ree_hub
 			- Leave
-				"Goodbye old man" you say to the character in front of you. => END
+				"Goodbye old man" you say to the character in front of you. 
+				do SoundManager.fade_out_music(3.0)
+				=> END
 		- Leave
-			"Goodbye old man" you say to the character in front of you. => END
+			"Goodbye old man" you say to the character in front of you. 
+			do SoundManager.fade_out_music(3.0)
+			=> END
 	- Sir, are you okay?
 		do change_background_sprite("res://Backgrounds/McBucket/default/mcbucket_normal_ree.png")
 		Old Man McBucket: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
@@ -59,7 +65,9 @@ What do you want to say him?
 			- Leave
 				"Goodbye old man" you say to the character in front of you. => END
 		- Leave
-			"Goodbye old man" you say to the character in front of you. => END
+			"Goodbye old man" you say to the character in front of you. 
+			do SoundManager.fade_out_music(3.0)
+			=> END
 	- Fuck was that, dickhead?
 		do change_background_sprite("res://Backgrounds/McBucket/default/mcbucket_normal_ree.png")
 		Old Man McBucket: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
@@ -82,12 +90,15 @@ What do you want to say him?
 			- REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!! => ree_hub
 			- Leave
 		- Leave
-			"Goodbye old man" you say to the character in front of you. => END
+			"Goodbye old man" you say to the character in front of you. 
+			do SoundManager.fade_out_music(3.0)
+			=> END
 - Nice eyes, old man.
 	The old man is still and silent.
 	Then, almost instantly and possibly with intent to deafen, he screams - 
 	do change_background_sprite("res://Backgrounds/McBucket/default/mcbucket_normal_ree.png")
 	Old Man McBucket: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
+	do GameManager.set_current_level_flag("mcbucket_has_screamed_at_player", true)
 	do change_background_sprite("res://Backgrounds/McBucket/default/mcbucket_normal_base.png")
 	The old man seems to know only one response.
 	What would you like to do?
@@ -105,8 +116,12 @@ What do you want to say him?
 		do change_background_sprite("res://Backgrounds/McBucket/default/mcbucket_normal_ree.png")
 		Old Man McBucket: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
 		- REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!! => ree_hub
-		- Leave => END
+		- Leave 
+		do SoundManager.fade_out_music(3.0)
+		=> END
 	- Leave
 		"Goodbye old man" you say to the character in front of you. => END
-- Nevermind. [Leave] => END
+- Nevermind. [Leave] 
+	do SoundManager.fade_out_music(3.0)
+	=> END
 	

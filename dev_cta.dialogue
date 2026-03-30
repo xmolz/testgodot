@@ -1,0 +1,124 @@
+~ start
+
+Player: I clicked on the locked level.
+Player: And then, I couldn't believe what I saw.
+Player: What I saw was the weirdest...
+Player: The creepiest...
+Player: The scariest...
+
+do actor_enter("Lewgend", "open_arms", "center")
+
+Lewgend: DEV INSERT!
+
+do actor_effect("Lewgend", "shock")
+do actor_change("Lewgend", "waving")
+
+Lewgend: Hey! I'm Lewgend. How are ya'?
+do actor_change("Lewgend", "explaining")
+Lewgend: Well, I've got news. Good and bad.
+
+
+Lewgend: So... bad news first.
+do actor_change("Lewgend", "embarrassed")
+Lewgend: The demo ends here.
+Lewgend: Yeah. I know. Bummer.
+
+do actor_effect("Lewgend", "shock")
+do actor_change("Lewgend", "open_arms")
+
+Lewgend: But - good news?
+do actor_change("Lewgend", "determined")
+Lewgend: Your boy is COOKING.
+Lewgend: COOKING so much! I've so much planned for this game!
+
+do actor_change("Lewgend", "explaining")
+Lewgend: For example\:
+Lewgend: Lemme call our first female love interest... Layla! 
+Lewgend: Layla! Get over here would ya'?
+
+# Lewgend slides to the right slot, making room!
+do actor_move("Lewgend", "right")
+
+# Layla slides in from off-screen into the left slot!
+do actor_dash_in("Layla", "base", "left")
+do actor_flip("Layla", true)
+Layla: HEY Lew! Called me?
+Layla: What's up? How's it going?
+Lewgend: Hey! All good, Layla! You seem upbeat today.
+Layla: Oh well you know, just trying to keep my spirits up.
+Layla: Kinda hard though.. you know? 
+Layla: Since you decided to give your protagonist bigger titties than me! 
+Lewgend: ..Layla.
+Lewgend: Do we really need to do this right now?
+Lewgend: We're creating a body positive game! Everybody is built different, you know?
+Layla: Whatever. I hope you compensate for this atrocity by giving me a damn good character arc.
+Lewgend: Oh you bet! Creating a rich world with interesting characters is the primary goal of this game!
+Layla: M'kay.
+do actor_flip("Layla", false)
+Layla:Anyway, bye now.
+
+# Layla walks off-screen to the left (the way she came in)
+do actor_walk_out("Layla", "left")
+
+# Lewgend smoothly slides back to the center of the screen
+do actor_move("Lewgend", "center")
+
+Lewgend: Hah. Classic Layla. She really is something.
+
+do actor_flip("Lewgend", true)
+Lewgend: But hey! Let's not forget about our first male love interest - Malcolm!
+Lewgend: Malcolm, get in here my man.
+Malcolm: You sure about that?
+Lewgend: Of course! Get that handsome face in here!
+#malcolm comes in 
+Malcolm: Last time we discussed this, you said I wasn't ready to be shown.
+Malcolm: Ever since I've lived my life alone. Devoid of colour and motion.
+Lewgend: Well, that's not true! We can still make you move through my sprite operations!
+Malcolm: Your sprite wh-?
+Lewgend: ZIP!
+Lewgend: FLIP!
+Lewgend: SLIP!
+#malcolm exits
+Lewgend: Welp. 
+Lewgend: Sorry about that. He still needs a lot of work.
+
+
+Lewgend: Also—quick note.
+Lewgend: All spicy content in the full game is completely optional.
+Lewgend: You can enjoy the story however you like.
+Lewgend: No pressure.
+
+Lewgend: Now…
+Lewgend: Back to reality.
+
+Lewgend: I’m also kind of…
+Lewgend: broke.
+
+Lewgend: Making this game solo has been really tough.
+Lewgend: I’ve been lucky to work with an amazing freelance artist,
+Lewgend: but I don’t have the resources to support them the way this project deserves.
+
+Lewgend: And that’s where you come in.
+
+# shift + patreon icon
+
+Lewgend: If you enjoyed the demo, consider supporting the game on Patreon.
+Lewgend: Even $3 a month helps me keep working on this and bringing the full story to life.
+
+Lewgend: Higher tiers will come with some cool extras too—stuff I’m really excited to share.
+
+Lewgend: This game means a lot to me.
+Lewgend: It’s something I’ve wanted to make for a long time.
+
+Lewgend: So yeah... if you want to see where this goes -
+Lewgend: I’d really, really appreciate your support.
+
+Lewgend: Anyway, that’s my time.
+Lewgend: See you soon. Toodles!
+
+Lewgend: And seriously - thanks for playing.
+
+
+do actor_leave("Lewgend")
+
+=> END

@@ -18,4 +18,4 @@ func _on_body_exited(body):
 func _process(delta):
 	if player_in_zone and Input.is_action_just_pressed("talk_to_npc"):
 		var dlg = load("res://testdialogue.dialogue")
-		DialogueManager.show_dialogue_balloon(dlg, "start")
+		DialogueManager.show_dialogue_balloon_scene("res://conversationballoon.tscn", dlg, "start")

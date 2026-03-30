@@ -13,15 +13,47 @@ var _defaults: Dictionary = {
 	"aida_in_main_room": true
 }
 
-# Set flag overrides here in the Inspector for testing. e.g. "mcbucket_zanopram_used": true
-@export var debug_flag_overrides: Dictionary = {}
+@export_group("Debug Flag Toggles")
+@export var override_has_spoken_to_aida: bool = false
+@export var override_aida_explanation_shown: bool = false
+@export var override_insurance_button_unlocked: bool = false
+@export var override_has_tried_memory_box: bool = false
+@export var override_mcbucket_interruption_happened: bool = false
+@export var override_mcbucket_has_screamed_at_player: bool = false
+@export var override_mcbucket_zanopram_used: bool = false
+@export var override_mcbucket_cannathink_used: bool = false
+@export var override_mcbucket_invigirol_used: bool = false
+@export var override_toilet_has_paper: bool = false
+@export var override_toilet_clogged: bool = false
+@export var override_give_techpass: bool = false
 
 
 func _ready():
 	for key in _defaults:
 		_flags[key] = _defaults[key]
-	for key in debug_flag_overrides:
-		_flags[key] = debug_flag_overrides[key]
+
+	# Apply individual debug toggles (only if true, so unchecked = no effect)
+	var _toggles := {
+		"has_spoken_to_aida": override_has_spoken_to_aida,
+		"aida_explanation_shown": override_aida_explanation_shown,
+		"insurance_button_unlocked": override_insurance_button_unlocked,
+		"has_tried_memory_box": override_has_tried_memory_box,
+		"mcbucket_interruption_happened": override_mcbucket_interruption_happened,
+		"mcbucket_has_screamed_at_player": override_mcbucket_has_screamed_at_player,
+		"mcbucket_zanopram_used": override_mcbucket_zanopram_used,
+		"mcbucket_cannathink_used": override_mcbucket_cannathink_used,
+		"mcbucket_invigirol_used": override_mcbucket_invigirol_used,
+		"toilet_has_paper": override_toilet_has_paper,
+		"toilet_clogged": override_toilet_clogged,
+	}
+	for flag_name in _toggles:
+		if _toggles[flag_name]:
+			_flags[flag_name] = true
+
+	# Debug: give techpass item directly
+	if override_give_techpass and GameManager:
+		GameManager.add_item_to_inventory("techpass")
+
 	print_rich("[color=LawnGreen]LevelStateManager for '%s' is ready.[/color]" % (get_parent().name if get_parent() else "UnnamedLevel"))
 
 

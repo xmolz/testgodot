@@ -1,0 +1,801 @@
+~ start
+if GameManager.get_current_level_flag("mcbucket_zanopram_used") == true:
+	=> drugged_branch
+
+#neutral sprite
+A man in his mid-forties sits upright on his bed.
+His sharp eyes track you as you stir. He looks Slavic.
+do change_background_sprite("res://Backgrounds/Sergey/sergey_hand_up.png")
+Sergey: Ah. You wake. Good. Was not sure you ever would.
+do SoundManager.play_music_track("sergey_sad_theme", 5.0)
+
+~ hub
+do change_background_sprite("res://Backgrounds/Sergey/sergey_neutral_mouth_open.png")
+Sergey: So then… tell me. How can Sergey help?
+
+- How long was I out?
+	do change_background_sprite("res://Backgrounds/Sergey/sergey_hand_up.png")
+	Sergey: Hard to say. You sleep long time. Since I arrive here, you do not move. Like statue. 
+	- I can't recall anything.
+		# concerned face sergei forwn
+		do change_background_sprite("res://Backgrounds/Sergey/sergey_frown.png")
+		Sergey: Hm. That is… not good. 
+		Sergey: You truly remember nothing?
+		- Nope. Nothing at all.
+			#neutral
+			do change_background_sprite("res://Backgrounds/Sergey/sergey_neutral_mouth_open.png")
+			Sergey: Then maybe this is fresh start, da? Clean page.
+			#hand up explaining  
+			do change_background_sprite("res://Backgrounds/Sergey/sergey_hand_up.png")
+			Sergey: In Russia we say… sometimes forgetting is gift.
+			#eyes closed smile
+			do change_background_sprite("res://Backgrounds/Sergey/sergey_eyes_closed.png")
+			#He gives a small shrug, as if to brush off the heaviness of his words.
+			set ConversationEventManager.has_heard_fresh_start_line = true 
+			=> hub
+
+- Who are you?
+	do change_background_sprite("res://Backgrounds/Sergey/sergey_hand_up.png")
+	Sergey: Name is Sergey. Heart had attack, so now I sit here.
+	Sergey: Happen right before I was about to leave the country, too. Bad timing.  
+	- Leaving? Where to?
+		do change_background_sprite("res://Backgrounds/Sergey/sergey_eyes_closed.png")
+		Sergey: Home. Russia.
+		Sergey: Before this, I was research contractor for HAVEMORE Defense.
+		do change_background_sprite("res://Backgrounds/Sergey/sergey_neutral_mouth_open.png")
+		Sergey: Not soldier - I worked with machines. Autonomous systems… behavior models… things that are supposed to make security “more efficient”.
+		#smile eyes closed
+		do change_background_sprite("res://Backgrounds/Sergey/sergey_eyes_closed.png")
+		#He gives a small, humorless laugh.
+		Sergey: Is funny. Work was not dangerous, but somehow… still hurts the head. The heart too, maybe.
+		- Stressful job?
+			#sergei neutral
+			do change_background_sprite("res://Backgrounds/Sergey/sergey_neutral_mouth_open.png")
+			Sergey: Hm. Stressful… yes. Very quiet type of stress.
+			#sergei frown
+			do change_background_sprite("res://Backgrounds/Sergey/sergey_frown.png")
+			Sergey: Too many screens. Too many decisions that are not really decisions.
+			Sergey: People there burn out without fire.
+			#He shifts under the blanket, adjusting his position.
+			#sergei hand behind head
+			do change_background_sprite("res://Backgrounds/Sergey/sergey_hand_behind_head.png")
+			Sergey: Anyway… I told my manager I bring resignation letter next day.
+			#sergei smile
+			do change_background_sprite("res://Backgrounds/Sergey/sergey_hand_up.png")
+			Sergey: Felt lighter than I had in years. Finally, I could go home, see snow, maybe drink tea with my little sister.
+			#He taps his chest lightly.
+			#sergei hand up explain
+			
+			Sergey: That night-boom. Heart decides to protest.
+			Sergey: HAVEMORE doctors saved me, da. But their insurance only works if I am still employee.
+			Sergey: If I quit now… bills will finish me faster than heart ever tried.
+			#sergei eyes closed
+			do change_background_sprite("res://Backgrounds/Sergey/sergey_eyes_closed.png")
+			#He gives a small shrug, resigned but not bitter.
+			#sergey neutral smile
+			do change_background_sprite("res://Backgrounds/Sergey/sergey_neutral_mouth_open.png")
+			Sergey: So I stay. At least until I can stand without that Nurse Bot helping me up.
+			- I'm so sorry to hear that.
+				#sergey hand up neutral
+				do change_background_sprite()
+				Sergey: Eh. No need for sorry.
+				#sergey eyes closed
+				do change_background_sprite("res://Backgrounds/Sergey/sergey_hand_up.png")
+				Sergey: Life is… how you say… stubborn. It goes where it wants.
+				#sergey neutral smile
+				do change_background_sprite("res://Backgrounds/Sergey/sergey_neutral_mouth_open.png")
+				Sergey: I just follow for now.
+				Sergey: But enough about Sergey.
+				Sergey: What about you, hm? 
+				# --- ADD THIS CONDITIONAL BLOCK (indented once and twice) ---
+				if ConversationEventManager.has_heard_fresh_start_line == true
+					#sergey hand behind head
+					do change_background_sprite("res://Backgrounds/Sergey/sergey_hand_behind_head.png")
+					Sergey: Oh wait. Just remember. No memories, da? Sorry. => hub
+				else
+					#He wants to know about your background
+					- I can't recall anything.
+						#sergei frown
+						do change_background_sprite("res://Backgrounds/Sergey/sergey_frown.png")
+						set ConversationEventManager.has_heard_fresh_start_line = true 
+						Sergey: Really? that is not good.
+						Sergey: Did the Nurse tell you anything?
+						- They said I am here because of a drug overdose.
+							#sergei frown + look away
+							do change_background_sprite("res://Backgrounds/Sergey/sergey_frown_look_away.png")
+							Sergey: Boze Moy. Sergey is sorry about that.
+							Sergey: Hope you find peace in your new life. => hub
+
+- How can I use the MemoryBox ™? [if GameManager.get_current_level_flag("has_spoken_to_aida") and GameManager.get_current_level_flag("has_tried_memory_box")]
+	# hand up
+	do change_background_sprite("res://Backgrounds/Sergey/sergey_hand_up.png")
+	Sergey: That machine? Simple. Just put in your TechPass™, turn the machine on, and put your hand on the scanner. Boom, you can access your memories. 
+	# hand down, smile
+	do change_background_sprite("res://Backgrounds/Sergey/sergey_neutral_mouth_open.png")
+	Sergey: I tried once. Helps if you feel lost or..
+	#sergei smile
+	do change_background_sprite("res://Backgrounds/Sergey/sergey_closeup_lookaway_sad.png")
+	Sergey: ..Lonely.
+	
+	#He pauses, then shakes his head. 
+	#sergei hand behind head
+	do change_background_sprite("res://Backgrounds/Sergey/sergey_hand_behind_head.png")
+	Sergey: But I do not look backward anymore. Only forward.
+	#It's a lie, but he wants to believe it.
+	#What do you want to say to Sergey?
+	# change line above, there's only one option to say below
+
+	- What's a TechPass™?
+		#sergei neutral
+		do change_background_sprite("res://Backgrounds/Sergey/sergey_hand_up.png")
+		Sergey: Hah. You must have hit head [i]very[/i] hard. Everyone has TechPass™.
+		#teachpass photo
+		do change_background_sprite("res://Backgrounds/Sergey/sergey_techpass_inhand.png")
+		Sergey: See here.
+		Sergey: It is… how to say… your key to the world. Without it, you cannot use public tech.
+		Sergey: No terminals, no dispensers, no doors that scan ID.
+		#sergei neutral
+		do change_background_sprite("res://Backgrounds/Sergey/sergey_neutral_mouth_open.png")
+		Sergey: Before this, HAVEMORE tried to push something else… neural implant.
+		#He lowers his voice just a touch.
+		#sergei hand behind head
+		do change_background_sprite("res://Backgrounds/Sergey/sergey_hand_behind_head.png")
+		Sergey: Government said no. Did not pass safety trials, I think.
+		Sergey: Only people on inside really know why.
+		#sergei hand up
+		do change_background_sprite("res://Backgrounds/Sergey/sergey_hand_up.png")
+		Sergey: So now we use TechPass™. 
+		Sergey: Small card, but big headache.
+		Sergey: Lose it, and suddenly you are nobody.
+		#sergei eyes closed
+		do change_background_sprite("res://Backgrounds/Sergey/sergey_eyes_closed.png")
+		#He shrugs, though there’s a frustrated edge to it.
+		#sergei neutral
+		do change_background_sprite("res://Backgrounds/Sergey/sergey_neutral_mouth_open.png")
+		Sergey: But rules are rules. Machine will not work for you unless you put your TechPass™ inside. MemoryBox™ is very strict with the permissions.
+		#He looks at you more carefully now.
+		#sergei frown
+		do change_background_sprite("res://Backgrounds/Sergey/sergey_frown.png")
+		Sergey: You really do not remember having one?
+		#sergei look side
+		do change_background_sprite("res://Backgrounds/Sergey/sergey_frown_look_away.png")
+		Sergey: …That is not good.
+		~ techpass_hub
+		#What do you want to say to Sergey?
+		
+		#again, change line above. I can't have this when I am only providing a singular dialogue option.
+		- Is there any way to get a new one?
+			#sergei hand up
+			do change_background_sprite("res://Backgrounds/Sergey/sergey_hand_up.png")
+			Sergey: Maybe. But replacement is slow. HAVEMORE will send a representative to verify your address.
+			if ConversationEventManager.has_heard_fresh_start_line == true
+				#sergei frown
+				do change_background_sprite("res://Backgrounds/Sergey/sergey_frown.png")
+				Sergey: Don't think you can do that with your... forgetting condition.
+			else
+				Sergey: So, if you are OK waiting a few weeks, you can open their website and apply.
+				do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_closeup_curious.png")
+				Little does he know you don't even remember your name, let alone your address.
+			- Could I… borrow yours? Just for a moment?
+				#sergei eyebrows raised
+				do change_background_sprite("res://Backgrounds/Sergey/sergey_closeup_surprised.png")
+				#Sergey raises both eyebrows.
+				Sergey: Borrow? Moya devushka, this is not phone charger.
+				Sergey: If someone else uses my Techpass, system records it against my my name.
+				Sergey: It is..risky. I'm sorry.
+				Sergey: I cannot do that.
+				#sergei look away
+				do change_background_sprite("res://Backgrounds/Sergey/sergey_closeup_lookaway_sad.png")
+				He looks away, as if uncomfortable with how blunt he sounded.
+				#sergei hand up
+				do change_background_sprite("res://Backgrounds/Sergey/sergey_front_neutral_mouth_open.png")
+				Sergey: But… I can help you make application to HAVEMORE.
+				Sergey: If I add my name, maybe they look at it sooner. They know me there.
+				#protag study face
+				do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_closeup_curious.png")
+				He wants to help. And though you barely know him, you can tell he's a kind man.
+				He checks all the boxes.
+				#eyes zoom in
+				do start_mental_image("res://Backgrounds/Sergey/sergey_front_neutral_mouth_open.png", 2.0, Color.LIGHT_CORAL, 0.3,0.5)
+				Soft voice.
+				# mouth zoom in
+				Kind eyes.
+				#hand behind head zoom in
+				That gentle, almost apologetic way he carries himself.
+				#protag studying
+				do stop_mental_image(0.5)
+				do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_closeup_curious.png")
+				You’ve known his type before. 
+				And while you may not remember much of your past -
+				You remember one thing.
+				#protag domme face
+				do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_closeup_domme.png")
+				You've made kind men and women like him bend before.
+				All you need to do is push a few buttons in the right order.
+				#sergei zooming in frown 
+				#do change_background_sprite("res://Backgrounds/Sergey/sergey_front_neutral_mouth_open.png")
+				#And Sergey..
+				#He's already told you he's lonely.
+				#Lonely makes people open.  
+				#Lonely makes people...
+				#do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_closeup_domme.png")
+				#Yield.
+				You know where to start...
+				- You must get tired of being alone here.
+					# clsoe up frown
+					#change the sprite. Why is he blushing here? seems weird as heck.
+					#maybe say: Tired? maybe. I don't know. 
+					do change_background_sprite("res://Backgrounds/Sergey/sergey_closeup_hand_behind_head.png")
+					Sergey: Tired? Da.
+					Sergey: Hospital is loud… but still feels empty.
+					# clos eup frown zoom in
+					do change_background_sprite("res://Backgrounds/Sergey/sergei_closeup_neutral_speaking.png")
+					Sergey: Days blend together. Nurse Bot comes, Nurse Bot goes.
+					#sergei frowning away
+					do change_background_sprite("res://Backgrounds/Sergey/sergey_closeup_lookaway_sad.png")
+					Sergey: Only 'friend' is that old man on the other corner.
+					#mcbucket slide
+					do change_background_sprite("res://Backgrounds/McBucket/default/mcbucket_normal_base.png","slide_left")
+					Sergey: Sad though, he do not speak much.
+					do change_background_sprite("res://Backgrounds/Sergey/sergey_closeup_hand_behind_head.png", "slide_right")
+					Sergey: So yes. Alone is good word.
+					#sergei hiding smile
+					#He gives a small, embarrassed smile.
+					#His shoulders soften after he speaks.
+					#crack in rock
+					#do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_closeup_domme.png")
+					#There it is.
+					#A cute lil puppy with no one to talk to.
+					#need to pick one tone for monolugue: 'you or I' think deeply on this.
+					#You can entertain him.
+					#... For a minute.
+					- It must be hard. No family visiting?
+						#close up in frown
+						do change_background_sprite("res://Backgrounds/Sergey/sergei_closeup_lookaway_sad_mouth_open.png")
+						Sergey: Family is… complication.
+						Sergey: Children live far. We do not speak much these days.
+						Sergey: Wife… she passed long time ago.
+						# close up neutral mouth close eyes closed smile
+						He hesitates, thumb brushing the blanket.
+						#close up hand behind head
+						do change_background_sprite("res://Backgrounds/Sergey/sergei_closeup_neutral_speaking.png")
+						Sergey: This is punishment, I suppose.
+						Sergey: I was difficult man in my younger years. Never home.
+						Sergey: So now… I sit here. And my children somewhere else.
+						#close eup eyes closed mouth closed smile
+						do change_background_sprite("res://Backgrounds/Sergey/sergey_closeup_hand_behind_head.png")
+						He gives a tight, apologetic smile - the kind a man makes when trying not to look broken.
+						# sergei looking sad
+						#do change_background_sprite("res://Backgrounds/Sergey/sergey_closeup_lookaway_sad.png")
+						#sequence below is too dark. The protag has some good in her heart.
+						You can tell he's hungry to be seen.
+						Naturally. It's the one thing everyone nededs to some extent in their life.
+						Well, best let him know that you do see him.
+						do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_closeup_domme.png","dissolve")
+						do SoundManager.fade_out_music(3.0)
+						All. Too. Well.
+						- Make a move on him
+							You step closer to this gentle giant.
+							#up on bed
+							do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_brushing_hair_on_bed.PNG")
+							You place your hands on the mattress and hoist yourself up, settling casually on the edge of his bed.
+							The springs creak under your weight. The mattress dips, tilting him ever so slightly toward you.
+							#close up sergei confised clushing
+							do change_background_sprite("res://Backgrounds/Sergey/sergei_front_confused.png")
+							Sergey watches you carefully. Equal parts confused and curious.
+							Sergey: Devushka… are you okay? Why are you looking like that?
+							#You take a look at him. A good look.
+							# close up torse
+							#His immaculate posture, even while seated.
+							# close up eyes
+							#His kind eyes.
+							#close up hands
+							#His large hands.
+							You slide even closer to him.
+							# close up confused blushing
+							do change_background_sprite("res://Backgrounds/Sergey/sergei_closeup_surprised_blush.png")
+							He starts blushing.
+							You’re half his size. Yet, he looks at you like a schoolboy who’s just realized his teacher knows exactly what he’s thinking.
+							do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_closeup_domme.png","dissolve")
+							This feels... familiarly powerful?
+							What do you say to him?
+							- You said you were lonely. I can tell it’s true.
+								#sergey close up forwn 
+								do change_background_sprite("res://Backgrounds/Sergey/sergey_closeup_lookaway_sad.png")
+								Sergey: Maybe. Loneliness makes strange things of people.
+								Sergey: But I am old man. I get used to it.
+								He finds himself unable to meet your gaze as he says that. 
+							- You don’t have to pretend you don’t want company.
+								do change_background_sprite("res://Backgrounds/Sergey/sergey_closeup_lookaway_sad.png")
+								Sergey: Company, yes. But… what kind of company you mean?
+								He shifts uncomfortably, the bed creaking beneath him.
+								Sergey: You should be resting. Doctors said—
+							- I’m just… curious about you, Sergey.
+								#sergey close up confused
+								do change_background_sprite("res://Backgrounds/Sergey/sergei_front_confused.png")
+								Sergey: Curious? About me?
+								#sergei laughing
+								do change_background_sprite("res://Backgrounds/Sergey/sergei_closeup_laughing.png")
+								#He laughs softly.
+								Sergey: You are funny, woman.
+								Sergey: You do not know your own name, but you want to know Sergey?
+						
+							#both on bed, close OR knee touching leg
+							do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_sergey_knees_touching.png")
+							You ignore his deflection and move closer.
+							#Close enough to get a good look at his face.
+							You study his guarded expression, the softness beneath it.
+							He’s holding his breath. He’s trying so hard to stay composed.
+							#hand moving sequence
+							do play_dissolve_sequence(["res://Backgrounds/Protagonist/xSergei/protag_sergey_hand_being_moved_two.png","res://Backgrounds/Protagonist/xSergei/protag_sergey_hand_being_moved_three.png" ], 1.5, 0.5)
+							#hand over thigh
+							#You place your hand gently on his thigh—right over the blanket.
+							#Sergey stiffens immediately. His eyes dart across the room, then back to you.
+							
+							#sergei blushing speaking close up
+							Sergey: Devushka... please.
+							Sergey: This is... we are in hospital.
+							Sergey: You are confused. Must be medication.
+							do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_sergey_hand_hovering.png", "dissolve")
+							He starts to lift his hand, as if to remove yours, but he hovers just above your skin. 
+							He can't bring himself to push you away.
+							#What do you say to him?
+							
+							- I'm not confused.
+								Player: I'm not Confused, Sergey. Trust me.
+							- I know exactly where I am.
+								Player: I know where I am Sergey. It's right where I wanna be right now.
+							do SoundManager.play_looping_sfx("heavy_breathing", 2.0, 0.0)
+							#sergei blsuhing looking away close eup
+							Sergei Looks at you. There is nothing he has to say.
+							Or rather, there is nothing he [i]can[/i] say.
+							#whispering in ear
+							do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_touching_sergey.png", "dissolve")
+							You lean in, lowering your voice to a whisper.
+							Player: And I know exactly who I'm touching.
+							#sergei close up looking away blushing
+                            # EDIT Changed to focus on tension, not surrender
+							#Sergey's adam's apple bobs as he swallows hard.
+							#His knuckles turn white where he grips the sheets.
+							#He is trembling. 
+							#He knows he should push you away, but his body refuses to obey.
+							#sergei close up looking away blushing speaking
+							do change_background_sprite("res://Backgrounds/Sergey/sergey_eyes_only_looking_away.png", "dissolve")
+							Sergey: I... I do not want to read wrong meaning.
+							Sergey: I am just... tired old man. You...You are...
+							#He trails off. He's begging you to stop him, because he knows he can't stop himself.
+							- I need you right now, Sergei.
+								do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_touching_sergey.png", "dissolve")
+								Player: Listen sergey, you ever wake up really horny?
+								Player: I usually do.
+								Player: And given how long I had been sleeping..
+								Player: I'm EXTRA horny.
+								Player: Won't you help a girl out?
+								Player: I need you.
+							#sergei looks at us
+							do change_background_sprite("res://Backgrounds/Sergey/sergey_eyes_only_eye_to_eye.png", "dissolve")
+							Sergey: You need ..me?
+							# EDIT: This is the ONLY moment he truly gives up.
+							#He exhales, a long, shuddering breath.
+							#The tension snaps.
+							#The fight leaves him completely.
+							Sergey: Boze moy...
+							do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_sergey_hand_being_moved_three.png", "dissolve")
+							#crack completely opening
+							This is it. The cracks have opened.
+							You hook your fingers over the edge of the heavy wool blanket.
+							And remove it.
+							# exposed gown and legs
+							do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_sergey_gown only.png", "dissolve")
+							Sergey shivers.
+							Now there is only the thin, worn cotton of the gown between you. 
+							A flimsy defense.
+							#slipping underneath
+							do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_sergey_gown_hand_slipped_in.png", "dissolve")
+							You slip your fingers underneath, finally making skin-to-skin contact.
+							The heat of his skin is a shock against your cold fingers.
+							#side view, head pulled back
+							#He flinches, a sharp intake of air hissing through his teeth. But he doesn't pull away. 
+							#Instead, his legs part just a fraction—a silent, desperate invitation.
+
+							You don't rush. You take your time mapping the tension of his inner thigh.
+							Your palm circling the inside of his thigh.
+							Ever. So. Slowly.
+    
+							# sfx heavy breathing man. Keep animation running
+							#His breath catches, and a quick, involuntary twitch runs through the muscle. 
+							#His body is surrendering to you long before his mind can find the words to catch up.
+
+							#very close - face to face. Sergei mouth closed
+							You lean in, closing the distance until you're breathing his air. 
+							You want to see him up close when you finally [i]claim[/i] him.
+
+							#very close, face to face - sergei mouth open
+							do change_background_sprite("res://Backgrounds/Sergey/sergey_eyes_only_eye_to_eye.png", "dissolve")
+							Sergey: I should not... we should not...
+							He bucks his hips slightly into your hand as he tells you that lie.
+							#very close, lips to ear
+							do change_background_sprite("res://Backgrounds/Sergey/sergey_eyes_only_pleasure.png", "dissolve")
+							You lean forward, your lips inches from his ear.
+							Now is the time. You move your hand higher, aiming for the....but then- 
+							#slide to mcbucket
+							do SoundManager.stop_looping_sfx("heavy_breathing", 0.0)
+							do SoundManager.play_sfx("mcbucket_scream")
+							do change_background_sprite("res://Backgrounds/McBucket/default/mcbucket_normal_ree.png")
+							do shake(1, 10)
+							Old Man McBucket: REEEEEEEEEEEEEEEEE~~~~~~~~
+							The patient across the room screams, shattering the moment.
+							do change_background_sprite("res://Backgrounds/Sergey/sergey_hand_behind_head.png")
+							Both you and Sergei flinch and pull back.
+							#Sergey looks at you apologetically.
+							- I'm sorry, I got carried away.
+								Sergey: No, it is okay. Don't apologize. Sergey got carried away too.
+								Sergey: This Old Man has lost it. Can't do nothing in front of him. 
+								~ interrupted_hub
+								do change_background_sprite("res://Backgrounds/Sergey/sergey_frown.png")
+								Sergey looks defeated.
+								- Who is that guy?
+									do change_background_sprite("res://Backgrounds/Sergey/sergei_closeup_lookaway_sad_mouth_open.png", "dissolve")
+									Sergey: I do not know. I think his name is McBucket.
+									Sergey: I try to make conversation once. But he only screams. Never talks.
+									Sergey: Must be very bad case.
+									- Have you tried asking the Nurse about him?
+										Sergey: The Nurse is an AI. She does not share patient details with other patient.
+										Sergey: I didn't know anything about you until you wake up either. => interrupted_hub
+								- But, I still want to continue!
+									#Good choice. You still need that TechPass™.
+									#You pull out your best puppy face and tell him you want to continue.
+									#He speaks softly and shyly.
+									do change_background_sprite("res://Backgrounds/Sergey/sergey_eyes_only_looking_away.png", "dissolve")
+									Sergey: I...I do too.
+									Sergey: It is just..this guy. I cannot do anything in front of him.
+									do change_background_sprite("res://Backgrounds/Sergey/sergei_closeup_lookaway_sad_mouth_open.png","dissolve")
+									Sergey: If only there was anything that could calm him down for a little while..
+									#Sergey continues to look defeated.
+									- Don't worry, I will take care of it [Leave].
+										do change_background_sprite("res://Backgrounds/Sergey/sergey_closeup_surprised.png")
+										Sergey: Eh? You will? 
+										Sergey: I do not know about that... But I hope you can figure this out.
+										Sergey: I would....really like that.
+										do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_closeup_domme.png","dissolve")
+										'And I would really like your TechPass™, sweetheart' is what you want to say.
+										'Me too! Sergey.' is what you end up saying instead.
+										Okay then, comatose girl. Lets get this bread.
+										do GameManager.set_current_level_flag("mcbucket_interruption_happened", true)
+										=> END!
+- Nevermind [Leave] 
+	do SoundManager.fade_out_music(3.0)
+	=> END
+~ some_other_thing_I_will_include_other_time
+- I bet you miss your wife. I can fill the part.
+#Suddenly, Sergey's face goes blank.
+#He pushes your hand away.
+Sergey: Anna was good wife. She would not like this. I am sorry.
+#Sergey pulls away from you. 
+#He seems upset.
+- I'm sorry Sergey. I didn't mean to upset you.
+	if ConversationEventManager.has_heard_fresh_start_line == true
+		Sergey: It is okay Devushka. You are waking up after long time.
+		Sergey: Maybe you forgot that these thing take some time.
+	if ConversationEventManager.has_heard_fresh_start_line == false
+		Sergey: It is okay, Devushka. Let's forget it.
+- No, not doing that. Must be another way. (Leave)
+Sergey: All the best, Devushka.
+- Nevermind [Back]
+
+
+~ drugged_branch
+#sergey neutral
+Having put the old man to sleep, you return to Sergey.
+He has retreated back into his shell during your absence.
+The blanket is pulled up tight, hiding his legs again.
+
+#protag thinking face
+do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_closeup_curious.png")
+Player: (Let's make this quick.)
+Player: (I need to get the fuck out of here. And this [i]gentle giant[/i] here holds the key.)
+Player: (No worries, I got this.)
+
+#back on bed sprite
+do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_brushing_hair_on_bed.PNG")
+You put your game face on and prop yourself back up on his bed.
+
+- Missed me?
+
+#sergey talking sprite
+do change_background_sprite("res://Backgrounds/Sergey/sergey_hand_behind_head.png")
+Sergey: Ah... You are back.
+Sergey: It is... very quiet now.
+Sergey: What did you do to him?
+
+- I just helped him get some peace
+	#sergey eyebrows raised / impressed
+	do change_background_sprite("res://Backgrounds/Sergey/sergei_closeup_laughing.png")
+	Sergey: Peace? Why, that is quite the rarity in this place!
+	Sergey: You are a very capable woman, I see.
+	#sergey shy smile
+	He looks at you with a new kind of respect.
+
+- Don't worry about him now, look at me.
+	#sergey blush / obedient
+	do change_background_sprite("res://Backgrounds/Sergey/sergei_closeup_surprised_blush.png")
+	Sergey does not ask again. He simply nods.
+	It's just him and you now.
+
+#sergey looking down / shy
+do change_background_sprite("res://Backgrounds/Sergey/sergei_closeup_lookaway_sad_mouth_open.png")
+Sergey: You know, I was half afraid you might not return.
+Sergey: That you would leave old Sergey... hanging.
+
+#protag smirk / internal monologue
+do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_closeup_domme.png")
+Player: (Aw, how CUTE.)
+Player: (Lil' Sergey isn't afraid of what I did to the old man.)
+Player: (He was afraid I wouldn't come back to finish the [i]job[/i].)
+
+Player: (Well then, the quest is nearly complete.)
+Player: (Time to get ready for the loot.)
+
+- Leave you hanging?
+
+#knees touching image
+Player: Oh, Sergey. How could i leave a man like YOU hanging?
+Player: God knows how long I'll need to be here.
+Player: I need to keep some company too. And the nurse and the old man aren't exactly the chummy type, you know?
+You pull yourself closer to him.
+do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_sergey_knees_touching.png")
+This time, you don't ask him for permission.
+do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_sergey_gown only.png", "dissolve")
+
+
+You notice Sergey open his mouth again, presumably to speak.
+Player: (God, I do not have the time for this.)
+So you did what any woman respecting her time would do\:
+
+# finger on sergey's mouth.
+do change_background_sprite("res://Backgrounds/rough/sergey_shutted_up.png", "dissolve")
+#need to make a drawing for this.
+You shut him up.
+Player: (Mama's here.)
+
+
+You run a finger down the glowing haptic strip on the bed frame.
+
+#sound effect -zhooom * vzzzzzt*
+#maybe: show his sprite go down as that happens?
+Sergey: Wait, what are you—
+do SoundManager.play_music_track("sergey_hj_music", 5.0)
+#bed reclining animation
+*Vzzzzzt*
+The servos engage instantly.
+do change_background_sprite("res://Backgrounds/Sergey/sergey_flat_and_embarrassed.png", "dissolve")
+The backrest drops, pulling him down until he lies flat beneath you.
+
+Player: (Well, I've got him where I want him.)
+Player: (Back to where I left off last time...)
+do fade_to_black(2.0)
+You put your hand on his gown and remove it.
+
+#fade to black / The Reveal
+Two things happen immediately.
+First, you notice that he is... [i]very[/i] happy to see you.
+But that's no surprise. You pushed every right button. In the exact right order.
+His erection was granted.
+
+And second, a phrase pops into your head.
+Something from a language class you maybe took a lifetime ago.
+
+#reveal what's underneath (CG or Text emphasis)
+do reveal_shock_from_black("res://haluwa.png", 25.0)
+Player: ([i]Ooki Desu.[/i])
+Player: (Oh. So this is what my brain remembers.)
+Player: (Good. Who'd wanna be burdened with the knowledge of trivial things.)
+Player: (You know, like my fucking name?)
+Player: (Seriously? Whatever. He's... huge.)
+Player: (Much bigger than I estimated.)
+
+And, for some reason, a voice of justice pops up in your head\:
+Player: (Hmmm. You know, it [i]does[/i] feel kindda unfair for him to be the only one exposed here.)
+
+
+
+do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_touching_sergey.png")
+
+Player: (The least I could do for this poor baby is show him some tits.)
+#add flagged line saying something like - god knows his wife can't do that for him anymore? Think about it. 
+You reach behind your neck, fingers finding the knot of your hospital gown.
+One tug is all it takes.
+
+#protag reveal boobs
+do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_top_off.png", "dissolve")
+The fabric slides down your shoulders, pooling at your waist and leaving you undone.
+#sergey blush / awestruck
+Sergey: Wow... Devushka...
+Sergey: You are.. extraordinarily beautiful.
+
+- This is for your eyes only, Sergey.
+
+Sergey looks down, his face burning.
+Player: (How cute.)
+Player: (Men will believe just about anything you say to them.)
+Player: (... As long as you have your tits out)
+
+Player: (Well, time to get to it.)
+do change_background_sprite("res://Animations/Hj frames/Hj frames _0001.png", "dissolve")
+You slide down by his side and take his huge dick in your hands.
+He barely fits him in your palm.
+
+Sergey is warm.
+[b]Feverishly[/b] warm.
+You are so close now, you can see every micro-expression, every twitch of muscle.
+
+The rise and fall of his chest.
+His hand loosely clutching the sheets.
+The way he can barely see you eye to eye. 
+
+Player: ([i]Interesting[/i].)
+#protag face looking down
+Player: (Perhaps in another life, I would've treated you better, Sergey.)
+Player: (Given you a chance to be known.)
+Player: (given myself one to be known by you, even.)
+
+Player: (But... in this life?)
+Player: (I just need you for a minute.)
+Player: (A hot fucking minute.)
+
+Player: (Best get it started.)
+do play_cinematic("default", true, true, "none")
+#cinematic plays for a while (until player clicks on continue)
+
+Sergey's hips begin to slide up and down - chasing the rhythm of your hand.
+Player: (He's close.)
+You tighten your grip ever so slightly.
+Faster. Faster.
+
+The movements turn desperate. Forceful.
+
+Player: (Men.)
+Player: (So predictable.)
+You know exactly when he is going to break.
+
+3..
+2..
+..!
+do change_background_sprite("res://Animations/Hj frames/Hj frames _0020.png", "none")
+
+# 5. Stop Cinematic (Reveal the new BG)
+# The video fades out, revealing the NEW background we just set.
+do stop_cinematic("dissolve")
+#end of climax image
+Sergey unravels completely.
+Player: Woah!
+This is a heavy, depsperate release.
+#protag looking down face
+Player: (Damn, you were really pent up, huh?)
+Player: (But wait, what's that? )
+#Sergey face (messy), dissolve
+do change_background_sprite("res://Backgrounds/Sergey/sergey_flat_and_drained.png", "dissolve")
+Player: (Lil' Sergey got some of his own cum on his cheek!)
+He is so lost in the aftershocks that he doesn't even notice.
+Player: (How cute.)
+
+#back to protag looking down
+You grab a tissue from the side table and reach out.
+Gently, you wipe his flustered face clean.
+
+#Sergey, speaking, no mess
+do change_background_sprite("res://Backgrounds/Sergey/sergey_flat_and_embarrassed.png", "none")
+The touch snaps him back to reality.
+Sergey: Devushka! Oh no, I -
+Player: (I sense an apology coming.)
+# Finger(s?) oh his face
+Player: It's okay Sergey. You don't need to say anything. 
+
+#haptic strip sound / bed raising
+You slide your finger against the bed's haptic strip again. Bringing him up.
+
+*Vzzzzzt*
+#protag sitting on bed
+do change_background_sprite("res://Backgrounds/Sergey/sergey_eyes_only_looking_away.png","dissolve")
+His face is a shy red.
+Player: Want me to grab you some water, cutie?
+Sergey: No, it's alright. Thank you..
+do SoundManager.fade_out_music(7.0)
+#fade to black
+do fade_to_black(1.5)
+For a moment, the room falls silent.
+You take a moment to fix your gown.
+Sergey tries to compose himself, pulling his gown back down to cover his big gun.
+do change_background_sprite("res://Backgrounds/Sergey/sergey_closeup_lookaway_sad.png")
+#sergey back to normal, neutral, shy (hair on his head)
+do fade_from_black(1.5)
+
+Sergey: Devushka..
+Sergey: I don't know what to say.
+
+- You don't need to say anything, Sergey.
+
+do change_background_sprite("res://Backgrounds/Sergey/sergey_eyes_only_looking_away.png")
+He looks away, shyly.
+
+You reach up to his forehead. There is a long strand of your hair sticking to his sweat-dampened skin.
+You pinch it and peel it off him, slowly.
+
+#protag domme face
+do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_closeup_domme.png", "dissolve")
+You: Oops! Sorry about that.
+
+#sergey close up eyes looking to the side, shy.
+do change_background_sprite("res://Backgrounds/Sergey/sergey_eyes_only_looking_away.png", "dissolve")
+Sergey: T-Thanks, Devushka.
+
+#start mental image / protag calculating
+do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_closeup_domme.png", "dissolve")
+That's it.
+He's primed.
+All you gotta do now is let him soak in the silence.
+
+3...
+2..
+1.
+
+#sergey talking / nervous
+do change_background_sprite("res://Backgrounds/Sergey/sergey_closeup_hand_behind_head.png")
+Sergey: Devushka... so you wanted to use the MemoryBox, right?
+Sergey: Now that I think... the process to get new pass might be too long.
+do change_background_sprite("res://Backgrounds/Sergey/sergey_front_neutral_mouth_open.png")
+Sergey: HAVEMORE bureaucracy is nightmare. Your bill will increase a lot if you wait.
+
+
+
+#do change_background_sprite("res://Backgrounds/Sergey/sergey_neutral_mouth_open.png")
+Sergey: You can use mine if you want. Just for a while.
+do change_background_sprite("res://Backgrounds/Sergey/sergey_front_hand_behind_head.png")
+Sergey: If HAVEMORE raises a query, I hope they will let me off easy.
+Sergey: I gave them twenty years of my life, after all!
+
+#protag internal monologue
+#protag domme face
+do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_closeup_domme.png", "dissolve")
+Player: (Bam. Wham. Thank you, Ma'am.)
+
+- Fake refuse the offering.
+#protag sad / virtuous face
+do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_closeup_curious.png")
+Player: Sergey... thank you. But I cannot take this.
+Player: I do not want you to feel pressured into giving me anything just because of what we just did.
+Player: It feels... unethical.
+#change protag expression to sly (internal)
+do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_closeup_domme.png", "dissolve")
+
+#back to sergey / panicked earnestness
+do change_background_sprite("res://Backgrounds/Sergey/sergey_closeup_surprised.png")
+Sergey's eyes widen. He looks horrified that you would think that.
+Sergey: Unethical? No! No, please. Do not think like that.
+Sergey: This is not... payment.
+
+#He reaches out and clumsily grabs your hand, pressing the warm plastic card into your palm.
+#hand holding image
+
+do change_background_sprite("res://Backgrounds/Sergey/sergey_hand_up.png")
+Sergey: This is... gift. From friend to friend.
+Sergey: Please. I insist.
+do change_background_sprite("res://Backgrounds/Sergey/sergey_frown.png")
+Sergey: If you do not take it, I will feel... bad. Like I took advantage of you.
+
+#protag neutral smile
+do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_closeup_curious.png")
+
+You: Well... if you put it that way.
+You: Thank you, Sergey.
+
+do GameManager.add_item_to_inventory("techpass")
+The air in the room returns back to normal.
+You: Stay put Sergey, let me figure out who I am and come see you again?
+Sergey: Of course Devushka, I've got no where to go.
+
+Well, guess it's time to finally get to it, huh?
+
+- Leave
+
+~ END

@@ -61,10 +61,6 @@ var current_balloon: Node = null
 
 
 func _ready():
-	# --- NEW AUDIO SETUP ---
-	_music_player = AudioStreamPlayer.new()
-	_music_player.bus = "Slow Music" # Routes it to your Music bus!
-	add_child(_music_player)
 	# 1. Setup Character Sprite
 	if character_main_sprite:
 		if scene_character_sprite_texture:
@@ -87,6 +83,9 @@ func _ready():
 	else:
 		print_rich("[color=orange]Warning: 'CinematicContinueButton' not found in RootContainer.[/color]")
 
+
+
+		
 	# 3. Connect Dialogue Manager Signals
 	DialogueManager.dialogue_ended.connect(_on_dialogue_ended_from_manager)
 	DialogueManager.got_dialogue.connect(_on_got_dialogue)
@@ -98,8 +97,9 @@ func _ready():
 	else:
 		print_rich("[color=red]No 'background_animations' (SpriteFrames) assigned![/color]")
 
-	# Ensure mental image sprite is hidden at start
-	mental_image_sprite.visible = false
+# Ensure mental image sprite is hidden at start
+	if mental_image_sprite:
+		mental_image_sprite.visible = false
 
 	# 5. Launch Dialogue Balloon & CAPTURE IT
 	if conversation_dialogue_file:
@@ -446,9 +446,17 @@ func change_background_sprite(texture_path: String, effect: String = ""):
 		print_rich("[color=red]Error: Could not load texture at: %s[/color]" % texture_path)
 		return
 
+	# --- CALCULATE EXACT SCALE TO FILL THE SCREEN ---
+	var screen_size = get_viewport().get_visible_rect().size
+	var tex_size = new_texture.get_size()
+	# This keeps the image's aspect ratio but ensures the whole screen is covered
+	var scale_factor = max(screen_size.x / tex_size.x, screen_size.y / tex_size.y)
+	var new_scale = Vector2(scale_factor, scale_factor)
+
 	# --- CASE 1: NO EFFECT (Standard Switch) ---
 	if effect == "" or effect == "none":
 		background_sprite.texture = new_texture
+		background_sprite.scale = new_scale # Apply dynamic scale
 		background_sprite.visible = true
 		background_sprite.position = Vector2.ZERO
 		return
@@ -467,6 +475,7 @@ func change_background_sprite(texture_path: String, effect: String = ""):
 
 		# 3. Set the MAIN sprite to the NEW image immediately
 		background_sprite.texture = new_texture
+		background_sprite.scale = new_scale # Apply dynamic scale
 		background_sprite.visible = true
 
 		# 4. Tween the Ghost's Opacity to 0
@@ -496,6 +505,7 @@ func change_background_sprite(texture_path: String, effect: String = ""):
 
 	# 3. Setup New Sprite
 	background_sprite.texture = new_texture
+	background_sprite.scale = new_scale # Apply dynamic scale
 	background_sprite.visible = true
 
 	# 4. Calculate Positions
@@ -528,7 +538,6 @@ func change_background_sprite(texture_path: String, effect: String = ""):
 	# 7. Cleanup
 	slide_tween.chain().tween_callback(temp_old_sprite.queue_free)
 
-
 func _on_dialogue_ended_from_manager(resource: DialogueResource):
 	if resource == conversation_dialogue_file:
 		conversation_finished.emit(resource)
@@ -559,9 +568,16 @@ func play_dissolve_sequence(image_paths: Array, hold_duration: float = 2.0, fade
 			print_rich("[color=red]Error loading: %s[/color]" % texture_path)
 			continue # Skip this bad image and try the next
 
+		# --- CALCULATE EXACT SCALE TO FILL THE SCREEN ---
+		var screen_size = get_viewport().get_visible_rect().size
+		var tex_size = new_texture.get_size()
+		var scale_factor = max(screen_size.x / tex_size.x, screen_size.y / tex_size.y)
+		var new_scale = Vector2(scale_factor, scale_factor)
+
 		# --- STEP 1: If this is the FIRST image and screen is empty, just show it ---
 		if i == 0 and not background_sprite.visible:
 			background_sprite.texture = new_texture
+			background_sprite.scale = new_scale # Apply dynamic scale
 			background_sprite.visible = true
 			background_sprite.modulate.a = 0.0 # Start invisible
 
@@ -585,6 +601,7 @@ func play_dissolve_sequence(image_paths: Array, hold_duration: float = 2.0, fade
 
 			# 3. Set the REAL sprite to the NEW image underneath
 			background_sprite.texture = new_texture
+			background_sprite.scale = new_scale # Apply dynamic scale
 			background_sprite.visible = true
 
 			# 4. Tween the GHOST to transparent (revealing the new one)
@@ -597,10 +614,8 @@ func play_dissolve_sequence(image_paths: Array, hold_duration: float = 2.0, fade
 			temp_old_sprite.queue_free() # Delete the ghost
 
 		# --- STEP 3: Wait for the "Hold" time before showing the next one ---
-		# We don't wait after the very last image
 		if i < image_paths.size() - 1:
 			await get_tree().create_timer(hold_duration).timeout
-			
 # ---------------------------------------------------------
 # NEW: FADE FUNCTIONS
 # ---------------------------------------------------------
@@ -709,42 +724,5 @@ func reveal_shock_from_black(texture_path: String, shake_power: float = 25.0):
 	else:
 		# Fallback if no overlay
 		pass
-# ---------------------------------------------------------
-# NEW: AUDIO FUNCTIONS (Called from .dialogue)
-# ---------------------------------------------------------
-
-# Called via dialogue: do play_music("track_name", 1.5)
-func play_music(track_name: String, fade_duration: float = 1.0):
-	if not music_tracks.has(track_name):
-		print_rich("[color=red]ConversationOverlay: Track '%s' not found in inspector list![/color]" % track_name)
-		return
-		
-	var stream = music_tracks[track_name]
-	
-	# Don't restart the track if it's already playing
-	if _music_player.stream == stream and _music_player.playing:
-		return
-		
-	_music_player.stream = stream
-	
-	if fade_duration > 0.0:
-		_music_player.volume_db = -80.0
-		_music_player.play()
-		var tween = create_tween()
-		# Fades up to 0.0 dB (normal volume)
-		tween.tween_property(_music_player, "volume_db", 0.0, fade_duration).set_trans(Tween.TRANS_SINE)
-	else:
-		_music_player.volume_db = 0.0
-		_music_player.play()
-
-# Called via dialogue: do stop_music(1.5)
-func stop_music(fade_duration: float = 1.0):
-	if fade_duration > 0.0:
-		var tween = create_tween()
-		tween.tween_property(_music_player, "volume_db", -80.0, fade_duration).set_trans(Tween.TRANS_SINE)
-		tween.tween_callback(_music_player.stop)
-	else:
-		_music_player.stop()
-
 func _exit_tree():
 	_cleanup_and_queue_free()
