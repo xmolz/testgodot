@@ -143,6 +143,10 @@ func set_ambience_volume(vol: float):
 
 # --- Music Functions ---
 
+# Instantly stops the currently playing music and resets the ambience volume
+func stop_music():
+	fade_out_music(0.0)
+
 # Called via dialogue: do SoundManager.play_music_track("aida_theme", 3.0)
 func play_music_track(track_name: String, fade_duration: float = 1.0):
 	_initialize_music_player()

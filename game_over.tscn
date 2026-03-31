@@ -1,0 +1,81 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://game_over.gd" id="1_script"]
+[ext_resource type="FontFile" uid="uid://b1iquuxsqnjah" path="res://Fonts/RubikGlitch-Regular.ttf" id="2_rubik"]
+[ext_resource type="FontFile" uid="uid://6fxwb86ujy6q" path="res://Fonts/IBMPlexSans-SemiBold.ttf" id="3_ibm"]
+[ext_resource type="Theme" uid="uid://bbh4rjwcxnama" path="res://Themes/verb_and_inventory_theme.tres" id="4_theme"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_title"]
+font = ExtResource("2_rubik")
+font_size = 120
+font_color = Color(0.2, 0.85, 1.0, 1.0)
+shadow_color = Color(0.2, 0.85, 1.0, 0.4)
+shadow_offset = Vector2(0, 0)
+shadow_size = 30
+
+[sub_resource type="Animation" id="Animation_fade_in"]
+resource_name = "fade_in"
+length = 3.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("VBoxContainer:modulate:a")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 3),
+"transitions": PackedFloat32Array(0.4, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_default"]
+_data = {
+&"fade_in": SubResource("Animation_fade_in")
+}
+
+[node name="GameOver" type="CanvasLayer"]
+layer = 120
+script = ExtResource("1_script")
+
+[node name="Background" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -120.0
+offset_right = 300.0
+offset_bottom = 120.0
+grow_horizontal = 2
+grow_vertical = 2
+modulate = Color(1, 1, 1, 0)
+alignment = 1
+
+[node name="GameOverLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+label_settings = SubResource("LabelSettings_title")
+text = "GAME OVER"
+horizontal_alignment = 1
+
+[node name="MainMenuButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_theme")
+text = "MAIN MENU"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "fade_in"
+libraries = {
+&"": SubResource("AnimationLibrary_default")
+}
+
+[connection signal="pressed" from="VBoxContainer/MainMenuButton" to="." method="_on_main_menu_button_pressed"]

@@ -13,6 +13,7 @@ const INTRO_DIALOGUE_FILE_PATH = "res://dialogue/npcs/faye.dialogue"
 const INTRO_BACKGROUND_ANIMATIONS_PATH = "res://conversation_backgrounds.tres"
 const INTRO_INITIAL_ANIMATION_NAME = "float_loop"
 const FORM_DIALOGUE = preload("res://form_related_dialogue.dialogue")
+const GAME_OVER_SCENE = preload("res://game_over.tscn")
 
 var _insurance_form_instance: CanvasLayer = null # To keep track of the form
 var _journal_overlay_instance: CanvasLayer = null # <--- ADD THIS
@@ -49,7 +50,8 @@ enum GameState {
 	IN_GAME_PLAY,
 	PAUSED,
 	EXPLANATION,
-	CUTSCENE # <--- Add this line
+	CUTSCENE, # <--- Add this line
+	GAME_OVER
 }
 
 
@@ -269,7 +271,12 @@ func change_game_state(new_state: GameState):
 				#print_rich("[color=yellow]GM: Cleaning up Main Menu scene.[/color]")
 				main_menu_scene_instance.queue_free()
 				main_menu_scene_instance = null
-				
+		GameState.INTRO_CONVERSATION:
+			if new_state == GameState.MAIN_MENU:
+				# Find and destroy the intro overlay if we are aborting to the main menu
+				var intro_overlay = get_tree().root.get_node_or_null("CharacterConversationOverlay")
+				if is_instance_valid(intro_overlay):
+					intro_overlay.queue_free()
 		GameState.IN_GAME_PLAY:
 			# When LEAVING the game (e.g. to Menu), stop music and ambience.
 			# If going to CUTSCENE or EXPLANATION, we usually want music/ambience to keep playing.
@@ -277,6 +284,11 @@ func change_game_state(new_state: GameState):
 				SoundManager.stop_music()
 				# --- STOP AMBIENCE HERE ---
 				SoundManager.stop_all_ambience()
+
+			if new_state == GameState.MAIN_MENU:
+				if is_instance_valid(main_game_scene_instance):
+					main_game_scene_instance.queue_free()
+					main_game_scene_instance = null
 
 	#print_rich("[color=yellow]GameManager: Changing state from %s to %s[/color]" % [GameState.keys()[current_game_state], GameState.keys()[new_state]])
 	current_game_state = new_state
@@ -1288,3 +1300,38 @@ func _on_form_submit_requested():
 		if SoundManager: SoundManager.play_sfx("form_incorrect_input")
 		var balloon = DialogueManager.show_dialogue_balloon_scene("res://conversationballoon.tscn", FORM_DIALOGUE, "incomplete_submit")
 		if is_instance_valid(balloon): balloon.process_mode = Node.PROCESS_MODE_ALWAYS
+
+func trigger_game_over(fade_duration: float = 3.0):
+	print_rich("[color=red]GM: Game Over Triggered![/color]")
+
+	# 1. Trigger the GLOBAL fade so it isn't destroyed during cleanup
+	if is_instance_valid(transition_layer) and transition_layer.has_method("global_fade_to_black"):
+		await transition_layer.global_fade_to_black(fade_duration)
+	else:
+		await get_tree().create_timer(fade_duration).timeout
+
+	# 2. Change state to stop player input
+	change_game_state(GameState.GAME_OVER)
+
+	# 3. Stop all audio aggressively
+	if SoundManager:
+		if SoundManager.has_method("stop_music"): SoundManager.stop_music()
+		if SoundManager.has_method("stop_all_ambience"): SoundManager.stop_all_ambience()
+
+	# 4. Clean up the main game scene if it exists
+	if is_instance_valid(main_game_scene_instance):
+		main_game_scene_instance.queue_free()
+		main_game_scene_instance = null
+
+	# 5. Aggressively hunt down Overlays AND Dialogue Balloons to prevent crashes
+	for child in get_tree().root.get_children():
+		if child is CharacterConversationOverlay:
+			if is_instance_valid(child.current_balloon):
+				child.current_balloon.queue_free()
+			child.queue_free()
+		elif "Balloon" in child.name or "conversationballoon" in child.name.to_lower():
+			child.queue_free()
+
+	# 6. Spawn the Game Over Scene
+	var game_over_instance = GAME_OVER_SCENE.instantiate()
+	get_tree().root.add_child(game_over_instance)

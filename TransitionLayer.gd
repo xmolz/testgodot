@@ -7,6 +7,7 @@ signal transition_finished
 @onready var left_shutter = get_node_or_null("LeftShutter")
 @onready var right_shutter = get_node_or_null("RightShutter")
 @onready var iris_rect = get_node_or_null("IrisColorRect")
+@onready var global_fade_rect = get_node_or_null("GlobalFadeRect")
 
 func _ready():
 	open_instant()
@@ -88,3 +89,19 @@ func play_iris_open(duration: float = 1.0):
 	await tween.finished
 	iris_rect.visible = false
 	emit_signal("transition_finished")
+
+# --- 3. TRADITIONAL FADES (For Game Over) ---
+func global_fade_to_black(duration: float = 3.0):
+	if global_fade_rect:
+		global_fade_rect.modulate.a = 0.0
+		global_fade_rect.visible = true
+		var tween = create_tween()
+		tween.tween_property(global_fade_rect, "modulate:a", 1.0, duration).set_trans(Tween.TRANS_SINE)
+		await tween.finished
+
+func global_fade_from_black(duration: float = 1.0):
+	if global_fade_rect:
+		var tween = create_tween()
+		tween.tween_property(global_fade_rect, "modulate:a", 0.0, duration).set_trans(Tween.TRANS_SINE)
+		await tween.finished
+		global_fade_rect.visible = false
