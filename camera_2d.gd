@@ -15,7 +15,7 @@ func _ready():
 	# - Position Smoothing Enabled (set to true)
 	# - Position Smoothing Speed (e.g., 5.0)
 
-func _physics_process(delta):
+func _process(delta):
 	if target_node:
 		# Simply update the camera's position to the target.
 		# Let the built-in limits and position smoothing handle the rest.

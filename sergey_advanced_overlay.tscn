@@ -1,0 +1,67 @@
+[gd_scene format=3 uid="uid://dmk5irmsf6dk8"]
+
+[ext_resource type="PackedScene" uid="uid://kfct0osfvolx" path="res://AdvancedConversationOverlay.tscn" id="1_sno40"]
+[ext_resource type="Resource" uid="uid://ckg6wmvrckv0q" path="res://sergey_dialogue_1.dialogue" id="2_gnclo"]
+[ext_resource type="Texture2D" uid="uid://b17sqnojj1giw" path="res://Backgrounds/Levels/sergey_background.png" id="2_m82w3"]
+[ext_resource type="Texture2D" uid="uid://dc0fm8mswbcby" path="res://Backgrounds/Sergey/sergei_closeup_lookaway_sad_mouth_open.png" id="4_pycg2"]
+[ext_resource type="Texture2D" uid="uid://de67eteln5uq8" path="res://Backgrounds/Sergey/sergey_closeup_lookaway_sad.png" id="5_0ujpy"]
+[ext_resource type="Texture2D" uid="uid://evxqd6plsa7q" path="res://Backgrounds/Sergey/sergey_techpass_inhand.png" id="5_tlo4k"]
+[ext_resource type="Texture2D" uid="uid://dombxpme2le8p" path="res://Backgrounds/Protagonist/xSergei/protag_closeup_curious.png" id="6_c08vn"]
+[ext_resource type="Texture2D" uid="uid://dgy0ed4g4nref" path="res://Backgrounds/Sergey/sergei_closeup_surprised_no_blush.png" id="7_fvtde"]
+[ext_resource type="Texture2D" uid="uid://dg5j6molt4bok" path="res://Backgrounds/Sergey/sergey_front_neutral_mouth_open.png" id="8_dwxe7"]
+[ext_resource type="Texture2D" uid="uid://1wjhdwc0ax4m" path="res://Backgrounds/Sergey/sergei_front_confused.png" id="9_wckb1"]
+[ext_resource type="Texture2D" uid="uid://d136xw7h1f8vu" path="res://Backgrounds/Sergey/sergey_front_hand_behind_head.png" id="10_84bjp"]
+[ext_resource type="Texture2D" uid="uid://p7m1uae20wlv" path="res://Backgrounds/Protagonist/xSergei/protag_closeup_domme.png" id="11_0ujpy"]
+[ext_resource type="Material" uid="uid://dek82a5tuykas" path="res://Shaders/grayscale_material.tres" id="11_dwxe7"]
+[ext_resource type="Texture2D" uid="uid://dbreblxk4v35e" path="res://Backgrounds/Sergey/sergey_closeup_hand_behind_head.png" id="12_tuot3"]
+[ext_resource type="Texture2D" uid="uid://dyb72s07jqu5x" path="res://Backgrounds/Sergey/sergei_closeup_neutral_speaking.png" id="13_l2ogi"]
+[ext_resource type="Texture2D" uid="uid://bsc4qxo3h14qh" path="res://Backgrounds/McBucket/default/mcbucket_normal_base.png" id="14_tuot3"]
+[ext_resource type="Texture2D" uid="uid://mjwes3vp3a4c" path="res://Backgrounds/Protagonist/xSergei/protag_brushing_hair_on_bed.PNG" id="15_6avt8"]
+[ext_resource type="Texture2D" uid="uid://c5sgdtk8nxoxf" path="res://Backgrounds/Sergey/sergei_closeup_surprised_blush.png" id="16_4vapy"]
+[ext_resource type="Texture2D" uid="uid://d3nb7jgrkd0yx" path="res://Backgrounds/Protagonist/xSergei/protag_sergey_knees_touching.png" id="17_2pexn"]
+[ext_resource type="Texture2D" uid="uid://bn8uge1xort1q" path="res://Backgrounds/Sergey/sergei_closeup_laughing.png" id="18_4vapy"]
+[ext_resource type="Texture2D" uid="uid://cj712e0golo18" path="res://Backgrounds/Protagonist/xSergei/protag_sergey_hand_being_moved_two.png" id="20_uok3j"]
+[ext_resource type="Texture2D" uid="uid://d04nt77cwqrnj" path="res://Backgrounds/Protagonist/xSergei/protag_sergey_hand_being_moved_three.png" id="21_tt3xl"]
+[ext_resource type="Texture2D" uid="uid://g51yo3gspa4e" path="res://Backgrounds/Protagonist/xSergei/protag_sergey_hand_hovering.png" id="22_btpci"]
+[ext_resource type="Texture2D" uid="uid://dqerjcvlwtc7e" path="res://Backgrounds/Protagonist/xSergei/protag_touching_sergey.png" id="23_y7hmf"]
+[ext_resource type="Texture2D" uid="uid://d0nk8fqa1flxy" path="res://Backgrounds/Sergey/sergey_eyes_only_looking_away.png" id="24_xjvy8"]
+[ext_resource type="Texture2D" uid="uid://cxo3lj8hyamin" path="res://Backgrounds/Sergey/sergey_eyes_only_eye_to_eye.png" id="25_sax1d"]
+[ext_resource type="Texture2D" uid="uid://cvs83tob7jh6c" path="res://Backgrounds/Protagonist/xSergei/protag_sergey_gown only.png" id="26_bwgue"]
+[ext_resource type="Texture2D" uid="uid://dolrnmrmvy8st" path="res://Backgrounds/Protagonist/xSergei/protag_sergey_gown_hand_slipped_in.png" id="27_fst7n"]
+[ext_resource type="Texture2D" uid="uid://c0xflvhq40wkh" path="res://Backgrounds/Sergey/sergey_eyes_only_pleasure.png" id="28_btpci"]
+[ext_resource type="Texture2D" uid="uid://wa2utobai5ph" path="res://Backgrounds/McBucket/default/mcbucket_normal_ree.png" id="29_y7hmf"]
+
+[node name="AdvancedConversationOverlay" unique_id=543555441 instance=ExtResource("1_sno40")]
+dialogue_resource = ExtResource("2_gnclo")
+background_aliases = {
+"sergey_background": ExtResource("2_m82w3")
+}
+cg_aliases = {
+"hand_hovering": ExtResource("22_btpci"),
+"hand_moved_3": ExtResource("21_tt3xl"),
+"hand_moved_two": ExtResource("20_uok3j"),
+"mcbucket_normal_base": ExtResource("14_tuot3"),
+"mcbucket_normal_ree": ExtResource("29_y7hmf"),
+"protag_brushing_hair_on_bed": ExtResource("15_6avt8"),
+"protag_closeup_curious": ExtResource("6_c08vn"),
+"protag_closeup_domme": ExtResource("11_0ujpy"),
+"protag_sergey_gown_hand_slipped_in": ExtResource("27_fst7n"),
+"protag_sergey_gown_only": ExtResource("26_bwgue"),
+"protag_sergey_knees_touching": ExtResource("17_2pexn"),
+"protag_touching_sergey": ExtResource("23_y7hmf"),
+"sergey_closeup_hand_behind_head": ExtResource("12_tuot3"),
+"sergey_closeup_laughing": ExtResource("18_4vapy"),
+"sergey_closeup_lookaway_sad": ExtResource("5_0ujpy"),
+"sergey_closeup_lookaway_sad_mouth_open": ExtResource("4_pycg2"),
+"sergey_closeup_neutral_speaking": ExtResource("13_l2ogi"),
+"sergey_closeup_surprised": ExtResource("7_fvtde"),
+"sergey_closeup_surprised_blush": ExtResource("16_4vapy"),
+"sergey_eyes_only_eye_to_eye": ExtResource("25_sax1d"),
+"sergey_eyes_only_looking_away": ExtResource("24_xjvy8"),
+"sergey_eyes_only_pleasure": ExtResource("28_btpci"),
+"sergey_front_confused": ExtResource("9_wckb1"),
+"sergey_front_hand_behind_head": ExtResource("10_84bjp"),
+"sergey_front_neutral_mouth_open": ExtResource("8_dwxe7"),
+"sergey_techpass_inhand": ExtResource("5_tlo4k")
+}
+mental_image_shader = ExtResource("11_dwxe7")

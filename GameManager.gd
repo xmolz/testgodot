@@ -86,6 +86,9 @@ var main_game_scene_instance: Node = null
 var main_menu_scene_instance: CanvasLayer = null
 # --- END of High-Level Game State Management ---
 var input_blocker_layer: CanvasLayer = null
+var custom_cursor_instance: CanvasLayer = null
+var walk_indicator_instance: Node2D = null
+var is_mouse_held_for_walk: bool = false
 # --- State Variables ---
 var current_verb_id: String = ""
 var current_selected_item_data: ItemData = null # "In Hand" / "Selected" item
@@ -117,6 +120,7 @@ var _item_data_map: Dictionary = {} # item_id -> ItemData
 
 # --- Game Flags (Global) ---
 var game_flags: Dictionary = {} # For flags that persist across levels
+var visited_dialogue_responses: Dictionary = {} # Tracks clicked dialogue options
 
 
 
@@ -126,6 +130,18 @@ var game_flags: Dictionary = {} # For flags that persist across levels
 
 func _ready():
 	#print_rich("[color=cyan]GM: GameManager is Ready! Starting initialization...[/color]")
+	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+
+	var cursor_scene = load("res://custom_cursor.tscn")
+	if cursor_scene:
+		custom_cursor_instance = cursor_scene.instantiate()
+		add_child(custom_cursor_instance)
+
+	var indicator_scene = load("res://walk_indicator.tscn")
+	if indicator_scene:
+		walk_indicator_instance = indicator_scene.instantiate()
+		add_child(walk_indicator_instance)
+
 	# Spawn our Global Transition Layer immediately
 	var transition_scene = preload("res://TransitionLayer.tscn")
 	transition_layer = transition_scene.instantiate()
@@ -225,6 +241,35 @@ func _ready():
 			#print_rich("[color=red]GM: Music did not start because the initialization block was skipped.[/color]")
 			#print_rich("[color=red]GM: Please select your Player node -> Node Tab -> Groups -> Add 'player'.[/color]")
 
+func _process(delta):
+	if is_mouse_held_for_walk:
+		if not Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+			is_mouse_held_for_walk = false
+			if is_instance_valid(walk_indicator_instance):
+				walk_indicator_instance.hide()
+
+			# Restore the cursor hover state if we stopped walking while currently over an object
+			if is_instance_valid(custom_cursor_instance):
+				custom_cursor_instance.set_hover_state(hovered_interactable != null)
+
+			# Restore UI text instantly upon release
+			update_sentence_line_ui()
+		else:
+			if current_game_state == GameState.IN_GAME_PLAY and is_instance_valid(player_node):
+				var mouse_world_pos = player_node.get_global_mouse_position()
+
+				# Mirror the Hysteresis logic from player.gd
+				var is_player_manually_walking = player_node.get("_is_manual_walking")
+				var active_deadzone = 20.0 if is_player_manually_walking else 150.0
+
+				if abs(player_node.global_position.x - mouse_world_pos.x) > active_deadzone:
+					if is_instance_valid(walk_indicator_instance):
+						walk_indicator_instance.global_position = mouse_world_pos
+						walk_indicator_instance.show()
+				else:
+					if is_instance_valid(walk_indicator_instance):
+						walk_indicator_instance.hide()
+
 func _unhandled_input(event: InputEvent):
 	if event is InputEventMouseButton and event.is_pressed():
 
@@ -235,7 +280,7 @@ func _unhandled_input(event: InputEvent):
 				get_viewport().set_input_as_handled()
 			return
 
-		# --- LEFT CLICK: Walk to Point ---
+		# --- LEFT CLICK: Walk to Point / Hold to Walk ---
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if current_game_state != GameState.IN_GAME_PLAY or current_interaction_state != InteractionState.WORLD:
 				return
@@ -246,7 +291,13 @@ func _unhandled_input(event: InputEvent):
 
 			if is_instance_valid(player_node) and player_node.has_method("walk_to_point"):
 				_is_player_walking = true
-				player_node.walk_to_point(player_node.get_global_mouse_position())
+				is_mouse_held_for_walk = true
+
+				var mouse_world_pos = player_node.get_global_mouse_position()
+
+				# ALWAYS trigger a standard point-and-click walk.
+				# The player.gd physics will decide whether to override this if the mouse is held outside the deadzone.
+				player_node.walk_to_point(mouse_world_pos)
 
 
 # Replace the entire existing function with this one.
@@ -470,23 +521,28 @@ func cancel_current_action():
 
 # --- UI and Interaction Flow ---
 func set_hovered_object(interactable: Interactable):
-	# Update the internal data immediately. 
-	# This ensures the game knows exactly what is under the mouse, even while the camera is moving.
 	hovered_interactable = interactable
-	
-	# Only update the visual UI text if the player isn't currently locked in a walk animation.
-	if not _is_player_walking:
-		update_sentence_line_ui()
+	update_sentence_line_ui()
+
+	# Only show hover state if we aren't currently dragging the mouse to walk
+	if is_instance_valid(custom_cursor_instance) and not is_mouse_held_for_walk:
+		custom_cursor_instance.set_hover_state(true)
 
 func clear_hovered_object():
 	# Clear the internal data immediately.
 	hovered_interactable = null
-	
-	# Only update the visual UI text if the player isn't currently locked in a walk animation.
-	if not _is_player_walking:
-		update_sentence_line_ui()
+	if is_instance_valid(custom_cursor_instance): custom_cursor_instance.set_hover_state(false)
+
+	update_sentence_line_ui()
 
 func update_sentence_line_ui():
+	# --- UI SUPPRESSION FIX ---
+	# Do not show interaction text while the player is moving (Hold-to-Walk or Point-and-Click)
+	if is_mouse_held_for_walk or _is_player_walking:
+		sentence_line_updated.emit("")
+		return
+	# --------------------------
+
 	var line_text = ""
 
 	if current_verb_id != "" and current_selected_item_data != null:
@@ -576,6 +632,7 @@ func _initiate_interaction_flow(interactable_node: Interactable, verb_to_use_id:
 # The player will call this function to "unlock" input once they have stopped moving.
 func player_has_finished_walk_command():
 	_is_player_walking = false
+	update_sentence_line_ui()
 
 
 func player_reached_interaction_target(interactable_node: Interactable, verb_to_use_id: String, item_data_to_use: ItemData):

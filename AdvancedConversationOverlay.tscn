@@ -4,11 +4,13 @@
 [ext_resource type="Script" uid="uid://yiootngfe2lt" path="res://CharacterProfile.gd" id="2_txusg"]
 [ext_resource type="Resource" uid="uid://c6mm5dugk4j3s" path="res://character_profiles/lewgend_profile.tres" id="3_2snxj"]
 [ext_resource type="Resource" uid="uid://txvb1qq5bx2s" path="res://character_profiles/layla_profile.tres" id="4_2snxj"]
+[ext_resource type="Resource" uid="uid://dm37yqoe1bx4" path="res://character_profiles/aida.tres" id="5_nitm1"]
+[ext_resource type="Resource" uid="uid://deutdb746jhqi" path="res://character_profiles/sergey.tres" id="6_bf5dx"]
 
-[node name="AdvancedConversationOverlay" type="CanvasLayer" unique_id=543555441]
+[node name="AdvancedConversationOverlay2" type="CanvasLayer" unique_id=543555441]
 layer = 75
 script = ExtResource("1_script")
-character_roster = Array[ExtResource("2_txusg")]([ExtResource("3_2snxj"), ExtResource("4_2snxj")])
+character_roster = Array[ExtResource("2_txusg")]([ExtResource("3_2snxj"), ExtResource("4_2snxj"), ExtResource("5_nitm1"), ExtResource("6_bf5dx")])
 
 [node name="DarkenBackdrop" type="ColorRect" parent="." unique_id=1365844061]
 anchors_preset = 15
@@ -18,6 +20,17 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 0.6)
+
+[node name="BackgroundLayer" type="TextureRect" parent="." unique_id=934686710]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 6
 
 [node name="ActorStage" type="Control" parent="." unique_id=1007007151]
 layout_mode = 3
@@ -36,3 +49,28 @@ position = Vector2(960, 1080)
 
 [node name="SlotRight" type="Marker2D" parent="ActorStage" unique_id=423892053]
 position = Vector2(1440, 1080)
+
+[node name="CGLayer" type="TextureRect" parent="." unique_id=207661274]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="MentalImageLayer" type="TextureRect" parent="." unique_id=1836713109]
+visible = false
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5

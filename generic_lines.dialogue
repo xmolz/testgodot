@@ -13,19 +13,20 @@ Player: (I might finally remember who I am.)
 
 => END
 ~ memory_box_locked
-It seems to be locked. I might need some kind of key.
+Player: (Hmmm. The screen says I need to insert my TechPass™ to begin.)
+Player: (Fuck is that, now?)
 do GameManager.set_current_level_flag("has_tried_memory_box", true)
 => END
 
 #mcbucket
 
 ~ mcbucket_sleeping_talk_to_response
-McBucket: Zzzzzzz....
-The old man seems to be fast asleep. He won't get in your way now.
+Old Man: Zzzzzzz....
+Player: (Out like a log. He's not getting in my way now.)
 => END
 
 ~ mcbucket_med_given_after_zanopram
-Hmmm. The old man seems unaffected. His sleep is deep.
+Hmmm. The Old Man seems unaffected. His sleep is deep.
 => END
 
 ~ toilet_flush_weak
@@ -36,10 +37,10 @@ You flush the toilet. It seems to have a weak flow.
 
 AIda: Hey patient #122, that cabinet is reserved for clinical staff. 
 AIda: If you are experiencing discomfort, I can assist with approved medication.
-Player: Huh. Looks like I can’t open the medicine cabinet while she’s here…
+Player: (Huh. Looks like I can’t open the medicine cabinet while she’s still around.)
 => END
 
 ~ mcbucket_not_put_to_sleep
-Player: The Old Man still seems to be up.
-Player: I better take care him before returning to Sergey.
+Player: (The Old Man still seems to be up.)
+Player: (I better take care of him before returning to Sergey.)
 => END

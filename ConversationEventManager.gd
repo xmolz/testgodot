@@ -12,3 +12,5 @@ var show_special_response: bool = false
 
 #Sergey's variables
 var has_heard_fresh_start_line: bool = false
+var asked_sergey_duration: bool = false
+var asked_sergey_identity: bool = false

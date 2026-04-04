@@ -1,6 +1,6 @@
 ~ start
 #sergey neutral
-Having put the old man to sleep, you return to Sergey.
+Having put the Old Man to sleep, you return to Sergey.
 He has retreated back into his shell during your absence.
 The blanket is pulled up tight, hiding his legs again.
 
@@ -44,7 +44,7 @@ Sergey: That you would leave old Sergey... hanging.
 #protag smirk / internal monologue
 do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_closeup_domme.png")
 Aw, how CUTE.
-Lil' Sergey isn't afraid of what you did to the old man.
+Lil' Sergey isn't afraid of what you did to the Old Man.
 He was afraid you wouldn't come back to finish the 'job'.
 
 Well then, the quest is nearly complete.

@@ -149,18 +149,18 @@ func _render_current_page():
 
 		var icon_rect: TextureRect = slot_button.get_node_or_null(ITEM_ICON_NODE_NAME)
 
-		# Disconnect old signals using string names
-		var pressed_callable = Callable(self, "_on_inventory_slot_pressed")
-		if slot_button.is_connected("pressed", pressed_callable):
-			slot_button.disconnect("pressed", pressed_callable)
+		# Safely disconnect any existing connections bound to this script
+		for conn in slot_button.pressed.get_connections():
+			if conn.callable.get_object() == self:
+				slot_button.pressed.disconnect(conn.callable)
 
-		var mouse_entered_callable = Callable(self, "_on_slot_mouse_entered")
-		if slot_button.is_connected("mouse_entered", mouse_entered_callable):
-			slot_button.disconnect("mouse_entered", mouse_entered_callable)
+		for conn in slot_button.mouse_entered.get_connections():
+			if conn.callable.get_object() == self:
+				slot_button.mouse_entered.disconnect(conn.callable)
 
-		var mouse_exited_callable = Callable(self, "_on_slot_mouse_exited")
-		if slot_button.is_connected("mouse_exited", mouse_exited_callable):
-			slot_button.disconnect("mouse_exited", mouse_exited_callable)
+		for conn in slot_button.mouse_exited.get_connections():
+			if conn.callable.get_object() == self:
+				slot_button.mouse_exited.disconnect(conn.callable)
 
 		var inventory_item_index = start_index + i
 		if inventory_item_index < current_player_inventory_cache.size():

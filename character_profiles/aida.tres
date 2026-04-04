@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="CharacterProfile" format=3 uid="uid://dm37yqoe1bx4"]
+
+[ext_resource type="Texture2D" uid="uid://6ux8dig7wlfq" path="res://Sprites/characters/aida/aida_base.png" id="1_kro8s"]
+[ext_resource type="Texture2D" uid="uid://dlrga7atfi0ks" path="res://Sprites/characters/aida/aida_pointing_up.png" id="2_85djq"]
+[ext_resource type="Texture2D" uid="uid://e4w7os0tol7p" path="res://Sprites/characters/aida/aida_thinking.png" id="3_tsei4"]
+[ext_resource type="Texture2D" uid="uid://bra4jkiac0edp" path="res://Sprites/characters/aida/aida_concerned.png" id="4_42t7j"]
+[ext_resource type="Texture2D" uid="uid://ms4ttit7idu1" path="res://Sprites/characters/aida/aida_smiling.png" id="5_2x7vy"]
+[ext_resource type="Script" uid="uid://yiootngfe2lt" path="res://CharacterProfile.gd" id="6_2x7vy"]
+[ext_resource type="Texture2D" uid="uid://dgduuliytjfph" path="res://Sprites/characters/aida/aida_surprised.png" id="6_jn3pf"]
+
+[resource]
+script = ExtResource("6_2x7vy")
+actor_id = "AIda"
+expressions = {
+"base": ExtResource("1_kro8s"),
+"concerned": ExtResource("4_42t7j"),
+"pointing_up": ExtResource("2_85djq"),
+"smiling": ExtResource("5_2x7vy"),
+"surprised": ExtResource("6_jn3pf"),
+"thinking": ExtResource("3_tsei4")
+}

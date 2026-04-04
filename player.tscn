@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://ba2cgdy2q1csl"]
+[gd_scene format=3 uid="uid://ba2cgdy2q1csl"]
 
 [ext_resource type="Script" uid="uid://j0sis8eh01lr" path="res://player.gd" id="1_6ubl7"]
 [ext_resource type="Texture2D" uid="uid://djey74n526wpc" path="res://protag_idle/protag_idle_0000.png" id="2_5tmop"]
@@ -25,14 +25,14 @@
 [ext_resource type="Texture2D" uid="uid://bc80si6q76mep" path="res://Animations/Protag/Idle/Protag_idle_0022.png" id="23_76oay"]
 [ext_resource type="Texture2D" uid="uid://yg6bahkw2a6q" path="res://Animations/Protag/Idle/Protag_idle_0023.png" id="24_b4uyv"]
 [ext_resource type="Texture2D" uid="uid://yom0u2trbd7w" path="res://Animations/Protag/Idle/Protag_idle_0024.png" id="25_tw8ou"]
-[ext_resource type="Texture2D" uid="uid://fwd18kxfvygu" path="res://Animations/Protag/Walk/Protag_walk_0001.png" id="26_hiqhm"]
-[ext_resource type="Texture2D" uid="uid://dlbvhnocpm1w5" path="res://Animations/Protag/Walk/Protag_walk_0002.png" id="27_tkwlq"]
-[ext_resource type="Texture2D" uid="uid://bw8vf0lih4j1m" path="res://Animations/Protag/Walk/Protag_walk_0003.png" id="28_hl5qd"]
-[ext_resource type="Texture2D" uid="uid://vaya4osfde02" path="res://Animations/Protag/Walk/Protag_walk_0004.png" id="29_ek41f"]
-[ext_resource type="Texture2D" uid="uid://bjy3k78sqxos8" path="res://Animations/Protag/Walk/Protag_walk_0005.png" id="30_khis8"]
-[ext_resource type="Texture2D" uid="uid://rqxgg4tmupi7" path="res://Animations/Protag/Walk/Protag_walk_0006.png" id="31_b88wv"]
-[ext_resource type="Texture2D" uid="uid://mjbdo0wg3ng8" path="res://Animations/Protag/Walk/Protag_walk_0007.png" id="32_pgbbb"]
-[ext_resource type="Texture2D" uid="uid://b8tp1ueq7uncy" path="res://Animations/Protag/Walk/Protag_walk_0008.png" id="33_331ug"]
+[ext_resource type="Texture2D" uid="uid://h3xmpywaw3cp" path="res://Animations/Protag/walk_new/protag_walk_0001.png" id="26_hiqhm"]
+[ext_resource type="Texture2D" uid="uid://1ri71cw4t764" path="res://Animations/Protag/walk_new/protag_walk_0002.png" id="27_tkwlq"]
+[ext_resource type="Texture2D" uid="uid://bic8egc2ovub" path="res://Animations/Protag/walk_new/protag_walk_0003.png" id="28_hl5qd"]
+[ext_resource type="Texture2D" uid="uid://b3ywl1tp2cp83" path="res://Animations/Protag/walk_new/protag_walk_0004.png" id="29_ek41f"]
+[ext_resource type="Texture2D" uid="uid://c12jeh0utvvo7" path="res://Animations/Protag/walk_new/protag_walk_0005.png" id="30_khis8"]
+[ext_resource type="Texture2D" uid="uid://bxu07y2pv06pq" path="res://Animations/Protag/walk_new/protag_walk_0006.png" id="31_b88wv"]
+[ext_resource type="Texture2D" uid="uid://clcci7swqw1qd" path="res://Animations/Protag/walk_new/protag_walk_0007.png" id="32_pgbbb"]
+[ext_resource type="Texture2D" uid="uid://bgomfl8s23y12" path="res://Animations/Protag/walk_new/protag_walk_0008.png" id="33_331ug"]
 
 [sub_resource type="Gradient" id="Gradient_hiqhm"]
 interpolation_mode = 2
@@ -122,25 +122,23 @@ _data = {
 &"walk": SubResource("Animation_ibah8")
 }
 
-[node name="Player" type="CharacterBody2D" groups=["player"]]
+[node name="Player" type="CharacterBody2D" unique_id=609698927 groups=["player"]]
 script = ExtResource("1_6ubl7")
 
-[node name="FloorShadow" type="Sprite2D" parent="."]
+[node name="FloorShadow" type="Sprite2D" parent="." unique_id=1127582037]
 modulate = Color(0.16546667, 0.126, 0.2, 0.32941177)
 position = Vector2(-2.4999847, 525)
 scale = Vector2(8.453125, 1.7708337)
 texture = SubResource("GradientTexture2D_hiqhm")
 
-[node name="Sprite" type="Sprite2D" parent="."]
+[node name="Sprite" type="Sprite2D" parent="." unique_id=653451135]
 position = Vector2(8.19647, -8.59983)
 texture = ExtResource("2_5tmop")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=356323500]
 position = Vector2(-12, 12.5)
 shape = SubResource("RectangleShape2D_keght")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_hqtel")
-}
-autoplay = "idle"
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1912273773]
+libraries/ = SubResource("AnimationLibrary_hqtel")
+autoplay = &"idle"

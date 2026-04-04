@@ -23,6 +23,7 @@ var _verb_for_interaction: String = ""
 var _item_for_interaction: ItemData = null
 var _can_move: bool = true
 var _stuck_timer: float = 0.0 # To track how long we've been stuck
+var _is_manual_walking: bool = false
 
 func _ready():
 	#if not sprite_2d: print_rich("[color=red]Player: Sprite2D node not found![/color]")
@@ -50,35 +51,84 @@ func _physics_process(delta: float):
 		if not is_on_floor():
 			velocity.y += GRAVITY * delta
 		else:
-			velocity.y = 0 
+			velocity.y = 0
 		move_and_slide()
 		return
+
+	# --- UNIFIED MANUAL MOVEMENT (Keyboard & Mouse Hold) ---
+	var manual_direction = Input.get_axis("ui_left", "ui_right")
+
+	if GameManager and GameManager.is_mouse_held_for_walk:
+		var mouse_x = get_global_mouse_position().x
+		var dist = abs(mouse_x - global_position.x)
+
+		# HYSTERESIS:
+		# If she is already walking, she won't stop until she gets very close to the cursor (20px).
+		# If she is standing still, she won't start until the cursor is further away (150px).
+		var active_deadzone = 20.0 if _is_manual_walking else 150.0
+
+		if dist > active_deadzone:
+			manual_direction = sign(mouse_x - global_position.x)
+
+	if manual_direction != 0:
+		if _is_walking_to_target:
+			_stop_walking() # Override the point-and-click click
+
+		_is_manual_walking = true
+		velocity.x = manual_direction * SPEED
+
+		if not is_on_floor():
+			velocity.y += GRAVITY * delta
+		else:
+			velocity.y = move_toward(velocity.y, 0, GRAVITY * delta * 0.1)
+
+		if is_instance_valid(sprite_2d): sprite_2d.flip_h = (velocity.x < 0)
+
+		move_and_slide()
+
+		if abs(get_real_velocity().x) < 10.0:
+			set_animation_state("idle")
+		else:
+			set_animation_state("walk")
+		return
+
+	elif _is_manual_walking:
+		# She reached the 20px inner deadzone OR the player let go of the mouse. Smooth stop.
+		_is_manual_walking = false
+		velocity.x = 0
+		set_animation_state("idle")
+
+		if not is_on_floor():
+			velocity.y += GRAVITY * delta
+		else:
+			velocity.y = move_toward(velocity.y, 0, GRAVITY * delta * 0.1)
+
+		move_and_slide()
+		return
+	# -------------------------------------------------------
 
 	if _is_walking_to_target:
 		var direction_to_destination = global_position.direction_to(_actual_walk_destination)
 		var x_distance_to_destination = abs(global_position.x - _actual_walk_destination.x)
 
-		# Check direction to prevent overshooting
-		var direction_from_start = sign(_actual_walk_destination.x - _start_walk_position_x)
-		var direction_from_current = sign(_actual_walk_destination.x - global_position.x)
-		var has_not_reached_target = (direction_from_start == direction_from_current)
-
 		# --- STUCK FAILSAFE ---
-		# If we are trying to move but velocity is near zero
 		if abs(get_real_velocity().x) < 10.0:
 			_stuck_timer += delta
 		else:
-			_stuck_timer = 0.0 # Reset if we move
-			
-		# If we've been stuck for 0.2 seconds, give up.
+			_stuck_timer = 0.0
+
 		if _stuck_timer > 0.2:
-			#print_rich("[color=orange]Player: Stuck against obstacle for %.2fs. Stopping.[/color]" % _stuck_timer)
 			_stop_walking()
 			return
 		# ----------------------
 
-		if has_not_reached_target and x_distance_to_destination > WALK_TO_THRESHOLD_X:
-			velocity.x = direction_to_destination.x * SPEED
+		# Calculate exactly how far we will move this frame
+		var step_distance = SPEED * delta
+
+		# If the distance to the target is larger than our step distance PLUS the threshold, keep walking
+		if x_distance_to_destination > (step_distance + WALK_TO_THRESHOLD_X):
+			velocity.x = sign(_actual_walk_destination.x - global_position.x) * SPEED
+
 			if not is_on_floor():
 				velocity.y += GRAVITY * delta
 			else:
@@ -86,15 +136,16 @@ func _physics_process(delta: float):
 
 			if is_instance_valid(sprite_2d): sprite_2d.flip_h = (velocity.x < 0)
 			set_animation_state("walk")
-		
-		else: # Reached destination
+
+		else: # Reached destination (We are close enough that the next step would overshoot)
 			_stop_walking()
-			
+
 			if is_instance_valid(_interactable_after_walk):
-				face_target(_interactable_after_walk.global_position) 
+				face_target(_interactable_after_walk.global_position)
 				var interactable_ref = _interactable_after_walk
 				var verb_ref = _verb_for_interaction
 				var item_ref = _item_for_interaction
+
 				_interactable_after_walk = null
 				_verb_for_interaction = ""
 				_item_for_interaction = null

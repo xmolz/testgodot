@@ -63,8 +63,9 @@ func _on_available_verbs_changed(available_verb_data_array: Array[VerbData]):
 	for i in range(all_button_slots.size()):
 		var button_node: Button = all_button_slots[i]
 
-		if button_node.is_connected("pressed", Callable(self, "_on_verb_button_pressed_dynamic")):
-			button_node.pressed.disconnect(Callable(self, "_on_verb_button_pressed_dynamic"))
+		for conn in button_node.pressed.get_connections():
+			if conn.callable.get_object() == self:
+				button_node.pressed.disconnect(conn.callable)
 
 		if i < available_verb_data_array.size():
 			var verb_data: VerbData = available_verb_data_array[i]

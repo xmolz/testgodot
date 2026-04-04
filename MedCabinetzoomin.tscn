@@ -7,13 +7,12 @@
 [ext_resource type="PackedScene" uid="uid://b8jbh3bghi1rb" path="res://UI_Zanopram.tscn" id="5_oa20e"]
 [ext_resource type="PackedScene" uid="uid://bi8u415ulvhb" path="res://UI_Invigirol.tscn" id="6_oa20e"]
 
-[node name="ObjectZoomOverlay" type="CanvasLayer"]
+[node name="ObjectZoomOverlay" type="CanvasLayer" unique_id=748160135]
 process_mode = 3
 script = ExtResource("1_34wwt")
 caught_dialogue_resource = ExtResource("2_oa20e")
-caught_dialogue_start_id = "test"
 
-[node name="RootContainer" type="Control" parent="."]
+[node name="RootContainer" type="Control" parent="." unique_id=1932052125]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -22,7 +21,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="BackgroundRect" type="ColorRect" parent="RootContainer"]
+[node name="BackgroundRect" type="ColorRect" parent="RootContainer" unique_id=1968724255]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -31,7 +30,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(1, 1, 1, 0)
 
-[node name="ZoomBackground" type="TextureRect" parent="RootContainer"]
+[node name="ZoomBackground" type="TextureRect" parent="RootContainer" unique_id=1765137914]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -45,30 +44,30 @@ texture = ExtResource("2_mvlbe")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="InteractableContainer" type="Node2D" parent="RootContainer"]
+[node name="InteractableContainer" type="Node2D" parent="RootContainer" unique_id=566578014]
 
-[node name="TextureButton" parent="RootContainer/InteractableContainer" instance=ExtResource("3_34wwt")]
+[node name="TextureButton" parent="RootContainer/InteractableContainer" unique_id=1318755882 instance=ExtResource("3_34wwt")]
 offset_left = 787.0
 offset_top = 52.0
 offset_right = 1089.2223
 offset_bottom = 952.0
 scale = Vector2(0.5, 0.5)
 
-[node name="TextureButton2" parent="RootContainer/InteractableContainer" instance=ExtResource("6_oa20e")]
+[node name="TextureButton2" parent="RootContainer/InteractableContainer" unique_id=965595439 instance=ExtResource("6_oa20e")]
 offset_left = 407.0
 offset_top = 53.0
 offset_right = 1107.0
 offset_bottom = 953.0
 scale = Vector2(0.5, 0.5)
 
-[node name="TextureButton3" parent="RootContainer/InteractableContainer" instance=ExtResource("5_oa20e")]
+[node name="TextureButton3" parent="RootContainer/InteractableContainer" unique_id=622915518 instance=ExtResource("5_oa20e")]
 offset_left = 1158.0
 offset_top = 52.0
 offset_right = 1858.0
 offset_bottom = 952.0
 scale = Vector2(0.5, 0.5)
 
-[node name="CloseButton" type="Button" parent="RootContainer"]
+[node name="CloseButton" type="Button" parent="RootContainer" unique_id=1079183846]
 layout_mode = 0
 offset_left = 22.0
 offset_top = 26.0

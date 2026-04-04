@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://custom_cursor.gd" id="1_cursor"]
+[ext_resource type="Script" path="res://custom_cursor_control.gd" id="2_control"]
+
+[node name="CustomCursor" type="CanvasLayer"]
+layer = 128
+script = ExtResource("1_cursor")
+
+[node name="Control" type="Control" parent="."]
+mouse_filter = 2
+script = ExtResource("2_control")

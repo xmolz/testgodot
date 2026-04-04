@@ -82,14 +82,14 @@ if GameManager.get_current_level_flag("tv_turned_off") == false
 	do GameManager.set_current_level_flag("tv_turned_off", true)
 	do wait(1.0)
 	Player: (The TV shut off. Wait...)
-	Player: (Why is McBucket suddenly vibrating?)
+	Player: (What's up with the Old Man?)
 	do GameManager.main_game_scene_instance.get_node("McBucket_Path/McBucket").change_state(2)
 else
 	Player: (Let's turn that back on.)
 	do GameManager.main_game_scene_instance.get_node("television_screen/ObjectSprite").set_tv_state(false)
 	do GameManager.set_current_level_flag("tv_turned_off", false)
 	do wait(1.0)
-	Player: (Ah, the soothing glow of static.)
-	Player: (McBucket seems to have calmed down, too.)
+	Player: (Ah, this soothing static.)
+	Player: (The Old Man seems to have calmed down, too.)
 	do GameManager.main_game_scene_instance.get_node("McBucket_Path/McBucket").change_state(0)
 => END

@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://coj4oefv5bkk3"]
+
+[ext_resource type="PackedScene" uid="uid://kfct0osfvolx" path="res://AdvancedConversationOverlay.tscn" id="1_4ttk6"]
+[ext_resource type="Resource" uid="uid://ccyinn2ynsx1p" path="res://AIda.dialogue" id="2_jwayt"]
+[ext_resource type="Texture2D" uid="uid://crnc1jb06omtv" path="res://Backgrounds/Levels/aida_hospital_background.png" id="3_pjyty"]
+[ext_resource type="Texture2D" uid="uid://dl2y6virqq4sx" path="res://Backgrounds/Protagonist/protag_hospital_base_1.png" id="4_l8wi3"]
+[ext_resource type="Texture2D" uid="uid://ch4lt4xrs12yr" path="res://Backgrounds/Protagonist/protag_hospital_base_aida_green_eyes.png" id="5_46eg0"]
+[ext_resource type="Texture2D" uid="uid://c4qee02ww1kcu" path="res://Backgrounds/Protagonist/protag_hospital_base_aida_red_eyes_gloves.png" id="6_l8wi3"]
+
+[node name="AdvancedConversationOverlay" unique_id=543555441 instance=ExtResource("1_4ttk6")]
+dialogue_resource = ExtResource("2_jwayt")
+background_aliases = {
+"aida_hospital_background": ExtResource("3_pjyty")
+}
+cg_aliases = {
+"scan_1": ExtResource("4_l8wi3"),
+"scan_2": ExtResource("5_46eg0"),
+"scan_3": ExtResource("6_l8wi3")
+}

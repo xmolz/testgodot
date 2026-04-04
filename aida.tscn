@@ -28,14 +28,14 @@
 [ext_resource type="Texture2D" uid="uid://dmpbp2ycpme0d" path="res://Animations/AIda/Idle/AIda_idle_0022.png" id="24_ob116"]
 [ext_resource type="Texture2D" uid="uid://bjs8bxv1kkp1j" path="res://Animations/AIda/Idle/AIda_idle_0023.png" id="25_dxcwj"]
 [ext_resource type="Texture2D" uid="uid://w8qcsrcpfibn" path="res://Animations/AIda/Idle/AIda_idle_0024.png" id="26_joril"]
-[ext_resource type="Texture2D" uid="uid://p3xfl3qi0yt" path="res://Animations/AIda/Walk/Aida_walking_0001.png" id="27_b36qa"]
-[ext_resource type="Texture2D" uid="uid://cm6wdi1xu3axm" path="res://Animations/AIda/Walk/Aida_walking_0002.png" id="28_xoi07"]
-[ext_resource type="Texture2D" uid="uid://cs8knrftlrb27" path="res://Animations/AIda/Walk/Aida_walking_0003.png" id="29_f5e6k"]
-[ext_resource type="Texture2D" uid="uid://yf5wvort68sq" path="res://Animations/AIda/Walk/Aida_walking_0004.png" id="30_pvvs7"]
-[ext_resource type="Texture2D" uid="uid://erlbr055rc0h" path="res://Animations/AIda/Walk/Aida_walking_0005.png" id="31_0qbb8"]
-[ext_resource type="Texture2D" uid="uid://bbi4iwca7a1ix" path="res://Animations/AIda/Walk/Aida_walking_0006.png" id="32_fqh8o"]
-[ext_resource type="Texture2D" uid="uid://c1l4ago0mrn7i" path="res://Animations/AIda/Walk/Aida_walking_0007.png" id="33_j51ha"]
-[ext_resource type="Texture2D" uid="uid://c6a2cjojiwtxa" path="res://Animations/AIda/Walk/Aida_walking_0008.png" id="34_2wnib"]
+[ext_resource type="Texture2D" uid="uid://b54whgr3y0wq5" path="res://Animations/AIda/walk_new/aida_walk_0001.png" id="29_f5e6k"]
+[ext_resource type="Texture2D" uid="uid://dlycxr0uqcwwc" path="res://Animations/AIda/walk_new/aida_walk_0002.png" id="30_pvvs7"]
+[ext_resource type="Texture2D" uid="uid://dxkpbpgu2dxp7" path="res://Animations/AIda/walk_new/aida_walk_0003.png" id="31_0qbb8"]
+[ext_resource type="Texture2D" uid="uid://jy27g3kmvf5s" path="res://Animations/AIda/walk_new/aida_walk_0004.png" id="32_fqh8o"]
+[ext_resource type="Texture2D" uid="uid://dmkqfsnpdx5he" path="res://Animations/AIda/walk_new/aida_walk_0005.png" id="33_j51ha"]
+[ext_resource type="Texture2D" uid="uid://bxhsylmag0xjd" path="res://Animations/AIda/walk_new/aida_walk_0006.png" id="34_2wnib"]
+[ext_resource type="Texture2D" uid="uid://cliov8fqdnpp5" path="res://Animations/AIda/walk_new/aida_walk_0007.png" id="35_mhq4g"]
+[ext_resource type="Texture2D" uid="uid://fk4y3sf3d6w8" path="res://Animations/AIda/walk_new/aida_walk_0008.png" id="36_6eamu"]
 
 [sub_resource type="Gradient" id="Gradient_sqtfq"]
 interpolation_mode = 2
@@ -111,10 +111,10 @@ tracks/0/path = NodePath("ObjectSprite:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.0833, 0.1667, 0.25, 0.33333334, 0.4167, 0.5, 0.5833, 0.666),
+"times": PackedFloat32Array(0, 0.0833, 0.1667, 0.25, 0.33333334, 0.4167, 0.5, 0.5833, 0.6666667),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [ExtResource("27_b36qa"), ExtResource("28_xoi07"), ExtResource("29_f5e6k"), ExtResource("30_pvvs7"), ExtResource("31_0qbb8"), ExtResource("32_fqh8o"), ExtResource("33_j51ha"), ExtResource("34_2wnib"), ExtResource("27_b36qa")]
+"values": [ExtResource("29_f5e6k"), ExtResource("30_pvvs7"), ExtResource("31_0qbb8"), ExtResource("32_fqh8o"), ExtResource("33_j51ha"), ExtResource("34_2wnib"), ExtResource("35_mhq4g"), ExtResource("36_6eamu"), ExtResource("29_f5e6k")]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_cvq8c"]

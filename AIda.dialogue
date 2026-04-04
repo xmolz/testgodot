@@ -2,179 +2,189 @@
 # 1. Check if we already did the intro. If yes, jump straight to the hub!
 if GameManager.get_current_level_flag("has_spoken_to_aida") == true:
 	=> aida_hub
-#expression = gloved neutral
+
+# Setup the empty hospital background and bring AIda on stage!
+do change_background("aida_hospital_background", "none", 0.0)
+do actor_show("AIda", "base", "center")
+
 A woman in a Nurse's attire is busy at work.
 She notices you approaching before you could call for her.
 do SoundManager.play_music_track("aida_theme", 4.0)
 
-do change_background_sprite("res://Backgrounds/Aida/aida_hospital_surprised.png")
+do actor_change("AIda", "surprised")
 AIda: Oh, patient #122! You're finally awake. That is statistically encouraging!
 AIda: Welcome back to the waking world!
 
 
 - Where am I? 
-	do change_background_sprite("res://Backgrounds/Aida/aida_hospital_explaining_confident.png")
+	do actor_change("AIda", "pointing_up")
 	AIda: You are currently located at HAVEMORE Inc's Multispecialty Recovery Facility - Greendale Avenue branch.
-	do change_background_sprite("res://Backgrounds/Aida/aida_hospital_happy.png") 
+	do actor_change("AIda", "smiling") 
 	AIda: Congratulations! You’re receiving the most advanced care legally permitted in this precinct.
-	#expression = happy neutral
-	AIda: I am AIda - Assigned Intelligence for Diagnostic Assistance! But you can just call me Nurse AIda.
+	AIda: I am AIda - Assigned Intelligence for Diagnostic Assistance! But you can just call me AIda.
 	- Condition? What Condition?
-	do change_background_sprite("res://Backgrounds/Aida/aida_hospital_thinking.png")
+	do actor_change("AIda", "thinking")
 	AIda: You were found unconscious on Christie Street.
 	AIda: We couldn't determine a definite cause through our preliminary scans.
 	AIda: Can you recall what happened?
 	- I can't. I don't remember a thing!
-		do change_background_sprite("res://Backgrounds/Aida/aida_hospital_concerned_thinking.png")
+		do actor_change("AIda", "concerned")
 		AIda: Oh no. That’s... quite unfortunate.
 		AIda: Cognitive impairment is not uncommon in cases like yours.
-		do change_background_sprite("res://Backgrounds/Aida/aida_hospital_explaining_confident.png")
-		AIda: But don’t worry - HAVEMORE Inc. is fully committed to restoring you to optimal operating status.
-		do change_background_sprite("res://Backgrounds/Aida/aida_hospital_happy.png")
+		do actor_change("AIda", "pointing_up")
+		AIda: But don’t worry - HAVEMORE Inc is fully committed to restoring you to optimal operating status.
+		do actor_change("AIda", "smiling")
 		AIda: Patient #122, can you try recalling your name for me?
 		- Sure! It's...
 			You try, but nothing comes to your mind. You are blank with a capital B.
 		- I can't even recall my name.
-		do change_background_sprite("res://Backgrounds/Aida/aida_hospital_base.png")
+		do actor_change("AIda", "base")
 		AIda: Memory loss confirmed.
-		AIda: Would you be willing to consent to a non-invasive HAVEMORE Inc. Neural Integrity Scan?
+		AIda: Would you be willing to consent to a non-invasive HAVEMORE Inc Neural Integrity Scan?
 		AIda: I can do it on the spot. It will allow us to see if you've suffered any major injuries in the regions of the brain associated with semantic and episodic memories.
 		AIda: Based on the results, we might be able to devise a plan to recover your memories.
 
 		- How much will it cost me?
-			do change_background_sprite("res://Backgrounds/Aida/aida_hospital_happy.png")
+			do actor_change("AIda", "smiling")
 			AIda: $2000. The amount will be automatically billed to your insurance provider.
 			AIda: ... Assuming we can locate one.
+			Player: (I don't like the sound of that.)
 			- How much have I incurred till now?
-			#expression	: Eyes closed, smiling. 
 				AIda: Approximately $546,780.
-				do change_background_sprite("res://Backgrounds/Protagonist/protag_hospital_base_1.png")
+				# do change_background_sprite("res://Backgrounds/Protagonist/protag_hospital_base_1.png")
 				A shiver runs down your spine.
 				You may not remember who you are, but you [i]know[/i] in your bones that amount's a problem.
-				do change_background_sprite("res://Backgrounds/Aida/aida_hospital_surprised.png")
+				do actor_change("AIda", "surprised")
 				AIda: But good news! If you're properly insured, your out-of-pocket cost might be as low as $20,000 USD!
-				do change_background_sprite("res://Backgrounds/Aida/aida_hospital_concerned_thinking.png")
+				do actor_change("AIda", "concerned")
 				AIda: The problem is... there was no phone, wallet, ID, or wearable device found on your person at intake.  
 				AIda: In short - to access your insurance, we need to know who you are.  
 				AIda: And to know who you are… well, we need access to your memories.
-				do change_background_sprite("res://Backgrounds/Aida/aida_hospital_explaining_confident.png")
+				do actor_change("AIda", "pointing_up")
 				AIda: That’s why I recommend proceeding with the Neural Integrity Scan™. 
 				AIda: It’s your best chance to... [i]reconnect[/i] with yourself.
 				- Fine, please begin the scan. 
 					=> begin_scan
 		- No, thanks.
-			do change_background_sprite("res://Backgrounds/Aida/aida_hospital_happy.png")
-			AIda: Of course! Your autonomy is very important to us at HAVEMORE Inc. 
-			do change_background_sprite("res://Backgrounds/Aida/aida_hospital_concerned_thinking.png")
+			do actor_change("AIda", "smiling")
+			AIda: Of course! Your autonomy is very important to us at HAVEMORE Inc 
+			do actor_change("AIda", "concerned")
 			AIda: That said - without a scan, we won’t be able to confirm the extent of your cognitive injuries.  
 			AIda: More importantly, we won’t be able to verify your identity or access your insurance profile.
-			do change_background_sprite("res://Backgrounds/Aida/aida_hospital_base.png")
+			do actor_change("AIda", "base")
 			AIda: As it stands, your billing total is accumulating rapidly - and without insurance on file, all charges default to [b]you[/b].  
 			AIda: Current estimate: $546,780 USD and counting! 
-			do change_background_sprite("res://Backgrounds/Aida/aida_hospital_explaining_confident.png")
+			do actor_change("AIda", "pointing_up")
 			AIda: But don’t worry - there’s still time to reduce your liability!   
 			AIda: A successful scan might recover enough memory to reconnect you to your coverage plan.  
 			AIda: If not, I’ll refer your case to our Floor Administrator for alternate financing options.
-			do change_background_sprite("res://Backgrounds/Aida/aida_hospital_thinking.png") 
+			do actor_change("AIda", "thinking") 
 			AIda: So - with all that in mind… are you sure you don’t want to reconsider?
 			- Fine, proceed with the scan.
 				=> begin_scan
 
 
 ~ begin_scan
-do change_background_sprite("res://Backgrounds/Protagonist/protag_hospital_base_1.png")
+do show_cg("scan_1", "fade", 0.5)
 AIda: Splendid! Beginning scan in 3, 2, 1...
-do change_background_sprite("res://Backgrounds/Protagonist/protag_hospital_base_aida_green_eyes.png")
+do show_cg("scan_2", "fade", 0.3)
 The Nurse places her metallic hands on your temple. She feels as cold as a spoon in a refrigerator.
-do change_background_sprite("res://Backgrounds/Protagonist/protag_hospital_base_aida_red_eyes_gloves.png")
+do show_cg("scan_3", "fade", 0.3)
+do start_tech_scan()
 Her irises shift to gray, then pulse red. A soft vibration hums through your skull.
 AIda: Progress: 4%... 22%... 67%... 91%... 
-do change_background_sprite("res://Backgrounds/Aida/aida_hospital_base.png")
+do stop_tech_scan()
+do hide_cg("fade", 0.5)
+do actor_change("AIda", "base")
 AIda: Scan complete.
-do change_background_sprite("res://Backgrounds/Aida/aida_hospital_concerned_thinking.png")
+do actor_change("AIda", "concerned")
 AIda: Thank you patient #122. Unfortunately, findings indicate substantial damage to your hippocampus and left temporal lobe.
-do change_background_sprite("res://Backgrounds/Aida/aida_hospital_thinking.png")
+do actor_change("AIda", "thinking")
 AIda: That would explain your current inability to access long-term autobiographical memory.
-do change_background_sprite("res://Backgrounds/Aida/aida_hospital_surprised.png")
+do actor_change("AIda", "surprised")
 AIda: Fortunately! HAVEMORE Inc now offers proprietary MemoryBox™ therapy - a revolutionary tool for memory stimulation and reconstruction.
 AIda: Luckily, we have a MemoryBox™ installed right here in this very unit. You may find it towards the right. 
 
 - How am I supposed to use this 'MemoryBox'?
-	do change_background_sprite("res://Backgrounds/Aida/aida_hospital_happy.png")
+	do actor_change("AIda", "smiling")
 	AIda: Excellent question! Think of it as... guided lucid dreaming, but clinically supervised.
 	AIda: You'll relive the memory as if you're there again.
 	- That sounds... intense
-		do change_background_sprite("res://Backgrounds/Aida/aida_hospital_base.png")
-		AIda: HAVEMORE Inc. assures all patients that the process is perfectly safe!
+		do actor_change("AIda", "base")
+		AIda: HAVEMORE Inc assures all patients that the process is perfectly safe!
 		AIda: Though I should mention: some find the experience disorienting at first.
 
 		- Fine, I'll check it out. [Leave]
-			do change_background_sprite("res://Backgrounds/Aida/aida_hospital_surprised.png")
+			do actor_change("AIda", "surprised")
 			AIda: Splendid! Here, I am providing you with this tablet. 
 			do GameManager.show_notification("Insurance Form Added!")
-			do change_background_sprite("res://Backgrounds/Aida/aida_hospital_base.png")
+			do actor_change("AIda", "base")
 			AIda: Once you piece your memory together using the MemoryBox™, fill out your personal details in the insurance form open in the tablet.  
-			AIda: Doing so ensures HAVEMORE Inc. can verify your identity and reconnect you with your coverage plan.
+			AIda: Doing so ensures HAVEMORE Inc can verify your identity and reconnect you with your coverage plan.
 			AIda: More importantly - it'll prevent your current balance from being transferred to our Collections Department. 
-			AIda: Consider it your lifeline back to solvency! Keep the form close, and update it whenever a missing piece of "you" resurfaces. 
-			do change_background_sprite("res://Backgrounds/Aida/aida_hospital_happy.png") 
+			AIda: Consider it your lifeline back to solvency! 
+			do actor_change("AIda", "smiling") 
 			AIda: The more complete your profile, the faster we can process your claim.
 			AIda: ... and the lower your personal liability becomes.
 			do GameManager.set_current_level_flag("has_spoken_to_aida", true)
 			do SoundManager.fade_out_music(6.0)
+			
+			do actor_hide("AIda")
 			=> END
 				
 ~ aida_hub
-do change_background_sprite("res://Backgrounds/Aida/aida_hospital_surprised.png")
+do change_background("res://Backgrounds/Levels/static_hospital_background.PNG", "none", 0.0)
+do actor_enter("AIda", "surprised", "center")
+
 AIda senses your presence before you reach her.
-do change_background_sprite("res://Backgrounds/Aida/aida_hospital_happy.png")
+do actor_change("AIda", "smiling")
 do SoundManager.play_music_track("aida_theme", 4.0)
 AIda: Patient #122! Welcome back! How can I help you?
 ~ conversation_return
-do change_background_sprite("res://Backgrounds/Aida/aida_hospital_happy.png")
+do actor_change("AIda", "smiling")
 What do you want to say to AIda?
 
 - What happened to me?
-	do change_background_sprite("res://Backgrounds/Aida/aida_hospital_concerned_thinking.png")
+	do actor_change("AIda", "concerned")
 	AIda: As I mentioned earlier, you were found unconscious on Christie Street thirteen days ago.
 	AIda: A passerby reported the incident while out for a walk, and our emergency responders brought you here shortly afterward.
-	do change_background_sprite("res://Backgrounds/Aida/aida_hospital_base.png")
+	do actor_change("AIda", "base")
 	AIda: The team found nothing on you, except for an old journal.
-	do change_background_sprite("res://Backgrounds/Aida/aida_hospital_explaining_confident.png")
+	do actor_change("AIda", "pointing_up")
 	AIda: I highly recommend using the MemoryBox™ in order to recover your memories.
 	AIda: It will be helpful in overcoming your current condition.
 	=> conversation_return
 
 - What is this place?
-	do change_background_sprite("res://Backgrounds/Aida/aida_hospital_explaining_confident.png")
+	do actor_change("AIda", "pointing_up")
 	AIda: This is Havemore's multispecialty recovery center.
-	do change_background_sprite("res://Backgrounds/Aida/aida_hospital_happy.png")
+	do actor_change("AIda", "smiling")
 	AIda: We provide the most advanced medical care available in the precinct!
 	AIda: You'll be taken care of wonderfully, here.
 	~ place_hub
 	There is a lot to unpack here.
 
 	- What's a 'Havemore'?
-		do change_background_sprite("res://Backgrounds/Aida/aida_hospital_explaining_confident.png")
+		do actor_change("AIda", "pointing_up")
 		AIda: Havemore is America's number one administrative and tech partner.
 		AIda: Our systems support healthcare, logistics, and urban management across the country.
-		do change_background_sprite("res://Backgrounds/Aida/aida_hospital_happy.png")
+		do actor_change("AIda", "smiling")
 		AIda: Ever since entering into a partnership with Havemore, America has seen a 150% increase in its GDP!
 		AIda: That growth rate exceeds all other corporate and national economic blocs.
 		 - So like, are there no poor people now?
-			do change_background_sprite("res://Backgrounds/Aida/aida_hospital_base.png")
+			do actor_change("AIda", "base")
 			AIda: Economic growth has significantly improved national prosperity.
-			do change_background_sprite("res://Backgrounds/Aida/aida_hospital_thinking.png")
+			do actor_change("AIda", "thinking")
 			AIda: However, individual financial outcomes may vary.
-			do change_background_sprite("res://Backgrounds/Aida/aida_hospital_happy.png")
+			do actor_change("AIda", "smiling")
 			AIda: Havemore remains determined to make America a better experience for all residents.
 			=> place_hub
 
 	- Precinct?
-		do change_background_sprite("res://Backgrounds/Aida/aida_hospital_explaining_confident.png")
+		do actor_change("AIda", "pointing_up")
 		AIda: Indeed! All cities in America are divided into Havemore administered precincts.
 		AIda: We are currently in the Greendale precinct's medical facility.
-		do change_background_sprite("res://Backgrounds/Aida/aida_hospital_happy.png")
+		do actor_change("AIda", "smiling")
 		AIda: This is a great place to be for someone with your condition!
 		=> place_hub
 
@@ -182,29 +192,29 @@ What do you want to say to AIda?
 		=> conversation_return
 
 - The MemoryBox seems to be locked. [if GameManager.get_current_level_flag("has_tried_memory_box")]
-	do change_background_sprite("res://Backgrounds/Aida/aida_hospital_surprised.png")
+	do actor_change("AIda", "surprised")
 	AIda: Oh! I'm terribly sorry about that!
-	do change_background_sprite("res://Backgrounds/Aida/aida_hospital_explaining_confident.png")
+	do actor_change("AIda", "pointing_up")
 	AIda: I must have forgotten to mention that access to a MemoryBox™ requires a HAVEMORE TechPass.
 	AIda: You might not remember, but it is a crucial part of everyday life now.
-	do change_background_sprite("res://Backgrounds/Aida/aida_hospital_base.png")
+	do actor_change("AIda", "base")
 	AIda: All public technology systems require a registered TechPass for access.
-	do change_background_sprite("res://Backgrounds/Aida/aida_hospital_concerned_thinking.png")
+	do actor_change("AIda", "concerned")
 	AIda: It appears you do not currently have one assigned to you.
-	do change_background_sprite("res://Backgrounds/Aida/aida_hospital_happy.png")
+	do actor_change("AIda", "smiling")
 	AIda: But please don't worry! I will submit a request for HAVEMORE to issue you a temporary pass.
 	AIda: Everything will be taken care of.
-	do change_background_sprite("res://Backgrounds/Aida/aida_hospital_thinking.png")
+	do actor_change("AIda", "thinking")
 	AIda: However... I should mention that temporary passes usually take about 30 days to arrive.
-	do change_background_sprite("res://Backgrounds/Aida/aida_hospital_base.png")
+	do actor_change("AIda", "base")
 	AIda: Until then, your medical expenses will continue accumulating on a daily basis.
 
 	- No way I'm staying here 30 more days!
-		do change_background_sprite("res://Backgrounds/Aida/aida_hospital_concerned_thinking.png")
+		do actor_change("AIda", "concerned")
 		AIda: I completely understand your concern.
-		do change_background_sprite("res://Backgrounds/Aida/aida_hospital_explaining_confident.png")
+		do actor_change("AIda", "pointing_up")
 		AIda: Unfortunately, without a TechPass, access to public systems is not possible.
-		do change_background_sprite("res://Backgrounds/Aida/aida_hospital_happy.png")
+		do actor_change("AIda", "smiling")
 		AIda: But please rest assured - HAVEMORE will process your request as quickly as possible.
 
 		Player: (Yeah. That's not happening.)
@@ -213,15 +223,15 @@ What do you want to say to AIda?
 
 		=> conversation_return
 
-- About the old man... [if GameManager.get_current_level_flag("mcbucket_zanopram_used")]
-	do change_background_sprite("res://Backgrounds/Aida/aida_hospital_thinking.png")
+- About the Old Man... [if GameManager.get_current_level_flag("mcbucket_zanopram_used")]
+	do actor_change("AIda", "thinking")
 	AIda takes a quick glance over at Patient #67.
 
-	do change_background_sprite("res://Backgrounds/Aida/aida_hospital_surprised.png")
+	do actor_change("AIda", "surprised")
 	AIda: Oh! It seems Patient #67 has fallen asleep on his own today.
-	do change_background_sprite("res://Backgrounds/Aida/aida_hospital_thinking.png")
+	do actor_change("AIda", "thinking")
 	AIda: That's unusual. He rarely does that without his medication - especially at this hour.
-	do change_background_sprite("res://Backgrounds/Aida/aida_hospital_concerned_thinking.png")
+	do actor_change("AIda", "concerned")
 	AIda: We'll likely need to monitor this more closely.
 
 	Player: (Looks like she didn't notice your little slip.)
@@ -229,39 +239,39 @@ What do you want to say to AIda?
 
 	=> conversation_return
 
-- What's wrong with the old man? [if (GameManager.get_current_level_flag("mcbucket_interruption_happened") or GameManager.get_current_level_flag("mcbucket_has_screamed_at_player")) and not GameManager.get_current_level_flag("mcbucket_zanopram_used")]
-	do change_background_sprite("res://Backgrounds/Aida/aida_hospital_surprised.png")
+- What's wrong with the Old Man? [if (GameManager.get_current_level_flag("mcbucket_interruption_happened") or GameManager.get_current_level_flag("mcbucket_has_screamed_at_player")) and not GameManager.get_current_level_flag("mcbucket_zanopram_used")]
+	do actor_change("AIda", "surprised")
 	AIda: Oh! You mean Patient #67.
-	do change_background_sprite("res://Backgrounds/Aida/aida_hospital_explaining_confident.png")
+	do actor_change("AIda", "pointing_up")
 	AIda: He has been with us for quite some time.
 	AIda: Our medical specialists are still researching his condition.
-	do change_background_sprite("res://Backgrounds/Aida/aida_hospital_happy.png")
+	do actor_change("AIda", "smiling")
 	AIda: But rest assured - Patient #67 is completely harmless!
 	AIda: When given the correct treatment, he can even become quite talkative.
 
 	~ mcbucket_enquiry_hub
-	There might still be more you want to learn about the old man.
+	There might still be more you want to learn about the Old Man.
 
 	- How do I shut him up?
-		do change_background_sprite("res://Backgrounds/Aida/aida_hospital_thinking.png")
+		do actor_change("AIda", "thinking")
 		AIda: While Patient #67 is usually quiet, he does scream from time to time.
 		AIda: This tends to happen when he sees something... overly exciting.
-		do change_background_sprite("res://Backgrounds/Aida/aida_hospital_explaining_confident.png")
+		do actor_change("AIda", "pointing_up")
 		AIda: That is why we keep the television in front of him tuned to HAVEMORE News!
 		AIda: Slow and predictable programming helps keep him calm.
-		do change_background_sprite("res://Backgrounds/Aida/aida_hospital_happy.png")
+		do actor_change("AIda", "smiling")
 		AIda gives you a polite corporate smile.
 
 		- Any medicine to help him sleep?
-			do change_background_sprite("res://Backgrounds/Aida/aida_hospital_surprised.png")
+			do actor_change("AIda", "surprised")
 			AIda: Why yes! Patient #67 is also receiving treatment for insomnia.
-			do change_background_sprite("res://Backgrounds/Aida/aida_hospital_explaining_confident.png")
+			do actor_change("AIda", "pointing_up")
 			AIda: We do administer sleep medication when necessary.
-			do change_background_sprite("res://Backgrounds/Aida/aida_hospital_base.png")
+			do actor_change("AIda", "base")
 			AIda: However, it is currently outside his scheduled dosage time.
-			do change_background_sprite("res://Backgrounds/Aida/aida_hospital_thinking.png")
+			do actor_change("AIda", "thinking")
 			AIda: If his screaming is bothering you, I recommend avoiding any... exciting activity near him.
-			do change_background_sprite("res://Backgrounds/Aida/aida_hospital_happy.png")
+			do actor_change("AIda", "smiling")
 			AIda: That should help keep things peaceful.
 
 			#player image
@@ -272,16 +282,16 @@ What do you want to say to AIda?
 			=> mcbucket_enquiry_hub
 
 	- Does his family visit?
-		do change_background_sprite("res://Backgrounds/Aida/aida_hospital_concerned_thinking.png")
+		do actor_change("AIda", "concerned")
 		AIda: Unfortunately, we have not seen any in-person visits from Patient #67's family.
-		do change_background_sprite("res://Backgrounds/Aida/aida_hospital_base.png")
+		do actor_change("AIda", "base")
 		AIda: However, they remain in contact with us through remote communication channels.
-		do change_background_sprite("res://Backgrounds/Aida/aida_hospital_happy.png")
+		do actor_change("AIda", "smiling")
 		AIda: But that's perfectly alright!
 		AIda: Here at HAVEMORE, we make sure every patient feels comfortable and cared for.
-		do change_background_sprite("res://Backgrounds/Aida/aida_hospital_surprised.png")
+		do actor_change("AIda", "surprised")
 		AIda: We could do the same for you too, Patient #122!
-		do change_background_sprite("res://Backgrounds/Aida/aida_hospital_happy.png")
+		do actor_change("AIda", "smiling")
 		AIda: HAVEMORE is very excited to have you here.
 		AIda: Just remember to fill out your insurance form first. Teehee!
 

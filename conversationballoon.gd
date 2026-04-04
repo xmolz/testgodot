@@ -7,6 +7,12 @@ extends CanvasLayer
 ## The action to use to skip typing the dialogue
 @export var skip_action: StringName = &"ui_cancel"
 
+# --- ICON EXPORTS ---
+@export_group("Response Icons")
+@export var proceed_icon: Texture2D
+@export var back_icon: Texture2D
+@export var leave_icon: Texture2D
+
 ## The dialogue resource
 var resource: DialogueResource
 
@@ -23,6 +29,7 @@ var will_hide_balloon: bool = false
 var locals: Dictionary = {}
 
 var _locale: String = TranslationServer.get_locale()
+var _is_responses_clickable: bool = false
 
 # --- Character Background Color Lookup Table (For the Nameplate) ---
 var character_colors: Dictionary = {
@@ -118,8 +125,49 @@ func _ready() -> void:
 	if responses_menu.next_action.is_empty():
 		responses_menu.next_action = next_action
 
+	# --- Disable auto focus outline on the first item ---
+	responses_menu.auto_focus_first_item = false
+
 	mutation_cooldown.timeout.connect(_on_mutation_cooldown_timeout)
 	add_child(mutation_cooldown)
+
+	# --- Style the responses menu and template button ---
+	# 1. Increase vertical spacing between response buttons
+	responses_menu.add_theme_constant_override("separation", 8)
+
+	# 2. Setup Rounded Corners, Alignment, and Padding for the template button
+	var template_btn = responses_menu.response_template as Button
+	if template_btn:
+		# Left align so the icons don't make the text jagged
+		template_btn.alignment = HORIZONTAL_ALIGNMENT_LEFT
+
+		var normal_style = StyleBoxFlat.new()
+		normal_style.bg_color = Color(0.15, 0.15, 0.15, 0.85) # Dark gray, slightly transparent
+		normal_style.corner_radius_top_left = 6
+		normal_style.corner_radius_top_right = 6
+		normal_style.corner_radius_bottom_left = 6
+		normal_style.corner_radius_bottom_right = 6
+		# Add internal padding
+		normal_style.content_margin_left = 15
+		normal_style.content_margin_top = 8
+		normal_style.content_margin_bottom = 8
+		normal_style.content_margin_right = 15
+		# Add an invisible border to the normal state so the button doesn't change size on hover
+		normal_style.border_width_left = 2
+		normal_style.border_width_top = 2
+		normal_style.border_width_right = 2
+		normal_style.border_width_bottom = 2
+		normal_style.border_color = Color(1.0, 1.0, 1.0, 0.0)
+
+		var hover_style = normal_style.duplicate()
+		hover_style.bg_color = Color(0.1, 0.25, 0.3, 0.9) # Slightly cyan background
+		hover_style.border_color = Color(0.2, 0.85, 1.0, 0.8) # Crisp cyan border
+
+		template_btn.add_theme_stylebox_override("normal", normal_style)
+		template_btn.add_theme_stylebox_override("hover", hover_style)
+		template_btn.add_theme_stylebox_override("focus", hover_style)
+		template_btn.add_theme_stylebox_override("pressed", hover_style)
+	# ---------------------------------------------------------
 
 
 func _unhandled_input(_event: InputEvent) -> void:
@@ -164,9 +212,17 @@ func apply_dialogue_line() -> void:
 	var regex = RegEx.new()
 	regex.compile("\\[.*?\\]") # Matches anything inside [ ]
 	var lookup_key = regex.sub(raw_name_with_tags, "", true).strip_edges() # "Dread"
-	
+
+	# 2b. Create a display name that swaps "Player" for the actual name or "???"
+	var display_name = raw_name_with_tags
+	if lookup_key == "Player":
+		if GameManager and GameManager.get_game_flag("first_name_correct"):
+			display_name = display_name.replace("Player", "Fiona")
+		else:
+			display_name = display_name.replace("Player", "???")
+
 	# 3. Handle Name Panel Visibility and Color
-	if raw_name_with_tags.is_empty():
+	if display_name.is_empty():
 		name_panel.visible = false
 	else:
 		name_panel.visible = true
@@ -174,22 +230,22 @@ func apply_dialogue_line() -> void:
 		# --- SMART SPACE INSERTER LOGIC ---
 		var spaced_name = ""
 		var inside_tag = false
-		
-		for i in range(raw_name_with_tags.length()):
-			var char = raw_name_with_tags[i]
-			
+
+		for i in range(display_name.length()):
+			var char = display_name[i]
+
 			if char == "[":
 				inside_tag = true
-			
+
 			spaced_name += char
-			
+
 			if char == "]":
 				inside_tag = false
-				
+
 			# If we are NOT inside a tag, and it's not a bracket, add a space
 			if not inside_tag and char != "[" and char != "]":
 				# Only add space if the NEXT char isn't a tag opener
-				if i < raw_name_with_tags.length() - 1 and raw_name_with_tags[i+1] != "[":
+				if i < display_name.length() - 1 and display_name[i+1] != "[":
 					spaced_name += " "
 		# ----------------------------------
 
@@ -235,7 +291,86 @@ func apply_dialogue_line() -> void:
 	dialogue_label.dialogue_line = dialogue_line
 
 	responses_menu.hide()
+	responses_menu.modulate.a = 1.0 # --- Reset alpha for safety
 	responses_menu.responses = dialogue_line.responses
+
+	# --- FORMATTING LOGIC FOR RESPONSES ---
+	for i in range(responses_menu.get_child_count()):
+		var button = responses_menu.get_child(i)
+
+		# Ignore the template and any non-button children
+		if button == responses_menu.response_template or not button is Button:
+			continue
+
+		# Retrieve the DialogueResponse object attached to the button
+		if not button.has_meta("response"):
+			continue
+
+		var response_obj = button.get_meta("response")
+		var original_text = response_obj.text
+		var display_text = original_text
+
+		# Safely check if this line has been visited
+		var is_visited = false
+		if GameManager and "visited_dialogue_responses" in GameManager:
+			is_visited = GameManager.visited_dialogue_responses.has(original_text)
+
+		# Default colors and icon
+		var resting_color = Color.WHITE # Reverted back to pure white
+		var hover_color = Color.WHITE
+		var lower_text = display_text.to_lower()
+		var assigned_icon: Texture2D = null
+
+		# Parse custom tags and apply styling/icons
+		if "[proceed]" in lower_text:
+			display_text = display_text.replacen("[proceed]", "").strip_edges()
+			assigned_icon = proceed_icon
+			resting_color = Color(0.2, 0.85, 1.0, 1.0) # Cyan
+			hover_color = Color.WHITE
+		elif "[back]" in lower_text:
+			display_text = display_text.replacen("[back]", "").strip_edges()
+			assigned_icon = back_icon
+			resting_color = Color(0.6, 0.6, 0.6, 1.0) # Gray
+			hover_color = Color(0.8, 0.8, 0.8, 1.0) # Light Gray
+		elif "[leave]" in lower_text:
+			display_text = display_text.replacen("[leave]", "").strip_edges()
+			assigned_icon = leave_icon
+			resting_color = Color(0.6, 0.6, 0.6, 1.0) # Gray
+			hover_color = Color(0.8, 0.8, 0.8, 1.0) # Light Gray
+		elif is_visited:
+			resting_color = Color(0.6, 0.6, 0.6, 1.0) # Gray
+			hover_color = Color(0.8, 0.8, 0.8, 1.0) # Light Gray
+
+		# --- Add a transparent spacer if no icon was assigned ---
+		if assigned_icon == null:
+			var blank_img = Image.create_empty(32, 32, false, Image.FORMAT_RGBA8)
+			assigned_icon = ImageTexture.create_from_image(blank_img)
+		# -------------------------------------------------------------
+
+		# Apply the parsed text, icon, and colors
+		button.text = display_text
+		button.icon = assigned_icon
+
+		# Scale the icon down so it matches the font size
+		button.expand_icon = true
+		button.add_theme_constant_override("icon_max_width", 32)
+
+		# Text colors
+		button.add_theme_color_override("font_color", resting_color)
+		button.add_theme_color_override("font_focus_color", resting_color)
+		button.add_theme_color_override("font_hover_color", hover_color)
+		button.add_theme_color_override("font_pressed_color", hover_color)
+
+		# Icon colors
+		button.add_theme_color_override("icon_normal_color", resting_color)
+		button.add_theme_color_override("icon_focus_color", resting_color)
+		button.add_theme_color_override("icon_hover_color", hover_color)
+		button.add_theme_color_override("icon_pressed_color", hover_color)
+
+		# --- Fix sticky hover state by dropping focus on mouse exit ---
+		if not button.mouse_exited.is_connected(button.release_focus):
+			button.mouse_exited.connect(button.release_focus)
+	# ------------------------------------------
 
 	dialogue_label.show()
 	if not dialogue_line.text.is_empty():
@@ -244,7 +379,16 @@ func apply_dialogue_line() -> void:
 
 	if dialogue_line.responses.size() > 0:
 		balloon.focus_mode = Control.FOCUS_NONE
+
+		# --- Fade-In Cooldown to prevent spam-clicking ---
+		_is_responses_clickable = false
+		responses_menu.modulate.a = 0.0
 		responses_menu.show()
+
+		var fade_tween = create_tween()
+		fade_tween.tween_property(responses_menu, "modulate:a", 1.0, 0.4).set_trans(Tween.TRANS_SINE)
+		fade_tween.tween_callback(func(): _is_responses_clickable = true)
+		# ------------------------------------------------------
 	elif dialogue_line.time != "":
 		var time = dialogue_line.text.length() * 0.02 if dialogue_line.time == "auto" else dialogue_line.time.to_float()
 		await get_tree().create_timer(time).timeout
@@ -294,6 +438,15 @@ func _on_balloon_gui_input(event: InputEvent) -> void:
 		next(dialogue_line.next_id)
 
 func _on_responses_menu_response_selected(response: DialogueResponse) -> void:
+	# --- Ignore clicks if the menu is still fading in ---
+	if not _is_responses_clickable:
+		return
+	# ---------------------------------------------------------
+
+	# Record visited response
+	if GameManager and "visited_dialogue_responses" in GameManager:
+		GameManager.visited_dialogue_responses[response.text] = true
+
 	if SoundManager: SoundManager.play_sfx("dialogue_advance")
 	next(response.next_id)
 

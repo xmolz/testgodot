@@ -46,13 +46,13 @@ do change_background_animation("dread_loop")
 [color=#FF00FF]Dread[/color]: Ain't nobody looking out for Little Miss Melancholy.
 [color=#FF00FF]Dread[/color]: You. Don't. Wanna. Wake up.
 [color=#FF00FF]Dread[/color]: Go back to sleep, friend. Come, enter eternal slumber with me.
-- Okay, fine. I'll sleep. I believe you.
+- Okay, fine. I'll sleep.
 	[color=#FF00FF]Dread[/color]: [speed=0.25]Yeeeees.[/speed] You get it now!
 	???: Your body grows paralyzingly heavy, dragged down by old grief.
 	???: There is no uncertainty to it anymore.
 	???: The dark claims you entirely.
 	do GameManager.trigger_game_over(3.0)
-- I don't believe you. Leave Dread and swim further into the darkness. => endless_dark
+- Leave Dread behind and swim away. => endless_dark
 
 ~ endless_dark
 do change_background_animation("float_loop")
@@ -66,7 +66,7 @@ do change_background_animation("float_loop")
 ???: To no longer want. To no longer need.
 ???: [speed=0.25]No longer feel.[/speed]
 ???: [speed=0.25]What do you do next?[/speed]
-- The exhaustion is too much. I'll just sleep here.
+- Lay to eternal rest.
 	???: Your arms stop moving. Your legs grow entirely still.
 	???: You let the heavy abyss pull you under once and for all.
 	do GameManager.trigger_game_over(3.0)

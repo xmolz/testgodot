@@ -34,12 +34,10 @@
 [ext_resource type="Resource" uid="uid://dlyoiu6syhnqe" path="res://unusables.dialogue" id="15_uit24"]
 [ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactable.gd" id="16_2cqfq"]
 [ext_resource type="PackedScene" uid="uid://bkjbta25aa1fj" path="res://Interactables/Game World/Hospital Bathroom/hospital_bathroom_mirror.tscn" id="16_blkrb"]
-[ext_resource type="PackedScene" uid="uid://c4v86fmondjfo" path="res://AidaDialogue.tscn" id="16_come4"]
 [ext_resource type="PackedScene" uid="uid://crcjecrrvndr2" path="res://Interactables/Game World/Hospital Room/medicine_cabinet.tscn" id="17_074og"]
 [ext_resource type="PackedScene" uid="uid://b7dat8bd2cm67" path="res://have_more_logo.tscn" id="18_d13ii"]
 [ext_resource type="Script" uid="uid://7xsscyp60ilq" path="res://interactions/actions/CallMethodAction.gd" id="19_4k2k6"]
 [ext_resource type="Script" uid="uid://b4i2dd2kqpmun" path="res://interactions/actions/RemoveItemAction.gd" id="20_0rl1p"]
-[ext_resource type="PackedScene" uid="uid://c2mnsensqkur6" path="res://sergey_conversation_1.tscn" id="20_h8e4i"]
 [ext_resource type="Script" uid="uid://h83nrnu1277x" path="res://interactions/actions/StartConversationAction.gd" id="22_b1qrp"]
 [ext_resource type="PackedScene" uid="uid://ckc058if0px63" path="res://mcbucket_default_conversation.tscn" id="22_facbu"]
 [ext_resource type="PackedScene" uid="uid://bpk8g8k1r5vb6" path="res://test_box.tscn" id="23_0odxb"]
@@ -51,6 +49,8 @@
 [ext_resource type="PackedScene" uid="uid://ctrgw5138xyjg" path="res://hospital_bathroom_door.tscn" id="30_pjyto"]
 [ext_resource type="Script" uid="uid://bjrpwaag6vx20" path="res://interactions/actions/TriggerCutsceneAction.gd" id="32_ntx8l"]
 [ext_resource type="Shader" uid="uid://bi5b0454i0065" path="res://interactions/actions/interactable_outline.gdshader" id="35_0dhbp"]
+[ext_resource type="PackedScene" uid="uid://coj4oefv5bkk3" path="res://aida_advanced_overlay.tscn" id="35_cyx1q"]
+[ext_resource type="PackedScene" uid="uid://dmk5irmsf6dk8" path="res://sergey_advanced_overlay.tscn" id="38_cyx1q"]
 [ext_resource type="PackedScene" uid="uid://cymg2dkrvsnfy" path="res://explanation_layer.tscn" id="38_d2t1y"]
 [ext_resource type="PackedScene" uid="uid://cxo2auakscy0h" path="res://hospital_door.tscn" id="40_h8e4i"]
 [ext_resource type="PackedScene" uid="uid://cn3wt8p41equ0" path="res://insurance_form_button_ui.tscn" id="41_4lmeg"]
@@ -866,10 +866,10 @@ object_display_name = "AIda"
 object_id = "AIda"
 category = 1
 interactions = Array[ExtResource("24_qsp4k")]([ExtResource("7_jq2sk"), SubResource("Resource_wnkbs")])
-character_conversation_overlay_scene = ExtResource("16_come4")
+character_conversation_overlay_scene = ExtResource("35_cyx1q")
 
 [node name="Waypoint1" type="Marker2D" parent="Aida_Path" unique_id=2135275449]
-position = Vector2(10646, -32)
+position = Vector2(9656, -32)
 
 [node name="Waypoint2" type="Marker2D" parent="Aida_Path" unique_id=2086599172]
 position = Vector2(5456, -32)
@@ -887,7 +887,7 @@ object_display_name = "Sergey"
 object_id = "sergey"
 category = 1
 interactions = Array[ExtResource("24_qsp4k")]([SubResource("Resource_htxhm"), SubResource("Resource_SergeyZanoResp"), SubResource("Resource_SergeyBlockResp"), SubResource("Resource_0cbny")])
-character_conversation_overlay_scene = ExtResource("20_h8e4i")
+character_conversation_overlay_scene = ExtResource("38_cyx1q")
 
 [node name="InteractionClickShape" parent="Sergei_Path/Sergei/InteractionArea" index="0" unique_id=1610555801]
 position = Vector2(159, -196)
@@ -963,6 +963,10 @@ scale = Vector2(0.16, 0.16)
 
 [node name="LevelStateManager" type="Node" parent="." unique_id=1325462510]
 script = ExtResource("10_4c57u")
+override_has_spoken_to_aida = true
+override_aida_explanation_shown = true
+override_insurance_button_unlocked = true
+override_has_tried_memory_box = true
 
 [node name="Tubelight" parent="." unique_id=1788805950 instance=ExtResource("14_w48qg")]
 position = Vector2(-416, -549)
@@ -1026,7 +1030,6 @@ z_index = -10
 position = Vector2(5643, 6.0000005)
 scale = Vector2(0.8, 0.8)
 object_display_name = "Memory Box"
-object_id = "MemoryBox"
 interactions = Array[ExtResource("24_qsp4k")]([ExtResource("7_jq2sk"), SubResource("Resource_b17eg"), SubResource("Resource_ruth0"), SubResource("Resource_sm6fg")])
 
 [node name="television_screen" parent="." unique_id=1366258808 instance=ExtResource("48_f6a44")]

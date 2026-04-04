@@ -1,28 +1,28 @@
 ~ burger
-a burger, this is.
+Player: (A burger, this is.)
 => END
 
 ~ faye
-a woman, it seems. 
+Player: (A woman, it seems.)
 => END
 
 ~ key_rusty_world
-goddamn rusty ass key ugh.
+Player: (Goddamn rusty ass key ugh.)
 => END
 
 ~ AIda
-a woman, in a nurse's attire. Her limbs seem to be metallic though?
-And damn, why she kindda...
+Player: (A woman, in a nurse's attire. Her limbs seem to be metallic though?)
+Player: (And damn, why she kindda...)
 => END
 
 ~ invigirol
-A medicine container. Eighteen months from expiry.
-Label provides no description. 
+Player: (A medicine container. Eighteen months from expiry.)
+Player: (Label provides no description.)
 => END
 
 ~ cannathink
-A medicine container. 6 months from expiry.
-Label provides no description.
+Player: (A medicine container. 6 months from expiry.)
+Player: (Label provides no description.)
 => END
 
 ~ MedicineCabinet
@@ -31,42 +31,43 @@ Player: (Tee-hee.)
 => END
 
 ~ zanopram
-A medicine container. 11 months from expiry.
-Label provides no description.
+Player: (A medicine container. 11 months from expiry.)
+Player: (Label provides no description.)
 => END
 
 ~ sergei
-A large man lays on a hospital bed. You think he has kind eyes.
-Kind, but sad.
+Player: (A large man lays on a hospital bed. You think he has kind eyes.)
+Player: (Kind, but sad.)
 => END
 
 ~ mcbucket
-An old man hooked up to a machine.
-You see not a single thought behind those googly eyes of his. 
+Player: (An Old Man hooked up to a machine.)
+Player: (You see not a single thought behind those googly eyes of his.)
 => END
 
 
 ~ sergei_medicine_dispenser
-A large balloon-like device. Seems to display a patient's vitals.
+Player: (A large balloon-like device. Seems to display a patient's vitals.)
 => END
 
 ~ testbox
-let me see me or let me be. these guys try to shut me off on MTV - but it feels so empty without  me
+Player: (Let me see me or let me be. These guys try to shut me off on MTV - but it feels so empty without me.)
+=> END
 
 ~ bathroom_door
 
-A sliding door.
-Seems to be leading to the restroom.
+Player: (A sliding door.)
+Player: (Seems to be leading to the restroom.)
 => END
 
 ~ main_room_door
-A sliding door.
-Seems to be leading back to the main room.
+Player: (A sliding door.)
+Player: (Seems to be leading back to the main room.)
 => END
 
 ~ exit_door
-An exit!
-I can make it outta here!
+Player: (An exit!)
+Player: (I can make it outta here!)
 
 => END
 
@@ -85,44 +86,45 @@ CEO Voss: We simply maintain it. The country runs through us.
 
 ~ memory_box
 
-A console-like device.
-Must be the Memory Box™ that metallic nurse was talking about, I guess.
+Player: (A console-like device.)
+Player: (Must be the Memory Box™ that metallic nurse was talking about.)
+Player: (I should trying using this!)
 => END
 
 #HOSPITAL BATHROOM
 
 ~ toilet_paper_dispenser
 
-An automatic toilet paper dispenser.
-The paper seems to be quite thick. Must be of premium quality.
+Player: (An automatic toilet paper dispenser.)
+Player: (The paper seems to be quite thick. Must be of premium quality.)
 
 => END
 
 ~ bathroom_mirror
 
-Wow, now this is a fancy mirror.
-Seems to be displaying the date and time on the top right.
+Player: (Wow, now this is a fancy mirror.)
+Player: (Seems to be displaying the date and time on the top right.)
 
 => END
 
 ~ hospital_toilet
 
-This is where I could take a dump, if I needed to.. 
+Player: (This is where I could take a dump, if I needed to..)
 
 => END
 
 ~ toilet_flush
 
-Looks like a fancy ass..toilet flush?
-And wait, what are those holes for on the sides?
+Player: (Looks like a fancy ass..toilet flush?)
+Player: (And wait, what are those holes for on the sides?)
 
 => END
 
 ~ mcbucket_medicine_dispenser
 
-Seems like some sort of a... medical care device?
-There is a capsule-shaped slot in the center.
-The old man seems to be hooked up to it. 
+Player: (Seems like some sort of a... medical care device?)
+Player: (There is a capsule-shaped slot in the center.)
+Player: (The Old Man seems to be hooked up to it.)
 
 => END
 
