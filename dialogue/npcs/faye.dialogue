@@ -16,7 +16,7 @@ do SoundManager.play_music_track("unnatural_city", 5.0)
 	???: Are you sure you want to sleep?
 	- I'm sure. Goodnight.
 		do GameManager.trigger_game_over()
-	- Actually, no. There's got to be more for me here. => meet_dread
+	- No. I must continue. => meet_dread
 - Struggle against the darkness => meet_dread
 
 ~ meet_dread

@@ -2,9 +2,7 @@ extends CharacterBody2D
 
 enum State { IDLE, HIGH, INVIGIROL, SLEEPING }
 
-const THINKING_DIALOGUE_SCENE = preload("res://mcbucket_thinking_conversation.tscn")
-const INVIGIROL_DIALOGUE_SCENE = preload("res://mcbucket_invigirol_conversation.tscn")
-const DEFAULT_DIALOGUE_SCENE = preload("res://mcbucket_default_conversation.tscn")
+const MCBUCKET_ADVANCED_OVERLAY = "res://mcbucket_advanced_overlay.tscn"
 
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var interactable_component = $InteractionArea
@@ -42,6 +40,42 @@ func _ready():
 	if GameManager:
 		GameManager.interaction_complete.connect(_on_global_interaction_complete)
 
+	# Programmatically add the "Give Toilet Paper" interaction
+	if interactable_component:
+		# 1. Response for when McBucket is SLEEPING
+		var sleep_response = InteractionResponse.new()
+		sleep_response.verb_id = "give"
+		sleep_response.required_item_id = "hospital_toilet_paper"
+		sleep_response.required_flag_id = "mcbucket_zanopram_used"
+		sleep_response.required_flag_value = true
+
+		var sleep_dialogue_action = ShowCustomDialogueAction.new()
+		sleep_dialogue_action.dialogue_resource = load("res://mcbucket_give_tp.dialogue")
+		sleep_dialogue_action.dialogue_checkpoint = "sleeping"
+		sleep_response.actions_to_perform.append(sleep_dialogue_action)
+
+		# 2. Response for when McBucket is AWAKE
+		var give_tp_response = InteractionResponse.new()
+		give_tp_response.verb_id = "give"
+		give_tp_response.required_item_id = "hospital_toilet_paper"
+		give_tp_response.required_flag_id = "mcbucket_zanopram_used"
+		give_tp_response.required_flag_value = false
+
+		var give_tp_action = ShowCustomDialogueAction.new()
+		give_tp_action.dialogue_resource = load("res://mcbucket_give_tp.dialogue")
+		give_tp_action.dialogue_checkpoint = "start"
+
+		var remove_tp_action = RemoveItemAction.new()
+		remove_tp_action.item_id_to_remove = "hospital_toilet_paper"
+
+		# Append dialogue first, then remove item
+		give_tp_response.actions_to_perform.append(give_tp_action)
+		give_tp_response.actions_to_perform.append(remove_tp_action)
+
+		# Add both to the interactable component
+		interactable_component.interactions.append(sleep_response)
+		interactable_component.interactions.append(give_tp_response)
+
 	# 4. Check State
 	await get_tree().process_frame
 	if not GameManager: return
@@ -68,19 +102,16 @@ func change_state(new_state: State):
 	match new_state:
 		State.IDLE:
 			animation_player.play("idle")
-			interactable_component.character_conversation_overlay_scene = DEFAULT_DIALOGUE_SCENE
+			interactable_component.character_conversation_scene_path = MCBUCKET_ADVANCED_OVERLAY
 		State.HIGH:
 			animation_player.play("high")
-			interactable_component.character_conversation_overlay_scene = THINKING_DIALOGUE_SCENE
-			print_rich("[color=cyan]McBucket state changed to HIGH.[/color]")
+			interactable_component.character_conversation_scene_path = MCBUCKET_ADVANCED_OVERLAY
 		State.INVIGIROL:
 			animation_player.play("invigirol", -1, 4.0)
-			interactable_component.character_conversation_overlay_scene = INVIGIROL_DIALOGUE_SCENE 
-			print_rich("[color=cyan]McBucket state changed to INVIGIROL.[/color]")
+			interactable_component.character_conversation_scene_path = MCBUCKET_ADVANCED_OVERLAY
 		State.SLEEPING:
 			animation_player.play("sleeping")
-			interactable_component.character_conversation_overlay_scene = null
-			print_rich("[color=cyan]McBucket state changed to SLEEPING.[/color]")
+			interactable_component.character_conversation_scene_path = "" # Cannot talk to him
 
 
 # --- SIGNAL HANDLERS ---

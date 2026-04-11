@@ -7,7 +7,7 @@ extends CanvasLayer
 var load_queue = [
 	{"path": "res://main_menu.tscn", "name": "Main Menu UI"},
 	{"path": "res://conversation_backgrounds.tres", "name": "Intro Cinematics"},
-	{"path": "res://CharacterConversationOverlay.tscn", "name": "Intro Sequence"},
+	{"path": "res://AdvancedConversationOverlay.tscn", "name": "Intro Sequence"},
 	{"path": "res://main.tscn", "name": "Hospital World"}
 ]
 
@@ -52,7 +52,7 @@ func _process(_delta):
 		match current_file["path"]:
 			"res://main_menu.tscn":
 				GameManager.cached_main_menu_scene = loaded_resource
-			"res://CharacterConversationOverlay.tscn":
+			"res://AdvancedConversationOverlay.tscn":
 				GameManager.cached_intro_overlay_scene = loaded_resource
 			"res://main.tscn":
 				GameManager.cached_main_game_scene = loaded_resource

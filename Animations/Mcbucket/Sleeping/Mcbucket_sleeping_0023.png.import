@@ -3,19 +3,20 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dcethwhh47lo7"
-path="res://.godot/imported/Mcbucket_sleeping_0023.png-2c513eb20c666a02f444de84dd7f58a0.ctex"
+path.s3tc="res://.godot/imported/Mcbucket_sleeping_0023.png-2c513eb20c666a02f444de84dd7f58a0.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0023.png"
-dest_files=["res://.godot/imported/Mcbucket_sleeping_0023.png-2c513eb20c666a02f444de84dd7f58a0.ctex"]
+dest_files=["res://.godot/imported/Mcbucket_sleeping_0023.png-2c513eb20c666a02f444de84dd7f58a0.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

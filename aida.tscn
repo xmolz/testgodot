@@ -49,7 +49,7 @@ fill_from = Vector2(0.50427353, 0.5)
 fill_to = Vector2(0.008547009, 0.014957265)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hsqv2"]
-size = Vector2(275, 1010)
+size = Vector2(183, 536)
 
 [sub_resource type="Animation" id="Animation_wanmg"]
 length = 0.001
@@ -145,7 +145,7 @@ script = ExtResource("13_5x1vy")
 script = ExtResource("5_f5e6k")
 
 [node name="InteractionClickShape" type="CollisionShape2D" parent="InteractionArea" unique_id=674429600]
-position = Vector2(-9.5, 7)
+position = Vector2(2.5, 6)
 shape = SubResource("RectangleShape2D_hsqv2")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=175000558]

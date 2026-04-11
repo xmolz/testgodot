@@ -1,7 +1,7 @@
-[gd_scene format=3 uid="uid://byi5q4k4m762l"]
+[gd_scene format=3 uid="uid://c5rmgeb3hiq78"]
 
 [ext_resource type="Script" uid="uid://cy1g0xpb3u0e2" path="res://character_conversation_overlay.gd" id="1_g3y2i"]
-[ext_resource type="Resource" uid="uid://fxlpt5jaaje7" path="res://mcbucket_cannathink.dialogue" id="2_g3y2i"]
+[ext_resource type="Resource" path="res://mcbucket_cannathink.dialogue" id="2_g3y2i"]
 [ext_resource type="Texture2D" uid="uid://cx4r1a1ci7vpj" path="res://sergey.PNG" id="3_awfyy"]
 [ext_resource type="Texture2D" uid="uid://coo5k2phjvc1e" path="res://Protag.png" id="4_6hk7o"]
 [ext_resource type="Texture2D" uid="uid://dkfxelpqykxt6" path="res://Backgrounds/McBucket/high/mcbucket_high_base.png" id="5_g3y2i"]

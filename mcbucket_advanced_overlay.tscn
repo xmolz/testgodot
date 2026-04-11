@@ -1,0 +1,10 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" uid="uid://kfct0osfvolx" path="res://AdvancedConversationOverlay.tscn" id="1_base"]
+[ext_resource type="Resource" path="res://mcbucket_unified.dialogue" id="2_dialogue"]
+
+[node name="AdvancedConversationOverlay" unique_id=543555441 instance=ExtResource("1_base")]
+dialogue_resource = ExtResource("2_dialogue")
+background_aliases = {
+"mcbucket_background": "res://Backgrounds/Levels/mcbucket_background.png"
+}

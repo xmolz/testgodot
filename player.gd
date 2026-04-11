@@ -50,8 +50,6 @@ func _physics_process(delta: float):
 		velocity.x = 0
 		if not is_on_floor():
 			velocity.y += GRAVITY * delta
-		else:
-			velocity.y = 0
 		move_and_slide()
 		return
 
@@ -79,8 +77,6 @@ func _physics_process(delta: float):
 
 		if not is_on_floor():
 			velocity.y += GRAVITY * delta
-		else:
-			velocity.y = move_toward(velocity.y, 0, GRAVITY * delta * 0.1)
 
 		if is_instance_valid(sprite_2d): sprite_2d.flip_h = (velocity.x < 0)
 
@@ -100,8 +96,6 @@ func _physics_process(delta: float):
 
 		if not is_on_floor():
 			velocity.y += GRAVITY * delta
-		else:
-			velocity.y = move_toward(velocity.y, 0, GRAVITY * delta * 0.1)
 
 		move_and_slide()
 		return
@@ -131,8 +125,6 @@ func _physics_process(delta: float):
 
 			if not is_on_floor():
 				velocity.y += GRAVITY * delta
-			else:
-				velocity.y = move_toward(velocity.y, 0, GRAVITY * delta * 0.1)
 
 			if is_instance_valid(sprite_2d): sprite_2d.flip_h = (velocity.x < 0)
 			set_animation_state("walk")
@@ -159,11 +151,8 @@ func _physics_process(delta: float):
 	# Idle Physics
 	if not is_on_floor():
 		velocity.y += GRAVITY * delta
-	else:
-		velocity.y = move_toward(velocity.y, 0, GRAVITY * delta * 0.1) 
 
-	velocity.x = move_toward(velocity.x, 0, SPEED * 0.5)
-	if abs(velocity.x) < 1.0 : velocity.x = 0
+	velocity.x = 0
 
 	if not _is_walking_to_target:
 		set_animation_state("idle")

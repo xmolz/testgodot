@@ -1,0 +1,325 @@
+~ start
+if GameManager.get_current_level_flag("mcbucket_cannathink_used") == true:
+	=> high_start
+elif GameManager.get_current_level_flag("mcbucket_invigirol_used") == true:
+	=> invigirol_start
+elif GameManager.get_current_level_flag("mcbucket_zanopram_used") == true:
+	=> sleeping_start
+else:
+	=> default_start
+
+~ default_start
+do change_background("mcbucket_background", "none", 0.0)
+do actor_enter("McBucket", "mcbucket_default", "center")
+An ancient man stares at you intently.
+Or at least, you think. The squint makes it hard to tell.
+do SoundManager.play_music_track("mcbucket_normal_theme", 5.0)
+What do you want to say him?
+~ default_hub
+- Hey, how are you?
+	The Old Man is still and silent.
+	Then, almost instantly and possibly with intent to deafen, he screams:
+	do actor_change("McBucket", "mcbucket_ree")
+	do SoundManager.play_sfx("mcbucket_scream")
+	do shake(0.5, 20.0)
+	Old Man: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
+	do GameManager.set_current_level_flag("mcbucket_has_screamed_at_player", true)
+	do actor_change("McBucket", "mcbucket_default")
+	Wow, that was quite something. What do you wanna say to him?
+	- What?
+		do actor_change("McBucket", "mcbucket_ree")
+		do shake(0.5, 20.0)
+		Old Man: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
+		do actor_change("McBucket", "mcbucket_default")
+		The Old Man seems to know only one response.
+		What would you like to do?
+		- Scream back at him
+			That's it. Only one way to tell the bastard who's in charge.
+			You put on your work face.
+			Suck all the air you can in - into your stomach.
+			You're gonna do it. Scream it back at him.
+			3...2...1..
+			do actor_change("McBucket", "mcbucket_ree")
+			do shake(0.5, 20.0)
+			Old Man: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
+			do actor_change("McBucket", "mcbucket_default")
+			You let all that air out.
+			Fucker beat you to it, it seems.
+			~ ree_hub
+			do actor_change("McBucket", "mcbucket_ree")
+			do shake(0.5, 20.0)
+			Old Man: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
+			- REEEEEEEEEEE~~~~~!!! => ree_hub
+			- Leave [Leave]
+				"Goodbye Old Man" you say to the character in front of you.
+				do SoundManager.fade_out_music(3.0)
+				=> END
+		- Leave [Leave]
+			"Goodbye Old Man" you say to the character in front of you.
+			do SoundManager.fade_out_music(3.0)
+			=> END
+	- Sir, are you okay?
+		do actor_change("McBucket", "mcbucket_ree")
+		do shake(0.5, 20.0)
+		Old Man: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
+		do actor_change("McBucket", "mcbucket_default")
+		The Old Man seems to know only one response.
+		What would you like to do?
+		- Scream back at him
+			That's it. Only one way to tell the bastard who's in charge.
+			You put on your work face.
+			Suck all the air you can in - into your stomach.
+			You're gonna do it. Scream it back at him.
+			3...2...1..
+			do actor_change("McBucket", "mcbucket_ree")
+			do shake(0.5, 20.0)
+			Old Man: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
+			do actor_change("McBucket", "mcbucket_default")
+			You let all that air out.
+			Fucker beat you to it, it seems.
+			do actor_change("McBucket", "mcbucket_ree")
+			do shake(0.5, 20.0)
+			Old Man: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
+			- REEEEEEEEEEE~~~~~!!! => ree_hub
+			- Leave [Leave]
+				"Goodbye Old Man" you say to the character in front of you. => END
+		- Leave [Leave]
+			"Goodbye Old Man" you say to the character in front of you.
+			do SoundManager.fade_out_music(3.0)
+			=> END
+	- Fuck was that, dickhead?
+		do actor_change("McBucket", "mcbucket_ree")
+		do shake(0.5, 20.0)
+		Old Man: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
+		do actor_change("McBucket", "mcbucket_default")
+		The Old Man seems to know only one response.
+		What would you like to do?
+		- Scream back at him
+			That's it. Only one way to tell the bastard who's in charge.
+			You put on your work face.
+			Suck all the air you can in - into your stomach.
+			You're gonna do it. Scream it back at him.
+			3...2...1..
+			do actor_change("McBucket", "mcbucket_ree")
+			do shake(0.5, 20.0)
+			Old Man: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
+			do actor_change("McBucket", "mcbucket_default")
+			You let all that air out.
+			Fucker beat you to it, it seems.
+			do actor_change("McBucket", "mcbucket_ree")
+			do shake(0.5, 20.0)
+			Old Man: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
+			- REEEEEEEEEEE~~~~~!!! => ree_hub
+			- Leave [Leave]
+				=> END
+		- Leave [Leave]
+			"Goodbye Old Man" you say to the character in front of you.
+			do SoundManager.fade_out_music(3.0)
+			=> END
+- Nice eyes, Old Man.
+	The Old Man is still and silent.
+	Then, almost instantly and possibly with intent to deafen, he screams -
+	do actor_change("McBucket", "mcbucket_ree")
+	do SoundManager.play_sfx("mcbucket_scream")
+	do shake(0.5, 20.0)
+	Old Man: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
+	do GameManager.set_current_level_flag("mcbucket_has_screamed_at_player", true)
+	do actor_change("McBucket", "mcbucket_default")
+	The Old Man seems to know only one response.
+	What would you like to do?
+	- Scream back at him
+		That's it. Only one way to tell the bastard who's in charge.
+		You put on your work face.
+		Suck all the air you can in - into your stomach.
+		You're gonna do it. Scream it back at him.
+		3...2...1..
+		do actor_change("McBucket", "mcbucket_ree")
+		do shake(0.5, 20.0)
+		Old Man: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
+		do actor_change("McBucket", "mcbucket_default")
+		You let all that air out.
+		Fucker beat you to it, it seems.
+		do actor_change("McBucket", "mcbucket_ree")
+		do shake(0.5, 20.0)
+		Old Man: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
+		- REEEEEEEEEEE~~~~~!!! => ree_hub
+		- Leave [Leave]
+			do SoundManager.fade_out_music(3.0)
+			=> END
+	- Leave [Leave]
+		"Goodbye Old Man" you say to the character in front of you. => END
+- Leave [Leave]
+	do SoundManager.fade_out_music(3.0)
+	=> END
+
+
+~ high_start
+do change_background("mcbucket_background", "none", 0.0)
+do actor_enter("McBucket", "mcbucket_high_base", "center")
+An ancient man leans back in his hospital chair.
+The squint in his eyes seems to have relaxed.
+do SoundManager.play_music_track("mcbucket_cannathink_theme", 5.0)
+What do you say to him?
+=> high_hub
+
+~ high_hub
+- Hey, how are you?
+	do actor_change("McBucket", "mcbucket_high_happy")
+	Old Man: I...am. Yes.
+	- Excuse me?
+		do actor_change("McBucket", "mcbucket_high_explaining_eyes_closed_mouth_closed")
+		Old Man: I would never accuse you of anything, friend.
+		do actor_change("McBucket", "mcbucket_high_happy")
+		Old Man: I think you are just...[i] splendid[/i].
+		Is there anything else you want to say to him?
+		=> high_hub
+
+- Nice eyes, Old Man.
+	do actor_change("McBucket", "mcbucket_high_happy")
+	Old Man: Thanks! Got 'em from my sister's side of the family, I think.
+	- Your..sister's side?
+		do actor_change("McBucket", "mcbucket_high_explaining_eyes_closed_mouth_closed")
+		Old Man: Hehehe...Yeah. She's got great knees too. That woman.
+		Is there anything else you want to say to him?
+		=> high_hub
+
+- Tell me something about yourself.
+	Old Man: Something about.....me?
+	do actor_change("McBucket", "mcbucket_high_happy")
+	Old Man: What d'ya wanna know?
+	=> high_hub2
+
+- Nevermind [Leave]
+	=> high_leave
+
+~ high_hub2
+- What's your name?
+	do actor_change("McBucket", "mcbucket_high_explaining_eyes_open_mouth_closed")
+	Old Man: Sure! Do you wanna know my [i]worldly[/i] name... or my [i]real[/i] name?
+
+	- Your worldly name.
+		do actor_change("McBucket", "mcbucket_high_explaining_eyes_closed_mouth_closed")
+		Old Man: That would be... Mr. Turtle.
+		- Mr. Turtle?
+			Old Man: Yes. I rarely come outta my shell. And I swim. I always swim.
+			- Okay… what's your real name then?
+				=> love_branch
+
+	- Your real name.
+		=> love_branch
+
+- How'd you end up here?
+	do actor_change("McBucket", "mcbucket_high_base")
+	Old Man: Here?
+	Old Man: Where are we anyway?
+	- We're at a hospital?
+		do actor_change("McBucket", "mcbucket_high_happy")
+		Old Man: A hospital? Hahaha. Well I don't know how I ended up here.
+		do actor_change("McBucket", "mcbucket_high_explaining_eyes_closed_mouth_open")
+		Old Man: But I can tell ya one thing for sure - they're wasting their time having me here!
+		Old Man: There ain't a damn thing wrong with Ol' McBucket over here.
+		do actor_change("McBucket", "mcbucket_high_explaining_eyes_closed_mouth_closed")
+		Old Man: Well, except for my severe case of...
+		- Of what?
+			do actor_change("McBucket", "mcbucket_high_base")
+			Old Man: Eh? What?
+			The Old Man seems to have lost his train of thought.
+			Do you want to talk about something else?
+			=> high_hub2
+
+- I'd like to ask some other questions [Back]
+	What do you wanna say to him?
+	=> high_hub
+
+- Nevermind [Leave]
+	=> high_leave
+
+~ love_branch
+Old Man: That would be...
+do actor_change("McBucket", "mcbucket_high_hand_up")
+Old Man: Love.
+- Love? What do you mean?
+	do actor_change("McBucket", "mcbucket_high_explaining_eyes_closed_mouth_closed")
+	Old Man: I mean the only real thing in this world [i]is[/i] love.
+	do actor_change("McBucket", "mcbucket_high_explaining_eyes_open_mouth_closed")
+	Old Man: Say, kid… you ever loved anyone before?
+
+	- Yes.
+		do actor_change("McBucket", "mcbucket_high_happy")
+		Old Man: Hah! Then you already know what I'm talking about!
+		Old Man: Hold onto it, kid. It's rarer than a polite seagull.
+		Old Man: And when you find it again… feed it something nice.
+		do actor_change("McBucket", "mcbucket_high_base")
+		You see the Old Man drift away into his own thoughts.
+		Is there anything else you'd like to say to the Old Man?
+		=> high_hub2
+
+	- Not really.
+		do actor_change("McBucket", "mcbucket_high_happy")
+		Old Man: Then I hope it finds you soon! It's the most wonderful thing.
+		Old Man: Once you're in love… you see it everywhere.
+		do actor_change("McBucket", "mcbucket_high_hand_up")
+		Old Man: In the grass. In the tiles. On the screen. Even in the chips.
+
+		- The chips?
+			do actor_change("McBucket", "mcbucket_high_explaining_eyes_open_mouth_closed")
+			Old Man: Yeah. You got any on ya? I'm gettin' kinda hungry for some reason.
+			The Old Man makes none and all the sense in the world at the same time.
+
+			- Have you ever been in love?
+				do actor_change("McBucket", "mcbucket_high_explaining_eyes_closed_mouth_open")
+				Old Man: Who? Me?
+				do actor_change("McBucket", "mcbucket_high_hand_up")
+				Old Man: I am [i]always[/i] in love.
+				do actor_change("McBucket", "mcbucket_high_explaining_eyes_closed_mouth_closed")
+				Old Man: It's not possible for me to [i]not[/i] be in it.
+				Old Man: I only forget sometimes.
+				do actor_change("McBucket", "mcbucket_high_happy")
+				Old Man: Once, I was walking down the street, and this RoboCop comes up to me and says...
+				Old Man: ...
+				do actor_change("McBucket", "mcbucket_high_base")
+				Old Man: Wait—what was I talking about?
+				=> high_hub2
+			- I'd like to ask something else [Back]
+				=> high_hub2
+			- Nevermind [Leave]
+				=> high_leave
+
+	- I can't recall. I have no memories.
+		do actor_change("McBucket", "mcbucket_high_base")
+		Old Man: Oh boy, no memories huh?
+		do actor_change("McBucket", "mcbucket_high_explaining_eyes_open_mouth_closed")
+		Old Man: Who took 'em from ya? Did you check the fridge?
+		You are reminded that you are talking to a person high out of their mind.
+		do actor_change("McBucket", "mcbucket_high_explaining_eyes_closed_mouth_open")
+		Old Man: Don't worry kiddo. Maybe they are just out for a swim.
+		do actor_change("McBucket", "mcbucket_high_happy")
+		Old Man: Maybe one day they'll swim right back to ya.
+		The Old Man's words penetrate you deeply.
+		Do you [i]want[/i] the memories to swim back to you?
+		Why did you overdose yourself into unconsciousness anyway?
+		You push away the thought.
+		Is there anything else you'd like to say to the Old Man?
+		=> high_hub2
+
+~ high_leave
+"Goodbye Old Man" you say to the character in front of you.
+do SoundManager.fade_out_music(3.0)
+=> END
+
+~ invigirol_start
+do change_background("mcbucket_background", "none", 0.0)
+do actor_enter("McBucket", "mcbucket_invigirol_base", "center")
+~ invigirol_loop
+do shake(-1, 20.0)
+Old Man McBucket: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
+- What?
+	=> invigirol_loop
+- Leave [Leave]
+	"GOODBYE OLD MAN!" You say to the creature in front of you.
+	=> END
+
+~ sleeping_start
+do change_background("mcbucket_background", "none", 0.0)
+The Old Man is fast asleep.
+=> END

@@ -8,8 +8,8 @@ const MAIN_MENU_SCENE_PATH = "res://main_menu.tscn"
 # --- ADD THIS LINE ---
 # Make sure this path is correct for your project structure!
 # In Boot.gd - CUT THESE LINES
-const INTRO_OVERLAY_SCENE_PATH = "res://CharacterConversationOverlay.tscn"
-const INTRO_DIALOGUE_FILE_PATH = "res://dialogue/npcs/faye.dialogue"
+const INTRO_OVERLAY_SCENE_PATH = "res://AdvancedConversationOverlay.tscn"
+const INTRO_DIALOGUE_FILE_PATH = "res://dialogue/intro.dialogue"
 const INTRO_BACKGROUND_ANIMATIONS_PATH = "res://conversation_backgrounds.tres"
 const INTRO_INITIAL_ANIMATION_NAME = "float_loop"
 const FORM_DIALOGUE = preload("res://form_related_dialogue.dialogue")
@@ -96,7 +96,8 @@ var hovered_interactable: Interactable = null
 var player_node: CharacterBody2D
 
 var _is_player_walking: bool = false
-var _current_character_conversation_overlay_instance: CharacterConversationOverlay = null
+var _current_character_conversation_overlay_instance: Node = null
+var debug_fps_label: Label = null
 var _signals_connected_to_interactable: Interactable = null # Tracks interactable for signal cleanup
 
 var current_level_state_manager: LevelStateManager = null # For current level's state
@@ -132,6 +133,21 @@ func _ready():
 	#print_rich("[color=cyan]GM: GameManager is Ready! Starting initialization...[/color]")
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 
+	# Create a debug FPS counter
+	var fps_canvas = CanvasLayer.new()
+	fps_canvas.layer = 128 # Put it above absolutely everything
+	debug_fps_label = Label.new()
+	debug_fps_label.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT, Control.PRESET_MODE_MINSIZE, 15)
+	debug_fps_label.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+	debug_fps_label.offset_right = -20
+	debug_fps_label.offset_top = 20
+	debug_fps_label.add_theme_font_size_override("font_size", 24)
+	debug_fps_label.add_theme_color_override("font_color", Color.GREEN)
+	debug_fps_label.add_theme_color_override("font_outline_color", Color.BLACK)
+	debug_fps_label.add_theme_constant_override("outline_size", 4)
+	fps_canvas.add_child(debug_fps_label)
+	add_child(fps_canvas)
+
 	var cursor_scene = load("res://custom_cursor.tscn")
 	if cursor_scene:
 		custom_cursor_instance = cursor_scene.instantiate()
@@ -141,6 +157,7 @@ func _ready():
 	if indicator_scene:
 		walk_indicator_instance = indicator_scene.instantiate()
 		add_child(walk_indicator_instance)
+		walk_indicator_instance.set_physics_interpolation_mode(Node.PHYSICS_INTERPOLATION_MODE_OFF)
 
 	# Spawn our Global Transition Layer immediately
 	var transition_scene = preload("res://TransitionLayer.tscn")
@@ -242,6 +259,12 @@ func _ready():
 			#print_rich("[color=red]GM: Please select your Player node -> Node Tab -> Groups -> Add 'player'.[/color]")
 
 func _process(delta):
+	if is_instance_valid(debug_fps_label):
+		var node_count = Performance.get_monitor(Performance.OBJECT_NODE_COUNT)
+		var orphan_count = Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT)
+		var sm_children = SoundManager.get_child_count() if SoundManager else 0
+		debug_fps_label.text = "FPS: %d | Nodes: %d | Orphans: %d | SM: %d" % [Engine.get_frames_per_second(), node_count, orphan_count, sm_children]
+
 	if is_mouse_held_for_walk:
 		if not Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 			is_mouse_held_for_walk = false
@@ -612,6 +635,10 @@ func _initiate_interaction_flow(interactable_node: Interactable, verb_to_use_id:
 		# --- THIS IS THE FIX ---
 		# Set the lock flag to true before telling the player to walk.
 		_is_player_walking = true
+
+		# Force the UI to instantly suppress the action label upon clicking
+		update_sentence_line_ui()
+
 		if not is_instance_valid(player_node):
 			#print_rich("[color=red]GM: Player node not set or invalid. Interacting immediately (if possible).[/color]")
 			_perform_actual_interaction(interactable_node, verb_to_use_id, item_data_to_use)
@@ -707,20 +734,20 @@ func _on_dialogue_ended_for_object_dialogue(_resource: Resource):
 
 # Replace the entire existing function with this one.
 func _on_character_conversation_finished(resource: DialogueResource):
-	# First, perform all the necessary cleanup and state changes.
 	exit_to_world_state()
 
-	if _current_character_conversation_overlay_instance:
-		_current_character_conversation_overlay_instance.queue_free()
-		_current_character_conversation_overlay_instance = null
+	# Do NOT queue_free the overlay here — it cleans itself up
+	# via _destroy_and_clear_cache / _cleanup_and_queue_free.
+	# Calling queue_free here races with the overlay's own cleanup
+	# and prevents texture references from being properly nulled,
+	# causing large textures to linger in VRAM until GC collects them.
+	_current_character_conversation_overlay_instance = null
 
 	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
 		player_node.set_can_move(true)
 
 	_complete_interaction_cycle()
 
-	# Now, simply announce that a conversation ended, and pass along which one.
-	# The Main scene will be listening for this.
 	character_conversation_ended.emit(resource)
 
 
@@ -1267,9 +1294,7 @@ func _start_intro_conversation():
 	intro_overlay.is_intro_sequence = true
 
 	# Configure its exported variables from code.
-	intro_overlay.conversation_dialogue_file = load(INTRO_DIALOGUE_FILE_PATH)
-	intro_overlay.background_animations = load(INTRO_BACKGROUND_ANIMATIONS_PATH)
-	intro_overlay.initial_animation_name = INTRO_INITIAL_ANIMATION_NAME
+	intro_overlay.dialogue_resource = load(INTRO_DIALOGUE_FILE_PATH)
 
 	# Connect to its 'conversation_finished' signal.
 	intro_overlay.conversation_finished.connect(_on_intro_conversation_finished, CONNECT_ONE_SHOT)
@@ -1286,6 +1311,9 @@ func _on_intro_conversation_finished(_dialogue_resource):
 		
 	# This loads the scene and starts the ambient hospital audio!
 	change_game_state(GameState.IN_GAME_PLAY)
+
+	# Free the heavy intro cinematic scenes from memory now that we don't need them
+	cached_intro_overlay_scene = null
 	
 	if is_instance_valid(transition_layer):
 		# Wait 3 full seconds in the dark to let the player hear the environment
@@ -1382,8 +1410,8 @@ func trigger_game_over(fade_duration: float = 3.0):
 
 	# 5. Aggressively hunt down Overlays AND Dialogue Balloons to prevent crashes
 	for child in get_tree().root.get_children():
-		if child is CharacterConversationOverlay:
-			if is_instance_valid(child.current_balloon):
+		if child is CharacterConversationOverlay or child is AdvancedConversationOverlay:
+			if "current_balloon" in child and is_instance_valid(child.current_balloon):
 				child.current_balloon.queue_free()
 			child.queue_free()
 		elif "Balloon" in child.name or "conversationballoon" in child.name.to_lower():

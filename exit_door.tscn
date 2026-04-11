@@ -5,20 +5,20 @@
 [ext_resource type="Material" uid="uid://dww3d0txyl18g" path="res://interactions/actions/interactable_outline.tres" id="OutlineMaterial"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rhf3t"]
-size = Vector2(697, 1259)
+size = Vector2(298, 541)
 
-[node name="ExitDoor" type="Area2D"]
+[node name="ExitDoor" type="Area2D" unique_id=1177886199]
 script = ExtResource("1_ti4c3")
 object_display_name = "Exit Door"
 object_id = "exit_door"
 
-[node name="ObjectSprite" type="Sprite2D" parent="."]
+[node name="ObjectSprite" type="Sprite2D" parent="." unique_id=536871538]
 material = ExtResource("OutlineMaterial")
 texture = ExtResource("2_pix1l")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-2.5, 1.5)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1377275937]
+position = Vector2(-3, -0.5)
 shape = SubResource("RectangleShape2D_rhf3t")
 
-[node name="WalkToPoint" type="Marker2D" parent="."]
-position = Vector2(0, 381)
+[node name="WalkToPoint" type="Marker2D" parent="." unique_id=914998803]
+position = Vector2(0, 269)

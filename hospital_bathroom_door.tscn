@@ -5,7 +5,7 @@
 [ext_resource type="Material" uid="uid://dww3d0txyl18g" path="res://interactions/actions/interactable_outline.tres" id="OutlineMaterial"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rhf3t"]
-size = Vector2(697, 1259)
+size = Vector2(298, 549)
 
 [node name="MainRoomDoor" type="Area2D" unique_id=1082946143]
 script = ExtResource("1_sd22h")
@@ -17,8 +17,8 @@ material = ExtResource("OutlineMaterial")
 texture = ExtResource("2_sd22h")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1860898421]
-position = Vector2(-2.5, 1.5)
+position = Vector2(0, 2.5)
 shape = SubResource("RectangleShape2D_rhf3t")
 
 [node name="WalkToPoint" type="Marker2D" parent="." unique_id=1759730965]
-position = Vector2(0, 381)
+position = Vector2(0, 272)

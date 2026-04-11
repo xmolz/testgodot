@@ -3,19 +3,20 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://ch78cxi5pjbf2"
-path="res://.godot/imported/aida_hospital_explaining_confident.png-53cdcf6754b24c9b984432eed20abd41.ctex"
+path.s3tc="res://.godot/imported/aida_hospital_explaining_confident.png-53cdcf6754b24c9b984432eed20abd41.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://Backgrounds/Aida/aida_hospital_explaining_confident.png"
-dest_files=["res://.godot/imported/aida_hospital_explaining_confident.png-53cdcf6754b24c9b984432eed20abd41.ctex"]
+dest_files=["res://.godot/imported/aida_hospital_explaining_confident.png-53cdcf6754b24c9b984432eed20abd41.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ShowCustomDialogueAction" load_steps=3 format=3]
+
+[ext_resource type="Resource" uid="uid://buvvctce1wr7t" path="res://use_item_accompanying_dialogue.dialogue" id="1_dialogue"]
+[ext_resource type="Script" uid="uid://8c6cnm8lo25p" path="res://interactions/actions/ShowCustomDialogueAction.gd" id="2_script"]
+
+[resource]
+script = ExtResource("2_script")
+dialogue_resource = ExtResource("1_dialogue")
+dialogue_checkpoint = "sneak_pills"

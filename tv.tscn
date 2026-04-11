@@ -18,7 +18,16 @@ object_display_name = "Television Screen"
 object_id = "television_screen"
 metadata/_custom_type_script = "uid://dwldhrx7leysr"
 
-[node name="ObjectSprite" type="Sprite2D" parent="." unique_id=1627579716]
+[node name="HoverGlow" type="ColorRect" parent="." unique_id=2073713427]
+visible = false
+offset_left = -244.0
+offset_top = -139.0
+offset_right = 243.0
+offset_bottom = 141.0
+mouse_filter = 2
+color = Color(0.2, 0.85, 1, 1)
+
+[node name="TVScreen" type="Sprite2D" parent="." unique_id=1336194276]
 material = SubResource("ShaderMaterial_arbd3")
 texture = ExtResource("2_rlxh4")
 script = ExtResource("4_arbd3")

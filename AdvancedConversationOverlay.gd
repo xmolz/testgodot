@@ -1,12 +1,13 @@
 extends CanvasLayer
+class_name AdvancedConversationOverlay
 
 signal conversation_finished(dialogue_resource: DialogueResource)
 
 @export var dialogue_resource: DialogueResource
 @export var start_dialogue_id: String = "start"
 @export var character_roster: Array[CharacterProfile] = []
-@export var background_aliases: Dictionary = {} # String -> Texture2D
-@export var cg_aliases: Dictionary = {} # String -> Texture2D
+@export var background_aliases: Dictionary = {} # String -> String (res:// path)
+@export var cg_aliases: Dictionary = {} # String -> String (res:// path)
 @export var mental_image_shader: ShaderMaterial
 
 var active_actors: Dictionary = {}
@@ -15,6 +16,8 @@ var _scan_active: bool = false
 var _scan_time: float = 0.0
 var _scan_tween: Tween
 
+var current_balloon: Node = null
+
 # --- SHAKE VARIABLES ---
 var _is_shaking: bool = false
 var _shake_timer: float = 0.0
@@ -22,18 +25,41 @@ var _shake_strength: float = 10.0
 var _shake_rng := RandomNumberGenerator.new()
 var _is_persistent_shake: bool = false
 var _ignore_next_got_dialogue_signal: bool = false
+var is_intro_sequence: bool = false
 
 @onready var actor_stage: Control = $ActorStage
 @onready var darken_backdrop: ColorRect = $DarkenBackdrop
 @onready var background_layer: TextureRect = $BackgroundLayer
 @onready var cg_layer: TextureRect = $CGLayer
 @onready var mental_image_layer: TextureRect = $MentalImageLayer
+@onready var solid_background: ColorRect = $SolidBackground
+@onready var cinematic_container: Control = $CinematicContainer
+@onready var cinematic_bg: ColorRect = $CinematicBackground
+@onready var cinematic_sprite: AnimatedSprite2D = $CinematicSprite
+@onready var continue_button: Button = $CinematicContinueButton
+@onready var fade_overlay: ColorRect = $FadeOverlay
+var _intro_silhouette: TextureRect = null
+var _spawned_entities: Dictionary = {}
+var is_cinematic_lock_active: bool = false
 var _mental_image_tween: Tween
+var _preloaded_textures: Dictionary = {}
+
+
+func _preload_all_textures():
+	for key in background_aliases:
+		var path = background_aliases[key]
+		if not _preloaded_textures.has(path):
+			_preloaded_textures[path] = load(path)
+	for key in cg_aliases:
+		var path = cg_aliases[key]
+		if not _preloaded_textures.has(path):
+			_preloaded_textures[path] = load(path)
 
 
 func _ready():
-	DialogueManager.show_dialogue_balloon_scene(
-		load("res://conversationballoon.tscn"),
+	_preload_all_textures()
+	current_balloon = DialogueManager.show_dialogue_balloon_scene(
+		preload("res://conversationballoon.tscn"),
 		dialogue_resource,
 		start_dialogue_id,
 		[self]
@@ -41,6 +67,11 @@ func _ready():
 	DialogueManager.dialogue_ended.connect(_on_dialogue_ended)
 	DialogueManager.got_dialogue.connect(_on_got_dialogue)
 	_shake_rng.randomize()
+
+	if continue_button:
+		continue_button.hide()
+		if not continue_button.pressed.is_connected(_on_cinematic_continue_pressed):
+			continue_button.pressed.connect(_on_cinematic_continue_pressed)
 
 
 func _process(delta: float):
@@ -70,17 +101,21 @@ func _on_dialogue_ended(_resource: DialogueResource):
 	if DialogueManager.got_dialogue.is_connected(_on_got_dialogue):
 		DialogueManager.got_dialogue.disconnect(_on_got_dialogue)
 
-	# Notify the GameManager that the conversation is over so it restores UI and Player movement
 	conversation_finished.emit(dialogue_resource)
 
 	var tween = create_tween().set_parallel(true)
 	tween.tween_property(darken_backdrop, "color:a", 0.0, 0.4).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-	tween.tween_property(background_layer, "modulate:a", 0.0, 0.4).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-	tween.tween_property(actor_stage, "modulate:a", 0.0, 0.4).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-	tween.tween_property(cg_layer, "modulate:a", 0.0, 0.4).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-	tween.tween_property(mental_image_layer, "modulate:a", 0.0, 0.4).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	if is_instance_valid(background_layer):
+		tween.tween_property(background_layer, "modulate:a", 0.0, 0.4).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	if is_instance_valid(actor_stage):
+		tween.tween_property(actor_stage, "modulate:a", 0.0, 0.4).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	if is_instance_valid(cg_layer):
+		tween.tween_property(cg_layer, "modulate:a", 0.0, 0.4).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	if is_instance_valid(mental_image_layer):
+		tween.tween_property(mental_image_layer, "modulate:a", 0.0, 0.4).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 
-	tween.chain().tween_callback(queue_free)
+	# Ensure the node deletes itself and clears texture cache
+	tween.chain().tween_callback(self._destroy_and_clear_cache)
 
 
 func get_profile(id: String) -> CharacterProfile:
@@ -355,9 +390,9 @@ func change_background(bg_name: String, transition: String = "fade", duration: f
 
 	# Check if it's an alias first, otherwise try loading it as a raw path (fallback)
 	if background_aliases.has(bg_name):
-		new_texture = background_aliases[bg_name]
+		new_texture = _preloaded_textures.get(background_aliases[bg_name], load(background_aliases[bg_name]))
 	elif ResourceLoader.exists(bg_name):
-		new_texture = load(bg_name)
+		new_texture = _preloaded_textures.get(bg_name, load(bg_name))
 
 	if not new_texture:
 		push_warning("Could not find background alias or path: " + bg_name)
@@ -479,9 +514,9 @@ func show_cg(cg_name: String, transition: String = "fade", duration: float = 0.5
 	var new_texture: Texture2D = null
 
 	if cg_aliases.has(cg_name):
-		new_texture = cg_aliases[cg_name]
+		new_texture = _preloaded_textures.get(cg_aliases[cg_name], load(cg_aliases[cg_name]))
 	elif ResourceLoader.exists(cg_name):
-		new_texture = load(cg_name)
+		new_texture = _preloaded_textures.get(cg_name, load(cg_name))
 
 	if not new_texture:
 		push_warning("Could not find CG alias or path: " + cg_name)
@@ -568,7 +603,7 @@ func hide_cg(transition: String = "fade", duration: float = 0.5):
 	if transition == "fade":
 		var tween = create_tween()
 		tween.tween_property(cg_layer, "modulate:a", 0.0, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-		# Don't null the texture immediately so it doesn't pop out during the fade
+		tween.tween_callback(func(): cg_layer.texture = null)
 	else:
 		cg_layer.modulate.a = 0.0
 		cg_layer.texture = null
@@ -608,9 +643,9 @@ func play_cg_sequence(cg_names: Array, hold_duration: float = 2.0, fade_duration
 		var new_texture: Texture2D = null
 
 		if cg_aliases.has(cg_name):
-			new_texture = cg_aliases[cg_name]
+			new_texture = _preloaded_textures.get(cg_aliases[cg_name], load(cg_aliases[cg_name]))
 		elif ResourceLoader.exists(cg_name):
-			new_texture = load(cg_name)
+			new_texture = _preloaded_textures.get(cg_name, load(cg_name))
 
 		if not new_texture:
 			push_warning("play_cg_sequence: Could not find CG alias or path: " + cg_name)
@@ -651,11 +686,11 @@ func start_mental_image(image_name: String, fade_duration: float = 0.5, tint: Co
 
 	# Try finding the image in either alias dictionary, fallback to raw path
 	if cg_aliases.has(image_name):
-		new_texture = cg_aliases[image_name]
+		new_texture = _preloaded_textures.get(cg_aliases[image_name], load(cg_aliases[image_name]))
 	elif background_aliases.has(image_name):
-		new_texture = background_aliases[image_name]
+		new_texture = _preloaded_textures.get(background_aliases[image_name], load(background_aliases[image_name]))
 	elif ResourceLoader.exists(image_name):
-		new_texture = load(image_name)
+		new_texture = _preloaded_textures.get(image_name, load(image_name))
 
 	if not new_texture:
 		push_warning("start_mental_image: Could not find alias or path: " + image_name)
@@ -755,3 +790,212 @@ func _on_got_dialogue(_line: DialogueLine):
 		_is_shaking = false
 		_is_persistent_shake = false
 		offset = Vector2.ZERO
+
+
+func _destroy_and_clear_cache():
+	# 1. Sever the nodes' ties to the textures so the reference count drops to 0
+	if is_instance_valid(background_layer): background_layer.texture = null
+	if is_instance_valid(cg_layer): cg_layer.texture = null
+	if is_instance_valid(mental_image_layer): mental_image_layer.texture = null
+
+	# 2. Clear the preloaded texture cache
+	_preloaded_textures.clear()
+
+	# 3. Delay destruction if this is the Intro sequence (smooth transition to main world)
+	if is_intro_sequence:
+		await get_tree().create_timer(2.0).timeout
+
+	if is_instance_valid(current_balloon):
+		current_balloon.queue_free()
+
+	# 4. Delete the node (Godot will automatically flush the VRAM now)
+	queue_free()
+
+# --- ENGINE-DRIVEN CINEMATIC FUNCTIONS ---
+func set_solid_background(hex_color: String, duration: float = 1.0):
+	if is_instance_valid(darken_backdrop):
+		darken_backdrop.hide()
+
+	var target_color = Color(hex_color)
+	if duration <= 0.0:
+		solid_background.color = target_color
+	else:
+		var tween = create_tween()
+		tween.tween_property(solid_background, "color", target_color, duration)
+
+func show_intro_silhouette(texture_path: String):
+	if _intro_silhouette: return
+
+	_intro_silhouette = TextureRect.new()
+	_intro_silhouette.texture = load(texture_path)
+
+	# Get sizes to manually center the image
+	var screen_size = Vector2(1920, 1080) # Fallback baseline
+	if is_inside_tree():
+		screen_size = get_viewport().get_visible_rect().size
+
+	var tex_size = _intro_silhouette.texture.get_size()
+	var centered_pos = (screen_size - tex_size) / 2.0
+
+	# Set pivot to the center of the image so scaling shrinks it towards its middle
+	_intro_silhouette.pivot_offset = tex_size / 2.0
+
+	# --- SCALE CONTROL ---
+	# Adjust this Vector2 to make the silhouette bigger or smaller!
+	_intro_silhouette.scale = Vector2(0.45, 0.45)
+
+	# Start invisible and 50 pixels lower than center
+	_intro_silhouette.modulate.a = 0.0
+	_intro_silhouette.position = centered_pos + Vector2(0, 50)
+
+	cinematic_container.add_child(_intro_silhouette)
+
+	var tween = create_tween().set_parallel(true)
+	tween.tween_property(_intro_silhouette, "modulate:a", 1.0, 3.0)
+	# Tween up to the true center
+	tween.tween_property(_intro_silhouette, "position:y", centered_pos.y, 3.0).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+
+	tween.chain().tween_callback(self._start_silhouette_float.bind(centered_pos.y))
+
+func _start_silhouette_float(center_y: float):
+	var float_tween = create_tween().set_loops()
+	float_tween.tween_property(_intro_silhouette, "position:y", center_y - 15.0, 2.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	float_tween.tween_property(_intro_silhouette, "position:y", center_y + 15.0, 2.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+func spawn_cinematic_entity(entity_name: String, tscn_path: String, screen_x: float, screen_y: float):
+	var scene = load(tscn_path)
+	if not scene: return
+	var instance = scene.instantiate()
+	instance.position = Vector2(screen_x, screen_y)
+	instance.modulate.a = 0.0
+	cinematic_container.add_child(instance)
+	_spawned_entities[entity_name] = instance
+	create_tween().tween_property(instance, "modulate:a", 1.0, 2.0)
+
+func remove_cinematic_entity(entity_name: String):
+	if _spawned_entities.has(entity_name):
+		var entity = _spawned_entities[entity_name]
+		_spawned_entities.erase(entity_name)
+		var tween = create_tween()
+		tween.tween_property(entity, "modulate:a", 0.0, 1.5)
+		tween.tween_callback(entity.queue_free)
+
+func create_glow_texture(center_color: Color, edge_color: Color, size: int = 256) -> GradientTexture2D:
+	var grad = Gradient.new()
+	grad.offsets = PackedFloat32Array([0.0, 1.0])
+	grad.colors = PackedColorArray([center_color, edge_color])
+	var tex = GradientTexture2D.new()
+	tex.gradient = grad
+	tex.fill = GradientTexture2D.FILL_RADIAL
+	tex.fill_from = Vector2(0.5, 0.5)
+	tex.fill_to = Vector2(0.5, 0.0)
+	tex.width = size
+	tex.height = size
+	return tex
+
+func activate_hope_surround():
+	var aura = TextureRect.new()
+	aura.texture = create_glow_texture(Color(1.0, 0.6, 0.7, 1.0), Color(1.0, 0.4, 0.6, 0.0), 2000)
+	aura.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	aura.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	aura.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	aura.material = CanvasItemMaterial.new()
+	aura.material.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+	aura.modulate = Color(1.0, 1.0, 1.0, 0.0)
+
+	cinematic_container.add_child(aura)
+	cinematic_container.move_child(aura, _intro_silhouette.get_index())
+
+	var tween = create_tween()
+	tween.tween_property(aura, "modulate:a", 0.6, 2.0)
+	var pulse = create_tween().set_loops()
+	pulse.tween_property(aura, "scale", Vector2(1.05, 1.05), 2.0).set_trans(Tween.TRANS_SINE)
+	pulse.tween_property(aura, "scale", Vector2(0.95, 0.95), 2.0).set_trans(Tween.TRANS_SINE)
+
+# --- CINEMATIC & FADE FUNCTIONS ---
+
+func play_cinematic(animation_name: String = "default", hide_balloon: bool = true, force_one_loop: bool = false, transition_effect: String = "none"):
+	if transition_effect == "dissolve" or transition_effect == "fade":
+		if cinematic_bg:
+			cinematic_bg.modulate.a = 0.0
+			cinematic_bg.show()
+		if cinematic_sprite:
+			cinematic_sprite.modulate.a = 0.0
+			cinematic_sprite.show()
+			cinematic_sprite.play(animation_name)
+
+		var tween = create_tween().set_parallel(true)
+		if cinematic_bg: tween.tween_property(cinematic_bg, "modulate:a", 1.0, 0.5).set_trans(Tween.TRANS_SINE)
+		if cinematic_sprite: tween.tween_property(cinematic_sprite, "modulate:a", 1.0, 0.5).set_trans(Tween.TRANS_SINE)
+	else:
+		if cinematic_bg:
+			cinematic_bg.modulate.a = 1.0
+			cinematic_bg.show()
+		if cinematic_sprite:
+			cinematic_sprite.modulate.a = 1.0
+			cinematic_sprite.show()
+			cinematic_sprite.play(animation_name)
+
+	is_cinematic_lock_active = true
+	if hide_balloon and current_balloon: current_balloon.hide()
+	if continue_button: continue_button.show()
+
+func _on_cinematic_continue_pressed():
+	is_cinematic_lock_active = false
+	if continue_button: continue_button.hide()
+
+	if current_balloon:
+		current_balloon.show()
+		if current_balloon.has_method("next") and current_balloon.dialogue_line:
+			current_balloon.next(current_balloon.dialogue_line.next_id)
+		else:
+			stop_cinematic()
+
+func stop_cinematic(transition_effect: String = "none"):
+	is_cinematic_lock_active = false
+	if continue_button: continue_button.hide()
+
+	if transition_effect == "dissolve" or transition_effect == "fade":
+		var tween = create_tween().set_parallel(true)
+		if cinematic_bg: tween.tween_property(cinematic_bg, "modulate:a", 0.0, 0.5)
+		if cinematic_sprite: tween.tween_property(cinematic_sprite, "modulate:a", 0.0, 0.5)
+		await tween.finished
+
+		if cinematic_bg: cinematic_bg.hide()
+		if cinematic_sprite:
+			cinematic_sprite.stop()
+			cinematic_sprite.hide()
+	else:
+		if cinematic_bg: cinematic_bg.hide()
+		if cinematic_sprite:
+			cinematic_sprite.stop()
+			cinematic_sprite.hide()
+
+	if current_balloon: current_balloon.show()
+
+func fade_to_black(duration: float = 1.0):
+	if not fade_overlay: return
+	fade_overlay.color = Color.BLACK
+	fade_overlay.show()
+	var tween = create_tween()
+	tween.tween_property(fade_overlay, "modulate:a", 1.0, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	await tween.finished
+
+func fade_from_black(duration: float = 1.0):
+	if not fade_overlay: return
+	var tween = create_tween()
+	tween.tween_property(fade_overlay, "modulate:a", 0.0, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	await tween.finished
+	fade_overlay.hide()
+
+func reveal_shock_from_black(cg_alias_name: String, shake_power: float = 25.0):
+	# Route through show_cg to automatically check the cg_aliases dictionary
+	show_cg(cg_alias_name, "none", 0.0)
+	shake(0.5, shake_power)
+	if fade_overlay:
+		fade_overlay.color = Color.WHITE
+		fade_overlay.modulate.a = 1.0
+		fade_overlay.show()
+		var tween = create_tween()
+		tween.tween_property(fade_overlay, "modulate:a", 0.0, 0.2).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		tween.tween_callback(fade_overlay.hide)

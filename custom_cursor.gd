@@ -9,21 +9,32 @@ func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
 
 func _process(delta):
-	# Follow the mouse
 	var mouse_pos = get_viewport().get_mouse_position()
-	$Control.global_position = mouse_pos
+	var needs_redraw = false
 
-	# Smoothly interpolate radius based on hover state
+	# Only update if position changed
+	if $Control.global_position != mouse_pos:
+		$Control.global_position = mouse_pos
+		needs_redraw = true
+
+	# Smoothly interpolate radius
 	var target_radius = 24.0 if is_hovering else 12.0
-	_current_radius = lerp(_current_radius, target_radius, delta * 15.0)
+	if abs(_current_radius - target_radius) > 0.1:
+		_current_radius = lerp(_current_radius, target_radius, delta * 15.0)
+		needs_redraw = true
 
-	# Rotate if hovering
+	# Rotate only if hovering, otherwise settle back to 0
 	if is_hovering:
-		_rotation_angle += delta * PI # Rotate half a circle per second
+		_rotation_angle += delta * PI
+		needs_redraw = true
 	else:
-		_rotation_angle = lerp_angle(_rotation_angle, 0.0, delta * 10.0)
+		if abs(_rotation_angle) > 0.01:
+			_rotation_angle = lerp_angle(_rotation_angle, 0.0, delta * 10.0)
+			needs_redraw = true
 
-	$Control.queue_redraw()
+	# Only force the GPU to redraw if something visually changed!
+	if needs_redraw:
+		$Control.queue_redraw()
 
 func set_hover_state(hovering: bool):
 	is_hovering = hovering

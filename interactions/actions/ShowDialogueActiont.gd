@@ -7,7 +7,7 @@ extends Action
 # Define the specific balloon scene to ensure visual consistency
 const BALLOON_SCENE_PATH = "res://conversationballoon.tscn"
 
-func execute(interactable_node: Interactable) -> bool:
+func execute(interactable_node: Interactable) -> Variant:
 	# --- Safety Checks ---
 	if not dialogue_resource:
 		push_warning("ShowDialogueAction on '%s' has no DialogueResource assigned." % interactable_node.object_display_name)
@@ -24,13 +24,6 @@ func execute(interactable_node: Interactable) -> bool:
 	if interactable_node.object_id.is_empty():
 		push_warning("Interactable '%s' has an empty object_id." % interactable_node.object_display_name)
 
-	# --- Connect Signal to GameManager ---
-	# This ensures UI is restored and player is unpaused when dialogue closes.
-	DialogueManager.dialogue_ended.connect(
-		GameManager._on_dialogue_ended_for_object_dialogue,
-		CONNECT_ONE_SHOT
-	)
-
 	# --- Core Logic ---
 	var target_object_id: String = interactable_node.object_id
 
@@ -38,9 +31,11 @@ func execute(interactable_node: Interactable) -> bool:
 
 	# USE THE CUSTOM SCENE instead of the default project setting
 	DialogueManager.show_dialogue_balloon_scene(
-		BALLOON_SCENE_PATH, 
-		dialogue_resource, 
+		BALLOON_SCENE_PATH,
+		dialogue_resource,
 		target_object_id
 	)
-	
+
+	await DialogueManager.dialogue_ended
+
 	return true

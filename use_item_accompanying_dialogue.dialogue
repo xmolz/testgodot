@@ -24,7 +24,13 @@ You dropped the thick toilet paper into the toilet.
 The... Toilet?: Warning. Obstruction detected.
 The... Toilet?: Water flow below acceptable levels.
 The... Toilet?: Maintenance assistance requested.
-Player: ...Woah. 
+Player: ...Woah.
 Player: What the fuck is this place?
+=> END
+
+~ sneak_pills
+Player: (The nurse isn't looking over here right now.)
+Player: (I'll just slip this in here real quick..)
+=> END
 
 => END

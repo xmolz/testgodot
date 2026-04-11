@@ -247,7 +247,9 @@ func _update_slot_selected_visual_state(selected_item_data: ItemData):
 	for slot_button in all_inventory_slots:
 		if not is_instance_valid(slot_button): continue
 
-		var slot_item_data = slot_button.get_meta("item_data", null)
+		var slot_item_data = null
+		if slot_button.has_meta("item_data"):
+			slot_item_data = slot_button.get_meta("item_data")
 		var equipped_indicator: Label = slot_button.get_node_or_null(EQUIPPED_INDICATOR_NODE_NAME)
 
 		var is_this_slot_selected = false

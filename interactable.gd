@@ -32,8 +32,10 @@ enum InteractionLocation { WORLD, UI_OVERLAY }
 @onready var object_sprite: Sprite2D = _find_object_sprite()
 @onready var walk_to_point: Marker2D = $WalkToPoint if has_node("WalkToPoint") else null
 var _is_mouse_over: bool = false
+var _outline_material: Material = null
 
 @export var character_conversation_overlay_scene: PackedScene
+@export var character_conversation_scene_path: String = ""
 @export var object_zoom_overlay_scene: PackedScene
 
 
@@ -46,24 +48,41 @@ func _ready():
 	if object_id == "":
 		object_id = name + "_" + str(get_instance_id())
 		print_rich("[color=yellow]Interactable: '%s' no object_id. Auto-gen: %s[/color]" % [name, object_id])
-	if category == ObjectCategory.CHARACTER and character_conversation_overlay_scene == null:
+	if category == ObjectCategory.CHARACTER and character_conversation_overlay_scene == null and character_conversation_scene_path.is_empty():
 		print_rich("[color=orange]Interactable '%s' (ID: %s): Category CHARACTER but no 'character_conversation_overlay_scene'![/color]" % [object_display_name, object_id])
 	mouse_entered.connect(_on_mouse_entered)
 	mouse_exited.connect(_on_mouse_exited)
 	input_event.connect(_on_input_event)
 	self_destruct_requested.connect(queue_free)
 
+	# Save the material and remove it to save GPU power
+	var sprite = _find_object_sprite()
+	if sprite and sprite.material:
+		_outline_material = sprite.material
+		sprite.material = null
+
 func _on_mouse_entered():
 	_is_mouse_over = true
 	if GameManager: GameManager.set_hovered_object(self)
-	if object_sprite and object_sprite.material is ShaderMaterial and object_sprite.material.get_shader_parameter("enable_outline")!=null:
-		object_sprite.material.set_shader_parameter("enable_outline", true)
+
+	if has_node("HoverGlow"):
+		get_node("HoverGlow").visible = true
+
+	var sprite = _find_object_sprite()
+	if sprite and _outline_material:
+		sprite.material = _outline_material
+		sprite.material.set_shader_parameter("enable_outline", true)
 
 func _on_mouse_exited():
 	_is_mouse_over = false
 	if GameManager: GameManager.clear_hovered_object()
-	if object_sprite and object_sprite.material is ShaderMaterial and object_sprite.material.get_shader_parameter("enable_outline")!=null:
-		object_sprite.material.set_shader_parameter("enable_outline", false)
+
+	if has_node("HoverGlow"):
+		get_node("HoverGlow").visible = false
+
+	var sprite = _find_object_sprite()
+	if sprite:
+		sprite.material = null
 
 func _on_input_event(_v: Viewport, event: InputEvent, _sidx: int):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
@@ -91,6 +110,18 @@ func attempt_interaction(verb_id: String, item_id_used_with: String = ""):
 				flag_matches = false
 
 		if verb_matches and item_matches and flag_matches:
+			# --- NEW CHECK: Ensure the match actually has actions ---
+			var has_valid_actions = false
+			for action in response.actions_to_perform:
+				if action != null:
+					has_valid_actions = true
+					break
+
+			if not has_valid_actions:
+				print_rich("[color=yellow]Match found for '%s', but actions_to_perform is empty. Skipping to fallback.[/color]" % verb_id)
+				continue
+			# --- END NEW CHECK ---
+
 			print_rich("[color=LimeGreen]Match found at index %s for Verb '%s' and Item '%s'.[/color]" % [i, verb_id, item_id_used_with])
 
 			for action in response.actions_to_perform:

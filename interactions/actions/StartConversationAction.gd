@@ -7,8 +7,14 @@ extends Action
 # that is already assigned on the Interactable itself.
 
 func execute(interactable_node: Interactable) -> bool:
-	# First, check if the Interactable has a conversation scene assigned.
-	if interactable_node.character_conversation_overlay_scene:
+	# Determine the conversation scene: prefer the string path (soft ref), fall back to PackedScene (hard ref)
+	var conversation_scene: PackedScene = null
+	if not interactable_node.character_conversation_scene_path.is_empty():
+		conversation_scene = load(interactable_node.character_conversation_scene_path)
+	elif interactable_node.character_conversation_overlay_scene:
+		conversation_scene = interactable_node.character_conversation_overlay_scene
+
+	if conversation_scene:
 		# Safety check for the GameManager.
 		if not GameManager:
 			push_warning("GameManager not found. Cannot enter conversation state.")
@@ -18,8 +24,9 @@ func execute(interactable_node: Interactable) -> bool:
 		GameManager.enter_conversation_state()
 
 		# Instantiate the scene and add it to the root of the tree.
-		var conversation_instance = interactable_node.character_conversation_overlay_scene.instantiate()
+		var conversation_instance = conversation_scene.instantiate()
 		interactable_node.get_tree().root.add_child(conversation_instance)
+		if GameManager: GameManager._current_character_conversation_overlay_instance = conversation_instance
 
 		# The old GameManager logic connected a signal to know when the conversation
 		# was done. We must replicate that here to ensure the UI comes back!
@@ -37,7 +44,7 @@ func execute(interactable_node: Interactable) -> bool:
 		return false
 	else:
 		# If no scene is assigned, the character can't talk.
-		push_warning("StartConversationAction failed: No 'character_conversation_overlay_scene' assigned to '%s'." % interactable_node.object_display_name)
+		push_warning("StartConversationAction failed: No conversation scene assigned to '%s'." % interactable_node.object_display_name)
 		# We can use the simple dialogue system for a fallback line.
 		interactable_node.display_dialogue.emit("They don't seem to have much to say.")
 		return true # Return true because the interaction is "over".

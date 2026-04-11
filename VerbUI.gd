@@ -110,17 +110,12 @@ func _on_game_manager_verb_changed(new_verb_id: String):
 	_update_button_selected_visual_state(new_verb_id)
 
 func _on_game_manager_sentence_line_updated(full_sentence: String):
-	if GameManager and GameManager.current_verb_id != "":
+	if full_sentence == "":
+		action_bubble_label.visible = false
+	else:
 		action_bubble_label.text = full_sentence
 		action_bubble_label.reset_size() # <--- Forces the box to shrink to the text size
 		action_bubble_label.visible = true
-	else:
-		if full_sentence != "":
-			action_bubble_label.text = full_sentence
-			action_bubble_label.reset_size() # <--- Forces the box to shrink to the text size
-			action_bubble_label.visible = true
-		else:
-			action_bubble_label.visible = false
 
 func _on_interaction_complete(): 
 	action_bubble_label.visible = false

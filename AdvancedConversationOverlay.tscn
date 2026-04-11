@@ -6,11 +6,29 @@
 [ext_resource type="Resource" uid="uid://txvb1qq5bx2s" path="res://character_profiles/layla_profile.tres" id="4_2snxj"]
 [ext_resource type="Resource" uid="uid://dm37yqoe1bx4" path="res://character_profiles/aida.tres" id="5_nitm1"]
 [ext_resource type="Resource" uid="uid://deutdb746jhqi" path="res://character_profiles/sergey.tres" id="6_bf5dx"]
+[ext_resource type="Resource" uid="uid://btxj50xynfv6y" path="res://character_profiles/mcbucket.tres" id="7_owce5"]
 
 [node name="AdvancedConversationOverlay2" type="CanvasLayer" unique_id=543555441]
 layer = 75
 script = ExtResource("1_script")
-character_roster = Array[ExtResource("2_txusg")]([ExtResource("3_2snxj"), ExtResource("4_2snxj"), ExtResource("5_nitm1"), ExtResource("6_bf5dx")])
+character_roster = Array[ExtResource("2_txusg")]([ExtResource("3_2snxj"), ExtResource("4_2snxj"), ExtResource("5_nitm1"), ExtResource("6_bf5dx"), ExtResource("7_owce5")])
+
+[node name="SolidBackground" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0)
+
+[node name="CinematicContainer" type="Control" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
 [node name="DarkenBackdrop" type="ColorRect" parent="." unique_id=1365844061]
 anchors_preset = 15
@@ -74,3 +92,41 @@ size_flags_vertical = 3
 mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
+
+[node name="CinematicBackground" type="ColorRect" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="CinematicSprite" type="AnimatedSprite2D" parent="."]
+visible = false
+position = Vector2(960, 540)
+scale = Vector2(0.938, 0.938)
+
+[node name="CinematicContinueButton" type="Button" parent="."]
+visible = false
+anchors_preset = -1
+anchor_left = 0.916
+anchor_top = 0.463
+anchor_right = 0.985
+anchor_bottom = 0.506
+offset_left = -0.720093
+offset_top = -0.0400391
+offset_right = 0.799805
+offset_bottom = 0.519958
+theme_override_font_sizes/font_size = 28
+text = "Continue"
+
+[node name="FadeOverlay" type="ColorRect" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)

@@ -5,6 +5,6 @@
 [resource]
 resource_local_to_scene = true
 shader = ExtResource("1_dd5wt")
-shader_parameter/enable_outline = false
+shader_parameter/enable_outline = true
 shader_parameter/outline_color = Color(0.2, 0.85, 1, 1)
-shader_parameter/outline_width = 7.0000003325
+shader_parameter/outline_width = 8.3050003944875

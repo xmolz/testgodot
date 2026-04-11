@@ -548,11 +548,18 @@ func _cleanup_and_queue_free():
 		DialogueManager.disconnect("dialogue_ended", _on_dialogue_ended_from_manager)
 	if DialogueManager.is_connected("got_dialogue", _on_got_dialogue):
 		DialogueManager.disconnect("got_dialogue", _on_got_dialogue)
-	
+
+	# Release large textures so VRAM is freed immediately, not when GC runs
+	if is_instance_valid(background_sprite): background_sprite.texture = null
+	if is_instance_valid(animated_background): animated_background.texture = null
+	if is_instance_valid(mental_image_sprite): mental_image_sprite.texture = null
+	if is_instance_valid(character_main_sprite): character_main_sprite.texture = null
+	background_animations = null
+
 	# Only delay the destruction if this is the Intro sequence!
 	if is_intro_sequence:
 		await get_tree().create_timer(2.0).timeout
-		
+
 	queue_free()
 
 # NEW FUNCTION: Play a sequence of images with a dissolve effect

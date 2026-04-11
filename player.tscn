@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://ba2cgdy2q1csl"]
 
 [ext_resource type="Script" uid="uid://j0sis8eh01lr" path="res://player.gd" id="1_6ubl7"]
-[ext_resource type="Texture2D" uid="uid://djey74n526wpc" path="res://protag_idle/protag_idle_0000.png" id="2_5tmop"]
+[ext_resource type="Texture2D" uid="uid://dksa3ybflupko" path="res://Animations/Protag/Idle/Protag_idle_0001.png" id="2_hiqhm"]
 [ext_resource type="Texture2D" uid="uid://c26bu3dueovgt" path="res://Animations/Protag/Idle/Protag_idle_0002.png" id="3_hl5qd"]
 [ext_resource type="Texture2D" uid="uid://drt7l36extpvg" path="res://Animations/Protag/Idle/Protag_idle_0003.png" id="4_ek41f"]
 [ext_resource type="Texture2D" uid="uid://xrseuyyi0amp" path="res://Animations/Protag/Idle/Protag_idle_0004.png" id="5_khis8"]
@@ -46,7 +46,7 @@ fill_from = Vector2(0.50427353, 0.5)
 fill_to = Vector2(0.008547009, 0.014957265)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_keght"]
-size = Vector2(220, 935)
+size = Vector2(177, 524)
 
 [sub_resource type="Animation" id="Animation_ny14h"]
 length = 0.001
@@ -60,7 +60,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("2_5tmop")]
+"values": [ExtResource("2_hiqhm")]
 }
 
 [sub_resource type="Animation" id="Animation_i3pqv"]
@@ -133,10 +133,10 @@ texture = SubResource("GradientTexture2D_hiqhm")
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=653451135]
 position = Vector2(8.19647, -8.59983)
-texture = ExtResource("2_5tmop")
+texture = ExtResource("2_hiqhm")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=356323500]
-position = Vector2(-12, 12.5)
+position = Vector2(4.5, 13)
 shape = SubResource("RectangleShape2D_keght")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1912273773]

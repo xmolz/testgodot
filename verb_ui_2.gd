@@ -106,11 +106,11 @@ func _on_game_manager_verb_changed(new_verb_id: String):
 
 
 func _on_game_manager_sentence_line_updated(full_sentence: String):
-	if not GameManager.current_verb_id.is_empty():
+	if full_sentence == "":
+		action_bubble_label.visible = false
+	else:
 		action_bubble_label.text = full_sentence
 		action_bubble_label.visible = true
-	else:
-		action_bubble_label.visible = false
 
 
 func _on_interaction_complete():

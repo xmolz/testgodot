@@ -3,19 +3,20 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dg65oyyxitimw"
-path="res://.godot/imported/sergey_handjob_frame_one.png-1830ddc3a95c36ef1d7c8cc91174c83c.ctex"
+path.s3tc="res://.godot/imported/sergey_handjob_frame_one.png-1830ddc3a95c36ef1d7c8cc91174c83c.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://Animations/Hj frames/sergey_handjob_frame_one.png"
-dest_files=["res://.godot/imported/sergey_handjob_frame_one.png-1830ddc3a95c36ef1d7c8cc91174c83c.ctex"]
+dest_files=["res://.godot/imported/sergey_handjob_frame_one.png-1830ddc3a95c36ef1d7c8cc91174c83c.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

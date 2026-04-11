@@ -31,6 +31,11 @@ var locals: Dictionary = {}
 var _locale: String = TranslationServer.get_locale()
 var _is_responses_clickable: bool = false
 
+# --- CACHED OBJECTS (avoid per-line allocations) ---
+var _bbcode_regex: RegEx
+var _blank_spacer_icon: ImageTexture
+var _cached_name_styles: Dictionary = {}  # lookup_key -> StyleBoxFlat
+
 # --- Character Background Color Lookup Table (For the Nameplate) ---
 var character_colors: Dictionary = {
 	"AIda": Color("#20B2AA"),   # Light Sea Green
@@ -169,6 +174,13 @@ func _ready() -> void:
 		template_btn.add_theme_stylebox_override("pressed", hover_style)
 	# ---------------------------------------------------------
 
+	# --- Pre-compile regex and create reusable spacer icon ---
+	_bbcode_regex = RegEx.new()
+	_bbcode_regex.compile("\\[.*?\\]")
+
+	var blank_img = Image.create_empty(32, 32, false, Image.FORMAT_RGBA8)
+	_blank_spacer_icon = ImageTexture.create_from_image(blank_img)
+
 
 func _unhandled_input(_event: InputEvent) -> void:
 	get_viewport().set_input_as_handled()
@@ -209,9 +221,7 @@ func apply_dialogue_line() -> void:
 	var raw_name_with_tags = dialogue_line.character
 	
 	# 2. Create a "Clean" name (No Tags) for Dictionary lookups
-	var regex = RegEx.new()
-	regex.compile("\\[.*?\\]") # Matches anything inside [ ]
-	var lookup_key = regex.sub(raw_name_with_tags, "", true).strip_edges() # "Dread"
+	var lookup_key = _bbcode_regex.sub(raw_name_with_tags, "", true).strip_edges() # "Dread"
 
 	# 2b. Create a display name that swaps "Player" for the actual name or "???"
 	var display_name = raw_name_with_tags
@@ -253,12 +263,14 @@ func apply_dialogue_line() -> void:
 		character_label.add_theme_color_override("default_color", Color.WHITE)
 		
 		# Update Background Panel Color using the CLEAN lookup key
-		var new_style = name_panel.get_theme_stylebox("panel").duplicate()
-		if character_colors.has(lookup_key):
-			new_style.bg_color = character_colors[lookup_key]
-		else:
-			new_style.bg_color = Color(0.2, 0.2, 0.2, 0.9)
-		name_panel.add_theme_stylebox_override("panel", new_style)
+		if not _cached_name_styles.has(lookup_key):
+			var new_style = name_panel.get_theme_stylebox("panel").duplicate()
+			if character_colors.has(lookup_key):
+				new_style.bg_color = character_colors[lookup_key]
+			else:
+				new_style.bg_color = Color(0.2, 0.2, 0.2, 0.9)
+			_cached_name_styles[lookup_key] = new_style
+		name_panel.add_theme_stylebox_override("panel", _cached_name_styles[lookup_key])
 
 	# 4. Update Portrait using CLEAN lookup key
 	if character_portraits.has(lookup_key):
@@ -310,10 +322,11 @@ func apply_dialogue_line() -> void:
 		var original_text = response_obj.text
 		var display_text = original_text
 
-		# Safely check if this line has been visited
+		# Safely check if this line has been visited using a truly unique ID
+		var unique_choice_id = resource.resource_path + "::" + response_obj.id
 		var is_visited = false
 		if GameManager and "visited_dialogue_responses" in GameManager:
-			is_visited = GameManager.visited_dialogue_responses.has(original_text)
+			is_visited = GameManager.visited_dialogue_responses.has(unique_choice_id)
 
 		# Default colors and icon
 		var resting_color = Color.WHITE # Reverted back to pure white
@@ -343,8 +356,7 @@ func apply_dialogue_line() -> void:
 
 		# --- Add a transparent spacer if no icon was assigned ---
 		if assigned_icon == null:
-			var blank_img = Image.create_empty(32, 32, false, Image.FORMAT_RGBA8)
-			assigned_icon = ImageTexture.create_from_image(blank_img)
+			assigned_icon = _blank_spacer_icon
 		# -------------------------------------------------------------
 
 		# Apply the parsed text, icon, and colors
@@ -443,9 +455,10 @@ func _on_responses_menu_response_selected(response: DialogueResponse) -> void:
 		return
 	# ---------------------------------------------------------
 
-	# Record visited response
+	# Record visited response using a truly unique ID
+	var unique_choice_id = resource.resource_path + "::" + response.id
 	if GameManager and "visited_dialogue_responses" in GameManager:
-		GameManager.visited_dialogue_responses[response.text] = true
+		GameManager.visited_dialogue_responses[unique_choice_id] = true
 
 	if SoundManager: SoundManager.play_sfx("dialogue_advance")
 	next(response.next_id)
@@ -460,7 +473,7 @@ func _on_dialogue_label_spoke(letter: String, letter_index: int, speed: float) -
 #region Dialogue Toggle Button
 
 func _create_toggle_button() -> void:
-	var toggle_scene = load("res://dialogue_toggle_ui.tscn")
+	var toggle_scene = preload("res://dialogue_toggle_ui.tscn")
 	var toggle_panel = toggle_scene.instantiate()
 	balloon.add_child(toggle_panel)
 	dialogue_toggle_button = toggle_panel.get_node("ToggleIcon")
@@ -478,9 +491,7 @@ func _on_dialogue_toggle(is_visible: bool) -> void:
 		name_panel.visible = not raw_name.is_empty()
 		
 		# Check if the portrait should be visible too
-		var regex = RegEx.new()
-		regex.compile("\\[.*?\\]")
-		var lookup_key = regex.sub(raw_name, "", true).strip_edges()
+		var lookup_key = _bbcode_regex.sub(raw_name, "", true).strip_edges()
 		
 		# TOGGLE THE CONTAINER
 		portrait_container.visible = character_portraits.has(lookup_key)

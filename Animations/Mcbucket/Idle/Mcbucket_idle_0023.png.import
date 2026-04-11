@@ -3,19 +3,20 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b88bysu4eylah"
-path="res://.godot/imported/Mcbucket_idle_0023.png-e9f57310e07d4b89138ae078756c235d.ctex"
+path.s3tc="res://.godot/imported/Mcbucket_idle_0023.png-e9f57310e07d4b89138ae078756c235d.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://Animations/Mcbucket/Idle/Mcbucket_idle_0023.png"
-dest_files=["res://.godot/imported/Mcbucket_idle_0023.png-e9f57310e07d4b89138ae078756c235d.ctex"]
+dest_files=["res://.godot/imported/Mcbucket_idle_0023.png-e9f57310e07d4b89138ae078756c235d.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

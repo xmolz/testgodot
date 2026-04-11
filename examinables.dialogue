@@ -26,7 +26,7 @@ Player: (Label provides no description.)
 => END
 
 ~ MedicineCabinet
-Player: (A cabinet of sorts. Seems like it's got an assortment of drugs inside.)
+Player: (A cabinet of sorts. Seems like it's got an assortment of capsule-shaped drugs inside.)
 Player: (Tee-hee.)
 => END
 
@@ -35,10 +35,6 @@ Player: (A medicine container. 11 months from expiry.)
 Player: (Label provides no description.)
 => END
 
-~ sergei
-Player: (A large man lays on a hospital bed. You think he has kind eyes.)
-Player: (Kind, but sad.)
-=> END
 
 ~ mcbucket
 Player: (An Old Man hooked up to a machine.)
@@ -128,3 +124,8 @@ Player: (The Old Man seems to be hooked up to it.)
 
 => END
 
+~ sergey
+
+Player: (A hunk of a man sits calmly on his bed.)
+Player: (He has kind eyes, but a I sense in certain sadness in him.)
+=> END
