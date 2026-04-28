@@ -1,23 +1,16 @@
 [gd_resource type="Resource" script_class="CharacterProfile" format=3 uid="uid://deutdb746jhqi"]
 
-[ext_resource type="Texture2D" uid="uid://dd4e2h2oml528" path="res://Sprites/characters/sergey/sergey_base.png" id="1_n5qpg"]
-[ext_resource type="Texture2D" uid="uid://b6mnontl8swfp" path="res://Sprites/characters/sergey/sergey_eyes_closed.png" id="2_n6knn"]
-[ext_resource type="Texture2D" uid="uid://dgk0sdf4tcs83" path="res://Sprites/characters/sergey/sergey_frown.png" id="3_8wh5k"]
-[ext_resource type="Texture2D" uid="uid://1hha0of7cbb1" path="res://Sprites/characters/sergey/sergey_frown_look_away.png" id="4_w32fb"]
-[ext_resource type="Texture2D" uid="uid://ch02ennnrhqtb" path="res://Sprites/characters/sergey/sergey_hand_behind_head.png" id="5_r6svb"]
-[ext_resource type="Texture2D" uid="uid://b766hj0ouah5e" path="res://Sprites/characters/sergey/sergey_hand_up.png" id="6_gidv2"]
 [ext_resource type="Script" uid="uid://yiootngfe2lt" path="res://CharacterProfile.gd" id="7_gidv2"]
-[ext_resource type="Texture2D" uid="uid://bi0ccp4o2j115" path="res://Sprites/characters/sergey/sergey_neutral_mouth_open.png" id="7_jsq86"]
 
 [resource]
 script = ExtResource("7_gidv2")
 actor_id = "Sergey"
 expressions = {
-"base": ExtResource("1_n5qpg"),
-"eyes_closed": ExtResource("2_n6knn"),
-"frown": ExtResource("3_8wh5k"),
-"frown_look_away": ExtResource("4_w32fb"),
-"hand_behind_head": ExtResource("5_r6svb"),
-"hand_up": ExtResource("6_gidv2"),
-"neutral_mouth_open": ExtResource("7_jsq86")
+"base": "res://Sprites/characters/sergey/sergey_base.png",
+"eyes_closed": "res://Sprites/characters/sergey/sergey_eyes_closed.png",
+"frown": "res://Sprites/characters/sergey/sergey_frown.png",
+"frown_look_away": "res://Sprites/characters/sergey/sergey_frown_look_away.png",
+"hand_behind_head": "res://Sprites/characters/sergey/sergey_hand_behind_head.png",
+"hand_up": "res://Sprites/characters/sergey/sergey_hand_up.png",
+"neutral_mouth_open": "res://Sprites/characters/sergey/sergey_neutral_mouth_open.png"
 }

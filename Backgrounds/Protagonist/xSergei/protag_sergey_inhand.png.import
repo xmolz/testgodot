@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bbols5g7cp3ij"
 path.s3tc="res://.godot/imported/protag_sergey_inhand.png-dfa9c7e2b7aa39104f488a1e8e18011f.s3tc.ctex"
+path.etc2="res://.godot/imported/protag_sergey_inhand.png-dfa9c7e2b7aa39104f488a1e8e18011f.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://Backgrounds/Protagonist/xSergei/protag_sergey_inhand.png"
-dest_files=["res://.godot/imported/protag_sergey_inhand.png-dfa9c7e2b7aa39104f488a1e8e18011f.s3tc.ctex"]
+dest_files=["res://.godot/imported/protag_sergey_inhand.png-dfa9c7e2b7aa39104f488a1e8e18011f.s3tc.ctex", "res://.godot/imported/protag_sergey_inhand.png-dfa9c7e2b7aa39104f488a1e8e18011f.etc2.ctex"]
 
 [params]
 

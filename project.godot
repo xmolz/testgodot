@@ -21,6 +21,10 @@ run/max_fps=60
 run/low_processor_mode=true
 config/icon="res://icon.svg"
 
+[audio]
+
+buses/default_bus_layout="uid://cuj677vfholik"
+
 [autoload]
 
 DialogueManager="*res://addons/dialogue_manager/dialogue_manager.gd"
@@ -83,8 +87,13 @@ talk_to_npc={
 
 [internationalization]
 
-locale/translations_pot_files=PackedStringArray("res://testdialogue.dialogue", "res://player_examine_lines.dialogue", "res://examinables.dialogue", "res://dialogue/talkto.dialogue", "res://dialogue/npcs/faye.dialogue", "res://AIda.dialogue", "res://IfElseTest.dialogue", "res://mcbucket_thinking_dialogue.dialogue", "res://untalkables.dialogue", "res://unusables.dialogue", "res://AIda_rough.dialogue", "res://generic_lines.dialogue", "res://use_item_accompanying_dialogue.dialogue", "res://form_related_dialogue.dialogue", "res://aida_toilet_assistance.dialogue", "res://aida_dialogue_hub.dialogue", "res://dev_cta.dialogue", "res://giveables.dialogue", "res://sergey_dialogue_1.dialogue", "res://sergey_dialogue_2.dialogue", "res://mcbucket_unified.dialogue", "res://mcbucket_give_tp.dialogue", "res://dialogue/intro.dialogue")
+locale/translations_pot_files=PackedStringArray("res://testdialogue.dialogue", "res://player_examine_lines.dialogue", "res://examinables.dialogue", "res://dialogue/talkto.dialogue", "res://dialogue/npcs/faye.dialogue", "res://AIda.dialogue", "res://IfElseTest.dialogue", "res://mcbucket_thinking_dialogue.dialogue", "res://untalkables.dialogue", "res://unusables.dialogue", "res://AIda_rough.dialogue", "res://generic_lines.dialogue", "res://use_item_accompanying_dialogue.dialogue", "res://form_related_dialogue.dialogue", "res://aida_toilet_assistance.dialogue", "res://aida_dialogue_hub.dialogue", "res://dev_cta.dialogue", "res://giveables.dialogue", "res://sergey_dialogue_1.dialogue", "res://sergey_dialogue_2.dialogue", "res://mcbucket_unified.dialogue", "res://mcbucket_give_tp.dialogue", "res://dialogue/intro.dialogue", "res://unpickables.dialogue")
 
 [physics]
 
 common/physics_interpolation=true
+
+[rendering]
+
+textures/vram_compression/import_s3tc_bptc=true
+textures/vram_compression/import_etc2_astc=true

@@ -1,10 +1,22 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://3u81i521aa4e"]
 
 [ext_resource type="PackedScene" uid="uid://kfct0osfvolx" path="res://AdvancedConversationOverlay.tscn" id="1_base"]
-[ext_resource type="Resource" path="res://mcbucket_unified.dialogue" id="2_dialogue"]
+[ext_resource type="Resource" uid="uid://d3ho2tpb064vp" path="res://mcbucket_unified.dialogue" id="2_dialogue"]
 
 [node name="AdvancedConversationOverlay" unique_id=543555441 instance=ExtResource("1_base")]
 dialogue_resource = ExtResource("2_dialogue")
 background_aliases = {
-"mcbucket_background": "res://Backgrounds/Levels/mcbucket_background.png"
+"test": "res://Backgrounds/Levels/static_hospital_background_ventless.png"
+}
+cg_aliases = {
+"mcbucket_high_base": "res://Backgrounds/McBucket/high/mcbucket_high_base.PNG",
+"mcbucket_high_base_mouth_open": "res://Backgrounds/McBucket/high/mcbucket_high_base_mouth_open.PNG",
+"mcbucket_high_explaining_eyes_closed_mouth_open": "res://Backgrounds/McBucket/high/mcbucket_high_explaining_eyes_closed_mouth_open.PNG",
+"mcbucket_high_explaining_eyes_open_mouth_open": "res://Backgrounds/McBucket/high/mcbucket_high_explaining_eyes_open_mouth_open.PNG",
+"mcbucket_high_explaining_eyes_open_mouth_open_2": "res://Backgrounds/McBucket/high/mcbucket_high_explaining_eyes_open_mouth_open (2).PNG",
+"mcbucket_high_hand_up": "res://Backgrounds/McBucket/high/mcbucket_high_hand_up.PNG",
+"mcbucket_high_happy": "res://Backgrounds/McBucket/high/mcbucket_high_happy.PNG",
+"mcbucket_invigirol_base": "res://Backgrounds/McBucket/invigirol/mcbucket_ivigirol_base.PNG",
+"mcbucket_normal_base": "res://Backgrounds/McBucket/default/mcbucket_normal_base.PNG",
+"mcbucket_normal_ree": "res://Backgrounds/McBucket/default/mcbucket_normal_ree.PNG"
 }

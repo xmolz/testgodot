@@ -1,6 +1,5 @@
 [gd_resource type="Resource" script_class="CharacterProfile" format=3 uid="uid://txvb1qq5bx2s"]
 
-[ext_resource type="Texture2D" uid="uid://bnwcakj25g4fc" path="res://Sprites/characters/layla/layla_template_sprite.png" id="1_5a83o"]
 [ext_resource type="Script" uid="uid://yiootngfe2lt" path="res://CharacterProfile.gd" id="6_ckiok"]
 
 [resource]
@@ -8,5 +7,10 @@ script = ExtResource("6_ckiok")
 actor_id = "Layla"
 default_scale = 0.75
 expressions = {
-"base": ExtResource("1_5a83o")
+"angry_1": "res://Sprites/characters/layla/layla_angry_1.png",
+"angry_2": "res://Sprites/characters/layla/layla_angry_2.png",
+"base": "res://Sprites/characters/layla/layla_base.png",
+"pout": "res://Sprites/characters/layla/layla_pout.png",
+"proud": "res://Sprites/characters/layla/layla_proud.png",
+"victory": "res://Sprites/characters/layla/layla_victory.png"
 }

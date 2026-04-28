@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://c6a2cjojiwtxa"
 path.s3tc="res://.godot/imported/Aida_walking_0008.png-0307728631dd5ad89a35c38dee3e92f5.s3tc.ctex"
+path.etc2="res://.godot/imported/Aida_walking_0008.png-0307728631dd5ad89a35c38dee3e92f5.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://Animations/AIda/Walk/Aida_walking_0008.png"
-dest_files=["res://.godot/imported/Aida_walking_0008.png-0307728631dd5ad89a35c38dee3e92f5.s3tc.ctex"]
+dest_files=["res://.godot/imported/Aida_walking_0008.png-0307728631dd5ad89a35c38dee3e92f5.s3tc.ctex", "res://.godot/imported/Aida_walking_0008.png-0307728631dd5ad89a35c38dee3e92f5.etc2.ctex"]
 
 [params]
 

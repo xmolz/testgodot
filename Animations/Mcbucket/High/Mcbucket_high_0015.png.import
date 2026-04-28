@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://cifgoj4xulles"
 path.s3tc="res://.godot/imported/Mcbucket_high_0015.png-bad5d69fd9640f15c257a5d9afacd119.s3tc.ctex"
+path.etc2="res://.godot/imported/Mcbucket_high_0015.png-bad5d69fd9640f15c257a5d9afacd119.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://Animations/Mcbucket/High/Mcbucket_high_0015.png"
-dest_files=["res://.godot/imported/Mcbucket_high_0015.png-bad5d69fd9640f15c257a5d9afacd119.s3tc.ctex"]
+dest_files=["res://.godot/imported/Mcbucket_high_0015.png-bad5d69fd9640f15c257a5d9afacd119.s3tc.ctex", "res://.godot/imported/Mcbucket_high_0015.png-bad5d69fd9640f15c257a5d9afacd119.etc2.ctex"]
 
 [params]
 

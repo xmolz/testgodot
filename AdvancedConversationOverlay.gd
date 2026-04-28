@@ -42,22 +42,19 @@ var _intro_silhouette: TextureRect = null
 var _spawned_entities: Dictionary = {}
 var is_cinematic_lock_active: bool = false
 var _mental_image_tween: Tween
-var _preloaded_textures: Dictionary = {}
 
-
-func _preload_all_textures():
-	for key in background_aliases:
-		var path = background_aliases[key]
-		if not _preloaded_textures.has(path):
-			_preloaded_textures[path] = load(path)
-	for key in cg_aliases:
-		var path = cg_aliases[key]
-		if not _preloaded_textures.has(path):
-			_preloaded_textures[path] = load(path)
+# --- PREDICTIVE PRELOADER ---
+var _texture_cache: Dictionary = {}   # String path -> Texture2D
+var _loading_paths: Dictionary = {}   # String path -> bool (request sent)
+const LOOKAHEAD_DEPTH: int = 20
 
 
 func _ready():
-	_preload_all_textures()
+	if is_instance_valid(darken_backdrop):
+		darken_backdrop.mouse_filter = Control.MOUSE_FILTER_STOP
+	if is_instance_valid(solid_background):
+		solid_background.mouse_filter = Control.MOUSE_FILTER_STOP
+
 	current_balloon = DialogueManager.show_dialogue_balloon_scene(
 		preload("res://conversationballoon.tscn"),
 		dialogue_resource,
@@ -72,6 +69,40 @@ func _ready():
 		continue_button.hide()
 		if not continue_button.pressed.is_connected(_on_cinematic_continue_pressed):
 			continue_button.pressed.connect(_on_cinematic_continue_pressed)
+
+		var custom_font = preload("res://Fonts/VarelaRound-Regular.ttf")
+		continue_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		continue_button.add_theme_font_override("font", custom_font)
+		continue_button.add_theme_font_size_override("font_size", 24)
+
+		var btn_normal = StyleBoxFlat.new()
+		btn_normal.bg_color = Color(0.15, 0.15, 0.15, 0.85)
+		btn_normal.corner_radius_top_left = 6
+		btn_normal.corner_radius_top_right = 6
+		btn_normal.corner_radius_bottom_left = 6
+		btn_normal.corner_radius_bottom_right = 6
+		btn_normal.content_margin_left = 25
+		btn_normal.content_margin_right = 25
+		btn_normal.content_margin_top = 10
+		btn_normal.content_margin_bottom = 10
+		btn_normal.border_width_left = 2
+		btn_normal.border_width_top = 2
+		btn_normal.border_width_right = 2
+		btn_normal.border_width_bottom = 2
+		btn_normal.border_color = Color(1.0, 1.0, 1.0, 0.0)
+
+		var btn_hover = btn_normal.duplicate()
+		btn_hover.bg_color = Color(0.1, 0.25, 0.3, 0.9)
+		btn_hover.border_color = Color(0.2, 0.85, 1.0, 0.8)
+
+		continue_button.add_theme_stylebox_override("normal", btn_normal)
+		continue_button.add_theme_stylebox_override("hover", btn_hover)
+		continue_button.add_theme_stylebox_override("focus", btn_hover)
+		continue_button.add_theme_stylebox_override("pressed", btn_hover)
+
+		continue_button.add_theme_color_override("font_color", Color(0.8, 0.8, 0.8, 1.0))
+		continue_button.add_theme_color_override("font_hover_color", Color.WHITE)
+		continue_button.add_theme_color_override("font_pressed_color", Color.WHITE)
 
 
 func _process(delta: float):
@@ -131,9 +162,14 @@ func actor_enter(actor_id: String, emotion: String, slot_name: String):
 		push_warning("Actor profile not found: " + actor_id)
 		return
 
-	var tex = profile.expressions.get(emotion)
-	if not tex:
+	var tex_path: String = profile.expressions.get(emotion, "")
+	if tex_path.is_empty():
 		push_warning("Emotion '" + emotion + "' not found for actor: " + actor_id)
+		return
+
+	var tex: Texture2D = await _get_texture_async(tex_path)
+	if not tex:
+		push_warning("Failed to load texture: " + tex_path)
 		return
 
 	var rect = TextureRect.new()
@@ -199,10 +235,12 @@ func actor_change(actor_id: String, emotion: String) -> void:
 	if not profile:
 		return
 
-	var tex = profile.expressions.get(emotion)
-	if tex:
-		var rect: TextureRect = active_actors[actor_id]
-		rect.texture = tex
+	var tex_path: String = profile.expressions.get(emotion, "")
+	if not tex_path.is_empty():
+		var tex: Texture2D = await _get_texture_async(tex_path)
+		if tex:
+			var rect: TextureRect = active_actors[actor_id]
+			rect.texture = tex
 
 
 func actor_effect(actor_id: String, effect_name: String) -> void:
@@ -233,9 +271,14 @@ func actor_walk_in(actor_id: String, emotion: String, slot_name: String, scale_m
 		push_warning("Actor profile not found: " + actor_id)
 		return
 
-	var tex = profile.expressions.get(emotion)
-	if not tex:
+	var tex_path: String = profile.expressions.get(emotion, "")
+	if tex_path.is_empty():
 		push_warning("Emotion '" + emotion + "' not found for actor: " + actor_id)
+		return
+
+	var tex: Texture2D = await _get_texture_async(tex_path)
+	if not tex:
+		push_warning("Failed to load texture: " + tex_path)
 		return
 
 	var rect = TextureRect.new()
@@ -338,9 +381,14 @@ func actor_dash_in(actor_id: String, emotion: String, slot_name: String, scale_m
 		push_warning("Actor profile not found: " + actor_id)
 		return
 
-	var tex = profile.expressions.get(emotion)
-	if not tex:
+	var tex_path: String = profile.expressions.get(emotion, "")
+	if tex_path.is_empty():
 		push_warning("Emotion '" + emotion + "' not found for actor: " + actor_id)
+		return
+
+	var tex: Texture2D = await _get_texture_async(tex_path)
+	if not tex:
+		push_warning("Failed to load texture: " + tex_path)
 		return
 
 	var rect = TextureRect.new()
@@ -386,13 +434,15 @@ func change_background(bg_name: String, transition: String = "fade", duration: f
 		background_layer.texture = null
 		return
 
-	var new_texture: Texture2D = null
-
-	# Check if it's an alias first, otherwise try loading it as a raw path (fallback)
+	var resolved_path: String = ""
 	if background_aliases.has(bg_name):
-		new_texture = _preloaded_textures.get(background_aliases[bg_name], load(background_aliases[bg_name]))
+		resolved_path = background_aliases[bg_name]
 	elif ResourceLoader.exists(bg_name):
-		new_texture = _preloaded_textures.get(bg_name, load(bg_name))
+		resolved_path = bg_name
+
+	var new_texture: Texture2D = null
+	if not resolved_path.is_empty():
+		new_texture = await _get_texture_async(resolved_path)
 
 	if not new_texture:
 		push_warning("Could not find background alias or path: " + bg_name)
@@ -474,9 +524,14 @@ func actor_show(actor_id: String, emotion: String, slot_name: String):
 		push_warning("Actor profile not found: " + actor_id)
 		return
 
-	var tex = profile.expressions.get(emotion)
-	if not tex:
+	var tex_path: String = profile.expressions.get(emotion, "")
+	if tex_path.is_empty():
 		push_warning("Emotion '" + emotion + "' not found for actor: " + actor_id)
+		return
+
+	var tex: Texture2D = await _get_texture_async(tex_path)
+	if not tex:
+		push_warning("Failed to load texture: " + tex_path)
 		return
 
 	var rect = TextureRect.new()
@@ -511,12 +566,15 @@ func actor_hide(actor_id: String) -> void:
 
 
 func show_cg(cg_name: String, transition: String = "fade", duration: float = 0.5):
-	var new_texture: Texture2D = null
-
+	var resolved_path: String = ""
 	if cg_aliases.has(cg_name):
-		new_texture = _preloaded_textures.get(cg_aliases[cg_name], load(cg_aliases[cg_name]))
+		resolved_path = cg_aliases[cg_name]
 	elif ResourceLoader.exists(cg_name):
-		new_texture = _preloaded_textures.get(cg_name, load(cg_name))
+		resolved_path = cg_name
+
+	var new_texture: Texture2D = null
+	if not resolved_path.is_empty():
+		new_texture = await _get_texture_async(resolved_path)
 
 	if not new_texture:
 		push_warning("Could not find CG alias or path: " + cg_name)
@@ -640,12 +698,15 @@ func stop_tech_scan():
 func play_cg_sequence(cg_names: Array, hold_duration: float = 2.0, fade_duration: float = 1.0):
 	for i in range(cg_names.size()):
 		var cg_name = cg_names[i]
-		var new_texture: Texture2D = null
-
+		var resolved_path: String = ""
 		if cg_aliases.has(cg_name):
-			new_texture = _preloaded_textures.get(cg_aliases[cg_name], load(cg_aliases[cg_name]))
+			resolved_path = cg_aliases[cg_name]
 		elif ResourceLoader.exists(cg_name):
-			new_texture = _preloaded_textures.get(cg_name, load(cg_name))
+			resolved_path = cg_name
+
+		var new_texture: Texture2D = null
+		if not resolved_path.is_empty():
+			new_texture = await _get_texture_async(resolved_path)
 
 		if not new_texture:
 			push_warning("play_cg_sequence: Could not find CG alias or path: " + cg_name)
@@ -682,15 +743,17 @@ func play_cg_sequence(cg_names: Array, hold_duration: float = 2.0, fade_duration
 
 
 func start_mental_image(image_name: String, fade_duration: float = 0.5, tint: Color = Color.WHITE, final_opacity: float = 0.6, start_scale: float = 1.0):
-	var new_texture: Texture2D = null
-
-	# Try finding the image in either alias dictionary, fallback to raw path
+	var resolved_path: String = ""
 	if cg_aliases.has(image_name):
-		new_texture = _preloaded_textures.get(cg_aliases[image_name], load(cg_aliases[image_name]))
+		resolved_path = cg_aliases[image_name]
 	elif background_aliases.has(image_name):
-		new_texture = _preloaded_textures.get(background_aliases[image_name], load(background_aliases[image_name]))
+		resolved_path = background_aliases[image_name]
 	elif ResourceLoader.exists(image_name):
-		new_texture = _preloaded_textures.get(image_name, load(image_name))
+		resolved_path = image_name
+
+	var new_texture: Texture2D = null
+	if not resolved_path.is_empty():
+		new_texture = await _get_texture_async(resolved_path)
 
 	if not new_texture:
 		push_warning("start_mental_image: Could not find alias or path: " + image_name)
@@ -782,7 +845,7 @@ func shake(duration: float = 0.4, strength: float = 10.0):
 		_shake_timer = duration
 
 
-func _on_got_dialogue(_line: DialogueLine):
+func _on_got_dialogue(line: DialogueLine):
 	if _ignore_next_got_dialogue_signal:
 		_ignore_next_got_dialogue_signal = false
 		return
@@ -791,6 +854,172 @@ func _on_got_dialogue(_line: DialogueLine):
 		_is_persistent_shake = false
 		offset = Vector2.ZERO
 
+	_update_predictive_cache(line)
+
+
+# --- PREDICTIVE PRELOADER SUBSYSTEM ---
+
+func _update_predictive_cache(line: DialogueLine):
+	var needed_paths: Dictionary = {}
+	_collect_upcoming_paths(line.next_id, LOOKAHEAD_DEPTH, needed_paths, {})
+
+	# GC: drop cached textures that are no longer in the upcoming window
+	var to_remove: Array = []
+	for path in _texture_cache:
+		if not needed_paths.has(path):
+			to_remove.append(path)
+	for path in to_remove:
+		_texture_cache.erase(path)
+		_loading_paths.erase(path)
+
+	# Request background-thread loading for new paths
+	for path in needed_paths:
+		if not _texture_cache.has(path) and not _loading_paths.has(path):
+			if ResourceLoader.exists(path):
+				_loading_paths[path] = true
+				ResourceLoader.load_threaded_request(path)
+
+
+func _collect_upcoming_paths(line_id: String, depth: int, out_paths: Dictionary, visited: Dictionary):
+	if depth <= 0:
+		return
+	if line_id in ["end", "end!", "", null]:
+		return
+	if visited.has(line_id):
+		return
+	visited[line_id] = true
+
+	# Handle stacked IDs (pipe-separated return addresses)
+	var base_id: String = line_id.split("|")[0]
+	if base_id.is_empty() or not dialogue_resource.lines.has(base_id):
+		return
+
+	var data: Dictionary = dialogue_resource.lines[base_id]
+
+	# Extract texture paths from mutation lines
+	if data.type == &"mutation" and data.has("mutation"):
+		_extract_paths_from_mutation(data.mutation, out_paths)
+
+	# Follow response branches
+	if data.has("responses"):
+		for resp_id in data.responses:
+			if dialogue_resource.lines.has(resp_id):
+				var resp_data: Dictionary = dialogue_resource.lines[resp_id]
+				if resp_data.has("next_id"):
+					_collect_upcoming_paths(resp_data.next_id, depth - 1, out_paths, visited)
+
+	# Follow condition branches
+	if data.has("next_sibling_id") and not data.next_sibling_id.is_empty():
+		_collect_upcoming_paths(data.next_sibling_id, depth - 1, out_paths, visited)
+	if data.has("next_id_after") and not data.next_id_after.is_empty():
+		_collect_upcoming_paths(data.next_id_after, depth - 1, out_paths, visited)
+
+	# Follow the main next_id
+	if data.has("next_id"):
+		var next: String = data.next_id.split("|")[0]
+		_collect_upcoming_paths(next, depth - 1, out_paths, visited)
+
+
+func _extract_paths_from_mutation(mutation: Dictionary, out_paths: Dictionary):
+	if not mutation.has("expression"):
+		return
+	var expression: Array = mutation.expression
+	if expression.is_empty():
+		return
+
+	var token: Dictionary = expression[0]
+	if token.type != &"function":
+		return
+
+	var func_name: String = token.function
+
+	match func_name:
+		"actor_enter", "actor_change", "actor_walk_in", "actor_dash_in", "actor_show":
+			var actor_id: String = _extract_string_arg(token, 0)
+			var emotion: String = _extract_string_arg(token, 1)
+			if not actor_id.is_empty() and not emotion.is_empty():
+				var profile = get_profile(actor_id)
+				if profile:
+					var tex_path: String = profile.expressions.get(emotion, "")
+					if not tex_path.is_empty():
+						out_paths[tex_path] = true
+
+		"change_background":
+			var bg_name: String = _extract_string_arg(token, 0)
+			if not bg_name.is_empty():
+				if background_aliases.has(bg_name):
+					out_paths[background_aliases[bg_name]] = true
+				elif ResourceLoader.exists(bg_name):
+					out_paths[bg_name] = true
+
+		"show_cg", "reveal_shock_from_black":
+			var cg_name: String = _extract_string_arg(token, 0)
+			if not cg_name.is_empty():
+				if cg_aliases.has(cg_name):
+					out_paths[cg_aliases[cg_name]] = true
+				elif ResourceLoader.exists(cg_name):
+					out_paths[cg_name] = true
+
+		"start_mental_image":
+			var image_name: String = _extract_string_arg(token, 0)
+			if not image_name.is_empty():
+				if cg_aliases.has(image_name):
+					out_paths[cg_aliases[image_name]] = true
+				elif background_aliases.has(image_name):
+					out_paths[background_aliases[image_name]] = true
+				elif ResourceLoader.exists(image_name):
+					out_paths[image_name] = true
+
+
+func _extract_string_arg(token: Dictionary, index: int) -> String:
+	if not token.has("value"):
+		return ""
+	var args: Array = token.value
+	if index >= args.size():
+		return ""
+	var arg_tokens: Array = args[index]
+	if arg_tokens.is_empty():
+		return ""
+	# Skip closing-bracket/paren tokens that _resolve_each also skips
+	if arg_tokens[0].type in [&"parens_close", &"bracket_close", &"brace_close"]:
+		return ""
+	if arg_tokens[0].type == &"string":
+		return arg_tokens[0].value
+	return ""
+
+
+func _get_texture_async(path: String) -> Texture2D:
+	if path.is_empty():
+		return null
+
+	# Already in cache
+	if _texture_cache.has(path):
+		return _texture_cache[path]
+
+	# A threaded load was already requested by the predictive crawler
+	if _loading_paths.has(path):
+		while ResourceLoader.load_threaded_get_status(path) == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+			await get_tree().process_frame
+		var tex: Texture2D = ResourceLoader.load_threaded_get(path)
+		_texture_cache[path] = tex
+		_loading_paths.erase(path)
+		return tex
+
+	# Not cached and not loading — start a threaded request now
+	if ResourceLoader.exists(path):
+		ResourceLoader.load_threaded_request(path)
+		while ResourceLoader.load_threaded_get_status(path) == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+			await get_tree().process_frame
+		var tex: Texture2D = ResourceLoader.load_threaded_get(path)
+		_texture_cache[path] = tex
+		return tex
+
+	# Fallback to synchronous load
+	var tex: Texture2D = load(path)
+	if tex:
+		_texture_cache[path] = tex
+	return tex
+
 
 func _destroy_and_clear_cache():
 	# 1. Sever the nodes' ties to the textures so the reference count drops to 0
@@ -798,8 +1027,9 @@ func _destroy_and_clear_cache():
 	if is_instance_valid(cg_layer): cg_layer.texture = null
 	if is_instance_valid(mental_image_layer): mental_image_layer.texture = null
 
-	# 2. Clear the preloaded texture cache
-	_preloaded_textures.clear()
+	# 2. Clear the predictive texture cache
+	_texture_cache.clear()
+	_loading_paths.clear()
 
 	# 3. Delay destruction if this is the Intro sequence (smooth transition to main world)
 	if is_intro_sequence:
@@ -826,8 +1056,13 @@ func set_solid_background(hex_color: String, duration: float = 1.0):
 func show_intro_silhouette(texture_path: String):
 	if _intro_silhouette: return
 
+	var tex = load(texture_path)
+	if not tex:
+		print_rich("[color=red]Cinematic Error: Could not load texture at path: %s[/color]" % texture_path)
+		return
+
 	_intro_silhouette = TextureRect.new()
-	_intro_silhouette.texture = load(texture_path)
+	_intro_silhouette.texture = tex
 
 	# Get sizes to manually center the image
 	var screen_size = Vector2(1920, 1080) # Fallback baseline
@@ -990,7 +1225,7 @@ func fade_from_black(duration: float = 1.0):
 
 func reveal_shock_from_black(cg_alias_name: String, shake_power: float = 25.0):
 	# Route through show_cg to automatically check the cg_aliases dictionary
-	show_cg(cg_alias_name, "none", 0.0)
+	await show_cg(cg_alias_name, "none", 0.0)
 	shake(0.5, shake_power)
 	if fade_overlay:
 		fade_overlay.color = Color.WHITE

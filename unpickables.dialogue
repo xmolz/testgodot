@@ -1,0 +1,56 @@
+~ start
+Player: (I can't pick that up.)
+=> END
+
+
+~ toilet_flush
+Player: (Pick up? The flusher?)
+Player: (Sigh...)
+=> END
+
+~ hospital_toilet
+Player: (Yeah... that ain't fitting in my pocket.)
+=> END
+
+~ bathroom_mirror
+Player: (Seriously? I want to pick up a bathroom mirror bolted to the wall?)
+Player: (What am I, stupid?)
+=> END
+
+
+~ AIda
+Player: (Pick her up? Heh.)
+Player: (I wish...)
+=> END
+
+~ sergey
+Player: (He's a bit too heavy for me...)
+=> END
+
+~ mcbucket
+Player: (I bet I could pick him up if I tried.)
+Player: (But... why would I?)
+=> END
+
+~ MedicineCabinet
+Player: (I can't 'pick' this up.)
+Player: (The drugs that are inside though. Different story.)
+=> END
+
+~ mcbucket_medicine_dispenser
+Player: (Can't pick this up.)
+Player: (Might be able to 'use' or 'give' something here, though.)
+=> END
+
+~ memory_box
+Player: (Can't pick this up.)
+Player: (Might be able to 'use' something on it though.)
+Player: (Something like a... card?)
+=> END
+
+~ television_screen
+Player: (Sigh...)
+Player: (I want to 'pick' the TV? Seriously?)
+=> END
+
+

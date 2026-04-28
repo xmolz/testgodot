@@ -1,0 +1,152 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://settings_menu.gd" id="1_script"]
+
+[node name="SettingsMenu" type="CanvasLayer"]
+layer = 120
+script = ExtResource("1_script")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.901961)
+
+[node name="MarginContainer" type="MarginContainer" parent="ColorRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 400
+theme_override_constants/margin_top = 150
+theme_override_constants/margin_right = 400
+theme_override_constants/margin_bottom = 150
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 25
+
+[node name="Title" type="Label" parent="ColorRect/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "SETTINGS"
+horizontal_alignment = 1
+
+[node name="MasterHBox" type="HBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/MasterHBox"]
+layout_mode = 2
+text = "Master Volume"
+
+[node name="Spacer" type="Control" parent="ColorRect/MarginContainer/VBoxContainer/MasterHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MasterVal" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/MasterHBox"]
+layout_mode = 2
+text = "10"
+
+[node name="MasterSlider" type="HSlider" parent="ColorRect/MarginContainer/VBoxContainer"]
+layout_mode = 2
+max_value = 10.0
+step = 1.0
+
+[node name="MusicHBox" type="HBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/MusicHBox"]
+layout_mode = 2
+text = "Music Volume"
+
+[node name="Spacer" type="Control" parent="ColorRect/MarginContainer/VBoxContainer/MusicHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MusicVal" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/MusicHBox"]
+layout_mode = 2
+text = "10"
+
+[node name="MusicSlider" type="HSlider" parent="ColorRect/MarginContainer/VBoxContainer"]
+layout_mode = 2
+max_value = 10.0
+step = 1.0
+
+[node name="SFXHBox" type="HBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/SFXHBox"]
+layout_mode = 2
+text = "SFX Volume"
+
+[node name="Spacer" type="Control" parent="ColorRect/MarginContainer/VBoxContainer/SFXHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SFXVal" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/SFXHBox"]
+layout_mode = 2
+text = "10"
+
+[node name="SFXSlider" type="HSlider" parent="ColorRect/MarginContainer/VBoxContainer"]
+layout_mode = 2
+max_value = 10.0
+step = 1.0
+
+[node name="InstantTextHBox" type="HBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/InstantTextHBox"]
+layout_mode = 2
+text = "Instant Text"
+
+[node name="Spacer" type="Control" parent="ColorRect/MarginContainer/VBoxContainer/InstantTextHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="InstantTextToggle" type="Button" parent="ColorRect/MarginContainer/VBoxContainer/InstantTextHBox"]
+custom_minimum_size = Vector2(100, 40)
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+text = "OFF"
+
+[node name="TextSpeedMargin" type="MarginContainer" parent="ColorRect/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 40
+
+[node name="TextSpeedContainer" type="VBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer/TextSpeedMargin"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="TextSpeedHBox" type="HBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer/TextSpeedMargin/TextSpeedContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/TextSpeedMargin/TextSpeedContainer/TextSpeedHBox"]
+layout_mode = 2
+text = "Text Speed"
+
+[node name="Spacer" type="Control" parent="ColorRect/MarginContainer/VBoxContainer/TextSpeedMargin/TextSpeedContainer/TextSpeedHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextSpeedVal" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/TextSpeedMargin/TextSpeedContainer/TextSpeedHBox"]
+layout_mode = 2
+text = "5"
+
+[node name="TextSpeedSlider" type="HSlider" parent="ColorRect/MarginContainer/VBoxContainer/TextSpeedMargin/TextSpeedContainer"]
+layout_mode = 2
+max_value = 10.0
+step = 1.0
+
+[node name="MainSpacer" type="Control" parent="ColorRect/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="CloseButton" type="Button" parent="ColorRect/MarginContainer/VBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+text = "Close"

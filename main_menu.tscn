@@ -94,6 +94,32 @@ text = "START DEMO"
 flat = true
 alignment = 2
 
+[node name="SettingsButton" type="Button" parent="Content/ButtonBlock"]
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.93333334, 0.93333334, 0.93333334, 1)
+theme_override_colors/font_pressed_color = Color(0.2684, 0.4335066, 0.61, 1)
+theme_override_colors/font_hover_color = Color(0.5921569, 0.8627451, 0.92156863, 1)
+theme_override_fonts/font = ExtResource("3_nlkkf")
+theme_override_font_sizes/font_size = 36
+text = "SETTINGS"
+flat = true
+alignment = 2
+
+[node name="CreditsButton" type="Button" parent="Content/ButtonBlock"]
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.93333334, 0.93333334, 0.93333334, 1)
+theme_override_colors/font_pressed_color = Color(0.2684, 0.4335066, 0.61, 1)
+theme_override_colors/font_hover_color = Color(0.5921569, 0.8627451, 0.92156863, 1)
+theme_override_fonts/font = ExtResource("3_nlkkf")
+theme_override_font_sizes/font_size = 36
+text = "CREDITS"
+flat = true
+alignment = 2
+
 [node name="QuitButton" type="Button" parent="Content/ButtonBlock"]
 layout_mode = 2
 focus_mode = 0
@@ -110,4 +136,6 @@ alignment = 2
 
 [connection signal="pressed" from="Content/ButtonBlock/StartButton" to="." method="_on_new_game_button_pressed"]
 [connection signal="pressed" from="Content/ButtonBlock/StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="Content/ButtonBlock/SettingsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="pressed" from="Content/ButtonBlock/CreditsButton" to="." method="_on_credits_button_pressed"]
 [connection signal="pressed" from="Content/ButtonBlock/QuitButton" to="." method="_on_quit_button_pressed"]

@@ -11,6 +11,7 @@
 process_mode = 3
 script = ExtResource("1_34wwt")
 caught_dialogue_resource = ExtResource("2_oa20e")
+default_verb_id = "pickup"
 
 [node name="RootContainer" type="Control" parent="." unique_id=1932052125]
 layout_mode = 3
@@ -73,4 +74,4 @@ offset_left = 22.0
 offset_top = 26.0
 offset_right = 130.0
 offset_bottom = 83.0
-text = "BACK LOL"
+text = "Back"

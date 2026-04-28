@@ -27,13 +27,18 @@ func execute(interactable_node: Interactable) -> Variant:
 	# --- Core Logic ---
 	var target_object_id: String = interactable_node.object_id
 
-	print_rich("[color=cyan]ShowDialogueAction: Showing custom balloon for '%s'[/color]" % target_object_id)
+	# Safety check: if the dialogue file doesn't have this specific object's ID, fall back to "~ start"
+	var checkpoint_to_use: String = target_object_id
+	if dialogue_resource and not dialogue_resource.titles.has(checkpoint_to_use):
+		checkpoint_to_use = "start"
+
+	print_rich("[color=cyan]ShowDialogueAction: Showing custom balloon for '%s' (Resolved to: '%s')[/color]" % [target_object_id, checkpoint_to_use])
 
 	# USE THE CUSTOM SCENE instead of the default project setting
 	DialogueManager.show_dialogue_balloon_scene(
 		BALLOON_SCENE_PATH,
 		dialogue_resource,
-		target_object_id
+		checkpoint_to_use
 	)
 
 	await DialogueManager.dialogue_ended

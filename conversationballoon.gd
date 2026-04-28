@@ -49,11 +49,11 @@ var character_colors: Dictionary = {
 
 # --- Character Portrait Lookup Table ---
 var character_portraits: Dictionary = {
-	"AIda": preload("res://Sprites/dialogue sprites/aida_dialogue_sprite.png"), 
+	"AIda": preload("res://Sprites/dialogue sprites/aida_dialogue_sprite.PNG"),
 	"Sergey": preload("res://Sprites/dialogue sprites/sergey_dialogue_sprite.png"),
 	"McBucket": preload("res://mcbucket.png"),
 	"Nathan": preload("res://icon.svg"),
-	"The... Toilet?": preload("res://Sprites/dialogue sprites/toilet_dialogue_sprite.png"), # <--- UPDATE THIS PATH
+	"The... Toilet?": preload("res://Sprites/dialogue sprites/toilet_dialogue_sprite.png"),
 	"Player": preload("res://Sprites/dialogue sprites/protag_dialogue_sprite.png")
 }
 
@@ -118,12 +118,23 @@ var mutation_cooldown: Timer = Timer.new()
 ## Reference to the Dialogue Container
 @onready var dialogue_container: MarginContainer = $Balloon/Dialogue
 
-## The toggle button for hiding/showing dialogue
-var dialogue_toggle_button: Control
+## Is the UI currently hidden by the player?
+var is_ui_hidden: bool = false
+
+## Quick Menu references
+@onready var quick_menu: HBoxContainer = %QuickMenu
+@onready var log_button: Button = %LogButton
+@onready var hide_button: Button = %HideButton
+@onready var menu_button: Button = %MenuButton
 
 
 func _ready() -> void:
-	_create_toggle_button()
+	if log_button:
+		log_button.pressed.connect(_on_log_button_pressed)
+	if menu_button:
+		menu_button.pressed.connect(_on_menu_button_pressed)
+	if hide_button:
+		hide_button.pressed.connect(_on_hide_button_pressed)
 	balloon.hide()
 	Engine.get_singleton("DialogueManager").mutated.connect(_on_mutated)
 
@@ -301,6 +312,11 @@ func apply_dialogue_line() -> void:
 
 	dialogue_label.hide()
 	dialogue_label.dialogue_line = dialogue_line
+	if GameManager:
+		if GameManager.instant_text:
+			dialogue_label.seconds_per_step = 0.0
+		else:
+			dialogue_label.seconds_per_step = GameManager.text_speed
 
 	responses_menu.hide()
 	responses_menu.modulate.a = 1.0 # --- Reset alpha for safety
@@ -384,6 +400,10 @@ func apply_dialogue_line() -> void:
 			button.mouse_exited.connect(button.release_focus)
 	# ------------------------------------------
 
+	# --- RECORD HISTORY ---
+	if GameManager and not dialogue_line.text.is_empty():
+		GameManager.add_dialogue_history_line(display_name, dialogue_line.text)
+
 	dialogue_label.show()
 	if not dialogue_line.text.is_empty():
 		dialogue_label.type_out()
@@ -428,6 +448,33 @@ func _on_mutated(_mutation: Dictionary) -> void:
 	mutation_cooldown.start(0.1)
 
 func _on_balloon_gui_input(event: InputEvent) -> void:
+	var is_right_click = event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.is_pressed()
+	var is_h_key = event is InputEventKey and event.keycode == KEY_H and event.is_pressed() and not event.is_echo()
+
+	# --- NEW: UNHIDE ON CLICK OR 'H' ---
+	if is_ui_hidden:
+		if event is InputEventMouseButton and event.is_pressed() and event.button_index in [MOUSE_BUTTON_LEFT, MOUSE_BUTTON_RIGHT]:
+			get_viewport().set_input_as_handled()
+			set_ui_hidden(false)
+			return
+		elif event.is_action_pressed(next_action) or event.is_action_pressed(skip_action) or is_h_key:
+			get_viewport().set_input_as_handled()
+			set_ui_hidden(false)
+			return
+
+	# --- NEW: HIDE ON RIGHT-CLICK OR 'H' ---
+	if is_right_click or is_h_key:
+		get_viewport().set_input_as_handled()
+		set_ui_hidden(true)
+		return
+
+	# --- NEW: SCROLL UP TO OPEN LOG ---
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_WHEEL_UP and event.is_pressed():
+		get_viewport().set_input_as_handled()
+		_on_log_button_pressed()
+		return
+
+	# See if we need to skip typing of the dialogue
 	if dialogue_label.is_typing:
 		var mouse_was_clicked: bool = event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed()
 		var skip_button_was_pressed: bool = event.is_action_pressed(skip_action)
@@ -442,11 +489,11 @@ func _on_balloon_gui_input(event: InputEvent) -> void:
 	get_viewport().set_input_as_handled()
 
 	if event is InputEventMouseButton and event.is_pressed() and event.button_index == MOUSE_BUTTON_LEFT:
-		if SoundManager: SoundManager.play_sfx("dialogue_advance")
+		if SoundManager: SoundManager.play_sfx("ui_click")
 		next(dialogue_line.next_id)
 
 	elif event.is_action_pressed(next_action) and get_viewport().gui_get_focus_owner() == balloon:
-		if SoundManager: SoundManager.play_sfx("dialogue_advance")
+		if SoundManager: SoundManager.play_sfx("ui_click")
 		next(dialogue_line.next_id)
 
 func _on_responses_menu_response_selected(response: DialogueResponse) -> void:
@@ -460,7 +507,25 @@ func _on_responses_menu_response_selected(response: DialogueResponse) -> void:
 	if GameManager and "visited_dialogue_responses" in GameManager:
 		GameManager.visited_dialogue_responses[unique_choice_id] = true
 
-	if SoundManager: SoundManager.play_sfx("dialogue_advance")
+	# --- RECORD CHOICE HISTORY ---
+	if GameManager:
+		var all_options: Array[String] = []
+		var chosen_idx = 0
+		for i in range(dialogue_line.responses.size()):
+			var resp = dialogue_line.responses[i]
+			all_options.append(resp.text)
+			if resp.id == response.id:
+				chosen_idx = i
+
+		var player_name = "Player"
+		if GameManager.get_game_flag("first_name_correct"):
+			player_name = "Fiona"
+		else:
+			player_name = "???"
+
+		GameManager.add_dialogue_history_choice(player_name, all_options, chosen_idx)
+
+	if SoundManager: SoundManager.play_sfx("ui_click")
 	next(response.next_id)
 
 func _on_dialogue_label_spoke(letter: String, letter_index: int, speed: float) -> void:
@@ -470,40 +535,46 @@ func _on_dialogue_label_spoke(letter: String, letter_index: int, speed: float) -
 #endregion
 
 
-#region Dialogue Toggle Button
+#region Quick Menu (VN Style)
 
-func _create_toggle_button() -> void:
-	var toggle_scene = preload("res://dialogue_toggle_ui.tscn")
-	var toggle_panel = toggle_scene.instantiate()
-	balloon.add_child(toggle_panel)
-	dialogue_toggle_button = toggle_panel.get_node("ToggleIcon")
-	dialogue_toggle_button.toggled_visibility.connect(_on_dialogue_toggle)
+func _on_hide_button_pressed() -> void:
+	if SoundManager: SoundManager.play_sfx("ui_click")
+	set_ui_hidden(true)
 
-func _on_dialogue_toggle(is_visible: bool) -> void:
+func set_ui_hidden(hide: bool) -> void:
+	is_ui_hidden = hide
+	var is_visible = not hide
+
 	var panel = $Balloon/Panel
 	panel.visible = is_visible
 	dialogue_container.visible = is_visible
 	$Balloon/Responses.visible = is_visible
-	
+	quick_menu.visible = is_visible
+
 	# Only restore character elements if we are toggling ON, and the current line requires them
 	if is_visible and dialogue_line != null:
 		var raw_name = dialogue_line.character
 		name_panel.visible = not raw_name.is_empty()
-		
-		# Check if the portrait should be visible too
+
 		var lookup_key = _bbcode_regex.sub(raw_name, "", true).strip_edges()
-		
-		# TOGGLE THE CONTAINER
 		portrait_container.visible = character_portraits.has(lookup_key)
 	else:
-		# Always hide them when toggling OFF
 		name_panel.visible = false
 		portrait_container.visible = false
 
 func _restore_dialogue_visibility() -> void:
-	if dialogue_toggle_button:
-		dialogue_toggle_button.set_dialogue_visible(true)
-	
-	# Reuse the smart toggle logic to safely turn the UI back on
-	_on_dialogue_toggle(true)
+	set_ui_hidden(false)
+
+func _on_log_button_pressed() -> void:
+	if SoundManager: SoundManager.play_sfx("ui_click")
+	var log_scene = load("res://dialogue_history_ui.tscn")
+	if log_scene:
+		var log_instance = log_scene.instantiate()
+		get_tree().root.add_child(log_instance)
+
+func _on_menu_button_pressed() -> void:
+	if SoundManager: SoundManager.play_sfx("ui_click")
+	if GameManager and is_instance_valid(GameManager.pause_menu_ui):
+		GameManager.pause_menu_ui.toggle_pause()
+
 #endregion

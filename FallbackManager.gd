@@ -35,8 +35,8 @@ func _find_valid_checkpoint(resource: DialogueResource, object_id: String, item_
 			print_rich("[color=green]FallbackManager: Found item-specific checkpoint: '%s'[/color]" % item_specific_checkpoint)
 			return item_specific_checkpoint
 
-	# Level 2: Object-Only
-	if not object_id.is_empty():
+	# Level 2: Object-Only (Only run this if NO item was used)
+	if item_id.is_empty() and not object_id.is_empty():
 		var object_specific_checkpoint = object_id
 		if resource.titles.has(object_specific_checkpoint):
 			print_rich("[color=green]FallbackManager: Found object-specific checkpoint: '%s'[/color]" % object_specific_checkpoint)

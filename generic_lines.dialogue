@@ -1,5 +1,18 @@
 #memory box
 
+~ block_talk_no_aida
+Player: Umm.. I think I should talk to the Nurse before I talk to anyone else.
+=> END
+
+~ block_talk_no_memory_box
+Player: I don't think I need to talk to them right now.
+Player: The Nurse told me to 'use' the memory box. Better do that first.
+=> END
+
+~ block_memory_box_no_aida
+Player: I should probably talk to the nurse before I touch this weird machine.
+=> END
+
 ~ memory_box_unlocked
 You slide the TechPass into the card slot.
 
@@ -7,21 +20,30 @@ Memory Box: Please place the headset on.
 
 You pick up the strange device and place it over your head.
 
-Player: (Alright… here goes.)
-Player: (If this thing works…)
+Player: (Alright... here goes.)
+Player: (If this thing works...)
 Player: (I might finally remember who I am.)
 
 => END
 ~ memory_box_locked
 Player: (Hmmm. The screen says I need to insert my TechPass™ to begin.)
-Player: (Fuck is that, now?)
+
+if GameManager.get_current_level_flag("learned_techpass_from_aida") == true and GameManager.get_current_level_flag("learned_techpass_from_sergey") == true
+	Player: (This must be the card the Nurse and Sergey were talking about.)
+elif GameManager.get_current_level_flag("learned_techpass_from_aida") == true
+	Player: (This must be the card the Nurse mentioned.)
+elif GameManager.get_current_level_flag("learned_techpass_from_sergey") == true
+	Player: (This must be the card Sergey was talking about.)
+else
+	Player: (Fuck is that, now?)
+
 do GameManager.set_current_level_flag("has_tried_memory_box", true)
 => END
 
 #mcbucket
 
 ~ mcbucket_sleeping_talk_to_response
-Old Man: Zzzzzzz....
+Old Man: Zzzzzzz...
 Player: (Out like a log. He's not getting in my way now.)
 => END
 
@@ -33,14 +55,24 @@ Hmmm. The Old Man seems unaffected. His sleep is deep.
 
 You flush the toilet. It seems to have a weak flow.
 => END
+
 ~ medicine_cabinet_interrupt
 
 AIda: Hey patient #122, that cabinet is reserved for clinical staff. 
 AIda: If you are experiencing discomfort, I can assist with approved medication.
 Player: (Huh. Looks like I can’t open the medicine cabinet while she’s still around.)
+Player: (Is there anyway I can send her to the other room?)
 => END
 
 ~ mcbucket_not_put_to_sleep
 Player: (The Old Man still seems to be up.)
 Player: (I better take care of him before returning to Sergey.)
+=> END
+
+~ give_empty_inventory
+Player: (I don't have anything on me to give.)
+=> END
+
+~ give_no_item_selected
+Player: (I should probably figure out what I want to give them first.)
 => END

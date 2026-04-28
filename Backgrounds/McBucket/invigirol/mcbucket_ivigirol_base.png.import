@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://xra4dmomvu43"
-path="res://.godot/imported/mcbucket_ivigirol_base.png-5028375f60f0eb0e12971307bcbf8a99.ctex"
+uid="uid://cby4vt7oji3sc"
+path="res://.godot/imported/mcbucket_ivigirol_base.PNG-f3d778c1967c514dcd9d248544cc7e02.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Backgrounds/McBucket/invigirol/mcbucket_ivigirol_base.png"
-dest_files=["res://.godot/imported/mcbucket_ivigirol_base.png-5028375f60f0eb0e12971307bcbf8a99.ctex"]
+source_file="res://Backgrounds/McBucket/invigirol/mcbucket_ivigirol_base.PNG"
+dest_files=["res://.godot/imported/mcbucket_ivigirol_base.PNG-f3d778c1967c514dcd9d248544cc7e02.ctex"]
 
 [params]
 

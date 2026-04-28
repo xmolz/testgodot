@@ -9,10 +9,10 @@ const MAIN_MENU_SCENE_PATH = "res://main_menu.tscn"
 # Make sure this path is correct for your project structure!
 # In Boot.gd - CUT THESE LINES
 const INTRO_OVERLAY_SCENE_PATH = "res://AdvancedConversationOverlay.tscn"
-const INTRO_DIALOGUE_FILE_PATH = "res://dialogue/intro.dialogue"
 const INTRO_BACKGROUND_ANIMATIONS_PATH = "res://conversation_backgrounds.tres"
 const INTRO_INITIAL_ANIMATION_NAME = "float_loop"
 const FORM_DIALOGUE = preload("res://form_related_dialogue.dialogue")
+const INTRO_DIALOGUE = preload("res://dialogue/intro.dialogue")
 const GAME_OVER_SCENE = preload("res://game_over.tscn")
 
 var _insurance_form_instance: CanvasLayer = null # To keep track of the form
@@ -85,19 +85,56 @@ var current_game_state: GameState = GameState.BOOTING
 var main_game_scene_instance: Node = null
 var main_menu_scene_instance: CanvasLayer = null
 # --- END of High-Level Game State Management ---
+var pause_menu_ui: CanvasLayer = null
 var input_blocker_layer: CanvasLayer = null
 var custom_cursor_instance: CanvasLayer = null
 var walk_indicator_instance: Node2D = null
 var is_mouse_held_for_walk: bool = false
+var is_transitioning: bool = false
+# --- Dialogue History ---
+const MAX_HISTORY_LOGS = 100
+var dialogue_history: Array[Dictionary] = []
+
+func add_dialogue_history_line(character_name: String, text: String):
+	dialogue_history.append({
+		"type": "line",
+		"character": character_name,
+		"text": text
+	})
+	if dialogue_history.size() > MAX_HISTORY_LOGS:
+		dialogue_history.pop_front()
+
+func add_dialogue_history_choice(character_name: String, options: Array[String], selected_index: int):
+	dialogue_history.append({
+		"type": "choice",
+		"character": character_name,
+		"options": options,
+		"selected_index": selected_index
+	})
+	if dialogue_history.size() > MAX_HISTORY_LOGS:
+		dialogue_history.pop_front()
+
+func add_dialogue_history_action(verb_name: String, object_name: String, item_name: String = ""):
+	dialogue_history.append({
+		"type": "action",
+		"verb": verb_name,
+		"object": object_name,
+		"item": item_name
+	})
+	if dialogue_history.size() > MAX_HISTORY_LOGS:
+		dialogue_history.pop_front()
+
 # --- State Variables ---
 var current_verb_id: String = ""
+var persisting_verb_id: String = ""
 var current_selected_item_data: ItemData = null # "In Hand" / "Selected" item
 var hovered_interactable: Interactable = null
+var hovered_interactables: Array[Interactable] = []
 var player_node: CharacterBody2D
 
 var _is_player_walking: bool = false
 var _current_character_conversation_overlay_instance: Node = null
-var debug_fps_label: Label = null
+#var debug_fps_label: Label = null
 var _signals_connected_to_interactable: Interactable = null # Tracks interactable for signal cleanup
 
 var current_level_state_manager: LevelStateManager = null # For current level's state
@@ -123,6 +160,20 @@ var _item_data_map: Dictionary = {} # item_id -> ItemData
 var game_flags: Dictionary = {} # For flags that persist across levels
 var visited_dialogue_responses: Dictionary = {} # Tracks clicked dialogue options
 
+# --- Global Settings ---
+var text_speed: float = 0.02 # Seconds per character (lower is faster)
+var instant_text: bool = false
+
+func set_bus_volume(bus_name: String, linear_val: float):
+	var bus_idx = AudioServer.get_bus_index(bus_name)
+	if bus_idx != -1:
+		AudioServer.set_bus_volume_db(bus_idx, linear_to_db(linear_val))
+
+func get_bus_volume(bus_name: String) -> float:
+	var bus_idx = AudioServer.get_bus_index(bus_name)
+	if bus_idx != -1:
+		return db_to_linear(AudioServer.get_bus_volume_db(bus_idx))
+	return 1.0
 
 
 # In GameManager.gd
@@ -134,19 +185,19 @@ func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 
 	# Create a debug FPS counter
-	var fps_canvas = CanvasLayer.new()
-	fps_canvas.layer = 128 # Put it above absolutely everything
-	debug_fps_label = Label.new()
-	debug_fps_label.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT, Control.PRESET_MODE_MINSIZE, 15)
-	debug_fps_label.grow_horizontal = Control.GROW_DIRECTION_BEGIN
-	debug_fps_label.offset_right = -20
-	debug_fps_label.offset_top = 20
-	debug_fps_label.add_theme_font_size_override("font_size", 24)
-	debug_fps_label.add_theme_color_override("font_color", Color.GREEN)
-	debug_fps_label.add_theme_color_override("font_outline_color", Color.BLACK)
-	debug_fps_label.add_theme_constant_override("outline_size", 4)
-	fps_canvas.add_child(debug_fps_label)
-	add_child(fps_canvas)
+	#var fps_canvas = CanvasLayer.new()
+	#fps_canvas.layer = 128 # Put it above absolutely everything
+	#debug_fps_label = Label.new()
+	#debug_fps_label.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT, Control.PRESET_MODE_MINSIZE, 15)
+	#debug_fps_label.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+	#debug_fps_label.offset_right = -20
+	#debug_fps_label.offset_top = 20
+	#debug_fps_label.add_theme_font_size_override("font_size", 24)
+	#debug_fps_label.add_theme_color_override("font_color", Color.GREEN)
+	#debug_fps_label.add_theme_color_override("font_outline_color", Color.BLACK)
+	#debug_fps_label.add_theme_constant_override("outline_size", 4)
+	#fps_canvas.add_child(debug_fps_label)
+	#add_child(fps_canvas)
 
 	var cursor_scene = load("res://custom_cursor.tscn")
 	if cursor_scene:
@@ -259,11 +310,11 @@ func _ready():
 			#print_rich("[color=red]GM: Please select your Player node -> Node Tab -> Groups -> Add 'player'.[/color]")
 
 func _process(delta):
-	if is_instance_valid(debug_fps_label):
-		var node_count = Performance.get_monitor(Performance.OBJECT_NODE_COUNT)
-		var orphan_count = Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT)
-		var sm_children = SoundManager.get_child_count() if SoundManager else 0
-		debug_fps_label.text = "FPS: %d | Nodes: %d | Orphans: %d | SM: %d" % [Engine.get_frames_per_second(), node_count, orphan_count, sm_children]
+	#if is_instance_valid(debug_fps_label):
+	#	var node_count = Performance.get_monitor(Performance.OBJECT_NODE_COUNT)
+	#	var orphan_count = Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT)
+	#	var sm_children = SoundManager.get_child_count() if SoundManager else 0
+	#	debug_fps_label.text = "FPS: %d | Nodes: %d | Orphans: %d | SM: %d" % [Engine.get_frames_per_second(), node_count, orphan_count, sm_children]
 
 	if is_mouse_held_for_walk:
 		if not Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
@@ -341,6 +392,7 @@ func change_game_state(new_state: GameState):
 	# =========================================================
 	match current_game_state:
 		GameState.MAIN_MENU:
+			_cleanup_all_overlays()
 			if is_instance_valid(main_menu_scene_instance):
 				#print_rich("[color=yellow]GM: Cleaning up Main Menu scene.[/color]")
 				main_menu_scene_instance.queue_free()
@@ -351,18 +403,26 @@ func change_game_state(new_state: GameState):
 				var intro_overlay = get_tree().root.get_node_or_null("CharacterConversationOverlay")
 				if is_instance_valid(intro_overlay):
 					intro_overlay.queue_free()
-		GameState.IN_GAME_PLAY:
+		GameState.IN_GAME_PLAY, GameState.PAUSED:
 			# When LEAVING the game (e.g. to Menu), stop music and ambience.
-			# If going to CUTSCENE or EXPLANATION, we usually want music/ambience to keep playing.
-			if new_state != GameState.CUTSCENE and new_state != GameState.EXPLANATION and new_state != GameState.PAUSED:
+			if new_state != GameState.CUTSCENE and new_state != GameState.EXPLANATION and new_state != GameState.PAUSED and new_state != GameState.IN_GAME_PLAY:
 				SoundManager.stop_music()
-				# --- STOP AMBIENCE HERE ---
 				SoundManager.stop_all_ambience()
 
 			if new_state == GameState.MAIN_MENU:
+				_cleanup_all_overlays()
 				if is_instance_valid(main_game_scene_instance):
 					main_game_scene_instance.queue_free()
 					main_game_scene_instance = null
+
+				# Aggressively clear UI references so they don't persist into the Main Menu
+				verb_ui = null
+				inventory_ui = null
+				insurance_form_button_ui = null
+				journal_button_ui = null
+				pause_menu_ui = null
+				explanation_layer = null
+				input_blocker_layer = null
 
 	#print_rich("[color=yellow]GameManager: Changing state from %s to %s[/color]" % [GameState.keys()[current_game_state], GameState.keys()[new_state]])
 	current_game_state = new_state
@@ -375,11 +435,12 @@ func change_game_state(new_state: GameState):
 			if is_instance_valid(main_menu_scene_instance):
 				return
 
-			# Replace: var menu_packed_scene = load(MAIN_MENU_SCENE_PATH)
 			var menu_packed_scene = cached_main_menu_scene
 			if not menu_packed_scene:
-				#print_rich("[color=red]GameManager Error: Failed to load Main Menu Scene.[/color]")
-				return
+				# Fallback if testing the scene directly without the Boot loader
+				menu_packed_scene = load(MAIN_MENU_SCENE_PATH)
+				if not menu_packed_scene:
+					return
 
 			main_menu_scene_instance = menu_packed_scene.instantiate()
 			main_menu_scene_instance.new_game_requested.connect(_on_main_menu_new_game_requested)
@@ -425,14 +486,20 @@ func change_game_state(new_state: GameState):
 				player_node = get_tree().get_first_node_in_group("player")
 
 			# 3. Restore Main UI Visibility
-			if is_instance_valid(verb_ui): verb_ui.visible = true
-			if is_instance_valid(inventory_ui): inventory_ui.visible = true
-			if is_instance_valid(journal_button_ui): journal_button_ui.visible = true # <--- ADD THIS LINE
-			
-			# 4. Restore Insurance Button (Logic Check)
-			if is_instance_valid(insurance_form_button_ui):
-				var should_be_visible = get_current_level_flag("insurance_button_unlocked")
-				insurance_form_button_ui.visible = should_be_visible
+			if current_interaction_state == InteractionState.WORLD:
+				if is_instance_valid(verb_ui): verb_ui.visible = true
+				if is_instance_valid(inventory_ui): inventory_ui.visible = true
+				if is_instance_valid(journal_button_ui): journal_button_ui.visible = true
+				if is_instance_valid(pause_menu_ui): pause_menu_ui.menu_panel.show()
+				if is_instance_valid(insurance_form_button_ui):
+					var should_be_visible = get_current_level_flag("insurance_button_unlocked")
+					insurance_form_button_ui.visible = should_be_visible
+			else:
+				if is_instance_valid(verb_ui): verb_ui.visible = false
+				if is_instance_valid(inventory_ui): inventory_ui.visible = false
+				if is_instance_valid(journal_button_ui): journal_button_ui.visible = false
+				if is_instance_valid(insurance_form_button_ui): insurance_form_button_ui.visible = false
+				if is_instance_valid(pause_menu_ui): pause_menu_ui.menu_panel.hide()
 
 			# 5. Unblock Input (Remove the gray blocker)
 			if is_instance_valid(input_blocker_layer):
@@ -441,11 +508,14 @@ func change_game_state(new_state: GameState):
 			# 6. Unlock Player Movement
 			if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
 				player_node.set_can_move(true)
-				
+
+			# Force the sentence line to refresh in case we had a verb or item selected before pausing
+			update_sentence_line_ui()
+
 			#print_rich("[color=green]GM: IN_GAME_PLAY state active. UI restored, Player unlocked.[/color]")
 
 		GameState.PAUSED:
-			pass
+			update_sentence_line_ui()
 
 		GameState.BOOTING:
 			pass
@@ -456,6 +526,7 @@ func change_game_state(new_state: GameState):
 			if is_instance_valid(inventory_ui): inventory_ui.visible = false
 			if is_instance_valid(insurance_form_button_ui): insurance_form_button_ui.visible = false
 			if is_instance_valid(journal_button_ui): journal_button_ui.visible = false # <--- ADD THIS LINE
+			if is_instance_valid(pause_menu_ui): pause_menu_ui.menu_panel.hide()
 			
 			# 2. Block Input (Clicking on things in the world)
 			if is_instance_valid(input_blocker_layer):
@@ -468,6 +539,9 @@ func change_game_state(new_state: GameState):
 			#print_rich("[color=Plum]GM: Entered CUTSCENE state. UI hidden, Input blocked.[/color]")
 
 func select_verb(verb_id_to_select: String):
+	# If the player manually selects or toggles a verb, clear any forced sticky state
+	persisting_verb_id = ""
+
 	var previously_selected_verb_id = current_verb_id
 	var new_verb_id = ""
 
@@ -486,6 +560,19 @@ func select_verb(verb_id_to_select: String):
 	if current_verb_id != new_verb_id:
 		current_verb_id = new_verb_id
 		verb_changed.emit(current_verb_id)
+
+		# --- QOL FIX: Empty Inventory Give Check ---
+		if current_verb_id == "give" and player_inventory.is_empty():
+			current_verb_id = ""
+			verb_changed.emit("")
+
+			if not DialogueManager.dialogue_ended.is_connected(_on_dialogue_ended_for_object_dialogue):
+				DialogueManager.dialogue_ended.connect(_on_dialogue_ended_for_object_dialogue, CONNECT_ONE_SHOT)
+
+			var generic_lines = preload("res://generic_lines.dialogue")
+			DialogueManager.show_dialogue_balloon_scene("res://conversationballoon.tscn", generic_lines, "give_empty_inventory")
+			return
+		# -------------------------------------------
 
 		# If we select a verb that DOES NOT use items, drop the in-hand item
 		if current_verb_id != "" and current_verb_id != "use" and current_verb_id != "give" and current_selected_item_data != null:
@@ -523,8 +610,11 @@ func select_inventory_item(item_data_to_select: ItemData):
 
 	update_sentence_line_ui()
 
-func cancel_current_action():
+func cancel_current_action(play_sound: bool = true):
 	var did_cancel = false
+
+	# If the player right-clicks to cancel, drop the sticky state
+	persisting_verb_id = ""
 
 	if current_verb_id != "":
 		current_verb_id = ""
@@ -539,29 +629,73 @@ func cancel_current_action():
 	if did_cancel:
 		update_sentence_line_ui()
 		# Play a slightly lower pitched click sound to indicate cancellation
-		if SoundManager: SoundManager.play_sfx("ui_click", 0.8)
+		if play_sound and SoundManager: SoundManager.play_sfx("ui_click")
 
 
 # --- UI and Interaction Flow ---
 func set_hovered_object(interactable: Interactable):
-	hovered_interactable = interactable
+	if not hovered_interactables.has(interactable):
+		hovered_interactables.append(interactable)
+	_update_top_hovered_object()
+
+func clear_hovered_object(interactable: Interactable = null):
+	if interactable and hovered_interactables.has(interactable):
+		hovered_interactables.erase(interactable)
+	elif interactable == null:
+		hovered_interactables.clear()
+	_update_top_hovered_object()
+
+func _update_top_hovered_object():
+	# Clean out invalid instances just in case an object was destroyed while hovered
+	for i in range(hovered_interactables.size() - 1, -1, -1):
+		if not is_instance_valid(hovered_interactables[i]):
+			hovered_interactables.remove_at(i)
+
+	# --- TRANSITION OVERRIDE ---
+	if hovered_interactables.is_empty() or is_transitioning:
+		hovered_interactable = null
+		if is_instance_valid(custom_cursor_instance):
+			custom_cursor_instance.set_hover_state(false)
+		update_sentence_line_ui()
+		return
+
+	# Find the top-most interactable
+	var top_interactable = hovered_interactables[0]
+	for i in range(1, hovered_interactables.size()):
+		var candidate = hovered_interactables[i]
+
+		# Safely get effective Z-index (checking parent if needed)
+		var top_z = top_interactable.z_index
+		if top_z == 0 and top_interactable.get_parent() is Node2D:
+			top_z = top_interactable.get_parent().z_index
+
+		var cand_z = candidate.z_index
+		if cand_z == 0 and candidate.get_parent() is Node2D:
+			cand_z = candidate.get_parent().z_index
+
+		if cand_z > top_z:
+			top_interactable = candidate
+		elif cand_z == top_z:
+			# If Z-index is tied, lower on the screen (higher Y) is in front
+			if candidate.global_position.y > top_interactable.global_position.y:
+				top_interactable = candidate
+
+	hovered_interactable = top_interactable
+
 	update_sentence_line_ui()
 
-	# Only show hover state if we aren't currently dragging the mouse to walk
+	# --- QOL FIX: Cursor state for incomplete Give ---
+	var should_hover_cursor = true
+	if current_verb_id == "give" and current_selected_item_data == null:
+		should_hover_cursor = false
+
 	if is_instance_valid(custom_cursor_instance) and not is_mouse_held_for_walk:
-		custom_cursor_instance.set_hover_state(true)
-
-func clear_hovered_object():
-	# Clear the internal data immediately.
-	hovered_interactable = null
-	if is_instance_valid(custom_cursor_instance): custom_cursor_instance.set_hover_state(false)
-
-	update_sentence_line_ui()
+		custom_cursor_instance.set_hover_state(should_hover_cursor)
 
 func update_sentence_line_ui():
 	# --- UI SUPPRESSION FIX ---
-	# Do not show interaction text while the player is moving (Hold-to-Walk or Point-and-Click)
-	if is_mouse_held_for_walk or _is_player_walking:
+	# Do not show interaction text while the player is moving (Hold-to-Walk or Point-and-Click), if paused, or transitioning
+	if is_mouse_held_for_walk or _is_player_walking or current_game_state == GameState.PAUSED or is_transitioning:
 		sentence_line_updated.emit("")
 		return
 	# --------------------------
@@ -583,9 +717,18 @@ func update_sentence_line_ui():
 	elif current_verb_id != "":
 		var verb_data = get_verb_data_by_id(current_verb_id)
 		var verb_text = verb_data.display_text if verb_data else current_verb_id
-		line_text = verb_text
-		if hovered_interactable:
-			line_text += " " + hovered_interactable.object_display_name
+
+		# --- QOL FIX: Give Verb Prompts ---
+		if current_verb_id == "give" and current_selected_item_data == null:
+			if hovered_interactable:
+				line_text = "Give what to " + hovered_interactable.object_display_name + "?"
+			else:
+				line_text = "Give what? (Select an item)"
+		else:
+			line_text = verb_text
+			if hovered_interactable:
+				line_text += " " + hovered_interactable.object_display_name
+		# ----------------------------------
 
 	elif hovered_interactable and hovered_interactable.interaction_location == Interactable.InteractionLocation.WORLD:
 		line_text = "Walk to " + hovered_interactable.object_display_name
@@ -594,6 +737,7 @@ func update_sentence_line_ui():
 
 
 func process_interaction_click(interactable_node: Interactable):
+	if is_transitioning: return
 	if not is_instance_valid(interactable_node): return
 
 	if current_verb_id != "" and current_selected_item_data != null:
@@ -609,6 +753,18 @@ func _initiate_interaction_flow(interactable_node: Interactable, verb_to_use_id:
 	if not is_instance_valid(interactable_node):
 		#print_rich("[color=red]GM: _initiate_interaction_flow called with invalid interactable_node.[/color]")
 		_complete_interaction_cycle(); return
+
+	# --- QOL FIX: Prevent "Give" without an item ---
+	if verb_to_use_id == "give" and item_data_to_use == null:
+		cancel_current_action(false)
+
+		if not DialogueManager.dialogue_ended.is_connected(_on_dialogue_ended_for_object_dialogue):
+			DialogueManager.dialogue_ended.connect(_on_dialogue_ended_for_object_dialogue, CONNECT_ONE_SHOT)
+
+		var generic_lines = preload("res://generic_lines.dialogue")
+		DialogueManager.show_dialogue_balloon_scene("res://conversationballoon.tscn", generic_lines, "give_no_item_selected")
+		return
+	# -----------------------------------------------
 
 	# --- NEW LINE ADDED HERE ---
 	# Tell the object (Aida) that an interaction is coming so she can stop walking immediately
@@ -682,6 +838,14 @@ func _perform_actual_interaction(interactable_node: Interactable, verb_to_use_id
 
 	#print_rich("[color=aqua]GM: Performing actual interaction: Verb '%s' on '%s' with 'in-hand' item: '%s' (ID: '%s')[/color]" % [verb_to_use_id, interactable_node.object_display_name, item_name_for_log, item_id_for_interaction])
 
+	# --- RECORD ACTION IN HISTORY LOG ---
+	var verb_data = get_verb_data_by_id(verb_to_use_id)
+	var verb_name = verb_data.display_text if verb_data else verb_to_use_id
+	var obj_name = interactable_node.object_display_name
+	var itm_name = item_in_hand_data.display_name if item_in_hand_data else ""
+	add_dialogue_history_action(verb_name, obj_name, itm_name)
+	# ------------------------------------
+
 	_disconnect_interactable_request_signals()
 
 	_signals_connected_to_interactable = interactable_node
@@ -708,27 +872,35 @@ func _on_dialogue_started(_resource: Resource):
 	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
 		player_node.set_can_move(false)
 
-	# --- ADD THIS BLOCK ---
 	# Hide the main UI whenever any dialogue line appears.
 	# This handles both in-world dialogue and character conversations.
 	if is_instance_valid(verb_ui):
 		verb_ui.visible = false
 	if is_instance_valid(inventory_ui):
 		inventory_ui.visible = false
+	if is_instance_valid(journal_button_ui):
+		journal_button_ui.visible = false
+	if is_instance_valid(insurance_form_button_ui):
+		insurance_form_button_ui.visible = false
 
 
 func _on_dialogue_ended_for_object_dialogue(_resource: Resource):
 	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
-		player_node.set_can_move(true)
+		if current_interaction_state == InteractionState.WORLD and current_game_state == GameState.IN_GAME_PLAY:
+			player_node.set_can_move(true)
 
-	# --- THIS IS THE FIX ---
 	# Restore the main UI as long as we are NOT in a full-screen conversation.
 	# This now correctly handles both the WORLD and the ZOOM_VIEW states.
-	if current_interaction_state != InteractionState.CONVERSATION:
+	if current_interaction_state != InteractionState.CONVERSATION and current_game_state == GameState.IN_GAME_PLAY:
 		if is_instance_valid(verb_ui):
 			verb_ui.visible = true
 		if is_instance_valid(inventory_ui):
 			inventory_ui.visible = true
+		if is_instance_valid(journal_button_ui):
+			journal_button_ui.visible = true
+		if is_instance_valid(insurance_form_button_ui):
+			var should_be_visible = get_current_level_flag("insurance_button_unlocked")
+			insurance_form_button_ui.visible = should_be_visible
 
 	_complete_interaction_cycle()
 
@@ -794,7 +966,14 @@ func _complete_interaction_cycle():
 	_disconnect_interactable_request_signals()
 	interaction_complete.emit()
 
-	current_verb_id = ""
+	# --- STICKY VERB FIX ---
+	if persisting_verb_id != "":
+		current_verb_id = persisting_verb_id
+		verb_changed.emit(current_verb_id)
+	else:
+		current_verb_id = ""
+	# -----------------------
+
 	if current_selected_item_data:
 		current_selected_item_data = null
 		selected_inventory_item_changed.emit(null)
@@ -805,15 +984,20 @@ func _complete_interaction_cycle():
 	
 	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
 		# Only unfreeze if we are in the normal gameplay state (not a full cutscene/zoom)
-		if current_interaction_state == InteractionState.WORLD:
+		if current_interaction_state == InteractionState.WORLD and current_game_state == GameState.IN_GAME_PLAY:
 			player_node.set_can_move(true)
 
-	# Restore UI visibility (Verbs and Inventory)
-	if current_interaction_state != InteractionState.CONVERSATION:
+	# Restore UI visibility (Verbs, Inventory, Journal, Form)
+	if current_interaction_state != InteractionState.CONVERSATION and current_game_state == GameState.IN_GAME_PLAY:
 		if is_instance_valid(verb_ui):
 			verb_ui.visible = true
 		if is_instance_valid(inventory_ui):
 			inventory_ui.visible = true
+		if is_instance_valid(journal_button_ui):
+			journal_button_ui.visible = true
+		if is_instance_valid(insurance_form_button_ui):
+			var should_be_visible = get_current_level_flag("insurance_button_unlocked")
+			insurance_form_button_ui.visible = should_be_visible
 	# --- FIX END ---
 
 	update_sentence_line_ui()
@@ -972,10 +1156,25 @@ func get_game_flag(flag_name: String) -> bool:
 
 # ADD THESE THREE NEW FUNCTIONS
 
+func force_clear_all_hovered_interactables():
+	var interactables_to_clear = hovered_interactables.duplicate()
+	hovered_interactables.clear()
+
+	for interactable in interactables_to_clear:
+		if is_instance_valid(interactable):
+			interactable._on_mouse_exited()
+
+	hovered_interactable = null
+	if is_instance_valid(custom_cursor_instance):
+		custom_cursor_instance.set_hover_state(false)
+	update_sentence_line_ui()
+
 func enter_conversation_state():
 	if current_interaction_state == InteractionState.CONVERSATION: return
 	#print_rich("[color=Plum]GM: Entering CONVERSATION state.[/color]")
 	current_interaction_state = InteractionState.CONVERSATION
+
+	force_clear_all_hovered_interactables()
 
 	# --- DEBUGGING STEP ---
 	# Let's see if the GameManager can actually see your button node.
@@ -991,11 +1190,14 @@ func enter_conversation_state():
 	if is_instance_valid(inventory_ui): inventory_ui.visible = false
 	if is_instance_valid(insurance_form_button_ui): insurance_form_button_ui.visible = false
 	if is_instance_valid(journal_button_ui): journal_button_ui.visible = false # <--- ADD THIS LINE
+	if is_instance_valid(pause_menu_ui): pause_menu_ui.menu_panel.hide()
 
 func enter_zoom_view_state():
 	if current_interaction_state == InteractionState.ZOOM_VIEW: return
 	#print_rich("[color=Plum]GM: Entering ZOOM_VIEW state.[/color]")
 	current_interaction_state = InteractionState.ZOOM_VIEW
+
+	force_clear_all_hovered_interactables()
 
 	# ... (existing code for input blocker and UI layers) ...
 	if is_instance_valid(input_blocker_layer):
@@ -1033,6 +1235,7 @@ func exit_to_world_state():
 		inventory_ui.visible = true
 	if is_instance_valid(journal_button_ui): # <--- ADD THIS BLOCK
 		journal_button_ui.visible = true     # <---
+	if is_instance_valid(pause_menu_ui): pause_menu_ui.menu_panel.show()
 
 	# --- THIS IS THE FIX (APPLIED HERE AS WELL) ---
 	# Check the flag here too, so the button reappears after future conversations.
@@ -1066,6 +1269,7 @@ func _find_and_assign_ui_nodes():
 	journal_button_ui = main_game_scene_instance.get_node_or_null("%JournalButtonUI") # <--- NEW
 	input_blocker_layer = main_game_scene_instance.get_node_or_null("%InputBlockerLayer")
 	explanation_layer = main_game_scene_instance.get_node_or_null("%ExplanationLayer")
+	pause_menu_ui = main_game_scene_instance.get_node_or_null("%PauseMenuUI")
 
 	# --- Verification Logging ---
 	if is_instance_valid(verb_ui):
@@ -1138,12 +1342,18 @@ func _on_form_field_submitted(field_id: String, value):
 				
 			else:
 				# --- CHANGED AUDIO LINE ---
-				if SoundManager: SoundManager.play_sfx("form_incorrect_input") 
-				
+				if SoundManager: SoundManager.play_sfx("form_incorrect_input")
+
 				var formatted_wrong_name = _format_wrong_name(value)
 				var temp_state = {"wrong_name": formatted_wrong_name}
 				var balloon = DialogueManager.show_dialogue_balloon_scene("res://conversationballoon.tscn", FORM_DIALOGUE, "first_name_incorrect", [temp_state])
 				if is_instance_valid(balloon): balloon.process_mode = Node.PROCESS_MODE_ALWAYS
+
+		_:
+			# Catch-all for unimplemented fields (Middle Name, Last Name, DOB, etc.)
+			if SoundManager: SoundManager.play_sfx("form_incorrect_input")
+			var balloon = DialogueManager.show_dialogue_balloon_scene("res://conversationballoon.tscn", FORM_DIALOGUE, "field_not_ready")
+			if is_instance_valid(balloon): balloon.process_mode = Node.PROCESS_MODE_ALWAYS
 
 # This function is called ONLY when the "Close Form" button is pressed.
 func _on_insurance_form_closed():
@@ -1173,8 +1383,6 @@ func start_explanation(data: ExplanationData, root_node_to_search: Node):
 	# A Resource doesn't have a ".has()" method. The correct way to check for a property
 	# is using the 'in' keyword.
 	if "exceptions_to_hide" in data:
-		pass
-	# --- END OF FIX ---
 		for node_path in data.exceptions_to_hide:
 			var node = root_node_to_search.get_node_or_null(node_path)
 			if is_instance_valid(node):
@@ -1190,6 +1398,8 @@ func start_explanation(data: ExplanationData, root_node_to_search: Node):
 	if is_instance_valid(journal_button_ui) and not journal_button_ui in nodes_to_keep_visible:
 		journal_button_ui.hide()
 	# --------------------------------------------
+	if is_instance_valid(pause_menu_ui) and not pause_menu_ui in nodes_to_keep_visible:
+		pause_menu_ui.menu_panel.hide()
 
 	if is_instance_valid(insurance_form_button_ui):
 		if insurance_form_button_ui in nodes_to_keep_visible:
@@ -1219,6 +1429,7 @@ func exit_explanation_state():
 	# --- FIX: Ensure the Journal comes back after the explanation finishes ---
 	if is_instance_valid(journal_button_ui): journal_button_ui.visible = true
 	# -----------------------------------------------------------------------
+	if is_instance_valid(pause_menu_ui): pause_menu_ui.menu_panel.show()
 
 	# --- THIS IS THE FIX ---
 	# Instead of just showing the button, check if it has been unlocked.
@@ -1283,18 +1494,20 @@ func _on_main_menu_quit_requested():
 func _start_intro_conversation():
 	#print_rich("[color=yellow]GM: Starting intro sequence...[/color]")
 
-	# Replace: var intro_overlay_packed_scene = load(INTRO_OVERLAY_SCENE_PATH)
 	var intro_overlay_packed_scene = cached_intro_overlay_scene
 	if not intro_overlay_packed_scene:
-		#print_rich("[color=red]GM Error: Failed to load Intro Overlay Scene at path: %s[/color]" % INTRO_OVERLAY_SCENE_PATH)
-		return
+		# Fallback to loading from disk if the cache was somehow cleared
+		intro_overlay_packed_scene = load(INTRO_OVERLAY_SCENE_PATH)
+		if not intro_overlay_packed_scene:
+			print_rich("[color=red]GM Error: Failed to load Intro Overlay Scene at path: %s[/color]" % INTRO_OVERLAY_SCENE_PATH)
+			return
 
 	var intro_overlay = intro_overlay_packed_scene.instantiate()
 	# --- ADD THIS LINE ---
 	intro_overlay.is_intro_sequence = true
 
 	# Configure its exported variables from code.
-	intro_overlay.dialogue_resource = load(INTRO_DIALOGUE_FILE_PATH)
+	intro_overlay.dialogue_resource = INTRO_DIALOGUE
 
 	# Connect to its 'conversation_finished' signal.
 	intro_overlay.conversation_finished.connect(_on_intro_conversation_finished, CONNECT_ONE_SHOT)
@@ -1312,8 +1525,8 @@ func _on_intro_conversation_finished(_dialogue_resource):
 	# This loads the scene and starts the ambient hospital audio!
 	change_game_state(GameState.IN_GAME_PLAY)
 
-	# Free the heavy intro cinematic scenes from memory now that we don't need them
-	cached_intro_overlay_scene = null
+	# Keep the intro overlay cached so replaying from the main menu works
+	# cached_intro_overlay_scene = null
 	
 	if is_instance_valid(transition_layer):
 		# Wait 3 full seconds in the dark to let the player hear the environment
@@ -1409,14 +1622,39 @@ func trigger_game_over(fade_duration: float = 3.0):
 		main_game_scene_instance = null
 
 	# 5. Aggressively hunt down Overlays AND Dialogue Balloons to prevent crashes
+	_cleanup_all_overlays()
+
+	# 6. Spawn the Game Over Scene
+	var game_over_instance = GAME_OVER_SCENE.instantiate()
+	get_tree().root.add_child(game_over_instance)
+
+func quit_to_main_menu_smooth():
+	# 1. Fade out smoothly
+	if is_instance_valid(transition_layer) and transition_layer.has_method("global_fade_to_black"):
+		await transition_layer.global_fade_to_black(1.0)
+
+	# 2. Hard reset interaction state just in case
+	current_interaction_state = InteractionState.WORLD
+
+	# 3. Swap the scene and dump VRAM
+	_cleanup_all_overlays()
+	change_game_state(GameState.MAIN_MENU)
+
+	# 4. Fade back in
+	if is_instance_valid(transition_layer) and transition_layer.has_method("global_fade_from_black"):
+		transition_layer.global_fade_from_black(1.0)
+
+func _cleanup_all_overlays():
 	for child in get_tree().root.get_children():
 		if child is CharacterConversationOverlay or child is AdvancedConversationOverlay:
 			if "current_balloon" in child and is_instance_valid(child.current_balloon):
 				child.current_balloon.queue_free()
 			child.queue_free()
+		elif child is ObjectZoomOverlay:
+			child.queue_free()
+		elif "MemoryBoxOverlay" in child.name:
+			child.queue_free()
 		elif "Balloon" in child.name or "conversationballoon" in child.name.to_lower():
 			child.queue_free()
-
-	# 6. Spawn the Game Over Scene
-	var game_over_instance = GAME_OVER_SCENE.instantiate()
-	get_tree().root.add_child(game_over_instance)
+		elif "DialogueHistory" in child.name:
+			child.queue_free()

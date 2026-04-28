@@ -4,8 +4,10 @@ extends CanvasLayer
 @onready var action_bubble_label: Label = $ActionBubbleLabel
 @onready var verb_button_grid: GridContainer = $VerbGridPanel/GridContainer 
 
-var active_verb_buttons: Dictionary = {} 
+var active_verb_buttons: Dictionary = {}
 var all_button_slots: Array[Button] = []
+var normal_bubble_style: StyleBoxFlat
+var disabled_bubble_style: StyleBoxFlat
 
 func _ready():
 	if verb_button_grid:
@@ -53,6 +55,12 @@ func _ready():
 
 	action_bubble_label.visible = false
 
+	# --- QOL FIX: Cache styles for faded label ---
+	normal_bubble_style = action_bubble_label.get_theme_stylebox("normal").duplicate()
+	disabled_bubble_style = normal_bubble_style.duplicate()
+	disabled_bubble_style.bg_color = Color(0.15, 0.15, 0.15, 0.9)
+	disabled_bubble_style.border_color = Color(0.4, 0.4, 0.4, 0.8)
+
 func _process(_delta: float) -> void: 
 	if action_bubble_label.visible:
 		action_bubble_label.global_position = get_viewport().get_mouse_position() + Vector2(15, 15)
@@ -87,7 +95,7 @@ func _on_available_verbs_changed(available_verb_data_array: Array[VerbData]):
 	_update_button_selected_visual_state(GameManager.current_verb_id if GameManager else "")
 
 func _on_verb_button_pressed_dynamic(verb_id_pressed: String):
-	SoundManager.play_sfx("ui_click", 1.5)
+	SoundManager.play_sfx("ui_click")
 
 	if GameManager and verb_id_pressed != "":
 		GameManager.select_verb(verb_id_pressed)
@@ -114,8 +122,16 @@ func _on_game_manager_sentence_line_updated(full_sentence: String):
 		action_bubble_label.visible = false
 	else:
 		action_bubble_label.text = full_sentence
-		action_bubble_label.reset_size() # <--- Forces the box to shrink to the text size
+		action_bubble_label.reset_size()
 		action_bubble_label.visible = true
+
+		# --- QOL FIX: Faded label for incomplete Give ---
+		if GameManager and GameManager.current_verb_id == "give" and GameManager.current_selected_item_data == null and GameManager.hovered_interactable != null:
+			action_bubble_label.add_theme_stylebox_override("normal", disabled_bubble_style)
+			action_bubble_label.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6, 1.0))
+		else:
+			action_bubble_label.add_theme_stylebox_override("normal", normal_bubble_style)
+			action_bubble_label.remove_theme_color_override("font_color")
 
 func _on_interaction_complete(): 
 	action_bubble_label.visible = false

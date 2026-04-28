@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://dq1e26q2d8nix"]
+[gd_scene format=3 uid="uid://dq1e26q2d8nix"]
 
 [ext_resource type="Script" uid="uid://dnvm6gaiggom5" path="res://Interactables/Game World/Hospital Bathroom/hospital_toilet.gd" id="1_1kp37"]
 [ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactable.gd" id="1_br1pn"]
@@ -9,7 +9,7 @@
 [ext_resource type="Material" uid="uid://dww3d0txyl18g" path="res://interactions/actions/interactable_outline.tres" id="OutlineMaterial"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o6q4n"]
-size = Vector2(188, 333)
+size = Vector2(188, 394)
 
 [sub_resource type="Animation" id="Animation_4dkf8"]
 length = 0.001
@@ -139,28 +139,26 @@ _data = {
 &"idle": SubResource("Animation_hkb1v")
 }
 
-[node name="HospitalToilet" type="Node2D"]
+[node name="HospitalToilet" type="Node2D" unique_id=689211014]
 script = ExtResource("1_1kp37")
 
-[node name="ObjectSprite" type="Sprite2D" parent="."]
+[node name="ObjectSprite" type="Sprite2D" parent="." unique_id=128490347]
 material = ExtResource("OutlineMaterial")
 texture = ExtResource("2_sqtfq")
 
-[node name="Glow" type="Sprite2D" parent="."]
+[node name="Glow" type="Sprite2D" parent="." unique_id=1848878648]
 texture = ExtResource("3_1kp37")
 
-[node name="InteractionArea" type="Area2D" parent="."]
+[node name="InteractionArea" type="Area2D" parent="." unique_id=1085681545]
 script = ExtResource("1_br1pn")
 metadata/_custom_type_script = "uid://dwldhrx7leysr"
 
-[node name="InteractionClickShape" type="CollisionShape2D" parent="InteractionArea"]
-position = Vector2(-7, -44.5)
+[node name="InteractionClickShape" type="CollisionShape2D" parent="InteractionArea" unique_id=1150964848]
+position = Vector2(-7, -56)
 shape = SubResource("RectangleShape2D_o6q4n")
 
-[node name="WalkToPoint" type="Marker2D" parent="."]
+[node name="WalkToPoint" type="Marker2D" parent="." unique_id=45858480]
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_8uv34")
-}
-autoplay = "idle"
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1977757815]
+libraries/ = SubResource("AnimationLibrary_8uv34")
+autoplay = &"idle"

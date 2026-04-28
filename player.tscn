@@ -127,8 +127,8 @@ script = ExtResource("1_6ubl7")
 
 [node name="FloorShadow" type="Sprite2D" parent="." unique_id=1127582037]
 modulate = Color(0.16546667, 0.126, 0.2, 0.32941177)
-position = Vector2(-2.4999847, 525)
-scale = Vector2(8.453125, 1.7708337)
+position = Vector2(0.99999243, 267.00003)
+scale = Vector2(5.5, 1.7708337)
 texture = SubResource("GradientTexture2D_hiqhm")
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=653451135]

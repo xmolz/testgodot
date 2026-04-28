@@ -112,8 +112,15 @@ func _ready():
 		print_rich("[color=red]InventoryUI: GameManager not found![/color]")
 
 	# --- Connect Pagination Buttons ---
-	if up_button: up_button.pressed.connect(_on_up_button_pressed)
-	if down_button: down_button.pressed.connect(_on_down_button_pressed)
+	if up_button:
+		up_button.pressed.connect(_on_up_button_pressed)
+		up_button.text = ""
+		_setup_button_icon(up_button, false)
+
+	if down_button:
+		down_button.pressed.connect(_on_down_button_pressed)
+		down_button.text = ""
+		_setup_button_icon(down_button, true)
 
 	_update_pagination_buttons_state() # Initial state
 
@@ -213,7 +220,7 @@ func _render_current_page():
 
 
 func _on_inventory_slot_pressed(item_data_pressed: ItemData):
-	SoundManager.play_sfx("ui_click", 1.5)
+	SoundManager.play_sfx("ui_click")
 	if GameManager and item_data_pressed: 
 		GameManager.select_inventory_item(item_data_pressed)
 	elif GameManager and not item_data_pressed: 
@@ -272,19 +279,53 @@ func _update_slot_selected_visual_state(selected_item_data: ItemData):
 
 # --- Pagination Logic ---
 func _on_up_button_pressed():
-	SoundManager.play_sfx("ui_click", 1.5)
+	SoundManager.play_sfx("ui_click")
 	if current_page_index > 0:
 		current_page_index -= 1
 		_render_current_page()
 		_update_pagination_buttons_state()
 
 func _on_down_button_pressed():
-	SoundManager.play_sfx("ui_click", 1.5)
+	SoundManager.play_sfx("ui_click")
 	if current_page_index < total_pages - 1:
 		current_page_index += 1
 		_render_current_page()
 		_update_pagination_buttons_state()
 
 func _update_pagination_buttons_state():
-	if up_button: up_button.disabled = (current_page_index == 0)
-	if down_button: down_button.disabled = (current_page_index >= total_pages - 1)
+	if up_button:
+		up_button.disabled = (current_page_index == 0)
+		_update_icon_color(up_button)
+	if down_button:
+		down_button.disabled = (current_page_index >= total_pages - 1)
+		_update_icon_color(down_button)
+
+func _update_icon_color(btn: Button):
+	if btn.get_child_count() > 0 and btn.get_child(-1) is TextureRect:
+		var tex_rect = btn.get_child(-1)
+		if tex_rect.get_child_count() > 0 and tex_rect.get_child(0) is ColorRect:
+			var color_rect = tex_rect.get_child(0)
+			color_rect.color = Color(0.5, 0.5, 0.5, 1.0) if btn.disabled else Color.WHITE
+
+
+func _setup_button_icon(btn: Button, flip: bool):
+	var tex_rect = TextureRect.new()
+	tex_rect.texture = preload("res://Icons/up_arrow.png")
+	tex_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	tex_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	tex_rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	tex_rect.offset_left = 10
+	tex_rect.offset_top = 10
+	tex_rect.offset_right = -10
+	tex_rect.offset_bottom = -10
+	tex_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	tex_rect.flip_v = flip
+	tex_rect.clip_children = CanvasItem.CLIP_CHILDREN_ONLY
+
+	var color_rect = ColorRect.new()
+	color_rect.color = Color.WHITE
+	color_rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	color_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	tex_rect.add_child(color_rect)
+	btn.add_child(tex_rect)

@@ -14,19 +14,22 @@ func execute(interactable_node: Interactable) -> Variant:
 		push_warning("ShowCustomDialogueAction is not configured correctly.")
 		return true
 
+	# --- SAFETY CHECK ---
+	# Ensure the checkpoint actually exists in the file to prevent hard crashes.
+	var safe_checkpoint = dialogue_checkpoint
+	if not dialogue_resource.titles.has(safe_checkpoint):
+		push_warning("Dialogue checkpoint '%s' not found in resource! Falling back to 'start'." % safe_checkpoint)
+		safe_checkpoint = "start"
+
 	# 1. Start the dialogue using the CUSTOM SCENE
-	# We use show_dialogue_balloon_scene to force our styled balloon
 	DialogueManager.show_dialogue_balloon_scene(
-		BALLOON_SCENE_PATH, 
-		dialogue_resource, 
-		dialogue_checkpoint
+		BALLOON_SCENE_PATH,
+		dialogue_resource,
+		safe_checkpoint
 	)
 
 	# 2. Wait for completion
-	# We await the signal so the Action List pauses here.
-	# (We do NOT connect to GameManager cleanup here, because Interactable.gd 
-	# handles the cleanup after the whole list of actions is finished).
 	await DialogueManager.dialogue_ended
-	
-	# 3. Return true to signal the Action List to continue (e.g. play sounds next)
+
+	# 3. Return true to signal the Action List to continue
 	return true

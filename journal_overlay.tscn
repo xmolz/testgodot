@@ -131,17 +131,28 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.784314)
 
+[node name="BackgroundButton" type="Button" parent="DimBackground"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+flat = true
+
 [node name="CenterContainer" type="CenterContainer" parent="." unique_id=1932486696]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme = SubResource("Theme_Journal")
 
 [node name="LayoutAnchor" type="Control" parent="CenterContainer" unique_id=1256329933]
 custom_minimum_size = Vector2(1200, 750)
 layout_mode = 2
+mouse_filter = 2
 
 [node name="CloseButton" type="Button" parent="CenterContainer/LayoutAnchor" unique_id=594081067]
 unique_name_in_owner = true

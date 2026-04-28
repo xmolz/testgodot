@@ -252,8 +252,8 @@ scale = Vector2(12.578125, 1.7708337)
 texture = SubResource("GradientTexture2D_shog1")
 
 [node name="DrugDisplay" type="Sprite2D" parent="." unique_id=1949413966]
-position = Vector2(-1.9999986, -61.375)
-scale = Vector2(0.18666667, 0.14138888)
+position = Vector2(-2, -32)
+scale = Vector2(0.1, 0.09)
 
 [node name="PulseOverlay" type="ColorRect" parent="." unique_id=1762419068]
 material = SubResource("ShaderMaterial_xhc8i")

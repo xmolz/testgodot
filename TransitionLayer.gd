@@ -27,7 +27,9 @@ func open_instant():
 # --- 1. SCI-FI DOOR TRANSITION (Used for Teleporting) ---
 func play_transition_sequence():
 	if not left_shutter or not right_shutter: return
-	
+
+	_set_gm_transitioning(true)
+
 	var viewport_width = get_viewport().get_visible_rect().size.x
 	var center_x = viewport_width / 2.0
 	
@@ -52,12 +54,15 @@ func play_transition_sequence():
 	open_tween.tween_property(right_shutter, "position:x", viewport_width, 0.5)
 	
 	await open_tween.finished
+
+	_set_gm_transitioning(false)
 	emit_signal("transition_finished")
 
 
 # --- 2. IRIS "EYE" TRANSITIONS (Used for loading states) ---
 func play_iris_close(duration: float = 1.0):
-	if not iris_rect or not iris_rect.material: 
+	_set_gm_transitioning(true)
+	if not iris_rect or not iris_rect.material:
 		await get_tree().create_timer(duration).timeout
 		emit_signal("transition_halfway")
 		return
@@ -74,24 +79,27 @@ func play_iris_close(duration: float = 1.0):
 	emit_signal("transition_halfway")
 
 func play_iris_open(duration: float = 1.0):
-	if not iris_rect or not iris_rect.material: 
+	if not iris_rect or not iris_rect.material:
 		await get_tree().create_timer(duration).timeout
+		_set_gm_transitioning(false)
 		emit_signal("transition_finished")
 		return
-	
+
 	iris_rect.visible = true
 	iris_rect.material.set_shader_parameter("circle_size", -0.1) # Start completely closed
-	
+
 	var tween = create_tween()
 	tween.tween_property(iris_rect.material, "shader_parameter/circle_size", 1.5, duration)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	
+
 	await tween.finished
 	iris_rect.visible = false
+	_set_gm_transitioning(false)
 	emit_signal("transition_finished")
 
 # --- 3. TRADITIONAL FADES (For Game Over) ---
 func global_fade_to_black(duration: float = 3.0):
+	_set_gm_transitioning(true)
 	if global_fade_rect:
 		global_fade_rect.modulate.a = 0.0
 		global_fade_rect.visible = true
@@ -105,3 +113,13 @@ func global_fade_from_black(duration: float = 1.0):
 		tween.tween_property(global_fade_rect, "modulate:a", 0.0, duration).set_trans(Tween.TRANS_SINE)
 		await tween.finished
 		global_fade_rect.visible = false
+	_set_gm_transitioning(false)
+
+
+func _set_gm_transitioning(is_active: bool):
+	if GameManager:
+		GameManager.is_transitioning = is_active
+		if GameManager.has_method("_update_top_hovered_object"):
+			GameManager._update_top_hovered_object()
+		if GameManager.has_method("update_sentence_line_ui"):
+			GameManager.update_sentence_line_ui()

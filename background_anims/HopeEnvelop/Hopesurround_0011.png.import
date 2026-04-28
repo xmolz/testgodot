@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://drahfm7ekwa38"
 path.s3tc="res://.godot/imported/Hopesurround_0011.png-c1853c58dd6fb884e3cdf7b54df26edd.s3tc.ctex"
+path.etc2="res://.godot/imported/Hopesurround_0011.png-c1853c58dd6fb884e3cdf7b54df26edd.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://background_anims/HopeEnvelop/Hopesurround_0011.png"
-dest_files=["res://.godot/imported/Hopesurround_0011.png-c1853c58dd6fb884e3cdf7b54df26edd.s3tc.ctex"]
+dest_files=["res://.godot/imported/Hopesurround_0011.png-c1853c58dd6fb884e3cdf7b54df26edd.s3tc.ctex", "res://.godot/imported/Hopesurround_0011.png-c1853c58dd6fb884e3cdf7b54df26edd.etc2.ctex"]
 
 [params]
 

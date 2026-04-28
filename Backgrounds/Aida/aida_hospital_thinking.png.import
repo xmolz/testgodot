@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dp2rdt21ao0ut"
 path.s3tc="res://.godot/imported/aida_hospital_thinking.png-88c4ad26b41d0d1fd44eeacdba19ae2d.s3tc.ctex"
+path.etc2="res://.godot/imported/aida_hospital_thinking.png-88c4ad26b41d0d1fd44eeacdba19ae2d.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://Backgrounds/Aida/aida_hospital_thinking.png"
-dest_files=["res://.godot/imported/aida_hospital_thinking.png-88c4ad26b41d0d1fd44eeacdba19ae2d.s3tc.ctex"]
+dest_files=["res://.godot/imported/aida_hospital_thinking.png-88c4ad26b41d0d1fd44eeacdba19ae2d.s3tc.ctex", "res://.godot/imported/aida_hospital_thinking.png-88c4ad26b41d0d1fd44eeacdba19ae2d.etc2.ctex"]
 
 [params]
 

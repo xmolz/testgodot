@@ -1,5 +1,7 @@
 extends CanvasLayer
 
+var custom_font = preload("res://Fonts/VarelaRound-Regular.ttf")
+
 signal journal_closed
 
 # --- NOW EXPORTED TO THE INSPECTOR ---
@@ -28,7 +30,48 @@ func _ready():
 	prev_button.pressed.connect(_on_prev_pressed)
 	next_button.pressed.connect(_on_next_pressed)
 	close_button.pressed.connect(_on_close_pressed)
-	
+
+	# --- CLOSE BUTTON POLISH ---
+	close_button.text = "Close"
+	close_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	close_button.add_theme_font_override("font", custom_font)
+	close_button.add_theme_font_size_override("font_size", 24)
+
+	close_button.flat = false
+	var btn_normal = StyleBoxFlat.new()
+	btn_normal.bg_color = Color(0.15, 0.15, 0.15, 0.85)
+	btn_normal.corner_radius_top_left = 6
+	btn_normal.corner_radius_top_right = 6
+	btn_normal.corner_radius_bottom_left = 6
+	btn_normal.corner_radius_bottom_right = 6
+	btn_normal.content_margin_left = 25
+	btn_normal.content_margin_right = 25
+	btn_normal.content_margin_top = 10
+	btn_normal.content_margin_bottom = 10
+	btn_normal.border_width_left = 2
+	btn_normal.border_width_top = 2
+	btn_normal.border_width_right = 2
+	btn_normal.border_width_bottom = 2
+	btn_normal.border_color = Color(1.0, 1.0, 1.0, 0.0)
+
+	var btn_hover = btn_normal.duplicate()
+	btn_hover.bg_color = Color(0.1, 0.25, 0.3, 0.9)
+	btn_hover.border_color = Color(0.2, 0.85, 1.0, 0.8)
+
+	close_button.add_theme_stylebox_override("normal", btn_normal)
+	close_button.add_theme_stylebox_override("hover", btn_hover)
+	close_button.add_theme_stylebox_override("focus", btn_hover)
+	close_button.add_theme_stylebox_override("pressed", btn_hover)
+
+	close_button.add_theme_color_override("font_color", Color(0.8, 0.8, 0.8, 1.0))
+	close_button.add_theme_color_override("font_hover_color", Color.WHITE)
+	close_button.add_theme_color_override("font_pressed_color", Color.WHITE)
+
+	# Close journal when clicking the dark background
+	$DimBackground/BackgroundButton.pressed.connect(func():
+		_on_close_pressed()
+	)
+
 	update_display()
 
 func update_display():

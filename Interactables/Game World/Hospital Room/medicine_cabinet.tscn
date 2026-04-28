@@ -77,8 +77,8 @@ texture = ExtResource("3_shoix")
 
 [node name="FloorShadow" type="Sprite2D" parent="." unique_id=1813748034]
 modulate = Color(0.16546667, 0.126, 0.2, 0.32941177)
-position = Vector2(3.000001, 748.00006)
-scale = Vector2(14.90625, 1.7708337)
+position = Vector2(1.5258789e-05, 350)
+scale = Vector2(7.65625, 1.7708337)
 texture = SubResource("GradientTexture2D_shog1")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1095235607]

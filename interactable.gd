@@ -62,6 +62,12 @@ func _ready():
 		sprite.material = null
 
 func _on_mouse_entered():
+	if GameManager:
+		if interaction_location == InteractionLocation.WORLD and GameManager.current_interaction_state != GameManager.InteractionState.WORLD:
+			return
+		if interaction_location == InteractionLocation.UI_OVERLAY and GameManager.current_interaction_state != GameManager.InteractionState.ZOOM_VIEW:
+			return
+
 	_is_mouse_over = true
 	if GameManager: GameManager.set_hovered_object(self)
 
@@ -75,7 +81,7 @@ func _on_mouse_entered():
 
 func _on_mouse_exited():
 	_is_mouse_over = false
-	if GameManager: GameManager.clear_hovered_object()
+	if GameManager: GameManager.clear_hovered_object(self)
 
 	if has_node("HoverGlow"):
 		get_node("HoverGlow").visible = false
@@ -85,6 +91,12 @@ func _on_mouse_exited():
 		sprite.material = null
 
 func _on_input_event(_v: Viewport, event: InputEvent, _sidx: int):
+	if GameManager:
+		if interaction_location == InteractionLocation.WORLD and GameManager.current_interaction_state != GameManager.InteractionState.WORLD:
+			return
+		if interaction_location == InteractionLocation.UI_OVERLAY and GameManager.current_interaction_state != GameManager.InteractionState.ZOOM_VIEW:
+			return
+
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
 		if GameManager: GameManager.process_interaction_click(self)
 
@@ -126,7 +138,12 @@ func attempt_interaction(verb_id: String, item_id_used_with: String = ""):
 
 			for action in response.actions_to_perform:
 				if action:
-					await action.execute(self)
+					var should_continue = await action.execute(self)
+
+					# If the action explicitly returns false, HALT the interaction chain.
+					# This prevents GameManager from resetting the UI prematurely.
+					if typeof(should_continue) == TYPE_BOOL and should_continue == false:
+						return
 
 			interaction_processed.emit()
 			return

@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dyud13rt7u572"
 path.s3tc="res://.godot/imported/Sergey_idle_0017.png-ae5f1e749134f06b8ea23d5651e8370a.s3tc.ctex"
+path.etc2="res://.godot/imported/Sergey_idle_0017.png-ae5f1e749134f06b8ea23d5651e8370a.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://Animations/Sergey/Idle/Sergey_idle_0017.png"
-dest_files=["res://.godot/imported/Sergey_idle_0017.png-ae5f1e749134f06b8ea23d5651e8370a.s3tc.ctex"]
+dest_files=["res://.godot/imported/Sergey_idle_0017.png-ae5f1e749134f06b8ea23d5651e8370a.s3tc.ctex", "res://.godot/imported/Sergey_idle_0017.png-ae5f1e749134f06b8ea23d5651e8370a.etc2.ctex"]
 
 [params]
 

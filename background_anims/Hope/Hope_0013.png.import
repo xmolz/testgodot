@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://0tumuyu67c77"
 path.s3tc="res://.godot/imported/Hope_0013.png-42c876da18d42431e5632446c2e19f0d.s3tc.ctex"
+path.etc2="res://.godot/imported/Hope_0013.png-42c876da18d42431e5632446c2e19f0d.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://background_anims/Hope/Hope_0013.png"
-dest_files=["res://.godot/imported/Hope_0013.png-42c876da18d42431e5632446c2e19f0d.s3tc.ctex"]
+dest_files=["res://.godot/imported/Hope_0013.png-42c876da18d42431e5632446c2e19f0d.s3tc.ctex", "res://.godot/imported/Hope_0013.png-42c876da18d42431e5632446c2e19f0d.etc2.ctex"]
 
 [params]
 

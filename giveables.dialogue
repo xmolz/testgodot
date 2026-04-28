@@ -17,7 +17,7 @@ Player: (What am I thinking?)
 
 ~ sergey_item_hospital_toilet_paper
 Sergey: Oh. Toilet paper.
-Sergey: Ummm.. Thanks?
+Sergey: Ummm... Thanks?
 Player: (Hmmm. Maybe this wasn't the most thoughtful gift.)
 => END
 
@@ -27,4 +27,28 @@ Player: (Hmmm. Maybe this wasn't the most thoughtful gift.)
 
 Player: (Sure, lemme just hand her the damn drugs I just stole from under her nose.)
 Player: (What could possibly go wrong?)
+=> END
+
+~ sergey_item_cannathink
+=> character_item_wrong_med
+
+~ sergey_item_zanopram
+=> character_item_wrong_med
+
+~ sergey_item_invigirol
+=> character_item_wrong_med
+
+~ mcbucket_item_cannathink
+=> character_item_wrong_med
+
+~ mcbucket_item_zanopram
+=> character_item_wrong_med
+
+~ mcbucket_item_invigirol
+=> character_item_wrong_med
+
+~ character_item_wrong_med
+Player: (I don't think I can just shove these cartridges down someone's throat.)
+Player: (There's gotta be a better way to go about this.)
+
 => END

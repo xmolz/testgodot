@@ -1,7 +1,13 @@
 ~ start
-I don't think that's going to talk back to me.
+Player: (I don't think that's going to talk back to me.)
 => END
 
 ~ MedicineCabinet
-Hello sir. I heard you have drugs in you.
+Player: (Hello sir. I heard you have drugs in you.)
+Player: (Sigh... What am I doing.)
+=> END
+
+~ bathroom_mirror
+Player: (Mirror, mirror.. on the wall.)
+Player: (Whose the sexiest, comatose patient em' all?)
 => END

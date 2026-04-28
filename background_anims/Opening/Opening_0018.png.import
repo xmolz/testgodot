@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://laqontsye1np"
 path.s3tc="res://.godot/imported/Opening_0018.png-b010fe7c182d160369bae92420b489e9.s3tc.ctex"
+path.etc2="res://.godot/imported/Opening_0018.png-b010fe7c182d160369bae92420b489e9.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://background_anims/Opening/Opening_0018.png"
-dest_files=["res://.godot/imported/Opening_0018.png-b010fe7c182d160369bae92420b489e9.s3tc.ctex"]
+dest_files=["res://.godot/imported/Opening_0018.png-b010fe7c182d160369bae92420b489e9.s3tc.ctex", "res://.godot/imported/Opening_0018.png-b010fe7c182d160369bae92420b489e9.etc2.ctex"]
 
 [params]
 

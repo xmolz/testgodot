@@ -5,12 +5,12 @@ extends Node
 var sfx_library: Dictionary = {
 	# UI & Misc
 	"ui_click": preload("res://ui_click.wav"),
+	"start_game": preload("res://Sfx/start.wav"),
 	"notification_ping": preload("res://notification_ping.wav"),
-	"dialogue_advance": preload("res://Sfx/Dialog/Dialog_sfx.wav"),
 	"swish": preload("res://Sfx/Dialog/swish_effect.wav"),
 	"form_correct_input": preload("res://Sfx/form_correct_input.mp3"),
 	"form_incorrect_input": preload("res://Sfx/form_incorrect_input.mp3"),
-	"mcbucket_scream": preload("res://Sfx/Dialog/mcbucket_scream.mp3"),
+	"mcbucket_scream": preload("res://Sfx/Dialog/mcbucket_scream.wav"),
 	
 	# Game World
 	"door_close": preload("res://Sfx/Game World/scifi door close.mp3"),
@@ -76,7 +76,7 @@ func _initialize_music_player():
 	_music_player = AudioStreamPlayer.new()
 	add_child(_music_player)
 	_music_player.process_mode = Node.PROCESS_MODE_ALWAYS
-	_music_player.bus = "Slow Music"
+	_music_player.bus = "Main Music"
 
 
 # --- SFX Functions ---
@@ -90,6 +90,12 @@ func play_sfx(sound_name: String, pitch: float = 1.0, volume_db: float = 0.0, bu
 	add_child(player)
 	
 	player.stream = sfx_library[sound_name]
+
+	# Globally soften the UI click (higher pitch = lighter sound, lower volume = less aggressive)
+	if sound_name == "ui_click":
+		if pitch == 1.0: pitch = 1.2
+		if volume_db == 0.0: volume_db = -6.0
+
 	player.pitch_scale = pitch
 	player.volume_db = volume_db
 	player.bus = bus_name 
@@ -161,6 +167,11 @@ func play_music_track(track_name: String, fade_duration: float = 1.0):
 	if _music_player.stream == stream and _music_player.playing:
 		return
 		
+	if track_name == "unnatural_city":
+		_music_player.bus = "Intro Music"
+	else:
+		_music_player.bus = "Main Music"
+
 	_music_player.stream = stream
 	
 	# Stop any current fade tweens

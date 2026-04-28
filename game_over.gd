@@ -7,7 +7,7 @@ func _ready():
 
 func _on_main_menu_button_pressed():
 	if SoundManager and SoundManager.has_method("play_sfx"):
-		SoundManager.play_sfx("ui_click", 1.5)
+		SoundManager.play_sfx("ui_click")
 
 	# Swap back to Main Menu state
 	GameManager.change_game_state(GameManager.GameState.MAIN_MENU)

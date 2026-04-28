@@ -167,18 +167,18 @@ func _on_balloon_gui_input(event: InputEvent) -> void:
 	# --- MODIFIED SECTION BELOW ---
 	if event is InputEventMouseButton and event.is_pressed() and event.button_index == MOUSE_BUTTON_LEFT:
 		# Play the sound when clicking to go next
-		SoundManager.play_sfx("dialogue_advance")
+		SoundManager.play_sfx("ui_click")
 		next(dialogue_line.next_id)
 
 	elif event.is_action_pressed(next_action) and get_viewport().gui_get_focus_owner() == balloon:
 		# Play the sound when pressing Space/Enter to go next
-		SoundManager.play_sfx("dialogue_advance")
+		SoundManager.play_sfx("ui_click")
 		next(dialogue_line.next_id)
 
 
 func _on_responses_menu_response_selected(response: DialogueResponse) -> void:
 	# Play the sound when clicking a choice button
-	SoundManager.play_sfx("dialogue_advance")
+	SoundManager.play_sfx("ui_click")
 	next(response.next_id)
 
 # --- ADD THIS FUNCTION ---

@@ -71,7 +71,7 @@ func _update_display():
 func _on_next_button_pressed():
 	# Play the exact same sound used in the dialogue balloon
 	if SoundManager:
-		SoundManager.play_sfx("dialogue_advance")
+		SoundManager.play_sfx("ui_click")
 	current_line_index += 1
 
 	if current_line_index >= current_explanation_data.explanation_lines.size():

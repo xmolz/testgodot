@@ -35,7 +35,7 @@ func _on_texture_button_pressed():
 		
 	# Play a UI click sound
 	if SoundManager:
-		SoundManager.play_sfx("ui_click", 1.5)
+		SoundManager.play_sfx("ui_click")
 		
 	print("The insurance form was clicked on!")
 	emit_signal("form_button_pressed")

@@ -15,26 +15,10 @@ Player: (Use? This hunk of a man?)
 Player: (Hmmmmm.)
 => END
 
-~ sergey_item_cannathink
-=> character_item_wrong_med
-
-~ sergey_item_zanopram
-=> character_item_wrong_med
-
-~ sergey_item_invigirol
-=> character_item_wrong_med
-
-~ mcbucket_item_cannathink
-=> character_item_wrong_med
-
-~ mcbucket_item_zanopram
-=> character_item_wrong_med
-
-~ mcbucket_item_invigirol
-=> character_item_wrong_med
 
 ~ hospital_toilet_regular_use
-We'll... You don't really need to go right now.
+Player: (I don't really need to go right now.)
+Player: (Besides, isn't the water level kinda... low?)
 => END
 
 ~ hospital_toilet_already_dropped
@@ -69,27 +53,61 @@ Player: I don't think that's the best idea...
 => END
 
 
+
+~ television_screen
+
+if GameManager.get_current_level_flag("tv_turned_off") == false
+	Player: (I'll just hit this switch here...)
+	do GameManager.main_game_scene_instance.get_node("television_screen/TVScreen").set_tv_state(true)
+	do GameManager.set_current_level_flag("tv_turned_off", true)
+	do wait(1.0)
+	if GameManager.get_current_level_flag("mcbucket_zanopram_used") == false and GameManager.get_current_level_flag("mcbucket_cannathink_used") == false and GameManager.get_current_level_flag("mcbucket_invigirol_used") == false
+		Player: (The TV shut off. Wait...)
+		Player: (What's up with the Old Man?)
+		do GameManager.main_game_scene_instance.get_node("McBucket_Path/McBucket").react_to_tv(true)
+	else
+		Player: (The TV shut off.)
+else
+	Player: (Let's turn that back on.)
+	do GameManager.main_game_scene_instance.get_node("television_screen/TVScreen").set_tv_state(false)
+	do GameManager.set_current_level_flag("tv_turned_off", false)
+	do wait(1.0)
+	Player: (Ah, this soothing static.)
+	if GameManager.get_current_level_flag("mcbucket_zanopram_used") == false and GameManager.get_current_level_flag("mcbucket_cannathink_used") == false and GameManager.get_current_level_flag("mcbucket_invigirol_used") == false
+		Player: (The Old Man seems to have calmed down, too.)
+		do GameManager.main_game_scene_instance.get_node("McBucket_Path/McBucket").react_to_tv(false)
+
+=> END
+
+~ sergey_item_cannathink
+=> character_item_wrong_med
+
+~ sergey_item_zanopram
+=> character_item_wrong_med
+
+~ sergey_item_invigirol
+=> character_item_wrong_med
+
+~ mcbucket_item_cannathink
+=> character_item_wrong_med
+
+~ mcbucket_item_zanopram
+=> character_item_wrong_med
+
+~ mcbucket_item_invigirol
+=> character_item_wrong_med
+
 ~ character_item_wrong_med
 Player: (I don't think I can just shove these cartridges down someone's throat.)
 Player: (There's gotta be a better way to go about this.)
 
 => END
 
-~ television_screen
-if GameManager.get_current_level_flag("tv_turned_off") == false
-	Player: (I'll just hit this switch here...)
-	do GameManager.main_game_scene_instance.get_node("television_screen/ObjectSprite").set_tv_state(true)
-	do GameManager.set_current_level_flag("tv_turned_off", true)
-	do wait(1.0)
-	Player: (The TV shut off. Wait...)
-	Player: (What's up with the Old Man?)
-	do GameManager.main_game_scene_instance.get_node("McBucket_Path/McBucket").change_state(2)
-else
-	Player: (Let's turn that back on.)
-	do GameManager.main_game_scene_instance.get_node("television_screen/ObjectSprite").set_tv_state(false)
-	do GameManager.set_current_level_flag("tv_turned_off", false)
-	do wait(1.0)
-	Player: (Ah, this soothing static.)
-	Player: (The Old Man seems to have calmed down, too.)
-	do GameManager.main_game_scene_instance.get_node("McBucket_Path/McBucket").change_state(0)
+~ mcbucket_item_hospital_toilet_paper
+Player: (While shoving toilet paper down one's throat is a valid strategy to shut someone up...)
+Player: (I don't think it's very legal.)
+=> END
+
+~ mcbucket_plain_use
+Player: (He might actually be useless, I'm afraid.)
 => END

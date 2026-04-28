@@ -1,3 +1,7 @@
+~ start
+
+Player: (Huh, I don't know what to make of this object.)
+=> END
 ~ burger
 Player: (A burger, this is.)
 => END
@@ -12,7 +16,7 @@ Player: (Goddamn rusty ass key ugh.)
 
 ~ AIda
 Player: (A woman, in a nurse's attire. Her limbs seem to be metallic though?)
-Player: (And damn, why she kindda...)
+Player: (And damn, why she kinda...)
 => END
 
 ~ invigirol
@@ -42,7 +46,7 @@ Player: (You see not a single thought behind those googly eyes of his.)
 => END
 
 
-~ sergei_medicine_dispenser
+~ sergey_medicine_dispenser
 Player: (A large balloon-like device. Seems to display a patient's vitals.)
 => END
 
@@ -69,22 +73,32 @@ Player: (I can make it outta here!)
 
 ~ television_screen
 
-A sleek wall-mounted TV hums softly. The news seems to be on.
+if GameManager.get_current_level_flag("tv_examined") == false
+	A sleek wall-mounted TV hums softly. The news seems to be on.
 
-A young reporter sits across from a man in a flawless black suit. He look enither young nor old. His face expresionless.
+	A young reporter sits across from a man in a flawless black suit. He looks neither young nor old. His face expressionless.
 
-Reporter: So, Mr. Voss, congratulations on securing the new federal contract! With national IDs now under HAVEMORE’s management, some say your company is practically running the country.
+	Reporter: So, Mr. Voss, congratulations on securing the new federal contract!
+	Reporter: With national IDs now under HAVEMORE’s management, some say your company is practically running the country.
 
-CEO Voss: Oh, we don’t run the country.
-CEO Voss: We simply maintain it. The country runs through us.
+	CEO Voss: Oh, we don’t run the country.
+	CEO Voss: We simply maintain it. The country runs through us.
+	do GameManager.set_current_level_flag("tv_examined", true)
+else
+	Player: (The interview with the CEO is still ongoing.)
+	Player: (I really don't like the smug look of this prick.)
 
 => END
 
 ~ memory_box
 
-Player: (A console-like device.)
-Player: (Must be the Memory Box™ that metallic nurse was talking about.)
-Player: (I should trying using this!)
+if GameManager.get_current_level_flag("has_spoken_to_aida") == true
+	Player: (A console-like device.)
+	Player: (Must be the Memory Box™ that metallic nurse was talking about.)
+	Player: (I should try using this!)
+else
+	Player: (A console-like device.)
+	Player: (Reminds me of an hourglass.)
 => END
 
 #HOSPITAL BATHROOM
@@ -105,13 +119,14 @@ Player: (Seems to be displaying the date and time on the top right.)
 
 ~ hospital_toilet
 
-Player: (This is where I could take a dump, if I needed to..)
+Player: (This is where I could take a dump, if I needed to...)
+Player: (Wait, the water level's kinda... low?)
 
 => END
 
 ~ toilet_flush
 
-Player: (Looks like a fancy ass..toilet flush?)
+Player: (Looks like a fancy ass...toilet flush?)
 Player: (And wait, what are those holes for on the sides?)
 
 => END

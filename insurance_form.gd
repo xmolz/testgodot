@@ -37,6 +37,25 @@ func _ready():
 	submit_button.pressed.connect(_on_submit_application_pressed)
 	back_button.pressed.connect(_on_submit_form) # Route the back button to close the form
 
+	# --- DYNAMIC UI ADJUSTMENTS ---
+	# Change all "Confirm" buttons to "Check"
+	var check_buttons = [first_name_button, middle_name_button, last_name_button, dob_button, phone_number_button, account_number_button]
+	for btn in check_buttons:
+		btn.text = "Check"
+
+	# Visually "disable" the submit button (but keep it clickable for dialogue)
+	submit_button.modulate = Color(0.5, 0.5, 0.5, 1.0)
+
+	# --- RESTORE PREVIOUSLY SOLVED FIELDS ---
+	if GameManager and GameManager.get_game_flag("first_name_correct"):
+		lock_field("first_name", "FIONA")
+
+	# Close form when clicking the dark background
+	$ColorRect/BackgroundButton.pressed.connect(func():
+		if SoundManager: SoundManager.play_sfx("ui_click")
+		_on_submit_form()
+	)
+
 # --- HANDLER FUNCTIONS FOR EACH "OKAY" BUTTON ---
 
 func _on_first_name_submit():

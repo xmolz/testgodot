@@ -2,27 +2,27 @@
 
 [ext_resource type="PackedScene" uid="uid://kfct0osfvolx" path="res://AdvancedConversationOverlay.tscn" id="1_sno40"]
 [ext_resource type="Resource" uid="uid://ckg6wmvrckv0q" path="res://sergey_dialogue_1.dialogue" id="2_gnclo"]
-[ext_resource type="Texture2D" uid="uid://d2ntha7kwjixc" path="res://Animations/Hj frames/Hj frames _0001.png" id="4_rts12"]
-[ext_resource type="Texture2D" uid="uid://shvhccg8n4yi" path="res://Animations/Hj frames/Hj frames _0002.png" id="5_waotj"]
-[ext_resource type="Texture2D" uid="uid://bk6ygxl6t7ppm" path="res://Animations/Hj frames/Hj frames _0003.png" id="6_bdbrl"]
-[ext_resource type="Texture2D" uid="uid://c8jr7u7bw5f5b" path="res://Animations/Hj frames/Hj frames _0004.png" id="7_1bf56"]
-[ext_resource type="Texture2D" uid="uid://cxcn3vpjvmjb" path="res://Animations/Hj frames/Hj frames _0005.png" id="8_hgs8t"]
-[ext_resource type="Texture2D" uid="uid://c4tngbqvpfsuf" path="res://Animations/Hj frames/Hj frames _0006.png" id="9_uok3j"]
-[ext_resource type="Texture2D" uid="uid://qqobs5n8kp2p" path="res://Animations/Hj frames/Hj frames _0007.png" id="10_tt3xl"]
-[ext_resource type="Texture2D" uid="uid://caokanmgbph6i" path="res://Animations/Hj frames/Hj frames _0008.png" id="11_btpci"]
+[ext_resource type="Texture2D" uid="uid://db7mnugkwor1q" path="res://Animations/Hj frames new/Hj-frames-new_0001.png" id="4_rts12"]
+[ext_resource type="Texture2D" uid="uid://b8itbkwpku6yk" path="res://Animations/Hj frames new/Hj-frames-new_0002.png" id="5_waotj"]
+[ext_resource type="Texture2D" uid="uid://dsqw28a7lcf4d" path="res://Animations/Hj frames new/Hj-frames-new_0003.png" id="6_bdbrl"]
+[ext_resource type="Texture2D" uid="uid://j1dt6by84wsu" path="res://Animations/Hj frames new/Hj-frames-new_0004.png" id="7_1bf56"]
+[ext_resource type="Texture2D" uid="uid://cmu5kko8505ka" path="res://Animations/Hj frames new/Hj-frames-new_0005.png" id="8_hgs8t"]
+[ext_resource type="Texture2D" uid="uid://cgy6mtovu1xwe" path="res://Animations/Hj frames new/Hj-frames-new_0006.png" id="9_uok3j"]
+[ext_resource type="Texture2D" uid="uid://nsdrl1f5dvc3" path="res://Animations/Hj frames new/Hj-frames-new_0007.png" id="10_tt3xl"]
+[ext_resource type="Texture2D" uid="uid://cu2l604gqrqvb" path="res://Animations/Hj frames new/Hj-frames-new_0008.png" id="11_btpci"]
 [ext_resource type="Material" uid="uid://dek82a5tuykas" path="res://Shaders/grayscale_material.tres" id="11_dwxe7"]
-[ext_resource type="Texture2D" uid="uid://8h6h8gy8ybyn" path="res://Animations/Hj frames/Hj frames _0009.png" id="12_y7hmf"]
-[ext_resource type="Texture2D" uid="uid://vb8kobo4wbrj" path="res://Animations/Hj frames/Hj frames _0010.png" id="13_xjvy8"]
-[ext_resource type="Texture2D" uid="uid://byk7yf6v4psbk" path="res://Animations/Hj frames/Hj frames _0011.png" id="14_sax1d"]
-[ext_resource type="Texture2D" uid="uid://ce34whsdmogcw" path="res://Animations/Hj frames/Hj frames _0012.png" id="15_bwgue"]
-[ext_resource type="Texture2D" uid="uid://lfoes1gpecye" path="res://Animations/Hj frames/Hj frames _0013.png" id="16_fst7n"]
-[ext_resource type="Texture2D" uid="uid://lpmpj4ydkao2" path="res://Animations/Hj frames/Hj frames _0014.png" id="17_7vawo"]
-[ext_resource type="Texture2D" uid="uid://b8fo8v47fmya1" path="res://Animations/Hj frames/Hj frames _0015.png" id="18_k5gom"]
-[ext_resource type="Texture2D" uid="uid://bjjotnbm4x55" path="res://Animations/Hj frames/Hj frames _0016.png" id="19_6x6w2"]
-[ext_resource type="Texture2D" uid="uid://si1ggwmblqxm" path="res://Animations/Hj frames/Hj frames _0017.png" id="20_bjrir"]
-[ext_resource type="Texture2D" uid="uid://cvpotlaoir54k" path="res://Animations/Hj frames/Hj frames _0018.png" id="21_vu2pn"]
-[ext_resource type="Texture2D" uid="uid://dmqfgnpfil8yg" path="res://Animations/Hj frames/Hj frames _0019.png" id="22_prgf1"]
-[ext_resource type="Texture2D" uid="uid://ba2w703gxwaug" path="res://Animations/Hj frames/Hj frames _0020.png" id="23_ox85a"]
+[ext_resource type="Texture2D" uid="uid://5qe43sg4qika" path="res://Animations/Hj frames new/Hj-frames-new_0009.png" id="12_y7hmf"]
+[ext_resource type="Texture2D" uid="uid://nm153xithdej" path="res://Animations/Hj frames new/Hj-frames-new_0010.png" id="13_xjvy8"]
+[ext_resource type="Texture2D" uid="uid://ccvfleb4jlin5" path="res://Animations/Hj frames new/Hj-frames-new_0011.png" id="14_sax1d"]
+[ext_resource type="Texture2D" uid="uid://8u6qfmischfa" path="res://Animations/Hj frames new/Hj-frames-new_0012.png" id="15_bwgue"]
+[ext_resource type="Texture2D" uid="uid://r12jygexxh0b" path="res://Animations/Hj frames new/Hj-frames-new_0013.png" id="16_fst7n"]
+[ext_resource type="Texture2D" uid="uid://pqymsor78yu2" path="res://Animations/Hj frames new/Hj-frames-new_0014.png" id="17_7vawo"]
+[ext_resource type="Texture2D" uid="uid://dyi4rwjot2krb" path="res://Animations/Hj frames new/Hj-frames-new_0015.png" id="18_k5gom"]
+[ext_resource type="Texture2D" uid="uid://o0qkccqbi5ty" path="res://Animations/Hj frames new/Hj-frames-new_0016.png" id="19_6x6w2"]
+[ext_resource type="Texture2D" uid="uid://dmynmsmim2m5n" path="res://Animations/Hj frames new/Hj-frames-new_0017.png" id="20_bjrir"]
+[ext_resource type="Texture2D" uid="uid://xjfgtpeyht14" path="res://Animations/Hj frames new/Hj-frames-new_0018.png" id="21_vu2pn"]
+[ext_resource type="Texture2D" uid="uid://btchre5um613x" path="res://Animations/Hj frames new/Hj-frames-new_0019.png" id="22_prgf1"]
+[ext_resource type="Texture2D" uid="uid://f8ivishgu2md" path="res://Animations/Hj frames new/Hj-frames-new_0020.png" id="23_ox85a"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_3pnpv"]
 animations = [{
@@ -95,18 +95,18 @@ animations = [{
 [node name="AdvancedConversationOverlay" unique_id=543555441 instance=ExtResource("1_sno40")]
 dialogue_resource = ExtResource("2_gnclo")
 background_aliases = {
-"sergey_background": "res://Backgrounds/Levels/sergey_background.png"
+"test": "res://Backgrounds/Levels/static_hospital_background_ventless.png"
 }
 cg_aliases = {
 "hand_hovering": "res://Backgrounds/Protagonist/xSergei/protag_sergey_hand_hovering.png",
 "hand_moved_3": "res://Backgrounds/Protagonist/xSergei/protag_sergey_hand_being_moved_three.png",
 "hand_moved_two": "res://Backgrounds/Protagonist/xSergei/protag_sergey_hand_being_moved_two.png",
-"hj_frame_1": "res://Animations/Hj frames/Hj frames _0001.png",
-"hj_frame_20": "res://Animations/Hj frames/Hj frames _0020.png",
-"japan": "res://haluwa.png",
-"mcbucket_normal_base": "res://Backgrounds/McBucket/default/mcbucket_normal_base.png",
-"mcbucket_normal_ree": "res://Backgrounds/McBucket/default/mcbucket_normal_ree.png",
-"protag_brushing_hair_on_bed": "res://Backgrounds/Protagonist/xSergei/protag_brushing_hair_on_bed.PNG",
+"hj_climax_image": "res://Backgrounds/Protagonist/xSergei/hj_climax_image.PNG",
+"hj_frame_1": "res://Backgrounds/Protagonist/xSergei/sergey_handjob_frame_one.png",
+"japan": "res://Backgrounds/Protagonist/xSergei/sergey_part_reveal.PNG",
+"mcbucket_normal_base": "res://Backgrounds/McBucket/default/mcbucket_normal_base.PNG",
+"mcbucket_normal_ree": "res://Backgrounds/McBucket/default/mcbucket_normal_ree.PNG",
+"protag_brushing_hair_on_bed": "res://Backgrounds/Protagonist/xSergei/protag_brushing_hair_on_bed.png",
 "protag_closeup_curious": "res://Backgrounds/Protagonist/xSergei/protag_closeup_curious.png",
 "protag_closeup_domme": "res://Backgrounds/Protagonist/xSergei/protag_closeup_domme.png",
 "protag_sergey_gown_hand_slipped_in": "res://Backgrounds/Protagonist/xSergei/protag_sergey_gown_hand_slipped_in.png",
@@ -121,7 +121,9 @@ cg_aliases = {
 "sergey_closeup_neutral_speaking": "res://Backgrounds/Sergey/sergei_closeup_neutral_speaking.png",
 "sergey_closeup_surprised": "res://Backgrounds/Sergey/sergei_closeup_surprised_no_blush.png",
 "sergey_closeup_surprised_blush": "res://Backgrounds/Sergey/sergei_closeup_surprised_blush.png",
+"sergey_eyes_closed": "res://Backgrounds/Sergey/sergey_eyes_closed.png",
 "sergey_eyes_only_eye_to_eye": "res://Backgrounds/Sergey/sergey_eyes_only_eye_to_eye.png",
+"sergey_eyes_only_eye_to_eye_intense": "res://Backgrounds/Sergey/sergey_eyes_only_eye_to_eye_intense.png",
 "sergey_eyes_only_looking_away": "res://Backgrounds/Sergey/sergey_eyes_only_looking_away.png",
 "sergey_eyes_only_pleasure": "res://Backgrounds/Sergey/sergey_eyes_only_pleasure.png",
 "sergey_flat_and_drained": "res://Backgrounds/Sergey/sergey_flat_and_drained.png",
@@ -129,15 +131,18 @@ cg_aliases = {
 "sergey_front_confused": "res://Backgrounds/Sergey/sergei_front_confused.png",
 "sergey_front_hand_behind_head": "res://Backgrounds/Sergey/sergey_front_hand_behind_head.png",
 "sergey_front_neutral_mouth_open": "res://Backgrounds/Sergey/sergey_front_neutral_mouth_open.png",
+"sergey_frown": "res://Backgrounds/Sergey/sergey_frown.png",
+"sergey_frown_look_away": "res://Backgrounds/Sergey/sergey_frown_look_away.png",
+"sergey_hand_behind_head": "res://Backgrounds/Sergey/sergey_hand_behind_head.png",
+"sergey_hand_up": "res://Backgrounds/Sergey/sergey_hand_up.png",
+"sergey_neutral": "res://Backgrounds/Sergey/sergey_neutral.png",
+"sergey_neutral_mouth_open": "res://Backgrounds/Sergey/sergey_neutral_mouth_open.png",
 "sergey_shutted_up": "res://Backgrounds/rough/sergey_shutted_up.png",
 "sergey_techpass_inhand": "res://Backgrounds/Sergey/sergey_techpass_inhand.png"
 }
 mental_image_shader = ExtResource("11_dwxe7")
 
-[node name="CinematicContainer" parent="." index="1"]
-layout_mode = 3
-
-[node name="CinematicSprite" parent="." index="8"]
+[node name="CinematicSprite" parent="." index="8" unique_id=1182331219]
 sprite_frames = SubResource("SpriteFrames_3pnpv")
-frame = 12
-frame_progress = 0.009506634
+frame = 19
+frame_progress = 0.73379415

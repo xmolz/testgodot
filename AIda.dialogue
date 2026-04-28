@@ -59,7 +59,7 @@ AIda: Welcome back to the waking world!
 				do actor_change("AIda", "concerned")
 				AIda: The problem is... there was no phone, wallet, ID, or wearable device found on your person at intake.  
 				AIda: In short - to access your insurance, we need to know who you are.  
-				AIda: And to know who you are… well, we need access to your memories.
+				AIda: And to know who you are... well, we need access to your memories.
 				do actor_change("AIda", "pointing_up")
 				AIda: That’s why I recommend proceeding with the Neural Integrity Scan™. 
 				AIda: It’s your best chance to... [i]reconnect[/i] with yourself.
@@ -79,7 +79,7 @@ AIda: Welcome back to the waking world!
 			AIda: A successful scan might recover enough memory to reconnect you to your coverage plan.  
 			AIda: If not, I’ll refer your case to our Floor Administrator for alternate financing options.
 			do actor_change("AIda", "thinking") 
-			AIda: So - with all that in mind… are you sure you don’t want to reconsider?
+			AIda: So - with all that in mind... are you sure you don’t want to reconsider?
 			- Fine, proceed with the scan.
 				=> begin_scan
 
@@ -133,7 +133,7 @@ AIda: Luckily, we have a MemoryBox™ installed right here in this very unit. Yo
 			=> END
 				
 ~ aida_hub
-do change_background("res://Backgrounds/Levels/static_hospital_background.PNG", "none", 0.0)
+do change_background("aida_hospital_background", "none", 0.0)
 do actor_enter("AIda", "surprised", "center")
 
 AIda senses your presence before you reach her.
@@ -192,6 +192,7 @@ What do you want to say to AIda?
 		=> conversation_return
 
 - The MemoryBox seems to be locked. [if GameManager.get_current_level_flag("has_tried_memory_box")]
+	do GameManager.set_current_level_flag("learned_techpass_from_aida", true)
 	do actor_change("AIda", "surprised")
 	AIda: Oh! I'm terribly sorry about that!
 	do actor_change("AIda", "pointing_up")
@@ -296,7 +297,7 @@ What do you want to say to AIda?
 		AIda: Just remember to fill out your insurance form first. Teehee!
 
 		#player image
-		Player: (Yeah… no.)
+		Player: (Yeah... no.)
 		Player: (That's not happening. I need to leave.)
 
 		=> mcbucket_enquiry_hub

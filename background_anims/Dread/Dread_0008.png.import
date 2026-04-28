@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://c3q2141s1jsw2"
 path.s3tc="res://.godot/imported/Dread_0008.png-5bc6881963e83208fbc43eaea283e039.s3tc.ctex"
+path.etc2="res://.godot/imported/Dread_0008.png-5bc6881963e83208fbc43eaea283e039.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://background_anims/Dread/Dread_0008.png"
-dest_files=["res://.godot/imported/Dread_0008.png-5bc6881963e83208fbc43eaea283e039.s3tc.ctex"]
+dest_files=["res://.godot/imported/Dread_0008.png-5bc6881963e83208fbc43eaea283e039.s3tc.ctex", "res://.godot/imported/Dread_0008.png-5bc6881963e83208fbc43eaea283e039.etc2.ctex"]
 
 [params]
 

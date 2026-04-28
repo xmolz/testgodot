@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b12ijh1r1sw36"
-path="res://.godot/imported/mcbucket_high_explaining_eyes_closed_mouth_open.png-42ce4c0aabff78522239b306f6c0e2d9.ctex"
+uid="uid://38t3qiks0i52"
+path="res://.godot/imported/mcbucket_high_explaining_eyes_closed_mouth_open.PNG-f3cc59ed09fcbe0eecf634875004c12b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Backgrounds/McBucket/high/mcbucket_high_explaining_eyes_closed_mouth_open.png"
-dest_files=["res://.godot/imported/mcbucket_high_explaining_eyes_closed_mouth_open.png-42ce4c0aabff78522239b306f6c0e2d9.ctex"]
+source_file="res://Backgrounds/McBucket/high/mcbucket_high_explaining_eyes_closed_mouth_open.PNG"
+dest_files=["res://.godot/imported/mcbucket_high_explaining_eyes_closed_mouth_open.PNG-f3cc59ed09fcbe0eecf634875004c12b.ctex"]
 
 [params]
 

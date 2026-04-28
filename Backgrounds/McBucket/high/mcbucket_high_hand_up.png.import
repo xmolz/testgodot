@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cqsofvu8h3wje"
-path="res://.godot/imported/mcbucket_high_hand_up.png-33e422d5d2d4c6d976157f7720f0c259.ctex"
+uid="uid://cbwoendcs20o3"
+path="res://.godot/imported/mcbucket_high_hand_up.PNG-ab0eb86b65757e1641ffbec30b72edc9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Backgrounds/McBucket/high/mcbucket_high_hand_up.png"
-dest_files=["res://.godot/imported/mcbucket_high_hand_up.png-33e422d5d2d4c6d976157f7720f0c259.ctex"]
+source_file="res://Backgrounds/McBucket/high/mcbucket_high_hand_up.PNG"
+dest_files=["res://.godot/imported/mcbucket_high_hand_up.PNG-ab0eb86b65757e1641ffbec30b72edc9.ctex"]
 
 [params]
 

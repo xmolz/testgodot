@@ -4,6 +4,11 @@
 [ext_resource type="Shader" uid="uid://cyp05p5euwm50" path="res://television_screen.gdshader" id="1_rlxh4"]
 [ext_resource type="Texture2D" uid="uid://dqyuerm7dscue" path="res://tv_sprite.png" id="2_rlxh4"]
 [ext_resource type="Script" uid="uid://d2cc5akswvuo0" path="res://tv_controller.gd" id="4_arbd3"]
+[ext_resource type="Script" uid="uid://bmq0s1nqhqi4j" path="res://InteractionResponse.gd" id="5_tv001"]
+[ext_resource type="Script" uid="uid://dltqnu07oiff" path="res://action.gd" id="6_tv001"]
+[ext_resource type="Script" uid="uid://8c6cnm8lo25p" path="res://interactions/actions/ShowCustomDialogueAction.gd" id="7_tv001"]
+[ext_resource type="Resource" uid="uid://dlyoiu6syhnqe" path="res://unusables.dialogue" id="8_tv001"]
+[ext_resource type="Resource" uid="uid://bivfrghh084ym" path="res://interactions/actions/DefaultExamineResponse.tres" id="9_tv001"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_arbd3"]
 shader = ExtResource("1_rlxh4")
@@ -12,10 +17,23 @@ shader_parameter/progress = 0.0
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_arbd3"]
 size = Vector2(474, 261)
 
+[sub_resource type="Resource" id="Resource_tv_act"]
+script = ExtResource("7_tv001")
+dialogue_resource = ExtResource("8_tv001")
+dialogue_checkpoint = "television_screen"
+metadata/_custom_type_script = "uid://8c6cnm8lo25p"
+
+[sub_resource type="Resource" id="Resource_tv_use"]
+script = ExtResource("5_tv001")
+verb_id = "use"
+actions_to_perform = Array[ExtResource("6_tv001")]([SubResource("Resource_tv_act")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
 [node name="television_screen" type="Area2D" unique_id=296554066]
 script = ExtResource("1_06tmt")
 object_display_name = "Television Screen"
 object_id = "television_screen"
+interactions = Array[ExtResource("5_tv001")]([ExtResource("9_tv001"), SubResource("Resource_tv_use")])
 metadata/_custom_type_script = "uid://dwldhrx7leysr"
 
 [node name="HoverGlow" type="ColorRect" parent="." unique_id=2073713427]

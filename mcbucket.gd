@@ -155,6 +155,21 @@ func _on_resume_timer_timeout():
 
 func _on_global_interaction_complete():
 	if _is_interacting_with_me:
-		_patience_timer.stop() 
-		_is_interacting_with_me = false 
+		_patience_timer.stop()
+		_is_interacting_with_me = false
 		_start_resume_countdown()
+
+
+func react_to_tv(is_tv_off: bool):
+	if not animation_player: return
+
+	if GameManager:
+		if GameManager.get_current_level_flag("mcbucket_cannathink_used") or \
+		   GameManager.get_current_level_flag("mcbucket_invigirol_used") or \
+		   GameManager.get_current_level_flag("mcbucket_zanopram_used"):
+			return
+
+	if is_tv_off:
+		animation_player.play("invigirol", -1, 4.0)
+	else:
+		animation_player.play("idle")

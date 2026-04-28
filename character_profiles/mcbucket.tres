@@ -1,27 +1,18 @@
 [gd_resource type="Resource" script_class="CharacterProfile" format=3 uid="uid://btxj50xynfv6y"]
 
-[ext_resource type="Texture2D" uid="uid://7g7luudeoust" path="res://Sprites/characters/mcbucket/mcbucket_default.png" id="1_7rjrh"]
-[ext_resource type="Texture2D" uid="uid://wssqde4yimtf" path="res://Sprites/characters/mcbucket/mcbucket_ree.png" id="2_uhhdg"]
-[ext_resource type="Texture2D" uid="uid://d4f30fqaltacg" path="res://Sprites/characters/mcbucket/mcbucket_invigirol_base.png" id="3_frm6e"]
-[ext_resource type="Texture2D" uid="uid://c1t5hkuiubpig" path="res://Sprites/characters/mcbucket/mcbucket_high_base.png" id="4_ufo4j"]
-[ext_resource type="Texture2D" uid="uid://c7c6qst6e2m3u" path="res://Sprites/characters/mcbucket/mcbucket_high_happy.png" id="5_80xyf"]
-[ext_resource type="Texture2D" uid="uid://dighmlgepf06h" path="res://Sprites/characters/mcbucket/mcbucket_high_hand_up.png" id="6_5fx5s"]
-[ext_resource type="Texture2D" uid="uid://pfn6y7xq3vyu" path="res://Sprites/characters/mcbucket/mcbucket_high_explaining_eyes_open_mouth_closed.png" id="7_mqbkx"]
 [ext_resource type="Script" uid="uid://yiootngfe2lt" path="res://CharacterProfile.gd" id="8_5fx5s"]
-[ext_resource type="Texture2D" uid="uid://bifiwq73ue8t1" path="res://Sprites/characters/mcbucket/mcbucket_high_explaining_eyes_closed_mouth_closed.png" id="8_m8r8n"]
-[ext_resource type="Texture2D" uid="uid://c0vyquj5afxi" path="res://Sprites/characters/mcbucket/mcbucket_high_explaining_eyes_closed_mouth_open.png" id="9_156mw"]
 
 [resource]
 script = ExtResource("8_5fx5s")
 actor_id = "McBucket"
 expressions = {
-"mcbucket_default": ExtResource("1_7rjrh"),
-"mcbucket_high_base": ExtResource("4_ufo4j"),
-"mcbucket_high_explaining_eyes_closed_mouth_closed": ExtResource("8_m8r8n"),
-"mcbucket_high_explaining_eyes_closed_mouth_open": ExtResource("9_156mw"),
-"mcbucket_high_explaining_eyes_open_mouth_closed": ExtResource("7_mqbkx"),
-"mcbucket_high_hand_up": ExtResource("6_5fx5s"),
-"mcbucket_high_happy": ExtResource("5_80xyf"),
-"mcbucket_invigirol_base": ExtResource("3_frm6e"),
-"mcbucket_ree": ExtResource("2_uhhdg")
+"mcbucket_default": "res://Sprites/characters/mcbucket/mcbucket_default.png",
+"mcbucket_high_base": "res://Sprites/characters/mcbucket/mcbucket_high_base.png",
+"mcbucket_high_explaining_eyes_closed_mouth_closed": "res://Sprites/characters/mcbucket/mcbucket_high_explaining_eyes_closed_mouth_closed.png",
+"mcbucket_high_explaining_eyes_closed_mouth_open": "res://Sprites/characters/mcbucket/mcbucket_high_explaining_eyes_closed_mouth_open.png",
+"mcbucket_high_explaining_eyes_open_mouth_closed": "res://Sprites/characters/mcbucket/mcbucket_high_explaining_eyes_open_mouth_closed.png",
+"mcbucket_high_hand_up": "res://Sprites/characters/mcbucket/mcbucket_high_hand_up.png",
+"mcbucket_high_happy": "res://Sprites/characters/mcbucket/mcbucket_high_happy.png",
+"mcbucket_invigirol_base": "res://Sprites/characters/mcbucket/mcbucket_invigirol_base.png",
+"mcbucket_ree": "res://Sprites/characters/mcbucket/mcbucket_ree.png"
 }

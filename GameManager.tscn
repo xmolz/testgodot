@@ -6,6 +6,7 @@
 [ext_resource type="Resource" uid="uid://bs01nglwwhavy" path="res://dialogue/talkto.dialogue" id="3_iyray"]
 [ext_resource type="Resource" uid="uid://dhmxbhyhr4erb" path="res://examine_verb.tres" id="3_pdxvr"]
 [ext_resource type="Resource" uid="uid://bnekusymfhc2d" path="res://talk_to_verb.tres" id="4_iyray"]
+[ext_resource type="Resource" uid="uid://dift6n638r1bb" path="res://dialogue/intro.dialogue" id="4_ow34n"]
 [ext_resource type="Resource" uid="uid://k8ha62365syy" path="res://pick_up_verb.tres" id="7_0145d"]
 [ext_resource type="Resource" uid="uid://hs2nkbv1s6yx" path="res://use_verb.tres" id="8_0q1rh"]
 [ext_resource type="Script" uid="uid://by8o1t3tdwrep" path="res://ItemData.gd" id="8_0145d"]
@@ -22,5 +23,6 @@
 script = ExtResource("1_108xg")
 player_examine_lines = ExtResource("2_pdxvr")
 player_talk_to_lines = ExtResource("3_iyray")
+intro_dialogue_file = ExtResource("4_ow34n")
 all_verb_data_resources = Array[ExtResource("2_dxunw")]([ExtResource("3_pdxvr"), ExtResource("4_iyray"), ExtResource("7_0145d"), ExtResource("8_0q1rh"), ExtResource("9_l3fct")])
 all_item_data_resources = Array[ExtResource("8_0145d")]([ExtResource("9_0q1rh"), ExtResource("11_5me18"), ExtResource("12_dm6qn"), ExtResource("13_lhkyk"), ExtResource("14_lk78y"), ExtResource("15_3ky0o"), ExtResource("16_techpass")])

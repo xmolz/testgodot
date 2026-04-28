@@ -30,7 +30,7 @@ layout_mode = 1
 anchors_preset = -1
 offset_left = 15.0
 offset_top = -40.0
-offset_right = 115.0
+offset_right = 145.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_tab")
 
 [node name="Label" type="Label" parent="JournalPanel/TabPanel" unique_id=1738791675]
@@ -40,7 +40,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "NOTES"
+text = "JOURNAL"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -63,3 +63,21 @@ mouse_default_cursor_shape = 2
 texture_normal = ExtResource("2_icon")
 ignore_texture_size = true
 stretch_mode = 5
+
+[node name="NotificationBadge" type="PanelContainer" parent="JournalPanel"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -30.0
+offset_top = -20.0
+offset_right = 10.0
+offset_bottom = 20.0
+grow_horizontal = 0
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="JournalPanel/NotificationBadge"]
+layout_mode = 2
+text = "!"
+horizontal_alignment = 1
+vertical_alignment = 1

@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://d04nt77cwqrnj"
 path.s3tc="res://.godot/imported/protag_sergey_hand_being_moved_three.png-c8610023bd084637f5692339c698ce21.s3tc.ctex"
+path.etc2="res://.godot/imported/protag_sergey_hand_being_moved_three.png-c8610023bd084637f5692339c698ce21.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://Backgrounds/Protagonist/xSergei/protag_sergey_hand_being_moved_three.png"
-dest_files=["res://.godot/imported/protag_sergey_hand_being_moved_three.png-c8610023bd084637f5692339c698ce21.s3tc.ctex"]
+dest_files=["res://.godot/imported/protag_sergey_hand_being_moved_three.png-c8610023bd084637f5692339c698ce21.s3tc.ctex", "res://.godot/imported/protag_sergey_hand_being_moved_three.png-c8610023bd084637f5692339c698ce21.etc2.ctex"]
 
 [params]
 

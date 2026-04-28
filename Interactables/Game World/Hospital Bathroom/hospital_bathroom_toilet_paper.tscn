@@ -1,29 +1,29 @@
-[gd_scene load_steps=4 format=3 uid="uid://cj8nc55uc3in"]
+[gd_scene format=3 uid="uid://cj8nc55uc3in"]
 
 [ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactable.gd" id="1_8n14r"]
 [ext_resource type="Texture2D" uid="uid://bh7iuihr2gl5i" path="res://Sprites/Hospital Bathroom/hospital_bathroom_toilet_paper.PNG" id="2_e1ojk"]
 [ext_resource type="Material" uid="uid://dww3d0txyl18g" path="res://interactions/actions/interactable_outline.tres" id="OutlineMaterial"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5u6mx"]
-size = Vector2(151, 73)
+size = Vector2(151, 99)
 
-[node name="HospitalBathroomToiletPaper" type="Area2D"]
+[node name="HospitalBathroomToiletPaper" type="Area2D" unique_id=1066053882]
 script = ExtResource("1_8n14r")
 metadata/_custom_type_script = "uid://dwldhrx7leysr"
 
-[node name="ContactShadow" type="Sprite2D" parent="."]
+[node name="ContactShadow" type="Sprite2D" parent="." unique_id=48467942]
 modulate = Color(0.33, 0.132, 0.19800003, 0.18039216)
 z_index = -1
 texture = ExtResource("2_e1ojk")
 offset = Vector2(2.845, 2.5)
 
-[node name="ObjectSprite" type="Sprite2D" parent="."]
+[node name="ObjectSprite" type="Sprite2D" parent="." unique_id=1458525088]
 material = ExtResource("OutlineMaterial")
 texture = ExtResource("2_e1ojk")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(2.5, -3.5)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=515021818]
+position = Vector2(2.5, 9.5)
 shape = SubResource("RectangleShape2D_5u6mx")
 
-[node name="WalkToPoint" type="Marker2D" parent="."]
+[node name="WalkToPoint" type="Marker2D" parent="." unique_id=1284033623]
 position = Vector2(3, -4)

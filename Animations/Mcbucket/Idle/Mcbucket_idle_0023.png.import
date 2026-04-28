@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://b88bysu4eylah"
 path.s3tc="res://.godot/imported/Mcbucket_idle_0023.png-e9f57310e07d4b89138ae078756c235d.s3tc.ctex"
+path.etc2="res://.godot/imported/Mcbucket_idle_0023.png-e9f57310e07d4b89138ae078756c235d.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://Animations/Mcbucket/Idle/Mcbucket_idle_0023.png"
-dest_files=["res://.godot/imported/Mcbucket_idle_0023.png-e9f57310e07d4b89138ae078756c235d.s3tc.ctex"]
+dest_files=["res://.godot/imported/Mcbucket_idle_0023.png-e9f57310e07d4b89138ae078756c235d.s3tc.ctex", "res://.godot/imported/Mcbucket_idle_0023.png-e9f57310e07d4b89138ae078756c235d.etc2.ctex"]
 
 [params]
 

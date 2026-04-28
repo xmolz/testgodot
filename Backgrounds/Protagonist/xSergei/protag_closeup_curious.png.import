@@ -2,7 +2,7 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dombxpme2le8p"
+uid="uid://dey5vxmoiigrv"
 path="res://.godot/imported/protag_closeup_curious.png-9ecb6ac0920d2abde4e794664547e9d3.ctex"
 metadata={
 "vram_texture": false
@@ -36,5 +36,5 @@ process/premult_alpha=false
 process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
-process/size_limit=1920
+process/size_limit=0
 detect_3d/compress_to=1

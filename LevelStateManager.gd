@@ -9,6 +9,8 @@ signal level_flag_changed(flag_name: String, new_value: bool)
 var _flags: Dictionary = {}
 
 # Default flag values for this level. Only needed for flags that start as true.
+# NOTE: Flags in _defaults without a debug toggle override:
+#   - aida_in_main_room
 var _defaults: Dictionary = {
 	"aida_in_main_room": true
 }
@@ -25,6 +27,10 @@ var _defaults: Dictionary = {
 @export var override_mcbucket_invigirol_used: bool = false
 @export var override_toilet_has_paper: bool = false
 @export var override_toilet_clogged: bool = false
+@export var override_tv_examined: bool = false
+@export var override_tv_turned_off: bool = false
+@export var override_learned_techpass_from_aida: bool = false
+@export var override_learned_techpass_from_sergey: bool = false
 @export var override_give_techpass: bool = false
 
 
@@ -45,6 +51,10 @@ func _ready():
 		"mcbucket_invigirol_used": override_mcbucket_invigirol_used,
 		"toilet_has_paper": override_toilet_has_paper,
 		"toilet_clogged": override_toilet_clogged,
+		"tv_examined": override_tv_examined,
+		"tv_turned_off": override_tv_turned_off,
+		"learned_techpass_from_aida": override_learned_techpass_from_aida,
+		"learned_techpass_from_sergey": override_learned_techpass_from_sergey,
 	}
 	for flag_name in _toggles:
 		if _toggles[flag_name]:

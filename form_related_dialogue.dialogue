@@ -1,6 +1,5 @@
 ~ incomplete_submit
-Player: I need to fill out all the fields before I submit this.
-Player: Better get to that memory box. 
+Player: (I should probably 'Check' the other fields first before I 'Submit' this.)
 => END
 
 ~ complete_submit
@@ -16,4 +15,9 @@ Player: I remember!
 ~ first_name_incorrect
 Player: {{wrong_name}}?
 Player: What a trash name. Surely I wasn't named that!
+=> END
+
+~ field_not_ready
+Player: (I don't think I've come across information that will help me in filling up this field yet.)
+Player: (Maybe after I've sorted my memories out using the memory box, I'll be able to do this.)
 => END

@@ -1,73 +1,69 @@
 ~ start
-if GameManager.get_current_level_flag("mcbucket_zanopram_used") == true:
-	=> drugged_branch
-
-# Set the background
-do change_background("sergey_background", "fade", 0.5)
-
-# Bring Sergey onto the stage
-do actor_show("Sergey", "base", "center")
+do change_background("test", "none", 0.0)
+if GameManager.get_current_level_flag("mcbucket_interruption_happened") == true and GameManager.get_current_level_flag("mcbucket_zanopram_used") == true:
+	=> drugged_branch_resume
+do show_cg("sergey_neutral", "fade", 0.5)
 
 A man in his mid-forties sits upright on his bed.
 His sharp eyes track you as you stir. He looks Slavic.
 
-do actor_change("Sergey", "hand_up")
+do show_cg("sergey_hand_up")
 Sergey: Ah. You wake. Good. Was not sure you ever would.
 do SoundManager.play_music_track("sergey_sad_theme", 5.0)
 
 ~ hub
-do actor_change("Sergey", "neutral_mouth_open")
+do show_cg("sergey_neutral_mouth_open")
 Sergey: So then… tell me. How can Sergey help?
 
 - How long was I out?
 	set ConversationEventManager.asked_sergey_duration = true
-	do actor_change("Sergey", "hand_up")
+	do show_cg("sergey_hand_up")
 	Sergey: Hard to say. You sleep long time. Since I arrive here, you do not move. Like statue. 
 	- I can't recall anything.
-		do actor_change("Sergey", "frown")
+		do show_cg("sergey_frown")
 		Sergey: Hm. That is… not good. 
 		Sergey: You truly remember nothing?
 		- Nope. Nothing at all.
-			do actor_change("Sergey", "neutral_mouth_open")
+			do show_cg("sergey_neutral_mouth_open")
 			Sergey: Then maybe this is fresh start, da? Clean page.
 			
-			do actor_change("Sergey", "hand_up")
+			do show_cg("sergey_hand_up")
 			Sergey: In Russia we say… sometimes forgetting is gift.
 			
-			do actor_change("Sergey", "eyes_closed")
+			do show_cg("sergey_eyes_closed")
 			He gives a small shrug, as if to brush off the heaviness of his words.
 			set ConversationEventManager.has_heard_fresh_start_line = true 
 			=> hub
 
 - Who are you?
 	set ConversationEventManager.asked_sergey_identity = true
-	do actor_change("Sergey", "hand_up")
+	do show_cg("sergey_hand_up")
 	Sergey: Name is Sergey. Heart had attack, so now I sit here.
 	Sergey: Happen right before I was about to leave the country, too. Bad timing.  
 	- Leaving? Where to?
-		do actor_change("Sergey", "eyes_closed")
+		do show_cg("sergey_eyes_closed")
 		Sergey: Home. Russia.
 		Sergey: Before this, I was research contractor for HAVEMORE Defense.
 		
-		do actor_change("Sergey", "neutral_mouth_open")
+		do show_cg("sergey_neutral_mouth_open")
 		Sergey: Not soldier - I worked with machines. Autonomous systems… behavior models… things that are supposed to make security “more efficient”.
 		
-		do actor_change("Sergey", "eyes_closed")
+		do show_cg("sergey_eyes_closed")
 		He gives a small, humorless laugh.
 		Sergey: Is funny. Work was not dangerous, but somehow… still hurts the head. The heart too, maybe.
 		- Stressful job?
-			do actor_change("Sergey", "neutral_mouth_open")
+			do show_cg("sergey_neutral_mouth_open")
 			Sergey: Hm. Stressful… yes. Very quiet type of stress.
 			
-			do actor_change("Sergey", "frown")
+			do show_cg("sergey_frown")
 			Sergey: Too many screens. Too many decisions that are not really decisions.
 			Sergey: People there burn out without fire.
 			
 			He shifts under the blanket, adjusting his position.
-			do actor_change("Sergey", "hand_behind_head")
+			do show_cg("sergey_hand_behind_head")
 			Sergey: Anyway… I told my manager I bring resignation letter next day.
 			
-			do actor_change("Sergey", "hand_up")
+			do show_cg("sergey_hand_up")
 			Sergey: Felt lighter than I had in years. Finally, I could go home, see snow, maybe drink tea with my little sister.
 			
 			He taps his chest lightly.
@@ -75,107 +71,105 @@ Sergey: So then… tell me. How can Sergey help?
 			Sergey: HAVEMORE doctors saved me, da. But their insurance only works if I am still employee.
 			Sergey: If I quit now… bills will finish me faster than heart ever tried.
 			
-			do actor_change("Sergey", "eyes_closed")
+			do show_cg("sergey_eyes_closed")
 			He gives a small shrug, resigned but not bitter.
 			
-			do actor_change("Sergey", "neutral_mouth_open")
+			do show_cg("sergey_neutral_mouth_open")
 			Sergey: So I stay. At least until I can stand without that Nurse Bot helping me up.
 			- I'm so sorry to hear that.
-				do actor_change("Sergey", "base")
+				do show_cg("sergey_neutral")
 				Sergey: Eh. No need for sorry.
 				
-				do actor_change("Sergey", "hand_up")
+				do show_cg("sergey_hand_up")
 				Sergey: Life is… how you say… stubborn. It goes where it wants.
 				
-				do actor_change("Sergey", "neutral_mouth_open")
+				do show_cg("sergey_neutral_mouth_open")
 				Sergey: I just follow for now.
 				Sergey: But enough about Sergey.
 				Sergey: What about you, hm? 
 				
 				if ConversationEventManager.has_heard_fresh_start_line == true:
-					do actor_change("Sergey", "hand_behind_head")
+					do show_cg("sergey_hand_behind_head")
 					Sergey: Oh wait. Just remember. No memories, da? Sorry. 
 					=> hub
 				else:
 					He wants to know about your background
 					- I can't recall anything.
-						do actor_change("Sergey", "frown")
+						do show_cg("sergey_frown")
 						set ConversationEventManager.has_heard_fresh_start_line = true 
 						Sergey: Really? that is not good.
 						Sergey: Did the Nurse tell you anything?
-						- They said I am here because of a drug overdose.
-							do actor_change("Sergey", "frown_look_away")
+						- They don't know the cause yet.
+							do show_cg("sergey_frown_look_away")
 							Sergey: Boze Moy. Sergey is sorry about that.
 							Sergey: Hope you find peace in your new life. 
 							=> hub
 
 - How can I use the MemoryBox ™? [Proceed] [if GameManager.get_current_level_flag("has_spoken_to_aida") and GameManager.get_current_level_flag("has_tried_memory_box") and ConversationEventManager.asked_sergey_duration and ConversationEventManager.asked_sergey_identity]
-	do actor_change("Sergey", "hand_up")
+	do show_cg("sergey_hand_up")
 	Sergey: That machine? Simple. Just put in your TechPass™, turn the machine on, and put your hand on the scanner. Boom, you can access your memories.
 
-	do actor_change("Sergey", "neutral_mouth_open")
+	do show_cg("sergey_neutral_mouth_open")
 	Sergey: I tried once. Helps if you feel lost or..
 
 	do show_cg("sergey_closeup_lookaway_sad")
 	Sergey: ..Lonely.
 
-	do hide_cg()
 	#He pauses, then shakes his head.
-	do actor_change("Sergey", "hand_behind_head")
+	do show_cg("sergey_hand_behind_head")
 	Sergey: But I do not look backward anymore. Only forward.
 	#It's a lie, but he wants to believe it.
 	#What do you want to say to Sergey?
 	# change line above, there's only one option to say below
 
 	- What's a TechPass™?
-		do actor_change("Sergey", "hand_up")
+		do GameManager.set_current_level_flag("learned_techpass_from_sergey", true)
+		do show_cg("sergey_hand_up")
 		Sergey: Hah. You must have hit head [i]very[/i] hard. Everyone has TechPass™.
 		do show_cg("sergey_techpass_inhand")
 		Sergey: See here.
 		Sergey: It is… how to say… your key to the world. Without it, you cannot use public tech.
 		Sergey: No terminals, no dispensers, no doors that scan ID.
-		do hide_cg()
 
-		do actor_change("Sergey", "neutral_mouth_open")
+		do show_cg("sergey_neutral_mouth_open")
 		Sergey: Before this, HAVEMORE tried to push something else… neural implant.
 		#He lowers his voice just a touch.
 
-		do actor_change("Sergey", "hand_behind_head")
+		do show_cg("sergey_hand_behind_head")
 		Sergey: Government said no. Did not pass safety trials, I think.
 		Sergey: Only people on inside really know why.
 
-		do actor_change("Sergey", "hand_up")
+		do show_cg("sergey_hand_up")
 		Sergey: So now we use TechPass™.
 		Sergey: Small card, but big headache.
 		Sergey: Lose it, and suddenly you are nobody.
 
-		do actor_change("Sergey", "eyes_closed")
+		do show_cg("sergey_eyes_closed")
 		#He shrugs, though there’s a frustrated edge to it.
 
-		do actor_change("Sergey", "neutral_mouth_open")
+		do show_cg("sergey_neutral_mouth_open")
 		Sergey: But rules are rules. Machine will not work for you unless you put your TechPass™ inside. MemoryBox™ is very strict with the permissions.
 		#He looks at you more carefully now.
 
-		do actor_change("Sergey", "frown")
+		do show_cg("sergey_frown")
 		Sergey: You really do not remember having one?
 
-		do actor_change("Sergey", "frown_look_away")
+		do show_cg("sergey_frown_look_away")
 		Sergey: …That is not good.
 		~ techpass_hub
 		#What do you want to say to Sergey?
 		
 		#again, change line above. I can't have this when I am only providing a singular dialogue option.
 		- Is there any way to get a new one?
-			do actor_change("Sergey", "hand_up")
+			do show_cg("sergey_hand_up")
 			Sergey: Maybe. But replacement is slow. HAVEMORE will send a representative to verify your address.
 			if ConversationEventManager.has_heard_fresh_start_line == true
-				do actor_change("Sergey", "frown")
+				do show_cg("sergey_frown")
 				Sergey: Don't think you can do that with your... forgetting condition.
 			else
 				Sergey: So, if you are OK waiting a few weeks, you can open their website and apply.
 				do show_cg("protag_closeup_curious")
 				Little does he know you don't even remember your name, let alone your address.
-				do hide_cg()
 			- Could I… borrow yours? Just for a moment?
 				do show_cg("sergey_closeup_surprised")
 				#Sergey raises both eyebrows.
@@ -207,7 +201,7 @@ Sergey: So then… tell me. How can Sergey help?
 				You’ve known his type before.
 				And while you may not remember much of your past -
 				You remember one thing.
-				do hide_cg()
+
 
 				do show_cg("protag_closeup_domme")
 				You've made kind men and women like him bend before.
@@ -346,7 +340,7 @@ Sergey: So then… tell me. How can Sergey help?
 								Player: Won't you help a girl out?
 								Player: I need you.
 							#sergei looks at us
-							do show_cg("sergey_eyes_only_eye_to_eye")
+							do show_cg("sergey_eyes_only_eye_to_eye_intense")
 							Sergey: You need ..me?
 							# EDIT: This is the ONLY moment he truly gives up.
 							#He exhales, a long, shuddering breath.
@@ -390,54 +384,65 @@ Sergey: So then… tell me. How can Sergey help?
 							#very close, lips to ear
 							do show_cg("sergey_eyes_only_pleasure")
 							You lean forward, your lips inches from his ear.
-							Now is the time. You move your hand higher, aiming for the....but then- 
-							#slide to mcbucket
-							do SoundManager.stop_looping_sfx("heavy_breathing", 0.0)
-							do SoundManager.play_sfx("mcbucket_scream")
-							do show_cg("mcbucket_normal_ree")
-							do shake(1, 10)
-							Old Man: REEEEEEEEEEEEEEEEE~~~~~~~~
-							The patient across the room screams, shattering the moment.
-							do show_cg("sergey_closeup_hand_behind_head")
-							Both you and Sergei flinch and pull back.
-							#Sergey looks at you apologetically.
-							- I'm sorry, I got carried away.
-								Sergey: No, it is okay. Don't apologize. Sergey got carried away too.
-								Sergey: This Old Man has lost it. Can't do nothing in front of him. 
-								~ interrupted_hub
-								do hide_cg()
-								do actor_change("Sergey", "frown")
-								Sergey looks defeated.
-								- Who is that guy?
-									do show_cg("sergey_closeup_lookaway_sad_mouth_open")
-									Sergey: I do not know. The nurse calls him Patient #67.
-									Sergey: I try to make conversation once. But he only screams. Never talks.
-									Sergey: Must be very bad case.
-									- Have you tried asking the Nurse about him?
-										Sergey: The Nurse is an AI. She does not share patient details with other patient.
-										Sergey: I didn't know anything about you until you wake up either. => interrupted_hub
-								- But, I still want to continue!
-									#Good choice. You still need that TechPass™.
-									#You pull out your best puppy face and tell him you want to continue.
-									#He speaks softly and shyly.
-									do show_cg("sergey_eyes_only_looking_away")
-									Sergey: I...I do too.
-									Sergey: It is just..this guy. I cannot do anything in front of him.
-									do show_cg("sergey_closeup_lookaway_sad_mouth_open")
-									Sergey: If only there was anything that could calm him down for a little while..
-									#Sergey continues to look defeated.
-									- Don't worry, I will take care of it [Leave].
-										do show_cg("sergey_closeup_surprised")
-										Sergey: Eh? You will?
-										Sergey: I do not know about that... But I hope you can figure this out.
-										Sergey: I would....really like that.
-										do show_cg("protag_closeup_domme")
-										'And I would really like your TechPass™, sweetheart' is what you want to say.
-										'Me too! Sergey.' is what you end up saying instead.
-										Okay then, comatose girl. Lets get this bread.
-										do GameManager.set_current_level_flag("mcbucket_interruption_happened", true)
-										=> END!
-- Leave [Leave] 
+							Now is the time. You move your hand higher, aiming for the....but then-
+
+							if GameManager.get_current_level_flag("mcbucket_zanopram_used") == false
+								#slide to mcbucket
+								do SoundManager.stop_looping_sfx("heavy_breathing", 0.0)
+								do SoundManager.play_sfx("mcbucket_scream")
+								do show_cg("mcbucket_normal_ree")
+								do shake(1, 10)
+								Old Man: REEEEEEEEEEEEEEEEE~~~~~~~~
+								The patient across the room screams, shattering the moment.
+								do show_cg("sergey_closeup_hand_behind_head")
+								Both you and Sergei flinch and pull back.
+								#Sergey looks at you apologetically.
+								- I'm sorry, I got carried away.
+									Sergey: No, it is okay. Don't apologize. Sergey got carried away too.
+									Sergey: This Old Man has lost it. Can't do nothing in front of him.
+									~ interrupted_hub
+									do show_cg("sergey_frown")
+									Sergey looks defeated.
+									- Who is that guy?
+										do show_cg("sergey_closeup_lookaway_sad_mouth_open")
+										Sergey: I do not know. The nurse calls him Patient #67.
+										Sergey: I try to make conversation once. But he only screams. Never talks.
+										Sergey: Must be very bad case.
+										- Have you tried asking the Nurse about him?
+											Sergey: The Nurse is an AI. She does not share patient details with other patient.
+											Sergey: I didn't know anything about you until you wake up either. => interrupted_hub
+									- But, I still want to continue!
+										#Good choice. You still need that TechPass™.
+										#You pull out your best puppy face and tell him you want to continue.
+										#He speaks softly and shyly.
+										do show_cg("sergey_eyes_only_looking_away")
+										Sergey: I...I do too.
+										Sergey: It is just..this guy. I cannot do anything in front of him.
+										do show_cg("sergey_closeup_lookaway_sad_mouth_open")
+										Sergey: If only there was anything that could calm him down for a little while..
+										#Sergey continues to look defeated.
+										- Don't worry, I will take care of it [Leave].
+											do show_cg("sergey_closeup_surprised")
+											Sergey: Eh? You will?
+											Sergey: I do not know about that... But I hope you can figure this out.
+											Sergey: I would....really like that.
+											do show_cg("protag_closeup_domme")
+											'And I would really like your TechPass™, sweetheart' is what you want to say.
+											'Me too! Sergey.' is what you end up saying instead.
+											Okay then, comatose girl. Lets get this bread.
+											do GameManager.set_current_level_flag("mcbucket_interruption_happened", true)
+											do SoundManager.fade_out_music(3.0)
+											=> END!
+							else
+								if GameManager.get_current_level_flag("mcbucket_interruption_happened") == true:
+									Player: (Thankfully, the Old Man across the room is out cold.)
+									Player: (No interruptions this time.)
+								else:
+									Player: (Thankfully, the Old Man across the room is out cold.)
+									Player: (Good thing I took care of him beforehand. No interruptions.)
+								=> bed_recline_sequence
+
+- Leave [Leave]
 	do SoundManager.fade_out_music(3.0)
 	=> END
 ~ some_other_thing_I_will_include_other_time
@@ -458,13 +463,8 @@ Sergey: All the best, Devushka.
 - Nevermind [Back]
 
 
-~ drugged_branch
-#sergey neutral
-# Set the background
-do change_background("sergey_background", "fade", 0.5)
-
-# Bring Sergey onto the stage
-do actor_show("Sergey", "base", "center")
+~ drugged_branch_resume
+do show_cg("sergey_neutral", "fade", 0.5)
 
 Having put the Old Man to sleep, you return to Sergey.
 He has retreated back into his shell during your absence.
@@ -538,24 +538,31 @@ do show_cg("sergey_shutted_up")
 You shut him up.
 Player: (Mama's here.)
 
+=> bed_recline_sequence
 
+~ bed_recline_sequence
 You run a finger down the glowing haptic strip on the bed frame.
 
 #sound effect -zhooom * vzzzzzt*
-#maybe: show his sprite go down as that happens?
 Sergey: Wait, what are you—
 do SoundManager.play_music_track("sergey_hj_music", 5.0)
-#bed reclining animation
 *Vzzzzzt*
 The servos engage instantly.
 do show_cg("sergey_flat_and_embarrassed")
 The backrest drops, pulling him down until he lies flat beneath you.
 
-Player: (Well, I've got him where I want him.)
-Player: (Back to where I left off last time...)
-do fade_to_black(2.0)
-You put your hand on his gown and remove it.
+if GameManager.get_current_level_flag("mcbucket_interruption_happened") == true:
+	Player: (Well, I've got him where I want him.)
+	Player: (Back to where I left off last time...)
+else:
+	Player: (Well, I've got him where I want him.)
+	Player: (Let's get this over with.)
 
+do fade_to_black(2.0)
+=> spicy_climax_sequence
+
+~ spicy_climax_sequence
+do SoundManager.stop_looping_sfx("heavy_breathing", 1.0)
 #fade to black / The Reveal
 Two things happen immediately.
 First, you notice that he is... [i]very[/i] happy to see you.
@@ -641,7 +648,7 @@ You know exactly when he is going to break.
 3..
 2..
 ..!
-do show_cg("hj_frame_20", "none")
+do show_cg("hj_climax_image", "none")
 
 # 5. Stop Cinematic (Reveal the new BG)
 # The video fades out, revealing the NEW background we just set.
@@ -757,10 +764,10 @@ Sergey: This is not... payment.
 #He reaches out and clumsily grabs your hand, pressing the warm plastic card into your palm.
 #hand holding image
 
-do actor_change("Sergey", "hand_up")
+do show_cg("sergey_hand_up")
 Sergey: This is... gift. From friend to friend.
 Sergey: Please. I insist.
-do actor_change("Sergey", "frown")
+do show_cg("sergey_frown")
 Sergey: If you do not take it, I will feel... bad. Like I took advantage of you.
 
 #protag neutral smile
@@ -776,6 +783,10 @@ Sergey: Of course Devushka, I've got no where to go.
 
 Well, guess it's time to finally get to it, huh?
 
-- Leave
+- Leave [Leave]
+	do SoundManager.fade_out_music(3.0)
+	=> END
 
 ~ END
+
+
