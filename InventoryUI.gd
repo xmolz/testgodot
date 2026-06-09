@@ -29,6 +29,23 @@ func _ready():
 	if inventory_grid_container:
 		inventory_grid_container.columns = 3 # Ensure 3 columns for 3x2 layout
 
+	# Enforce horizontal anchors to prevent overlapping
+	$InventoryGridPanel.anchor_left = 0.46
+	$InventoryGridPanel.anchor_right = 0.76
+
+	if OS.has_feature("mobile"):
+		$InventoryGridPanel.anchor_top = 0.75
+
+		$InventoryGridPanel/TabPanel.anchor_left = 1.0
+		$InventoryGridPanel/TabPanel.anchor_right = 1.0
+		$InventoryGridPanel/TabPanel.offset_left = -220
+		$InventoryGridPanel/TabPanel.offset_right = -15
+		$InventoryGridPanel/TabPanel.offset_top = -50
+
+		$InventoryGridPanel/TabPanel/InventoryLabel.add_theme_font_size_override("font_size", 28)
+		if up_button: up_button.add_theme_font_size_override("font_size", 24)
+		if down_button: down_button.add_theme_font_size_override("font_size", 24)
+
 	# --- Initialize Hover Label ---
 	if item_name_hover_label:
 		item_name_hover_label.visible = false
@@ -43,12 +60,16 @@ func _ready():
 	for i in range(ITEMS_PER_PAGE):
 		var slot_button = Button.new()
 		slot_button.name = "InventorySlotButton_" + str(i)
-		slot_button.custom_minimum_size = Vector2(60, 60) # Adjusted for label space
+		if OS.has_feature("mobile"):
+			slot_button.custom_minimum_size = Vector2(0, 0)
+			slot_button.add_theme_font_size_override("font_size", 26)
+		else:
+			slot_button.custom_minimum_size = Vector2(60, 60)
 		slot_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		slot_button.size_flags_vertical = Control.SIZE_EXPAND_FILL
-		slot_button.disabled = true # Start disabled
-		slot_button.focus_mode = Control.FOCUS_NONE # Prevent keyboard focus unless desired
-		slot_button.clip_text = true # Might be useful if text ever overflows
+		slot_button.disabled = true
+		slot_button.focus_mode = Control.FOCUS_NONE
+		slot_button.clip_text = true
 
 		# Add a TextureRect inside the button for the icon
 		var icon_rect = TextureRect.new()
@@ -59,42 +80,6 @@ func _ready():
 		icon_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		slot_button.add_child(icon_rect)
 
-		# Add "Equipped" Indicator Label to each slot
-		var equipped_label = Label.new()
-		equipped_label.name = EQUIPPED_INDICATOR_NODE_NAME
-		equipped_label.text = "Selected" 
-		equipped_label.visible = false # Initially hidden
-		equipped_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		equipped_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		equipped_label.autowrap_mode = TextServer.AUTOWRAP_WORD
-		equipped_label.clip_text = true
-
-		var label_stylebox = StyleBoxFlat.new()
-		label_stylebox.bg_color = Color(0.0, 0.0, 0.0, 0.85) # Dark transparent background
-		label_stylebox.border_width_left = 1
-		label_stylebox.border_width_right = 1
-		label_stylebox.border_width_top = 1
-		label_stylebox.border_width_bottom = 1
-		label_stylebox.border_color = Color(0.2, 0.85, 1.0, 1.0) # Flashy Cyan border
-		label_stylebox.set_content_margin_all(1) 
-		label_stylebox.corner_radius_top_left = 3
-		label_stylebox.corner_radius_bottom_right = 3
-		equipped_label.add_theme_stylebox_override("normal", label_stylebox)
-		equipped_label.add_theme_color_override("font_color", Color(0.2, 0.85, 1.0, 1.0)) # Cyan Text
-		equipped_label.add_theme_font_size_override("font_size", 12)
-
-		# Positioning the "Equipped" label at the top right of the button.
-		equipped_label.set_anchor(SIDE_LEFT, 0.55)   # Start from 55% from the left
-		equipped_label.set_anchor(SIDE_TOP, 0.05)    # Start 5% from the top
-		equipped_label.set_anchor(SIDE_RIGHT, 0.95)  # End at 95% from the left
-		equipped_label.set_anchor(SIDE_BOTTOM, 0.30) # End at 30% from the top
-		equipped_label.offset_left = 0
-		equipped_label.offset_top = 0
-		equipped_label.offset_right = 0
-		equipped_label.offset_bottom = 0
-
-		slot_button.add_child(equipped_label)
-
 		all_inventory_slots.append(slot_button)
 		inventory_grid_container.add_child(slot_button)
 
@@ -103,6 +88,8 @@ func _ready():
 		GameManager.inventory_updated.connect(_on_game_manager_inventory_updated)
 		GameManager.selected_inventory_item_changed.connect(_on_game_manager_selected_item_changed)
 		GameManager.interaction_complete.connect(_on_interaction_complete)
+		GameManager.verb_changed.connect(_on_game_manager_verb_changed)
+		GameManager.verb_lock_changed.connect(_on_game_manager_verb_lock_changed)
 
 		if GameManager.has_method("get_player_inventory"):
 			_on_game_manager_inventory_updated(GameManager.get_player_inventory())
@@ -228,6 +215,10 @@ func _on_inventory_slot_pressed(item_data_pressed: ItemData):
 
 
 func _on_slot_mouse_entered(item_data_hovered: ItemData, _slot_button_node: Button):
+	# Touchscreens do not have a persistent cursor, so hover labels get stuck when tapped.
+	if OS.has_feature("mobile"):
+		return
+
 	if item_name_hover_label and item_data_hovered:
 		item_name_hover_label.text = item_data_hovered.display_name
 		item_name_hover_label.reset_size() # <--- Forces the box to shrink to the text size
@@ -248,34 +239,57 @@ func _on_game_manager_selected_item_changed(selected_item_data: ItemData):
 func _on_interaction_complete():
 	if item_name_hover_label:
 		item_name_hover_label.visible = false
+	if GameManager:
+		_update_slot_selected_visual_state(GameManager.current_selected_item_data)
 
+
+func _on_game_manager_verb_changed(_new_verb_id: String):
+	if GameManager: _update_slot_selected_visual_state(GameManager.current_selected_item_data)
+
+func _on_game_manager_verb_lock_changed(_is_active: bool):
+	if GameManager: _update_slot_selected_visual_state(GameManager.current_selected_item_data)
 
 func _update_slot_selected_visual_state(selected_item_data: ItemData):
+	var is_item_verb_active = GameManager and (GameManager.current_verb_id == "use" or GameManager.current_verb_id == "give") and GameManager.is_verb_lock_active
+
 	for slot_button in all_inventory_slots:
 		if not is_instance_valid(slot_button): continue
 
 		var slot_item_data = null
 		if slot_button.has_meta("item_data"):
 			slot_item_data = slot_button.get_meta("item_data")
-		var equipped_indicator: Label = slot_button.get_node_or_null(EQUIPPED_INDICATOR_NODE_NAME)
 
 		var is_this_slot_selected = false
-		if slot_item_data and selected_item_data: 
+		if slot_item_data and selected_item_data:
 			if slot_item_data.item_id == selected_item_data.item_id:
 				is_this_slot_selected = true
 
-		# Update modulation (highlight)
-		if is_this_slot_selected:
-			slot_button.modulate = Color(0.2, 0.85, 1.0, 1.0) # Flashy Cyan
-		else:
-			slot_button.modulate = Color(1.0, 1.0, 1.0, 1.0) # Default color
+		slot_button.modulate = Color.WHITE
 
-		# Update "Selected" indicator visibility
-		if equipped_indicator:
-			equipped_indicator.visible = is_this_slot_selected
-		elif slot_item_data and not equipped_indicator: 
-			print_rich("[color=orange]InventoryUI: '%s' label missing in slot for item '%s'[/color]" % [EQUIPPED_INDICATOR_NODE_NAME, slot_item_data.display_name])
+		var style = slot_button.get_theme_stylebox("normal", "Button").duplicate()
+		if style is StyleBoxFlat:
+			if is_this_slot_selected:
+				style.border_color = Color(0.2, 0.85, 1.0, 1.0)
+				style.border_width_left = 4
+				style.border_width_top = 4
+				style.border_width_right = 4
+				style.border_width_bottom = 4
+			else:
+				style.border_color = Color(0.6, 0.6, 0.6, 0.8)
+				style.border_width_left = 2
+				style.border_width_top = 2
+				style.border_width_right = 2
+				style.border_width_bottom = 2
 
+			if is_item_verb_active and slot_item_data != null and not slot_button.disabled:
+				style.bg_color = Color(0.0, 0.35, 0.45, 0.8)
+			else:
+				style.bg_color = Color(0.15, 0.15, 0.15, 0.6)
+
+		slot_button.add_theme_stylebox_override("normal", style)
+		slot_button.add_theme_stylebox_override("hover", style)
+		slot_button.add_theme_stylebox_override("focus", style)
+		slot_button.add_theme_stylebox_override("pressed", style)
 
 # --- Pagination Logic ---
 func _on_up_button_pressed():

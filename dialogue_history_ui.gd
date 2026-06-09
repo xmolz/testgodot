@@ -5,30 +5,35 @@ extends CanvasLayer
 @onready var close_button: Button = $ColorRect/MarginContainer/VBoxContainer/Header/CloseButton
 @onready var title_label: Label = $ColorRect/MarginContainer/VBoxContainer/Header/Title
 
-const PLAYER_NAMES = ["Player", "Fiona", "???"]
+const PLAYER_NAMES = ["Player"]
 var custom_font = preload("res://Fonts/VarelaRound-Regular.ttf")
 
 var character_colors: Dictionary = {
 	"AIda": Color("#20B2AA"),
 	"Sergey": Color("#DAA520"),
-	"McBucket": Color("#6B8E23"),
+	"McBucket": Color("#FF4500"),
+	"Old Man": Color("#FF4500"),
+	"Old Man McBucket": Color("#FF4500"),
+	"Layla": Color("#FF8299"),
+	"Lewgend": Color("#708090"),
 	"Nathan": Color("#FF69B4"),
-	"Dread": Color("#4B0082"),
+	"Dread": Color("#FF00FF"),
+	"Hope": Color("#FFC8E3"),
 	"The... Toilet?": Color("#DC143C"),
-	"Player": Color("#FFD65C"),
-	"Fiona": Color("#FFD65C"),
-	"???": Color("#FFD65C")
+	"Player": Color("#FFD65C")
 }
 
 var character_portraits: Dictionary = {
 	"AIda": preload("res://Sprites/dialogue sprites/aida_dialogue_sprite.PNG"),
 	"Sergey": preload("res://Sprites/dialogue sprites/sergey_dialogue_sprite.png"),
-	"McBucket": preload("res://mcbucket.png"),
+	"McBucket": preload("res://Sprites/dialogue sprites/mcbucket_dialogue_sprite.PNG"),
+	"Old Man": preload("res://Sprites/dialogue sprites/mcbucket_dialogue_sprite.PNG"),
+	"Old Man McBucket": preload("res://Sprites/dialogue sprites/mcbucket_dialogue_sprite.PNG"),
+	"Layla": preload("res://Sprites/dialogue sprites/layla_dialogue_sprite.png"),
+	"Lewgend": preload("res://Sprites/dialogue sprites/lewgend_dialogue_sprite.png"),
 	"Nathan": preload("res://icon.svg"),
 	"The... Toilet?": preload("res://Sprites/dialogue sprites/toilet_dialogue_sprite.png"),
-	"Player": preload("res://Sprites/dialogue sprites/protag_dialogue_sprite.png"),
-	"Fiona": preload("res://Sprites/dialogue sprites/protag_dialogue_sprite.png"),
-	"???": preload("res://Sprites/dialogue sprites/protag_dialogue_sprite.png")
+	"Player": preload("res://Sprites/dialogue sprites/protag_dialogue_sprite.png")
 }
 
 func _ready():
@@ -39,14 +44,14 @@ func _ready():
 
 	# --- UI POLISH: Title Label ---
 	title_label.add_theme_font_override("font", custom_font)
-	title_label.add_theme_font_size_override("font_size", 36)
+	title_label.add_theme_font_size_override("font_size", 54 if OS.has_feature("mobile") else 36)
 	title_label.add_theme_color_override("font_color", Color(0.2, 0.85, 1.0, 1.0)) # Cyan accent
 
 	# --- UI POLISH: Close Button ---
 	close_button.text = "Close"
 	close_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	close_button.add_theme_font_override("font", custom_font)
-	close_button.add_theme_font_size_override("font_size", 24)
+	close_button.add_theme_font_size_override("font_size", 40 if OS.has_feature("mobile") else 24)
 
 	# Remove the "flat" property if it was set in the inspector so our styleboxes work
 	close_button.flat = false
@@ -57,10 +62,10 @@ func _ready():
 	normal_style.corner_radius_top_right = 6
 	normal_style.corner_radius_bottom_left = 6
 	normal_style.corner_radius_bottom_right = 6
-	normal_style.content_margin_left = 25
-	normal_style.content_margin_right = 25
-	normal_style.content_margin_top = 10
-	normal_style.content_margin_bottom = 10
+	normal_style.content_margin_left = 40 if OS.has_feature("mobile") else 25
+	normal_style.content_margin_right = 40 if OS.has_feature("mobile") else 25
+	normal_style.content_margin_top = 25 if OS.has_feature("mobile") else 10
+	normal_style.content_margin_bottom = 25 if OS.has_feature("mobile") else 10
 	normal_style.border_width_left = 2
 	normal_style.border_width_top = 2
 	normal_style.border_width_right = 2
@@ -81,10 +86,11 @@ func _ready():
 	close_button.add_theme_color_override("font_pressed_color", Color.WHITE)
 	# ------------------------------
 
-	$ColorRect.gui_input.connect(func(event):
-		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
-			_close_log()
-	)
+	if not OS.has_feature("mobile"):
+		$ColorRect.gui_input.connect(func(event):
+			if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
+				_close_log()
+		)
 
 	# Wait one frame for the VBoxContainer to calculate its size, then scroll to bottom
 	await get_tree().process_frame
@@ -110,11 +116,12 @@ func _populate_log():
 
 	for entry in GameManager.dialogue_history:
 		var align_right = false
-		var char_name = entry.get("character", "")
+		var lookup_name = entry.get("lookup_name", "")
+		var display_name = entry.get("display_name", "")
 
 		# Determine if this is a continuation of the same speaker
-		var is_continuation = (char_name == previous_character and char_name != "")
-		previous_character = char_name
+		var is_continuation = (lookup_name == previous_character and lookup_name != "")
+		previous_character = lookup_name
 
 		# --- ACTION LOGGING LOGIC (FIXED) ---
 		if entry["type"] == "action":
@@ -123,7 +130,7 @@ func _populate_log():
 			action_label.fit_content = true
 			action_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			action_label.add_theme_font_override("normal_font", custom_font)
-			action_label.add_theme_font_size_override("normal_font_size", 20)
+			action_label.add_theme_font_size_override("normal_font_size", 32 if OS.has_feature("mobile") else 20)
 
 			var v = entry["verb"]
 			var o = entry["object"]
@@ -149,7 +156,7 @@ func _populate_log():
 			continue
 		# -----------------------------
 
-		if char_name in PLAYER_NAMES:
+		if lookup_name in PLAYER_NAMES:
 			align_right = true
 
 		var row_box = HBoxContainer.new()
@@ -157,25 +164,24 @@ func _populate_log():
 		row_box.add_theme_constant_override("separation", 20)
 
 		var portrait = TextureRect.new()
-		portrait.custom_minimum_size = Vector2(80, 80)
+		portrait.custom_minimum_size = Vector2(130, 130) if OS.has_feature("mobile") else Vector2(80, 80)
 		portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 
-		if not is_continuation and character_portraits.has(char_name):
-			portrait.texture = character_portraits[char_name]
+		if not is_continuation and character_portraits.has(lookup_name):
+			portrait.texture = character_portraits[lookup_name]
 
 		var text_vbox = VBoxContainer.new()
-		# Allow the VBox to take up the entire screen width so text never squishes
 		text_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 
-		if not is_continuation and char_name != "":
+		if not is_continuation and display_name != "":
 			var name_label = Label.new()
-			name_label.text = char_name
+			name_label.text = display_name
 			name_label.add_theme_font_override("font", custom_font)
-			name_label.add_theme_font_size_override("font_size", 24)
+			name_label.add_theme_font_size_override("font_size", 38 if OS.has_feature("mobile") else 24)
 
-			if character_colors.has(char_name):
-				name_label.add_theme_color_override("font_color", character_colors[char_name])
+			if character_colors.has(lookup_name):
+				name_label.add_theme_color_override("font_color", character_colors[lookup_name])
 			else:
 				name_label.add_theme_color_override("font_color", Color(0.8, 0.8, 0.8))
 
@@ -190,7 +196,7 @@ func _populate_log():
 			text_label.fit_content = true
 			text_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			text_label.add_theme_font_override("normal_font", custom_font)
-			text_label.add_theme_font_size_override("normal_font_size", 28)
+			text_label.add_theme_font_size_override("normal_font_size", 42 if OS.has_feature("mobile") else 28)
 			text_label.add_theme_color_override("default_color", Color(0.9, 0.9, 0.9))
 
 			if align_right:
@@ -211,7 +217,7 @@ func _populate_log():
 				choice_label.fit_content = true
 				choice_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 				choice_label.add_theme_font_override("normal_font", custom_font)
-				choice_label.add_theme_font_size_override("normal_font_size", 26)
+				choice_label.add_theme_font_size_override("normal_font_size", 38 if OS.has_feature("mobile") else 26)
 
 				if i == selected_index:
 					choice_label.text = "[right][color=#33d9ff]> " + clean_text + "[/color][/right]"

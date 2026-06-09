@@ -13,6 +13,7 @@ var verb_buttons_array: Array[Button] = []
 var current_verb_ids: Array[String] = []
 # A dictionary to quickly find a button by its verb_id for visual updates.
 var active_verb_buttons: Dictionary = {} # Key: verb_id (String), Value: Button node
+var think_pulse_tween: Tween
 
 
 # --- GODOT BUILT-IN FUNCTIONS ---
@@ -43,6 +44,7 @@ func _ready():
 	GameManager.verb_changed.connect(_on_game_manager_verb_changed)
 	GameManager.sentence_line_updated.connect(_on_game_manager_sentence_line_updated)
 	GameManager.interaction_complete.connect(_on_interaction_complete)
+	GameManager.new_hint_available.connect(_on_new_hint_available)
 
 	action_bubble_label.visible = false
 	# Initially update the buttons to their default state
@@ -80,6 +82,9 @@ func _on_available_verbs_changed(available_verb_data_array: Array[VerbData]):
 			current_verb_ids[i] = ""
 
 	_update_button_selected_visual_state(GameManager.current_verb_id)
+
+	if GameManager and GameManager.has_method("has_unread_hint"):
+		_on_new_hint_available(GameManager.has_unread_hint())
 
 
 func _on_verb_button_pressed(button_index: int):
@@ -122,4 +127,29 @@ func _update_button_selected_visual_state(selected_verb_id: String):
 	for verb_id in active_verb_buttons:
 		var button_node: Button = active_verb_buttons[verb_id]
 		if is_instance_valid(button_node):
-			button_node.modulate = Color.SKY_BLUE if verb_id == selected_verb_id else Color.WHITE
+			if verb_id == "think" and think_pulse_tween and think_pulse_tween.is_valid():
+				print_rich("[color=pink]--- DEBUG UI: Bypassing visual reset for 'think' because tween is running. ---[/color]")
+				continue
+			button_node.modulate = Color(0.2, 0.85, 1.0, 1.0) if verb_id == selected_verb_id else Color.WHITE
+
+
+func _on_new_hint_available(is_available: bool):
+	print_rich("[color=pink]--- DEBUG UI: Received new_hint_available(%s) ---[/color]" % str(is_available))
+	if not active_verb_buttons.has("think"):
+		print_rich("[color=red]--- DEBUG UI ERROR: 'think' verb not found in active_verb_buttons! Keys: %s ---[/color]" % str(active_verb_buttons.keys()))
+		return
+
+	var btn = active_verb_buttons["think"]
+	print_rich("[color=pink]--- DEBUG UI: Button found. Applying glow... ---[/color]")
+
+	if is_available and GameManager and GameManager.assisted_mode:
+		if think_pulse_tween: think_pulse_tween.kill()
+		think_pulse_tween = create_tween().set_loops()
+		think_pulse_tween.tween_property(btn, "modulate", Color(1.0, 1.0, 0.0, 1.0), 0.6).set_trans(Tween.TRANS_SINE)
+		think_pulse_tween.tween_property(btn, "modulate", Color.WHITE, 0.6).set_trans(Tween.TRANS_SINE)
+	else:
+		if think_pulse_tween: think_pulse_tween.kill()
+		if GameManager.current_verb_id == "think":
+			btn.modulate = Color(0.2, 0.85, 1.0, 1.0)
+		else:
+			btn.modulate = Color.WHITE

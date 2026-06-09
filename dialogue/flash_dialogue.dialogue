@@ -1,0 +1,64 @@
+~ default_post
+Player: I used FLASH!
+Player: ...It wasn't very effective.
+=> END
+
+# --- EXAMPLES OF HOW TO USE THIS FILE ---
+
+~ mcbucket_pre
+
+if GameManager.get_current_level_flag("mcbucket_cannathink_used"):
+	Player: Flash? This Old stoner?
+	Player: Hmm. Why not. Let's see how he reacts.
+	=> END
+
+else:
+	Player: (Flash? This old fossil?)
+	Player: (Hmm. Why not. Might be a cool experiment.)
+=> END
+
+~ mcbucket_post
+
+if GameManager.get_current_level_flag("mcbucket_zanopram_used"):
+	Player: Yeah... don't know what I was expecting to happen.
+	Player: Dangling a carrot in front of a sleeping rabbit like that.
+	=> END
+elif GameManager.get_current_level_flag("mcbucket_invigirol_used"):
+	=> default_post
+elif GameManager.get_current_level_flag("mcbucket_cannathink_used"):
+	Old Man: Aphrodite? Ye almighty Aphrodite?
+	Old Man: Ye bless me with yer presence?
+	Player: That's... flattering.
+	=> END
+else:
+	Player: (Wait... Something's happening to him.)
+
+# This command reaches into the main scene and forces his state to 2 (INVIGIROL/Hyper)
+do GameManager.main_game_scene_instance.get_node("McBucket_Path/McBucket").change_state(2)
+
+=> END
+
+~ AIda_post
+AIda: Oh wow, Patient #122! Your mammary tissue health appears statistically outstanding!
+AIda: Would you like a full clinical breast examination? I can perform a thorough scan and palpation on the spot!
+AIda: Havemore Inc provides tests at [i]very[/i] competitive rates. The charge will simply be added to your current tab.
+Player: Nah, I'm good.
+Player: (...Why did I do that?)
+=> END
+
+~ AIda_pre
+if GameManager.get_current_level_flag("has_spoken_to_aida") == false:
+	Player: (Umm... I think it'll be better to try talking to her first.)
+	do GameManager.set_game_flag("abort_flash", true)
+=> END
+
+~ sergey_pre
+if GameManager.has_item("techpass") == false:
+	Player: (For some reason, I don't think it will be a good idea to flash him just yet.)
+	do GameManager.set_game_flag("abort_flash", true)
+=> END
+
+~ sergey_post
+Sergey smiles shyly.
+Player: (Got 'em.)
+=> END

@@ -26,6 +26,7 @@ var _shake_rng := RandomNumberGenerator.new()
 var _is_persistent_shake: bool = false
 var _ignore_next_got_dialogue_signal: bool = false
 var is_intro_sequence: bool = false
+var _camera_offset: Vector2 = Vector2.ZERO
 
 @onready var actor_stage: Control = $ActorStage
 @onready var darken_backdrop: ColorRect = $DarkenBackdrop
@@ -41,6 +42,7 @@ var is_intro_sequence: bool = false
 var _intro_silhouette: TextureRect = null
 var _spawned_entities: Dictionary = {}
 var is_cinematic_lock_active: bool = false
+var patreon_btn: Button = null
 var _mental_image_tween: Tween
 
 # --- PREDICTIVE PRELOADER ---
@@ -73,7 +75,7 @@ func _ready():
 		var custom_font = preload("res://Fonts/VarelaRound-Regular.ttf")
 		continue_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		continue_button.add_theme_font_override("font", custom_font)
-		continue_button.add_theme_font_size_override("font_size", 24)
+		continue_button.add_theme_font_size_override("font_size", 46 if OS.has_feature("mobile") else 32)
 
 		var btn_normal = StyleBoxFlat.new()
 		btn_normal.bg_color = Color(0.15, 0.15, 0.15, 0.85)
@@ -81,10 +83,24 @@ func _ready():
 		btn_normal.corner_radius_top_right = 6
 		btn_normal.corner_radius_bottom_left = 6
 		btn_normal.corner_radius_bottom_right = 6
-		btn_normal.content_margin_left = 25
-		btn_normal.content_margin_right = 25
-		btn_normal.content_margin_top = 10
-		btn_normal.content_margin_bottom = 10
+		btn_normal.content_margin_left = 50 if OS.has_feature("mobile") else 35
+		btn_normal.content_margin_right = 50 if OS.has_feature("mobile") else 35
+		btn_normal.content_margin_top = 25 if OS.has_feature("mobile") else 15
+		btn_normal.content_margin_bottom = 25 if OS.has_feature("mobile") else 15
+
+		continue_button.reset_size()
+
+		# Anchor to Top-Left so it never covers the center scene or overflows
+		continue_button.anchor_left = 0.0
+		continue_button.anchor_right = 0.0
+		continue_button.anchor_top = 0.0
+		continue_button.anchor_bottom = 0.0
+		continue_button.grow_horizontal = Control.GROW_DIRECTION_END
+		continue_button.grow_vertical = Control.GROW_DIRECTION_END
+
+		# Add safe padding from the absolute edges
+		continue_button.offset_left = 50 if OS.has_feature("mobile") else 30
+		continue_button.offset_top = 50 if OS.has_feature("mobile") else 30
 		btn_normal.border_width_left = 2
 		btn_normal.border_width_top = 2
 		btn_normal.border_width_right = 2
@@ -119,12 +135,12 @@ func _process(delta: float):
 			_shake_timer -= delta
 			if _shake_timer <= 0:
 				_is_shaking = false
-				offset = Vector2.ZERO # Reset CanvasLayer offset
+				offset = _camera_offset # Reset CanvasLayer offset
 
 		if _is_shaking:
 			var offset_x = _shake_rng.randf_range(-_shake_strength, _shake_strength)
 			var offset_y = _shake_rng.randf_range(-_shake_strength, _shake_strength)
-			offset = Vector2(offset_x, offset_y) # Shake the entire CanvasLayer
+			offset = _camera_offset + Vector2(offset_x, offset_y) # Shake the entire CanvasLayer
 
 
 func _on_dialogue_ended(_resource: DialogueResource):
@@ -343,16 +359,24 @@ func actor_move(actor_id: String, target_slot_name: String, duration: float = 0.
 		return
 
 	var rect: TextureRect = active_actors[actor_id]
+	var target_base_pos: Vector2
 
-	# Find the new target marker
-	var marker_name = "Slot" + target_slot_name.capitalize()
-	var marker = actor_stage.get_node_or_null(marker_name)
-	if not marker:
-		push_warning("Could not find slot marker: " + marker_name)
-		return
+	# Dynamically handle center-offsets so we don't need hardcoded markers in the scene
+	if target_slot_name.to_lower() == "center_right":
+		target_base_pos = Vector2(1200, 1080)
+	elif target_slot_name.to_lower() == "center_left":
+		target_base_pos = Vector2(720, 1080)
+	else:
+		# Fallback to standard markers for left, right, and center
+		var marker_name = "Slot" + target_slot_name.capitalize()
+		var marker = actor_stage.get_node_or_null(marker_name)
+		if not marker:
+			push_warning("Could not find slot marker: " + marker_name)
+			marker = actor_stage.get_node("SlotCenter")
+		target_base_pos = marker.position
 
-	# Calculate the exact target position (matching the math in actor_enter)
-	var target_pos = marker.position - rect.pivot_offset
+	# Calculate the exact target position
+	var target_pos = target_base_pos - rect.pivot_offset
 
 	# Create a smooth tween to slide them over
 	var tween = create_tween()
@@ -428,6 +452,163 @@ func actor_dash_in(actor_id: String, emotion: String, slot_name: String, scale_m
 	# A shorter duration (0.4s) makes it feel fast and energetic.
 	tween.tween_property(rect, "position:x", target_pos.x, 0.4).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
+func actor_peek_in(actor_id: String, emotion: String, side: String = "right"):
+	var profile = get_profile(actor_id)
+	if not profile: return
+	var tex_path: String = profile.expressions.get(emotion, "")
+	if tex_path.is_empty(): return
+	var tex: Texture2D = await _get_texture_async(tex_path)
+	if not tex: return
+
+	var rect = TextureRect.new()
+	rect.texture = tex
+	var screen_height = float(get_viewport().get_visible_rect().size.y)
+	var tex_size = tex.get_size()
+	var base_scale = screen_height / float(tex_size.y)
+	var final_scale = base_scale * profile.default_scale
+
+	rect.scale = Vector2(final_scale, final_scale)
+	rect.pivot_offset = Vector2(tex_size.x / 2.0, tex_size.y)
+	actor_stage.add_child(rect)
+	active_actors[actor_id] = rect
+
+	var marker_name = "Slot" + side.capitalize()
+	var marker = actor_stage.get_node_or_null(marker_name)
+	if not marker: marker = actor_stage.get_node("SlotCenter")
+
+	var target_pos = marker.position - rect.pivot_offset
+
+	if side.to_lower() == "right":
+		rect.rotation_degrees = -12.0
+		# Shift down by 250 pixels on the Y axis to hide the bottom cutoff
+		rect.position = Vector2(target_pos.x + 800.0, target_pos.y + 250.0)
+		rect.modulate.a = 1.0
+		var tween = create_tween()
+		tween.tween_property(rect, "position:x", target_pos.x + 350.0, 0.6).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	else:
+		rect.rotation_degrees = 12.0
+		# Shift down by 250 pixels on the Y axis to hide the bottom cutoff
+		rect.position = Vector2(target_pos.x - 800.0, target_pos.y + 250.0)
+		rect.modulate.a = 1.0
+		var tween = create_tween()
+		tween.tween_property(rect, "position:x", target_pos.x - 350.0, 0.6).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+
+func actor_enter_from_peek(actor_id: String, target_slot_name: String, duration: float = 0.5):
+	if not active_actors.has(actor_id): return
+	var rect: TextureRect = active_actors[actor_id]
+	var marker_name = "Slot" + target_slot_name.capitalize()
+	var marker = actor_stage.get_node_or_null(marker_name)
+	if not marker: return
+
+	var target_pos = marker.position - rect.pivot_offset
+	var tween = create_tween().set_parallel(true)
+	tween.tween_property(rect, "position", target_pos, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.tween_property(rect, "rotation_degrees", 0.0, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+
+func hide_dialogue_ui():
+	if current_balloon and current_balloon.has_method("set_ui_hidden"):
+		current_balloon.set_ui_hidden(true)
+
+func show_dialogue_ui():
+	if current_balloon and current_balloon.has_method("set_ui_hidden"):
+		current_balloon.set_ui_hidden(false)
+
+var _original_actor_transforms = {}
+
+func actor_focus(actor_id: String, zoom_modifier: float = 2.0, duration: float = 0.01, face_x_ratio: float = 0.5):
+	if not active_actors.has(actor_id): return
+
+	if _original_actor_transforms.is_empty():
+		for id in active_actors:
+			var r = active_actors[id]
+			_original_actor_transforms[id] = {"pos": r.position, "scale": r.scale}
+
+	var rect: TextureRect = active_actors[actor_id]
+	actor_stage.move_child(rect, -1)
+
+	var profile = get_profile(actor_id)
+	var tex_size = rect.texture.get_size()
+	var screen_size = get_viewport().get_visible_rect().size
+
+	var base_scale = screen_size.y / float(tex_size.y)
+	var target_scale_mag = base_scale * profile.default_scale * zoom_modifier
+	var target_scale = Vector2(target_scale_mag, target_scale_mag)
+	if rect.scale.x < 0: target_scale.x = -target_scale.x
+
+	var local_face = Vector2(tex_size.x * face_x_ratio, tex_size.y * 0.2)
+	var screen_focus_point = Vector2(screen_size.x * 0.5, screen_size.y * 0.35)
+	var target_pos = screen_focus_point - rect.pivot_offset - (local_face - rect.pivot_offset) * target_scale
+
+	var tween = create_tween().set_parallel(true)
+	var is_smash_cut = duration <= 0.05
+
+	if is_smash_cut:
+		rect.scale = target_scale
+		rect.position = target_pos
+		rect.modulate = Color.WHITE
+	else:
+		tween.tween_property(rect, "scale", target_scale, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		tween.tween_property(rect, "position", target_pos, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		tween.tween_property(rect, "modulate", Color.WHITE, duration)
+
+	if is_instance_valid(background_layer):
+		tween.tween_property(background_layer, "modulate", Color(0.2, 0.2, 0.2, 1.0), duration)
+
+	for id in active_actors:
+		if id != actor_id:
+			var other_rect = active_actors[id]
+			if _original_actor_transforms.has(id):
+				var orig = _original_actor_transforms[id]
+				var target_other_scale = orig["scale"]
+
+				if sign(other_rect.scale.x) != sign(target_other_scale.x):
+					target_other_scale.x = -target_other_scale.x
+
+				if is_smash_cut:
+					other_rect.scale = target_other_scale
+					other_rect.position = orig["pos"]
+					other_rect.modulate = Color(1.0, 1.0, 1.0, 0.0)
+				else:
+					tween.tween_property(other_rect, "scale", target_other_scale, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+					tween.tween_property(other_rect, "position", orig["pos"], duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+					tween.tween_property(other_rect, "modulate", Color(1.0, 1.0, 1.0, 0.0), duration)
+
+func actor_unfocus_all(duration: float = 0.2):
+	var tween = create_tween().set_parallel(true)
+	var is_smash_cut = duration <= 0.05
+
+	if is_instance_valid(background_layer):
+		tween.tween_property(background_layer, "modulate", Color.WHITE, duration)
+
+	for id in active_actors:
+		var rect: TextureRect = active_actors[id]
+		if _original_actor_transforms.has(id):
+			var orig = _original_actor_transforms[id]
+			var target_scale = orig["scale"]
+			if sign(rect.scale.x) != sign(target_scale.x):
+				target_scale.x = -target_scale.x
+
+			if is_smash_cut:
+				rect.scale = target_scale
+				rect.position = orig["pos"]
+				rect.modulate = Color.WHITE
+			else:
+				tween.tween_property(rect, "scale", target_scale, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+				tween.tween_property(rect, "position", orig["pos"], duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+				tween.tween_property(rect, "modulate", Color.WHITE, duration)
+		elif is_smash_cut:
+			rect.modulate = Color.WHITE
+
+	if is_smash_cut:
+		_original_actor_transforms.clear()
+	else:
+		tween.chain().tween_callback(func(): _original_actor_transforms.clear())
+
+func set_backdrop_darkness(alpha: float = 0.6, duration: float = 0.5):
+	if not is_instance_valid(darken_backdrop): return
+	var tween = create_tween()
+	tween.tween_property(darken_backdrop, "color:a", alpha, duration)
+
 
 func change_background(bg_name: String, transition: String = "fade", duration: float = 0.5):
 	if bg_name.is_empty():
@@ -485,8 +666,8 @@ func change_background(bg_name: String, transition: String = "fade", duration: f
 		background_layer.position.x = new_start_x
 
 		var tween = create_tween().set_parallel(true)
-		tween.tween_property(background_layer, "position:x", 0.0, duration).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
-		tween.tween_property(ghost, "position:x", old_end_x, duration).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
+		tween.tween_property(background_layer, "position:x", 0.0, duration).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
+		tween.tween_property(ghost, "position:x", old_end_x, duration).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
 
 		tween.chain().tween_callback(ghost.queue_free)
 		tween.tween_callback(func():
@@ -581,29 +762,13 @@ func show_cg(cg_name: String, transition: String = "fade", duration: float = 0.5
 		return
 
 	# --- SLIDE TRANSITIONS ---
-	if transition in ["slide_left", "slide_right"] and cg_layer.texture != null:
+	if transition in ["slide_left", "slide_right"]:
 		if SoundManager and SoundManager.has_method("play_sfx"):
 			SoundManager.play_sfx("swish", 1.0, -5.0)
 
-		var ghost = TextureRect.new()
-		ghost.texture = cg_layer.texture
-		ghost.expand_mode = cg_layer.expand_mode
-		ghost.stretch_mode = cg_layer.stretch_mode
-		ghost.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
-		ghost.size = get_viewport().get_visible_rect().size
-		ghost.position = Vector2.ZERO
-		ghost.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		var slide_tween = create_tween().set_parallel(true)
+		var screen_width = get_viewport().get_visible_rect().size.x
 
-		cg_layer.get_parent().add_child(ghost)
-		cg_layer.get_parent().move_child(ghost, cg_layer.get_index())
-
-		cg_layer.texture = new_texture
-		cg_layer.modulate.a = 1.0
-
-		cg_layer.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
-		cg_layer.size = get_viewport().get_visible_rect().size
-
-		var screen_width = cg_layer.size.x
 		var new_start_x = 0.0
 		var old_end_x = 0.0
 
@@ -614,14 +779,32 @@ func show_cg(cg_name: String, transition: String = "fade", duration: float = 0.5
 			new_start_x = screen_width
 			old_end_x = -screen_width
 
+		# Only create a ghost if there is an existing texture to slide out
+		if cg_layer.texture != null:
+			var ghost = TextureRect.new()
+			ghost.texture = cg_layer.texture
+			ghost.expand_mode = cg_layer.expand_mode
+			ghost.stretch_mode = cg_layer.stretch_mode
+			ghost.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
+			ghost.size = get_viewport().get_visible_rect().size
+			ghost.position = Vector2.ZERO
+			ghost.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+			cg_layer.get_parent().add_child(ghost)
+			cg_layer.get_parent().move_child(ghost, cg_layer.get_index())
+
+			slide_tween.tween_property(ghost, "position:x", old_end_x, duration).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
+			slide_tween.chain().tween_callback(ghost.queue_free)
+
+		# Setup New Sprite
+		cg_layer.texture = new_texture
+		cg_layer.modulate.a = 1.0
+		cg_layer.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
+		cg_layer.size = get_viewport().get_visible_rect().size
 		cg_layer.position.x = new_start_x
 
-		var tween = create_tween().set_parallel(true)
-		tween.tween_property(cg_layer, "position:x", 0.0, duration).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
-		tween.tween_property(ghost, "position:x", old_end_x, duration).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
-
-		tween.chain().tween_callback(ghost.queue_free)
-		tween.chain().tween_callback(func():
+		slide_tween.tween_property(cg_layer, "position:x", 0.0, duration).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
+		slide_tween.chain().tween_callback(func():
 			if is_instance_valid(cg_layer):
 				cg_layer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		)
@@ -658,7 +841,23 @@ func show_cg(cg_name: String, transition: String = "fade", duration: float = 0.5
 		cg_layer.modulate.a = 1.0
 
 func hide_cg(transition: String = "fade", duration: float = 0.5):
-	if transition == "fade":
+	if transition in ["slide_left", "slide_right"]:
+		var screen_width = get_viewport().get_visible_rect().size.x
+		var target_x = 0.0
+
+		if transition == "slide_left":
+			target_x = -screen_width
+		elif transition == "slide_right":
+			target_x = screen_width
+
+		var tween = create_tween()
+		tween.tween_property(cg_layer, "position:x", target_x, duration).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
+		tween.tween_callback(func():
+			cg_layer.texture = null
+			cg_layer.position = Vector2.ZERO
+			cg_layer.modulate.a = 0.0
+		)
+	elif transition == "fade":
 		var tween = create_tween()
 		tween.tween_property(cg_layer, "modulate:a", 0.0, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 		tween.tween_callback(func(): cg_layer.texture = null)
@@ -934,7 +1133,7 @@ func _extract_paths_from_mutation(mutation: Dictionary, out_paths: Dictionary):
 	var func_name: String = token.function
 
 	match func_name:
-		"actor_enter", "actor_change", "actor_walk_in", "actor_dash_in", "actor_show":
+		"actor_enter", "actor_change", "actor_walk_in", "actor_dash_in", "actor_show", "actor_peek_in":
 			var actor_id: String = _extract_string_arg(token, 0)
 			var emotion: String = _extract_string_arg(token, 1)
 			if not actor_id.is_empty() and not emotion.is_empty():
@@ -1234,3 +1433,179 @@ func reveal_shock_from_black(cg_alias_name: String, shake_power: float = 25.0):
 		var tween = create_tween()
 		tween.tween_property(fade_overlay, "modulate:a", 0.0, 0.2).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 		tween.tween_callback(fade_overlay.hide)
+
+func actor_tackle(attacker_id: String, target_id: String):
+	if not active_actors.has(attacker_id) or not active_actors.has(target_id): return
+
+	var attacker: TextureRect = active_actors[attacker_id]
+	var target: TextureRect = active_actors[target_id]
+	var orig_attacker_pos = attacker.position
+
+	var dir = sign(target.position.x - attacker.position.x)
+	if dir == 0: dir = 1.0
+
+	actor_stage.move_child(attacker, -1) # Bring attacker to front
+
+	var tween = create_tween()
+
+	# 1. ANTICIPATION: Pull back smoothly to wind up the punch
+	tween.tween_property(attacker, "position:x", orig_attacker_pos.x - (dir * 60.0), 0.25)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+
+	# 2. THE STRIKE: Fast lunge, but stop slightly before the target's center to simulate physical contact!
+	var hit_pos = target.position.x - (dir * 80.0)
+	tween.tween_property(attacker, "position:x", hit_pos, 0.1)\
+		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+
+	# 3. THE IMPACT
+	tween.tween_callback(func():
+		shake(0.2, 25.0) # Snappier, heavier screen shake
+		active_actors.erase(target_id)
+
+		var target_fly = create_tween().set_parallel(true)
+
+		# Knockback: Starts explosive, then slows down (EASE_OUT)
+		target_fly.tween_property(target, "position:x", target.position.x + (dir * 800.0), 0.5)\
+			.set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
+
+		# Fall down: Target drops out of frame
+		target_fly.tween_property(target, "position:y", target.position.y + 300.0, 0.5)\
+			.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+
+		# Tilt backward 90 degrees like getting knocked off their feet (instead of spinning)
+		target_fly.tween_property(target, "rotation_degrees", dir * 90.0, 0.5)\
+			.set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
+
+		target_fly.chain().tween_callback(target.queue_free)
+	)
+
+	# 4. FOLLOW-THROUGH & RECOVERY
+	tween.tween_interval(0.3) # Hold the punch pose for a moment
+
+	# Calmly step back to the original spot
+	tween.tween_property(attacker, "position:x", orig_attacker_pos.x, 0.4)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+func show_patreon_button():
+	if is_instance_valid(patreon_btn): return
+
+	var tex = load("res://Icons/patreon_logo.png")
+	if not tex:
+		push_warning("Could not load Patreon logo at res://Icons/patreon_logo.png")
+		return
+
+	# Resize the massive 2048x2048 image down to a clean 96x96 UI icon
+	var img = tex.get_image()
+	if img:
+		img.resize(96, 96, Image.INTERPOLATE_BILINEAR)
+		tex = ImageTexture.create_from_image(img)
+
+	var custom_font = preload("res://Fonts/VarelaRound-Regular.ttf")
+
+	patreon_btn = Button.new()
+	patreon_btn.text = " Support on Patreon"
+	patreon_btn.icon = tex
+	patreon_btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	patreon_btn.add_theme_constant_override("h_separation", 18) # Space between icon and text
+
+	# Style the text
+	patreon_btn.add_theme_font_override("font", custom_font)
+	patreon_btn.add_theme_font_size_override("font_size", 44 if OS.has_feature("mobile") else 36)
+	patreon_btn.add_theme_color_override("font_color", Color(0.9, 0.9, 0.9, 1.0))
+	patreon_btn.add_theme_color_override("font_hover_color", Color.WHITE)
+	patreon_btn.add_theme_color_override("font_pressed_color", Color.WHITE)
+
+	# Build the Theme Boxes
+	var btn_normal = StyleBoxFlat.new()
+	btn_normal.bg_color = Color(0.15, 0.15, 0.15, 0.9)
+	btn_normal.corner_radius_top_left = 12
+	btn_normal.corner_radius_top_right = 12
+	btn_normal.corner_radius_bottom_left = 12
+	btn_normal.corner_radius_bottom_right = 12
+	btn_normal.content_margin_left = 25
+	btn_normal.content_margin_right = 35
+	btn_normal.content_margin_top = 15
+	btn_normal.content_margin_bottom = 15
+	btn_normal.border_width_left = 3
+	btn_normal.border_width_top = 3
+	btn_normal.border_width_right = 3
+	btn_normal.border_width_bottom = 3
+	btn_normal.border_color = Color(1.0, 1.0, 1.0, 0.0)
+
+	var btn_hover = btn_normal.duplicate()
+	btn_hover.bg_color = Color(0.1, 0.25, 0.3, 0.95)
+	btn_hover.border_color = Color(0.2, 0.85, 1.0, 0.9)
+
+	patreon_btn.add_theme_stylebox_override("normal", btn_normal)
+	patreon_btn.add_theme_stylebox_override("hover", btn_hover)
+	patreon_btn.add_theme_stylebox_override("focus", btn_hover)
+	patreon_btn.add_theme_stylebox_override("pressed", btn_hover)
+
+	# Force the button to calculate its size based on the text/margins
+	patreon_btn.reset_size()
+
+	# Hover juice
+	patreon_btn.mouse_entered.connect(func():
+		var t = create_tween()
+		t.tween_property(patreon_btn, "scale", Vector2(1.05, 1.05), 0.15).set_trans(Tween.TRANS_SINE)
+	)
+	patreon_btn.mouse_exited.connect(func():
+		var t = create_tween()
+		t.tween_property(patreon_btn, "scale", Vector2(1.0, 1.0), 0.15).set_trans(Tween.TRANS_SINE)
+	)
+
+	# --- CLICK ACTION ---
+	patreon_btn.pressed.connect(func():
+		if SoundManager and SoundManager.has_method("play_sfx"):
+			SoundManager.play_sfx("ui_click")
+		# UPDATE THIS STRING WITH YOUR ACTUAL PATREON URL!
+		OS.shell_open("https://patreon.com")
+	)
+
+	# --- CRITICAL FIX: Add to the Dialogue Balloon so it sits on Layer 100! ---
+	if is_instance_valid(current_balloon):
+		current_balloon.add_child(patreon_btn)
+	else:
+		$RootContainer.add_child(patreon_btn)
+
+	# Wait 1 frame so Godot can calculate the final UI size before we grab pivot/position
+	await get_tree().process_frame
+
+	# Center the pivot for clean scaling
+	patreon_btn.pivot_offset = patreon_btn.size / 2.0
+
+	# Drop animation logic
+	var screen_size = get_viewport().get_visible_rect().size
+	var target_pos = Vector2(screen_size.x * 0.28 - (patreon_btn.size.x / 2.0), screen_size.y * 0.4 - (patreon_btn.size.y / 2.0))
+	var start_pos = target_pos - Vector2(0, 1000)
+
+	patreon_btn.position = start_pos
+
+	var tween = create_tween()
+	tween.tween_property(patreon_btn, "position", target_pos, 0.8).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
+
+func hide_patreon_button():
+	if is_instance_valid(patreon_btn):
+		var tween = create_tween()
+		tween.tween_property(patreon_btn, "position:y", patreon_btn.position.y + 1000, 0.5).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+		tween.tween_callback(patreon_btn.queue_free)
+
+func center_patreon_button_and_keep_alive():
+	if not is_instance_valid(patreon_btn): return
+
+	var screen_size = get_viewport().get_visible_rect().size
+	# Center horizontally, and push it 65% down the screen
+	var target_pos = Vector2(screen_size.x * 0.5 - (patreon_btn.size.x / 2.0), screen_size.y * 0.65 - (patreon_btn.size.y / 2.0))
+
+	var tween = create_tween()
+	tween.tween_property(patreon_btn, "position", target_pos, 0.6).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+
+	# Rename it so the Memory Box can find it easily later
+	patreon_btn.name = "PersistentPatreonBtn"
+
+	# Reparent the button to the MemoryBoxOverlay so it survives this scene's destruction
+	var memory_box = get_parent()
+	if is_instance_valid(memory_box):
+		patreon_btn.reparent(memory_box, true)
+		# Null our local reference so we don't accidentally manipulate it during cleanup
+		patreon_btn = null

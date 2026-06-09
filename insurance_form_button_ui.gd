@@ -6,6 +6,25 @@ signal form_button_pressed
 @onready var texture_button: TextureButton = $FormPanel/MarginContainer/TextureButton
 
 func _ready():
+	# --- UNIVERSAL LAYOUT (PC & Mobile) ---
+	var form_panel = $FormPanel
+	var tab_panel = $FormPanel/TabPanel
+	var tab_label = $FormPanel/TabPanel/Label
+
+	form_panel.anchor_left = 0.89
+	form_panel.anchor_right = 0.98
+
+	tab_panel.anchor_left = 0.5
+	tab_panel.anchor_right = 0.5
+	tab_panel.offset_left = -60
+	tab_panel.offset_right = 60
+
+	if OS.has_feature("mobile"):
+		form_panel.anchor_top = 0.75
+		tab_panel.offset_top = -50
+		tab_label.add_theme_font_size_override("font_size", 28)
+	# --------------------------------------
+
 	texture_button.pressed.connect(_on_texture_button_pressed)
 	
 	# Add hover effects to make it feel responsive

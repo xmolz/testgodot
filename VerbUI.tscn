@@ -32,7 +32,7 @@ corner_radius_top_right = 10
 process_mode = 3
 script = ExtResource("1_fpe4u")
 
-[node name="ActionBubbleLabel" type="Label" parent="."]
+[node name="ActionBubbleLabel" type="RichTextLabel" parent="."]
 offset_right = 40.0
 offset_bottom = 23.0
 theme = ExtResource("2_5r43t")

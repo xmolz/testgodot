@@ -1,0 +1,65 @@
+~ hint_start
+Player: (Where... where am I?)
+Player: (Is this a hospital?)
+Player: (I should probably talk to that Nurse.)
+=> END
+
+~ hint_use_memory_box
+Player: (The Nurse told me to 'use' the MemoryBox™.)
+Player: (It must be that weird, hourglass-like device in this room.)
+=> END
+
+~ hint_ask_sergey
+Player: (This machine requires a TechPass™. Wonder where I can find one around here...)
+=> END
+
+~ hint_need_distraction
+Player: (The Old Man is a nuisance. I need to find a way to shut him up.)
+=> END
+
+~ hint_clog_toilet_main
+=> hint_need_distraction
+
+~ hint_clog_toilet_bathroom
+=> hint_need_distraction
+
+~ hint_toilet_clogged
+=> hint_need_distraction
+
+~ hint_aida_gone
+=> hint_need_distraction
+
+~ hint_use_zanopram
+=> hint_need_distraction
+
+~ hint_wrong_drugs
+Player: (I've given the other drugs to him, but they haven't put him to sleep yet.)
+Player: (I should put him to sleep with Zzzanopram.)
+Player: (Soon as I'm done playing with him. Hehe.)
+=> END
+
+~ hint_return_to_sergey
+Player: (The Old Man's asleep.)
+Player: (Time to return to Sergey.)
+=> END
+
+~ hint_has_techpass
+Player: (I have the TechPass™.)
+Player: (All I need to do now is use it on that weird machine.)
+=> END
+
+# --- Out of Order / Speedrun Variants ---
+# If the player does things before getting the objective, their
+# overarching goal is still just to figure out the Memory Box / TechPass.
+
+~ hint_toilet_clogged_no_context
+=> hint_ask_sergey
+
+~ hint_aida_gone_no_context
+=> hint_ask_sergey
+
+~ hint_use_zanopram_no_context
+=> hint_ask_sergey
+
+~ hint_wrong_drugs_no_context
+=> hint_ask_sergey

@@ -90,11 +90,13 @@ theme_override_styles/disabled = SubResource("StyleBoxFlat_3w4a0")
 theme_override_styles/normal = ExtResource("1_uocnp")
 text = "  <  "
 
-[node name="ViewportPanel" type="Panel" parent="ChaptersAreaPanel/HBoxContainer"]
+[node name="ViewportPanel" type="ScrollContainer" parent="ChaptersAreaPanel/HBoxContainer"]
 clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxEmpty_uocnp")
+horizontal_scroll_mode = 3
+vertical_scroll_mode = 0
 
 [node name="ChapterListContainer" type="HBoxContainer" parent="ChaptersAreaPanel/HBoxContainer/ViewportPanel"]
 layout_mode = 1

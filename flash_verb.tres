@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="VerbData" format=3 uid="uid://dnikp56n5a5o1"]
+
+[ext_resource type="Script" uid="uid://cn3ln508qp8dm" path="res://VerbData.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+verb_id = "flash"
+display_text = "Flash"

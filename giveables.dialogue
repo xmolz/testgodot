@@ -18,6 +18,8 @@ Player: (What am I thinking?)
 ~ sergey_item_hospital_toilet_paper
 Sergey: Oh. Toilet paper.
 Sergey: Ummm... Thanks?
+do GameManager.remove_item_from_inventory("hospital_toilet_paper")
+do GameManager.show_notification("Toilet paper given to Sergey.")
 Player: (Hmmm. Maybe this wasn't the most thoughtful gift.)
 => END
 
@@ -51,4 +53,12 @@ Player: (What could possibly go wrong?)
 Player: (I don't think I can just shove these cartridges down someone's throat.)
 Player: (There's gotta be a better way to go about this.)
 
+=> END
+
+~ AIda_item_techpass
+Player: (I think she might confiscate this from me if I show it to her...)
+=> END
+
+~ mcbucket_item_techpass
+Player: (Why would I want him to have that?)
 => END

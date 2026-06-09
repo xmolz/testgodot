@@ -35,6 +35,25 @@ layout_mode = 2
 text = "SETTINGS"
 horizontal_alignment = 1
 
+[node name="AssistedModeHBox" type="HBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/AssistedModeHBox"]
+layout_mode = 2
+text = "Assisted Mode"
+
+[node name="Spacer" type="Control" parent="ColorRect/MarginContainer/VBoxContainer/AssistedModeHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AssistedModeToggle" type="Button" parent="ColorRect/MarginContainer/VBoxContainer/AssistedModeHBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 40)
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+text = "OFF"
+
 [node name="MasterHBox" type="HBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
@@ -140,6 +159,35 @@ text = "5"
 layout_mode = 2
 max_value = 10.0
 step = 1.0
+
+[node name="TextScaleMargin" type="MarginContainer" parent="ColorRect/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 40
+
+[node name="TextScaleContainer" type="VBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer/TextScaleMargin"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="TextScaleHBox" type="HBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer/TextScaleMargin/TextScaleContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/TextScaleMargin/TextScaleContainer/TextScaleHBox"]
+layout_mode = 2
+text = "Text Size"
+
+[node name="Spacer" type="Control" parent="ColorRect/MarginContainer/VBoxContainer/TextScaleMargin/TextScaleContainer/TextScaleHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextScaleVal" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/TextScaleMargin/TextScaleContainer/TextScaleHBox"]
+layout_mode = 2
+text = "100%"
+
+[node name="TextScaleSlider" type="HSlider" parent="ColorRect/MarginContainer/VBoxContainer/TextScaleMargin/TextScaleContainer"]
+layout_mode = 2
+min_value = 50.0
+max_value = 300.0
+step = 10.0
 
 [node name="MainSpacer" type="Control" parent="ColorRect/MarginContainer/VBoxContainer"]
 layout_mode = 2

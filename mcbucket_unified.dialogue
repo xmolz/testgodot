@@ -386,7 +386,7 @@ do SoundManager.fade_out_music(3.0)
 do show_cg("mcbucket_invigirol_base", "none", 0.0)
 ~ invigirol_loop
 do shake(-1, 20.0)
-Old Man McBucket: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
+Old Man: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
 - What?
 	=> invigirol_loop
 - Leave [Leave]

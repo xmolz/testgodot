@@ -9,6 +9,7 @@ background_aliases = {
 "aida_hospital_background": "res://Backgrounds/Levels/aida_hospital_background.png"
 }
 cg_aliases = {
+"memory_box": "res://Backgrounds/CGs/memory_box_cg.png",
 "scan_1": "res://Backgrounds/Protagonist/protag_hospital_base_1.png",
 "scan_2": "res://Backgrounds/Protagonist/protag_hospital_base_aida_green_eyes.png",
 "scan_3": "res://Backgrounds/Protagonist/protag_hospital_base_aida_red_eyes_gloves.png"

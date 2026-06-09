@@ -31,6 +31,27 @@ func _ready():
 	next_button.pressed.connect(_on_next_pressed)
 	close_button.pressed.connect(_on_close_pressed)
 
+	# --- MOBILE SCALING FOR JOURNAL ---
+	if OS.has_feature("mobile"):
+		$CenterContainer/LayoutAnchor.custom_minimum_size = Vector2(1400, 800)
+		page_indicator_label.add_theme_font_size_override("font_size", 46)
+
+		close_button.position.y = -120
+		var pagination = $CenterContainer/LayoutAnchor/PaginationContainer
+		pagination.position.y = -120
+
+		prev_button.custom_minimum_size = Vector2(100, 80)
+		var prev_icon = prev_button.get_node("IconRect")
+		prev_icon.offset_left = -24; prev_icon.offset_right = 24
+		prev_icon.offset_top = -24; prev_icon.offset_bottom = 24
+		prev_icon.pivot_offset = Vector2(24, 24)
+
+		next_button.custom_minimum_size = Vector2(100, 80)
+		var next_icon = next_button.get_node("IconRect")
+		next_icon.offset_left = -24; next_icon.offset_right = 24
+		next_icon.offset_top = -24; next_icon.offset_bottom = 24
+		next_icon.pivot_offset = Vector2(24, 24)
+
 	# --- CLOSE BUTTON POLISH ---
 	close_button.text = "Close"
 	close_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -44,10 +65,11 @@ func _ready():
 	btn_normal.corner_radius_top_right = 6
 	btn_normal.corner_radius_bottom_left = 6
 	btn_normal.corner_radius_bottom_right = 6
-	btn_normal.content_margin_left = 25
-	btn_normal.content_margin_right = 25
-	btn_normal.content_margin_top = 10
-	btn_normal.content_margin_bottom = 10
+	btn_normal.content_margin_left = 40 if OS.has_feature("mobile") else 25
+	btn_normal.content_margin_right = 40 if OS.has_feature("mobile") else 25
+	btn_normal.content_margin_top = 25 if OS.has_feature("mobile") else 10
+	btn_normal.content_margin_bottom = 25 if OS.has_feature("mobile") else 10
+	close_button.add_theme_font_size_override("font_size", 40 if OS.has_feature("mobile") else 24)
 	btn_normal.border_width_left = 2
 	btn_normal.border_width_top = 2
 	btn_normal.border_width_right = 2

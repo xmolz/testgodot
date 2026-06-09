@@ -7,12 +7,14 @@ extends Control
 
 @export_group("UI Settings")
 @export var enable_journal_notification: bool = true
+@export var force_assisted_mode: bool = false
 
 # --- Node References ---
 @onready var level_state_manager: LevelStateManager = $LevelStateManager
 @onready var sergey_interactable: Interactable = $Sergei_Path/Sergei/InteractionArea
 @onready var mcbucket_interactable: Interactable = $McBucket_Path/McBucket/InteractionArea
 @onready var memory_box_interactable: Interactable = $MemoryBox
+@onready var level_hint_manager: LevelHintManager = $LevelHintManager
 
 
 func _ready():
@@ -20,6 +22,19 @@ func _ready():
 
 	# We must wait for one frame. This is a crucial step.
 	await get_tree().process_frame
+
+	# --- Remove local PauseMenuUI (now spawned globally by GameManager) ---
+	var local_pause = get_node_or_null("%PauseMenuUI")
+	if is_instance_valid(local_pause):
+		local_pause.queue_free()
+
+	# --- DEBUG: Force Assisted Mode ---
+	if GameManager and force_assisted_mode:
+		GameManager.assisted_mode = true
+		GameManager.unlock_verb("think")
+		GameManager.current_unread_hint = ""
+		GameManager.last_read_hint = ""
+	# ----------------------------------
 
 	# --- Apply Journal Notification Setting ---
 	if GameManager and is_instance_valid(GameManager.journal_button_ui):
@@ -39,6 +54,8 @@ func _ready():
 		# Register this level's state manager
 		if is_instance_valid(level_state_manager):
 			GameManager.register_level_state_manager(level_state_manager)
+		if is_instance_valid(level_hint_manager):
+			GameManager.current_hint_manager = level_hint_manager
 		else:
 			print_rich("[color=red]%s: LevelStateManager node not found...[/color]" % name)
 	else:
@@ -49,6 +66,7 @@ func _exit_tree():
 	if GameManager and is_instance_valid(level_state_manager):
 		if GameManager.current_level_state_manager == level_state_manager:
 			GameManager.register_level_state_manager(null)
+			GameManager.current_hint_manager = null
 			print_rich("[color=yellow]%s: Unregistered its LevelStateManager.[/color]" % name)
 
 

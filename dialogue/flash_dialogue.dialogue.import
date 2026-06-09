@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://ni44c6nes6th"
+path="res://.godot/imported/flash_dialogue.dialogue-fb9923b3df43c94a7d297da706d1b6af.tres"
+
+[deps]
+
+source_file="res://dialogue/flash_dialogue.dialogue"
+dest_files=["res://.godot/imported/flash_dialogue.dialogue-fb9923b3df43c94a7d297da706d1b6af.tres"]
+
+[params]
+
+defaults=true

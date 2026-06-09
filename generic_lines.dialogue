@@ -1,16 +1,16 @@
 #memory box
 
 ~ block_talk_no_aida
-Player: Umm.. I think I should talk to the Nurse before I talk to anyone else.
+Player: (Umm.. I think I should talk to the Nurse before I talk to anyone else.)
 => END
 
 ~ block_talk_no_memory_box
-Player: I don't think I need to talk to them right now.
-Player: The Nurse told me to 'use' the memory box. Better do that first.
+Player: (I don't think I need to talk to them right now.)
+Player: (The Nurse told me to 'use' the memory box. Better do that first.)
 => END
 
 ~ block_memory_box_no_aida
-Player: I should probably talk to the nurse before I touch this weird machine.
+Player: (I should probably talk to the nurse before I touch this weird machine.)
 => END
 
 ~ memory_box_unlocked
@@ -43,8 +43,8 @@ do GameManager.set_current_level_flag("has_tried_memory_box", true)
 #mcbucket
 
 ~ mcbucket_sleeping_talk_to_response
-Old Man: Zzzzzzz...
-Player: (Out like a log. He's not getting in my way now.)
+Player: (The old man seems to be out cold right now.)
+Player: (Wonder how long it'll last.)
 => END
 
 ~ mcbucket_med_given_after_zanopram
@@ -54,14 +54,17 @@ Hmmm. The Old Man seems unaffected. His sleep is deep.
 ~ toilet_flush_weak
 
 You flush the toilet. It seems to have a weak flow.
+Player: (This could probably get clogged easily...)
 => END
 
 ~ medicine_cabinet_interrupt
 
-AIda: Hey patient #122, that cabinet is reserved for clinical staff. 
+AIda: Hey patient #122, that cabinet is reserved for clinical staff.
 AIda: If you are experiencing discomfort, I can assist with approved medication.
 Player: (Huh. Looks like I can’t open the medicine cabinet while she’s still around.)
-Player: (Is there anyway I can send her to the other room?)
+if GameManager.get_current_level_flag("mcbucket_interruption_happened") or (GameManager.get_current_level_flag("mcbucket_has_screamed_at_player") and GameManager.get_current_level_flag("learned_about_meds_from_aida"))
+	Player: (Is there any way I can send her to the other room?)
+do GameManager.set_current_level_flag("aida_stopped_cabinet", true)
 => END
 
 ~ mcbucket_not_put_to_sleep

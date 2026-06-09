@@ -21,7 +21,7 @@ do SoundManager.play_music_track("unnatural_city", 5.0)
 	???: And you're in it.
 	???: Are you sure you want to sleep?
 	- I'm sure. Goodnight.
-		do GameManager.trigger_game_over()
+		do GameManager.trigger_game_over(1.5)
 	- No. I  must continue. => meet_dread
 - Struggle against the darkness => meet_dread
 
@@ -45,7 +45,7 @@ do spawn_cinematic_entity("dread", "res://dread_entity.tscn", 960, 300)
 	???: You'd like this. The darkness is enticing. Escaping the pain is easy.
 	???: Are you sure you want to sleep?
 	- I'm sure. Goodnight.
-		do GameManager.trigger_game_over(3.0)
+		do GameManager.trigger_game_over(1.5)
 	- Actually, no. I can't. => defy_dread
 - No. I don't want to sleep again. => defy_dread
 
@@ -61,7 +61,7 @@ do spawn_cinematic_entity("dread", "res://dread_entity.tscn", 960, 300)
 	???: Your body grows paralyzingly heavy, dragged down by old grief.
 	???: There is no uncertainty to it anymore.
 	???: The dark claims you entirely.
-	do GameManager.trigger_game_over(3.0)
+	do GameManager.trigger_game_over(1.5)
 - Leave Dread behind and swim away. => endless_dark
 
 ~ endless_dark
@@ -81,7 +81,7 @@ do remove_cinematic_entity("dread")
 - Lay to eternal rest.
 	???: Your arms stop moving. Your legs grow entirely still.
 	???: You let the heavy abyss pull you under once and for all.
-	do GameManager.trigger_game_over(3.0)
+	do GameManager.trigger_game_over(1.5)
 - Just... keep... pushing... => breaking_point
 
 ~ breaking_point

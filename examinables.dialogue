@@ -41,8 +41,21 @@ Player: (Label provides no description.)
 
 
 ~ mcbucket
-Player: (An Old Man hooked up to a machine.)
-Player: (You see not a single thought behind those googly eyes of his.)
+
+if GameManager.get_current_level_flag("mcbucket_zanopram_used")
+	Old Man: Zzzzzzz...
+	Player: (Out like a log. He's not getting in my way now.)
+elif GameManager.get_current_level_flag("mcbucket_cannathink_used")
+	Player: (The old man stares blankly into space.)
+	Player: (Damn, seems like the cannathink got him to calm down.)
+	Player: (Maybe I should try talking to him now?)
+elif GameManager.get_current_level_flag("mcbucket_invigirol_used")
+	Player: (Damn, the geezer is huffin' an' puffin'.)
+	Player: (Can't be good.)
+else
+	Player: (An Old Man hooked up to a machine.)
+	Player: (You see not a single thought behind those googly eyes of his.)
+
 => END
 
 
@@ -73,7 +86,10 @@ Player: (I can make it outta here!)
 
 ~ television_screen
 
-if GameManager.get_current_level_flag("tv_examined") == false
+if GameManager.get_current_level_flag("tv_turned_off") == true
+	Player: (A sleek wall-mounted TV that’s turned off.)
+	Player: (The room is quieter, but I like that better.)
+elif GameManager.get_current_level_flag("tv_examined") == false
 	A sleek wall-mounted TV hums softly. The news seems to be on.
 
 	A young reporter sits across from a man in a flawless black suit. He looks neither young nor old. His face expressionless.
@@ -86,7 +102,7 @@ if GameManager.get_current_level_flag("tv_examined") == false
 	do GameManager.set_current_level_flag("tv_examined", true)
 else
 	Player: (The interview with the CEO is still ongoing.)
-	Player: (I really don't like the smug look of this prick.)
+	Player: (I really don’t like the smug look of this prick.)
 
 => END
 
@@ -118,10 +134,15 @@ Player: (Seems to be displaying the date and time on the top right.)
 => END
 
 ~ hospital_toilet
-
-Player: (This is where I could take a dump, if I needed to...)
-Player: (Wait, the water level's kinda... low?)
-
+if GameManager.get_current_level_flag("toilet_clogged")
+	Player: (I've successfully clogged this dumper.)
+	Player: (What now, though?)
+elif GameManager.get_current_level_flag("toilet_has_paper")
+	Player: (The dropped toilet paper has clumped together into a soggy ball.)
+	Player: (Probably won't flush well...)
+else
+	Player: (This is where I could take a dump, if I needed to...)
+	Player: (Wait, the water level's kinda... low?)
 => END
 
 ~ toilet_flush
@@ -142,5 +163,5 @@ Player: (The Old Man seems to be hooked up to it.)
 ~ sergey
 
 Player: (A hunk of a man sits calmly on his bed.)
-Player: (He has kind eyes, but a I sense in certain sadness in him.)
+Player: (He has kind eyes, but I sense a certain sadness in him.)
 => END

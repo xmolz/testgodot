@@ -32,6 +32,7 @@ var _defaults: Dictionary = {
 @export var override_learned_techpass_from_aida: bool = false
 @export var override_learned_techpass_from_sergey: bool = false
 @export var override_give_techpass: bool = false
+@export var override_dev_cta_completed: bool = false
 
 
 func _ready():
@@ -55,6 +56,7 @@ func _ready():
 		"tv_turned_off": override_tv_turned_off,
 		"learned_techpass_from_aida": override_learned_techpass_from_aida,
 		"learned_techpass_from_sergey": override_learned_techpass_from_sergey,
+		"dev_cta_completed": override_dev_cta_completed,
 	}
 	for flag_name in _toggles:
 		if _toggles[flag_name]:

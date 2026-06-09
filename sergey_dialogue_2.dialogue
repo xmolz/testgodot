@@ -6,9 +6,9 @@ The blanket is pulled up tight, hiding his legs again.
 
 #protag thinking face
 do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_closeup_curious.png")
-Let's make this quick.
-You need to get the fuck out of here.
-And he is holding the key.
+Player: (Let's make this quick.)
+Player: (You need to get the fuck out of here.)
+Player: (And he is holding the key.)
 #back on bed sprite
 do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_brushing_hair_on_bed.PNG")
 You put your game face on and prop yourself back up on his bed.
@@ -43,12 +43,12 @@ Sergey: That you would leave old Sergey... hanging.
 
 #protag smirk / internal monologue
 do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_closeup_domme.png")
-Aw, how CUTE.
-Lil' Sergey isn't afraid of what you did to the Old Man.
-He was afraid you wouldn't come back to finish the 'job'.
+Player: (Aw, how CUTE.)
+Player: (Lil' Sergey isn't afraid of what you did to the Old Man.)
+Player: (He was afraid you wouldn't come back to finish the 'job'.)
 
-Well then, the quest is nearly complete.
-Time to get ready for the loot.
+Player: (Well then, the quest is nearly complete.)
+Player: (Time to get ready for the loot.)
 
 - Leave a handsome guy like you hanging? NEVER.
 
@@ -99,7 +99,7 @@ Something from a language class you took a lifetime ago.
 
 #reveal what's underneath (CG or Text emphasis)
 do reveal_shock_from_black("res://haluwa.png", 25.0)
-[i]"Ooki Desu."[/i]
+Player: [i]"Ooki Desu."[/i]
 
 Sergey is huge.
 Much bigger than you calculated.
@@ -185,7 +185,7 @@ The kind of pressure that has been building up inside him for years, finally bur
 But wait... what's this?
 
 #Sergey face (messy)
-Lil' Sergey got some of his own [noun] on his cheek.
+Lil' Sergey got some of his own cum on his cheek.
 He is so lost in the aftershocks that he doesn't even notice.
 His body is still twitching, his eyes rolled back in bliss.
 How cute. 
@@ -222,7 +222,7 @@ You reach up to his forehead. There is a long strand of your hair sticking to hi
 You pinch it and peel it off slowly.
 
 #protag shy smile (fake)
-You: Oops. Sorry about this.
+Player: Oops. Sorry about this.
 
 #sergey close up eyes looking to the side, shy.
 Sergey: T-Thanks, Devushka. 
@@ -248,15 +248,15 @@ Sergey: If HAVEMORE raises a query, I hope they will let me off easy.
 Sergey: I gave them twenty years of my life, after all!
 
 #protag internal monologue
-Bam. Wham. Thank you, Ma'am.
+Player: (Bam. Wham. Thank you, Ma'am.)
 
 - Fake refuse the offering.
 #protag sad / virtuous face
-You: Sergey... thank you. But I cannot take this.
-You: I do not want you to feel pressured into giving me anything just because of... what we just did.
-You: It feels... unethical.
+Player: Sergey... thank you. But I cannot take this.
+Player: I do not want you to feel pressured into giving me anything just because of... what we just did.
+Player: It feels... unethical.
 #change protag expression to sly looking (internal)
-Hook, line and sinker, baby!
+Player: (Hook, line and sinker, baby!)
 
 #back to sergey / panicked earnestness
 Sergey's eyes widen. He looks horrified that you would think that.
@@ -273,13 +273,13 @@ Sergey: If you do not take it, I will feel... bad. Like I took advantage of *you
 You look at the card in your hand.
 He's practically begging you to take his security clearance.
 
-You: Well... if you put it that way.
-You: Thank you, Sergey.
+Player: Well... if you put it that way.
+Player: Thank you, Sergey.
 
 #item get animation / sound
 *You acquired: Sergey's TechPass™*
 The air in the room returns back to normal.
-You: Stay put Sergey, let me figure out who I am and come see you again?
+Player: Stay put Sergey, let me figure out who I am and come see you again?
 Sergey: Of course Devushka, I've got no where to go.
 
 Well, guess it's time to finally get to it, huh?

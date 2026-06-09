@@ -1,0 +1,79 @@
+~ hint_has_techpass
+Player: (I have the TechPass™.)
+Player: (All I need to do now is use it on that weird machine.)
+=> END
+
+~ hint_return_to_sergey
+Player: (The Old Man's asleep.)
+Player: (Time to return to Sergey.)
+=> END
+
+~ hint_wrong_drugs
+Player: (I've given the other drugs to him, but they haven't put him to sleep yet.)
+Player: (I should put him to sleep with Zzzanopram.)
+Player: (Soon as I'm done playing with him. Hehe.)
+=> END
+
+~ hint_use_zanopram
+Player: (I've got the Zzzanopram.)
+Player: (This capsule seems like it'll fit right in the Old Man's bio-regulator.)
+=> END
+
+~ hint_aida_gone
+Player: (She's gone. I should 'use' the medicine cabinet ASAP!)
+=> END
+
+~ hint_toilet_clogged
+Player: (Done. Now, let's leave this room and let her deal with the mess.)
+=> END
+
+~ hint_clog_toilet_main
+Player: (That nurse won't let me take the drugs while she's watching.)
+Player: (I need to somehow send her to the other room.)
+Player: (I should go into the bathroom and see if I can break something.)
+=> END
+
+~ hint_clog_toilet_bathroom
+Player: (The toilet's water pressure is kinda low. I bet I could clog it if I drop some thick toilet paper into the bowl and flush it.)
+Player: (I should 'use' the toilet paper dispenser to get started.)
+=> END
+
+~ hint_need_distraction
+Player: (The Old Man is a nuisance. I need to shut him up.)
+Player: (There's a medicine cabinet here. I bet it contains sleeping meds.)
+=> END
+
+~ hint_ask_sergey
+Player: (Seems like this machine requires a TechPass™.)
+Player: (I don't know what that is. Maybe I should ask that hunk of a man in the right corner?)
+=> END
+
+~ hint_use_memory_box
+Player: (The Nurse told me to 'use' the MemoryBox™.)
+Player: (It must be that weird, hourglass-like device in this room.)
+=> END
+
+~ hint_start
+Player: (Where... where am I?)
+Player: (Is this a hospital?)
+Player: (I should probably talk to that Nurse.)
+=> END
+
+~ hint_use_zanopram_no_context
+Player: (I've got this Zzzanopram pill...)
+Player: (That Old Man over there is hooked up to a bio-regulator. I wonder what happens if I put it in?)
+=> END
+
+~ hint_aida_gone_no_context
+Player: (The nurse left.)
+Player: (Maybe I should see what's inside that medicine cabinet there.)
+=> END
+
+~ hint_wrong_drugs_no_context
+Player: (That cartridge worked. I should try talking to him now.)
+Player: (When I'm done, I'll just give him Zzzanopram to shut him up for a bit.)
+=> END
+
+~ hint_toilet_clogged_no_context
+Player: (Hehe. Wonder what the nurse'll say when she sees this.)
+=> END

@@ -10,6 +10,25 @@ var custom_font = preload("res://Fonts/VarelaRound-Regular.ttf")
 var pulse_tween: Tween
 
 func _ready():
+	# --- UNIVERSAL LAYOUT (PC & Mobile) ---
+	var journal_panel = $JournalPanel
+	var tab_panel = $JournalPanel/TabPanel
+	var tab_label = $JournalPanel/TabPanel/Label
+
+	journal_panel.anchor_left = 0.78
+	journal_panel.anchor_right = 0.87
+
+	tab_panel.anchor_left = 0.5
+	tab_panel.anchor_right = 0.5
+	tab_panel.offset_left = -80
+	tab_panel.offset_right = 80
+
+	if OS.has_feature("mobile"):
+		journal_panel.anchor_top = 0.75
+		tab_panel.offset_top = -50
+		tab_label.add_theme_font_size_override("font_size", 28)
+	# --------------------------------------
+
 	texture_button.pressed.connect(_on_texture_button_pressed)
 	texture_button.mouse_entered.connect(_on_hover_enter)
 	texture_button.mouse_exited.connect(_on_hover_exit)

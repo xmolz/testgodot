@@ -40,7 +40,11 @@ var _cached_name_styles: Dictionary = {}  # lookup_key -> StyleBoxFlat
 var character_colors: Dictionary = {
 	"AIda": Color("#20B2AA"),   # Light Sea Green
 	"Sergey": Color("#DAA520"), # Goldenrod
-	"McBucket": Color("#6B8E23"), # Olive Drab
+	"McBucket": Color("#FF4500"), # Orange-Red
+	"Old Man": Color("#FF4500"),
+	"Old Man McBucket": Color("#FF4500"),
+	"Layla": Color("#FF8299"),   # Soft Rose Pink
+	"Lewgend": Color("#708090"), # Neutral Slate Grey
 	"Nathan": Color("#FF69B4"),  # Hot Pink
 	"Dread": Color("#4B0082"),   # Indigo
 	"The... Toilet?": Color("#DC143C"),   # Crimson Red (Warning!)
@@ -51,7 +55,11 @@ var character_colors: Dictionary = {
 var character_portraits: Dictionary = {
 	"AIda": preload("res://Sprites/dialogue sprites/aida_dialogue_sprite.PNG"),
 	"Sergey": preload("res://Sprites/dialogue sprites/sergey_dialogue_sprite.png"),
-	"McBucket": preload("res://mcbucket.png"),
+	"McBucket": preload("res://Sprites/dialogue sprites/mcbucket_dialogue_sprite.PNG"),
+	"Old Man": preload("res://Sprites/dialogue sprites/mcbucket_dialogue_sprite.PNG"),
+	"Old Man McBucket": preload("res://Sprites/dialogue sprites/mcbucket_dialogue_sprite.PNG"),
+	"Layla": preload("res://Sprites/dialogue sprites/layla_dialogue_sprite.png"),
+	"Lewgend": preload("res://Sprites/dialogue sprites/lewgend_dialogue_sprite.png"),
 	"Nathan": preload("res://icon.svg"),
 	"The... Toilet?": preload("res://Sprites/dialogue sprites/toilet_dialogue_sprite.png"),
 	"Player": preload("res://Sprites/dialogue sprites/protag_dialogue_sprite.png")
@@ -60,9 +68,19 @@ var character_portraits: Dictionary = {
 # --- Character Shader Background Colors ---
 var character_bg_colors: Dictionary = {
 	"AIda": {
-		"top": Color("#c22b64"), 
-		"bot": Color("#ffffff"), 
+		"top": Color("#c22b64"),
+		"bot": Color("#ffffff"),
 		"dot": Color(1.0, 1.0, 1.0, 0.4)
+	},
+	"Layla": {
+		"top": Color("#FF9EAF"),
+		"bot": Color("#FFE0E6"),
+		"dot": Color(1.0, 1.0, 1.0, 0.4)
+	},
+	"Lewgend": {
+		"top": Color("#4F4F4F"),
+		"bot": Color("#A9A9A9"),
+		"dot": Color(1.0, 1.0, 1.0, 0.2)
 	},
 	"The... Toilet?": {
 		"top": Color("#330000"),
@@ -78,6 +96,21 @@ var character_bg_colors: Dictionary = {
 		"top": Color("#B8860B"),
 		"bot": Color("#FFFFFF"),
 		"dot": Color(1.0, 1.0, 1.0, 0.4)
+	},
+	"McBucket": {
+		"top": Color("#9400D3"),
+		"bot": Color("#FFD700"),
+		"dot": Color(1.0, 0.0, 0.2, 0.4)
+	},
+	"Old Man": {
+		"top": Color("#9400D3"),
+		"bot": Color("#FFD700"),
+		"dot": Color(1.0, 0.0, 0.2, 0.4)
+	},
+	"Old Man McBucket": {
+		"top": Color("#9400D3"),
+		"bot": Color("#FFD700"),
+		"dot": Color(1.0, 0.0, 0.2, 0.4)
 	}
 }
 ## The current line
@@ -126,6 +159,7 @@ var is_ui_hidden: bool = false
 @onready var log_button: Button = %LogButton
 @onready var hide_button: Button = %HideButton
 @onready var menu_button: Button = %MenuButton
+@onready var auto_button: Button = %AutoButton
 
 
 func _ready() -> void:
@@ -133,6 +167,8 @@ func _ready() -> void:
 		log_button.pressed.connect(_on_log_button_pressed)
 	if menu_button:
 		menu_button.pressed.connect(_on_menu_button_pressed)
+	if auto_button:
+		auto_button.pressed.connect(_on_auto_button_pressed)
 	if hide_button:
 		hide_button.pressed.connect(_on_hide_button_pressed)
 	balloon.hide()
@@ -154,8 +190,11 @@ func _ready() -> void:
 	# 2. Setup Rounded Corners, Alignment, and Padding for the template button
 	var template_btn = responses_menu.response_template as Button
 	if template_btn:
-		# Left align so the icons don't make the text jagged
 		template_btn.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		template_btn.autowrap_mode = TextServer.AUTOWRAP_OFF
+		template_btn.clip_contents = false
+		template_btn.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+		template_btn.custom_minimum_size = Vector2(400, 0)
 
 		var normal_style = StyleBoxFlat.new()
 		normal_style.bg_color = Color(0.15, 0.15, 0.15, 0.85) # Dark gray, slightly transparent
@@ -167,7 +206,7 @@ func _ready() -> void:
 		normal_style.content_margin_left = 15
 		normal_style.content_margin_top = 8
 		normal_style.content_margin_bottom = 8
-		normal_style.content_margin_right = 15
+		normal_style.content_margin_right = 25
 		# Add an invisible border to the normal state so the button doesn't change size on hover
 		normal_style.border_width_left = 2
 		normal_style.border_width_top = 2
@@ -185,12 +224,90 @@ func _ready() -> void:
 		template_btn.add_theme_stylebox_override("pressed", hover_style)
 	# ---------------------------------------------------------
 
+	# --- MOBILE UI SCALING ---
+	if OS.has_feature("mobile"):
+		quick_menu.add_theme_constant_override("separation", 50)
+		menu_button.add_theme_font_size_override("font_size", 44)
+		log_button.add_theme_font_size_override("font_size", 44)
+		auto_button.add_theme_font_size_override("font_size", 44)
+		hide_button.add_theme_font_size_override("font_size", 44)
+
+		responses_menu.add_theme_constant_override("separation", 25)
+		if template_btn:
+			template_btn.custom_minimum_size = Vector2(600, 0)
+			var mobile_style = template_btn.get_theme_stylebox("normal").duplicate()
+			mobile_style.content_margin_top = 20
+			mobile_style.content_margin_bottom = 20
+			mobile_style.content_margin_right = 35
+			template_btn.add_theme_stylebox_override("normal", mobile_style)
+			template_btn.add_theme_stylebox_override("hover", mobile_style)
+			template_btn.add_theme_stylebox_override("focus", mobile_style)
+			template_btn.add_theme_stylebox_override("pressed", mobile_style)
+
+		dialogue_container.add_theme_constant_override("margin_top", 35)
+		dialogue_container.add_theme_constant_override("margin_bottom", 30)
+
+		# Bring the top anchors up by 5% to make the box slightly taller on mobile
+		var panel = $Balloon/Panel
+		var dialogue_node = $Balloon/Dialogue
+
+		panel.anchor_top -= 0.05
+		dialogue_node.anchor_top -= 0.05
+
+		# Scale up and shift up the portrait box to match the taller mobile panel.
+		# The TextureRect inside will automatically scale the image to fit this new 190x190 box.
+		if is_instance_valid(portrait_container):
+			portrait_container.offset_left = 40
+			portrait_container.offset_top = -260
+			portrait_container.offset_right = 230
+			portrait_container.offset_bottom = -70
+
+		# Move the NamePanel up by the same 5% so it stays perfectly aligned above the box
+		if is_instance_valid(name_panel):
+			name_panel.anchor_top -= 0.05
+			name_panel.anchor_bottom -= 0.05
+
+	# --- FIX RESPONSE EXPANSION DIRECTION (Universal) ---
+	var responses_container = $Balloon/Responses
+	var responses_menu_vbox = %ResponsesMenu
+	if is_instance_valid(responses_container) and is_instance_valid(responses_menu_vbox):
+		responses_container.anchor_right = 0.95
+		responses_menu_vbox.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+
 	# --- Pre-compile regex and create reusable spacer icon ---
 	_bbcode_regex = RegEx.new()
 	_bbcode_regex.compile("\\[.*?\\]")
 
 	var blank_img = Image.create_empty(32, 32, false, Image.FORMAT_RGBA8)
 	_blank_spacer_icon = ImageTexture.create_from_image(blank_img)
+
+	# Hard-resize the exported icons to exactly 32x32 so the layout engine doesn't crush them
+	proceed_icon = _resize_texture(proceed_icon, 32)
+	back_icon = _resize_texture(back_icon, 32)
+	leave_icon = _resize_texture(leave_icon, 32)
+
+	# --- DYNAMIC TEXT SCALING (PC, Mobile & Marketing) ---
+	var scale_mult: float = GameManager.dialogue_text_scale if GameManager else 1.0
+
+	var base_diag_size = 44 if OS.has_feature("mobile") else 28
+	var base_name_size = 44 if OS.has_feature("mobile") else 30
+	var base_resp_size = 38 if OS.has_feature("mobile") else 28
+
+	var diag_size = int(base_diag_size * scale_mult)
+	var name_size = int(base_name_size * scale_mult)
+	var resp_size = int(base_resp_size * scale_mult)
+
+	dialogue_label.add_theme_font_size_override("normal_font_size", diag_size)
+	dialogue_label.add_theme_font_size_override("bold_font_size", diag_size)
+	dialogue_label.add_theme_font_size_override("italics_font_size", diag_size)
+	dialogue_label.add_theme_font_size_override("bold_italics_font_size", diag_size)
+
+	character_label.add_theme_font_size_override("normal_font_size", name_size)
+	character_label.add_theme_font_size_override("bold_font_size", name_size)
+
+	var template_btn_ref = responses_menu.response_template as Button
+	if template_btn_ref:
+		template_btn_ref.add_theme_font_size_override("font_size", resp_size)
 
 
 func _unhandled_input(_event: InputEvent) -> void:
@@ -290,7 +407,7 @@ func apply_dialogue_line() -> void:
 		# SHOW THE WHOLE CONTAINER (Box + Pattern + Image)
 		portrait_container.visible = true 
 		
-		dialogue_container.add_theme_constant_override("margin_left", 230)
+		dialogue_container.add_theme_constant_override("margin_left", 260 if OS.has_feature("mobile") else 230)
 		# --- NEW: SWAP SHADER COLORS ---
 		var bg_pattern = portrait_container.get_node("BackgroundPattern")
 		if bg_pattern and bg_pattern.material is ShaderMaterial:
@@ -308,7 +425,7 @@ func apply_dialogue_line() -> void:
 		# HIDE THE WHOLE CONTAINER
 		portrait_container.visible = false 
 		
-		dialogue_container.add_theme_constant_override("margin_left", 30)
+		dialogue_container.add_theme_constant_override("margin_left", 50 if OS.has_feature("mobile") else 30)
 
 	dialogue_label.hide()
 	dialogue_label.dialogue_line = dialogue_line
@@ -370,18 +487,18 @@ func apply_dialogue_line() -> void:
 			resting_color = Color(0.6, 0.6, 0.6, 1.0) # Gray
 			hover_color = Color(0.8, 0.8, 0.8, 1.0) # Light Gray
 
-		# --- Add a transparent spacer if no icon was assigned ---
+		# --- ICON AND ALIGNMENT REFACTOR ---
+		button.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+
 		if assigned_icon == null:
 			assigned_icon = _blank_spacer_icon
-		# -------------------------------------------------------------
 
-		# Apply the parsed text, icon, and colors
 		button.text = display_text
 		button.icon = assigned_icon
-
-		# Scale the icon down so it matches the font size
-		button.expand_icon = true
-		button.add_theme_constant_override("icon_max_width", 32)
+		button.expand_icon = false
+		button.icon_alignment = HORIZONTAL_ALIGNMENT_LEFT
+		button.add_theme_constant_override("h_separation", 12)
+		# --------------------------------------------------------------------------------------
 
 		# Text colors
 		button.add_theme_color_override("font_color", resting_color)
@@ -402,7 +519,14 @@ func apply_dialogue_line() -> void:
 
 	# --- RECORD HISTORY ---
 	if GameManager and not dialogue_line.text.is_empty():
-		GameManager.add_dialogue_history_line(display_name, dialogue_line.text)
+		var history_display_name = lookup_key
+		if lookup_key == "Player":
+			if GameManager.get_game_flag("first_name_correct"):
+				history_display_name = "Fiona"
+			else:
+				history_display_name = "???"
+
+		GameManager.add_dialogue_history_line(lookup_key, history_display_name, dialogue_line.text)
 
 	dialogue_label.show()
 	if not dialogue_line.text.is_empty():
@@ -444,8 +568,10 @@ func _on_mutation_cooldown_timeout() -> void:
 
 func _on_mutated(_mutation: Dictionary) -> void:
 	is_waiting_for_input = false
-	will_hide_balloon = true
-	mutation_cooldown.start(0.1)
+
+	# --- COMMENT THESE OUT TO FIX THE BLINK ---
+	# will_hide_balloon = true
+	# mutation_cooldown.start(0.1)
 
 func _on_balloon_gui_input(event: InputEvent) -> void:
 	var is_right_click = event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.is_pressed()
@@ -523,7 +649,7 @@ func _on_responses_menu_response_selected(response: DialogueResponse) -> void:
 		else:
 			player_name = "???"
 
-		GameManager.add_dialogue_history_choice(player_name, all_options, chosen_idx)
+		GameManager.add_dialogue_history_choice("Player", player_name, all_options, chosen_idx)
 
 	if SoundManager: SoundManager.play_sfx("ui_click")
 	next(response.next_id)
@@ -572,9 +698,21 @@ func _on_log_button_pressed() -> void:
 		var log_instance = log_scene.instantiate()
 		get_tree().root.add_child(log_instance)
 
+func _on_auto_button_pressed() -> void:
+	if SoundManager: SoundManager.play_sfx("ui_click")
+
 func _on_menu_button_pressed() -> void:
 	if SoundManager: SoundManager.play_sfx("ui_click")
 	if GameManager and is_instance_valid(GameManager.pause_menu_ui):
 		GameManager.pause_menu_ui.toggle_pause()
 
 #endregion
+
+func _resize_texture(tex: Texture2D, size: int) -> Texture2D:
+	if not is_instance_valid(tex): return null
+	var img = tex.get_image()
+	if img:
+		if img.get_width() != size or img.get_height() != size:
+			img.resize(size, size, Image.INTERPOLATE_BILINEAR)
+		return ImageTexture.create_from_image(img)
+	return tex

@@ -8,6 +8,18 @@ Player: (Sigh... What am I doing.)
 => END
 
 ~ bathroom_mirror
-Player: (Mirror, mirror.. on the wall.)
-Player: (Whose the sexiest, comatose patient em' all?)
+Player: (Mirror, mirror... on the wall.)
+Player: (Who's the sexiest comatose patient of 'em all?)
+=> END
+
+~ television_screen
+Player: (Huh... I'm not sure how the voice control on this works.)
+=> END
+
+~ exit_door
+~ bathroom_door
+~ main_room_door
+Player: Open Sesame!
+Player: (... Well, that didn't work.)
+Player: (Maybe I should just 'use' this by swiping my hand over that glow-y thing?)
 => END

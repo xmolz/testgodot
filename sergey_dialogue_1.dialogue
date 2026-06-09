@@ -105,7 +105,7 @@ Sergey: So then… tell me. How can Sergey help?
 							Sergey: Hope you find peace in your new life. 
 							=> hub
 
-- How can I use the MemoryBox ™? [Proceed] [if GameManager.get_current_level_flag("has_spoken_to_aida") and GameManager.get_current_level_flag("has_tried_memory_box") and ConversationEventManager.asked_sergey_duration and ConversationEventManager.asked_sergey_identity]
+- How can I use the MemoryBox ™? [Proceed] [if GameManager.get_current_level_flag("has_spoken_to_aida") and GameManager.get_current_level_flag("has_tried_memory_box") and ConversationEventManager.asked_sergey_identity]
 	do show_cg("sergey_hand_up")
 	Sergey: That machine? Simple. Just put in your TechPass™, turn the machine on, and put your hand on the scanner. Boom, you can access your memories.
 
@@ -166,15 +166,19 @@ Sergey: So then… tell me. How can Sergey help?
 			if ConversationEventManager.has_heard_fresh_start_line == true
 				do show_cg("sergey_frown")
 				Sergey: Don't think you can do that with your... forgetting condition.
-			else
+			else:
 				Sergey: So, if you are OK waiting a few weeks, you can open their website and apply.
 				do show_cg("protag_closeup_curious")
-				Little does he know you don't even remember your name, let alone your address.
+				if GameManager.get_game_flag("first_name_correct")
+					Little does he know you barely managed to remember your name.
+					An address would be a longshot.
+				else
+					Little does he know you don't even remember your name, let alone your address.
 			- Could I… borrow yours? Just for a moment?
 				do show_cg("sergey_closeup_surprised")
 				#Sergey raises both eyebrows.
 				Sergey: Borrow? Moya devushka, this is not phone charger.
-				Sergey: If someone else uses my Techpass, system records it against my my name.
+				Sergey: If someone else uses my Techpass, system records it against my name.
 				Sergey: It is..risky. I'm sorry.
 				Sergey: I cannot do that.
 				#sergei look away
@@ -220,15 +224,15 @@ Sergey: So then… tell me. How can Sergey help?
 					Sergey: Tired? Da.
 					Sergey: Hospital is loud… but still feels empty.
 
-					do show_cg("sergei_closeup_neutral_speaking")
+					do show_cg("sergey_closeup_neutral_speaking")
 					Sergey: Days blend together. Nurse Bot comes, Nurse Bot goes.
 
 					do show_cg("sergey_closeup_lookaway_sad")
 					Sergey: Only 'friend' is that Old Man on the other corner.
 					#mcbucket slide
-					do show_cg("mcbucket_normal_base", "slide_left")
+					do show_cg("mcbucket_normal_base", "slide_left", 0.05)
 					Sergey: Sad though, he do not speak much.
-					do show_cg("sergey_closeup_hand_behind_head", "slide_right")
+					do show_cg("sergey_closeup_hand_behind_head", "slide_right", 0.05)
 					Sergey: So yes. Alone is good word.
 					#sergei hiding smile
 					#He gives a small, embarrassed smile.
@@ -254,7 +258,7 @@ Sergey: So then… tell me. How can Sergey help?
 						do show_cg("sergey_closeup_hand_behind_head")
 						He gives a tight, apologetic smile - the kind a man makes when trying not to look broken.
 						You can tell he's hungry to be seen.
-						Naturally. It's the one thing everyone nededs to some extent in their life.
+						Naturally. It's the one thing everyone needs to some extent in their life.
 						Well, best let him know that you do see him.
 						do show_cg("protag_closeup_domme")
 						do SoundManager.fade_out_music(3.0)
@@ -311,12 +315,12 @@ Sergey: So then… tell me. How can Sergey help?
 							#What do you say to him?
 							
 							- I'm not confused.
-								Player: I'm not Confused, Sergey. Trust me.
+								Player: I'm not confused, Sergey. Trust me.
 							- I know exactly where I am.
 								Player: I know where I am Sergey. It's right where I wanna be right now.
 							do SoundManager.play_looping_sfx("heavy_breathing", 2.0, 0.0)
 							#sergei blsuhing looking away close eup
-							Sergei Looks at you. There is nothing he has to say.
+							Sergey looks at you. There is nothing he has to say.
 							Or rather, there is nothing he [i]can[/i] say.
 							do show_cg("protag_touching_sergey")
 							You lean in, lowering your voice to a whisper.
@@ -331,9 +335,9 @@ Sergey: So then… tell me. How can Sergey help?
 							Sergey: I... I do not want to read wrong meaning.
 							Sergey: I am just... tired old man. You...You are...
 							#He trails off. He's begging you to stop him, because he knows he can't stop himself.
-							- I need you right now, Sergei.
+							- I need you right now, Sergey.
 								do show_cg("protag_touching_sergey")
-								Player: Listen sergey, you ever wake up really horny?
+								Player: Listen Sergey, you ever wake up really horny?
 								Player: I usually do.
 								Player: And given how long I had been sleeping..
 								Player: I'm EXTRA horny.
@@ -395,7 +399,7 @@ Sergey: So then… tell me. How can Sergey help?
 								Old Man: REEEEEEEEEEEEEEEEE~~~~~~~~
 								The patient across the room screams, shattering the moment.
 								do show_cg("sergey_closeup_hand_behind_head")
-								Both you and Sergei flinch and pull back.
+								Both you and Sergey flinch and pull back.
 								#Sergey looks at you apologetically.
 								- I'm sorry, I got carried away.
 									Sergey: No, it is okay. Don't apologize. Sergey got carried away too.
@@ -411,7 +415,7 @@ Sergey: So then… tell me. How can Sergey help?
 										- Have you tried asking the Nurse about him?
 											Sergey: The Nurse is an AI. She does not share patient details with other patient.
 											Sergey: I didn't know anything about you until you wake up either. => interrupted_hub
-									- But, I still want to continue!
+									- But, I still want to continue! [Proceed]
 										#Good choice. You still need that TechPass™.
 										#You pull out your best puppy face and tell him you want to continue.
 										#He speaks softly and shyly.
@@ -432,7 +436,7 @@ Sergey: So then… tell me. How can Sergey help?
 											Okay then, comatose girl. Lets get this bread.
 											do GameManager.set_current_level_flag("mcbucket_interruption_happened", true)
 											do SoundManager.fade_out_music(3.0)
-											=> END!
+											=> END
 							else
 								if GameManager.get_current_level_flag("mcbucket_interruption_happened") == true:
 									Player: (Thankfully, the Old Man across the room is out cold.)
@@ -519,7 +523,8 @@ Player: (Time to get ready for the loot.)
 - Leave you hanging?
 
 #knees touching image
-Player: Oh, Sergey. How could i leave a man like YOU hanging?
+do show_cg("protag_closeup_speaking")
+Player: Oh, Sergey. How could I leave a man like YOU hanging?
 Player: God knows how long I'll need to be here.
 Player: I need to keep some company too. And the nurse and the Old Man aren't exactly the chummy type, you know?
 You pull yourself closer to him.
@@ -576,8 +581,12 @@ Something from a language class you maybe took a lifetime ago.
 do reveal_shock_from_black("japan", 25.0)
 Player: ([i]Ooki Desu.[/i])
 Player: (Oh. So this is what my brain remembers.)
-Player: (Good. Who'd wanna be burdened with the knowledge of trivial things.)
-Player: (You know, like my fucking name?)
+if GameManager.get_game_flag("first_name_correct")
+	Player: (Good. Who'd wanna be burdened with the knowledge of trivial things.)
+	Player: (You know, like who the fuck I really am?)
+else
+	Player: (Good. Who'd wanna be burdened with the knowledge of trivial things.)
+	Player: (You know, like my fucking name?)
 Player: (Seriously? Whatever. He's... huge.)
 Player: (Much bigger than I estimated.)
 
@@ -656,7 +665,7 @@ do stop_cinematic("dissolve")
 #end of climax image
 Sergey unravels completely.
 Player: Woah!
-This is a heavy, depsperate release.
+This is a heavy, desperate release.
 #protag looking down face
 Player: (Damn, you were really pent up, huh?)
 Player: (But wait, what's that? )
@@ -692,8 +701,8 @@ do SoundManager.fade_out_music(7.0)
 do fade_to_black(1.5)
 For a moment, the room falls silent.
 You take a moment to fix your gown.
-Sergey tries to compose himself, pulling his gown back down to cover his big gun.
 do show_cg("sergey_closeup_lookaway_sad")
+Sergey tries to compose himself, pulling his gown back down to cover his gentlemen's package.
 #sergey back to normal, neutral, shy (hair on his head)
 do fade_from_black(1.5)
 
@@ -709,8 +718,8 @@ You reach up to his forehead. There is a long strand of your hair sticking to hi
 You pinch it and peel it off him, slowly.
 
 #protag domme face
-do show_cg("protag_closeup_domme")
-You: Oops! Sorry about that.
+do show_cg("protag_closeup_speaking")
+Player: Oops! Sorry about that.
 
 #sergey close up eyes looking to the side, shy.
 do show_cg("sergey_eyes_only_looking_away")
@@ -771,14 +780,14 @@ do show_cg("sergey_frown")
 Sergey: If you do not take it, I will feel... bad. Like I took advantage of you.
 
 #protag neutral smile
-do show_cg("protag_closeup_curious")
+do show_cg("protag_closeup_speaking")
 
-You: Well... if you put it that way.
-You: Thank you, Sergey.
+Player: Well... if you put it that way.
+Player: Thank you, Sergey.
 
 do GameManager.add_item_to_inventory("techpass")
 The air in the room returns back to normal.
-You: Stay put Sergey, let me figure out who I am and come see you again?
+Player: Stay put Sergey, let me figure out who I am and come see you again?
 Sergey: Of course Devushka, I've got no where to go.
 
 Well, guess it's time to finally get to it, huh?
@@ -788,5 +797,3 @@ Well, guess it's time to finally get to it, huh?
 	=> END
 
 ~ END
-
-

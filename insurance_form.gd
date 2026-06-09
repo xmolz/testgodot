@@ -37,6 +37,71 @@ func _ready():
 	submit_button.pressed.connect(_on_submit_application_pressed)
 	back_button.pressed.connect(_on_submit_form) # Route the back button to close the form
 
+	# --- BACK BUTTON OUTLINE (PC & Mobile) ---
+	back_button.flat = false
+	var back_normal = StyleBoxFlat.new()
+	back_normal.bg_color = Color(0.1, 0.15, 0.2, 0.8)
+	back_normal.corner_radius_top_left = 6
+	back_normal.corner_radius_top_right = 6
+	back_normal.corner_radius_bottom_left = 6
+	back_normal.corner_radius_bottom_right = 6
+	back_normal.border_width_left = 2
+	back_normal.border_width_top = 2
+	back_normal.border_width_right = 2
+	back_normal.border_width_bottom = 2
+	back_normal.border_color = Color(0.4, 0.5, 0.6, 0.8)
+	back_normal.content_margin_left = 15
+	back_normal.content_margin_right = 15
+	back_normal.content_margin_top = 5
+	back_normal.content_margin_bottom = 5
+
+	var back_hover = back_normal.duplicate()
+	back_hover.bg_color = Color(0.2, 0.3, 0.4, 0.9)
+	back_hover.border_color = Color(0.2, 0.85, 1.0, 1.0)
+
+	back_button.add_theme_stylebox_override("normal", back_normal)
+	back_button.add_theme_stylebox_override("hover", back_hover)
+	back_button.add_theme_stylebox_override("focus", back_hover)
+	back_button.add_theme_stylebox_override("pressed", back_hover)
+
+	# --- MOBILE SCALING FOR INSURANCE FORM ---
+	if OS.has_feature("mobile"):
+		$TabletFrame.anchor_left = 0.05
+		$TabletFrame.anchor_right = 0.95
+		$TabletFrame.anchor_top = 0.05
+		$TabletFrame.anchor_bottom = 0.95
+
+		var header_logo = $TabletFrame/Padding/ContentCanvas/HeaderContainer/HavemoreLabel
+		var header_text = $TabletFrame/Padding/ContentCanvas/HeaderContainer/Label2
+		var subtitle = $TabletFrame/Padding/ContentCanvas/Subtitle
+
+		header_logo.add_theme_font_size_override("font_size", 60)
+		header_text.add_theme_font_size_override("font_size", 44)
+		subtitle.add_theme_font_size_override("font_size", 30)
+		subtitle.offset_top = 130
+		subtitle.offset_bottom = 170
+
+		back_button.add_theme_font_size_override("font_size", 36)
+		submit_button.add_theme_font_size_override("font_size", 42)
+
+		var labels_container = $TabletFrame/Padding/ContentCanvas/LabelsContainer
+		for child in labels_container.get_children():
+			if child is Label:
+				child.add_theme_font_size_override("font_size", 32)
+				child.custom_minimum_size.y = 80
+
+		var edits_container = $TabletFrame/Padding/ContentCanvas/LineEditContainer
+		for child in edits_container.get_children():
+			if child is LineEdit:
+				child.add_theme_font_size_override("font_size", 30)
+				child.custom_minimum_size.y = 80
+
+		var btns_container = $TabletFrame/Padding/ContentCanvas/ButtonContainer
+		for child in btns_container.get_children():
+			if child is Button:
+				child.add_theme_font_size_override("font_size", 30)
+				child.custom_minimum_size.y = 80
+
 	# --- DYNAMIC UI ADJUSTMENTS ---
 	# Change all "Confirm" buttons to "Check"
 	var check_buttons = [first_name_button, middle_name_button, last_name_button, dob_button, phone_number_button, account_number_button]

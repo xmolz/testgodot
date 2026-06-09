@@ -28,7 +28,8 @@ var sfx_library: Dictionary = {
 	"room_tone_traffic": preload("res://Sfx/Game World/ambience_distant_highway.mp3"),
 	
 	# Looping SFX
-	"heavy_breathing": preload("res://Sfx/Dialog/heavy_breathing.mp3") # <-- Update this path to where your file actually is!
+	"heavy_breathing": preload("res://Sfx/Dialog/heavy_breathing.mp3"),
+	"scan_effect": preload("res://Sfx/Dialog/scan_effect.mp3")
 }
 
 # --- Music Library ---
@@ -68,6 +69,19 @@ func _ready():
 	_ambience_bus_index = AudioServer.get_bus_index("Ambience")
 	if _ambience_bus_index != -1:
 		_base_ambience_volume = AudioServer.get_bus_volume_db(_ambience_bus_index)
+
+	# --- MOBILE AUDIO ENHANCEMENT ---
+	if OS.has_feature("mobile"):
+		var master_bus_idx = AudioServer.get_bus_index("Master")
+		if master_bus_idx != -1:
+			var current_vol = AudioServer.get_bus_volume_db(master_bus_idx)
+			AudioServer.set_bus_volume_db(master_bus_idx, current_vol + 4.0)
+
+			var compressor = AudioEffectCompressor.new()
+			compressor.threshold = -15.0
+			compressor.ratio = 3.0
+			compressor.release_ms = 250.0
+			AudioServer.add_bus_effect(master_bus_idx, compressor)
 
 func _initialize_music_player():
 	if is_instance_valid(_music_player):
@@ -294,3 +308,19 @@ func _cleanup_looping_sfx(sound_name: String):
 			player.queue_free()
 		_looping_sfx_players.erase(sound_name)
 		_looping_sfx_tweens.erase(sound_name)
+
+func stop_all_audio():
+	stop_music()
+	stop_all_ambience()
+	for sound_name in _looping_sfx_players.keys():
+		var player = _looping_sfx_players[sound_name]
+		if is_instance_valid(player):
+			player.stop()
+			player.queue_free()
+	_looping_sfx_players.clear()
+	if _music_tween and _music_tween.is_valid():
+		_music_tween.kill()
+	for tween in _looping_sfx_tweens.values():
+		if tween and tween.is_valid():
+			tween.kill()
+	_looping_sfx_tweens.clear()

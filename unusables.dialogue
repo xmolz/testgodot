@@ -1,5 +1,5 @@
 ~ start
-Player: That doesn't seem to work.
+Player: (That doesn't seem to work.)
 => END
 
 
@@ -22,8 +22,8 @@ Player: (Besides, isn't the water level kinda... low?)
 => END
 
 ~ hospital_toilet_already_dropped
-You've already dropped a lot of toilet paper in.
-=> END 
+Player: (I've already dropped quite a bit of that in already.)
+=> END
 
 ~ hospital_toilet_already_clogged
 This is already broken.
@@ -105,9 +105,121 @@ Player: (There's gotta be a better way to go about this.)
 
 ~ mcbucket_item_hospital_toilet_paper
 Player: (While shoving toilet paper down one's throat is a valid strategy to shut someone up...)
-Player: (I don't think it's very legal.)
+Player: (I probably don't wanna do something that extreme.)
 => END
 
 ~ mcbucket_plain_use
 Player: (He might actually be useless, I'm afraid.)
+=> END
+
+~ television_screen_item_hospital_toilet_paper
+You wipe the object clean with your toilet paper.
+do GameManager.remove_item_from_inventory("hospital_toilet_paper")
+Player: (Well... I still feel empty inside.)
+=> END
+
+~ television_screen_item_invigirol
+~ television_screen_item_zanopram
+~ television_screen_item_cannathink
+Player: (There is no universe in which this makes sense.)
+Player: (I mean... probably.)
+=> END
+
+~ television_screen_item_techpass
+Player: (I might be using this on the wrong machine...)
+=> END
+
+~ MedicineCabinet_item_hospital_toilet_paper
+You wipe the object clean with your toilet paper.
+do GameManager.remove_item_from_inventory("hospital_toilet_paper")
+Player: (Well... I still feel empty inside.)
+=> END
+
+~ MedicineCabinet_item_invigirol
+~ MedicineCabinet_item_zanopram
+~ MedicineCabinet_item_cannathink
+Player: (There is no universe in which this makes sense.)
+Player: (I mean... probably.)
+=> END
+
+~ MedicineCabinet_item_techpass
+Player: (I might be using this on the wrong machine...)
+=> END
+
+~ mcbucket_medicine_dispenser_item_techpass
+Player: (I might be using this on the wrong machine...)
+=> END
+
+~ mcbucket_medicine_dispenser_item_hospital_toilet_paper
+Player: (That's not very intelligent.)
+Player: (Am I... not very intelligent?)
+Player: (Shame.)
+=> END
+
+~ exit_door_item_hospital_toilet_paper
+~ bathroom_door_item_hospital_toilet_paper
+~ main_room_door_item_hospital_toilet_paper
+You wipe the object clean with your toilet paper.
+do GameManager.remove_item_from_inventory("hospital_toilet_paper")
+Player: (Well... I still feel empty inside.)
+=> END
+
+~ exit_door_item_invigirol
+~ exit_door_item_zanopram
+~ exit_door_item_cannathink
+~ bathroom_door_item_invigirol
+~ bathroom_door_item_zanopram
+~ bathroom_door_item_cannathink
+~ main_room_door_item_invigirol
+~ main_room_door_item_zanopram
+~ main_room_door_item_cannathink
+Player: (There is no universe in which this makes sense.)
+Player: (I mean... probably.)
+=> END
+
+~ hospital_toilet_item_invigirol
+~ hospital_toilet_item_zanopram
+~ hospital_toilet_item_cannathink
+Player: (This really isn't my brightest idea, is it?)
+=> END
+
+~ hospital_toilet_item_techpass
+Player: (Sure! Let me just flush all my hard work down the shitter!)
+Player: (Wouldn't that be just amazing!)
+=> END
+
+~ toilet_paper_dispenser_item_hospital_toilet_paper
+~ toilet_paper_dispenser_item_invigirol
+~ toilet_paper_dispenser_item_zanopram
+~ toilet_paper_dispenser_item_cannathink
+~ toilet_paper_dispenser_item_techpass
+~ toilet_flush_item_hospital_toilet_paper
+~ toilet_flush_item_invigirol
+~ toilet_flush_item_zanopram
+~ toilet_flush_item_cannathink
+~ toilet_flush_item_techpass
+Player: (This really isn't my brightest idea, is it?)
+=> END
+
+~ bathroom_mirror
+Player: (Damn... my mug ain't half bad, huh?)
+=> END
+
+~ bathroom_mirror_item_hospital_toilet_paper
+You wipe the object clean with your toilet paper.
+do GameManager.remove_item_from_inventory("hospital_toilet_paper")
+Player: (Well... I still feel empty inside.)
+=> END
+
+~ bathroom_mirror_item_invigirol
+~ bathroom_mirror_item_zanopram
+~ bathroom_mirror_item_cannathink
+~ memory_box_item_hospital_toilet_paper
+Player: (This really isn't my brightest idea, is it?)
+=> END
+
+~ exit_door_item_techpass
+~ bathroom_door_item_techpass
+~ main_room_door_item_techpass
+Player: (I might be using this on the wrong machine...)
 => END

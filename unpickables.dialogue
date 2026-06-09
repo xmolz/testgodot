@@ -53,4 +53,11 @@ Player: (Sigh...)
 Player: (I want to 'pick' the TV? Seriously?)
 => END
 
+~ exit_door
+~ bathroom_door
+~ main_room_door
+Player: (Sure, let's pick the damn door.)
+Player: (Genius...)
+=> END
+
 

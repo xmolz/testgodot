@@ -14,6 +14,27 @@ func _ready():
 	next_button.pressed.connect(_on_next_button_pressed)
 	hide()
 
+	if OS.has_feature("mobile"):
+		var panel = $PanelContainer
+		panel.custom_minimum_size = Vector2(1000, 450)
+		panel.offset_left = -500
+		panel.offset_top = -225
+		panel.offset_right = 500
+		panel.offset_bottom = 225
+
+		explanation_label.add_theme_font_size_override("font_size", 44)
+		next_button.add_theme_font_size_override("font_size", 40)
+
+		var btn_style = next_button.get_theme_stylebox("normal").duplicate()
+		btn_style.content_margin_top = 25
+		btn_style.content_margin_bottom = 25
+		btn_style.content_margin_left = 50
+		btn_style.content_margin_right = 50
+		next_button.add_theme_stylebox_override("normal", btn_style)
+		next_button.add_theme_stylebox_override("hover", btn_style)
+		next_button.add_theme_stylebox_override("pressed", btn_style)
+		next_button.add_theme_stylebox_override("focus", btn_style)
+
 func show_explanation(data: ExplanationData, root_node: Node):
 	if not data or data.explanation_lines.is_empty():
 		print("Error: Invalid or empty explanation data provided.")

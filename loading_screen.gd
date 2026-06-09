@@ -5,16 +5,32 @@ extends CanvasLayer
 
 # The list of massive files we want to pre-load.
 var load_queue = [
-	{"path": "res://main_menu.tscn", "name": "Main Menu UI"},
-	{"path": "res://conversation_backgrounds.tres", "name": "Intro Cinematics"},
-	{"path": "res://AdvancedConversationOverlay.tscn", "name": "Intro Sequence"},
-	{"path": "res://main.tscn", "name": "Hospital World"}
+	{"path": "res://main_menu.tscn", "name": "System Interfaces"},
+	{"path": "res://difficulty_select_screen.tscn", "name": "Game Configuration"},
+	{"path": "res://conversation_backgrounds.tres", "name": "Visual Assets"},
+	{"path": "res://AdvancedConversationOverlay.tscn", "name": "Narrative Engine"},
+	{"path": "res://main.tscn", "name": "Environment Data"}
 ]
 
 var current_load_index: int = 0
 var progress_array: Array = []
 
 func _ready():
+	var custom_font = preload("res://Fonts/VarelaRound-Regular.ttf")
+	info_label.add_theme_font_override("font", custom_font)
+	progress_bar.add_theme_font_override("font", custom_font)
+
+	# --- MOBILE SCALING ---
+	if OS.has_feature("mobile"):
+		info_label.add_theme_font_size_override("font_size", 48)
+		progress_bar.custom_minimum_size.y = 80
+		progress_bar.add_theme_font_size_override("font_size", 36)
+
+		var vbox = $VBoxContainer
+		vbox.offset_top = -350
+		vbox.offset_bottom = -100
+		vbox.add_theme_constant_override("separation", 25)
+
 	progress_bar.value = 0
 	_start_next_load()
 

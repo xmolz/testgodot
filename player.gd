@@ -10,8 +10,11 @@ var player_half_width: float = 65.0
 
 @onready var sprite_2d: Sprite2D = $Sprite
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
-# Reference to get the actual width of the player
 @onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
+@onready var thought_bubble_pivot = $ThoughtBubblePivot
+@onready var thought_bubble_pos = $ThoughtBubblePos
+@onready var prompt_label = $ThoughtBubblePivot/ThoughtBubble/MarginContainer/PromptLabel
+var _thought_bounce_tween: Tween
 
 var current_animation_state = "idle"
 
@@ -43,9 +46,27 @@ func _ready():
 	
 	play_animation("idle")
 
+	thought_bubble_pivot.visible = false
+	var bubble_style = StyleBoxFlat.new()
+	bubble_style.bg_color = Color(0, 0, 0, 0.8)
+	bubble_style.border_width_left = 3
+	bubble_style.border_width_top = 3
+	bubble_style.border_width_right = 3
+	bubble_style.border_width_bottom = 3
+	bubble_style.border_color = Color(1, 1, 1, 1)
+	bubble_style.corner_radius_top_left = 20
+	bubble_style.corner_radius_top_right = 20
+	bubble_style.corner_radius_bottom_left = 20
+	bubble_style.corner_radius_bottom_right = 20
+	$ThoughtBubblePivot/ThoughtBubble.add_theme_stylebox_override("panel", bubble_style)
+	prompt_label.add_theme_font_override("normal_font", preload("res://Fonts/VarelaRound-Regular.ttf"))
+	prompt_label.add_theme_font_size_override("normal_font_size", 44)
+	prompt_label.fit_content = true
+	prompt_label.autowrap_mode = TextServer.AUTOWRAP_OFF
+
 func _physics_process(delta: float):
 	if not _can_move:
-		if is_instance_valid(animation_player):
+		if is_instance_valid(animation_player) and current_animation_state == "walk":
 			set_animation_state("idle")
 		velocity.x = 0
 		if not is_on_floor():
@@ -154,7 +175,7 @@ func _physics_process(delta: float):
 
 	velocity.x = 0
 
-	if not _is_walking_to_target:
+	if not _is_walking_to_target and current_animation_state == "walk":
 		set_animation_state("idle")
 
 	move_and_slide()
@@ -205,10 +226,29 @@ func walk_to_and_interact(interactable_walk_to_point_pos: Vector2, interactable_
 	_stuck_timer = 0.0
 
 	var target_x = interactable_walk_to_point_pos.x
-	if global_position.x < target_x:
-		_actual_walk_destination.x = target_x - INTERACTION_OFFSET_X
+
+	# --- CUSTOM OFFSET LOGIC ---
+	var current_offset = INTERACTION_OFFSET_X
+	if verb_id == "flash":
+		current_offset = 270.0
+	# ---------------------------
+
+	# --- APPROACH SIDE OVERRIDE ---
+	var forced_side = 0
+	if is_instance_valid(interactable_node) and "approach_side" in interactable_node:
+		forced_side = interactable_node.approach_side
+
+	if forced_side == 1:
+		_actual_walk_destination.x = target_x - current_offset
+	elif forced_side == 2:
+		_actual_walk_destination.x = target_x + current_offset
 	else:
-		_actual_walk_destination.x = target_x + INTERACTION_OFFSET_X
+		if global_position.x < target_x:
+			_actual_walk_destination.x = target_x - current_offset
+		else:
+			_actual_walk_destination.x = target_x + current_offset
+	# ------------------------------
+
 	_actual_walk_destination.y = global_position.y
 
 	_start_walk_position_x = global_position.x
@@ -240,6 +280,27 @@ func play_animation(anim_name: String):
 	if animation_player.has_animation(anim_name):
 		animation_player.play(anim_name)
 		
+func show_thought_bubble(text: String):
+	prompt_label.text = "[center]" + text + "[/center]"
+	thought_bubble_pivot.visible = true
+
+	if is_instance_valid(thought_bubble_pos):
+		var target_x = thought_bubble_pos.position.x
+		if sprite_2d and sprite_2d.flip_h:
+			# Apply a manual offset to compensate for the character's visual center shifting when the sprite is flipped
+			target_x = -target_x - (-10.0)
+
+		thought_bubble_pivot.position = Vector2(target_x, thought_bubble_pos.position.y)
+
+		if _thought_bounce_tween: _thought_bounce_tween.kill()
+		_thought_bounce_tween = create_tween().set_loops()
+		_thought_bounce_tween.tween_property(thought_bubble_pivot, "position:y", thought_bubble_pos.position.y - 10.0, 1.0).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+		_thought_bounce_tween.tween_property(thought_bubble_pivot, "position:y", thought_bubble_pos.position.y, 1.0).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+func hide_thought_bubble():
+	thought_bubble_pivot.visible = false
+	if _thought_bounce_tween: _thought_bounce_tween.kill()
+
 var _last_step_time: int = 0
 const STEP_COOLDOWN_MSEC: int = 350 # Time in milliseconds (increase to slow down sounds)
 

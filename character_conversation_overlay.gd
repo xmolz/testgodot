@@ -87,7 +87,7 @@ func _ready():
 		var custom_font = preload("res://Fonts/VarelaRound-Regular.ttf")
 		continue_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		continue_button.add_theme_font_override("font", custom_font)
-		continue_button.add_theme_font_size_override("font_size", 24)
+		continue_button.add_theme_font_size_override("font_size", 46 if OS.has_feature("mobile") else 32)
 
 		var btn_normal = StyleBoxFlat.new()
 		btn_normal.bg_color = Color(0.15, 0.15, 0.15, 0.85)
@@ -95,10 +95,24 @@ func _ready():
 		btn_normal.corner_radius_top_right = 6
 		btn_normal.corner_radius_bottom_left = 6
 		btn_normal.corner_radius_bottom_right = 6
-		btn_normal.content_margin_left = 25
-		btn_normal.content_margin_right = 25
-		btn_normal.content_margin_top = 10
-		btn_normal.content_margin_bottom = 10
+		btn_normal.content_margin_left = 50 if OS.has_feature("mobile") else 35
+		btn_normal.content_margin_right = 50 if OS.has_feature("mobile") else 35
+		btn_normal.content_margin_top = 25 if OS.has_feature("mobile") else 15
+		btn_normal.content_margin_bottom = 25 if OS.has_feature("mobile") else 15
+
+		continue_button.reset_size()
+
+		# Anchor to Top-Left so it never covers the center scene or overflows
+		continue_button.anchor_left = 0.0
+		continue_button.anchor_right = 0.0
+		continue_button.anchor_top = 0.0
+		continue_button.anchor_bottom = 0.0
+		continue_button.grow_horizontal = Control.GROW_DIRECTION_END
+		continue_button.grow_vertical = Control.GROW_DIRECTION_END
+
+		# Add safe padding from the absolute edges
+		continue_button.offset_left = 50 if OS.has_feature("mobile") else 30
+		continue_button.offset_top = 50 if OS.has_feature("mobile") else 30
 		btn_normal.border_width_left = 2
 		btn_normal.border_width_top = 2
 		btn_normal.border_width_right = 2
@@ -567,10 +581,10 @@ func change_background_sprite(texture_path: String, effect: String = ""):
 	var slide_tween = create_tween().set_parallel(true)
 
 	slide_tween.tween_property(background_sprite, "position", Vector2.ZERO, duration)\
-		.set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
+		.set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
 
 	slide_tween.tween_property(temp_old_sprite, "position", old_sprite_end_pos, duration)\
-		.set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
+		.set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
 
 	# 7. Cleanup
 	slide_tween.chain().tween_callback(temp_old_sprite.queue_free)

@@ -109,6 +109,7 @@ cg_aliases = {
 "protag_brushing_hair_on_bed": "res://Backgrounds/Protagonist/xSergei/protag_brushing_hair_on_bed.png",
 "protag_closeup_curious": "res://Backgrounds/Protagonist/xSergei/protag_closeup_curious.png",
 "protag_closeup_domme": "res://Backgrounds/Protagonist/xSergei/protag_closeup_domme.png",
+"protag_closeup_speaking": "res://Backgrounds/Protagonist/xSergei/protag_closeup_speaking.png",
 "protag_sergey_gown_hand_slipped_in": "res://Backgrounds/Protagonist/xSergei/protag_sergey_gown_hand_slipped_in.png",
 "protag_sergey_gown_only": "res://Backgrounds/Protagonist/xSergei/protag_sergey_gown only.png",
 "protag_sergey_knees_touching": "res://Backgrounds/Protagonist/xSergei/protag_sergey_knees_touching.png",
@@ -126,8 +127,8 @@ cg_aliases = {
 "sergey_eyes_only_eye_to_eye_intense": "res://Backgrounds/Sergey/sergey_eyes_only_eye_to_eye_intense.png",
 "sergey_eyes_only_looking_away": "res://Backgrounds/Sergey/sergey_eyes_only_looking_away.png",
 "sergey_eyes_only_pleasure": "res://Backgrounds/Sergey/sergey_eyes_only_pleasure.png",
-"sergey_flat_and_drained": "res://Backgrounds/Sergey/sergey_flat_and_drained.png",
-"sergey_flat_and_embarrassed": "res://Backgrounds/Sergey/sergey_flat_and_embarrassed.png",
+"sergey_flat_and_drained": "res://Backgrounds/Sergey/sergey_flat_and_drained.PNG",
+"sergey_flat_and_embarrassed": "res://Backgrounds/Sergey/sergey_flat_and_embarrassed.PNG",
 "sergey_front_confused": "res://Backgrounds/Sergey/sergei_front_confused.png",
 "sergey_front_hand_behind_head": "res://Backgrounds/Sergey/sergey_front_hand_behind_head.png",
 "sergey_front_neutral_mouth_open": "res://Backgrounds/Sergey/sergey_front_neutral_mouth_open.png",
@@ -137,7 +138,7 @@ cg_aliases = {
 "sergey_hand_up": "res://Backgrounds/Sergey/sergey_hand_up.png",
 "sergey_neutral": "res://Backgrounds/Sergey/sergey_neutral.png",
 "sergey_neutral_mouth_open": "res://Backgrounds/Sergey/sergey_neutral_mouth_open.png",
-"sergey_shutted_up": "res://Backgrounds/rough/sergey_shutted_up.png",
+"sergey_shutted_up": "res://Backgrounds/Sergey/sergey_shutted_up.PNG",
 "sergey_techpass_inhand": "res://Backgrounds/Sergey/sergey_techpass_inhand.png"
 }
 mental_image_shader = ExtResource("11_dwxe7")

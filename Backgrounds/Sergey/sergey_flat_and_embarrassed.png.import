@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cbjfw66mpibhf"
-path="res://.godot/imported/sergey_flat_and_embarrassed.png-5268a8cc812d970e031fb1b70320d435.ctex"
+uid="uid://ti7ab4sl2ci0"
+path="res://.godot/imported/sergey_flat_and_embarrassed.PNG-d4b78df33c9c8b1189532ce3deefb43a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Backgrounds/Sergey/sergey_flat_and_embarrassed.png"
-dest_files=["res://.godot/imported/sergey_flat_and_embarrassed.png-5268a8cc812d970e031fb1b70320d435.ctex"]
+source_file="res://Backgrounds/Sergey/sergey_flat_and_embarrassed.PNG"
+dest_files=["res://.godot/imported/sergey_flat_and_embarrassed.PNG-d4b78df33c9c8b1189532ce3deefb43a.ctex"]
 
 [params]
 
@@ -36,5 +36,5 @@ process/premult_alpha=false
 process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
-process/size_limit=1920
+process/size_limit=0
 detect_3d/compress_to=1

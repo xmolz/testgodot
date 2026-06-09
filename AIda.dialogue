@@ -91,9 +91,11 @@ do show_cg("scan_2", "fade", 0.3)
 The Nurse places her metallic hands on your temple. She feels as cold as a spoon in a refrigerator.
 do show_cg("scan_3", "fade", 0.3)
 do start_tech_scan()
+do SoundManager.play_looping_sfx("scan_effect", 0.5, -5.0)
 Her irises shift to gray, then pulse red. A soft vibration hums through your skull.
-AIda: Progress: 4%... 22%... 67%... 91%... 
+AIda: Progress: 4%... 22%... 67%... 91%...
 do stop_tech_scan()
+do SoundManager.stop_looping_sfx("scan_effect", 0.5)
 do hide_cg("fade", 0.5)
 do actor_change("AIda", "base")
 AIda: Scan complete.
@@ -103,9 +105,12 @@ do actor_change("AIda", "thinking")
 AIda: That would explain your current inability to access long-term autobiographical memory.
 do actor_change("AIda", "surprised")
 AIda: Fortunately! HAVEMORE Inc now offers proprietary MemoryBox™ therapy - a revolutionary tool for memory stimulation and reconstruction.
-AIda: Luckily, we have a MemoryBox™ installed right here in this very unit. You may find it towards the right. 
+do show_cg("memory_box", "slide_right", 0.5)
+AIda: Luckily, we have a MemoryBox™ installed right here in this very unit. You may find it towards the right.
 
-- How am I supposed to use this 'MemoryBox'?
+
+- How do I use this 'MemoryBox'?
+	do hide_cg("slide_left", 0.5)
 	do actor_change("AIda", "smiling")
 	AIda: Excellent question! Think of it as... guided lucid dreaming, but clinically supervised.
 	AIda: You'll relive the memory as if you're there again.
@@ -260,6 +265,8 @@ What do you want to say to AIda?
 		do actor_change("AIda", "pointing_up")
 		AIda: That is why we keep the television in front of him tuned to HAVEMORE News!
 		AIda: Slow and predictable programming helps keep him calm.
+		do actor_change("AIda", "concerned")
+		AIda: However, this method is not 100% effective. He could still scream while the television is on.
 		do actor_change("AIda", "smiling")
 		AIda gives you a polite corporate smile.
 
@@ -279,6 +286,7 @@ What do you want to say to AIda?
 			Player: (So they do have meds for him.)
 			Player: (And they're probably kept somewhere in this room.)
 			Player: (I should look around.)
+			do GameManager.set_current_level_flag("learned_about_meds_from_aida", true)
 
 			=> mcbucket_enquiry_hub
 

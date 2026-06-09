@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://cppyr6lerlx7s"
+path="res://.godot/imported/hints.dialogue-838649573a53d3246c74af9f8434dba0.tres"
+
+[deps]
+
+source_file="res://hints.dialogue"
+dest_files=["res://.godot/imported/hints.dialogue-838649573a53d3246c74af9f8434dba0.tres"]
+
+[params]
+
+defaults=true

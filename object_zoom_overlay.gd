@@ -28,7 +28,7 @@ func _ready():
 		close_button.text = "Close"
 		close_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		close_button.add_theme_font_override("font", custom_font)
-		close_button.add_theme_font_size_override("font_size", 24)
+		close_button.add_theme_font_size_override("font_size", 46 if OS.has_feature("mobile") else 32)
 
 		var btn_normal = StyleBoxFlat.new()
 		btn_normal.bg_color = Color(0.15, 0.15, 0.15, 0.85)
@@ -36,10 +36,14 @@ func _ready():
 		btn_normal.corner_radius_top_right = 6
 		btn_normal.corner_radius_bottom_left = 6
 		btn_normal.corner_radius_bottom_right = 6
-		btn_normal.content_margin_left = 25
-		btn_normal.content_margin_right = 25
-		btn_normal.content_margin_top = 10
-		btn_normal.content_margin_bottom = 10
+		btn_normal.content_margin_left = 50 if OS.has_feature("mobile") else 35
+		btn_normal.content_margin_right = 50 if OS.has_feature("mobile") else 35
+		btn_normal.content_margin_top = 25 if OS.has_feature("mobile") else 15
+		btn_normal.content_margin_bottom = 25 if OS.has_feature("mobile") else 15
+
+		close_button.reset_size()
+		if OS.has_feature("mobile"):
+			close_button.position = Vector2(40, 40)
 		btn_normal.border_width_left = 2
 		btn_normal.border_width_top = 2
 		btn_normal.border_width_right = 2
@@ -79,6 +83,7 @@ func _ready():
 
 # --- THIS IS THE MISSING FUNCTION ---
 func _on_close_button_pressed():
+	if SoundManager: SoundManager.play_sfx("ui_click")
 	# When the button is pressed, we start the cleanup process.
 	_cleanup_and_queue_free()
 

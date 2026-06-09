@@ -17,6 +17,13 @@ var current_digit: int = 0
 # The _ready function runs once, when the node is first added to the scene.
 # It's the perfect place for setup.
 func _ready():
+	# --- MOBILE SCALING ---
+	if OS.has_feature("mobile"):
+		custom_minimum_size = Vector2(80, 200)
+		up_button.add_theme_font_size_override("font_size", 42)
+		down_button.add_theme_font_size_override("font_size", 42)
+		digit_label.add_theme_font_size_override("font_size", 46)
+
 	# Set the label to its starting value.
 	_update_label()
 	# Connect the buttons' 'pressed' signals to our functions below.

@@ -13,7 +13,7 @@
 
 [sub_resource type="Resource" id="Resource_ookji"]
 script = ExtResource("8_1sodi")
-line_to_say = "picekd up cannathink"
+line_to_say = "picked up cannathink"
 metadata/_custom_type_script = "uid://bapryqa2s86c5"
 
 [sub_resource type="Resource" id="Resource_ktyjx"]

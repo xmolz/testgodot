@@ -47,14 +47,15 @@ func _cleanup_and_queue_free():
 func _start_caught_dialogue():
 	print_rich("[color=red]MedicineCabinet: Playing Caught Dialogue.[/color]")
 
-	# --- THE FIX: Connect the cleanup signal! ---
-	# We tell DialogueManager: "When this text finishes, tell GameManager to unlock the player."
+	if GameManager and GameManager.has_method("clear_active_dialogue_balloons"):
+		GameManager.clear_active_dialogue_balloons()
+
 	if GameManager:
-		DialogueManager.dialogue_ended.connect(
-			GameManager._on_dialogue_ended_for_object_dialogue,
-			CONNECT_ONE_SHOT
-		)
-	# --------------------------------------------
+		if not DialogueManager.dialogue_ended.is_connected(GameManager._on_dialogue_ended_for_object_dialogue):
+			DialogueManager.dialogue_ended.connect(
+				GameManager._on_dialogue_ended_for_object_dialogue,
+				CONNECT_ONE_SHOT
+			)
 
 	DialogueManager.show_dialogue_balloon_scene(
 		"res://conversationballoon.tscn",

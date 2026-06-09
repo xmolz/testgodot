@@ -17,6 +17,7 @@ enum ObjectCategory { OBJECT, CHARACTER }
 # --- NEW ENUM TO DEFINE WHERE THE INTERACTABLE EXISTS ---
 enum InteractionLocation { WORLD, UI_OVERLAY }
 
+enum ApproachSide { ANY, LEFT_SIDE, RIGHT_SIDE }
 
 @export var object_display_name: String = "Object"
 @export var object_id: String = ""
@@ -24,6 +25,7 @@ enum InteractionLocation { WORLD, UI_OVERLAY }
 @export var category: ObjectCategory = ObjectCategory.OBJECT
 # --- NEW EXPORT VARIABLE FOR THE LOCATION CONTEXT ---
 @export var interaction_location: InteractionLocation = InteractionLocation.WORLD
+@export var approach_side: ApproachSide = ApproachSide.ANY
 
 
 # --- THE NEW SYSTEM IS NOW THE ONLY SYSTEM ---
@@ -32,6 +34,7 @@ enum InteractionLocation { WORLD, UI_OVERLAY }
 @onready var object_sprite: Sprite2D = _find_object_sprite()
 @onready var walk_to_point: Marker2D = $WalkToPoint if has_node("WalkToPoint") else null
 var _is_mouse_over: bool = false
+var _is_force_highlighted: bool = false
 var _outline_material: Material = null
 
 @export var character_conversation_overlay_scene: PackedScene
@@ -50,6 +53,7 @@ func _ready():
 		print_rich("[color=yellow]Interactable: '%s' no object_id. Auto-gen: %s[/color]" % [name, object_id])
 	if category == ObjectCategory.CHARACTER and character_conversation_overlay_scene == null and character_conversation_scene_path.is_empty():
 		print_rich("[color=orange]Interactable '%s' (ID: %s): Category CHARACTER but no 'character_conversation_overlay_scene'![/color]" % [object_display_name, object_id])
+	add_to_group("interactables")
 	mouse_entered.connect(_on_mouse_entered)
 	mouse_exited.connect(_on_mouse_exited)
 	input_event.connect(_on_input_event)
@@ -60,6 +64,23 @@ func _ready():
 	if sprite and sprite.material:
 		_outline_material = sprite.material
 		sprite.material = null
+	# --- AUTO-INJECT UNIVERSAL FLASH VERB ---
+	var has_flash_assigned = false
+	for response in interactions:
+		if response and response.verb_id == "flash":
+			has_flash_assigned = true
+			break
+			
+	if not has_flash_assigned:
+		var flash_response = InteractionResponse.new()
+		flash_response.verb_id = "flash"
+		flash_response.requires_walk = true
+		
+		var universal_flash = UniversalFlashAction.new()
+		flash_response.actions_to_perform.append(universal_flash)
+		
+		interactions.append(flash_response)
+	# ----------------------------------------
 
 func _on_mouse_entered():
 	if GameManager:
@@ -71,24 +92,40 @@ func _on_mouse_entered():
 	_is_mouse_over = true
 	if GameManager: GameManager.set_hovered_object(self)
 
-	if has_node("HoverGlow"):
-		get_node("HoverGlow").visible = true
+	if not OS.has_feature("mobile"):
+		if has_node("HoverGlow"):
+			get_node("HoverGlow").visible = true
 
-	var sprite = _find_object_sprite()
-	if sprite and _outline_material:
-		sprite.material = _outline_material
-		sprite.material.set_shader_parameter("enable_outline", true)
+		var sprite = _find_object_sprite()
+		if sprite and _outline_material:
+			sprite.material = _outline_material
+			sprite.material.set_shader_parameter("enable_outline", true)
 
 func _on_mouse_exited():
 	_is_mouse_over = false
 	if GameManager: GameManager.clear_hovered_object(self)
+	if not OS.has_feature("mobile"):
+		if has_node("HoverGlow"): get_node("HoverGlow").visible = false
+		var sprite = _find_object_sprite()
+		if sprite and not _is_force_highlighted:
+			sprite.material = null
 
-	if has_node("HoverGlow"):
-		get_node("HoverGlow").visible = false
-
+func force_highlight(active: bool):
+	_is_force_highlighted = active
 	var sprite = _find_object_sprite()
-	if sprite:
-		sprite.material = null
+
+	if active:
+		if has_node("HoverGlow"): get_node("HoverGlow").visible = true
+		if sprite and _outline_material:
+			sprite.material = _outline_material
+			sprite.material.set_shader_parameter("enable_outline", true)
+	else:
+		if not _is_mouse_over or OS.has_feature("mobile"):
+			if has_node("HoverGlow"): get_node("HoverGlow").visible = false
+			if sprite: sprite.material = null
+
+		if not _is_mouse_over:
+			if GameManager: GameManager.clear_hovered_object(self)
 
 func _on_input_event(_v: Viewport, event: InputEvent, _sidx: int):
 	if GameManager:

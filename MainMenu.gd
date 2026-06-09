@@ -4,6 +4,22 @@ extends CanvasLayer
 signal new_game_requested
 signal quit_game_requested
 
+@onready var button_block = $Content/ButtonBlock
+@onready var start_btn = $Content/ButtonBlock/StartButton
+@onready var settings_btn = $Content/ButtonBlock/SettingsButton
+@onready var credits_btn = $Content/ButtonBlock/CreditsButton
+@onready var quit_btn = $Content/ButtonBlock/QuitButton
+
+func _ready():
+	if OS.has_feature("mobile"):
+		button_block.add_theme_constant_override("separation", 40)
+
+		var mobile_font_size = 54
+		start_btn.add_theme_font_size_override("font_size", mobile_font_size)
+		settings_btn.add_theme_font_size_override("font_size", mobile_font_size)
+		credits_btn.add_theme_font_size_override("font_size", mobile_font_size)
+		quit_btn.add_theme_font_size_override("font_size", mobile_font_size)
+
 func _on_new_game_button_pressed():
 	# Verify the click is working in the Output log
 	print("MainMenu: New Game Button Pressed")

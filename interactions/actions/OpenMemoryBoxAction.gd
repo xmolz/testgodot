@@ -9,27 +9,30 @@ func execute(interactable_node: Interactable) -> Variant:
 		push_warning("OpenMemoryBoxAction failed: Scene could not be loaded.")
 		return true
 
-	# 1. IRIS CLOSE TO BLACK
+	# 1. ENTER UI STATE BEFORE FADE
+	# This instantly hides the UI and locks player movement
+	if GameManager:
+		GameManager.cancel_current_action(false)
+		GameManager.persisting_verb_id = ""
+		GameManager.enter_conversation_state()
+
+	# 2. IRIS CLOSE TO BLACK
 	if GameManager and GameManager.transition_layer:
 		await GameManager.transition_layer.play_iris_close(1.0)
 
-	# 2. SPAWN THE UI (While screen is black)
-	if GameManager:
-		GameManager.enter_conversation_state()
-
+	# 3. SPAWN THE UI (While screen is black)
 	var instance = MemoryBoxScene.instantiate()
 	interactable_node.get_tree().root.add_child(instance)
-	
-	# Wait one frame so the UI can calculate its layout sizes
+
 	await interactable_node.get_tree().process_frame
 
-	# 3. TRIGGER RETRO BOOT SEQUENCE (Start this immediately!)
+	# 4. TRIGGER RETRO BOOT SEQUENCE
 	if instance.has_method("play_boot_sequence"):
 		instance.play_boot_sequence()
 
-	# 4. IRIS OPEN (Revealing the dark background while the UI gracefully fades in)
+	# 5. IRIS OPEN
 	if GameManager and GameManager.transition_layer:
-		await GameManager.transition_layer.play_iris_open(1.0) # Slower, chill open
+		await GameManager.transition_layer.play_iris_open(1.0)
 
 	print_rich("[color=cyan]OpenMemoryBoxAction: Opened the Memory Box overlay.[/color]")
 

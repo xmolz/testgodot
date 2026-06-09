@@ -1,13 +1,17 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://cqlvokl3ymyk8"]
 
-[ext_resource type="Script" path="res://pause_menu_ui.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://cdudubb37e8au" path="res://pause_menu_ui.gd" id="1_script"]
+[ext_resource type="Shader" uid="uid://l538xfgj8q2v" path="res://Shaders/white_icon_shader.gdshader" id="3_shader"]
 
-[node name="PauseMenuUI" type="CanvasLayer"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_aepd1"]
+shader = ExtResource("3_shader")
+
+[node name="PauseMenuUI" type="CanvasLayer" unique_id=501466196]
 process_mode = 3
 layer = 110
 script = ExtResource("1_script")
 
-[node name="MenuPanel" type="PanelContainer" parent="."]
+[node name="MenuPanel" type="PanelContainer" parent="." unique_id=1112015817]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
@@ -17,7 +21,7 @@ offset_right = -20.0
 offset_bottom = 100.0
 grow_horizontal = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="MenuPanel"]
+[node name="MarginContainer" type="MarginContainer" parent="MenuPanel" unique_id=1541213786]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 15
@@ -25,34 +29,60 @@ theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 15
 theme_override_constants/margin_bottom = 20
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MenuPanel/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MenuPanel/MarginContainer" unique_id=1563126049]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 8
 alignment = 1
 
-[node name="Line1" type="ColorRect" parent="MenuPanel/MarginContainer/VBoxContainer"]
+[node name="Line1" type="ColorRect" parent="MenuPanel/MarginContainer/VBoxContainer" unique_id=1443137293]
 custom_minimum_size = Vector2(0, 4)
 layout_mode = 2
 mouse_filter = 2
 
-[node name="Line2" type="ColorRect" parent="MenuPanel/MarginContainer/VBoxContainer"]
+[node name="Line2" type="ColorRect" parent="MenuPanel/MarginContainer/VBoxContainer" unique_id=352462352]
 custom_minimum_size = Vector2(0, 4)
 layout_mode = 2
 mouse_filter = 2
 
-[node name="Line3" type="ColorRect" parent="MenuPanel/MarginContainer/VBoxContainer"]
+[node name="Line3" type="ColorRect" parent="MenuPanel/MarginContainer/VBoxContainer" unique_id=681753927]
 custom_minimum_size = Vector2(0, 4)
 layout_mode = 2
 mouse_filter = 2
 
-[node name="MenuButton" type="Button" parent="MenuPanel"]
+[node name="MenuButton" type="Button" parent="MenuPanel" unique_id=782052477]
 layout_mode = 2
 focus_mode = 0
 mouse_default_cursor_shape = 2
 flat = true
 
-[node name="Overlay" type="ColorRect" parent="."]
+[node name="ScanCancelPanel" type="PanelContainer" parent="." unique_id=496826786]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -100.0
+offset_top = 110.0
+offset_right = -20.0
+offset_bottom = 190.0
+grow_horizontal = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="ScanCancelPanel" unique_id=577047613]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="ScanCancelButton" type="TextureButton" parent="ScanCancelPanel/MarginContainer" unique_id=420581299]
+material = SubResource("ShaderMaterial_aepd1")
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Overlay" type="ColorRect" parent="." unique_id=486277780]
 visible = false
 anchors_preset = 15
 anchor_right = 1.0
@@ -61,8 +91,8 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.85098)
 
-[node name="BackgroundButton" type="Button" parent="Overlay"]
-anchors_preset = 15
+[node name="BackgroundButton" type="Button" parent="Overlay" unique_id=1971626090]
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
@@ -70,7 +100,7 @@ grow_vertical = 2
 focus_mode = 0
 flat = true
 
-[node name="CenterContainer" type="CenterContainer" parent="Overlay"]
+[node name="CenterContainer" type="CenterContainer" parent="Overlay" unique_id=1005123146]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -79,35 +109,35 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Overlay/CenterContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Overlay/CenterContainer" unique_id=188375652]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="ResumeButton" type="Button" parent="Overlay/CenterContainer/VBoxContainer"]
+[node name="ResumeButton" type="Button" parent="Overlay/CenterContainer/VBoxContainer" unique_id=445226457]
 layout_mode = 2
 text = "Resume"
 
-[node name="HistoryButton" type="Button" parent="Overlay/CenterContainer/VBoxContainer"]
+[node name="HistoryButton" type="Button" parent="Overlay/CenterContainer/VBoxContainer" unique_id=1428238257]
 layout_mode = 2
 text = "Dialogue Log"
 
-[node name="SettingsButton" type="Button" parent="Overlay/CenterContainer/VBoxContainer"]
+[node name="SettingsButton" type="Button" parent="Overlay/CenterContainer/VBoxContainer" unique_id=1182913799]
 layout_mode = 2
 text = "Settings"
 
-[node name="ControlsButton" type="Button" parent="Overlay/CenterContainer/VBoxContainer"]
+[node name="ControlsButton" type="Button" parent="Overlay/CenterContainer/VBoxContainer" unique_id=494489092]
 layout_mode = 2
 text = "Controls"
 
-[node name="CreditsButton" type="Button" parent="Overlay/CenterContainer/VBoxContainer"]
+[node name="CreditsButton" type="Button" parent="Overlay/CenterContainer/VBoxContainer" unique_id=1631865900]
 layout_mode = 2
 text = "Credits"
 
-[node name="QuitButton" type="Button" parent="Overlay/CenterContainer/VBoxContainer"]
+[node name="QuitButton" type="Button" parent="Overlay/CenterContainer/VBoxContainer" unique_id=1591283700]
 layout_mode = 2
 text = "Quit to Title"
 
-[node name="ConfirmOverlay" type="ColorRect" parent="."]
+[node name="ConfirmOverlay" type="ColorRect" parent="." unique_id=1105213193]
 visible = false
 anchors_preset = 15
 anchor_right = 1.0
@@ -116,7 +146,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.901961)
 
-[node name="CenterContainer" type="CenterContainer" parent="ConfirmOverlay"]
+[node name="CenterContainer" type="CenterContainer" parent="ConfirmOverlay" unique_id=1035318855]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -124,36 +154,36 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ConfirmPanel" type="PanelContainer" parent="ConfirmOverlay/CenterContainer"]
+[node name="ConfirmPanel" type="PanelContainer" parent="ConfirmOverlay/CenterContainer" unique_id=231985621]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="ConfirmOverlay/CenterContainer/ConfirmPanel"]
+[node name="MarginContainer" type="MarginContainer" parent="ConfirmOverlay/CenterContainer/ConfirmPanel" unique_id=729587073]
 layout_mode = 2
 theme_override_constants/margin_left = 40
 theme_override_constants/margin_top = 30
 theme_override_constants/margin_right = 40
 theme_override_constants/margin_bottom = 30
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ConfirmOverlay/CenterContainer/ConfirmPanel/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="ConfirmOverlay/CenterContainer/ConfirmPanel/MarginContainer" unique_id=1785895179]
 layout_mode = 2
 theme_override_constants/separation = 30
 
-[node name="Label" type="Label" parent="ConfirmOverlay/CenterContainer/ConfirmPanel/MarginContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="ConfirmOverlay/CenterContainer/ConfirmPanel/MarginContainer/VBoxContainer" unique_id=1484398048]
 layout_mode = 2
 text = "Are you sure you want to return to the main menu?"
 horizontal_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="ConfirmOverlay/CenterContainer/ConfirmPanel/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="ConfirmOverlay/CenterContainer/ConfirmPanel/MarginContainer/VBoxContainer" unique_id=115330918]
 layout_mode = 2
 theme_override_constants/separation = 20
 alignment = 1
 
-[node name="YesButton" type="Button" parent="ConfirmOverlay/CenterContainer/ConfirmPanel/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="YesButton" type="Button" parent="ConfirmOverlay/CenterContainer/ConfirmPanel/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1018554792]
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 text = "Yes"
 
-[node name="NoButton" type="Button" parent="ConfirmOverlay/CenterContainer/ConfirmPanel/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="NoButton" type="Button" parent="ConfirmOverlay/CenterContainer/ConfirmPanel/MarginContainer/VBoxContainer/HBoxContainer" unique_id=40026435]
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 text = "No"

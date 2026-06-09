@@ -13,6 +13,16 @@ func _ready():
 	modulate.a = 0.0
 	scale = Vector2(0.8, 0.8)
 
+	if OS.has_feature("mobile"):
+		label.add_theme_font_size_override("font_size", 36)
+		var mobile_style = get_theme_stylebox("panel").duplicate()
+		mobile_style.content_margin_left = 40
+		mobile_style.content_margin_right = 40
+		mobile_style.content_margin_top = 20
+		mobile_style.content_margin_bottom = 20
+		add_theme_stylebox_override("panel", mobile_style)
+		reset_size()
+
 	# We want the scale to happen from the center of the capsule
 	pivot_offset = size / 2.0
 

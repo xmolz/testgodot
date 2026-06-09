@@ -14,6 +14,18 @@ func _ready():
 	# Connect our own "pressed" signal to a handler function.
 	self.pressed.connect(_on_pressed)
 
+	# --- TOUCH SCROLL FIX ---
+	# Buttons default to STOP, which blocks the ScrollContainer from seeing swipes.
+	# Changing this to PASS allows silky smooth native touch scrolling!
+	self.mouse_filter = Control.MOUSE_FILTER_PASS
+
+	# --- MOBILE SCALING FOR CHAPTER BUTTON ---
+	if OS.has_feature("mobile"):
+		self.custom_minimum_size = Vector2(350, 260)
+		chapter_name_label.add_theme_font_size_override("font_size", 32)
+		# Provide 80 pixels of vertical space so the text easily fits without clipping
+		chapter_name_label.custom_minimum_size.y = 80
+
 func _on_pressed():
 	# When this button is pressed, emit our custom signal,
 	# passing our own chapter_data along with it.

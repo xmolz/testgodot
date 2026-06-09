@@ -11,7 +11,11 @@ extends CanvasLayer
 @onready var text_speed_margin = $ColorRect/MarginContainer/VBoxContainer/TextSpeedMargin
 @onready var text_speed_slider = $ColorRect/MarginContainer/VBoxContainer/TextSpeedMargin/TextSpeedContainer/TextSpeedSlider
 @onready var text_speed_val = $ColorRect/MarginContainer/VBoxContainer/TextSpeedMargin/TextSpeedContainer/TextSpeedHBox/TextSpeedVal
+@onready var text_scale_margin = $ColorRect/MarginContainer/VBoxContainer/TextScaleMargin
+@onready var text_scale_slider = $ColorRect/MarginContainer/VBoxContainer/TextScaleMargin/TextScaleContainer/TextScaleSlider
+@onready var text_scale_val = $ColorRect/MarginContainer/VBoxContainer/TextScaleMargin/TextScaleContainer/TextScaleHBox/TextScaleVal
 @onready var close_button = $ColorRect/MarginContainer/VBoxContainer/CloseButton
+@onready var assisted_mode_toggle = %AssistedModeToggle
 
 var custom_font = preload("res://Fonts/VarelaRound-Regular.ttf")
 
@@ -28,6 +32,9 @@ func _ready():
 		text_speed_slider.value = round(speed_mapped)
 
 		_update_toggle_visuals(GameManager.instant_text)
+		_update_assisted_toggle_visuals(GameManager.assisted_mode)
+
+		text_scale_slider.value = GameManager.dialogue_text_scale * 100.0
 
 	_update_labels()
 
@@ -35,7 +42,9 @@ func _ready():
 	music_slider.value_changed.connect(_on_music_changed)
 	sfx_slider.value_changed.connect(_on_sfx_changed)
 	text_speed_slider.value_changed.connect(_on_text_speed_changed)
+	text_scale_slider.value_changed.connect(_on_text_scale_changed)
 	instant_text_toggle.pressed.connect(_on_instant_text_pressed)
+	assisted_mode_toggle.pressed.connect(_on_assisted_mode_pressed)
 	close_button.pressed.connect(_on_close_pressed)
 
 	$ColorRect.gui_input.connect(func(event):
@@ -53,6 +62,7 @@ func _update_labels():
 	music_val.text = str(music_slider.value)
 	sfx_val.text = str(sfx_slider.value)
 	text_speed_val.text = str(text_speed_slider.value)
+	text_scale_val.text = str(text_scale_slider.value) + "%"
 
 func _on_master_changed(value: float):
 	master_val.text = str(value)
@@ -103,17 +113,26 @@ func _on_text_speed_changed(value: float):
 		var new_speed = remap(value, 0.0, 10.0, 0.05, 0.005)
 		GameManager.text_speed = new_speed
 
+func _on_text_scale_changed(value: float):
+	text_scale_val.text = str(value) + "%"
+	if GameManager:
+		GameManager.dialogue_text_scale = value / 100.0
+
 func _on_close_pressed():
 	if SoundManager: SoundManager.play_sfx("ui_click")
 	queue_free()
 
 func _apply_ui_polish():
 	title.add_theme_font_override("font", custom_font)
-	title.add_theme_font_size_override("font_size", 48)
+	title.add_theme_font_size_override("font_size", 72 if OS.has_feature("mobile") else 48)
 	title.add_theme_color_override("font_color", Color(0.2, 0.85, 1.0, 1.0))
 
 	instant_text_toggle.add_theme_font_override("font", custom_font)
-	instant_text_toggle.add_theme_font_size_override("font_size", 20)
+	instant_text_toggle.add_theme_font_size_override("font_size", 36 if OS.has_feature("mobile") else 20)
+	instant_text_toggle.custom_minimum_size = Vector2(160, 60) if OS.has_feature("mobile") else Vector2(100, 40)
+	assisted_mode_toggle.add_theme_font_override("font", custom_font)
+	assisted_mode_toggle.add_theme_font_size_override("font_size", 36 if OS.has_feature("mobile") else 20)
+	assisted_mode_toggle.custom_minimum_size = Vector2(160, 60) if OS.has_feature("mobile") else Vector2(100, 40)
 
 	for child in $ColorRect/MarginContainer/VBoxContainer.get_children():
 		if child is HBoxContainer:
@@ -121,7 +140,7 @@ func _apply_ui_polish():
 				if subchild is Label:
 					subchild.add_theme_font_override("font", custom_font)
 					# Main labels get 24, TextSpeed gets 20 below
-					subchild.add_theme_font_size_override("font_size", 24)
+					subchild.add_theme_font_size_override("font_size", 42 if OS.has_feature("mobile") else 24)
 					if subchild.name.ends_with("Val"):
 						subchild.add_theme_color_override("font_color", Color(0.2, 0.85, 1.0, 1.0))
 
@@ -130,7 +149,15 @@ func _apply_ui_polish():
 	for subchild in speed_hbox.get_children():
 		if subchild is Label:
 			subchild.add_theme_font_override("font", custom_font)
-			subchild.add_theme_font_size_override("font_size", 20)
+			subchild.add_theme_font_size_override("font_size", 36 if OS.has_feature("mobile") else 20)
+			if subchild.name.ends_with("Val"):
+				subchild.add_theme_color_override("font_color", Color(0.2, 0.85, 1.0, 1.0))
+
+	var scale_hbox = $ColorRect/MarginContainer/VBoxContainer/TextScaleMargin/TextScaleContainer/TextScaleHBox
+	for subchild in scale_hbox.get_children():
+		if subchild is Label:
+			subchild.add_theme_font_override("font", custom_font)
+			subchild.add_theme_font_size_override("font_size", 36 if OS.has_feature("mobile") else 20)
 			if subchild.name.ends_with("Val"):
 				subchild.add_theme_color_override("font_color", Color(0.2, 0.85, 1.0, 1.0))
 
@@ -140,24 +167,24 @@ func _apply_ui_polish():
 	slider_bg.corner_radius_top_right = 4
 	slider_bg.corner_radius_bottom_left = 4
 	slider_bg.corner_radius_bottom_right = 4
-	slider_bg.content_margin_top = 8
-	slider_bg.content_margin_bottom = 8
+	slider_bg.content_margin_top = 20 if OS.has_feature("mobile") else 8
+	slider_bg.content_margin_bottom = 20 if OS.has_feature("mobile") else 8
 
 	var slider_fill = StyleBoxFlat.new()
 	slider_fill.bg_color = Color(0.2, 0.85, 1.0, 1.0)
 	slider_fill.corner_radius_top_left = 4
 	slider_fill.corner_radius_bottom_left = 4
-	slider_fill.content_margin_top = 8
-	slider_fill.content_margin_bottom = 8
+	slider_fill.content_margin_top = 20 if OS.has_feature("mobile") else 8
+	slider_fill.content_margin_bottom = 20 if OS.has_feature("mobile") else 8
 
-	var sliders = [master_slider, music_slider, sfx_slider, text_speed_slider]
+	var sliders = [master_slider, music_slider, sfx_slider, text_speed_slider, text_scale_slider]
 	for s in sliders:
 		s.add_theme_stylebox_override("slider", slider_bg)
 		s.add_theme_stylebox_override("grabber_area", slider_fill)
 		s.add_theme_stylebox_override("grabber_area_highlight", slider_fill)
 
 	close_button.add_theme_font_override("font", custom_font)
-	close_button.add_theme_font_size_override("font_size", 28)
+	close_button.add_theme_font_size_override("font_size", 46 if OS.has_feature("mobile") else 28)
 
 	var btn_normal = StyleBoxFlat.new()
 	btn_normal.bg_color = Color(0.15, 0.15, 0.15, 0.85)
@@ -165,8 +192,8 @@ func _apply_ui_polish():
 	btn_normal.corner_radius_top_right = 6
 	btn_normal.corner_radius_bottom_left = 6
 	btn_normal.corner_radius_bottom_right = 6
-	btn_normal.content_margin_top = 10
-	btn_normal.content_margin_bottom = 10
+	btn_normal.content_margin_top = 25 if OS.has_feature("mobile") else 10
+	btn_normal.content_margin_bottom = 25 if OS.has_feature("mobile") else 10
 	btn_normal.border_width_left = 2
 	btn_normal.border_width_top = 2
 	btn_normal.border_width_right = 2
@@ -184,3 +211,35 @@ func _apply_ui_polish():
 	close_button.add_theme_color_override("font_color", Color(0.8, 0.8, 0.8, 1.0))
 	close_button.add_theme_color_override("font_hover_color", Color.WHITE)
 	close_button.add_theme_color_override("font_pressed_color", Color.WHITE)
+
+func _on_assisted_mode_pressed():
+	if SoundManager: SoundManager.play_sfx("ui_click")
+	if GameManager:
+		GameManager.assisted_mode = not GameManager.assisted_mode
+		_update_assisted_toggle_visuals(GameManager.assisted_mode)
+
+		if GameManager.has_method("refresh_hint_system"):
+			GameManager.refresh_hint_system()
+
+func _update_assisted_toggle_visuals(is_on: bool):
+	var style = StyleBoxFlat.new()
+	style.corner_radius_top_left = 6
+	style.corner_radius_top_right = 6
+	style.corner_radius_bottom_left = 6
+	style.corner_radius_bottom_right = 6
+
+	if is_on:
+		assisted_mode_toggle.text = "ON"
+		assisted_mode_toggle.add_theme_color_override("font_color", Color(0.1, 0.1, 0.1, 1.0))
+		assisted_mode_toggle.add_theme_color_override("font_hover_color", Color.BLACK)
+		style.bg_color = Color(0.2, 0.85, 1.0, 1.0)
+	else:
+		assisted_mode_toggle.text = "OFF"
+		assisted_mode_toggle.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6, 1.0))
+		assisted_mode_toggle.add_theme_color_override("font_hover_color", Color.WHITE)
+		style.bg_color = Color(0.15, 0.15, 0.15, 1.0)
+
+	assisted_mode_toggle.add_theme_stylebox_override("normal", style)
+	assisted_mode_toggle.add_theme_stylebox_override("hover", style)
+	assisted_mode_toggle.add_theme_stylebox_override("focus", style)
+	assisted_mode_toggle.add_theme_stylebox_override("pressed", style)
