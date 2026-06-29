@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://ek6h76xy564h"]
+
+[ext_resource type="Script" path="res://alyssa_exporter.gd" id="1_script"]
+
+[node name="AlyssaExporter" type="Node"]
+script = ExtResource("1_script")

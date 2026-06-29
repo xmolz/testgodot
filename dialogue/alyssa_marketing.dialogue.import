@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://b4fw1fuogq3a8"
+path="res://.godot/imported/alyssa_marketing.dialogue-0b40df820a0f37e307b468a582aa379a.tres"
+
+[deps]
+
+source_file="res://dialogue/alyssa_marketing.dialogue"
+dest_files=["res://.godot/imported/alyssa_marketing.dialogue-0b40df820a0f37e307b468a582aa379a.tres"]
+
+[params]
+
+defaults=true

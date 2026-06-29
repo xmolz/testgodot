@@ -48,7 +48,8 @@ var character_colors: Dictionary = {
 	"Nathan": Color("#FF69B4"),  # Hot Pink
 	"Dread": Color("#4B0082"),   # Indigo
 	"The... Toilet?": Color("#DC143C"),   # Crimson Red (Warning!)
-	"Player": Color("#FFD65C")            # Blonde Gold (HSV 43,44,100)
+	"Player": Color("#FFD65C"),            # Blonde Gold (HSV 43,44,100)
+	"Alyssa": Color("#9370DB"),   # Medium Purple
 }
 
 # --- Character Portrait Lookup Table ---
@@ -111,7 +112,12 @@ var character_bg_colors: Dictionary = {
 		"top": Color("#9400D3"),
 		"bot": Color("#FFD700"),
 		"dot": Color(1.0, 0.0, 0.2, 0.4)
-	}
+	},
+	"Alyssa": {
+		"top": Color("#4B0082"), # Indigo
+		"bot": Color("#E6E6FA"), # Lavender
+		"dot": Color(1.0, 1.0, 1.0, 0.4)
+	},
 }
 ## The current line
 var dialogue_line: DialogueLine:

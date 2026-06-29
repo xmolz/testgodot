@@ -1,0 +1,30 @@
+extends Node
+
+func _ready():
+	var viewport = SubViewport.new()
+	viewport.transparent_bg = true
+	viewport.size = Vector2(1920, 1080)
+	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	add_child(viewport)
+
+	var main_menu = load("res://main_menu.tscn").instantiate()
+	viewport.add_child(main_menu)
+
+	main_menu.get_node("Content/Background").visible = false
+	main_menu.get_node("Content/Vignette").visible = false
+	main_menu.get_node("Content/ButtonBlock").visible = false
+
+	for i in range(5):
+		await get_tree().process_frame
+
+	var img = viewport.get_texture().get_image()
+
+	var used_rect = img.get_used_rect()
+	var cropped_img = img.get_region(used_rect)
+
+	var export_path = "res://exported_logo.png"
+	cropped_img.save_png(export_path)
+
+	print("SUCCESS! Logo exported to: " + export_path)
+
+	get_tree().quit()
