@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3 uid="uid://xmq2iq7j8nup"]
 
-[ext_resource type="Texture2D" uid="uid://dk1p47yk7kbuu" path="res://cannathink.png" id="1_ch4sg"]
+[ext_resource type="Texture2D" path="res://Sprites/inventory_items/cannathink_icon.png" id="1_ch4sg"]
 [ext_resource type="Script" uid="uid://by8o1t3tdwrep" path="res://ItemData.gd" id="2_q20wr"]
 
 [resource]

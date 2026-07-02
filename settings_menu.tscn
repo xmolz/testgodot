@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=2 format=3 uid="uid://settings_menu_001"]
 
 [ext_resource type="Script" path="res://settings_menu.gd" id="1_script"]
 
@@ -21,10 +21,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 400
-theme_override_constants/margin_top = 150
-theme_override_constants/margin_right = 400
-theme_override_constants/margin_bottom = 150
+theme_override_constants/margin_left = 320
+theme_override_constants/margin_top = 80
+theme_override_constants/margin_right = 320
+theme_override_constants/margin_bottom = 80
 
 [node name="VBoxContainer" type="VBoxContainer" parent="ColorRect/MarginContainer"]
 layout_mode = 2
@@ -35,18 +35,205 @@ layout_mode = 2
 text = "SETTINGS"
 horizontal_alignment = 1
 
-[node name="AssistedModeHBox" type="HBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer"]
+[node name="TabButtons" type="HBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="TabAudio" type="Button" parent="ColorRect/MarginContainer/VBoxContainer/TabButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+mouse_default_cursor_shape = 2
+text = "Audio"
+
+[node name="TabDialogue" type="Button" parent="ColorRect/MarginContainer/VBoxContainer/TabButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+mouse_default_cursor_shape = 2
+text = "Dialogue"
+
+[node name="TabGameplay" type="Button" parent="ColorRect/MarginContainer/VBoxContainer/TabButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+mouse_default_cursor_shape = 2
+text = "Gameplay"
+
+[node name="HSeparator" type="HSeparator" parent="ColorRect/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="TabAudioContent" type="VBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="MasterLabel" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/TabAudioContent"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Master Volume: 7"
+
+[node name="MasterHBox" type="HBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer/TabAudioContent"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="MasterMinus" type="Button" parent="ColorRect/MarginContainer/VBoxContainer/TabAudioContent/MasterHBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+text = "-"
+
+[node name="MasterSlider" type="HSlider" parent="ColorRect/MarginContainer/VBoxContainer/TabAudioContent/MasterHBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 10.0
+step = 1.0
+tick_count = 11
+ticks_on_borders = true
+
+[node name="MasterPlus" type="Button" parent="ColorRect/MarginContainer/VBoxContainer/TabAudioContent/MasterHBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+text = "+"
+
+[node name="MusicLabel" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/TabAudioContent"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Music Volume: 7"
+
+[node name="MusicHBox" type="HBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer/TabAudioContent"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="MusicMinus" type="Button" parent="ColorRect/MarginContainer/VBoxContainer/TabAudioContent/MusicHBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+text = "-"
+
+[node name="MusicSlider" type="HSlider" parent="ColorRect/MarginContainer/VBoxContainer/TabAudioContent/MusicHBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 10.0
+step = 1.0
+tick_count = 11
+ticks_on_borders = true
+
+[node name="MusicPlus" type="Button" parent="ColorRect/MarginContainer/VBoxContainer/TabAudioContent/MusicHBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+text = "+"
+
+[node name="SFXLabel" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/TabAudioContent"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "SFX Volume: 7"
+
+[node name="SFXHBox" type="HBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer/TabAudioContent"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="SFXMinus" type="Button" parent="ColorRect/MarginContainer/VBoxContainer/TabAudioContent/SFXHBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+text = "-"
+
+[node name="SFXSlider" type="HSlider" parent="ColorRect/MarginContainer/VBoxContainer/TabAudioContent/SFXHBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 10.0
+step = 1.0
+tick_count = 11
+ticks_on_borders = true
+
+[node name="SFXPlus" type="Button" parent="ColorRect/MarginContainer/VBoxContainer/TabAudioContent/SFXHBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+text = "+"
+
+[node name="TabDialogueContent" type="VBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="TextScaleLabel" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Text Size: 5"
+
+[node name="TextScaleHBox" type="HBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="TextScaleMinus" type="Button" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent/TextScaleHBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+text = "-"
+
+[node name="TextScaleSlider" type="HSlider" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent/TextScaleHBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = 1.0
+max_value = 10.0
+step = 1.0
+value = 5.0
+tick_count = 10
+ticks_on_borders = true
+
+[node name="TextScalePlus" type="Button" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent/TextScaleHBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+text = "+"
+
+[node name="InstantTextHBox" type="HBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/AssistedModeHBox"]
+[node name="InstantTextLabel" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent/InstantTextHBox"]
+unique_name_in_owner = true
 layout_mode = 2
-text = "Assisted Mode"
+text = "Instant Text"
 
-[node name="Spacer" type="Control" parent="ColorRect/MarginContainer/VBoxContainer/AssistedModeHBox"]
+[node name="Spacer" type="Control" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent/InstantTextHBox"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="AssistedModeToggle" type="Button" parent="ColorRect/MarginContainer/VBoxContainer/AssistedModeHBox"]
+[node name="InstantTextToggle" type="Button" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent/InstantTextHBox"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 40)
 layout_mode = 2
@@ -54,146 +241,137 @@ focus_mode = 0
 mouse_default_cursor_shape = 2
 text = "OFF"
 
-[node name="MasterHBox" type="HBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer"]
+[node name="TextSpeedLabel" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent"]
+unique_name_in_owner = true
 layout_mode = 2
+text = "Text Speed: 5"
 
-[node name="Label" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/MasterHBox"]
+[node name="TextSpeedHBox" type="HBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent"]
 layout_mode = 2
-text = "Master Volume"
+theme_override_constants/separation = 15
 
-[node name="Spacer" type="Control" parent="ColorRect/MarginContainer/VBoxContainer/MasterHBox"]
+[node name="TextSpeedMinus" type="Button" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent/TextSpeedHBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+text = "-"
+
+[node name="TextSpeedSlider" type="HSlider" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent/TextSpeedHBox"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-
-[node name="MasterVal" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/MasterHBox"]
-layout_mode = 2
-text = "10"
-
-[node name="MasterSlider" type="HSlider" parent="ColorRect/MarginContainer/VBoxContainer"]
-layout_mode = 2
+size_flags_vertical = 4
 max_value = 10.0
 step = 1.0
+tick_count = 11
+ticks_on_borders = true
 
-[node name="MusicHBox" type="HBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer"]
+[node name="TextSpeedPlus" type="Button" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent/TextSpeedHBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+text = "+"
+
+[node name="AutoForwardHBox" type="HBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/MusicHBox"]
+[node name="AutoForwardLabel" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent/AutoForwardHBox"]
+unique_name_in_owner = true
 layout_mode = 2
-text = "Music Volume"
+text = "Auto Forward"
 
-[node name="Spacer" type="Control" parent="ColorRect/MarginContainer/VBoxContainer/MusicHBox"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="MusicVal" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/MusicHBox"]
-layout_mode = 2
-text = "10"
-
-[node name="MusicSlider" type="HSlider" parent="ColorRect/MarginContainer/VBoxContainer"]
-layout_mode = 2
-max_value = 10.0
-step = 1.0
-
-[node name="SFXHBox" type="HBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/SFXHBox"]
-layout_mode = 2
-text = "SFX Volume"
-
-[node name="Spacer" type="Control" parent="ColorRect/MarginContainer/VBoxContainer/SFXHBox"]
+[node name="Spacer" type="Control" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent/AutoForwardHBox"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="SFXVal" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/SFXHBox"]
-layout_mode = 2
-text = "10"
-
-[node name="SFXSlider" type="HSlider" parent="ColorRect/MarginContainer/VBoxContainer"]
-layout_mode = 2
-max_value = 10.0
-step = 1.0
-
-[node name="InstantTextHBox" type="HBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/InstantTextHBox"]
-layout_mode = 2
-text = "Instant Text"
-
-[node name="Spacer" type="Control" parent="ColorRect/MarginContainer/VBoxContainer/InstantTextHBox"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="InstantTextToggle" type="Button" parent="ColorRect/MarginContainer/VBoxContainer/InstantTextHBox"]
+[node name="AutoForwardToggle" type="Button" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent/AutoForwardHBox"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 40)
 layout_mode = 2
 focus_mode = 0
 mouse_default_cursor_shape = 2
 text = "OFF"
 
-[node name="TextSpeedMargin" type="MarginContainer" parent="ColorRect/MarginContainer/VBoxContainer"]
+[node name="AutoDelayLabel" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent"]
+unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/margin_left = 40
+text = "Auto Wait Time: 3"
 
-[node name="TextSpeedContainer" type="VBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer/TextSpeedMargin"]
+[node name="AutoDelayHBox" type="HBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent"]
 layout_mode = 2
 theme_override_constants/separation = 15
 
-[node name="TextSpeedHBox" type="HBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer/TextSpeedMargin/TextSpeedContainer"]
+[node name="AutoDelayMinus" type="Button" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent/AutoDelayHBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+text = "-"
 
-[node name="Label" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/TextSpeedMargin/TextSpeedContainer/TextSpeedHBox"]
-layout_mode = 2
-text = "Text Speed"
-
-[node name="Spacer" type="Control" parent="ColorRect/MarginContainer/VBoxContainer/TextSpeedMargin/TextSpeedContainer/TextSpeedHBox"]
+[node name="AutoDelaySlider" type="HSlider" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent/AutoDelayHBox"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-
-[node name="TextSpeedVal" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/TextSpeedMargin/TextSpeedContainer/TextSpeedHBox"]
-layout_mode = 2
-text = "5"
-
-[node name="TextSpeedSlider" type="HSlider" parent="ColorRect/MarginContainer/VBoxContainer/TextSpeedMargin/TextSpeedContainer"]
-layout_mode = 2
+size_flags_vertical = 4
+min_value = 1.0
 max_value = 10.0
 step = 1.0
+value = 3.0
+tick_count = 10
+ticks_on_borders = true
 
-[node name="TextScaleMargin" type="MarginContainer" parent="ColorRect/MarginContainer/VBoxContainer"]
+[node name="AutoDelayPlus" type="Button" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent/AutoDelayHBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
-theme_override_constants/margin_left = 40
+focus_mode = 0
+mouse_default_cursor_shape = 2
+text = "+"
 
-[node name="TextScaleContainer" type="VBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer/TextScaleMargin"]
+[node name="TabGameplayContent" type="VBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
 layout_mode = 2
-theme_override_constants/separation = 15
+theme_override_constants/separation = 20
 
-[node name="TextScaleHBox" type="HBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer/TextScaleMargin/TextScaleContainer"]
+[node name="AssistedModeHBox" type="HBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer/TabGameplayContent"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/TextScaleMargin/TextScaleContainer/TextScaleHBox"]
+[node name="AssistedModeLabel" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/TabGameplayContent/AssistedModeHBox"]
+unique_name_in_owner = true
 layout_mode = 2
-text = "Text Size"
+text = "Assisted Mode"
 
-[node name="Spacer" type="Control" parent="ColorRect/MarginContainer/VBoxContainer/TextScaleMargin/TextScaleContainer/TextScaleHBox"]
+[node name="Spacer" type="Control" parent="ColorRect/MarginContainer/VBoxContainer/TabGameplayContent/AssistedModeHBox"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="TextScaleVal" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/TextScaleMargin/TextScaleContainer/TextScaleHBox"]
+[node name="AssistedModeToggle" type="Button" parent="ColorRect/MarginContainer/VBoxContainer/TabGameplayContent/AssistedModeHBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 40)
 layout_mode = 2
-text = "100%"
+focus_mode = 0
+mouse_default_cursor_shape = 2
+text = "OFF"
 
-[node name="TextScaleSlider" type="HSlider" parent="ColorRect/MarginContainer/VBoxContainer/TextScaleMargin/TextScaleContainer"]
+[node name="AssistedModeSubtext" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/TabGameplayContent"]
+unique_name_in_owner = true
+modulate = Color(0.6, 0.6, 0.6, 1)
 layout_mode = 2
-min_value = 50.0
-max_value = 300.0
-step = 10.0
+text = "Modifies the 'Think' verb to provide explicit puzzle solutions."
+autowrap_mode = 3
 
 [node name="MainSpacer" type="Control" parent="ColorRect/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
 [node name="CloseButton" type="Button" parent="ColorRect/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 mouse_default_cursor_shape = 2

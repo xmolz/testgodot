@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cwwpjjh8g2oys"
-path="res://.godot/imported/cannathink.png-0b8bc23e1ab91132ebb847c2edcc3dbb.ctex"
+uid="uid://c4le6pdm3xefh"
+path="res://.godot/imported/invigirol_icon.png-9df2b29b5f2e07865a95487eda63ccd7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://cannathink.png"
-dest_files=["res://.godot/imported/cannathink.png-0b8bc23e1ab91132ebb847c2edcc3dbb.ctex"]
+source_file="res://Sprites/inventory_items/invigirol_icon.png"
+dest_files=["res://.godot/imported/invigirol_icon.png-9df2b29b5f2e07865a95487eda63ccd7.ctex"]
 
 [params]
 

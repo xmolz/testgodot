@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bqbbirvssvi8t"
-path="res://.godot/imported/invigirol_sprite.png-233083d7b42ea44001e51c97fc24ee6f.ctex"
+uid="uid://801qaxy4ivhp"
+path="res://.godot/imported/zanopram_icon.png-d64ac44590b0c4621ff256a2c017955f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://invigirol_sprite.png"
-dest_files=["res://.godot/imported/invigirol_sprite.png-233083d7b42ea44001e51c97fc24ee6f.ctex"]
+source_file="res://Sprites/inventory_items/zanopram_icon.png"
+dest_files=["res://.godot/imported/zanopram_icon.png-d64ac44590b0c4621ff256a2c017955f.ctex"]
 
 [params]
 

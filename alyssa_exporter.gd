@@ -10,7 +10,7 @@ func _ready():
 
 	# 2. Add the background image
 	var tex_rect = TextureRect.new()
-	tex_rect.texture = load("res://Backgrounds/alyssa marketing post.png")
+	tex_rect.texture = load("res://Backgrounds/layla_marketing_image.png")
 	tex_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	tex_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	tex_rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -18,7 +18,7 @@ func _ready():
 
 	# 3. Increase font size dynamically for the 1800x2400 resolution
 	if GameManager:
-		GameManager.dialogue_text_scale = 1.8
+		GameManager.dialogue_text_scale = 2.2 # Increased slightly
 
 	# 4. Instantiate the balloon inside the viewport
 	var dialogue_res = load("res://dialogue/alyssa_marketing.dialogue")
@@ -26,15 +26,16 @@ func _ready():
 	viewport.add_child(balloon)
 	balloon.start(dialogue_res, "start")
 
-	# Wait a frame for layout to initialize
-	await get_tree().process_frame
-	await get_tree().process_frame
+	# Wait for typing to initialize so we can safely override margins
+	# (conversationballoon.gd modifies dialogue margins dynamically when it starts)
+	await get_tree().create_timer(0.5).timeout
 
 	# 5. Customize the Balloon layout for this exact aspect ratio!
 	var panel = balloon.get_node("%Balloon/Panel")
 	var diag = balloon.get_node("%Balloon/Dialogue")
 	var name_panel = balloon.get_node("%Balloon/NamePanel")
 	var quick_menu = balloon.get_node_or_null("%QuickMenu")
+	var portrait_container = balloon.get_node_or_null("%PortraitContainer")
 
 	# Hide the bottom quick menu (Menu, Log, Auto, Hide)
 	if quick_menu:
@@ -48,7 +49,7 @@ func _ready():
 		panel.anchor_bottom = 1.0
 		panel.offset_left = 80
 		panel.offset_right = -80
-		panel.offset_top = -350
+		panel.offset_top = -450 # Increased height
 		panel.offset_bottom = -40
 
 	if diag:
@@ -58,10 +59,10 @@ func _ready():
 		diag.anchor_bottom = 1.0
 		diag.offset_left = 80
 		diag.offset_right = -80
-		diag.offset_top = -350
+		diag.offset_top = -450
 		diag.offset_bottom = -40
-		# Ensure internal text padding is nice
-		diag.add_theme_constant_override("margin_left", 60)
+		# Ensure internal text padding is nice and clears the portrait
+		diag.add_theme_constant_override("margin_left", 380)
 		diag.add_theme_constant_override("margin_right", 60)
 		diag.add_theme_constant_override("margin_top", 40)
 
@@ -72,12 +73,23 @@ func _ready():
 		name_panel.anchor_top = 1.0
 		name_panel.anchor_bottom = 1.0
 		name_panel.offset_left = 80
-		name_panel.offset_right = 450
-		name_panel.offset_top = -350 - 70
-		name_panel.offset_bottom = -350 + 5
+		name_panel.offset_right = 550 # Widened to fit scaled text
+		name_panel.offset_top = -450 - 90
+		name_panel.offset_bottom = -450 + 5
 
-	# 6. Wait for typing to initialize, then skip it
-	await get_tree().create_timer(0.5).timeout
+	# Fix portrait container scaling and layout
+	if portrait_container:
+		portrait_container.anchor_left = 0.0
+		portrait_container.anchor_right = 0.0
+		portrait_container.anchor_top = 1.0
+		portrait_container.anchor_bottom = 1.0
+		# Make it a 300x300 box, centered in the 410px high panel
+		portrait_container.offset_left = 120
+		portrait_container.offset_top = -395
+		portrait_container.offset_right = 420
+		portrait_container.offset_bottom = -95
+
+	# 6. Skip typing
 	if is_instance_valid(balloon.dialogue_label):
 		balloon.dialogue_label.skip_typing()
 

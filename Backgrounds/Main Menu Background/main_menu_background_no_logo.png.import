@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://25vyenwfnkyx"
-path="res://.godot/imported/alyssa marketing post.png-2bd799a5aa4b00afd7f2ab663fc5e141.ctex"
+uid="uid://7b7ihqnd7ba2"
+path="res://.godot/imported/main_menu_background_no_logo.png-35e01c8f3e41759f4fe91f772bfe2d09.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Backgrounds/alyssa marketing post.png"
-dest_files=["res://.godot/imported/alyssa marketing post.png-2bd799a5aa4b00afd7f2ab663fc5e141.ctex"]
+source_file="res://Backgrounds/Main Menu Background/main_menu_background_no_logo.png"
+dest_files=["res://.godot/imported/main_menu_background_no_logo.png-35e01c8f3e41759f4fe91f772bfe2d09.ctex"]
 
 [params]
 

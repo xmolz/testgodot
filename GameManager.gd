@@ -35,6 +35,7 @@ signal item_picked_up(item_name: String)
 signal notification_requested(message: String)
 signal new_hint_available(is_available: bool)
 signal verb_lock_changed(is_active: bool)
+signal auto_forward_toggled(is_on: bool)
 
 # character conversation ended signal
 signal character_conversation_ended(dialogue_resource: DialogueResource)
@@ -186,6 +187,13 @@ var visited_dialogue_responses: Dictionary = {} # Tracks clicked dialogue option
 var text_speed: float = 0.02 # Seconds per character (lower is faster)
 var instant_text: bool = false
 var dialogue_text_scale: float = 1.0
+
+var is_auto_playing: bool = false:
+	set(val):
+		is_auto_playing = val
+		auto_forward_toggled.emit(val)
+
+var auto_time_delay: float = 0.486
 
 func set_bus_volume(bus_name: String, linear_val: float):
 	var bus_idx = AudioServer.get_bus_index(bus_name)

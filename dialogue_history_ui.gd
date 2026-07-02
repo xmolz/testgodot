@@ -86,7 +86,7 @@ func _ready():
 	close_button.add_theme_color_override("font_pressed_color", Color.WHITE)
 	# ------------------------------
 
-	if not OS.has_feature("mobile"):
+	if OS.has_feature("mobile"):
 		$ColorRect.gui_input.connect(func(event):
 			if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
 				_close_log()

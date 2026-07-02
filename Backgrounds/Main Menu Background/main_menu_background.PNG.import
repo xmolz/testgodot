@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bjuaurrw0logr"
-path="res://.godot/imported/zanopram.png-a0f43358448e6a3d2c43b4c6e28ca13d.ctex"
+uid="uid://cbyfluyn3ynu8"
+path="res://.godot/imported/main_menu_background.PNG-b2e79e831c27b50d416eaab42196ff50.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://zanopram.png"
-dest_files=["res://.godot/imported/zanopram.png-a0f43358448e6a3d2c43b4c6e28ca13d.ctex"]
+source_file="res://Backgrounds/Main Menu Background/main_menu_background.PNG"
+dest_files=["res://.godot/imported/main_menu_background.PNG-b2e79e831c27b50d416eaab42196ff50.ctex"]
 
 [params]
 

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bj3w6acg6sb7g"]
 
 [ext_resource type="Script" uid="uid://ctc8mysw5ic3e" path="res://MainMenu.gd" id="1_jix8l"]
-[ext_resource type="Texture2D" uid="uid://dj36rtbdioqh3" path="res://Backgrounds/Game Images/Template Background 2.jpg" id="2_glbon"]
+[ext_resource type="Texture2D" uid="uid://7b7ihqnd7ba2" path="res://Backgrounds/Main Menu Background/main_menu_background_no_logo.png" id="2_nlkkf"]
 [ext_resource type="FontFile" uid="uid://6fxwb86ujy6q" path="res://Fonts/IBMPlexSans-SemiBold.ttf" id="3_nlkkf"]
 [ext_resource type="FontFile" uid="uid://b1iquuxsqnjah" path="res://Fonts/RubikGlitch-Regular.ttf" id="4_qe12f"]
 [ext_resource type="Texture2D" uid="uid://hopltlv76q36" path="res://Icons/logo_glass_icon.png" id="5_glbon"]
@@ -42,7 +42,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_glbon")
+texture = ExtResource("2_nlkkf")
 expand_mode = 1
 stretch_mode = 6
 
@@ -58,12 +58,14 @@ texture = SubResource("GradientTexture2D_h7a2f")
 [node name="TitleBlock" type="VBoxContainer" parent="Content" unique_id=1154241700]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.05
-anchor_top = 0.70000005
-anchor_right = 0.5
-anchor_bottom = 0.95100003
-offset_top = -6.1035156e-05
-offset_bottom = -0.080078125
+anchor_left = 0.264
+anchor_top = 0.004
+anchor_right = 0.71400005
+anchor_bottom = 0.25500003
+offset_left = -0.8800049
+offset_top = -0.32000017
+offset_right = -0.88012695
+offset_bottom = -0.4000244
 theme_override_constants/separation = -25
 alignment = 1
 
@@ -103,12 +105,14 @@ flip_h = true
 [node name="ButtonBlock" type="VBoxContainer" parent="Content" unique_id=535756564]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.6
-anchor_top = 0.4
-anchor_right = 0.89100003
-anchor_bottom = 0.606
-offset_right = -0.7200928
-offset_bottom = 0.52001953
+anchor_left = 0.62100005
+anchor_top = 0.45400003
+anchor_right = 0.91200006
+anchor_bottom = 0.69900006
+offset_left = 0.67993164
+offset_top = -0.32003784
+offset_right = -0.040161133
+offset_bottom = 0.079956055
 theme_override_constants/separation = 15
 alignment = 1
 

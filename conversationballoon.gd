@@ -133,6 +133,9 @@ var dialogue_line: DialogueLine:
 ## A cooldown timer for delaying the balloon hide when encountering a mutation.
 var mutation_cooldown: Timer = Timer.new()
 
+## Timer for auto-advancing text
+var auto_advance_timer: Timer = Timer.new()
+
 ## The base balloon anchor
 @onready var balloon: Control = %Balloon
 
@@ -159,6 +162,8 @@ var mutation_cooldown: Timer = Timer.new()
 
 ## Is the UI currently hidden by the player?
 var is_ui_hidden: bool = false
+
+var _is_log_open: bool = false
 
 ## Quick Menu references
 @onready var quick_menu: HBoxContainer = %QuickMenu
@@ -188,6 +193,15 @@ func _ready() -> void:
 
 	mutation_cooldown.timeout.connect(_on_mutation_cooldown_timeout)
 	add_child(mutation_cooldown)
+
+	auto_advance_timer.one_shot = true
+	auto_advance_timer.timeout.connect(_on_auto_advance_timeout)
+	add_child(auto_advance_timer)
+
+	if GameManager:
+		_update_auto_button_visuals()
+		if not GameManager.auto_forward_toggled.is_connected(_on_global_auto_toggled):
+			GameManager.auto_forward_toggled.connect(_on_global_auto_toggled)
 
 	# --- Style the responses menu and template button ---
 	# 1. Increase vertical spacing between response buttons
@@ -340,6 +354,7 @@ func start(dialogue_resource: DialogueResource, title: String, extra_game_states
 ## Apply any changes to the balloon given a new [DialogueLine].
 func apply_dialogue_line() -> void:
 	mutation_cooldown.stop()
+	auto_advance_timer.stop()
 
 	is_waiting_for_input = false
 	balloon.focus_mode = Control.FOCUS_ALL
@@ -551,6 +566,11 @@ func apply_dialogue_line() -> void:
 		fade_tween.tween_property(responses_menu, "modulate:a", 1.0, 0.4).set_trans(Tween.TRANS_SINE)
 		fade_tween.tween_callback(func(): _is_responses_clickable = true)
 		# ------------------------------------------------------
+
+		# --- AUTO-FORWARD SINGLE CHOICE ---
+		if GameManager and GameManager.is_auto_playing and dialogue_line.responses.size() == 1:
+			_start_auto_advance_timer()
+
 	elif dialogue_line.time != "":
 		var time = dialogue_line.text.length() * 0.02 if dialogue_line.time == "auto" else dialogue_line.time.to_float()
 		await get_tree().create_timer(time).timeout
@@ -559,6 +579,9 @@ func apply_dialogue_line() -> void:
 		is_waiting_for_input = true
 		balloon.focus_mode = Control.FOCUS_ALL
 		balloon.grab_focus()
+
+		if GameManager and GameManager.is_auto_playing:
+			_start_auto_advance_timer()
 
 ## Go to the next line
 func next(next_id: String) -> void:
@@ -677,6 +700,17 @@ func set_ui_hidden(hide: bool) -> void:
 	is_ui_hidden = hide
 	var is_visible = not hide
 
+	if hide:
+		if not auto_advance_timer.is_stopped():
+			auto_advance_timer.paused = true
+	else:
+		if GameManager and GameManager.is_auto_playing:
+			if is_instance_valid(auto_advance_timer) and auto_advance_timer.paused:
+				auto_advance_timer.paused = false
+			elif not dialogue_label.is_typing:
+				if is_waiting_for_input or (dialogue_line and dialogue_line.responses.size() == 1):
+					_start_auto_advance_timer()
+
 	var panel = $Balloon/Panel
 	panel.visible = is_visible
 	dialogue_container.visible = is_visible
@@ -704,8 +738,95 @@ func _on_log_button_pressed() -> void:
 		var log_instance = log_scene.instantiate()
 		get_tree().root.add_child(log_instance)
 
+		# Suspend Auto-Forward while the log is open
+		_is_log_open = true
+		if not auto_advance_timer.is_stopped():
+			auto_advance_timer.paused = true
+
+		log_instance.tree_exited.connect(func():
+			if not is_instance_valid(self):
+				return
+
+			_is_log_open = false
+			if GameManager and GameManager.is_auto_playing:
+				# If timer was paused, resume it
+				if is_instance_valid(auto_advance_timer) and auto_advance_timer.paused:
+					auto_advance_timer.paused = false
+				# If text finished typing while the log was open, start the timer now
+				elif not dialogue_label.is_typing:
+					if is_waiting_for_input or (dialogue_line and dialogue_line.responses.size() == 1):
+						_start_auto_advance_timer()
+		)
+
 func _on_auto_button_pressed() -> void:
 	if SoundManager: SoundManager.play_sfx("ui_click")
+	if GameManager:
+		GameManager.is_auto_playing = not GameManager.is_auto_playing
+
+func _on_global_auto_toggled(is_on: bool):
+	_update_auto_button_visuals()
+	if is_on and not dialogue_label.is_typing:
+		if is_waiting_for_input:
+			_start_auto_advance_timer()
+		elif dialogue_line.responses.size() == 1:
+			_start_auto_advance_timer()
+	elif not is_on:
+		auto_advance_timer.stop()
+
+func _start_auto_advance_timer():
+	if _is_log_open or is_ui_hidden:
+		return
+
+	# Base wait from settings + 0.025 seconds per character
+	var wait_time = GameManager.auto_time_delay + (dialogue_line.text.length() * 0.025)
+	auto_advance_timer.start(wait_time)
+
+func _on_auto_advance_timeout():
+	if is_waiting_for_input:
+		next(dialogue_line.next_id)
+	elif dialogue_line.responses.size() == 1:
+		_simulate_single_response_click(dialogue_line.responses[0])
+
+func _simulate_single_response_click(response: DialogueResponse):
+	var target_btn: Button = null
+	for i in range(responses_menu.get_child_count()):
+		var btn = responses_menu.get_child(i)
+		if btn is Button and btn.has_meta("response") and btn.get_meta("response") == response:
+			target_btn = btn
+			break
+
+	if target_btn:
+		target_btn.grab_focus()
+		target_btn.pivot_offset = target_btn.size / 2.0
+
+		var tween = create_tween()
+		# Visually compress and tint the button to simulate a physical click
+		tween.tween_property(target_btn, "scale", Vector2(0.95, 0.95), 0.1).set_trans(Tween.TRANS_SINE)
+		tween.parallel().tween_property(target_btn, "modulate", Color(0.6, 0.85, 1.0, 1.0), 0.1)
+
+		# Bounce back
+		tween.tween_property(target_btn, "scale", Vector2(1.0, 1.0), 0.1).set_trans(Tween.TRANS_SINE)
+		tween.parallel().tween_property(target_btn, "modulate", Color.WHITE, 0.1)
+
+		# Trigger the actual dialogue progression right when the button reaches maximum compression
+		tween.parallel().tween_callback(func():
+			_on_responses_menu_response_selected(response)
+		).set_delay(0.1)
+	else:
+		_on_responses_menu_response_selected(response)
+
+func _cancel_auto_mode():
+	if GameManager and GameManager.is_auto_playing:
+		GameManager.is_auto_playing = false
+
+func _update_auto_button_visuals():
+	if not auto_button: return
+	if GameManager and GameManager.is_auto_playing:
+		auto_button.add_theme_color_override("font_color", Color(0.2, 0.85, 1.0, 1.0))
+		auto_button.add_theme_color_override("font_hover_color", Color(0.4, 0.95, 1.0, 1.0))
+	else:
+		auto_button.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6, 1.0))
+		auto_button.add_theme_color_override("font_hover_color", Color(0.2, 0.85, 1.0, 1.0))
 
 func _on_menu_button_pressed() -> void:
 	if SoundManager: SoundManager.play_sfx("ui_click")

@@ -46,7 +46,10 @@ func _ready():
 	_apply_style()
 
 	menu_button.pressed.connect(toggle_pause)
-	bg_button.pressed.connect(toggle_pause)
+	if OS.has_feature("mobile"):
+		bg_button.pressed.connect(toggle_pause)
+	else:
+		bg_button.mouse_default_cursor_shape = Control.CURSOR_ARROW
 	resume_btn.pressed.connect(toggle_pause)
 	history_btn.pressed.connect(_on_history_pressed)
 	settings_btn.pressed.connect(_on_settings_pressed)
@@ -62,12 +65,28 @@ func _process(_delta):
 		scan_cancel_panel.visible = menu_panel.visible
 
 func _input(event):
+	# 1. Handle Escape Key (Toggles Pause ON and OFF)
 	if event.is_action_pressed("ui_cancel") or (event is InputEventKey and event.keycode == KEY_ESCAPE and event.is_pressed() and not event.is_echo()):
 		if confirm_overlay.visible:
+			get_viewport().set_input_as_handled()
 			_on_confirm_no()
 			return
 
 		if GameManager and (GameManager.current_game_state == GameManager.GameState.IN_GAME_PLAY or GameManager.current_game_state == GameManager.GameState.PAUSED or GameManager.current_game_state == GameManager.GameState.INTRO_CONVERSATION):
+			if get_tree().root.has_node("SettingsMenu") or get_tree().root.has_node("DialogueHistoryUI") or get_tree().root.has_node("CreditsMenu") or get_tree().root.has_node("ControlsMenu"):
+				return
+
+			get_viewport().set_input_as_handled()
+			toggle_pause()
+
+	# 2. Handle Right-Click (Acts as "Back" / "Unpause" ONLY when menu is open)
+	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.is_pressed():
+		if confirm_overlay.visible:
+			get_viewport().set_input_as_handled()
+			_on_confirm_no()
+			return
+
+		if overlay.visible:
 			if get_tree().root.has_node("SettingsMenu") or get_tree().root.has_node("DialogueHistoryUI") or get_tree().root.has_node("CreditsMenu") or get_tree().root.has_node("ControlsMenu"):
 				return
 

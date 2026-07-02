@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3 uid="uid://dle6p4hlq4yos"]
 
-[ext_resource type="Texture2D" uid="uid://bjuaurrw0logr" path="res://zanopram.png" id="1_s6e58"]
+[ext_resource type="Texture2D" path="res://Sprites/inventory_items/zanopram_icon.png" id="1_s6e58"]
 [ext_resource type="Script" uid="uid://by8o1t3tdwrep" path="res://ItemData.gd" id="2_0lxtp"]
 
 [resource]
