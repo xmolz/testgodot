@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://bigouorladqds"]
+[gd_scene format=3 uid="uid://bigouorladqds"]
 
 [ext_resource type="Script" uid="uid://npn3pmma7jfq" path="res://VerbUI.gd" id="1_fpe4u"]
 [ext_resource type="Theme" uid="uid://bbh4rjwcxnama" path="res://Themes/verb_and_inventory_theme.tres" id="2_5r43t"]
@@ -28,50 +28,37 @@ border_color = Color(1, 1, 1, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 
-[node name="VerbUI_CanvasLayer" type="CanvasLayer"]
+[node name="VerbUI_CanvasLayer" type="CanvasLayer" unique_id=155028526]
 process_mode = 3
 script = ExtResource("1_fpe4u")
 
-[node name="ActionBubbleLabel" type="RichTextLabel" parent="."]
+[node name="ActionBubbleLabel" type="RichTextLabel" parent="." unique_id=856570646]
 offset_right = 40.0
 offset_bottom = 23.0
 theme = ExtResource("2_5r43t")
 theme_override_styles/normal = SubResource("StyleBoxFlat_bubble")
 
-[node name="VerbGridPanel" type="Panel" parent="."]
+[node name="DynamicVerbVBox" type="VBoxContainer" parent="." unique_id=1229167665]
+unique_name_in_owner = true
 anchors_preset = -1
 anchor_left = 0.02
 anchor_top = 0.82
 anchor_right = 0.48
 anchor_bottom = 0.98
 theme = ExtResource("2_5r43t")
+theme_override_constants/separation = 12
 
-[node name="TabPanel" type="Panel" parent="VerbGridPanel"]
-layout_mode = 1
-anchors_preset = -1
-offset_left = 15.0
-offset_top = -40.0
-offset_right = 165.0
-offset_bottom = 0.0
+[node name="TabPanel" type="Panel" parent="DynamicVerbVBox" unique_id=1451535010]
+layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_tab")
 
-[node name="ActionsLabel" type="Label" parent="VerbGridPanel/TabPanel"]
+[node name="ActionsLabel" type="Label" parent="DynamicVerbVBox/TabPanel" unique_id=1750820316]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 text = "ACTIONS"
 horizontal_alignment = 1
 vertical_alignment = 1
-
-[node name="GridContainer" type="GridContainer" parent="VerbGridPanel"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 12.0
-offset_top = 12.0
-offset_right = -12.0
-offset_bottom = -12.0
-theme = ExtResource("2_5r43t")
-columns = 3

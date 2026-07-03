@@ -688,7 +688,7 @@ size = Vector2(9603, 1138)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jx0wj"]
 size = Vector2(1913, 1292)
 
-[node name="Camera2D" type="Control" unique_id=1988882771]
+[node name="Main" type="Control" unique_id=1988882771]
 layout_mode = 3
 anchors_preset = 0
 offset_left = -5752.0
@@ -990,19 +990,10 @@ process_callback = 0
 position_smoothing_speed = 2.0
 script = ExtResource("2_h2yge")
 target_path = NodePath("../Player")
-custom_zoom_level = 1.1
 
 [node name="LevelStateManager" type="Node" parent="." unique_id=1325462510]
 script = ExtResource("10_4c57u")
-override_has_spoken_to_aida = true
-override_aida_explanation_shown = true
-override_insurance_button_unlocked = true
-override_has_tried_memory_box = true
-override_mcbucket_interruption_happened = true
-override_mcbucket_has_screamed_at_player = true
-override_mcbucket_zanopram_used = true
-override_learned_techpass_from_aida = true
-override_learned_techpass_from_sergey = true
+override_give_techpass = true
 
 [node name="VerbUI_CanvasLayer" parent="." unique_id=1400491569 instance=ExtResource("1_1bvp3")]
 unique_name_in_owner = true

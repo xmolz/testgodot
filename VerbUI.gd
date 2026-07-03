@@ -2,7 +2,7 @@
 extends CanvasLayer
 
 @onready var action_bubble_label: RichTextLabel = $ActionBubbleLabel
-@onready var verb_button_grid: GridContainer = $VerbGridPanel/GridContainer
+@onready var dynamic_verb_vbox: VBoxContainer = %DynamicVerbVBox
 
 var active_verb_buttons: Dictionary = {}
 var all_button_slots: Array[Button] = []
@@ -10,50 +10,57 @@ var normal_bubble_style: StyleBoxFlat
 var disabled_bubble_style: StyleBoxFlat
 var think_pulse_tween: Tween
 
+const PREFERRED_ORDER = ["examine", "use", "talk_to", "pickup"]
+const ROW_RECIPES = {
+	1: [1],
+	2: [1, 1],
+	3: [2, 1],
+	4: [2, 2],
+	5: [3, 2],
+	6: [3, 3],
+	7: [3, 2, 2],
+	8: [3, 3, 2],
+	9: [3, 3, 3],
+}
+
 func _ready():
-	if verb_button_grid:
-		verb_button_grid.columns = 3
-	else:
-		print_rich("[color=red]VerbUI: VerbButtonGrid node not found! Cannot set columns.[/color]")
-		return
-
-	for child in verb_button_grid.get_children():
-		verb_button_grid.remove_child(child)
-		child.queue_free()
-
-	all_button_slots.clear()
-	active_verb_buttons.clear()
-
-	# Enforce horizontal anchors to prevent overlapping
-	$VerbGridPanel.anchor_left = 0.02
-	$VerbGridPanel.anchor_right = 0.44
+	dynamic_verb_vbox.anchor_left = 0.02
+	dynamic_verb_vbox.anchor_right = 0.44
 
 	if OS.has_feature("mobile"):
-		$VerbGridPanel.anchor_top = 0.75
-		$VerbGridPanel/TabPanel.offset_top = -50
-		$VerbGridPanel/TabPanel.offset_right = 190
-		$VerbGridPanel/TabPanel/ActionsLabel.add_theme_font_size_override("font_size", 28)
+		dynamic_verb_vbox.anchor_top = 0.75
+		var tab_panel = dynamic_verb_vbox.get_node("TabPanel")
+		tab_panel.offset_top = -50
+		tab_panel.offset_right = 190
+		tab_panel.get_node("ActionsLabel").add_theme_font_size_override("font_size", 28)
 		action_bubble_label.add_theme_font_size_override("normal_font_size", 28)
 
-	for i in range(9):
-		var new_button = Button.new()
-		new_button.text = "-"
-		new_button.disabled = true
-		new_button.name = "VerbSlotButton_" + str(i)
-		if OS.has_feature("mobile"):
-			new_button.custom_minimum_size = Vector2(0, 0)
-			new_button.add_theme_font_size_override("font_size", 36)
-		else:
-			new_button.custom_minimum_size = Vector2(100, 30)
-		new_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		new_button.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	# Background panel behind verb buttons
+	var verb_grid_panel = Panel.new()
+	verb_grid_panel.name = "VerbGridPanel"
+	verb_grid_panel.anchor_left = dynamic_verb_vbox.anchor_left
+	verb_grid_panel.anchor_top = dynamic_verb_vbox.anchor_top
+	verb_grid_panel.anchor_right = dynamic_verb_vbox.anchor_right
+	verb_grid_panel.anchor_bottom = dynamic_verb_vbox.anchor_bottom
+	verb_grid_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
-		# --- THE FIX: Disable focus so it doesn't get stuck highlighted! ---
-		new_button.focus_mode = Control.FOCUS_NONE
-		# -------------------------------------------------------------------
+	var panel_style = StyleBoxFlat.new()
+	panel_style.bg_color = Color(0, 0, 0, 0.5)
+	panel_style.border_width_left = 3
+	panel_style.border_width_top = 3
+	panel_style.border_width_right = 3
+	panel_style.border_width_bottom = 3
+	panel_style.border_color = Color(1, 1, 1, 1)
+	panel_style.corner_radius_top_left = 10
+	panel_style.corner_radius_top_right = 10
+	panel_style.corner_radius_bottom_left = 10
+	panel_style.corner_radius_bottom_right = 10
+	verb_grid_panel.add_theme_stylebox_override("panel", panel_style)
 
-		all_button_slots.append(new_button)
-		verb_button_grid.add_child(new_button)
+	add_child(verb_grid_panel)
+	move_child(verb_grid_panel, dynamic_verb_vbox.get_index())
+
+	dynamic_verb_vbox.add_theme_constant_override("separation", 12)
 
 	if GameManager:
 		GameManager.available_verbs_changed.connect(_on_available_verbs_changed)
@@ -64,15 +71,9 @@ func _ready():
 
 		if GameManager.has_method("get_currently_displayable_verbs"):
 			_on_available_verbs_changed(GameManager.get_currently_displayable_verbs())
-		else:
-			print_rich("[color=orange]VerbUI: GameManager doesn't have get_currently_displayable_verbs yet.[/color]")
-
-	else:
-		print_rich("[color=red]VerbUI: GameManager not found during _ready().[/color]")
 
 	action_bubble_label.visible = false
 
-	# --- PC UI COLOR HIGHLIGHT FIX: Configure RichTextLabel properties ---
 	action_bubble_label.bbcode_enabled = true
 	action_bubble_label.fit_content = true
 	action_bubble_label.scroll_active = false
@@ -82,7 +83,6 @@ func _ready():
 	action_bubble_label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.5))
 	action_bubble_label.add_theme_constant_override("shadow_outline_size", 1)
 
-	# --- QOL FIX: Cache styles for faded label ---
 	normal_bubble_style = action_bubble_label.get_theme_stylebox("normal").duplicate()
 	disabled_bubble_style = normal_bubble_style.duplicate()
 	disabled_bubble_style.bg_color = Color(0.15, 0.15, 0.15, 0.9)
@@ -95,43 +95,107 @@ func _process(_delta: float) -> void:
 
 func _on_available_verbs_changed(available_verb_data_array: Array[VerbData]):
 	active_verb_buttons.clear()
+	all_button_slots.clear()
 
-	for i in range(all_button_slots.size()):
-		var button_node: Button = all_button_slots[i]
+	for child in dynamic_verb_vbox.get_children():
+		if child is HBoxContainer:
+			child.queue_free()
 
-		for conn in button_node.pressed.get_connections():
-			if conn.callable.get_object() == self:
-				button_node.pressed.disconnect(conn.callable)
+	# Sort verbs: preferred order first, then the rest
+	var sorted_verbs: Array[VerbData] = []
+	var remaining: Array[VerbData] = available_verb_data_array.duplicate()
+	for preferred_id in PREFERRED_ORDER:
+		for verb in remaining:
+			if verb.verb_id == preferred_id:
+				sorted_verbs.append(verb)
+				remaining.erase(verb)
+				break
+	sorted_verbs.append_array(remaining)
 
-		if i < available_verb_data_array.size():
-			var verb_data: VerbData = available_verb_data_array[i]
-			if verb_data and is_instance_valid(verb_data):
-				button_node.text = verb_data.display_text
-				button_node.disabled = false
-				button_node.set_meta("verb_id", verb_data.verb_id)
-				button_node.pressed.connect(_on_verb_button_pressed_dynamic.bind(verb_data.verb_id))
-				active_verb_buttons[verb_data.verb_id] = button_node
-			else:
-				button_node.text = "-"
-				button_node.disabled = true
-				button_node.set_meta("verb_id", "")
-		else:
-			button_node.text = "-"
-			button_node.disabled = true
-			button_node.set_meta("verb_id", "")
+	var count = sorted_verbs.size()
+	if count == 0:
+		_update_button_selected_visual_state("")
+		return
+
+	var recipe = ROW_RECIPES.get(count, _fallback_recipe(count))
+
+	var verb_index = 0
+	for row_count in recipe:
+		var hbox = HBoxContainer.new()
+		hbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		hbox.add_theme_constant_override("separation", 12)
+		dynamic_verb_vbox.add_child(hbox)
+
+		for j in range(row_count):
+			if verb_index >= sorted_verbs.size():
+				break
+			var verb_data: VerbData = sorted_verbs[verb_index]
+			var btn = Button.new()
+			btn.text = verb_data.display_text
+			btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			btn.size_flags_vertical = Control.SIZE_EXPAND_FILL
+			btn.focus_mode = Control.FOCUS_NONE
+			btn.set_meta("verb_id", verb_data.verb_id)
+			btn.pressed.connect(_on_verb_button_pressed_dynamic.bind(verb_data.verb_id))
+
+			_style_verb_button(btn)
+			if not OS.has_feature("mobile"):
+				btn.custom_minimum_size = Vector2(100, 30)
+
+			hbox.add_child(btn)
+			all_button_slots.append(btn)
+			active_verb_buttons[verb_data.verb_id] = btn
+			verb_index += 1
 
 	_update_button_selected_visual_state(GameManager.current_verb_id if GameManager else "")
 
 	if GameManager and GameManager.has_method("has_unread_hint"):
 		_on_new_hint_available(GameManager.has_unread_hint())
 
+func _fallback_recipe(count: int) -> Array:
+	var recipe = []
+	var left = count
+	while left > 0:
+		var row = mini(left, 3)
+		recipe.append(row)
+		left -= row
+	return recipe
+
+func _style_verb_button(btn: Button):
+	var custom_font = preload("res://Fonts/VarelaRound-Regular.ttf")
+	btn.add_theme_font_override("font", custom_font)
+	btn.add_theme_font_size_override("font_size", 36 if OS.has_feature("mobile") else 22)
+	btn.add_theme_color_override("font_color", Color(1, 1, 1, 1))
+	btn.add_theme_color_override("font_hover_color", Color(1, 1, 1, 1))
+
+	var normal_style = StyleBoxFlat.new()
+	normal_style.bg_color = Color(0.15, 0.15, 0.15, 0.6)
+	normal_style.border_width_left = 2
+	normal_style.border_width_top = 2
+	normal_style.border_width_right = 2
+	normal_style.border_width_bottom = 2
+	normal_style.border_color = Color(0.6, 0.6, 0.6, 0.8)
+	normal_style.corner_radius_top_left = 5
+	normal_style.corner_radius_top_right = 5
+	normal_style.corner_radius_bottom_left = 5
+	normal_style.corner_radius_bottom_right = 5
+
+	var hover_style = normal_style.duplicate()
+	hover_style.bg_color = Color(0.25, 0.25, 0.25, 0.8)
+	hover_style.border_color = Color(1, 1, 1, 1)
+
+	var focus_style = StyleBoxEmpty.new()
+
+	btn.add_theme_stylebox_override("normal", normal_style)
+	btn.add_theme_stylebox_override("hover", hover_style)
+	btn.add_theme_stylebox_override("pressed", hover_style)
+	btn.add_theme_stylebox_override("focus", focus_style)
+
 func _on_verb_button_pressed_dynamic(verb_id_pressed: String):
 	if SoundManager: SoundManager.play_sfx("ui_click")
 
 	if GameManager and verb_id_pressed != "":
 		GameManager.select_verb(verb_id_pressed)
-	else:
-		print("VerbUI: GameManager not found or empty verb_id pressed.")
 
 func _on_game_manager_verb_changed(new_verb_id: String):
 	if OS.has_feature("mobile"):
@@ -163,7 +227,6 @@ func _on_game_manager_sentence_line_updated(full_sentence: String):
 		action_bubble_label.reset_size()
 		action_bubble_label.visible = true
 
-		# --- QOL FIX: Faded label for incomplete Give ---
 		if GameManager and GameManager.current_verb_id == "give" and GameManager.current_selected_item_data == null and GameManager.hovered_interactable != null:
 			action_bubble_label.add_theme_stylebox_override("normal", disabled_bubble_style)
 			action_bubble_label.add_theme_color_override("default_color", Color(0.6, 0.6, 0.6, 1.0))
