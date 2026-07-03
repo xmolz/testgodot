@@ -1,6 +1,6 @@
 extends CanvasLayer
 
-@onready var title = $ColorRect/MarginContainer/VBoxContainer/Title
+@onready var title = %Title
 
 # Tabs
 @onready var tab_audio_btn = %TabAudio
@@ -53,8 +53,10 @@ extends CanvasLayer
 @onready var close_button = %CloseButton
 
 var custom_font = preload("res://Fonts/VarelaRound-Regular.ttf")
+var _open_time_ms: int = 0
 
 func _ready():
+	_open_time_ms = Time.get_ticks_msec()
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_apply_ui_polish()
 
@@ -84,7 +86,7 @@ func _ready():
 	tab_gameplay_btn.pressed.connect(_switch_tab.bind(2))
 
 	# Start on Audio tab
-	_switch_tab(0)
+	_switch_tab(0, false)
 
 	# Connect +/- buttons
 	_connect_increment_buttons(master_minus, master_plus, master_slider)
@@ -110,6 +112,7 @@ func _ready():
 	if OS.has_feature("mobile"):
 		$ColorRect.gui_input.connect(func(event):
 			if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
+				if Time.get_ticks_msec() - _open_time_ms < 300: return
 				_on_close_pressed()
 		)
 
@@ -118,7 +121,7 @@ func _input(event):
 		get_viewport().set_input_as_handled()
 		_on_close_pressed()
 	# Right-click to close (PC Only)
-	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.is_pressed():
+	elif not OS.has_feature("mobile") and event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.is_pressed():
 		get_viewport().set_input_as_handled()
 		_on_close_pressed()
 
@@ -132,12 +135,14 @@ func _connect_increment_buttons(btn_minus: Button, btn_plus: Button, slider: HSl
 		slider.value += slider.step
 	)
 
-func _switch_tab(tab_index: int):
-	if SoundManager: SoundManager.play_sfx("ui_click")
+func _switch_tab(tab_index: int, play_sound: bool = true):
+	if play_sound and SoundManager: SoundManager.play_sfx("ui_click")
 
 	tab_audio_content.visible = (tab_index == 0)
 	tab_dialogue_content.visible = (tab_index == 1)
 	tab_gameplay_content.visible = (tab_index == 2)
+
+	%TabScroll.scroll_vertical = 0
 
 	_style_tab_button(tab_audio_btn, tab_index == 0)
 	_style_tab_button(tab_dialogue_btn, tab_index == 1)
@@ -366,6 +371,7 @@ func _apply_ui_polish():
 
 	var sliders = [master_slider, music_slider, sfx_slider, text_speed_slider, auto_delay_slider, text_scale_slider]
 	for s in sliders:
+		s.scrollable = false
 		s.add_theme_stylebox_override("slider", slider_bg)
 		s.add_theme_stylebox_override("grabber_area", slider_fill)
 		s.add_theme_stylebox_override("grabber_area_highlight", slider_fill)
@@ -401,3 +407,47 @@ func _apply_ui_polish():
 	close_button.add_theme_color_override("font_color", Color(0.8, 0.8, 0.8, 1.0))
 	close_button.add_theme_color_override("font_hover_color", Color.WHITE)
 	close_button.add_theme_color_override("font_pressed_color", Color.WHITE)
+
+	# --- SCROLLBAR STYLE ---
+	var tab_scroll: ScrollContainer = %TabScroll
+	var vbar: VScrollBar = tab_scroll.get_v_scroll_bar()
+	vbar.custom_minimum_size.x = 24 if OS.has_feature("mobile") else 12
+
+	var track_style = StyleBoxFlat.new()
+	track_style.bg_color = Color(0.1, 0.12, 0.15, 1.0)
+	track_style.corner_radius_top_left = 4
+	track_style.corner_radius_top_right = 4
+	track_style.corner_radius_bottom_left = 4
+	track_style.corner_radius_bottom_right = 4
+
+	var grabber_style = StyleBoxFlat.new()
+	grabber_style.bg_color = Color(0.2, 0.85, 1.0, 0.9)
+	grabber_style.corner_radius_top_left = 4
+	grabber_style.corner_radius_top_right = 4
+	grabber_style.corner_radius_bottom_left = 4
+	grabber_style.corner_radius_bottom_right = 4
+
+	var grabber_hl = grabber_style.duplicate()
+	grabber_hl.bg_color = Color(0.2, 0.85, 1.0, 1.0)
+
+	vbar.add_theme_stylebox_override("scroll", track_style)
+	vbar.add_theme_stylebox_override("scroll_focus", track_style)
+	vbar.add_theme_stylebox_override("grabber", grabber_style)
+	vbar.add_theme_stylebox_override("grabber_highlight", grabber_hl)
+	vbar.add_theme_stylebox_override("grabber_pressed", grabber_hl)
+	%ScrollMargin.add_theme_constant_override("margin_right", 40 if OS.has_feature("mobile") else 24)
+
+	if OS.has_feature("mobile"):
+		tab_scroll.scroll_deadzone = 24
+		var margin_container = $ColorRect/MarginContainer
+		margin_container.add_theme_constant_override("margin_left", 120)
+		margin_container.add_theme_constant_override("margin_right", 120)
+		margin_container.add_theme_constant_override("margin_top", 60)
+		margin_container.add_theme_constant_override("margin_bottom", 60)
+		for btn in inc_dec_buttons:
+			btn.custom_minimum_size = Vector2(90, 90)
+		for toggle in [instant_text_toggle, auto_forward_toggle, assisted_mode_toggle]:
+			toggle.custom_minimum_size = Vector2(180, 90)
+		for s in sliders:
+			s.custom_minimum_size.y = 90
+		close_button.custom_minimum_size.y = 110

@@ -1,6 +1,22 @@
-[gd_scene load_steps=2 format=3 uid="uid://settings_menu_001"]
+[gd_scene load_steps=3 format=3 uid="uid://settings_menu_001"]
 
 [ext_resource type="Script" path="res://settings_menu.gd" id="1_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_content"]
+bg_color = Color(0.05, 0.05, 0.05, 0.6)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_left = 10
+corner_radius_bottom_right = 10
+content_margin_left = 30.0
+content_margin_top = 30.0
+content_margin_right = 30.0
+content_margin_bottom = 30.0
 
 [node name="SettingsMenu" type="CanvasLayer"]
 layer = 120
@@ -26,21 +42,27 @@ theme_override_constants/margin_top = 80
 theme_override_constants/margin_right = 320
 theme_override_constants/margin_bottom = 80
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect/MarginContainer"]
+[node name="ContentPanel" type="PanelContainer" parent="ColorRect/MarginContainer"]
+layout_mode = 2
+mouse_filter = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_content")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect/MarginContainer/ContentPanel"]
 layout_mode = 2
 theme_override_constants/separation = 25
 
-[node name="Title" type="Label" parent="ColorRect/MarginContainer/VBoxContainer"]
+[node name="Title" type="Label" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "SETTINGS"
 horizontal_alignment = 1
 
-[node name="TabButtons" type="HBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer"]
+[node name="TabButtons" type="HBoxContainer" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 20
 alignment = 1
 
-[node name="TabAudio" type="Button" parent="ColorRect/MarginContainer/VBoxContainer/TabButtons"]
+[node name="TabAudio" type="Button" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabButtons"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -48,7 +70,7 @@ focus_mode = 0
 mouse_default_cursor_shape = 2
 text = "Audio"
 
-[node name="TabDialogue" type="Button" parent="ColorRect/MarginContainer/VBoxContainer/TabButtons"]
+[node name="TabDialogue" type="Button" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabButtons"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -56,7 +78,7 @@ focus_mode = 0
 mouse_default_cursor_shape = 2
 text = "Dialogue"
 
-[node name="TabGameplay" type="Button" parent="ColorRect/MarginContainer/VBoxContainer/TabButtons"]
+[node name="TabGameplay" type="Button" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabButtons"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -64,25 +86,44 @@ focus_mode = 0
 mouse_default_cursor_shape = 2
 text = "Gameplay"
 
-[node name="HSeparator" type="HSeparator" parent="ColorRect/MarginContainer/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="TabAudioContent" type="VBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer"]
+[node name="TabScroll" type="ScrollContainer" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+follow_focus = true
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 1
+
+[node name="ScrollMargin" type="MarginContainer" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_right = 30
+
+[node name="ScrollInner" type="VBoxContainer" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 20
+
+[node name="TabAudioContent" type="VBoxContainer" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="MasterLabel" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/TabAudioContent"]
+[node name="MasterLabel" type="Label" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabAudioContent"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Master Volume: 7"
 
-[node name="MasterHBox" type="HBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer/TabAudioContent"]
+[node name="MasterHBox" type="HBoxContainer" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabAudioContent"]
 layout_mode = 2
 theme_override_constants/separation = 15
 
-[node name="MasterMinus" type="Button" parent="ColorRect/MarginContainer/VBoxContainer/TabAudioContent/MasterHBox"]
+[node name="MasterMinus" type="Button" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabAudioContent/MasterHBox"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
@@ -90,7 +131,7 @@ focus_mode = 0
 mouse_default_cursor_shape = 2
 text = "-"
 
-[node name="MasterSlider" type="HSlider" parent="ColorRect/MarginContainer/VBoxContainer/TabAudioContent/MasterHBox"]
+[node name="MasterSlider" type="HSlider" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabAudioContent/MasterHBox"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -100,7 +141,7 @@ step = 1.0
 tick_count = 11
 ticks_on_borders = true
 
-[node name="MasterPlus" type="Button" parent="ColorRect/MarginContainer/VBoxContainer/TabAudioContent/MasterHBox"]
+[node name="MasterPlus" type="Button" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabAudioContent/MasterHBox"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
@@ -108,16 +149,16 @@ focus_mode = 0
 mouse_default_cursor_shape = 2
 text = "+"
 
-[node name="MusicLabel" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/TabAudioContent"]
+[node name="MusicLabel" type="Label" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabAudioContent"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Music Volume: 7"
 
-[node name="MusicHBox" type="HBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer/TabAudioContent"]
+[node name="MusicHBox" type="HBoxContainer" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabAudioContent"]
 layout_mode = 2
 theme_override_constants/separation = 15
 
-[node name="MusicMinus" type="Button" parent="ColorRect/MarginContainer/VBoxContainer/TabAudioContent/MusicHBox"]
+[node name="MusicMinus" type="Button" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabAudioContent/MusicHBox"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
@@ -125,7 +166,7 @@ focus_mode = 0
 mouse_default_cursor_shape = 2
 text = "-"
 
-[node name="MusicSlider" type="HSlider" parent="ColorRect/MarginContainer/VBoxContainer/TabAudioContent/MusicHBox"]
+[node name="MusicSlider" type="HSlider" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabAudioContent/MusicHBox"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -135,7 +176,7 @@ step = 1.0
 tick_count = 11
 ticks_on_borders = true
 
-[node name="MusicPlus" type="Button" parent="ColorRect/MarginContainer/VBoxContainer/TabAudioContent/MusicHBox"]
+[node name="MusicPlus" type="Button" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabAudioContent/MusicHBox"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
@@ -143,16 +184,16 @@ focus_mode = 0
 mouse_default_cursor_shape = 2
 text = "+"
 
-[node name="SFXLabel" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/TabAudioContent"]
+[node name="SFXLabel" type="Label" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabAudioContent"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "SFX Volume: 7"
 
-[node name="SFXHBox" type="HBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer/TabAudioContent"]
+[node name="SFXHBox" type="HBoxContainer" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabAudioContent"]
 layout_mode = 2
 theme_override_constants/separation = 15
 
-[node name="SFXMinus" type="Button" parent="ColorRect/MarginContainer/VBoxContainer/TabAudioContent/SFXHBox"]
+[node name="SFXMinus" type="Button" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabAudioContent/SFXHBox"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
@@ -160,7 +201,7 @@ focus_mode = 0
 mouse_default_cursor_shape = 2
 text = "-"
 
-[node name="SFXSlider" type="HSlider" parent="ColorRect/MarginContainer/VBoxContainer/TabAudioContent/SFXHBox"]
+[node name="SFXSlider" type="HSlider" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabAudioContent/SFXHBox"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -170,7 +211,7 @@ step = 1.0
 tick_count = 11
 ticks_on_borders = true
 
-[node name="SFXPlus" type="Button" parent="ColorRect/MarginContainer/VBoxContainer/TabAudioContent/SFXHBox"]
+[node name="SFXPlus" type="Button" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabAudioContent/SFXHBox"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
@@ -178,22 +219,22 @@ focus_mode = 0
 mouse_default_cursor_shape = 2
 text = "+"
 
-[node name="TabDialogueContent" type="VBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer"]
+[node name="TabDialogueContent" type="VBoxContainer" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="TextScaleLabel" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent"]
+[node name="TextScaleLabel" type="Label" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabDialogueContent"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Text Size: 5"
 
-[node name="TextScaleHBox" type="HBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent"]
+[node name="TextScaleHBox" type="HBoxContainer" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabDialogueContent"]
 layout_mode = 2
 theme_override_constants/separation = 15
 
-[node name="TextScaleMinus" type="Button" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent/TextScaleHBox"]
+[node name="TextScaleMinus" type="Button" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabDialogueContent/TextScaleHBox"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
@@ -201,7 +242,7 @@ focus_mode = 0
 mouse_default_cursor_shape = 2
 text = "-"
 
-[node name="TextScaleSlider" type="HSlider" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent/TextScaleHBox"]
+[node name="TextScaleSlider" type="HSlider" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabDialogueContent/TextScaleHBox"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -213,7 +254,7 @@ value = 5.0
 tick_count = 10
 ticks_on_borders = true
 
-[node name="TextScalePlus" type="Button" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent/TextScaleHBox"]
+[node name="TextScalePlus" type="Button" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabDialogueContent/TextScaleHBox"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
@@ -221,19 +262,19 @@ focus_mode = 0
 mouse_default_cursor_shape = 2
 text = "+"
 
-[node name="InstantTextHBox" type="HBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent"]
+[node name="InstantTextHBox" type="HBoxContainer" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabDialogueContent"]
 layout_mode = 2
 
-[node name="InstantTextLabel" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent/InstantTextHBox"]
+[node name="InstantTextLabel" type="Label" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabDialogueContent/InstantTextHBox"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Instant Text"
 
-[node name="Spacer" type="Control" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent/InstantTextHBox"]
+[node name="Spacer" type="Control" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabDialogueContent/InstantTextHBox"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="InstantTextToggle" type="Button" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent/InstantTextHBox"]
+[node name="InstantTextToggle" type="Button" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabDialogueContent/InstantTextHBox"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 40)
 layout_mode = 2
@@ -241,16 +282,16 @@ focus_mode = 0
 mouse_default_cursor_shape = 2
 text = "OFF"
 
-[node name="TextSpeedLabel" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent"]
+[node name="TextSpeedLabel" type="Label" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabDialogueContent"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Text Speed: 5"
 
-[node name="TextSpeedHBox" type="HBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent"]
+[node name="TextSpeedHBox" type="HBoxContainer" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabDialogueContent"]
 layout_mode = 2
 theme_override_constants/separation = 15
 
-[node name="TextSpeedMinus" type="Button" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent/TextSpeedHBox"]
+[node name="TextSpeedMinus" type="Button" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabDialogueContent/TextSpeedHBox"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
@@ -258,7 +299,7 @@ focus_mode = 0
 mouse_default_cursor_shape = 2
 text = "-"
 
-[node name="TextSpeedSlider" type="HSlider" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent/TextSpeedHBox"]
+[node name="TextSpeedSlider" type="HSlider" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabDialogueContent/TextSpeedHBox"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -268,7 +309,7 @@ step = 1.0
 tick_count = 11
 ticks_on_borders = true
 
-[node name="TextSpeedPlus" type="Button" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent/TextSpeedHBox"]
+[node name="TextSpeedPlus" type="Button" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabDialogueContent/TextSpeedHBox"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
@@ -276,19 +317,19 @@ focus_mode = 0
 mouse_default_cursor_shape = 2
 text = "+"
 
-[node name="AutoForwardHBox" type="HBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent"]
+[node name="AutoForwardHBox" type="HBoxContainer" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabDialogueContent"]
 layout_mode = 2
 
-[node name="AutoForwardLabel" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent/AutoForwardHBox"]
+[node name="AutoForwardLabel" type="Label" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabDialogueContent/AutoForwardHBox"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Auto Forward"
 
-[node name="Spacer" type="Control" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent/AutoForwardHBox"]
+[node name="Spacer" type="Control" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabDialogueContent/AutoForwardHBox"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="AutoForwardToggle" type="Button" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent/AutoForwardHBox"]
+[node name="AutoForwardToggle" type="Button" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabDialogueContent/AutoForwardHBox"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 40)
 layout_mode = 2
@@ -296,16 +337,16 @@ focus_mode = 0
 mouse_default_cursor_shape = 2
 text = "OFF"
 
-[node name="AutoDelayLabel" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent"]
+[node name="AutoDelayLabel" type="Label" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabDialogueContent"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Auto Wait Time: 3"
 
-[node name="AutoDelayHBox" type="HBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent"]
+[node name="AutoDelayHBox" type="HBoxContainer" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabDialogueContent"]
 layout_mode = 2
 theme_override_constants/separation = 15
 
-[node name="AutoDelayMinus" type="Button" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent/AutoDelayHBox"]
+[node name="AutoDelayMinus" type="Button" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabDialogueContent/AutoDelayHBox"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
@@ -313,7 +354,7 @@ focus_mode = 0
 mouse_default_cursor_shape = 2
 text = "-"
 
-[node name="AutoDelaySlider" type="HSlider" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent/AutoDelayHBox"]
+[node name="AutoDelaySlider" type="HSlider" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabDialogueContent/AutoDelayHBox"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -325,7 +366,7 @@ value = 3.0
 tick_count = 10
 ticks_on_borders = true
 
-[node name="AutoDelayPlus" type="Button" parent="ColorRect/MarginContainer/VBoxContainer/TabDialogueContent/AutoDelayHBox"]
+[node name="AutoDelayPlus" type="Button" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabDialogueContent/AutoDelayHBox"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
@@ -333,25 +374,25 @@ focus_mode = 0
 mouse_default_cursor_shape = 2
 text = "+"
 
-[node name="TabGameplayContent" type="VBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer"]
+[node name="TabGameplayContent" type="VBoxContainer" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="AssistedModeHBox" type="HBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer/TabGameplayContent"]
+[node name="AssistedModeHBox" type="HBoxContainer" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabGameplayContent"]
 layout_mode = 2
 
-[node name="AssistedModeLabel" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/TabGameplayContent/AssistedModeHBox"]
+[node name="AssistedModeLabel" type="Label" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabGameplayContent/AssistedModeHBox"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Assisted Mode"
 
-[node name="Spacer" type="Control" parent="ColorRect/MarginContainer/VBoxContainer/TabGameplayContent/AssistedModeHBox"]
+[node name="Spacer" type="Control" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabGameplayContent/AssistedModeHBox"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="AssistedModeToggle" type="Button" parent="ColorRect/MarginContainer/VBoxContainer/TabGameplayContent/AssistedModeHBox"]
+[node name="AssistedModeToggle" type="Button" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabGameplayContent/AssistedModeHBox"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 40)
 layout_mode = 2
@@ -359,18 +400,14 @@ focus_mode = 0
 mouse_default_cursor_shape = 2
 text = "OFF"
 
-[node name="AssistedModeSubtext" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/TabGameplayContent"]
+[node name="AssistedModeSubtext" type="Label" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer/TabScroll/ScrollMargin/ScrollInner/TabGameplayContent"]
 unique_name_in_owner = true
 modulate = Color(0.6, 0.6, 0.6, 1)
 layout_mode = 2
 text = "Modifies the 'Think' verb to provide explicit puzzle solutions."
 autowrap_mode = 3
 
-[node name="MainSpacer" type="Control" parent="ColorRect/MarginContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="CloseButton" type="Button" parent="ColorRect/MarginContainer/VBoxContainer"]
+[node name="CloseButton" type="Button" parent="ColorRect/MarginContainer/ContentPanel/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0

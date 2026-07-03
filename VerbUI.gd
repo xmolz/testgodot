@@ -2,6 +2,7 @@
 extends CanvasLayer
 
 @onready var action_bubble_label: RichTextLabel = $ActionBubbleLabel
+@onready var verb_grid_panel: Panel = $VerbGridPanel
 @onready var dynamic_verb_vbox: VBoxContainer = %DynamicVerbVBox
 
 var active_verb_buttons: Dictionary = {}
@@ -24,43 +25,14 @@ const ROW_RECIPES = {
 }
 
 func _ready():
-	dynamic_verb_vbox.anchor_left = 0.02
-	dynamic_verb_vbox.anchor_right = 0.44
-
 	if OS.has_feature("mobile"):
-		dynamic_verb_vbox.anchor_top = 0.75
-		var tab_panel = dynamic_verb_vbox.get_node("TabPanel")
+		verb_grid_panel.anchor_top = 0.75
+		var tab_panel = verb_grid_panel.get_node("TabPanel")
 		tab_panel.offset_top = -50
-		tab_panel.offset_right = 190
+		tab_panel.offset_left = 15
+		tab_panel.offset_right = 220
 		tab_panel.get_node("ActionsLabel").add_theme_font_size_override("font_size", 28)
 		action_bubble_label.add_theme_font_size_override("normal_font_size", 28)
-
-	# Background panel behind verb buttons
-	var verb_grid_panel = Panel.new()
-	verb_grid_panel.name = "VerbGridPanel"
-	verb_grid_panel.anchor_left = dynamic_verb_vbox.anchor_left
-	verb_grid_panel.anchor_top = dynamic_verb_vbox.anchor_top
-	verb_grid_panel.anchor_right = dynamic_verb_vbox.anchor_right
-	verb_grid_panel.anchor_bottom = dynamic_verb_vbox.anchor_bottom
-	verb_grid_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-
-	var panel_style = StyleBoxFlat.new()
-	panel_style.bg_color = Color(0, 0, 0, 0.5)
-	panel_style.border_width_left = 3
-	panel_style.border_width_top = 3
-	panel_style.border_width_right = 3
-	panel_style.border_width_bottom = 3
-	panel_style.border_color = Color(1, 1, 1, 1)
-	panel_style.corner_radius_top_left = 10
-	panel_style.corner_radius_top_right = 10
-	panel_style.corner_radius_bottom_left = 10
-	panel_style.corner_radius_bottom_right = 10
-	verb_grid_panel.add_theme_stylebox_override("panel", panel_style)
-
-	add_child(verb_grid_panel)
-	move_child(verb_grid_panel, dynamic_verb_vbox.get_index())
-
-	dynamic_verb_vbox.add_theme_constant_override("separation", 12)
 
 	if GameManager:
 		GameManager.available_verbs_changed.connect(_on_available_verbs_changed)
@@ -123,7 +95,7 @@ func _on_available_verbs_changed(available_verb_data_array: Array[VerbData]):
 	for row_count in recipe:
 		var hbox = HBoxContainer.new()
 		hbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
-		hbox.add_theme_constant_override("separation", 12)
+		hbox.add_theme_constant_override("separation", 8)
 		dynamic_verb_vbox.add_child(hbox)
 
 		for j in range(row_count):
@@ -162,34 +134,8 @@ func _fallback_recipe(count: int) -> Array:
 	return recipe
 
 func _style_verb_button(btn: Button):
-	var custom_font = preload("res://Fonts/VarelaRound-Regular.ttf")
-	btn.add_theme_font_override("font", custom_font)
-	btn.add_theme_font_size_override("font_size", 36 if OS.has_feature("mobile") else 22)
-	btn.add_theme_color_override("font_color", Color(1, 1, 1, 1))
-	btn.add_theme_color_override("font_hover_color", Color(1, 1, 1, 1))
-
-	var normal_style = StyleBoxFlat.new()
-	normal_style.bg_color = Color(0.15, 0.15, 0.15, 0.6)
-	normal_style.border_width_left = 2
-	normal_style.border_width_top = 2
-	normal_style.border_width_right = 2
-	normal_style.border_width_bottom = 2
-	normal_style.border_color = Color(0.6, 0.6, 0.6, 0.8)
-	normal_style.corner_radius_top_left = 5
-	normal_style.corner_radius_top_right = 5
-	normal_style.corner_radius_bottom_left = 5
-	normal_style.corner_radius_bottom_right = 5
-
-	var hover_style = normal_style.duplicate()
-	hover_style.bg_color = Color(0.25, 0.25, 0.25, 0.8)
-	hover_style.border_color = Color(1, 1, 1, 1)
-
-	var focus_style = StyleBoxEmpty.new()
-
-	btn.add_theme_stylebox_override("normal", normal_style)
-	btn.add_theme_stylebox_override("hover", hover_style)
-	btn.add_theme_stylebox_override("pressed", hover_style)
-	btn.add_theme_stylebox_override("focus", focus_style)
+	if OS.has_feature("mobile"):
+		btn.add_theme_font_size_override("font_size", 36)
 
 func _on_verb_button_pressed_dynamic(verb_id_pressed: String):
 	if SoundManager: SoundManager.play_sfx("ui_click")

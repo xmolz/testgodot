@@ -32,6 +32,7 @@ var custom_font = preload("res://Fonts/VarelaRound-Regular.ttf")
 var _was_paused_before_menu: bool = false
 var _pre_pause_game_state = null
 var _was_menu_visible: bool = false
+var _overlay_open_time_ms: int = 0
 
 func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -47,9 +48,10 @@ func _ready():
 
 	menu_button.pressed.connect(toggle_pause)
 	if OS.has_feature("mobile"):
-		bg_button.pressed.connect(toggle_pause)
+		bg_button.pressed.connect(_on_bg_button_pressed)
 	else:
 		bg_button.mouse_default_cursor_shape = Control.CURSOR_ARROW
+	$Overlay/CenterContainer/VBoxContainer.mouse_filter = Control.MOUSE_FILTER_STOP
 	resume_btn.pressed.connect(toggle_pause)
 	history_btn.pressed.connect(_on_history_pressed)
 	settings_btn.pressed.connect(_on_settings_pressed)
@@ -93,6 +95,10 @@ func _input(event):
 			get_viewport().set_input_as_handled()
 			toggle_pause()
 
+func _on_bg_button_pressed():
+	if Time.get_ticks_msec() - _overlay_open_time_ms < 300: return
+	toggle_pause()
+
 func toggle_pause():
 	if SoundManager: SoundManager.play_sfx("ui_click")
 
@@ -112,6 +118,7 @@ func toggle_pause():
 		if is_instance_valid(menu_panel):
 			menu_panel.hide()
 		overlay.show()
+		_overlay_open_time_ms = Time.get_ticks_msec()
 		get_tree().paused = true
 		if GameManager: GameManager.change_game_state(GameManager.GameState.PAUSED)
 
