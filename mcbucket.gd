@@ -80,11 +80,11 @@ func _ready():
 	await get_tree().process_frame
 	if not GameManager: return
 
-	if GameManager.get_current_level_flag("mcbucket_cannathink_used"):
+	if Flags.get_level_flag("mcbucket_cannathink_used"):
 		change_state(State.HIGH)
-	elif GameManager.get_current_level_flag("mcbucket_invigirol_used"):
+	elif Flags.get_level_flag("mcbucket_invigirol_used"):
 		change_state(State.INVIGIROL)
-	elif GameManager.get_current_level_flag("mcbucket_zanopram_used"):
+	elif Flags.get_level_flag("mcbucket_zanopram_used"):
 		change_state(State.SLEEPING)
 	else:
 		change_state(State.IDLE)
@@ -95,9 +95,9 @@ func change_state(new_state: State):
 		return
 
 	if GameManager:
-		GameManager.set_current_level_flag("mcbucket_cannathink_used", new_state == State.HIGH)
-		GameManager.set_current_level_flag("mcbucket_invigirol_used", new_state == State.INVIGIROL)
-		GameManager.set_current_level_flag("mcbucket_zanopram_used", new_state == State.SLEEPING)
+		Flags.set_level_flag("mcbucket_cannathink_used", new_state == State.HIGH)
+		Flags.set_level_flag("mcbucket_invigirol_used", new_state == State.INVIGIROL)
+		Flags.set_level_flag("mcbucket_zanopram_used", new_state == State.SLEEPING)
 
 	match new_state:
 		State.IDLE:
@@ -164,9 +164,9 @@ func react_to_tv(is_tv_off: bool):
 	if not animation_player: return
 
 	if GameManager:
-		if GameManager.get_current_level_flag("mcbucket_cannathink_used") or \
-		   GameManager.get_current_level_flag("mcbucket_invigirol_used") or \
-		   GameManager.get_current_level_flag("mcbucket_zanopram_used"):
+		if Flags.get_level_flag("mcbucket_cannathink_used") or \
+		   Flags.get_level_flag("mcbucket_invigirol_used") or \
+		   Flags.get_level_flag("mcbucket_zanopram_used"):
 			return
 
 	if is_tv_off:

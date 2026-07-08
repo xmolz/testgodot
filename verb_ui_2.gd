@@ -142,7 +142,7 @@ func _on_new_hint_available(is_available: bool):
 	var btn = active_verb_buttons["think"]
 	print_rich("[color=pink]--- DEBUG UI: Button found. Applying glow... ---[/color]")
 
-	if is_available and GameManager and GameManager.assisted_mode:
+	if is_available and GameManager and Settings.assisted_mode:
 		if think_pulse_tween: think_pulse_tween.kill()
 		think_pulse_tween = create_tween().set_loops()
 		think_pulse_tween.tween_property(btn, "modulate", Color(1.0, 1.0, 0.0, 1.0), 0.6).set_trans(Tween.TRANS_SINE)

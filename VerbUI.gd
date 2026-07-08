@@ -203,7 +203,7 @@ func _on_new_hint_available(is_available: bool):
 	if think_pulse_tween and think_pulse_tween.is_valid():
 		think_pulse_tween.kill()
 
-	if is_available and GameManager and GameManager.assisted_mode:
+	if is_available and GameManager and Settings.assisted_mode:
 		btn.modulate = Color.WHITE
 		think_pulse_tween = create_tween().set_loops()
 		think_pulse_tween.tween_property(btn, "modulate", Color(1.0, 1.0, 0.0, 1.0), 0.6).set_trans(Tween.TRANS_SINE)

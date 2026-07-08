@@ -13,7 +13,7 @@ func execute(_interactable_node: Interactable) -> Variant:
 	if GameManager:
 		# This calls the function you already set up in GameManager
 		# which routes it to the current LevelStateManager
-		GameManager.set_current_level_flag(flag_name, flag_value)
+		Flags.set_level_flag(flag_name, flag_value)
 		print("Action: Set Level Flag '%s' to %s" % [flag_name, str(flag_value)])
 	
 	return true

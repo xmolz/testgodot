@@ -18,7 +18,7 @@ func _ready():
 
 	# 3. Increase font size dynamically for the 1800x2400 resolution
 	if GameManager:
-		GameManager.dialogue_text_scale = 2.2 # Increased slightly
+		Settings.dialogue_text_scale = 2.2 # Increased slightly
 
 	# 4. Instantiate the balloon inside the viewport
 	var dialogue_res = load("res://dialogue/alyssa_marketing.dialogue")
@@ -107,6 +107,6 @@ func _ready():
 	print("===========================================\n")
 
 	if GameManager:
-		GameManager.dialogue_text_scale = 1.0
+		Settings.dialogue_text_scale = 1.0
 
 	get_tree().quit()

@@ -85,14 +85,14 @@ func _ready():
 
 	# --- Connect to GameManager Signals ---
 	if GameManager:
-		GameManager.inventory_updated.connect(_on_game_manager_inventory_updated)
+		Inventory.inventory_updated.connect(_on_game_manager_inventory_updated)
 		GameManager.selected_inventory_item_changed.connect(_on_game_manager_selected_item_changed)
 		GameManager.interaction_complete.connect(_on_interaction_complete)
 		GameManager.verb_changed.connect(_on_game_manager_verb_changed)
 		GameManager.verb_lock_changed.connect(_on_game_manager_verb_lock_changed)
 
 		if GameManager.has_method("get_player_inventory"):
-			_on_game_manager_inventory_updated(GameManager.get_player_inventory())
+			_on_game_manager_inventory_updated(Inventory.get_items())
 		else:
 			print_rich("[color=orange]InventoryUI: GameManager has no get_player_inventory method.[/color]")
 	else:

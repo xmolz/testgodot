@@ -6,7 +6,7 @@ func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 
 	if GameManager:
-		GameManager.register_level_state_manager(level_state_manager)
+		Flags.register_level_state_manager(level_state_manager)
 
 	await get_tree().process_frame
 	await get_tree().process_frame
@@ -17,7 +17,7 @@ func _ready():
 			GameManager.unlock_verb(v)
 		GameManager.set_active_scene_verbs(all_verbs)
 
-		GameManager.add_item_to_inventory("hospital_toilet_paper")
+		Inventory.add_item("hospital_toilet_paper")
 
 		level_state_manager.set_level_flag("insurance_button_unlocked", true)
 		level_state_manager.set_level_flag("dev_cta_completed", false)

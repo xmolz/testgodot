@@ -53,7 +53,7 @@ func _ready():
 
 	# Check Flag
 	if GameManager:
-		badge.visible = not GameManager.get_game_flag("journal_opened_once")
+		badge.visible = not Flags.get_game_flag("journal_opened_once")
 
 	# Start pulsing if visible
 	if badge.visible:
@@ -89,7 +89,7 @@ func _on_texture_button_pressed():
 
 	# Hide badge, kill tween, and save flag
 	if GameManager:
-		GameManager.set_game_flag("journal_opened_once", true)
+		Flags.set_game_flag("journal_opened_once", true)
 
 	if pulse_tween:
 		pulse_tween.kill()
@@ -105,7 +105,7 @@ func set_notification_enabled(is_enabled: bool):
 		if pulse_tween:
 			pulse_tween.kill()
 	else:
-		if GameManager and not GameManager.get_game_flag("journal_opened_once"):
+		if GameManager and not Flags.get_game_flag("journal_opened_once"):
 			if not badge.visible:
 				badge.visible = true
 				_start_pulse_animation()

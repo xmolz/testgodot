@@ -64,7 +64,7 @@ func _ready():
 
 	# Debug: give techpass item directly
 	if override_give_techpass and GameManager:
-		GameManager.add_item_to_inventory("techpass")
+		Inventory.add_item("techpass")
 
 	print_rich("[color=LawnGreen]LevelStateManager for '%s' is ready.[/color]" % (get_parent().name if get_parent() else "UnnamedLevel"))
 

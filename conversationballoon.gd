@@ -200,8 +200,8 @@ func _ready() -> void:
 
 	if GameManager:
 		_update_auto_button_visuals()
-		if not GameManager.auto_forward_toggled.is_connected(_on_global_auto_toggled):
-			GameManager.auto_forward_toggled.connect(_on_global_auto_toggled)
+		if not Settings.auto_forward_toggled.is_connected(_on_global_auto_toggled):
+			Settings.auto_forward_toggled.connect(_on_global_auto_toggled)
 
 	# --- Style the responses menu and template button ---
 	# 1. Increase vertical spacing between response buttons
@@ -311,7 +311,7 @@ func _ready() -> void:
 	leave_icon = _resize_texture(leave_icon, 32)
 
 	# --- DYNAMIC TEXT SCALING (PC, Mobile & Marketing) ---
-	var scale_mult: float = GameManager.dialogue_text_scale if GameManager else 1.0
+	var scale_mult: float = Settings.dialogue_text_scale if GameManager else 1.0
 
 	var base_diag_size = 44 if OS.has_feature("mobile") else 28
 	var base_name_size = 44 if OS.has_feature("mobile") else 30
@@ -379,7 +379,7 @@ func apply_dialogue_line() -> void:
 	# 2b. Create a display name that swaps "Player" for the actual name or "???"
 	var display_name = raw_name_with_tags
 	if lookup_key == "Player":
-		if GameManager and GameManager.get_game_flag("first_name_correct"):
+		if GameManager and Flags.get_game_flag("first_name_correct"):
 			display_name = display_name.replace("Player", "Fiona")
 		else:
 			display_name = display_name.replace("Player", "???")
@@ -455,10 +455,10 @@ func apply_dialogue_line() -> void:
 	dialogue_label.hide()
 	dialogue_label.dialogue_line = dialogue_line
 	if GameManager:
-		if GameManager.instant_text:
+		if Settings.instant_text:
 			dialogue_label.seconds_per_step = 0.0
 		else:
-			dialogue_label.seconds_per_step = GameManager.text_speed
+			dialogue_label.seconds_per_step = Settings.text_speed
 
 	responses_menu.hide()
 	responses_menu.modulate.a = 1.0 # --- Reset alpha for safety
@@ -484,7 +484,7 @@ func apply_dialogue_line() -> void:
 		var unique_choice_id = resource.resource_path + "::" + response_obj.id
 		var is_visited = false
 		if GameManager and "visited_dialogue_responses" in GameManager:
-			is_visited = GameManager.visited_dialogue_responses.has(unique_choice_id)
+			is_visited = DialogueHistory.visited_responses.has(unique_choice_id)
 
 		# Default colors and icon
 		var resting_color = Color.WHITE # Reverted back to pure white
@@ -551,12 +551,12 @@ func apply_dialogue_line() -> void:
 	if GameManager and not dialogue_line.text.is_empty():
 		var history_display_name = lookup_key
 		if lookup_key == "Player":
-			if GameManager.get_game_flag("first_name_correct"):
+			if Flags.get_game_flag("first_name_correct"):
 				history_display_name = "Fiona"
 			else:
 				history_display_name = "???"
 
-		GameManager.add_dialogue_history_line(lookup_key, history_display_name, dialogue_line.text)
+		DialogueHistory.add_line(lookup_key, history_display_name, dialogue_line.text)
 
 	dialogue_label.show()
 	if not dialogue_line.text.is_empty():
@@ -577,7 +577,7 @@ func apply_dialogue_line() -> void:
 		# ------------------------------------------------------
 
 		# --- AUTO-FORWARD SINGLE CHOICE ---
-		if GameManager and GameManager.is_auto_playing and dialogue_line.responses.size() == 1:
+		if GameManager and Settings.is_auto_playing and dialogue_line.responses.size() == 1:
 			_start_auto_advance_timer()
 
 	elif dialogue_line.time != "":
@@ -589,7 +589,7 @@ func apply_dialogue_line() -> void:
 		balloon.focus_mode = Control.FOCUS_ALL
 		balloon.grab_focus()
 
-		if GameManager and GameManager.is_auto_playing:
+		if GameManager and Settings.is_auto_playing:
 			_start_auto_advance_timer()
 
 ## Go to the next line
@@ -669,7 +669,7 @@ func _on_responses_menu_response_selected(response: DialogueResponse) -> void:
 	# Record visited response using a truly unique ID
 	var unique_choice_id = resource.resource_path + "::" + response.id
 	if GameManager and "visited_dialogue_responses" in GameManager:
-		GameManager.visited_dialogue_responses[unique_choice_id] = true
+		DialogueHistory.visited_responses[unique_choice_id] = true
 
 	# --- RECORD CHOICE HISTORY ---
 	if GameManager:
@@ -682,12 +682,12 @@ func _on_responses_menu_response_selected(response: DialogueResponse) -> void:
 				chosen_idx = i
 
 		var player_name = "Player"
-		if GameManager.get_game_flag("first_name_correct"):
+		if Flags.get_game_flag("first_name_correct"):
 			player_name = "Fiona"
 		else:
 			player_name = "???"
 
-		GameManager.add_dialogue_history_choice("Player", player_name, all_options, chosen_idx)
+		DialogueHistory.add_choice("Player", player_name, all_options, chosen_idx)
 
 	if SoundManager: SoundManager.play_sfx("ui_click")
 	next(response.next_id)
@@ -713,7 +713,7 @@ func set_ui_hidden(hide: bool) -> void:
 		if not auto_advance_timer.is_stopped():
 			auto_advance_timer.paused = true
 	else:
-		if GameManager and GameManager.is_auto_playing:
+		if GameManager and Settings.is_auto_playing:
 			if is_instance_valid(auto_advance_timer) and auto_advance_timer.paused:
 				auto_advance_timer.paused = false
 			elif not dialogue_label.is_typing:
@@ -757,7 +757,7 @@ func _on_log_button_pressed() -> void:
 				return
 
 			_is_log_open = false
-			if GameManager and GameManager.is_auto_playing:
+			if GameManager and Settings.is_auto_playing:
 				# If timer was paused, resume it
 				if is_instance_valid(auto_advance_timer) and auto_advance_timer.paused:
 					auto_advance_timer.paused = false
@@ -770,7 +770,7 @@ func _on_log_button_pressed() -> void:
 func _on_auto_button_pressed() -> void:
 	if SoundManager: SoundManager.play_sfx("ui_click")
 	if GameManager:
-		GameManager.is_auto_playing = not GameManager.is_auto_playing
+		Settings.is_auto_playing = not Settings.is_auto_playing
 
 func _on_global_auto_toggled(is_on: bool):
 	_update_auto_button_visuals()
@@ -787,7 +787,7 @@ func _start_auto_advance_timer():
 		return
 
 	# Base wait from settings + 0.025 seconds per character
-	var wait_time = GameManager.auto_time_delay + (dialogue_line.text.length() * 0.025)
+	var wait_time = Settings.auto_time_delay + (dialogue_line.text.length() * 0.025)
 	auto_advance_timer.start(wait_time)
 
 func _on_auto_advance_timeout():
@@ -825,12 +825,12 @@ func _simulate_single_response_click(response: DialogueResponse):
 		_on_responses_menu_response_selected(response)
 
 func _cancel_auto_mode():
-	if GameManager and GameManager.is_auto_playing:
-		GameManager.is_auto_playing = false
+	if GameManager and Settings.is_auto_playing:
+		Settings.is_auto_playing = false
 
 func _update_auto_button_visuals():
 	if not auto_button: return
-	if GameManager and GameManager.is_auto_playing:
+	if GameManager and Settings.is_auto_playing:
 		auto_button.add_theme_color_override("font_color", Color(0.2, 0.85, 1.0, 1.0))
 		auto_button.add_theme_color_override("font_hover_color", Color(0.2, 0.85, 1.0, 1.0) if OS.has_feature("mobile") else Color(0.4, 0.95, 1.0, 1.0))
 	else:

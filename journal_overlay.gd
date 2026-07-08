@@ -115,9 +115,9 @@ func update_display():
 		if entry.required_flag != "":
 			var flag_name = entry.required_flag
 			var is_unlocked = false
-			if GameManager.current_level_state_manager and GameManager.get_current_level_flag(flag_name):
+			if Flags.current_level_state_manager and Flags.get_level_flag(flag_name):
 				is_unlocked = true
-			elif GameManager.get_game_flag(flag_name):
+			elif Flags.get_game_flag(flag_name):
 				is_unlocked = true
 				
 			if not is_unlocked:

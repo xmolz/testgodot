@@ -28,7 +28,7 @@ func _execution_steps():
 	print_rich("[color=magenta][Time: %s] Cutscene START.[/color]" % Time.get_ticks_msec())
 	
 	# --- STEP 0: PRE-SETUP ---
-	GameManager.set_current_level_flag("aida_fixing_toilet", true)
+	Flags.set_level_flag("aida_fixing_toilet", true)
 	
 	var aida_mover = aida_npc.get_node_or_null("MovementController")
 	if aida_mover: aida_mover.pause_movement()
@@ -101,8 +101,8 @@ func _execution_steps():
 	
 	# --- STEP 5: UNCLOG TOILET ---
 	if toilet_interactable:
-		GameManager.set_current_level_flag("toilet_clogged", false)
-		GameManager.set_current_level_flag("toilet_has_paper", false)
+		Flags.set_level_flag("toilet_clogged", false)
+		Flags.set_level_flag("toilet_has_paper", false)
 		
 		var toilet_root = toilet_interactable.get_parent()
 		if toilet_root and toilet_root.has_method("change_state"):
@@ -120,7 +120,7 @@ func _execution_steps():
 	aida_npc.visible = true
 	
 	# ### MOVED FLAG RESET HERE ###
-	GameManager.set_current_level_flag("aida_fixing_toilet", false)
+	Flags.set_level_flag("aida_fixing_toilet", false)
 	# ---------------------------
 	
 	# --- STEP 7: RETURN TO PATROL ---
@@ -133,6 +133,6 @@ func _execution_steps():
 		aida_mover.resume_movement()
 		
 	# Reset Busy Flag
-	GameManager.set_current_level_flag("aida_fixing_toilet", false)
+	Flags.set_level_flag("aida_fixing_toilet", false)
 	
 	print_rich("[color=magenta][Time: %s] Cutscene Script Complete.[/color]" % Time.get_ticks_msec())

@@ -17,7 +17,7 @@ func execute(interactable_node: Interactable) -> bool:
 	# --- NEW LOGIC: Automatically set the state flag so the item doesn't respawn ---
 	if not interactable_node.state_flag_id.is_empty():
 		if GameManager:
-			GameManager.set_current_level_flag(interactable_node.state_flag_id, true)
+			Flags.set_level_flag(interactable_node.state_flag_id, true)
 			print_rich("[color=green]AddItemAction: Auto-set level flag '%s' to true.[/color]" % interactable_node.state_flag_id)
 
 	return true

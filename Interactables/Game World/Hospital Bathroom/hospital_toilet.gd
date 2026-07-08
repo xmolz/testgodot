@@ -11,9 +11,9 @@ func _ready():
 	_restore_state()
 
 func _restore_state():
-	if GameManager.get_current_level_flag("toilet_clogged"):
+	if Flags.get_level_flag("toilet_clogged"):
 		change_state(ToiletState.CLOGGED)
-	elif GameManager.get_current_level_flag("toilet_has_paper"):
+	elif Flags.get_level_flag("toilet_has_paper"):
 		change_state(ToiletState.HAS_PAPER)
 	else:
 		change_state(ToiletState.NORMAL)
@@ -26,16 +26,16 @@ func change_state(new_state_int: int):
 		match new_state:
 			ToiletState.NORMAL:
 				# Clear ALL flags when normal
-				GameManager.set_current_level_flag("toilet_has_paper", false)
-				GameManager.set_current_level_flag("toilet_clogged", false)
+				Flags.set_level_flag("toilet_has_paper", false)
+				Flags.set_level_flag("toilet_clogged", false)
 			ToiletState.HAS_PAPER:
-				GameManager.set_current_level_flag("toilet_has_paper", true)
+				Flags.set_level_flag("toilet_has_paper", true)
 				# Ensure clogged is false
-				GameManager.set_current_level_flag("toilet_clogged", false)
+				Flags.set_level_flag("toilet_clogged", false)
 			ToiletState.CLOGGED:
-				GameManager.set_current_level_flag("toilet_clogged", true)
+				Flags.set_level_flag("toilet_clogged", true)
 				# (Optional: keep has_paper true if you want, or clear it. Usually clogged implies paper is stuck)
-				# GameManager.set_current_level_flag("toilet_has_paper", true) 
+				# Flags.set_level_flag("toilet_has_paper", true) 
 
 	match new_state:
 		ToiletState.NORMAL:

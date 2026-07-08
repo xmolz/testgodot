@@ -19,7 +19,7 @@ func _process(_delta):
 	if is_currently_in_main != _was_in_main_room:
 		_was_in_main_room = is_currently_in_main
 		if GameManager:
-			GameManager.set_current_level_flag("aida_in_main_room", is_currently_in_main)
+			Flags.set_level_flag("aida_in_main_room", is_currently_in_main)
 
 func _ready():
 	# 1. Setup Resume Timer (Wait after talking)

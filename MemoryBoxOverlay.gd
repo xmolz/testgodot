@@ -105,7 +105,7 @@ func play_boot_sequence():
 func _restore_patreon_button():
 	if not GameManager:
 		return
-	if not GameManager.get_current_level_flag("dev_cta_completed"):
+	if not Flags.get_level_flag("dev_cta_completed"):
 		return
 	var existing = get_node_or_null("PersistentPatreonBtn")
 	if is_instance_valid(existing):

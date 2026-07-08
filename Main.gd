@@ -30,7 +30,7 @@ func _ready():
 
 	# --- DEBUG: Force Assisted Mode ---
 	if GameManager and force_assisted_mode:
-		GameManager.assisted_mode = true
+		Settings.assisted_mode = true
 		GameManager.unlock_verb("think")
 		GameManager.current_unread_hint = ""
 		GameManager.last_read_hint = ""
@@ -53,7 +53,7 @@ func _ready():
 
 		# Register this level's state manager
 		if is_instance_valid(level_state_manager):
-			GameManager.register_level_state_manager(level_state_manager)
+			Flags.register_level_state_manager(level_state_manager)
 		if is_instance_valid(level_hint_manager):
 			GameManager.current_hint_manager = level_hint_manager
 		else:
@@ -64,8 +64,8 @@ func _ready():
 
 func _exit_tree():
 	if GameManager and is_instance_valid(level_state_manager):
-		if GameManager.current_level_state_manager == level_state_manager:
-			GameManager.register_level_state_manager(null)
+		if Flags.current_level_state_manager == level_state_manager:
+			Flags.register_level_state_manager(null)
 			GameManager.current_hint_manager = null
 			print_rich("[color=yellow]%s: Unregistered its LevelStateManager.[/color]" % name)
 

@@ -62,21 +62,21 @@ func _ready():
 
 	# Load initial values
 	if GameManager:
-		master_slider.value = round(GameManager.get_bus_volume("Master") * 7.0)
-		music_slider.value = round(GameManager.get_bus_volume("Music") * 7.0)
-		sfx_slider.value = round(GameManager.get_bus_volume("SFX") * 7.0)
+		master_slider.value = round(Settings.get_bus_volume("Master") * 7.0)
+		music_slider.value = round(Settings.get_bus_volume("Music") * 7.0)
+		sfx_slider.value = round(Settings.get_bus_volume("SFX") * 7.0)
 
-		var speed_mapped = remap(GameManager.text_speed, 0.05, 0.005, 0.0, 10.0)
+		var speed_mapped = remap(Settings.text_speed, 0.05, 0.005, 0.0, 10.0)
 		text_speed_slider.value = round(speed_mapped)
 
-		var auto_mapped = remap(GameManager.auto_time_delay, 0.125, 1.75, 1.0, 10.0)
+		var auto_mapped = remap(Settings.auto_time_delay, 0.125, 1.75, 1.0, 10.0)
 		auto_delay_slider.value = round(auto_mapped)
 
-		text_scale_slider.value = round((GameManager.dialogue_text_scale - 0.5) * 10.0)
+		text_scale_slider.value = round((Settings.dialogue_text_scale - 0.5) * 10.0)
 
-		_update_instant_text_visuals(GameManager.instant_text)
-		_update_auto_forward_visuals(GameManager.is_auto_playing)
-		_update_assisted_toggle_visuals(GameManager.assisted_mode)
+		_update_instant_text_visuals(Settings.instant_text)
+		_update_auto_forward_visuals(Settings.is_auto_playing)
+		_update_assisted_toggle_visuals(Settings.assisted_mode)
 
 	_update_labels()
 
@@ -188,21 +188,21 @@ func _update_labels():
 
 func _on_master_changed(value: float):
 	_update_labels()
-	if GameManager: GameManager.set_bus_volume("Master", value / 7.0)
+	if GameManager: Settings.set_bus_volume("Master", value / 7.0)
 
 func _on_music_changed(value: float):
 	_update_labels()
-	if GameManager: GameManager.set_bus_volume("Music", value / 7.0)
+	if GameManager: Settings.set_bus_volume("Music", value / 7.0)
 
 func _on_sfx_changed(value: float):
 	_update_labels()
-	if GameManager: GameManager.set_bus_volume("SFX", value / 7.0)
+	if GameManager: Settings.set_bus_volume("SFX", value / 7.0)
 
 func _on_instant_text_pressed():
 	if SoundManager: SoundManager.play_sfx("ui_click")
 	if GameManager:
-		GameManager.instant_text = not GameManager.instant_text
-		_update_instant_text_visuals(GameManager.instant_text)
+		Settings.instant_text = not Settings.instant_text
+		_update_instant_text_visuals(Settings.instant_text)
 
 func _update_instant_text_visuals(is_on: bool):
 	_style_toggle_button(instant_text_toggle, is_on)
@@ -220,13 +220,13 @@ func _on_text_speed_changed(value: float):
 	_update_labels()
 	if GameManager:
 		var new_speed = remap(value, 0.0, 10.0, 0.05, 0.005)
-		GameManager.text_speed = new_speed
+		Settings.text_speed = new_speed
 
 func _on_auto_forward_pressed():
 	if SoundManager: SoundManager.play_sfx("ui_click")
 	if GameManager:
-		GameManager.is_auto_playing = not GameManager.is_auto_playing
-		_update_auto_forward_visuals(GameManager.is_auto_playing)
+		Settings.is_auto_playing = not Settings.is_auto_playing
+		_update_auto_forward_visuals(Settings.is_auto_playing)
 
 func _update_auto_forward_visuals(is_on: bool):
 	_style_toggle_button(auto_forward_toggle, is_on)
@@ -244,18 +244,18 @@ func _on_auto_delay_changed(value: float):
 	_update_labels()
 	if GameManager:
 		var new_delay = remap(value, 1.0, 10.0, 0.125, 1.75)
-		GameManager.auto_time_delay = new_delay
+		Settings.auto_time_delay = new_delay
 
 func _on_text_scale_changed(value: float):
 	_update_labels()
 	if GameManager:
-		GameManager.dialogue_text_scale = 0.5 + (value * 0.1)
+		Settings.dialogue_text_scale = 0.5 + (value * 0.1)
 
 func _on_assisted_mode_pressed():
 	if SoundManager: SoundManager.play_sfx("ui_click")
 	if GameManager:
-		GameManager.assisted_mode = not GameManager.assisted_mode
-		_update_assisted_toggle_visuals(GameManager.assisted_mode)
+		Settings.assisted_mode = not Settings.assisted_mode
+		_update_assisted_toggle_visuals(Settings.assisted_mode)
 		if GameManager.has_method("refresh_hint_system"):
 			GameManager.refresh_hint_system()
 
@@ -289,7 +289,7 @@ func _on_close_pressed():
 
 func _exit_tree():
 	if GameManager:
-		GameManager.save_settings()
+		Settings.save_settings()
 
 func _apply_ui_polish():
 	# Fonts and main text sizing

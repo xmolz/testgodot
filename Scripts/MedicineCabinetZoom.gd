@@ -9,9 +9,9 @@ func _ready():
 	print_rich("[color=orange]MedicineCabinet: Zoom opened. Forcing Game Unpause to allow Aida to move.[/color]")
 	get_tree().paused = false
 	
-	if GameManager and GameManager.current_level_state_manager:
-		if not GameManager.current_level_state_manager.level_flag_changed.is_connected(_on_level_flag_changed):
-			GameManager.current_level_state_manager.level_flag_changed.connect(_on_level_flag_changed)
+	if GameManager and Flags.current_level_state_manager:
+		if not Flags.current_level_state_manager.level_flag_changed.is_connected(_on_level_flag_changed):
+			Flags.current_level_state_manager.level_flag_changed.connect(_on_level_flag_changed)
 
 func _on_level_flag_changed(flag_name: String, new_value: bool):
 	if flag_name == "aida_in_main_room" and new_value == true:
@@ -27,9 +27,9 @@ func _trigger_forced_exit():
 
 func _cleanup_and_queue_free():
 	# Safely disconnect the signal to prevent crashes when Aida moves around later
-	if GameManager and GameManager.current_level_state_manager:
-		if GameManager.current_level_state_manager.level_flag_changed.is_connected(_on_level_flag_changed):
-			GameManager.current_level_state_manager.level_flag_changed.disconnect(_on_level_flag_changed)
+	if GameManager and Flags.current_level_state_manager:
+		if Flags.current_level_state_manager.level_flag_changed.is_connected(_on_level_flag_changed):
+			Flags.current_level_state_manager.level_flag_changed.disconnect(_on_level_flag_changed)
 
 	# Inform the GameManager that we are returning to the main level.
 	if GameManager:

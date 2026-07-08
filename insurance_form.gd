@@ -112,7 +112,7 @@ func _ready():
 	submit_button.modulate = Color(0.5, 0.5, 0.5, 1.0)
 
 	# --- RESTORE PREVIOUSLY SOLVED FIELDS ---
-	if GameManager and GameManager.get_game_flag("first_name_correct"):
+	if GameManager and Flags.get_game_flag("first_name_correct"):
 		lock_field("first_name", "FIONA")
 
 	# Close form when clicking the dark background

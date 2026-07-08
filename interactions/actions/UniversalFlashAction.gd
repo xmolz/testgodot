@@ -20,7 +20,7 @@ func execute(interactable_node: Interactable) -> Variant:
 		return true
 
 	# Reset the abort flag before starting
-	GameManager.set_game_flag("abort_flash", false)
+	Flags.set_game_flag("abort_flash", false)
 
 	# 2. Check Pre-Flash (Plays dialogue, then continues to animation)
 	var pre_id = obj_id + "_pre"
@@ -29,8 +29,8 @@ func execute(interactable_node: Interactable) -> Variant:
 		await DialogueManager.dialogue_ended
 
 	# Check if the dialogue requested the flash to be aborted
-	if GameManager.get_game_flag("abort_flash") == true:
-		GameManager.set_game_flag("abort_flash", false)
+	if Flags.get_game_flag("abort_flash") == true:
+		Flags.set_game_flag("abort_flash", false)
 		return true
 
 	# 3. Perform Flash Animation

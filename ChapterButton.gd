@@ -43,7 +43,7 @@ func populate(data: MemoryChapterData):
 	# Check if the chapter has a flag that needs to be checked.
 	if not chapter_data.unlock_flag.is_empty():
 		# Ask the GameManager if the flag is true or false.
-		var is_unlocked = GameManager.get_game_flag(chapter_data.unlock_flag)
+		var is_unlocked = Flags.get_game_flag(chapter_data.unlock_flag)
 
 		if not is_unlocked:
 			# If the chapter is locked, make it look disabled.

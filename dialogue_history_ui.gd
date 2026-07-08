@@ -112,7 +112,7 @@ func _populate_log():
 	var previous_character = ""
 	var custom_font = preload("res://Fonts/VarelaRound-Regular.ttf")
 
-	for entry in GameManager.dialogue_history:
+	for entry in DialogueHistory.entries:
 		var align_right = false
 		var lookup_name = entry.get("lookup_name", "")
 		var display_name = entry.get("display_name", "")

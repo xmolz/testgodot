@@ -39,7 +39,7 @@ var _outline_material: Material = null
 
 func _ready():
 	if not state_flag_id.is_empty():
-		if GameManager.get_current_level_flag(state_flag_id):
+		if Flags.get_level_flag(state_flag_id):
 			get_parent().queue_free()
 			return
 
@@ -149,7 +149,7 @@ func attempt_interaction(verb_id: String, item_id_used_with: String = ""):
 		var flag_matches: bool = true
 		if not response.required_flag_id.is_empty():
 			if GameManager:
-				flag_matches = (GameManager.get_current_level_flag(response.required_flag_id) == response.required_flag_value)
+				flag_matches = (Flags.get_level_flag(response.required_flag_id) == response.required_flag_value)
 			else:
 				flag_matches = false
 
@@ -225,7 +225,7 @@ func does_verb_require_walk(verb_id_to_check: String, item_data_used: ItemData =
 		var flag_matches: bool = true
 		if not response.required_flag_id.is_empty():
 			# If a flag ID is specified, we must check it.
-			flag_matches = (GameManager.get_current_level_flag(response.required_flag_id) == response.required_flag_value)
+			flag_matches = (Flags.get_level_flag(response.required_flag_id) == response.required_flag_value)
 
 		# If we found the valid interaction response that is going to fire:
 		if verb_matches and item_matches and flag_matches:
