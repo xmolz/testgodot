@@ -95,8 +95,7 @@ var _current_character_conversation_overlay_instance: Node = null
 
 var _mouse_held_timer: float = 0.0
 var _potential_hold_walk: bool = false
-#var debug_fps_label: Label = null
-var _signals_connected_to_interactable: Interactable = null # Tracks interactable for signal cleanup
+var _signals_connected_to_interactable: Interactable = null
 
 var current_hint_manager: LevelHintManager = null
 
@@ -116,21 +115,6 @@ var last_read_hint: String = ""
 func _ready():
 	print("If I Remember Correctly — v%s" % str(ProjectSettings.get_setting("application/config/version", "unset")))
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
-
-	# Create a debug FPS counter
-	#var fps_canvas = CanvasLayer.new()
-	#fps_canvas.layer = 128 # Put it above absolutely everything
-	#debug_fps_label = Label.new()
-	#debug_fps_label.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT, Control.PRESET_MODE_MINSIZE, 15)
-	#debug_fps_label.grow_horizontal = Control.GROW_DIRECTION_BEGIN
-	#debug_fps_label.offset_right = -20
-	#debug_fps_label.offset_top = 20
-	#debug_fps_label.add_theme_font_size_override("font_size", 24)
-	#debug_fps_label.add_theme_color_override("font_color", Color.GREEN)
-	#debug_fps_label.add_theme_color_override("font_outline_color", Color.BLACK)
-	#debug_fps_label.add_theme_constant_override("outline_size", 4)
-	#fps_canvas.add_child(debug_fps_label)
-	#add_child(fps_canvas)
 
 	var cursor_scene = load("res://custom_cursor.tscn")
 	if cursor_scene and not OS.has_feature("mobile"):
@@ -155,8 +139,6 @@ func _ready():
 
 	if DialogueManager:
 		DialogueManager.dialogue_started.connect(_on_dialogue_started)
-	else:
-		pass
 
 	# Initialize Verbs
 	for verb_data_res in all_verb_data_resources:
@@ -199,21 +181,9 @@ func _ready():
 			if is_instance_valid(pause_menu_ui):
 				pause_menu_ui.menu_panel.show()
 
-			# --- THIS IS THE FIX ---
-			# We wait one frame to ensure the Scene Tree and AudioServer are fully stable
-			# before trying to create and play the audio player.
 			await get_tree().process_frame
-			
-			# Music is currently commented out as per your request
-			# SoundManager.play_music()
-			
-			# --- START AMBIENCE FOR TEST SCENE ---
-			SoundManager.play_ambience("room_tone_air", -5.0) 
+			SoundManager.play_ambience("room_tone_air", -5.0)
 			SoundManager.play_ambience("room_tone_electric", -15.0)
-
-		else:
-			pass
-			# This Else block is new - it warns you if the Player Group is missing
 
 func _process(delta):
 	# --- FIX 1: Cancel verb lock if player tries to move manually with A/D ---
@@ -337,9 +307,6 @@ func change_game_state(new_state: GameState):
 	await get_tree().process_frame
 
 	# =========================================================
-	# 1. LEAVING THE OLD STATE (Cleanup)
-	# =========================================================
-# =========================================================
 	# 1. LEAVING THE OLD STATE (Cleanup)
 	# =========================================================
 	match current_game_state:
@@ -746,11 +713,8 @@ func _initiate_interaction_flow(interactable_node: Interactable, verb_to_use_id:
 		return
 	# -----------------------------------------------
 
-	# --- NEW LINE ADDED HERE ---
-	# Tell the object (Aida) that an interaction is coming so she can stop walking immediately
 	if interactable_node.has_method("notify_interaction_pending"):
 		interactable_node.notify_interaction_pending()
-	# ---------------------------
 
 	if is_verb_lock_active:
 		_activate_verb_lock(false)
@@ -769,8 +733,6 @@ func _initiate_interaction_flow(interactable_node: Interactable, verb_to_use_id:
 	if item_data_to_use: item_name_for_log = item_data_to_use.display_name
 
 	if walk_needed:
-		# --- THIS IS THE FIX ---
-		# Set the lock flag to true before telling the player to walk.
 		_is_player_walking = true
 
 		# Force the UI to instantly suppress the action label upon clicking
@@ -790,8 +752,6 @@ func _initiate_interaction_flow(interactable_node: Interactable, verb_to_use_id:
 				player_node.face_target(interactable_node.global_position)
 		_perform_actual_interaction(interactable_node, verb_to_use_id, item_data_to_use)
 
-# --- ADD THIS ENTIRE NEW FUNCTION ---
-# The player will call this function to "unlock" input once they have stopped moving.
 func player_has_finished_walk_command():
 	_is_player_walking = false
 	update_sentence_line_ui()
@@ -881,10 +841,6 @@ func _disconnect_interactable_request_signals():
 
 		if node_to_disconnect_from.interaction_processed.is_connected(_on_interactable_action_finished):
 			node_to_disconnect_from.interaction_processed.disconnect(_on_interactable_action_finished)
-	else:
-		if _signals_connected_to_interactable != null:
-			pass
-
 	_signals_connected_to_interactable = null
 
 func _complete_interaction_cycle():
@@ -908,10 +864,6 @@ func _complete_interaction_cycle():
 		current_selected_item_data = null
 		selected_inventory_item_changed.emit(null)
 
-	# --- FIX START: Restore Player Control and UI ---
-	# Since we removed the unfreeze logic from the individual Dialogue actions,
-	# we must ensure the player is un-frozen here, at the absolute end of the chain.
-	
 	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
 		# Only unfreeze if we are in the normal gameplay state (not a full cutscene/zoom)
 		if current_interaction_state == InteractionState.WORLD and current_game_state == GameState.IN_GAME_PLAY:
@@ -1040,8 +992,6 @@ func is_verb_id_currently_active(verb_id_to_check: String) -> bool:
 	if active_scene_verb_ids.is_empty(): return true
 	return active_scene_verb_ids.has(verb_id_to_check)
 
-# ADD THESE THREE NEW FUNCTIONS
-
 func force_clear_all_hovered_interactables():
 	var interactables_to_clear = hovered_interactables.duplicate()
 	hovered_interactables.clear()
@@ -1061,11 +1011,6 @@ func enter_conversation_state():
 
 	force_clear_all_hovered_interactables()
 
-	# --- DEBUGGING STEP ---
-	# Let's see if the GameManager can actually see your button node.
-	#print("Attempting to hide button UI. Node is: ", insurance_form_button_ui)
-	# --- END DEBUGGING STEP ---
-
 	# Show the blocker on layer 1 to stop clicks to the world (layer 0)
 	if is_instance_valid(input_blocker_layer):
 		input_blocker_layer.visible = true
@@ -1081,7 +1026,6 @@ func enter_zoom_view_state():
 
 	force_clear_all_hovered_interactables()
 
-	# ... (existing code for input blocker and UI layers) ...
 	if is_instance_valid(input_blocker_layer):
 		input_blocker_layer.visible = true
 	if is_instance_valid(verb_ui):
@@ -1093,17 +1037,10 @@ func enter_zoom_view_state():
 	if is_instance_valid(patreon_world_ui):
 		patreon_world_ui.visible = false
 
-	# --- THIS IS STILL IMPORTANT ---
-	# Explicitly disabling player movement prevents weird input bugs on un-pause.
 	if is_instance_valid(player_node):
 		player_node.set_can_move(false)
-	# -----------------------------
 
-	# --- PAUSE THE ENTIRE GAME ---
-	# This stops _process and _physics_process for all nodes unless their
-	# process_mode is set to "Always".
 	get_tree().paused = true
-	# -----------------------------
 	Events.interaction_state_changed.emit(current_interaction_state)
 
 func exit_to_world_state():
@@ -1140,42 +1077,17 @@ func _find_and_assign_ui_nodes():
 		if not pause_menu_ui.scan_cancel_requested.is_connected(_on_scan_cancel_pressed):
 			pause_menu_ui.scan_cancel_requested.connect(_on_scan_cancel_pressed)
 
-	# --- Verification Logging ---
-	if is_instance_valid(verb_ui):
-		pass
-	else:
-		pass
-
-	if is_instance_valid(inventory_ui):
-		pass
-	else:
-		pass
-
 	if is_instance_valid(insurance_form_button_ui):
 		if not insurance_form_button_ui.form_button_pressed.is_connected(_on_insurance_form_button_pressed):
 			insurance_form_button_ui.form_button_pressed.connect(_on_insurance_form_button_pressed)
-	else:
-		pass
 
-	# --- JOURNAL VALIDATION ---
 	if is_instance_valid(journal_button_ui):
-		# Connect the signal from the button to the GameManager!
 		if not journal_button_ui.journal_button_pressed.is_connected(_on_journal_button_pressed):
 			journal_button_ui.journal_button_pressed.connect(_on_journal_button_pressed)
-		else:
-			pass
-	# --------------------------
-
-	if is_instance_valid(input_blocker_layer):
-		pass
-	else:
-		pass
 
 	if is_instance_valid(explanation_layer):
 		if not explanation_layer.explanation_finished.is_connected(exit_explanation_state):
 			explanation_layer.explanation_finished.connect(exit_explanation_state)
-	else:
-		pass
 		
 func _on_form_field_submitted(field_id: String, value):
 
@@ -1185,7 +1097,6 @@ func _on_form_field_submitted(field_id: String, value):
 			regex.compile("(?i)^\\s*fiona\\s*$") 
 			
 			if regex.search(value):
-				# --- CHANGED AUDIO LINE ---
 				if SoundManager: SoundManager.play_sfx("form_correct_input")
 				
 				if is_instance_valid(_insurance_form_instance):
@@ -1197,7 +1108,6 @@ func _on_form_field_submitted(field_id: String, value):
 				Flags.set_game_flag("first_name_correct", true)
 				
 			else:
-				# --- CHANGED AUDIO LINE ---
 				if SoundManager: SoundManager.play_sfx("form_incorrect_input")
 
 				var formatted_wrong_name = _format_wrong_name(value)
@@ -1220,20 +1130,13 @@ func _on_insurance_form_closed():
 	# Return control to the player and un-pause the game.
 	exit_to_world_state()
 
-# Add these new functions to the end of GameManager.gd
-
 func start_explanation(data: ExplanationData, root_node_to_search: Node):
 	if current_game_state == GameState.EXPLANATION or not is_instance_valid(explanation_layer):
 		return
 
 	change_game_state(GameState.EXPLANATION)
 
-	# --- THIS IS THE NEW, SMARTER HIDING LOGIC ---
 	var nodes_to_keep_visible = []
-
-	# --- THIS IS THE FIX ---
-	# A Resource doesn't have a ".has()" method. The correct way to check for a property
-	# is using the 'in' keyword.
 	if "exceptions_to_hide" in data:
 		for node_path in data.exceptions_to_hide:
 			var node = root_node_to_search.get_node_or_null(node_path)
@@ -1246,10 +1149,8 @@ func start_explanation(data: ExplanationData, root_node_to_search: Node):
 	if is_instance_valid(inventory_ui) and not inventory_ui in nodes_to_keep_visible:
 		inventory_ui.hide()
 		
-	# --- FIX: Hide the journal button as well ---
 	if is_instance_valid(journal_button_ui) and not journal_button_ui in nodes_to_keep_visible:
 		journal_button_ui.hide()
-	# --------------------------------------------
 	if is_instance_valid(pause_menu_ui) and not pause_menu_ui in nodes_to_keep_visible:
 		pause_menu_ui.menu_panel.hide()
 
@@ -1258,7 +1159,6 @@ func start_explanation(data: ExplanationData, root_node_to_search: Node):
 			insurance_form_button_ui.show()
 		else:
 			insurance_form_button_ui.hide()
-	# --- END OF NEW LOGIC ---
 
 	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
 		player_node.set_can_move(false)
@@ -1281,10 +1181,6 @@ func exit_explanation_state():
 
 	change_game_state(GameState.IN_GAME_PLAY)
 
-# Add these three missing functions to the end of the script.
-
-# This function runs when the main UI button (on the game screen) is pressed.
-# This function runs when the main UI button (on the game screen) is pressed.
 func _on_insurance_form_button_pressed():
 	if is_instance_valid(_insurance_form_instance):
 		return
@@ -1294,9 +1190,7 @@ func _on_insurance_form_button_pressed():
 	_insurance_form_instance.field_submitted.connect(_on_form_field_submitted)
 	_insurance_form_instance.form_closed.connect(_on_insurance_form_closed)
 	
-	# --- ADD THIS LINE ---
 	_insurance_form_instance.form_submit_requested.connect(_on_form_submit_requested)
-	# ---------------------
 
 	get_tree().root.add_child(_insurance_form_instance)
 	_insurance_form_instance.show()
@@ -1412,7 +1306,6 @@ func _start_intro_conversation():
 			return
 
 	var intro_overlay = intro_overlay_packed_scene.instantiate()
-	# --- ADD THIS LINE ---
 	intro_overlay.is_intro_sequence = true
 
 	# Configure its exported variables from code.
@@ -1486,7 +1379,6 @@ func _format_wrong_name(raw_name: String) -> String:
 		var part2 = clean.substr(2)
 		return part1 + "..." + part2
 
-# --- ADD THIS TO THE BOTTOM OF GameManager.gd ---
 func _on_form_submit_requested():
 	# Check all 6 flags. If they haven't gotten one correct, it defaults to false.
 	var f_name = Flags.get_game_flag("first_name_correct")
