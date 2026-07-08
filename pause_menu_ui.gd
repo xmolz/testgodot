@@ -40,7 +40,6 @@ func _ready():
 	menu_panel.hide()
 	scan_cancel_panel.hide()
 	scan_cancel_btn.texture_normal = preload("res://Icons/magnifying-glass.png")
-	scan_cancel_btn.pressed.connect(func(): scan_cancel_requested.emit())
 	overlay.hide()
 	confirm_overlay.hide()
 

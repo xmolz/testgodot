@@ -2,6 +2,7 @@
 extends Node
 
 const MAIN_GAME_SCENE_PATH = "res://main.tscn"
+const PATREON_URL := "https://www.patreon.com/cw/lewgend"
 const INSURANCE_FORM_SCENE = preload("res://insurance_form.tscn")
 const JOURNAL_OVERLAY_SCENE = preload("res://journal_overlay.tscn") # <--- ADD THIS 
 const MAIN_MENU_SCENE_PATH = "res://main_menu.tscn"
@@ -206,12 +207,48 @@ func get_bus_volume(bus_name: String) -> float:
 		return db_to_linear(AudioServer.get_bus_volume_db(bus_idx))
 	return 1.0
 
+# =========================================================
+# SETTINGS PERSISTENCE (user://settings.cfg)
+# =========================================================
+const SETTINGS_FILE_PATH = "user://settings.cfg"
+
+func save_settings():
+	var cfg = ConfigFile.new()
+	cfg.set_value("audio", "master", get_bus_volume("Master"))
+	cfg.set_value("audio", "music", get_bus_volume("Music"))
+	cfg.set_value("audio", "sfx", get_bus_volume("SFX"))
+	cfg.set_value("dialogue", "text_speed", text_speed)
+	cfg.set_value("dialogue", "instant_text", instant_text)
+	cfg.set_value("dialogue", "text_scale", dialogue_text_scale)
+	cfg.set_value("dialogue", "auto_forward", is_auto_playing)
+	cfg.set_value("dialogue", "auto_delay", auto_time_delay)
+	cfg.set_value("gameplay", "assisted_mode", assisted_mode)
+	var err = cfg.save(SETTINGS_FILE_PATH)
+	if err != OK:
+		push_warning("GM: Could not save settings to %s (error %d)" % [SETTINGS_FILE_PATH, err])
+
+func load_settings():
+	var cfg = ConfigFile.new()
+	if cfg.load(SETTINGS_FILE_PATH) != OK:
+		return # First launch (or unreadable file) — keep in-script defaults.
+	set_bus_volume("Master", clampf(float(cfg.get_value("audio", "master", get_bus_volume("Master"))), 0.0, 1.0))
+	set_bus_volume("Music", clampf(float(cfg.get_value("audio", "music", get_bus_volume("Music"))), 0.0, 1.0))
+	set_bus_volume("SFX", clampf(float(cfg.get_value("audio", "sfx", get_bus_volume("SFX"))), 0.0, 1.0))
+	text_speed = clampf(float(cfg.get_value("dialogue", "text_speed", text_speed)), 0.005, 0.05)
+	instant_text = bool(cfg.get_value("dialogue", "instant_text", instant_text))
+	dialogue_text_scale = clampf(float(cfg.get_value("dialogue", "text_scale", dialogue_text_scale)), 0.5, 1.5)
+	is_auto_playing = bool(cfg.get_value("dialogue", "auto_forward", is_auto_playing))
+	auto_time_delay = clampf(float(cfg.get_value("dialogue", "auto_delay", auto_time_delay)), 0.125, 1.75)
+	assisted_mode = bool(cfg.get_value("gameplay", "assisted_mode", assisted_mode))
+
 
 # In GameManager.gd
 
 # In GameManager.gd
 
 func _ready():
+	load_settings()
+	print("If I Remember Correctly — v%s" % str(ProjectSettings.get_setting("application/config/version", "unset")))
 	#print_rich("[color=cyan]GM: GameManager is Ready! Starting initialization...[/color]")
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 
@@ -559,11 +596,13 @@ func change_game_state(new_state: GameState):
 			# --- A. LOADING PHASE ---
 			# Only load the scene if it doesn't exist (e.g. fresh boot)
 			if not is_instance_valid(main_game_scene_instance):
-				# Replace: var main_packed_scene = load(MAIN_GAME_SCENE_PATH)
 				var main_packed_scene = cached_main_game_scene
 				if not main_packed_scene:
-					#print_rich("[color=red]GameManager Error: Failed to load Main Game Scene.[/color]")
-					return
+					# Fallback: cache is null (preload failed/skipped, or scene run directly)
+					main_packed_scene = load(MAIN_GAME_SCENE_PATH)
+					if not main_packed_scene:
+						print_rich("[color=red]GameManager Error: Failed to load Main Game Scene.[/color]")
+						return
 
 				main_game_scene_instance = main_packed_scene.instantiate()
 				get_tree().root.add_child(main_game_scene_instance)
@@ -1178,7 +1217,7 @@ func _activate_verb_lock(active: bool):
 func _on_scan_cancel_pressed():
 	if SoundManager: SoundManager.play_sfx("ui_click")
 	if is_verb_lock_active:
-		cancel_current_action()
+		cancel_current_action(false)
 	else:
 		if _scan_active:
 			_cancel_scan()
@@ -1694,9 +1733,77 @@ func show_notification(message: String):
 	notification_requested.emit(message)
 
 
+# =========================================================
+# RUN-STATE RESET
+# Called once per New Game (from _on_main_menu_new_game_requested)
+# so a second playthrough in the same session starts clean.
+# Intentionally does NOT touch user preferences (text_speed,
+# instant_text, dialogue_text_scale, is_auto_playing), the
+# cached_* PackedScenes, or is_transitioning (TransitionLayer owns it).
+# =========================================================
+func reset_run_state():
+	# --- Interaction / input transients ---
+	_disconnect_interactable_request_signals()
+	hovered_interactables.clear()
+	hovered_interactable = null
+	is_mouse_held_for_walk = false
+	_potential_hold_walk = false
+	_mouse_held_timer = 0.0
+	_is_player_walking = false
+	_scan_active = false
+	if _scan_tween: _scan_tween.kill()
+	current_interaction_state = InteractionState.WORLD
+	_is_game_over_triggering = false
+	_activate_verb_lock(false)
+
+	# --- Verb & item selection ---
+	persisting_verb_id = ""
+	if current_verb_id != "":
+		current_verb_id = ""
+		verb_changed.emit("")
+	if current_selected_item_data != null:
+		current_selected_item_data = null
+		selected_inventory_item_changed.emit(null)
+
+	# --- Inventory ---
+	player_inventory.clear()
+	inventory_updated.emit(player_inventory.duplicate())
+
+	# --- Global flags & dialogue memory ---
+	game_flags.clear()
+	visited_dialogue_responses.clear()
+	dialogue_history.clear()
+
+	# --- Hints & difficulty (difficulty select re-establishes these) ---
+	assisted_mode = false
+	current_unread_hint = ""
+	last_read_hint = ""
+	new_hint_available.emit(false)
+
+	# --- Verbs: re-derive defaults exactly like _ready() does ---
+	unlocked_verb_ids.clear()
+	for verb_data_res in all_verb_data_resources:
+		if verb_data_res and verb_data_res.unlocked_by_default and not verb_data_res.verb_id in unlocked_verb_ids:
+			unlocked_verb_ids.append(verb_data_res.verb_id)
+	active_scene_verb_ids = unlocked_verb_ids.duplicate()
+	_emit_available_verbs_changed_update()
+
+	# --- Sibling autoload run-state (Sergey conversation memory etc.) ---
+	if ConversationEventManager and ConversationEventManager.has_method("reset_run_state"):
+		ConversationEventManager.reset_run_state()
+
+	# --- Stale references (their owning scenes were freed on quit) ---
+	current_level_state_manager = null
+	current_hint_manager = null
+	_insurance_form_instance = null
+	_journal_overlay_instance = null
+	_current_character_conversation_overlay_instance = null
+
 func _on_main_menu_new_game_requested():
 	if is_instance_valid(transition_layer) and transition_layer.has_method("global_fade_to_black"):
 		await transition_layer.global_fade_to_black(0.5)
+
+	reset_run_state()
 
 	change_game_state(GameState.DIFFICULTY_SELECT)
 
@@ -1705,6 +1812,7 @@ func _on_main_menu_new_game_requested():
 
 func _on_difficulty_chosen(is_assisted: bool):
 	assisted_mode = is_assisted
+	save_settings()
 	print_rich("[color=green]GM: Difficulty selected. Assisted Mode = %s[/color]" % str(assisted_mode))
 
 	unlock_verb("think")
@@ -2001,7 +2109,7 @@ func _create_world_patreon_button():
 
 	btn.pressed.connect(func():
 		if SoundManager and SoundManager.has_method("play_sfx"): SoundManager.play_sfx("ui_click")
-		OS.shell_open("https://patreon.com")
+		OS.shell_open(PATREON_URL)
 	)
 
 	patreon_world_ui.hide()

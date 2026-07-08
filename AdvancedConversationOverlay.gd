@@ -143,7 +143,10 @@ func _process(delta: float):
 			offset = _camera_offset + Vector2(offset_x, offset_y) # Shake the entire CanvasLayer
 
 
-func _on_dialogue_ended(_resource: DialogueResource):
+func _on_dialogue_ended(resource: DialogueResource):
+	# Guard: another balloon's dialogue ending must not tear down this overlay.
+	if resource != dialogue_resource:
+		return
 	DialogueManager.dialogue_ended.disconnect(_on_dialogue_ended)
 	if DialogueManager.got_dialogue.is_connected(_on_got_dialogue):
 		DialogueManager.got_dialogue.disconnect(_on_got_dialogue)
@@ -1558,8 +1561,7 @@ func show_patreon_button():
 	patreon_btn.pressed.connect(func():
 		if SoundManager and SoundManager.has_method("play_sfx"):
 			SoundManager.play_sfx("ui_click")
-		# UPDATE THIS STRING WITH YOUR ACTUAL PATREON URL!
-		OS.shell_open("https://patreon.com")
+		OS.shell_open(GameManager.PATREON_URL)
 	)
 
 	# --- CRITICAL FIX: Add to the Dialogue Balloon so it sits on Layer 100! ---
@@ -1576,7 +1578,8 @@ func show_patreon_button():
 
 	# Drop animation logic
 	var screen_size = get_viewport().get_visible_rect().size
-	var target_pos = Vector2(screen_size.x * 0.28 - (patreon_btn.size.x / 2.0), screen_size.y * 0.4 - (patreon_btn.size.y / 2.0))
+	var drop_y_factor: float = 0.58 if OS.has_feature("mobile") else 0.5
+	var target_pos = Vector2(screen_size.x * 0.28 - (patreon_btn.size.x / 2.0), screen_size.y * drop_y_factor - (patreon_btn.size.y / 2.0))
 	var start_pos = target_pos - Vector2(0, 1000)
 
 	patreon_btn.position = start_pos

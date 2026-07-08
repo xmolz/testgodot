@@ -7,8 +7,6 @@
 [ext_resource type="Texture2D" uid="uid://dldvj1j53uooh" path="res://Backgrounds/Levels/static_hospital_background.PNG" id="2_dg77c"]
 [ext_resource type="Script" uid="uid://dljo5cmv24o5h" path="res://camera_2d.gd" id="2_h2yge"]
 [ext_resource type="PackedScene" uid="uid://cud6uaak7lo18" path="res://InventoryUI.tscn" id="2_kek77"]
-[ext_resource type="PackedScene" uid="uid://c3shvlwnp4663" path="res://interactable.tscn" id="2_lquwl"]
-[ext_resource type="Texture2D" uid="uid://smwtb1ho1c5j" path="res://png-clipart-hamburger-cheeseburger-fast-food-pixel-art-burger-king-food-cheese.png" id="3_7mycd"]
 [ext_resource type="Resource" uid="uid://d3deg4gqysr72" path="res://ExplanationData.tres" id="3_hrvbo"]
 [ext_resource type="PackedScene" path="res://washroom_sign_visual.tscn" id="5_cyx1q"]
 [ext_resource type="PackedScene" uid="uid://btku3hrvme7k6" path="res://static_bathroom_background.tscn" id="5_f6a44"]
@@ -19,13 +17,11 @@
 [ext_resource type="PackedScene" uid="uid://dwqwwrmp7uisr" path="res://Interactables/Game World/Hospital Bathroom/hospital_bathroom_toilet_flush.tscn" id="7_rnkwl"]
 [ext_resource type="AudioStream" uid="uid://cy8syrd23db10" path="res://Sfx/Game World/bathroom_music.mp3" id="7_wu3dr"]
 [ext_resource type="PackedScene" uid="uid://oy53tf8tvxe5" path="res://aida.tscn" id="8_vivmo"]
-[ext_resource type="Script" uid="uid://bapryqa2s86c5" path="res://interactions/actions/SayLineAction.gd" id="9_4k2k6"]
 [ext_resource type="Texture2D" uid="uid://bcxknipqlnnip" path="res://Sprites/Hospital Bathroom/hospital_bathroom_sink.png" id="9_4w656"]
 [ext_resource type="Script" uid="uid://nvyqoryt5sbh" path="res://interactions/actions/AddItemAction.gd" id="10_0rl1p"]
 [ext_resource type="Script" uid="uid://bs05cyo72v37l" path="res://LevelStateManager.gd" id="10_4c57u"]
 [ext_resource type="PackedScene" uid="uid://frycmvsnkt3j" path="res://Sergey.tscn" id="10_getpj"]
 [ext_resource type="Resource" uid="uid://buvvctce1wr7t" path="res://use_item_accompanying_dialogue.dialogue" id="10_vke2r"]
-[ext_resource type="Script" uid="uid://c5bw6trnybm71" path="res://interactions/actions/DestroyAction.gd" id="11_ok6jj"]
 [ext_resource type="PackedScene" uid="uid://c8w3xusvs4d7d" path="res://mcbucket.tscn" id="13_0odxb"]
 [ext_resource type="PackedScene" uid="uid://bjnf6egwtuqv5" path="res://MedCabinetzoomin.tscn" id="14_cegan"]
 [ext_resource type="Script" uid="uid://bfn877nkjq8gv" path="res://interactions/actions/PlaySoundAction.gd" id="14_ruth0"]
@@ -152,7 +148,7 @@ verb_id = "use"
 actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_yjja3"), SubResource("Resource_yvsr8")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_jx0wj"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0dhbp"]
 resource_local_to_scene = true
 shader = ExtResource("35_0dhbp")
 shader_parameter/enable_outline = false
@@ -259,40 +255,6 @@ fill = 1
 fill_from = Vector2(0.50427353, 0.5)
 fill_to = Vector2(0.008547009, 0.014957265)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_kkkcx"]
-resource_local_to_scene = true
-shader = ExtResource("35_0dhbp")
-shader_parameter/enable_outline = false
-shader_parameter/outline_color = Color(0.2, 0.85, 1, 1)
-shader_parameter/outline_width = 7.0000003325
-
-[sub_resource type="Resource" id="Resource_facbu"]
-script = ExtResource("9_4k2k6")
-line_to_say = "picked up the rusty key"
-metadata/_custom_type_script = "uid://bapryqa2s86c5"
-
-[sub_resource type="Resource" id="Resource_b1qrp"]
-script = ExtResource("10_0rl1p")
-item_id_to_add = "key_rusty"
-metadata/_custom_type_script = "uid://nvyqoryt5sbh"
-
-[sub_resource type="Resource" id="Resource_come4"]
-script = ExtResource("11_ok6jj")
-metadata/_custom_type_script = "uid://c5bw6trnybm71"
-
-[sub_resource type="Resource" id="Resource_h8e4i"]
-script = ExtResource("24_qsp4k")
-verb_id = "pickup"
-actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_facbu"), SubResource("Resource_b1qrp"), SubResource("Resource_come4")])
-metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_34ol3"]
-resource_local_to_scene = true
-shader = ExtResource("35_0dhbp")
-shader_parameter/enable_outline = false
-shader_parameter/outline_color = Color(0.2, 0.85, 1, 1)
-shader_parameter/outline_width = 7.0000003325
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pjluw"]
 size = Vector2(9583, 90.4065)
 
@@ -329,7 +291,7 @@ verb_id = "use"
 actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_l0gw7")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_c2n8d"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_34ol3"]
 resource_local_to_scene = true
 shader = ExtResource("35_0dhbp")
 shader_parameter/enable_outline = false
@@ -385,7 +347,7 @@ verb_id = "talk_to"
 actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_f6a44")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_wy5fy"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_c2n8d"]
 resource_local_to_scene = true
 shader = ExtResource("35_0dhbp")
 shader_parameter/enable_outline = false
@@ -428,7 +390,7 @@ verb_id = "use"
 actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_mcb_plain_use_act")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_gx4rg"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wy5fy"]
 resource_local_to_scene = true
 shader = ExtResource("35_0dhbp")
 shader_parameter/enable_outline = false
@@ -510,7 +472,7 @@ verb_id = "use"
 actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_pjyto")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_5dllo"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gx4rg"]
 resource_local_to_scene = true
 shader = ExtResource("35_0dhbp")
 shader_parameter/enable_outline = false
@@ -762,7 +724,7 @@ position = Vector2(641, 2120)
 scale = Vector2(0.7, 0.7)
 
 [node name="ObjectSprite" parent="HospitalToilet" index="0" unique_id=128490347]
-material = SubResource("ShaderMaterial_jx0wj")
+material = SubResource("ShaderMaterial_0dhbp")
 
 [node name="InteractionArea" parent="HospitalToilet" index="2" unique_id=1085681545]
 object_display_name = "Toilet"
@@ -797,34 +759,6 @@ offset = Vector2(7, 6)
 position = Vector2(4.9997253, 416)
 scale = Vector2(12.0937605, 2.1250005)
 texture = SubResource("GradientTexture2D_abqjc")
-
-[node name="Burger" parent="." unique_id=1116473219 instance=ExtResource("2_lquwl")]
-visible = false
-position = Vector2(-699, 755)
-object_display_name = "Burger"
-object_id = "burger"
-
-[node name="ObjectSprite" parent="Burger" index="0"]
-material = SubResource("ShaderMaterial_kkkcx")
-scale = Vector2(0.0377778, 0.0377778)
-texture = ExtResource("3_7mycd")
-
-[node name="Rusty Key" parent="." unique_id=1162515410 instance=ExtResource("2_lquwl")]
-visible = false
-z_index = 1805
-position = Vector2(-339, 28)
-scale = Vector2(4.125, 4.125)
-object_display_name = "Rusty Key"
-object_id = "key_rusty_world"
-interactions = Array[ExtResource("24_qsp4k")]([ExtResource("7_jq2sk"), SubResource("Resource_h8e4i")])
-
-[node name="ObjectSprite" parent="Rusty Key" index="0"]
-material = SubResource("ShaderMaterial_34ol3")
-scale = Vector2(0.0377778, 0.0377778)
-texture = ExtResource("3_7mycd")
-
-[node name="CollisionShape2D" parent="Rusty Key" index="1"]
-z_index = 15
 
 [node name="Floor" type="StaticBody2D" parent="." unique_id=762936804]
 position = Vector2(220, -515)
@@ -900,7 +834,7 @@ position = Vector2(-8, 33)
 scale = Vector2(0.98, 0.98)
 
 [node name="ObjectSprite" parent="Aida_Path/AIda" index="1" unique_id=940694777]
-material = SubResource("ShaderMaterial_c2n8d")
+material = SubResource("ShaderMaterial_34ol3")
 
 [node name="MovementController" parent="Aida_Path/AIda" index="2" unique_id=825057676]
 movement_speed = 250.0
@@ -937,7 +871,7 @@ interactions = Array[ExtResource("24_qsp4k")]([SubResource("Resource_htxhm"), Su
 character_conversation_overlay_scene = ExtResource("38_cyx1q")
 
 [node name="ObjectSprite" parent="Sergei_Path/Sergei" index="4" unique_id=427518227]
-material = SubResource("ShaderMaterial_wy5fy")
+material = SubResource("ShaderMaterial_c2n8d")
 
 [node name="MedicalTube" type="Line2D" parent="." unique_id=1970149638]
 z_index = -2
@@ -968,7 +902,7 @@ interactions = Array[ExtResource("24_qsp4k")]([ExtResource("7_jq2sk"), SubResour
 
 [node name="ObjectSprite" parent="McBucket_Path/McBucket" index="4" unique_id=1554080546]
 z_index = 1
-material = SubResource("ShaderMaterial_gx4rg")
+material = SubResource("ShaderMaterial_wy5fy")
 
 [node name="McbucketBandaid" type="Sprite2D" parent="McBucket_Path/McBucket" unique_id=1105273087]
 z_index = 2
@@ -1092,7 +1026,7 @@ z_index = -1
 position = Vector2(992, -22)
 
 [node name="ObjectSprite" parent="MedicineDispenser" index="1" unique_id=452912050]
-material = SubResource("ShaderMaterial_5dllo")
+material = SubResource("ShaderMaterial_gx4rg")
 
 [node name="PulseOverlay" parent="MedicineDispenser" index="5" unique_id=1762419068]
 offset_left = -90.0
@@ -1136,8 +1070,6 @@ shape = SubResource("RectangleShape2D_jx0wj")
 
 [editable path="HospitalToilet"]
 [editable path="HospitalBathroomSink"]
-[editable path="Burger"]
-[editable path="Rusty Key"]
 [editable path="Aida_Path/AIda"]
 [editable path="Sergei_Path/Sergei"]
 [editable path="McBucket_Path/McBucket"]

@@ -4,8 +4,6 @@ extends CanvasLayer
 @export var all_memory_data: Array[MemoryGroupData] = []
 @export var dev_cta_dialogue: DialogueResource
 @onready var location_list_container: VBoxContainer = $Panel/ScrollContainer/LocationListContainer
-@onready var story_button: Button = $Panel/TabContainer/StoryButton
-@onready var spicy_button: Button = $Panel/TabContainer/SpicyButton
 @onready var back_button: Button = $Panel/BackButton
 @onready var panel: Panel = $Panel
 
@@ -13,8 +11,6 @@ const LocationRowScene = preload("res://LocationRow.tscn")
 const ADVANCED_OVERLAY_SCENE = preload("res://AdvancedConversationOverlay.tscn")
 
 func _ready():
-	story_button.pressed.connect(_on_story_button_pressed)
-	spicy_button.pressed.connect(_on_spicy_button_pressed)
 	back_button.pressed.connect(_on_back_button_pressed)
 
 	# --- MOBILE SCALING FOR MEMORY BOX MAIN UI ---
@@ -31,67 +27,30 @@ func _ready():
 		back_button.add_theme_font_size_override("font_size", 72)
 		back_button.custom_minimum_size = Vector2(100, 100)
 
-		# Scale up the tabs
-		story_button.add_theme_font_size_override("font_size", 36)
-		story_button.custom_minimum_size = Vector2(200, 80)
-
-		spicy_button.add_theme_font_size_override("font_size", 36)
-		spicy_button.custom_minimum_size = Vector2(200, 80)
-
-		# Perfectly center the tabs under the title
-		var tabs = $Panel/TabContainer
-		tabs.anchor_left = 0.0
-		tabs.anchor_right = 1.0
-		tabs.offset_left = 0
-		tabs.offset_right = 0
-		tabs.alignment = BoxContainer.ALIGNMENT_CENTER
-
-		# Push the tabs down slightly to create a gap below the main title
-		tabs.anchor_top = 0.15
-		tabs.anchor_bottom = 0.25
-
-		# Push the chapter list further down to create a gap between it and the tabs
+		# Push the chapter list down to create a gap below the main title
 		var scroll = $Panel/ScrollContainer
-		scroll.anchor_top = 0.32
+		scroll.anchor_top = 0.20
 
-	_populate_list(MemoryGroupData.MemoryCategory.STORY)
+	_populate_list()
 
 	# Hide the panel instantly before the screen even becomes visible
 	panel.modulate.a = 0.0
 
 	call_deferred("_restore_patreon_button")
 
-func _populate_list(category_to_show: MemoryGroupData.MemoryCategory):
+func _populate_list():
 	# First, clear any location rows that are already there.
 	for child in location_list_container.get_children():
 		child.queue_free()
 
-	# Now, loop through all of our data files.
+	# Show every memory group (category filtering removed with the Story/Spicy toggle).
 	for memory_group in all_memory_data:
-		# Check if the data's category matches the tab we want to show.
-		if memory_group.category == category_to_show:
-			# If it matches, create a new LocationRow instance.
-			var new_row = LocationRowScene.instantiate()
-			# Add it to our VBoxContainer.
-			location_list_container.add_child(new_row)
-			# And tell the new row to populate itself with this data.
-			new_row.populate(memory_group)
-
-			# --- THIS IS THE CRITICAL LINE, CORRECTLY INDENTED ---
-			# It MUST be inside this 'if' block to access 'new_row'.
-			new_row.chapter_selected.connect(_on_chapter_selected)
+		var new_row = LocationRowScene.instantiate()
+		location_list_container.add_child(new_row)
+		new_row.populate(memory_group)
+		new_row.chapter_selected.connect(_on_chapter_selected)
 
 # --- Signal Handlers ---
-
-func _on_story_button_pressed():
-	if SoundManager: SoundManager.play_sfx("ui_click")
-	_populate_list(MemoryGroupData.MemoryCategory.STORY)
-
-
-func _on_spicy_button_pressed():
-	if SoundManager: SoundManager.play_sfx("ui_click")
-	_populate_list(MemoryGroupData.MemoryCategory.SPICY)
-
 
 func _on_back_button_pressed():
 	if SoundManager: SoundManager.play_sfx("ui_click")
@@ -103,7 +62,10 @@ func _on_back_button_pressed():
 
 
 func _on_chapter_selected(data: MemoryChapterData):
-	if data.chapter_name.to_lower() == "chapter 1":
+	if data.triggers_dev_cta:
+		if not dev_cta_dialogue:
+			push_warning("MemoryBoxOverlay: triggers_dev_cta is set but dev_cta_dialogue is not assigned.")
+			return
 		# Clear the persistent Patreon button if they replay the scene
 		var old_btn = get_node_or_null("PersistentPatreonBtn")
 		if is_instance_valid(old_btn):
@@ -212,7 +174,7 @@ func _restore_patreon_button():
 	btn.pressed.connect(func():
 		if SoundManager and SoundManager.has_method("play_sfx"):
 			SoundManager.play_sfx("ui_click")
-		OS.shell_open("https://patreon.com")
+		OS.shell_open(GameManager.PATREON_URL)
 	)
 
 	add_child(btn)

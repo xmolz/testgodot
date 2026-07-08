@@ -14,3 +14,7 @@ extends Resource
 ## The GameManager flag that must be 'true' for this chapter to be unlocked.
 ## If empty, the chapter is unlocked by default.
 @export var unlock_flag: String = ""
+
+## If true, selecting this chapter plays the dev CTA dialogue
+## instead of loading scene_path_to_load.
+@export var triggers_dev_cta: bool = false

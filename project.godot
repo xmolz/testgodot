@@ -14,10 +14,15 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 
 [application]
 
-config/name="Test"
+config/name="If I Remember Correctly"
+config/version="0.1.0-demo"
 run/main_scene="uid://vmpt4xerpfew"
+config/use_custom_user_dir=true
+config/custom_user_dir_name="Lewgend/If I Remember Correctly"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 run/max_fps=60
+boot_splash/bg_color=Color(0.039215688, 0.039215688, 0.05490196, 1)
+boot_splash/show_image=false
 config/icon="res://icon.svg"
 
 [audio]
@@ -27,11 +32,11 @@ buses/default_bus_layout="uid://cuj677vfholik"
 [autoload]
 
 DialogueManager="*res://addons/dialogue_manager/dialogue_manager.gd"
+SoundManager="*res://SoundManager.gd"
 GameManager="*res://GameManager.tscn"
 ConversationEventManager="*res://ConversationEventManager.gd"
 FallbackManager="*res://FallbackManager.gd"
 NotificationManager="*res://NotificationManager.tscn"
-SoundManager="*res://SoundManager.gd"
 
 [dialogue_manager]
 
@@ -41,7 +46,7 @@ runtime/balloon_path="uid://dmfq0fjxxjgay"
 
 window/size/viewport_width=1920
 window/size/viewport_height=1080
-window/size/mode=4
+window/size/mode=2
 window/stretch/mode="canvas_items"
 
 [editor_plugins]
@@ -94,5 +99,8 @@ common/physics_interpolation=true
 
 [rendering]
 
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
 textures/vram_compression/import_s3tc_bptc=true
 textures/vram_compression/import_etc2_astc=true
+environment/defaults/default_clear_color=Color(0.039215688, 0.039215688, 0.05490196, 1)

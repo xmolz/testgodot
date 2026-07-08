@@ -28,15 +28,18 @@ func _ready():
 
 	# --- MOBILE SCALING FOR LOCATION ROW ---
 	if OS.has_feature("mobile"):
-		# Increase Y from 200 to 280 to allow the chapter buttons to fit without squishing
-		$LocationInfoPanel.custom_minimum_size = Vector2(300, 280)
-		location_name_label.add_theme_font_size_override("font_size", 32)
+		# Scaled to ~70% for mobile so the row doesn't dominate the screen
+		$LocationInfoPanel.custom_minimum_size = Vector2(205, 190)
+		location_name_label.add_theme_font_size_override("font_size", 24)
 
-		left_arrow_button.add_theme_font_size_override("font_size", 64)
-		left_arrow_button.custom_minimum_size.x = 90
+		left_arrow_button.add_theme_font_size_override("font_size", 48)
+		left_arrow_button.custom_minimum_size.x = 72
 
-		right_arrow_button.add_theme_font_size_override("font_size", 64)
-		right_arrow_button.custom_minimum_size.x = 90
+		right_arrow_button.add_theme_font_size_override("font_size", 48)
+		right_arrow_button.custom_minimum_size.x = 72
+
+		# Tighten the gap between chapter buttons (scene default is 50, desktop keeps that)
+		chapter_list_container.add_theme_constant_override("separation", 34)
 
 func populate(data: MemoryGroupData):
 	self.memory_data = data

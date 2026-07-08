@@ -148,28 +148,35 @@ func _switch_tab(tab_index: int, play_sound: bool = true):
 	_style_tab_button(tab_dialogue_btn, tab_index == 1)
 	_style_tab_button(tab_gameplay_btn, tab_index == 2)
 
+func _apply_button_styles(btn: Button, normal_sb: StyleBox, hover_sb: StyleBox, pressed_sb: StyleBox, disabled_sb: StyleBox) -> void:
+	btn.add_theme_stylebox_override("normal", normal_sb)
+	btn.add_theme_stylebox_override("hover", normal_sb if OS.has_feature("mobile") else hover_sb)
+	btn.add_theme_stylebox_override("pressed", pressed_sb)
+	btn.add_theme_stylebox_override("hover_pressed", pressed_sb)
+	btn.add_theme_stylebox_override("disabled", disabled_sb)
+	btn.focus_mode = Control.FOCUS_NONE
+	btn.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+
 func _style_tab_button(btn: Button, is_active: bool):
 	var style = StyleBoxFlat.new()
 	style.corner_radius_top_left = 6
 	style.corner_radius_top_right = 6
 	style.corner_radius_bottom_left = 6
 	style.corner_radius_bottom_right = 6
+	style.anti_aliasing = false
 	style.content_margin_top = 15 if OS.has_feature("mobile") else 10
 	style.content_margin_bottom = 15 if OS.has_feature("mobile") else 10
 
 	if is_active:
 		style.bg_color = Color(0.2, 0.85, 1.0, 1.0)
 		btn.add_theme_color_override("font_color", Color(0.1, 0.1, 0.1, 1.0))
-		btn.add_theme_color_override("font_hover_color", Color.BLACK)
+		btn.add_theme_color_override("font_hover_color", Color(0.1, 0.1, 0.1, 1.0) if OS.has_feature("mobile") else Color.BLACK)
 	else:
 		style.bg_color = Color(0.15, 0.15, 0.15, 0.85)
 		btn.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6, 1.0))
-		btn.add_theme_color_override("font_hover_color", Color.WHITE)
+		btn.add_theme_color_override("font_hover_color", Color(0.6, 0.6, 0.6, 1.0) if OS.has_feature("mobile") else Color.WHITE)
 
-	btn.add_theme_stylebox_override("normal", style)
-	btn.add_theme_stylebox_override("hover", style)
-	btn.add_theme_stylebox_override("pressed", style)
-	btn.add_theme_stylebox_override("focus", style)
+	_apply_button_styles(btn, style, style, style, style)
 
 func _update_labels():
 	master_label.text = "Master Volume: " + str(int(master_slider.value))
@@ -261,26 +268,28 @@ func _style_toggle_button(btn: Button, is_on: bool):
 	style.corner_radius_top_right = 6
 	style.corner_radius_bottom_left = 6
 	style.corner_radius_bottom_right = 6
+	style.anti_aliasing = false
 
 	if is_on:
 		btn.text = "ON"
 		btn.add_theme_color_override("font_color", Color(0.1, 0.1, 0.1, 1.0))
-		btn.add_theme_color_override("font_hover_color", Color.BLACK)
-		style.bg_color = Color(0.2, 0.85, 1.0, 1.0) # Cyan
+		btn.add_theme_color_override("font_hover_color", Color(0.1, 0.1, 0.1, 1.0) if OS.has_feature("mobile") else Color.BLACK)
+		style.bg_color = Color(0.2, 0.85, 1.0, 1.0)
 	else:
 		btn.text = "OFF"
 		btn.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6, 1.0))
-		btn.add_theme_color_override("font_hover_color", Color.WHITE)
-		style.bg_color = Color(0.15, 0.15, 0.15, 1.0) # Dark Grey
+		btn.add_theme_color_override("font_hover_color", Color(0.6, 0.6, 0.6, 1.0) if OS.has_feature("mobile") else Color.WHITE)
+		style.bg_color = Color(0.15, 0.15, 0.15, 1.0)
 
-	btn.add_theme_stylebox_override("normal", style)
-	btn.add_theme_stylebox_override("hover", style)
-	btn.add_theme_stylebox_override("focus", style)
-	btn.add_theme_stylebox_override("pressed", style)
+	_apply_button_styles(btn, style, style, style, style)
 
 func _on_close_pressed():
 	if SoundManager: SoundManager.play_sfx("ui_click")
 	queue_free()
+
+func _exit_tree():
+	if GameManager:
+		GameManager.save_settings()
 
 func _apply_ui_polish():
 	# Fonts and main text sizing
@@ -311,10 +320,14 @@ func _apply_ui_polish():
 	square_btn_style.border_width_right = 2
 	square_btn_style.border_width_bottom = 2
 	square_btn_style.border_color = Color(1.0, 1.0, 1.0, 0.0)
+	square_btn_style.anti_aliasing = false
 
 	var square_btn_hover = square_btn_style.duplicate()
 	square_btn_hover.bg_color = Color(0.1, 0.25, 0.3, 0.9)
 	square_btn_hover.border_color = Color(0.2, 0.85, 1.0, 0.8)
+
+	var square_btn_disabled = square_btn_style.duplicate()
+	square_btn_disabled.bg_color = Color(0.12, 0.12, 0.12, 0.5)
 
 	var inc_dec_buttons = [
 		master_minus, master_plus, music_minus, music_plus, sfx_minus, sfx_plus,
@@ -339,10 +352,8 @@ func _apply_ui_polish():
 					subchild.add_theme_font_override("font", custom_font)
 					if subchild in inc_dec_buttons:
 						subchild.add_theme_font_size_override("font_size", plus_minus_size)
-						subchild.add_theme_stylebox_override("normal", square_btn_style)
-						subchild.add_theme_stylebox_override("hover", square_btn_hover)
-						subchild.add_theme_stylebox_override("focus", square_btn_hover)
-						subchild.add_theme_stylebox_override("pressed", square_btn_hover)
+						_apply_button_styles(subchild, square_btn_style, square_btn_hover, square_btn_hover, square_btn_disabled)
+						subchild.add_theme_color_override("font_disabled_color", Color(0.4, 0.4, 0.4, 0.5))
 					else:
 						subchild.add_theme_font_size_override("font_size", toggle_size)
 
@@ -395,17 +406,15 @@ func _apply_ui_polish():
 	btn_normal.border_width_right = 2
 	btn_normal.border_width_bottom = 2
 	btn_normal.border_color = Color(1.0, 1.0, 1.0, 0.0)
+	btn_normal.anti_aliasing = false
 
 	var btn_hover = btn_normal.duplicate()
 	btn_hover.bg_color = Color(0.1, 0.25, 0.3, 0.9)
 	btn_hover.border_color = Color(0.2, 0.85, 1.0, 0.8)
 
-	close_button.add_theme_stylebox_override("normal", btn_normal)
-	close_button.add_theme_stylebox_override("hover", btn_hover)
-	close_button.add_theme_stylebox_override("focus", btn_hover)
-	close_button.add_theme_stylebox_override("pressed", btn_hover)
+	_apply_button_styles(close_button, btn_normal, btn_hover, btn_hover, btn_normal)
 	close_button.add_theme_color_override("font_color", Color(0.8, 0.8, 0.8, 1.0))
-	close_button.add_theme_color_override("font_hover_color", Color.WHITE)
+	close_button.add_theme_color_override("font_hover_color", Color(0.8, 0.8, 0.8, 1.0) if OS.has_feature("mobile") else Color.WHITE)
 	close_button.add_theme_color_override("font_pressed_color", Color.WHITE)
 
 	# --- SCROLLBAR STYLE ---

@@ -78,8 +78,11 @@ func _process(_delta):
 		_start_next_load()
 		
 	elif load_status == ResourceLoader.THREAD_LOAD_FAILED or load_status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
-		print_rich("[color=red]LoadingScreen Error: Failed to load %s[/color]" % current_file["path"])
+		push_error("LoadingScreen: Failed to load %s (status %d) — skipping." % [current_file["path"], load_status])
+		print_rich("[color=red]LoadingScreen Error: Failed to load %s — skipping.[/color]" % current_file["path"])
 		set_process(false)
+		current_load_index += 1
+		_start_next_load()
 
 func _finish_loading():
 	progress_bar.value = 100

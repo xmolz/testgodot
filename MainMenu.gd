@@ -20,6 +20,8 @@ func _ready():
 		credits_btn.add_theme_font_size_override("font_size", mobile_font_size)
 		quit_btn.add_theme_font_size_override("font_size", mobile_font_size)
 
+	_add_version_label()
+
 func _on_new_game_button_pressed():
 	# Verify the click is working in the Output log
 	print("MainMenu: New Game Button Pressed")
@@ -43,3 +45,22 @@ func _on_credits_button_pressed():
 	if credits_scene:
 		var instance = credits_scene.instantiate()
 		get_tree().root.add_child(instance)
+
+func _add_version_label():
+	var version = str(ProjectSettings.get_setting("application/config/version", ""))
+	if version.is_empty():
+		return
+
+	var version_label = Label.new()
+	version_label.name = "VersionLabel"
+	version_label.text = "v" + version
+	version_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	version_label.modulate.a = 0.5
+
+	version_label.add_theme_font_override("font", preload("res://Fonts/VarelaRound-Regular.ttf"))
+	version_label.add_theme_font_size_override("font_size", 28 if OS.has_feature("mobile") else 16)
+
+	add_child(version_label)
+	version_label.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT, Control.PRESET_MODE_MINSIZE, 12)
+	version_label.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+	version_label.grow_vertical = Control.GROW_DIRECTION_BEGIN

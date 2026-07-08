@@ -12,7 +12,7 @@ enum MemoryCategory { STORY, SPICY }
 @export var group_image: Texture2D
 
 ## The category this group will be displayed under.
-@export var category: MemoryCategory = MemoryCategory.STORY
+@export var category: MemoryCategory = MemoryCategory.STORY # Unused since Story/Spicy toggle removal — kept for .tres compatibility.
 
 ## An array that holds all the chapter data resources for this group.
 @export var chapters: Array[MemoryChapterData] = []

@@ -71,6 +71,7 @@ func _ready():
 	normal_style.border_width_right = 2
 	normal_style.border_width_bottom = 2
 	normal_style.border_color = Color(1.0, 1.0, 1.0, 0.0) # Invisible border to prevent jitter
+	normal_style.anti_aliasing = false
 
 	var hover_style = normal_style.duplicate()
 	hover_style.bg_color = Color(0.1, 0.25, 0.3, 0.9) # Subtle cyan tint
@@ -87,10 +88,7 @@ func _ready():
 	# ------------------------------
 
 	if OS.has_feature("mobile"):
-		$ColorRect.gui_input.connect(func(event):
-			if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
-				_close_log()
-		)
+		scroll_container.scroll_deadzone = 24
 
 	# Wait one frame for the VBoxContainer to calculate its size, then scroll to bottom
 	await get_tree().process_frame
@@ -128,6 +126,7 @@ func _populate_log():
 			var action_label = RichTextLabel.new()
 			action_label.bbcode_enabled = true
 			action_label.fit_content = true
+			action_label.mouse_filter = Control.MOUSE_FILTER_PASS
 			action_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			action_label.add_theme_font_override("normal_font", custom_font)
 			action_label.add_theme_font_size_override("normal_font_size", 32 if OS.has_feature("mobile") else 20)
@@ -167,6 +166,7 @@ func _populate_log():
 		portrait.custom_minimum_size = Vector2(130, 130) if OS.has_feature("mobile") else Vector2(80, 80)
 		portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		portrait.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 		if not is_continuation and character_portraits.has(lookup_name):
 			portrait.texture = character_portraits[lookup_name]
@@ -194,6 +194,7 @@ func _populate_log():
 			var text_label = RichTextLabel.new()
 			text_label.bbcode_enabled = true
 			text_label.fit_content = true
+			text_label.mouse_filter = Control.MOUSE_FILTER_PASS
 			text_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			text_label.add_theme_font_override("normal_font", custom_font)
 			text_label.add_theme_font_size_override("normal_font_size", 42 if OS.has_feature("mobile") else 28)
@@ -215,6 +216,7 @@ func _populate_log():
 				var choice_label = RichTextLabel.new()
 				choice_label.bbcode_enabled = true
 				choice_label.fit_content = true
+				choice_label.mouse_filter = Control.MOUSE_FILTER_PASS
 				choice_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 				choice_label.add_theme_font_override("normal_font", custom_font)
 				choice_label.add_theme_font_size_override("normal_font_size", 38 if OS.has_feature("mobile") else 26)

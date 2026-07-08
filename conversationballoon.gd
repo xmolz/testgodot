@@ -233,6 +233,7 @@ func _ready() -> void:
 		normal_style.border_width_right = 2
 		normal_style.border_width_bottom = 2
 		normal_style.border_color = Color(1.0, 1.0, 1.0, 0.0)
+		normal_style.anti_aliasing = false
 
 		var hover_style = normal_style.duplicate()
 		hover_style.bg_color = Color(0.1, 0.25, 0.3, 0.9) # Slightly cyan background
@@ -240,7 +241,7 @@ func _ready() -> void:
 
 		template_btn.add_theme_stylebox_override("normal", normal_style)
 		template_btn.add_theme_stylebox_override("hover", hover_style)
-		template_btn.add_theme_stylebox_override("focus", hover_style)
+		template_btn.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
 		template_btn.add_theme_stylebox_override("pressed", hover_style)
 	# ---------------------------------------------------------
 
@@ -252,6 +253,9 @@ func _ready() -> void:
 		auto_button.add_theme_font_size_override("font_size", 44)
 		hide_button.add_theme_font_size_override("font_size", 44)
 
+		for qbtn in [menu_button, log_button, hide_button]:
+			qbtn.add_theme_color_override("font_hover_color", Color(0.6, 0.6, 0.6, 1.0))
+
 		responses_menu.add_theme_constant_override("separation", 25)
 		if template_btn:
 			template_btn.custom_minimum_size = Vector2(600, 0)
@@ -261,7 +265,7 @@ func _ready() -> void:
 			mobile_style.content_margin_right = 35
 			template_btn.add_theme_stylebox_override("normal", mobile_style)
 			template_btn.add_theme_stylebox_override("hover", mobile_style)
-			template_btn.add_theme_stylebox_override("focus", mobile_style)
+			template_btn.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
 			template_btn.add_theme_stylebox_override("pressed", mobile_style)
 
 		dialogue_container.add_theme_constant_override("margin_top", 35)
@@ -532,6 +536,11 @@ func apply_dialogue_line() -> void:
 		button.add_theme_color_override("icon_focus_color", resting_color)
 		button.add_theme_color_override("icon_hover_color", hover_color)
 		button.add_theme_color_override("icon_pressed_color", hover_color)
+
+		button.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+		if OS.has_feature("mobile"):
+			button.add_theme_color_override("font_hover_color", resting_color)
+			button.add_theme_color_override("icon_hover_color", resting_color)
 
 		# --- Fix sticky hover state by dropping focus on mouse exit ---
 		if not button.mouse_exited.is_connected(button.release_focus):
@@ -823,10 +832,10 @@ func _update_auto_button_visuals():
 	if not auto_button: return
 	if GameManager and GameManager.is_auto_playing:
 		auto_button.add_theme_color_override("font_color", Color(0.2, 0.85, 1.0, 1.0))
-		auto_button.add_theme_color_override("font_hover_color", Color(0.4, 0.95, 1.0, 1.0))
+		auto_button.add_theme_color_override("font_hover_color", Color(0.2, 0.85, 1.0, 1.0) if OS.has_feature("mobile") else Color(0.4, 0.95, 1.0, 1.0))
 	else:
 		auto_button.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6, 1.0))
-		auto_button.add_theme_color_override("font_hover_color", Color(0.2, 0.85, 1.0, 1.0))
+		auto_button.add_theme_color_override("font_hover_color", Color(0.6, 0.6, 0.6, 1.0) if OS.has_feature("mobile") else Color(0.2, 0.85, 1.0, 1.0))
 
 func _on_menu_button_pressed() -> void:
 	if SoundManager: SoundManager.play_sfx("ui_click")

@@ -63,17 +63,21 @@ func _apply_button_styling(btn: Button):
 	normal_style.border_width_right = 2
 	normal_style.border_width_bottom = 2
 	normal_style.border_color = Color(1.0, 1.0, 1.0, 0.0)
+	normal_style.anti_aliasing = false
 
 	var hover_style = normal_style.duplicate()
 	hover_style.bg_color = Color(0.1, 0.25, 0.3, 0.9)
 	hover_style.border_color = Color(0.2, 0.85, 1.0, 0.8)
 
 	btn.add_theme_stylebox_override("normal", normal_style)
-	btn.add_theme_stylebox_override("hover", hover_style)
-	btn.add_theme_stylebox_override("focus", hover_style)
+	btn.add_theme_stylebox_override("hover", normal_style if OS.has_feature("mobile") else hover_style)
 	btn.add_theme_stylebox_override("pressed", hover_style)
+	btn.add_theme_stylebox_override("disabled", normal_style)
+	btn.focus_mode = Control.FOCUS_NONE
+	btn.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
 	btn.add_theme_color_override("font_color", Color(0.8, 0.8, 0.8, 1.0))
-	btn.add_theme_color_override("font_hover_color", Color.WHITE)
+	btn.add_theme_color_override("font_hover_color", Color(0.8, 0.8, 0.8, 1.0) if OS.has_feature("mobile") else Color.WHITE)
+	btn.add_theme_color_override("font_disabled_color", Color(0.8, 0.8, 0.8, 1.0))
 
 func _on_selection(is_assisted: bool):
 	if SoundManager: SoundManager.play_sfx("start_game")

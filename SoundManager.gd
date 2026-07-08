@@ -324,3 +324,4 @@ func stop_all_audio():
 		if tween and tween.is_valid():
 			tween.kill()
 	_looping_sfx_tweens.clear()
+	set_ambience_volume(_base_ambience_volume)

@@ -14,3 +14,9 @@ var show_special_response: bool = false
 var has_heard_fresh_start_line: bool = false
 var asked_sergey_duration: bool = false
 var asked_sergey_identity: bool = false
+
+func reset_run_state():
+	show_special_response = false
+	has_heard_fresh_start_line = false
+	asked_sergey_duration = false
+	asked_sergey_identity = false
