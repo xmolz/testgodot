@@ -17,7 +17,7 @@ func trigger_fallback(verb_data: VerbData, object_id: String, item_id: String):
 	var checkpoint_to_use: String = _find_valid_checkpoint(fallback_resource, object_id, item_id)
 
 	DialogueManager.dialogue_ended.connect(
-		GameManager._on_dialogue_ended_for_object_dialogue,
+		GameManager.restore_world_after_object_dialogue,
 		CONNECT_ONE_SHOT
 	)
 

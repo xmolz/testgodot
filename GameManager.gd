@@ -486,8 +486,8 @@ func select_verb(verb_id_to_select: String):
 					last_read_hint = current_hint_manager.evaluate_hint()
 					new_hint_available.emit(false)
 
-					if not DialogueManager.dialogue_ended.is_connected(_on_dialogue_ended_for_object_dialogue):
-						DialogueManager.dialogue_ended.connect(_on_dialogue_ended_for_object_dialogue, CONNECT_ONE_SHOT)
+					if not DialogueManager.dialogue_ended.is_connected(restore_world_after_object_dialogue):
+						DialogueManager.dialogue_ended.connect(restore_world_after_object_dialogue, CONNECT_ONE_SHOT)
 
 					DialogueManager.show_dialogue_balloon_scene(CONVERSATION_BALLOON_SCENE, hint_res, last_read_hint)
 			return
@@ -498,8 +498,8 @@ func select_verb(verb_id_to_select: String):
 			current_verb_id = ""
 			verb_changed.emit("")
 
-			if not DialogueManager.dialogue_ended.is_connected(_on_dialogue_ended_for_object_dialogue):
-				DialogueManager.dialogue_ended.connect(_on_dialogue_ended_for_object_dialogue, CONNECT_ONE_SHOT)
+			if not DialogueManager.dialogue_ended.is_connected(restore_world_after_object_dialogue):
+				DialogueManager.dialogue_ended.connect(restore_world_after_object_dialogue, CONNECT_ONE_SHOT)
 
 			var generic_lines = preload("res://generic_lines.dialogue")
 			DialogueManager.show_dialogue_balloon_scene(CONVERSATION_BALLOON_SCENE, generic_lines, "give_empty_inventory")
@@ -704,8 +704,8 @@ func _initiate_interaction_flow(interactable_node: Interactable, verb_to_use_id:
 	if verb_to_use_id == "give" and item_data_to_use == null:
 		cancel_current_action(false)
 
-		if not DialogueManager.dialogue_ended.is_connected(_on_dialogue_ended_for_object_dialogue):
-			DialogueManager.dialogue_ended.connect(_on_dialogue_ended_for_object_dialogue, CONNECT_ONE_SHOT)
+		if not DialogueManager.dialogue_ended.is_connected(restore_world_after_object_dialogue):
+			DialogueManager.dialogue_ended.connect(restore_world_after_object_dialogue, CONNECT_ONE_SHOT)
 
 		var generic_lines = preload("res://generic_lines.dialogue")
 		DialogueManager.show_dialogue_balloon_scene(CONVERSATION_BALLOON_SCENE, generic_lines, "give_no_item_selected")
@@ -796,7 +796,7 @@ func _on_dialogue_started(_resource: Resource):
 	# This handles both in-world dialogue and character conversations.
 	_set_gameplay_ui_visible(false)
 
-func _on_dialogue_ended_for_object_dialogue(_resource: Resource):
+func restore_world_after_object_dialogue(_resource: Resource):
 	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
 		if current_interaction_state == InteractionState.WORLD and current_game_state == GameState.IN_GAME_PLAY:
 			player_node.set_can_move(true)

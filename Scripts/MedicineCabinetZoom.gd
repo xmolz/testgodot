@@ -51,9 +51,9 @@ func _start_caught_dialogue():
 		GameManager.clear_active_dialogue_balloons()
 
 	if GameManager:
-		if not DialogueManager.dialogue_ended.is_connected(GameManager._on_dialogue_ended_for_object_dialogue):
+		if not DialogueManager.dialogue_ended.is_connected(GameManager.restore_world_after_object_dialogue):
 			DialogueManager.dialogue_ended.connect(
-				GameManager._on_dialogue_ended_for_object_dialogue,
+				GameManager.restore_world_after_object_dialogue,
 				CONNECT_ONE_SHOT
 			)
 
