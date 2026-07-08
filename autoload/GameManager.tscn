@@ -11,30 +11,12 @@
 [ext_resource type="Resource" uid="uid://dnikp56n5a5o1" path="res://data/flash_verb.tres" id="10_jjrwh"]
 [ext_resource type="Resource" uid="uid://gh5470ejevom" path="res://data/think_verb.tres" id="10_ow34n"]
 [ext_resource type="Resource" uid="uid://dle6p4hlq4yos" path="res://data/zanopram.tres" id="11_5me18"]
-[ext_resource type="Texture2D" uid="uid://dr0u72qbmp7jc" path="res://key.png" id="11_hrhxs"]
 [ext_resource type="Resource" uid="uid://xmq2iq7j8nup" path="res://data/cannathink.tres" id="12_dm6qn"]
 [ext_resource type="Resource" uid="uid://lr7bq8edhdbr" path="res://data/invigirol.tres" id="13_lhkyk"]
 [ext_resource type="Resource" uid="uid://c2o4m1lmeyqpn" path="res://data/hospital_toilet_paper.tres" id="15_3ky0o"]
-[ext_resource type="Texture2D" uid="uid://cfkvy6v701sh1" path="res://icon.svg" id="15_l3fct"]
 [ext_resource type="Resource" uid="uid://d3wyrwv44q3fh" path="res://data/techpass.tres" id="16_techpass"]
-
-[sub_resource type="Resource" id="Resource_ax3xs"]
-script = ExtResource("8_0145d")
-item_id = "key_rusty"
-display_name = "Rusty Key"
-icon = ExtResource("11_hrhxs")
-description = "An old, very rusty key. It looks like it might fit a simple lock."
-metadata/_custom_type_script = "uid://by8o1t3tdwrep"
-
-[sub_resource type="Resource" id="Resource_ow34n"]
-script = ExtResource("8_0145d")
-item_id = "testbox"
-display_name = "Test Box"
-icon = ExtResource("15_l3fct")
-description = "woah. A testBox. I have seen god."
-metadata/_custom_type_script = "uid://by8o1t3tdwrep"
 
 [node name="GameManager" type="Node" unique_id=666986880]
 script = ExtResource("1_108xg")
 all_verb_data_resources = Array[ExtResource("2_dxunw")]([ExtResource("3_pdxvr"), ExtResource("4_iyray"), ExtResource("7_0145d"), ExtResource("8_0q1rh"), ExtResource("9_l3fct"), ExtResource("10_jjrwh"), ExtResource("10_ow34n")])
-all_item_data_resources = Array[ExtResource("8_0145d")]([SubResource("Resource_ax3xs"), ExtResource("11_5me18"), ExtResource("12_dm6qn"), ExtResource("13_lhkyk"), SubResource("Resource_ow34n"), ExtResource("15_3ky0o"), ExtResource("16_techpass")])
+all_item_data_resources = Array[ExtResource("8_0145d")]([ExtResource("11_5me18"), ExtResource("12_dm6qn"), ExtResource("13_lhkyk"), ExtResource("15_3ky0o"), ExtResource("16_techpass")])

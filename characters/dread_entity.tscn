@@ -1,6 +1,6 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://dread_entity.gd" id="1_script"]
+[ext_resource type="Script" path="res://characters/dread_entity.gd" id="1_script"]
 
 [node name="DreadEntity" type="Control"]
 layout_mode = 3

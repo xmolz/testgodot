@@ -1,0 +1,1630 @@
+.claude/settings.local.json
+.gitattributes
+.gitignore
+1080test1.jpg
+1080test1.jpg.import
+Animations/AIda/Idle/AIda_idle_0001.png
+Animations/AIda/Idle/AIda_idle_0001.png.import
+Animations/AIda/Idle/AIda_idle_0002.png
+Animations/AIda/Idle/AIda_idle_0002.png.import
+Animations/AIda/Idle/AIda_idle_0003.png
+Animations/AIda/Idle/AIda_idle_0003.png.import
+Animations/AIda/Idle/AIda_idle_0004.png
+Animations/AIda/Idle/AIda_idle_0004.png.import
+Animations/AIda/Idle/AIda_idle_0005.png
+Animations/AIda/Idle/AIda_idle_0005.png.import
+Animations/AIda/Idle/AIda_idle_0006.png
+Animations/AIda/Idle/AIda_idle_0006.png.import
+Animations/AIda/Idle/AIda_idle_0007.png
+Animations/AIda/Idle/AIda_idle_0007.png.import
+Animations/AIda/Idle/AIda_idle_0008.png
+Animations/AIda/Idle/AIda_idle_0008.png.import
+Animations/AIda/Idle/AIda_idle_0009.png
+Animations/AIda/Idle/AIda_idle_0009.png.import
+Animations/AIda/Idle/AIda_idle_0010.png
+Animations/AIda/Idle/AIda_idle_0010.png.import
+Animations/AIda/Idle/AIda_idle_0011.png
+Animations/AIda/Idle/AIda_idle_0011.png.import
+Animations/AIda/Idle/AIda_idle_0012.png
+Animations/AIda/Idle/AIda_idle_0012.png.import
+Animations/AIda/Idle/AIda_idle_0013.png
+Animations/AIda/Idle/AIda_idle_0013.png.import
+Animations/AIda/Idle/AIda_idle_0014.png
+Animations/AIda/Idle/AIda_idle_0014.png.import
+Animations/AIda/Idle/AIda_idle_0015.png
+Animations/AIda/Idle/AIda_idle_0015.png.import
+Animations/AIda/Idle/AIda_idle_0016.png
+Animations/AIda/Idle/AIda_idle_0016.png.import
+Animations/AIda/Idle/AIda_idle_0017.png
+Animations/AIda/Idle/AIda_idle_0017.png.import
+Animations/AIda/Idle/AIda_idle_0018.png
+Animations/AIda/Idle/AIda_idle_0018.png.import
+Animations/AIda/Idle/AIda_idle_0019.png
+Animations/AIda/Idle/AIda_idle_0019.png.import
+Animations/AIda/Idle/AIda_idle_0020.png
+Animations/AIda/Idle/AIda_idle_0020.png.import
+Animations/AIda/Idle/AIda_idle_0021.png
+Animations/AIda/Idle/AIda_idle_0021.png.import
+Animations/AIda/Idle/AIda_idle_0022.png
+Animations/AIda/Idle/AIda_idle_0022.png.import
+Animations/AIda/Idle/AIda_idle_0023.png
+Animations/AIda/Idle/AIda_idle_0023.png.import
+Animations/AIda/Idle/AIda_idle_0024.png
+Animations/AIda/Idle/AIda_idle_0024.png.import
+Animations/AIda/Walk/Aida_walking_0001.png
+Animations/AIda/Walk/Aida_walking_0001.png.import
+Animations/AIda/Walk/Aida_walking_0002.png
+Animations/AIda/Walk/Aida_walking_0002.png.import
+Animations/AIda/Walk/Aida_walking_0003.png
+Animations/AIda/Walk/Aida_walking_0003.png.import
+Animations/AIda/Walk/Aida_walking_0004.png
+Animations/AIda/Walk/Aida_walking_0004.png.import
+Animations/AIda/Walk/Aida_walking_0005.png
+Animations/AIda/Walk/Aida_walking_0005.png.import
+Animations/AIda/Walk/Aida_walking_0006.png
+Animations/AIda/Walk/Aida_walking_0006.png.import
+Animations/AIda/Walk/Aida_walking_0007.png
+Animations/AIda/Walk/Aida_walking_0007.png.import
+Animations/AIda/Walk/Aida_walking_0008.png
+Animations/AIda/Walk/Aida_walking_0008.png.import
+Animations/AIda/walk_new/aida_walk_0001.png
+Animations/AIda/walk_new/aida_walk_0001.png.import
+Animations/AIda/walk_new/aida_walk_0002.png
+Animations/AIda/walk_new/aida_walk_0002.png.import
+Animations/AIda/walk_new/aida_walk_0003.png
+Animations/AIda/walk_new/aida_walk_0003.png.import
+Animations/AIda/walk_new/aida_walk_0004.png
+Animations/AIda/walk_new/aida_walk_0004.png.import
+Animations/AIda/walk_new/aida_walk_0005.png
+Animations/AIda/walk_new/aida_walk_0005.png.import
+Animations/AIda/walk_new/aida_walk_0006.png
+Animations/AIda/walk_new/aida_walk_0006.png.import
+Animations/AIda/walk_new/aida_walk_0007.png
+Animations/AIda/walk_new/aida_walk_0007.png.import
+Animations/AIda/walk_new/aida_walk_0008.png
+Animations/AIda/walk_new/aida_walk_0008.png.import
+Animations/Game Objects/Hospital Room/Medicine Dispenser/Base Cyan Glow/Medicine Dispenser Cyan Glow.png
+Animations/Game Objects/Hospital Room/Medicine Dispenser/Base Cyan Glow/Medicine Dispenser Cyan Glow.png.import
+Animations/Game Objects/Hospital Room/Medicine Dispenser/Base Cyan Sprites/Medicine dispenser cyan_0001.png
+Animations/Game Objects/Hospital Room/Medicine Dispenser/Base Cyan Sprites/Medicine dispenser cyan_0001.png.import
+Animations/Game Objects/Hospital Room/Medicine Dispenser/Base Cyan Sprites/Medicine dispenser cyan_0002.png
+Animations/Game Objects/Hospital Room/Medicine Dispenser/Base Cyan Sprites/Medicine dispenser cyan_0002.png.import
+Animations/Game Objects/Hospital Room/Medicine Dispenser/Base Cyan Sprites/Medicine dispenser cyan_0003.png
+Animations/Game Objects/Hospital Room/Medicine Dispenser/Base Cyan Sprites/Medicine dispenser cyan_0003.png.import
+Animations/Game Objects/Hospital Room/Medicine Dispenser/Base Cyan Sprites/Medicine dispenser cyan_0004.png
+Animations/Game Objects/Hospital Room/Medicine Dispenser/Base Cyan Sprites/Medicine dispenser cyan_0004.png.import
+Animations/Game Objects/Hospital Room/Medicine Dispenser/Base Cyan Sprites/Medicine dispenser cyan_0005.png
+Animations/Game Objects/Hospital Room/Medicine Dispenser/Base Cyan Sprites/Medicine dispenser cyan_0005.png.import
+Animations/Game Objects/Hospital Room/Medicine Dispenser/Base Cyan Sprites/Medicine dispenser cyan_0006.png
+Animations/Game Objects/Hospital Room/Medicine Dispenser/Base Cyan Sprites/Medicine dispenser cyan_0006.png.import
+Animations/Game Objects/Hospital Room/Medicine Dispenser/Base Yellow Glow/Medicine Dispenser Yellow Glow.png
+Animations/Game Objects/Hospital Room/Medicine Dispenser/Base Yellow Glow/Medicine Dispenser Yellow Glow.png.import
+Animations/Game Objects/Hospital Room/Medicine Dispenser/Base Yellow Sprites/Medicine dispenser yellow_0001.png
+Animations/Game Objects/Hospital Room/Medicine Dispenser/Base Yellow Sprites/Medicine dispenser yellow_0001.png.import
+Animations/Game Objects/Hospital Room/Medicine Dispenser/Base Yellow Sprites/Medicine dispenser yellow_0002.png
+Animations/Game Objects/Hospital Room/Medicine Dispenser/Base Yellow Sprites/Medicine dispenser yellow_0002.png.import
+Animations/Game Objects/Hospital Room/Medicine Dispenser/Base Yellow Sprites/Medicine dispenser yellow_0003.png
+Animations/Game Objects/Hospital Room/Medicine Dispenser/Base Yellow Sprites/Medicine dispenser yellow_0003.png.import
+Animations/Game Objects/Hospital Room/Medicine Dispenser/Base Yellow Sprites/Medicine dispenser yellow_0004.png
+Animations/Game Objects/Hospital Room/Medicine Dispenser/Base Yellow Sprites/Medicine dispenser yellow_0004.png.import
+Animations/Game Objects/Hospital Room/Medicine Dispenser/Base Yellow Sprites/Medicine dispenser yellow_0005.png
+Animations/Game Objects/Hospital Room/Medicine Dispenser/Base Yellow Sprites/Medicine dispenser yellow_0005.png.import
+Animations/Game Objects/Hospital Room/Medicine Dispenser/Base Yellow Sprites/Medicine dispenser yellow_0006.png
+Animations/Game Objects/Hospital Room/Medicine Dispenser/Base Yellow Sprites/Medicine dispenser yellow_0006.png.import
+Animations/Hj frames new/Hj-frames-new_0001.png
+Animations/Hj frames new/Hj-frames-new_0001.png.import
+Animations/Hj frames new/Hj-frames-new_0002.png
+Animations/Hj frames new/Hj-frames-new_0002.png.import
+Animations/Hj frames new/Hj-frames-new_0003.png
+Animations/Hj frames new/Hj-frames-new_0003.png.import
+Animations/Hj frames new/Hj-frames-new_0004.png
+Animations/Hj frames new/Hj-frames-new_0004.png.import
+Animations/Hj frames new/Hj-frames-new_0005.png
+Animations/Hj frames new/Hj-frames-new_0005.png.import
+Animations/Hj frames new/Hj-frames-new_0006.png
+Animations/Hj frames new/Hj-frames-new_0006.png.import
+Animations/Hj frames new/Hj-frames-new_0007.png
+Animations/Hj frames new/Hj-frames-new_0007.png.import
+Animations/Hj frames new/Hj-frames-new_0008.png
+Animations/Hj frames new/Hj-frames-new_0008.png.import
+Animations/Hj frames new/Hj-frames-new_0009.png
+Animations/Hj frames new/Hj-frames-new_0009.png.import
+Animations/Hj frames new/Hj-frames-new_0010.png
+Animations/Hj frames new/Hj-frames-new_0010.png.import
+Animations/Hj frames new/Hj-frames-new_0011.png
+Animations/Hj frames new/Hj-frames-new_0011.png.import
+Animations/Hj frames new/Hj-frames-new_0012.png
+Animations/Hj frames new/Hj-frames-new_0012.png.import
+Animations/Hj frames new/Hj-frames-new_0013.png
+Animations/Hj frames new/Hj-frames-new_0013.png.import
+Animations/Hj frames new/Hj-frames-new_0014.png
+Animations/Hj frames new/Hj-frames-new_0014.png.import
+Animations/Hj frames new/Hj-frames-new_0015.png
+Animations/Hj frames new/Hj-frames-new_0015.png.import
+Animations/Hj frames new/Hj-frames-new_0016.png
+Animations/Hj frames new/Hj-frames-new_0016.png.import
+Animations/Hj frames new/Hj-frames-new_0017.png
+Animations/Hj frames new/Hj-frames-new_0017.png.import
+Animations/Hj frames new/Hj-frames-new_0018.png
+Animations/Hj frames new/Hj-frames-new_0018.png.import
+Animations/Hj frames new/Hj-frames-new_0019.png
+Animations/Hj frames new/Hj-frames-new_0019.png.import
+Animations/Hj frames new/Hj-frames-new_0020.png
+Animations/Hj frames new/Hj-frames-new_0020.png.import
+Animations/Mcbucket/High/Mcbucket_high_0001.png
+Animations/Mcbucket/High/Mcbucket_high_0001.png.import
+Animations/Mcbucket/High/Mcbucket_high_0002.png
+Animations/Mcbucket/High/Mcbucket_high_0002.png.import
+Animations/Mcbucket/High/Mcbucket_high_0003.png
+Animations/Mcbucket/High/Mcbucket_high_0003.png.import
+Animations/Mcbucket/High/Mcbucket_high_0004.png
+Animations/Mcbucket/High/Mcbucket_high_0004.png.import
+Animations/Mcbucket/High/Mcbucket_high_0005.png
+Animations/Mcbucket/High/Mcbucket_high_0005.png.import
+Animations/Mcbucket/High/Mcbucket_high_0006.png
+Animations/Mcbucket/High/Mcbucket_high_0006.png.import
+Animations/Mcbucket/High/Mcbucket_high_0007.png
+Animations/Mcbucket/High/Mcbucket_high_0007.png.import
+Animations/Mcbucket/High/Mcbucket_high_0008.png
+Animations/Mcbucket/High/Mcbucket_high_0008.png.import
+Animations/Mcbucket/High/Mcbucket_high_0009.png
+Animations/Mcbucket/High/Mcbucket_high_0009.png.import
+Animations/Mcbucket/High/Mcbucket_high_0010.png
+Animations/Mcbucket/High/Mcbucket_high_0010.png.import
+Animations/Mcbucket/High/Mcbucket_high_0011.png
+Animations/Mcbucket/High/Mcbucket_high_0011.png.import
+Animations/Mcbucket/High/Mcbucket_high_0012.png
+Animations/Mcbucket/High/Mcbucket_high_0012.png.import
+Animations/Mcbucket/High/Mcbucket_high_0013.png
+Animations/Mcbucket/High/Mcbucket_high_0013.png.import
+Animations/Mcbucket/High/Mcbucket_high_0014.png
+Animations/Mcbucket/High/Mcbucket_high_0014.png.import
+Animations/Mcbucket/High/Mcbucket_high_0015.png
+Animations/Mcbucket/High/Mcbucket_high_0015.png.import
+Animations/Mcbucket/High/Mcbucket_high_0016.png
+Animations/Mcbucket/High/Mcbucket_high_0016.png.import
+Animations/Mcbucket/High/Mcbucket_high_0017.png
+Animations/Mcbucket/High/Mcbucket_high_0017.png.import
+Animations/Mcbucket/High/Mcbucket_high_0018.png
+Animations/Mcbucket/High/Mcbucket_high_0018.png.import
+Animations/Mcbucket/High/Mcbucket_high_0019.png
+Animations/Mcbucket/High/Mcbucket_high_0019.png.import
+Animations/Mcbucket/High/Mcbucket_high_0020.png
+Animations/Mcbucket/High/Mcbucket_high_0020.png.import
+Animations/Mcbucket/High/Mcbucket_high_0021.png
+Animations/Mcbucket/High/Mcbucket_high_0021.png.import
+Animations/Mcbucket/High/Mcbucket_high_0022.png
+Animations/Mcbucket/High/Mcbucket_high_0022.png.import
+Animations/Mcbucket/High/Mcbucket_high_0023.png
+Animations/Mcbucket/High/Mcbucket_high_0023.png.import
+Animations/Mcbucket/High/Mcbucket_high_0024.png
+Animations/Mcbucket/High/Mcbucket_high_0024.png.import
+Animations/Mcbucket/Idle/Mcbucket_idle_0001.png
+Animations/Mcbucket/Idle/Mcbucket_idle_0001.png.import
+Animations/Mcbucket/Idle/Mcbucket_idle_0002.png
+Animations/Mcbucket/Idle/Mcbucket_idle_0002.png.import
+Animations/Mcbucket/Idle/Mcbucket_idle_0003.png
+Animations/Mcbucket/Idle/Mcbucket_idle_0003.png.import
+Animations/Mcbucket/Idle/Mcbucket_idle_0004.png
+Animations/Mcbucket/Idle/Mcbucket_idle_0004.png.import
+Animations/Mcbucket/Idle/Mcbucket_idle_0005.png
+Animations/Mcbucket/Idle/Mcbucket_idle_0005.png.import
+Animations/Mcbucket/Idle/Mcbucket_idle_0006.png
+Animations/Mcbucket/Idle/Mcbucket_idle_0006.png.import
+Animations/Mcbucket/Idle/Mcbucket_idle_0007.png
+Animations/Mcbucket/Idle/Mcbucket_idle_0007.png.import
+Animations/Mcbucket/Idle/Mcbucket_idle_0008.png
+Animations/Mcbucket/Idle/Mcbucket_idle_0008.png.import
+Animations/Mcbucket/Idle/Mcbucket_idle_0009.png
+Animations/Mcbucket/Idle/Mcbucket_idle_0009.png.import
+Animations/Mcbucket/Idle/Mcbucket_idle_0010.png
+Animations/Mcbucket/Idle/Mcbucket_idle_0010.png.import
+Animations/Mcbucket/Idle/Mcbucket_idle_0011.png
+Animations/Mcbucket/Idle/Mcbucket_idle_0011.png.import
+Animations/Mcbucket/Idle/Mcbucket_idle_0012.png
+Animations/Mcbucket/Idle/Mcbucket_idle_0012.png.import
+Animations/Mcbucket/Idle/Mcbucket_idle_0013.png
+Animations/Mcbucket/Idle/Mcbucket_idle_0013.png.import
+Animations/Mcbucket/Idle/Mcbucket_idle_0014.png
+Animations/Mcbucket/Idle/Mcbucket_idle_0014.png.import
+Animations/Mcbucket/Idle/Mcbucket_idle_0015.png
+Animations/Mcbucket/Idle/Mcbucket_idle_0015.png.import
+Animations/Mcbucket/Idle/Mcbucket_idle_0016.png
+Animations/Mcbucket/Idle/Mcbucket_idle_0016.png.import
+Animations/Mcbucket/Idle/Mcbucket_idle_0017.png
+Animations/Mcbucket/Idle/Mcbucket_idle_0017.png.import
+Animations/Mcbucket/Idle/Mcbucket_idle_0018.png
+Animations/Mcbucket/Idle/Mcbucket_idle_0018.png.import
+Animations/Mcbucket/Idle/Mcbucket_idle_0019.png
+Animations/Mcbucket/Idle/Mcbucket_idle_0019.png.import
+Animations/Mcbucket/Idle/Mcbucket_idle_0020.png
+Animations/Mcbucket/Idle/Mcbucket_idle_0020.png.import
+Animations/Mcbucket/Idle/Mcbucket_idle_0021.png
+Animations/Mcbucket/Idle/Mcbucket_idle_0021.png.import
+Animations/Mcbucket/Idle/Mcbucket_idle_0022.png
+Animations/Mcbucket/Idle/Mcbucket_idle_0022.png.import
+Animations/Mcbucket/Idle/Mcbucket_idle_0023.png
+Animations/Mcbucket/Idle/Mcbucket_idle_0023.png.import
+Animations/Mcbucket/Idle/Mcbucket_idle_0024.png
+Animations/Mcbucket/Idle/Mcbucket_idle_0024.png.import
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0001.png
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0001.png.import
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0002.png
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0002.png.import
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0003.png
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0003.png.import
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0004.png
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0004.png.import
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0005.png
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0005.png.import
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0006.png
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0006.png.import
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0007.png
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0007.png.import
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0008.png
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0008.png.import
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0009.png
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0009.png.import
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0010.png
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0010.png.import
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0011.png
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0011.png.import
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0012.png
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0012.png.import
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0013.png
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0013.png.import
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0014.png
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0014.png.import
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0015.png
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0015.png.import
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0016.png
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0016.png.import
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0017.png
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0017.png.import
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0018.png
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0018.png.import
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0019.png
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0019.png.import
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0020.png
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0020.png.import
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0021.png
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0021.png.import
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0022.png
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0022.png.import
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0023.png
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0023.png.import
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0024.png
+Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0024.png.import
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0001.png
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0001.png.import
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0002.png
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0002.png.import
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0003.png
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0003.png.import
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0004.png
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0004.png.import
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0005.png
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0005.png.import
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0006.png
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0006.png.import
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0007.png
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0007.png.import
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0008.png
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0008.png.import
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0009.png
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0009.png.import
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0010.png
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0010.png.import
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0011.png
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0011.png.import
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0012.png
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0012.png.import
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0013.png
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0013.png.import
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0014.png
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0014.png.import
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0015.png
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0015.png.import
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0016.png
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0016.png.import
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0017.png
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0017.png.import
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0018.png
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0018.png.import
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0019.png
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0019.png.import
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0020.png
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0020.png.import
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0021.png
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0021.png.import
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0022.png
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0022.png.import
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0023.png
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0023.png.import
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0024.png
+Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0024.png.import
+Animations/Protag/Flash/Flash_0001.png
+Animations/Protag/Flash/Flash_0001.png.import
+Animations/Protag/Flash/Flash_0002.png
+Animations/Protag/Flash/Flash_0002.png.import
+Animations/Protag/Flash/Flash_0003.png
+Animations/Protag/Flash/Flash_0003.png.import
+Animations/Protag/Flash/Flash_0004.png
+Animations/Protag/Flash/Flash_0004.png.import
+Animations/Protag/Flash/Flash_0005.png
+Animations/Protag/Flash/Flash_0005.png.import
+Animations/Protag/Flash/Flash_0006.png
+Animations/Protag/Flash/Flash_0006.png.import
+Animations/Protag/Flash/Flash_0007.png
+Animations/Protag/Flash/Flash_0007.png.import
+Animations/Protag/Flash/Flash_0008.png
+Animations/Protag/Flash/Flash_0008.png.import
+Animations/Protag/Flash/Flash_0009.png
+Animations/Protag/Flash/Flash_0009.png.import
+Animations/Protag/Flash/Flash_0010.png
+Animations/Protag/Flash/Flash_0010.png.import
+Animations/Protag/Flash/Flash_0011.png
+Animations/Protag/Flash/Flash_0011.png.import
+Animations/Protag/Flash/Flash_0012.png
+Animations/Protag/Flash/Flash_0012.png.import
+Animations/Protag/Idle New/Idle_new_resized_0001.png
+Animations/Protag/Idle New/Idle_new_resized_0001.png.import
+Animations/Protag/Idle New/Idle_new_resized_0002.png
+Animations/Protag/Idle New/Idle_new_resized_0002.png.import
+Animations/Protag/Idle New/Idle_new_resized_0003.png
+Animations/Protag/Idle New/Idle_new_resized_0003.png.import
+Animations/Protag/Idle New/Idle_new_resized_0004.png
+Animations/Protag/Idle New/Idle_new_resized_0004.png.import
+Animations/Protag/Idle New/Idle_new_resized_0005.png
+Animations/Protag/Idle New/Idle_new_resized_0005.png.import
+Animations/Protag/Idle New/Idle_new_resized_0006.png
+Animations/Protag/Idle New/Idle_new_resized_0006.png.import
+Animations/Protag/Idle New/Idle_new_resized_0007.png
+Animations/Protag/Idle New/Idle_new_resized_0007.png.import
+Animations/Protag/Idle New/Idle_new_resized_0008.png
+Animations/Protag/Idle New/Idle_new_resized_0008.png.import
+Animations/Protag/Idle New/Idle_new_resized_0009.png
+Animations/Protag/Idle New/Idle_new_resized_0009.png.import
+Animations/Protag/Idle New/Idle_new_resized_0010.png
+Animations/Protag/Idle New/Idle_new_resized_0010.png.import
+Animations/Protag/Idle New/Idle_new_resized_0011.png
+Animations/Protag/Idle New/Idle_new_resized_0011.png.import
+Animations/Protag/Idle New/Idle_new_resized_0012.png
+Animations/Protag/Idle New/Idle_new_resized_0012.png.import
+Animations/Protag/Idle New/Idle_new_resized_0013.png
+Animations/Protag/Idle New/Idle_new_resized_0013.png.import
+Animations/Protag/Idle New/Idle_new_resized_0014.png
+Animations/Protag/Idle New/Idle_new_resized_0014.png.import
+Animations/Protag/Idle New/Idle_new_resized_0015.png
+Animations/Protag/Idle New/Idle_new_resized_0015.png.import
+Animations/Protag/Idle New/Idle_new_resized_0016.png
+Animations/Protag/Idle New/Idle_new_resized_0016.png.import
+Animations/Protag/Idle New/Idle_new_resized_0017.png
+Animations/Protag/Idle New/Idle_new_resized_0017.png.import
+Animations/Protag/Idle New/Idle_new_resized_0018.png
+Animations/Protag/Idle New/Idle_new_resized_0018.png.import
+Animations/Protag/Idle New/Idle_new_resized_0019.png
+Animations/Protag/Idle New/Idle_new_resized_0019.png.import
+Animations/Protag/Idle New/Idle_new_resized_0020.png
+Animations/Protag/Idle New/Idle_new_resized_0020.png.import
+Animations/Protag/Idle New/Idle_new_resized_0021.png
+Animations/Protag/Idle New/Idle_new_resized_0021.png.import
+Animations/Protag/Idle New/Idle_new_resized_0022.png
+Animations/Protag/Idle New/Idle_new_resized_0022.png.import
+Animations/Protag/Idle New/Idle_new_resized_0023.png
+Animations/Protag/Idle New/Idle_new_resized_0023.png.import
+Animations/Protag/Idle New/Idle_new_resized_0024.png
+Animations/Protag/Idle New/Idle_new_resized_0024.png.import
+Animations/Protag/Idle/Protag_idle_0001.png
+Animations/Protag/Idle/Protag_idle_0001.png.import
+Animations/Protag/Idle/Protag_idle_0002.png
+Animations/Protag/Idle/Protag_idle_0002.png.import
+Animations/Protag/Idle/Protag_idle_0003.png
+Animations/Protag/Idle/Protag_idle_0003.png.import
+Animations/Protag/Idle/Protag_idle_0004.png
+Animations/Protag/Idle/Protag_idle_0004.png.import
+Animations/Protag/Idle/Protag_idle_0005.png
+Animations/Protag/Idle/Protag_idle_0005.png.import
+Animations/Protag/Idle/Protag_idle_0006.png
+Animations/Protag/Idle/Protag_idle_0006.png.import
+Animations/Protag/Idle/Protag_idle_0007.png
+Animations/Protag/Idle/Protag_idle_0007.png.import
+Animations/Protag/Idle/Protag_idle_0008.png
+Animations/Protag/Idle/Protag_idle_0008.png.import
+Animations/Protag/Idle/Protag_idle_0009.png
+Animations/Protag/Idle/Protag_idle_0009.png.import
+Animations/Protag/Idle/Protag_idle_0010.png
+Animations/Protag/Idle/Protag_idle_0010.png.import
+Animations/Protag/Idle/Protag_idle_0011.png
+Animations/Protag/Idle/Protag_idle_0011.png.import
+Animations/Protag/Idle/Protag_idle_0012.png
+Animations/Protag/Idle/Protag_idle_0012.png.import
+Animations/Protag/Idle/Protag_idle_0013.png
+Animations/Protag/Idle/Protag_idle_0013.png.import
+Animations/Protag/Idle/Protag_idle_0014.png
+Animations/Protag/Idle/Protag_idle_0014.png.import
+Animations/Protag/Idle/Protag_idle_0015.png
+Animations/Protag/Idle/Protag_idle_0015.png.import
+Animations/Protag/Idle/Protag_idle_0016.png
+Animations/Protag/Idle/Protag_idle_0016.png.import
+Animations/Protag/Idle/Protag_idle_0017.png
+Animations/Protag/Idle/Protag_idle_0017.png.import
+Animations/Protag/Idle/Protag_idle_0018.png
+Animations/Protag/Idle/Protag_idle_0018.png.import
+Animations/Protag/Idle/Protag_idle_0019.png
+Animations/Protag/Idle/Protag_idle_0019.png.import
+Animations/Protag/Idle/Protag_idle_0020.png
+Animations/Protag/Idle/Protag_idle_0020.png.import
+Animations/Protag/Idle/Protag_idle_0021.png
+Animations/Protag/Idle/Protag_idle_0021.png.import
+Animations/Protag/Idle/Protag_idle_0022.png
+Animations/Protag/Idle/Protag_idle_0022.png.import
+Animations/Protag/Idle/Protag_idle_0023.png
+Animations/Protag/Idle/Protag_idle_0023.png.import
+Animations/Protag/Idle/Protag_idle_0024.png
+Animations/Protag/Idle/Protag_idle_0024.png.import
+Animations/Protag/Walk New Resized/walk_new_resized_0001.png
+Animations/Protag/Walk New Resized/walk_new_resized_0001.png.import
+Animations/Protag/Walk New Resized/walk_new_resized_0002.png
+Animations/Protag/Walk New Resized/walk_new_resized_0002.png.import
+Animations/Protag/Walk New Resized/walk_new_resized_0003.png
+Animations/Protag/Walk New Resized/walk_new_resized_0003.png.import
+Animations/Protag/Walk New Resized/walk_new_resized_0004.png
+Animations/Protag/Walk New Resized/walk_new_resized_0004.png.import
+Animations/Protag/Walk New Resized/walk_new_resized_0005.png
+Animations/Protag/Walk New Resized/walk_new_resized_0005.png.import
+Animations/Protag/Walk New Resized/walk_new_resized_0006.png
+Animations/Protag/Walk New Resized/walk_new_resized_0006.png.import
+Animations/Protag/Walk New Resized/walk_new_resized_0007.png
+Animations/Protag/Walk New Resized/walk_new_resized_0007.png.import
+Animations/Protag/Walk New Resized/walk_new_resized_0008.png
+Animations/Protag/Walk New Resized/walk_new_resized_0008.png.import
+Animations/Protag/Walk/Protag_walk_0001.png
+Animations/Protag/Walk/Protag_walk_0001.png.import
+Animations/Protag/Walk/Protag_walk_0002.png
+Animations/Protag/Walk/Protag_walk_0002.png.import
+Animations/Protag/Walk/Protag_walk_0003.png
+Animations/Protag/Walk/Protag_walk_0003.png.import
+Animations/Protag/Walk/Protag_walk_0004.png
+Animations/Protag/Walk/Protag_walk_0004.png.import
+Animations/Protag/Walk/Protag_walk_0005.png
+Animations/Protag/Walk/Protag_walk_0005.png.import
+Animations/Protag/Walk/Protag_walk_0006.png
+Animations/Protag/Walk/Protag_walk_0006.png.import
+Animations/Protag/Walk/Protag_walk_0007.png
+Animations/Protag/Walk/Protag_walk_0007.png.import
+Animations/Protag/Walk/Protag_walk_0008.png
+Animations/Protag/Walk/Protag_walk_0008.png.import
+Animations/Protag/idle new resized/idle_new_resized_0001.png
+Animations/Protag/idle new resized/idle_new_resized_0001.png.import
+Animations/Protag/idle new resized/idle_new_resized_0002.png
+Animations/Protag/idle new resized/idle_new_resized_0002.png.import
+Animations/Protag/idle new resized/idle_new_resized_0003.png
+Animations/Protag/idle new resized/idle_new_resized_0003.png.import
+Animations/Protag/idle new resized/idle_new_resized_0004.png
+Animations/Protag/idle new resized/idle_new_resized_0004.png.import
+Animations/Protag/idle new resized/idle_new_resized_0005.png
+Animations/Protag/idle new resized/idle_new_resized_0005.png.import
+Animations/Protag/idle new resized/idle_new_resized_0006.png
+Animations/Protag/idle new resized/idle_new_resized_0006.png.import
+Animations/Protag/idle new resized/idle_new_resized_0007.png
+Animations/Protag/idle new resized/idle_new_resized_0007.png.import
+Animations/Protag/idle new resized/idle_new_resized_0008.png
+Animations/Protag/idle new resized/idle_new_resized_0008.png.import
+Animations/Protag/idle new resized/idle_new_resized_0009.png
+Animations/Protag/idle new resized/idle_new_resized_0009.png.import
+Animations/Protag/idle new resized/idle_new_resized_0010.png
+Animations/Protag/idle new resized/idle_new_resized_0010.png.import
+Animations/Protag/idle new resized/idle_new_resized_0011.png
+Animations/Protag/idle new resized/idle_new_resized_0011.png.import
+Animations/Protag/idle new resized/idle_new_resized_0012.png
+Animations/Protag/idle new resized/idle_new_resized_0012.png.import
+Animations/Protag/idle new resized/idle_new_resized_0013.png
+Animations/Protag/idle new resized/idle_new_resized_0013.png.import
+Animations/Protag/idle new resized/idle_new_resized_0014.png
+Animations/Protag/idle new resized/idle_new_resized_0014.png.import
+Animations/Protag/idle new resized/idle_new_resized_0015.png
+Animations/Protag/idle new resized/idle_new_resized_0015.png.import
+Animations/Protag/idle new resized/idle_new_resized_0016.png
+Animations/Protag/idle new resized/idle_new_resized_0016.png.import
+Animations/Protag/idle new resized/idle_new_resized_0017.png
+Animations/Protag/idle new resized/idle_new_resized_0017.png.import
+Animations/Protag/idle new resized/idle_new_resized_0018.png
+Animations/Protag/idle new resized/idle_new_resized_0018.png.import
+Animations/Protag/idle new resized/idle_new_resized_0019.png
+Animations/Protag/idle new resized/idle_new_resized_0019.png.import
+Animations/Protag/idle new resized/idle_new_resized_0020.png
+Animations/Protag/idle new resized/idle_new_resized_0020.png.import
+Animations/Protag/idle new resized/idle_new_resized_0021.png
+Animations/Protag/idle new resized/idle_new_resized_0021.png.import
+Animations/Protag/idle new resized/idle_new_resized_0022.png
+Animations/Protag/idle new resized/idle_new_resized_0022.png.import
+Animations/Protag/idle new resized/idle_new_resized_0023.png
+Animations/Protag/idle new resized/idle_new_resized_0023.png.import
+Animations/Protag/idle new resized/idle_new_resized_0024.png
+Animations/Protag/idle new resized/idle_new_resized_0024.png.import
+Animations/Protag/walk_new/protag_walk_0001.png
+Animations/Protag/walk_new/protag_walk_0001.png.import
+Animations/Protag/walk_new/protag_walk_0002.png
+Animations/Protag/walk_new/protag_walk_0002.png.import
+Animations/Protag/walk_new/protag_walk_0003.png
+Animations/Protag/walk_new/protag_walk_0003.png.import
+Animations/Protag/walk_new/protag_walk_0004.png
+Animations/Protag/walk_new/protag_walk_0004.png.import
+Animations/Protag/walk_new/protag_walk_0005.png
+Animations/Protag/walk_new/protag_walk_0005.png.import
+Animations/Protag/walk_new/protag_walk_0006.png
+Animations/Protag/walk_new/protag_walk_0006.png.import
+Animations/Protag/walk_new/protag_walk_0007.png
+Animations/Protag/walk_new/protag_walk_0007.png.import
+Animations/Protag/walk_new/protag_walk_0008.png
+Animations/Protag/walk_new/protag_walk_0008.png.import
+Animations/Sergey/Idle/Sergey_idle_0001.png
+Animations/Sergey/Idle/Sergey_idle_0001.png.import
+Animations/Sergey/Idle/Sergey_idle_0002.png
+Animations/Sergey/Idle/Sergey_idle_0002.png.import
+Animations/Sergey/Idle/Sergey_idle_0003.png
+Animations/Sergey/Idle/Sergey_idle_0003.png.import
+Animations/Sergey/Idle/Sergey_idle_0004.png
+Animations/Sergey/Idle/Sergey_idle_0004.png.import
+Animations/Sergey/Idle/Sergey_idle_0005.png
+Animations/Sergey/Idle/Sergey_idle_0005.png.import
+Animations/Sergey/Idle/Sergey_idle_0006.png
+Animations/Sergey/Idle/Sergey_idle_0006.png.import
+Animations/Sergey/Idle/Sergey_idle_0007.png
+Animations/Sergey/Idle/Sergey_idle_0007.png.import
+Animations/Sergey/Idle/Sergey_idle_0008.png
+Animations/Sergey/Idle/Sergey_idle_0008.png.import
+Animations/Sergey/Idle/Sergey_idle_0009.png
+Animations/Sergey/Idle/Sergey_idle_0009.png.import
+Animations/Sergey/Idle/Sergey_idle_0010.png
+Animations/Sergey/Idle/Sergey_idle_0010.png.import
+Animations/Sergey/Idle/Sergey_idle_0011.png
+Animations/Sergey/Idle/Sergey_idle_0011.png.import
+Animations/Sergey/Idle/Sergey_idle_0012.png
+Animations/Sergey/Idle/Sergey_idle_0012.png.import
+Animations/Sergey/Idle/Sergey_idle_0013.png
+Animations/Sergey/Idle/Sergey_idle_0013.png.import
+Animations/Sergey/Idle/Sergey_idle_0014.png
+Animations/Sergey/Idle/Sergey_idle_0014.png.import
+Animations/Sergey/Idle/Sergey_idle_0015.png
+Animations/Sergey/Idle/Sergey_idle_0015.png.import
+Animations/Sergey/Idle/Sergey_idle_0016.png
+Animations/Sergey/Idle/Sergey_idle_0016.png.import
+Animations/Sergey/Idle/Sergey_idle_0017.png
+Animations/Sergey/Idle/Sergey_idle_0017.png.import
+Animations/Sergey/Idle/Sergey_idle_0018.png
+Animations/Sergey/Idle/Sergey_idle_0018.png.import
+Animations/Sergey/Idle/Sergey_idle_0019.png
+Animations/Sergey/Idle/Sergey_idle_0019.png.import
+Animations/Sergey/Idle/Sergey_idle_0020.png
+Animations/Sergey/Idle/Sergey_idle_0020.png.import
+Animations/Sergey/Idle/Sergey_idle_0021.png
+Animations/Sergey/Idle/Sergey_idle_0021.png.import
+Animations/Sergey/Idle/Sergey_idle_0022.png
+Animations/Sergey/Idle/Sergey_idle_0022.png.import
+Animations/Sergey/Idle/Sergey_idle_0023.png
+Animations/Sergey/Idle/Sergey_idle_0023.png.import
+Animations/Sergey/Idle/Sergey_idle_0024.png
+Animations/Sergey/Idle/Sergey_idle_0024.png.import
+App Icons/IIRC.icns
+App Icons/IIRC.ico
+App Icons/android 192x192.png
+App Icons/android 192x192.png.import
+App Icons/android 432x432.png
+App Icons/android 432x432.png.import
+App Icons/android black background 432x432.png
+App Icons/android black background 432x432.png.import
+Backgrounds/Aida/aida_hospital_base.png
+Backgrounds/Aida/aida_hospital_base.png.import
+Backgrounds/Aida/aida_hospital_concerned_thinking.png
+Backgrounds/Aida/aida_hospital_concerned_thinking.png.import
+Backgrounds/Aida/aida_hospital_explaining_confident.png
+Backgrounds/Aida/aida_hospital_explaining_confident.png.import
+Backgrounds/Aida/aida_hospital_happy.png
+Backgrounds/Aida/aida_hospital_happy.png.import
+Backgrounds/Aida/aida_hospital_surprised.png
+Backgrounds/Aida/aida_hospital_surprised.png.import
+Backgrounds/Aida/aida_hospital_thinking.png
+Backgrounds/Aida/aida_hospital_thinking.png.import
+Backgrounds/CGs/memory_box_cg.png
+Backgrounds/CGs/memory_box_cg.png.import
+Backgrounds/Levels/aida_hospital_background.png
+Backgrounds/Levels/aida_hospital_background.png.import
+Backgrounds/Levels/layla shower bg.png
+Backgrounds/Levels/layla shower bg.png.import
+Backgrounds/Levels/sergey_background.png
+Backgrounds/Levels/sergey_background.png.import
+Backgrounds/Levels/static_hospital_background.PNG
+Backgrounds/Levels/static_hospital_background.PNG.import
+Backgrounds/Levels/static_hospital_background_ventless.png
+Backgrounds/Levels/static_hospital_background_ventless.png.import
+Backgrounds/Levels/static_hospital_bathroom_background.PNG
+Backgrounds/Levels/static_hospital_bathroom_background.PNG.import
+Backgrounds/Main Menu Background/main_menu_background_no_logo.png
+Backgrounds/Main Menu Background/main_menu_background_no_logo.png.import
+Backgrounds/McBucket/default/mcbucket_normal_base.png
+Backgrounds/McBucket/default/mcbucket_normal_base.png.import
+Backgrounds/McBucket/default/mcbucket_normal_ree.png
+Backgrounds/McBucket/default/mcbucket_normal_ree.png.import
+Backgrounds/McBucket/high/mcbucket_high_base.png
+Backgrounds/McBucket/high/mcbucket_high_base.png.import
+Backgrounds/McBucket/high/mcbucket_high_base_mouth_open.PNG
+Backgrounds/McBucket/high/mcbucket_high_base_mouth_open.PNG.import
+Backgrounds/McBucket/high/mcbucket_high_explaining_eyes_closed_mouth_open.png
+Backgrounds/McBucket/high/mcbucket_high_explaining_eyes_closed_mouth_open.png.import
+Backgrounds/McBucket/high/mcbucket_high_explaining_eyes_open_mouth_open (2).PNG
+Backgrounds/McBucket/high/mcbucket_high_explaining_eyes_open_mouth_open (2).PNG.import
+Backgrounds/McBucket/high/mcbucket_high_explaining_eyes_open_mouth_open.PNG
+Backgrounds/McBucket/high/mcbucket_high_explaining_eyes_open_mouth_open.PNG.import
+Backgrounds/McBucket/high/mcbucket_high_hand_up.png
+Backgrounds/McBucket/high/mcbucket_high_hand_up.png.import
+Backgrounds/McBucket/high/mcbucket_high_happy.png
+Backgrounds/McBucket/high/mcbucket_high_happy.png.import
+Backgrounds/McBucket/invigirol/mcbucket_ivigirol_base.png
+Backgrounds/McBucket/invigirol/mcbucket_ivigirol_base.png.import
+Backgrounds/Protagonist/protag_hospital_base_1.png
+Backgrounds/Protagonist/protag_hospital_base_1.png.import
+Backgrounds/Protagonist/protag_hospital_base_aida_green_eyes.png
+Backgrounds/Protagonist/protag_hospital_base_aida_green_eyes.png.import
+Backgrounds/Protagonist/protag_hospital_base_aida_red_eyes.png
+Backgrounds/Protagonist/protag_hospital_base_aida_red_eyes.png.import
+Backgrounds/Protagonist/protag_hospital_base_aida_red_eyes_gloves.png
+Backgrounds/Protagonist/protag_hospital_base_aida_red_eyes_gloves.png.import
+Backgrounds/Protagonist/xSergei/hj_climax_image.PNG
+Backgrounds/Protagonist/xSergei/hj_climax_image.PNG.import
+Backgrounds/Protagonist/xSergei/protag_brushing_hair_on_bed.PNG
+Backgrounds/Protagonist/xSergei/protag_brushing_hair_on_bed.PNG.import
+Backgrounds/Protagonist/xSergei/protag_closeup_curious.png
+Backgrounds/Protagonist/xSergei/protag_closeup_curious.png.import
+Backgrounds/Protagonist/xSergei/protag_closeup_domme.png
+Backgrounds/Protagonist/xSergei/protag_closeup_domme.png.import
+Backgrounds/Protagonist/xSergei/protag_closeup_speaking.png
+Backgrounds/Protagonist/xSergei/protag_closeup_speaking.png.import
+Backgrounds/Protagonist/xSergei/protag_sergey_gown only.png
+Backgrounds/Protagonist/xSergei/protag_sergey_gown only.png.import
+Backgrounds/Protagonist/xSergei/protag_sergey_gown_hand_slipped_in.png
+Backgrounds/Protagonist/xSergei/protag_sergey_gown_hand_slipped_in.png.import
+Backgrounds/Protagonist/xSergei/protag_sergey_hand_being_moved_one.png
+Backgrounds/Protagonist/xSergei/protag_sergey_hand_being_moved_one.png.import
+Backgrounds/Protagonist/xSergei/protag_sergey_hand_being_moved_three.png
+Backgrounds/Protagonist/xSergei/protag_sergey_hand_being_moved_three.png.import
+Backgrounds/Protagonist/xSergei/protag_sergey_hand_being_moved_two.png
+Backgrounds/Protagonist/xSergei/protag_sergey_hand_being_moved_two.png.import
+Backgrounds/Protagonist/xSergei/protag_sergey_hand_hovering.png
+Backgrounds/Protagonist/xSergei/protag_sergey_hand_hovering.png.import
+Backgrounds/Protagonist/xSergei/protag_sergey_inhand.png
+Backgrounds/Protagonist/xSergei/protag_sergey_inhand.png.import
+Backgrounds/Protagonist/xSergei/protag_sergey_knees_touching.png
+Backgrounds/Protagonist/xSergei/protag_sergey_knees_touching.png.import
+Backgrounds/Protagonist/xSergei/protag_top_off.png
+Backgrounds/Protagonist/xSergei/protag_top_off.png.import
+Backgrounds/Protagonist/xSergei/protag_touching_sergey.png
+Backgrounds/Protagonist/xSergei/protag_touching_sergey.png.import
+Backgrounds/Protagonist/xSergei/sergey_handjob_frame_one.png
+Backgrounds/Protagonist/xSergei/sergey_handjob_frame_one.png.import
+Backgrounds/Protagonist/xSergei/sergey_part_reveal.PNG
+Backgrounds/Protagonist/xSergei/sergey_part_reveal.PNG.import
+Backgrounds/Sergey/sergei_closeup_laughing.png
+Backgrounds/Sergey/sergei_closeup_laughing.png.import
+Backgrounds/Sergey/sergei_closeup_lookaway_sad_mouth_open.png
+Backgrounds/Sergey/sergei_closeup_lookaway_sad_mouth_open.png.import
+Backgrounds/Sergey/sergei_closeup_neutral_speaking.png
+Backgrounds/Sergey/sergei_closeup_neutral_speaking.png.import
+Backgrounds/Sergey/sergei_closeup_surprised_blush.png
+Backgrounds/Sergey/sergei_closeup_surprised_blush.png.import
+Backgrounds/Sergey/sergei_closeup_surprised_no_blush.png
+Backgrounds/Sergey/sergei_closeup_surprised_no_blush.png.import
+Backgrounds/Sergey/sergei_front_confused.png
+Backgrounds/Sergey/sergei_front_confused.png.import
+Backgrounds/Sergey/sergey_closeup_hand_behind_head.png
+Backgrounds/Sergey/sergey_closeup_hand_behind_head.png.import
+Backgrounds/Sergey/sergey_closeup_lookaway_sad.png
+Backgrounds/Sergey/sergey_closeup_lookaway_sad.png.import
+Backgrounds/Sergey/sergey_closeup_surprised.png
+Backgrounds/Sergey/sergey_closeup_surprised.png.import
+Backgrounds/Sergey/sergey_eyes_closed.png
+Backgrounds/Sergey/sergey_eyes_closed.png.import
+Backgrounds/Sergey/sergey_eyes_only_eye_to_eye.png
+Backgrounds/Sergey/sergey_eyes_only_eye_to_eye.png.import
+Backgrounds/Sergey/sergey_eyes_only_eye_to_eye_intense.png
+Backgrounds/Sergey/sergey_eyes_only_eye_to_eye_intense.png.import
+Backgrounds/Sergey/sergey_eyes_only_looking_away.png
+Backgrounds/Sergey/sergey_eyes_only_looking_away.png.import
+Backgrounds/Sergey/sergey_eyes_only_pleasure.png
+Backgrounds/Sergey/sergey_eyes_only_pleasure.png.import
+Backgrounds/Sergey/sergey_flat_and_drained.png
+Backgrounds/Sergey/sergey_flat_and_drained.png.import
+Backgrounds/Sergey/sergey_flat_and_embarrassed.png
+Backgrounds/Sergey/sergey_flat_and_embarrassed.png.import
+Backgrounds/Sergey/sergey_front_hand_behind_head.png
+Backgrounds/Sergey/sergey_front_hand_behind_head.png.import
+Backgrounds/Sergey/sergey_front_neutral_mouth_closed.png
+Backgrounds/Sergey/sergey_front_neutral_mouth_closed.png.import
+Backgrounds/Sergey/sergey_front_neutral_mouth_open.png
+Backgrounds/Sergey/sergey_front_neutral_mouth_open.png.import
+Backgrounds/Sergey/sergey_frown.png
+Backgrounds/Sergey/sergey_frown.png.import
+Backgrounds/Sergey/sergey_frown_look_away.png
+Backgrounds/Sergey/sergey_frown_look_away.png.import
+Backgrounds/Sergey/sergey_hand_behind_head.png
+Backgrounds/Sergey/sergey_hand_behind_head.png.import
+Backgrounds/Sergey/sergey_hand_up.png
+Backgrounds/Sergey/sergey_hand_up.png.import
+Backgrounds/Sergey/sergey_neutral.png
+Backgrounds/Sergey/sergey_neutral.png.import
+Backgrounds/Sergey/sergey_neutral_mouth_open.png
+Backgrounds/Sergey/sergey_neutral_mouth_open.png.import
+Backgrounds/Sergey/sergey_shutted_up.PNG
+Backgrounds/Sergey/sergey_shutted_up.PNG.import
+Backgrounds/Sergey/sergey_techpass_inhand.png
+Backgrounds/Sergey/sergey_techpass_inhand.png.import
+Backgrounds/dread_crying_face.png
+Backgrounds/dread_crying_face.png.import
+Backgrounds/dread_evil_face.png
+Backgrounds/dread_evil_face.png.import
+Backgrounds/intro_silhouette.png
+Backgrounds/intro_silhouette.png.import
+Boot.gd
+Boot.gd.uid
+Boot.tscn
+CherryBomb-Regular.ttf
+CherryBomb-Regular.ttf.import
+CourierPrime-Regular.ttf
+CourierPrime-Regular.ttf.import
+Cutscenes/Cutscene.gd
+Cutscenes/Cutscene.gd.uid
+Cutscenes/ToiletClogCutscene.gd
+Cutscenes/ToiletClogCutscene.gd.uid
+Dev/MarketingMockup.gd
+Dev/MarketingMockup.gd.uid
+Dev/MarketingMockup.tscn
+Dev/alyssa_exporter.gd
+Dev/alyssa_exporter.gd.uid
+Dev/alyssa_exporter.tscn
+Dev/damp_skin.gdshader
+Dev/damp_skin.gdshader.uid
+Dev/glass_water_drops.gdshader
+Dev/glass_water_drops.gdshader.uid
+Dev/sexy_scene_mockup.tscn
+Dev/shower_stream.gdshader
+Dev/shower_stream.gdshader.uid
+Dev/steam_fog.gdshader
+Dev/steam_fog.gdshader.uid
+Dev/water_drip.gdshader
+Dev/water_drip.gdshader.uid
+Draft walk/Draft walk_0000.png
+Draft walk/Draft walk_0000.png.import
+Draft walk/Draft walk_0001.png
+Draft walk/Draft walk_0001.png.import
+Draft walk/Draft walk_0002.png
+Draft walk/Draft walk_0002.png.import
+Draft walk/Draft walk_0003.png
+Draft walk/Draft walk_0003.png.import
+Draft walk/Draft walk_0004.png
+Draft walk/Draft walk_0004.png.import
+Draft walk/Draft walk_0005.png
+Draft walk/Draft walk_0005.png.import
+Draft walk/Draft walk_0006.png
+Draft walk/Draft walk_0006.png.import
+Draft walk/Draft walk_0007.png
+Draft walk/Draft walk_0007.png.import
+Draft walk/Draft walk_0008.png
+Draft walk/Draft walk_0008.png.import
+Draft walk/Draft walk_0009.png
+Draft walk/Draft walk_0009.png.import
+Fonts/IBMPlexSans-SemiBold.ttf
+Fonts/IBMPlexSans-SemiBold.ttf.import
+Fonts/Lato-Black.ttf
+Fonts/Lato-Black.ttf.import
+Fonts/Lato-Bold.ttf
+Fonts/Lato-Bold.ttf.import
+Fonts/Lato-Italic.ttf
+Fonts/Lato-Italic.ttf.import
+Fonts/Lato-Regular.ttf
+Fonts/Lato-Regular.ttf.import
+Fonts/Orbitron-SemiBold.ttf
+Fonts/Orbitron-SemiBold.ttf.import
+Fonts/PlayfairDisplay-Italic.ttf
+Fonts/PlayfairDisplay-Italic.ttf.import
+Fonts/PlayfairDisplay-Regular.ttf
+Fonts/PlayfairDisplay-Regular.ttf.import
+Fonts/PlayfairDisplay-SemiBold.ttf
+Fonts/PlayfairDisplay-SemiBold.ttf.import
+Fonts/PlayfairDisplay-SemiBoldItalic.ttf
+Fonts/PlayfairDisplay-SemiBoldItalic.ttf.import
+Fonts/RubikGlitch-Regular.ttf
+Fonts/RubikGlitch-Regular.ttf.import
+Fonts/VarelaRound-Regular.ttf
+Fonts/VarelaRound-Regular.ttf.import
+Hj animation.webm
+IIRC_Master_Dialogue_Document.md
+IIRC_Master_Dialogue_Document.pdf
+Icons/back.png
+Icons/back.png.import
+Icons/cancel.png
+Icons/cancel.png.import
+Icons/dialogue_icon.png
+Icons/dialogue_icon.png.import
+Icons/insurance_form_icon.png
+Icons/insurance_form_icon.png.import
+Icons/journal_icon.png
+Icons/journal_icon.png.import
+Icons/leave.png
+Icons/leave.png.import
+Icons/logo_glass_icon.png
+Icons/logo_glass_icon.png.import
+Icons/magnifying-glass.png
+Icons/magnifying-glass.png.import
+Icons/patreon_logo.png
+Icons/patreon_logo.png.import
+Icons/proceed.png
+Icons/proceed.png.import
+Icons/title_glitch.gdshader
+Icons/title_glitch.gdshader.uid
+Icons/up_arrow.png
+Icons/up_arrow.png.import
+Interactables/Game World/Hospital Bathroom/hospital_bathroom_mirror.tscn
+Interactables/Game World/Hospital Bathroom/hospital_bathroom_toilet_flush.tscn
+Interactables/Game World/Hospital Bathroom/hospital_bathroom_toilet_paper.tscn
+Interactables/Game World/Hospital Bathroom/hospital_toilet.gd
+Interactables/Game World/Hospital Bathroom/hospital_toilet.gd.uid
+Interactables/Game World/Hospital Bathroom/hospital_toilet.tscn
+Interactables/Game World/Hospital Room/Invigirol.tscn
+Interactables/Game World/Hospital Room/PulseOverlay.gdshader
+Interactables/Game World/Hospital Room/PulseOverlay.gdshader.uid
+Interactables/Game World/Hospital Room/Zanopram.tscn
+Interactables/Game World/Hospital Room/exit_door.tscn
+Interactables/Game World/Hospital Room/mcbucket_med_dispenser.tscn
+Interactables/Game World/Hospital Room/medicine_cabinet.tscn
+Interactables/Game World/Hospital Room/medicine_dispenser.gd
+Interactables/Game World/Hospital Room/medicine_dispenser.gd.uid
+Interactables/Game World/Hospital Room/medicine_dispenser.tscn
+Interactables/Game World/Hospital Room/tv.tscn
+Interactables/Game World/Hospital Room/tv_controller.gd
+Interactables/Game World/Hospital Room/tv_controller.gd.uid
+Journal Notes/page_one.png
+Journal Notes/page_one.png.import
+Journal Notes/page_one.tres
+Journal Notes/page_two.png
+Journal Notes/page_two.png.import
+Journal Notes/page_two.tres
+LevelHintManager.gd
+LevelHintManager.gd.uid
+LevelStateManager.gd
+LevelStateManager.gd.uid
+Main.gd
+Main.gd.uid
+Mcbucket_idle_0019.png
+Mcbucket_idle_0019.png.import
+Medicine Cabinet.png
+Medicine Cabinet.png.import
+Memory Box Chapter Images/Chapters/Chapter 1 - University.png
+Memory Box Chapter Images/Chapters/Chapter 1 - University.png.import
+Memory Box Chapter Images/Locations/University.png
+Memory Box Chapter Images/Locations/University.png.import
+Non Interactables/camera_2d.gd
+Non Interactables/camera_2d.gd.uid
+Non Interactables/camera_region.gd
+Non Interactables/camera_region.gd.uid
+Non Interactables/hospital_bathroom_sink.tscn
+Non Interactables/hospital_scrolling_wall_background.tscn
+Non Interactables/static_bathroom_background.tscn
+Non Interactables/static_wall_background.tscn
+Non Interactables/static_wall_background_ventless.tscn
+RobotoMono-VariableFont_wght.ttf
+RobotoMono-VariableFont_wght.ttf.import
+Sfx/Dialog/Dialog_sfx.wav
+Sfx/Dialog/Dialog_sfx.wav.import
+Sfx/Dialog/heavy_breathing.mp3
+Sfx/Dialog/heavy_breathing.mp3.import
+Sfx/Dialog/mcbucket_scream.wav
+Sfx/Dialog/mcbucket_scream.wav.import
+Sfx/Dialog/scan_effect.mp3
+Sfx/Dialog/scan_effect.mp3.import
+Sfx/Dialog/swish_effect.wav
+Sfx/Dialog/swish_effect.wav.import
+Sfx/Game World/ambience_distant_highway.mp3
+Sfx/Game World/ambience_distant_highway.mp3.import
+Sfx/Game World/ambience_fluoroscent_buzz.mp3
+Sfx/Game World/ambience_fluoroscent_buzz.mp3.import
+Sfx/Game World/ambience_spaceship.mp3
+Sfx/Game World/ambience_spaceship.mp3.import
+Sfx/Game World/bathroom_music.mp3
+Sfx/Game World/bathroom_music.mp3.import
+Sfx/Game World/hospital_toilet_flush.mp3
+Sfx/Game World/hospital_toilet_flush.mp3.import
+Sfx/Game World/monitor_pulse.mp3
+Sfx/Game World/monitor_pulse.mp3.import
+Sfx/Game World/notification_ping.wav
+Sfx/Game World/notification_ping.wav.import
+Sfx/Game World/oxygen_bubbles.mp3
+Sfx/Game World/oxygen_bubbles.mp3.import
+Sfx/Game World/scifi door close.mp3
+Sfx/Game World/scifi door close.mp3.import
+Sfx/Game World/scifi door open.mp3
+Sfx/Game World/scifi door open.mp3.import
+Sfx/Game World/ui_click.wav
+Sfx/Game World/ui_click.wav.import
+Sfx/Music/8. comeaux.mp3
+Sfx/Music/8. comeaux.mp3.import
+Sfx/Music/8. comeaux.wav
+Sfx/Music/8. comeaux.wav.import
+Sfx/Music/Unnatural City.ogg
+Sfx/Music/Unnatural City.ogg.import
+Sfx/Music/aida_corporate_theme.mp3
+Sfx/Music/aida_corporate_theme.mp3.import
+Sfx/Music/mcbucket_cannathink_theme.mp3
+Sfx/Music/mcbucket_cannathink_theme.mp3.import
+Sfx/Music/mcbucket_regular_theme.mp3
+Sfx/Music/mcbucket_regular_theme.mp3.import
+Sfx/Music/sergey_sad_theme.mp3
+Sfx/Music/sergey_sad_theme.mp3.import
+Sfx/Music/snake_city_run_boy_run.mp3
+Sfx/Music/snake_city_run_boy_run.mp3.import
+Sfx/Music/wii menu.mp3
+Sfx/Music/wii menu.mp3.import
+Sfx/Player/squeak_01.wav
+Sfx/Player/squeak_01.wav.import
+Sfx/Player/squeak_02.wav
+Sfx/Player/squeak_02.wav.import
+Sfx/Player/squeak_03.wav
+Sfx/Player/squeak_03.wav.import
+Sfx/form_correct_input.mp3
+Sfx/form_correct_input.mp3.import
+Sfx/form_incorrect_input.mp3
+Sfx/form_incorrect_input.mp3.import
+Sfx/start.wav
+Sfx/start.wav.import
+Shaders/grayscale_material.gdshader
+Shaders/grayscale_material.gdshader.uid
+Shaders/grayscale_material.tres
+Shaders/white_icon_shader.gdshader
+Shaders/white_icon_shader.gdshader.uid
+Sprites/Cabinet Medicines/Cannathink.png
+Sprites/Cabinet Medicines/Cannathink.png.import
+Sprites/Cabinet Medicines/Cannathink_Mask.png
+Sprites/Cabinet Medicines/Cannathink_Mask.png.import
+Sprites/Cabinet Medicines/Invigirol.png
+Sprites/Cabinet Medicines/Invigirol.png.import
+Sprites/Cabinet Medicines/Invigirol_Mask.png
+Sprites/Cabinet Medicines/Invigirol_Mask.png.import
+Sprites/Cabinet Medicines/Zanopram.png
+Sprites/Cabinet Medicines/Zanopram.png.import
+Sprites/Cabinet Medicines/Zanopram_Mask.png
+Sprites/Cabinet Medicines/Zanopram_Mask.png.import
+Sprites/Hospital Bathroom/hospital_bathroom_commode.PNG
+Sprites/Hospital Bathroom/hospital_bathroom_commode.PNG.import
+Sprites/Hospital Bathroom/hospital_bathroom_commode_error.png
+Sprites/Hospital Bathroom/hospital_bathroom_commode_error.png.import
+Sprites/Hospital Bathroom/hospital_bathroom_commode_error_glow.png
+Sprites/Hospital Bathroom/hospital_bathroom_commode_error_glow.png.import
+Sprites/Hospital Bathroom/hospital_bathroom_commode_glow.PNG
+Sprites/Hospital Bathroom/hospital_bathroom_commode_glow.PNG.import
+Sprites/Hospital Bathroom/hospital_bathroom_door.PNG
+Sprites/Hospital Bathroom/hospital_bathroom_door.PNG.import
+Sprites/Hospital Bathroom/hospital_bathroom_mirror.png
+Sprites/Hospital Bathroom/hospital_bathroom_mirror.png.import
+Sprites/Hospital Bathroom/hospital_bathroom_sink.png
+Sprites/Hospital Bathroom/hospital_bathroom_sink.png.import
+Sprites/Hospital Bathroom/hospital_bathroom_sink_glow.png
+Sprites/Hospital Bathroom/hospital_bathroom_sink_glow.png.import
+Sprites/Hospital Bathroom/hospital_bathroom_toilet_flush.png
+Sprites/Hospital Bathroom/hospital_bathroom_toilet_flush.png.import
+Sprites/Hospital Bathroom/hospital_bathroom_toilet_paper.PNG
+Sprites/Hospital Bathroom/hospital_bathroom_toilet_paper.PNG.import
+Sprites/Hospital Room/Medicine dispenser yellow_0001.png
+Sprites/Hospital Room/Medicine dispenser yellow_0001.png.import
+Sprites/Hospital Room/hospital_room_door.png
+Sprites/Hospital Room/hospital_room_door.png.import
+Sprites/Hospital Room/mcbucket_bandaid.png
+Sprites/Hospital Room/mcbucket_bandaid.png.import
+Sprites/Hospital Room/medicine_cabinet.png
+Sprites/Hospital Room/medicine_cabinet.png.import
+Sprites/Hospital Room/medicine_cabinet_glow.png
+Sprites/Hospital Room/medicine_cabinet_glow.png.import
+Sprites/Hospital Room/memory_box.png
+Sprites/Hospital Room/memory_box.png.import
+Sprites/Hospital Room/washroom_sign.png
+Sprites/Hospital Room/washroom_sign.png.import
+Sprites/characters/aida/aida_base.png
+Sprites/characters/aida/aida_base.png.import
+Sprites/characters/aida/aida_concerned.png
+Sprites/characters/aida/aida_concerned.png.import
+Sprites/characters/aida/aida_pointing_up.png
+Sprites/characters/aida/aida_pointing_up.png.import
+Sprites/characters/aida/aida_smiling.png
+Sprites/characters/aida/aida_smiling.png.import
+Sprites/characters/aida/aida_surprised.png
+Sprites/characters/aida/aida_surprised.png.import
+Sprites/characters/aida/aida_thinking.png
+Sprites/characters/aida/aida_thinking.png.import
+Sprites/characters/layla/layla_angry_1.png
+Sprites/characters/layla/layla_angry_1.png.import
+Sprites/characters/layla/layla_angry_2.png
+Sprites/characters/layla/layla_angry_2.png.import
+Sprites/characters/layla/layla_base.png
+Sprites/characters/layla/layla_base.png.import
+Sprites/characters/layla/layla_pout.png
+Sprites/characters/layla/layla_pout.png.import
+Sprites/characters/layla/layla_proud.png
+Sprites/characters/layla/layla_proud.png.import
+Sprites/characters/layla/layla_victory.png
+Sprites/characters/layla/layla_victory.png.import
+Sprites/characters/lewgend/lewgend_arms_open.png
+Sprites/characters/lewgend/lewgend_arms_open.png.import
+Sprites/characters/lewgend/lewgend_determined.png
+Sprites/characters/lewgend/lewgend_determined.png.import
+Sprites/characters/lewgend/lewgend_embarrassed.png
+Sprites/characters/lewgend/lewgend_embarrassed.png.import
+Sprites/characters/lewgend/lewgend_explaining_1.png
+Sprites/characters/lewgend/lewgend_explaining_1.png.import
+Sprites/characters/lewgend/lewgend_explaining_2.png
+Sprites/characters/lewgend/lewgend_explaining_2.png.import
+Sprites/characters/lewgend/lewgend_explaining_3.png
+Sprites/characters/lewgend/lewgend_explaining_3.png.import
+Sprites/characters/lewgend/lewgend_hand_on_chest.png
+Sprites/characters/lewgend/lewgend_hand_on_chest.png.import
+Sprites/characters/lewgend/lewgend_waving.png
+Sprites/characters/lewgend/lewgend_waving.png.import
+Sprites/characters/malcolm/sm1_sensei_blush.png
+Sprites/characters/malcolm/sm1_sensei_blush.png.import
+Sprites/characters/mcbucket/mcbucket_default.png
+Sprites/characters/mcbucket/mcbucket_default.png.import
+Sprites/characters/mcbucket/mcbucket_high_base.png
+Sprites/characters/mcbucket/mcbucket_high_base.png.import
+Sprites/characters/mcbucket/mcbucket_high_explaining_eyes_closed_mouth_closed.png
+Sprites/characters/mcbucket/mcbucket_high_explaining_eyes_closed_mouth_closed.png.import
+Sprites/characters/mcbucket/mcbucket_high_explaining_eyes_closed_mouth_open.png
+Sprites/characters/mcbucket/mcbucket_high_explaining_eyes_closed_mouth_open.png.import
+Sprites/characters/mcbucket/mcbucket_high_explaining_eyes_open_mouth_closed.png
+Sprites/characters/mcbucket/mcbucket_high_explaining_eyes_open_mouth_closed.png.import
+Sprites/characters/mcbucket/mcbucket_high_hand_up.png
+Sprites/characters/mcbucket/mcbucket_high_hand_up.png.import
+Sprites/characters/mcbucket/mcbucket_high_happy.png
+Sprites/characters/mcbucket/mcbucket_high_happy.png.import
+Sprites/characters/mcbucket/mcbucket_invigirol_base.png
+Sprites/characters/mcbucket/mcbucket_invigirol_base.png.import
+Sprites/characters/mcbucket/mcbucket_ree.png
+Sprites/characters/mcbucket/mcbucket_ree.png.import
+Sprites/characters/sergey/sergey_base.png
+Sprites/characters/sergey/sergey_base.png.import
+Sprites/characters/sergey/sergey_eyes_closed.png
+Sprites/characters/sergey/sergey_eyes_closed.png.import
+Sprites/characters/sergey/sergey_frown.png
+Sprites/characters/sergey/sergey_frown.png.import
+Sprites/characters/sergey/sergey_frown_look_away.png
+Sprites/characters/sergey/sergey_frown_look_away.png.import
+Sprites/characters/sergey/sergey_hand_behind_head.png
+Sprites/characters/sergey/sergey_hand_behind_head.png.import
+Sprites/characters/sergey/sergey_hand_up.png
+Sprites/characters/sergey/sergey_hand_up.png.import
+Sprites/characters/sergey/sergey_neutral_mouth_open.png
+Sprites/characters/sergey/sergey_neutral_mouth_open.png.import
+Sprites/dialogue sprites/aida_dialogue_sprite.PNG
+Sprites/dialogue sprites/aida_dialogue_sprite.PNG.import
+Sprites/dialogue sprites/layla_dialogue_sprite.png
+Sprites/dialogue sprites/layla_dialogue_sprite.png.import
+Sprites/dialogue sprites/lewgend_dialogue_sprite.png
+Sprites/dialogue sprites/lewgend_dialogue_sprite.png.import
+Sprites/dialogue sprites/mcbucket_dialogue_sprite.PNG
+Sprites/dialogue sprites/mcbucket_dialogue_sprite.PNG.import
+Sprites/dialogue sprites/protag_dialogue_sprite.png
+Sprites/dialogue sprites/protag_dialogue_sprite.png.import
+Sprites/dialogue sprites/sergey_dialogue_sprite.png
+Sprites/dialogue sprites/sergey_dialogue_sprite.png.import
+Sprites/dialogue sprites/toilet_dialogue_sprite.png
+Sprites/dialogue sprites/toilet_dialogue_sprite.png.import
+Sprites/inventory_items/cannathink_icon.png
+Sprites/inventory_items/cannathink_icon.png.import
+Sprites/inventory_items/invigirol_icon.png
+Sprites/inventory_items/invigirol_icon.png.import
+Sprites/inventory_items/techpass_inventory_item.png
+Sprites/inventory_items/techpass_inventory_item.png.import
+Sprites/inventory_items/toilet_paper_inventory_sprite.png
+Sprites/inventory_items/toilet_paper_inventory_sprite.png.import
+Sprites/inventory_items/zanopram_icon.png
+Sprites/inventory_items/zanopram_icon.png.import
+Themes/Game_UI_Theme.tres
+Themes/general_theme.tres
+Themes/medfinance_theme.tres
+Themes/verb_and_inventory_theme.tres
+addons/dialogue_manager/DialogueManager.cs
+addons/dialogue_manager/DialogueManager.cs.uid
+addons/dialogue_manager/LICENSE
+addons/dialogue_manager/assets/banner.png
+addons/dialogue_manager/assets/banner.png.import
+addons/dialogue_manager/assets/icon.svg
+addons/dialogue_manager/assets/icon.svg.import
+addons/dialogue_manager/assets/responses_menu.svg
+addons/dialogue_manager/assets/responses_menu.svg.import
+addons/dialogue_manager/assets/update.svg
+addons/dialogue_manager/assets/update.svg.import
+addons/dialogue_manager/compiler/compilation.gd
+addons/dialogue_manager/compiler/compilation.gd.uid
+addons/dialogue_manager/compiler/compiled_line.gd
+addons/dialogue_manager/compiler/compiled_line.gd.uid
+addons/dialogue_manager/compiler/compiler.gd
+addons/dialogue_manager/compiler/compiler.gd.uid
+addons/dialogue_manager/compiler/compiler_regex.gd
+addons/dialogue_manager/compiler/compiler_regex.gd.uid
+addons/dialogue_manager/compiler/compiler_result.gd
+addons/dialogue_manager/compiler/compiler_result.gd.uid
+addons/dialogue_manager/compiler/expression_parser.gd
+addons/dialogue_manager/compiler/expression_parser.gd.uid
+addons/dialogue_manager/compiler/resolved_goto_data.gd
+addons/dialogue_manager/compiler/resolved_goto_data.gd.uid
+addons/dialogue_manager/compiler/resolved_line_data.gd
+addons/dialogue_manager/compiler/resolved_line_data.gd.uid
+addons/dialogue_manager/compiler/resolved_tag_data.gd
+addons/dialogue_manager/compiler/resolved_tag_data.gd.uid
+addons/dialogue_manager/compiler/tree_line.gd
+addons/dialogue_manager/compiler/tree_line.gd.uid
+addons/dialogue_manager/components/code_edit.gd
+addons/dialogue_manager/components/code_edit.gd.uid
+addons/dialogue_manager/components/code_edit.tscn
+addons/dialogue_manager/components/code_edit_syntax_highlighter.gd
+addons/dialogue_manager/components/code_edit_syntax_highlighter.gd.uid
+addons/dialogue_manager/components/download_update_panel.gd
+addons/dialogue_manager/components/download_update_panel.gd.uid
+addons/dialogue_manager/components/download_update_panel.tscn
+addons/dialogue_manager/components/editor_property/editor_property.gd
+addons/dialogue_manager/components/editor_property/editor_property.gd.uid
+addons/dialogue_manager/components/editor_property/editor_property_control.gd
+addons/dialogue_manager/components/editor_property/editor_property_control.gd.uid
+addons/dialogue_manager/components/editor_property/editor_property_control.tscn
+addons/dialogue_manager/components/editor_property/resource_button.gd
+addons/dialogue_manager/components/editor_property/resource_button.gd.uid
+addons/dialogue_manager/components/editor_property/resource_button.tscn
+addons/dialogue_manager/components/errors_panel.gd
+addons/dialogue_manager/components/errors_panel.gd.uid
+addons/dialogue_manager/components/errors_panel.tscn
+addons/dialogue_manager/components/files_list.gd
+addons/dialogue_manager/components/files_list.gd.uid
+addons/dialogue_manager/components/files_list.tscn
+addons/dialogue_manager/components/search_and_replace.gd
+addons/dialogue_manager/components/search_and_replace.gd.uid
+addons/dialogue_manager/components/search_and_replace.tscn
+addons/dialogue_manager/components/title_list.gd
+addons/dialogue_manager/components/title_list.gd.uid
+addons/dialogue_manager/components/title_list.tscn
+addons/dialogue_manager/components/update_button.gd
+addons/dialogue_manager/components/update_button.gd.uid
+addons/dialogue_manager/components/update_button.tscn
+addons/dialogue_manager/constants.gd
+addons/dialogue_manager/constants.gd.uid
+addons/dialogue_manager/dialogue_label.gd
+addons/dialogue_manager/dialogue_label.gd.uid
+addons/dialogue_manager/dialogue_label.tscn
+addons/dialogue_manager/dialogue_line.gd
+addons/dialogue_manager/dialogue_line.gd.uid
+addons/dialogue_manager/dialogue_manager.gd
+addons/dialogue_manager/dialogue_manager.gd.uid
+addons/dialogue_manager/dialogue_processor.gd
+addons/dialogue_manager/dialogue_processor.gd.uid
+addons/dialogue_manager/dialogue_resource.gd
+addons/dialogue_manager/dialogue_resource.gd.uid
+addons/dialogue_manager/dialogue_response.gd
+addons/dialogue_manager/dialogue_response.gd.uid
+addons/dialogue_manager/dialogue_responses_menu.gd
+addons/dialogue_manager/dialogue_responses_menu.gd.uid
+addons/dialogue_manager/editor_translation_parser_plugin.gd
+addons/dialogue_manager/editor_translation_parser_plugin.gd.uid
+addons/dialogue_manager/example_balloon/ExampleBalloon.cs
+addons/dialogue_manager/example_balloon/ExampleBalloon.cs.uid
+addons/dialogue_manager/example_balloon/example_balloon.gd
+addons/dialogue_manager/example_balloon/example_balloon.gd.uid
+addons/dialogue_manager/example_balloon/example_balloon.tscn
+addons/dialogue_manager/example_balloon/small_example_balloon.tscn
+addons/dialogue_manager/export_plugin.gd
+addons/dialogue_manager/export_plugin.gd.uid
+addons/dialogue_manager/import_plugin.gd
+addons/dialogue_manager/import_plugin.gd.uid
+addons/dialogue_manager/inspector_plugin.gd
+addons/dialogue_manager/inspector_plugin.gd.uid
+addons/dialogue_manager/l10n/en.po
+addons/dialogue_manager/l10n/es.po
+addons/dialogue_manager/l10n/translations.pot
+addons/dialogue_manager/l10n/uk.po
+addons/dialogue_manager/l10n/zh.po
+addons/dialogue_manager/l10n/zh_TW.po
+addons/dialogue_manager/plugin.cfg
+addons/dialogue_manager/plugin.cfg.uid
+addons/dialogue_manager/plugin.gd
+addons/dialogue_manager/plugin.gd.uid
+addons/dialogue_manager/settings.gd
+addons/dialogue_manager/settings.gd.uid
+addons/dialogue_manager/test_scene.gd
+addons/dialogue_manager/test_scene.gd.uid
+addons/dialogue_manager/test_scene.tscn
+addons/dialogue_manager/utilities/builtins.gd
+addons/dialogue_manager/utilities/builtins.gd.uid
+addons/dialogue_manager/utilities/dialogue_cache.gd
+addons/dialogue_manager/utilities/dialogue_cache.gd.uid
+addons/dialogue_manager/utilities/translations.gd
+addons/dialogue_manager/utilities/translations.gd.uid
+addons/dialogue_manager/utilities/waiter.gd
+addons/dialogue_manager/utilities/waiter.gd.uid
+addons/dialogue_manager/views/find_in_dialogue_view.gd
+addons/dialogue_manager/views/find_in_dialogue_view.gd.uid
+addons/dialogue_manager/views/find_in_dialogue_view.tscn
+addons/dialogue_manager/views/main_view.gd
+addons/dialogue_manager/views/main_view.gd.uid
+addons/dialogue_manager/views/main_view.tscn
+autoload/ConversationEventManager.gd
+autoload/ConversationEventManager.gd.uid
+autoload/FallbackManager.gd
+autoload/FallbackManager.gd.uid
+autoload/GameManager.gd
+autoload/GameManager.gd.uid
+autoload/GameManager.tscn
+autoload/NotificationManager.gd
+autoload/NotificationManager.gd.uid
+autoload/NotificationManager.tscn
+autoload/SoundManager.gd
+autoload/SoundManager.gd.uid
+autoload/dialogue_history.gd
+autoload/dialogue_history.gd.uid
+autoload/events.gd
+autoload/events.gd.uid
+autoload/flags.gd
+autoload/flags.gd.uid
+autoload/inventory.gd
+autoload/inventory.gd.uid
+autoload/settings.gd
+autoload/settings.gd.uid
+characters/CharacterProfile.gd
+characters/CharacterProfile.gd.uid
+characters/Sergey.tscn
+characters/WaypointMovement.gd
+characters/WaypointMovement.gd.uid
+characters/aida.gd
+characters/aida.gd.uid
+characters/aida.tres
+characters/aida.tscn
+characters/dread_entity.gd
+characters/dread_entity.gd.uid
+characters/dread_entity.tscn
+characters/hope_entity.gd
+characters/hope_entity.gd.uid
+characters/hope_entity.tscn
+characters/layla_profile.tres
+characters/lewgend_profile.tres
+characters/malcolm.tres
+characters/mcbucket.gd
+characters/mcbucket.gd.uid
+characters/mcbucket.tres
+characters/mcbucket.tscn
+characters/npc.gd
+characters/npc.gd.uid
+characters/npc.tscn
+characters/player.gd
+characters/player.gd.uid
+characters/player.tscn
+characters/sergey.gd
+characters/sergey.gd.uid
+characters/sergey.tres
+conversation/AdvancedConversationOverlay.gd
+conversation/AdvancedConversationOverlay.gd.uid
+conversation/AdvancedConversationOverlay.tscn
+conversation/CharacterConversationOverlay.tscn
+conversation/MedCabinetzoomin.tscn
+conversation/MedicineCabinetZoom.gd
+conversation/MedicineCabinetZoom.gd.uid
+conversation/MemoryBoxOverlay.gd
+conversation/MemoryBoxOverlay.gd.uid
+conversation/MemoryBoxOverlay.tscn
+conversation/ObjectZoomOverlay.tscn
+conversation/aida_advanced_overlay.tscn
+conversation/balloon.gd
+conversation/balloon.gd.uid
+conversation/character_conversation_overlay.gd
+conversation/character_conversation_overlay.gd.uid
+conversation/character_conversation_scene.tscn
+conversation/conversation_backgrounds.tres
+conversation/conversationballoon.gd
+conversation/conversationballoon.gd.uid
+conversation/conversationballoon.tscn
+conversation/mcbucket_advanced_overlay.tscn
+conversation/mcbucket_thinking_conversation.tscn
+conversation/memory_box.tscn
+conversation/object_zoom_overlay.gd
+conversation/object_zoom_overlay.gd.uid
+conversation/sergey_advanced_overlay.tscn
+conversation/sergey_conversation_1.tscn
+conversation/sergey_conversation_2.tscn
+data/ExplanationData.tres
+data/InteractionResponse.gd
+data/InteractionResponse.gd.uid
+data/ItemData.gd
+data/ItemData.gd.uid
+data/JournalPageData.gd
+data/JournalPageData.gd.uid
+data/MemoryChapterData.gd
+data/MemoryChapterData.gd.uid
+data/MemoryGroupData.gd
+data/MemoryGroupData.gd.uid
+data/VerbData.gd
+data/VerbData.gd.uid
+data/cannathink.tres
+data/chapter_university_1.tres
+data/chapter_university_2.tres
+data/chapter_university_3.tres
+data/chapter_university_4.tres
+data/chapter_university_5.tres
+data/chapter_university_6.tres
+data/examine_verb.tres
+data/explanation_data.gd
+data/explanation_data.gd.uid
+data/flash_verb.tres
+data/give_verb.tres
+data/hospital_toilet_paper.tres
+data/invigirol.tres
+data/location_university.tres
+data/memeoryboxleftandrightpanel.tres
+data/memorybox.tres
+data/memoryboxbackbutton.tres
+data/pick_up_verb.tres
+data/talk_to_verb.tres
+data/techpass.tres
+data/think_verb.tres
+data/use_verb.tres
+data/zanopram.tres
+default_bus_layout.tres
+dialogue/AIda.dialogue
+dialogue/AIda.dialogue.import
+dialogue/aida_dialogue_hub.dialogue
+dialogue/aida_dialogue_hub.dialogue.import
+dialogue/aida_toilet_assistance.dialogue
+dialogue/aida_toilet_assistance.dialogue.import
+dialogue/alyssa_marketing.dialogue
+dialogue/alyssa_marketing.dialogue.import
+dialogue/dev_cta.dialogue
+dialogue/dev_cta.dialogue.import
+dialogue/examinables.dialogue
+dialogue/examinables.dialogue.import
+dialogue/flash_dialogue.dialogue
+dialogue/flash_dialogue.dialogue.import
+dialogue/form_related_dialogue.dialogue
+dialogue/form_related_dialogue.dialogue.import
+dialogue/generic_lines.dialogue
+dialogue/generic_lines.dialogue.import
+dialogue/giveables.dialogue
+dialogue/giveables.dialogue.import
+dialogue/hints.dialogue
+dialogue/hints.dialogue.import
+dialogue/hints_adventure.dialogue
+dialogue/hints_adventure.dialogue.import
+dialogue/intro.dialogue
+dialogue/intro.dialogue.import
+dialogue/mcbucket_give_tp.dialogue
+dialogue/mcbucket_give_tp.dialogue.import
+dialogue/mcbucket_thinking_dialogue.dialogue
+dialogue/mcbucket_thinking_dialogue.dialogue.import
+dialogue/mcbucket_unified.dialogue
+dialogue/mcbucket_unified.dialogue.import
+dialogue/npcs/faye.dialogue
+dialogue/npcs/faye.dialogue.import
+dialogue/sergey_dialogue_1.dialogue
+dialogue/sergey_dialogue_1.dialogue.import
+dialogue/sergey_dialogue_2.dialogue
+dialogue/sergey_dialogue_2.dialogue.import
+dialogue/talkto.dialogue
+dialogue/talkto.dialogue.import
+dialogue/testdialogue.dialogue
+dialogue/testdialogue.dialogue.import
+dialogue/unflashables.dialogue
+dialogue/unflashables.dialogue.import
+dialogue/unpickables.dialogue
+dialogue/unpickables.dialogue.import
+dialogue/untalkables.dialogue
+dialogue/untalkables.dialogue.import
+dialogue/unusables.dialogue
+dialogue/unusables.dialogue.import
+dialogue/use_item_accompanying_dialogue.dialogue
+dialogue/use_item_accompanying_dialogue.dialogue.import
+exit_sign_visual.tscn
+export_presets.cfg
+exported_logo.png
+exported_logo.png.import
+generate_pdf.py
+hiragino-kaku-gothic-std-w8.otf
+hiragino-kaku-gothic-std-w8.otf.import
+hospital bed.png
+hospital bed.png.import
+hospital door.png
+hospital door.png.import
+hospital_bathroom_door.tscn
+hospital_door.tscn
+icon.svg
+icon.svg.import
+image0(6).png
+image0(6).png.import
+insurance form bg.png
+insurance form bg.png.import
+interactions/action.gd
+interactions/action.gd.uid
+interactions/actions/AddItemAction.gd
+interactions/actions/AddItemAction.gd.uid
+interactions/actions/CallMethodAction.gd
+interactions/actions/CallMethodAction.gd.uid
+interactions/actions/DefaultExamineResponse.tres
+interactions/actions/DestroyAction.gd
+interactions/actions/DestroyAction.gd.uid
+interactions/actions/OpenMemoryBoxAction.gd
+interactions/actions/OpenMemoryBoxAction.gd.uid
+interactions/actions/OpenMemoryBoxAction.tres
+interactions/actions/OpenZoomViewAction.gd
+interactions/actions/OpenZoomViewAction.gd.uid
+interactions/actions/PlaySoundAction.gd
+interactions/actions/PlaySoundAction.gd.uid
+interactions/actions/PlayerFlashAction.gd
+interactions/actions/PlayerFlashAction.gd.uid
+interactions/actions/RemoveItemAction.gd
+interactions/actions/RemoveItemAction.gd.uid
+interactions/actions/SayLineAction.gd
+interactions/actions/SayLineAction.gd.uid
+interactions/actions/SetLevelFlagAction.gd
+interactions/actions/SetLevelFlagAction.gd.uid
+interactions/actions/SetLevelFlagAction.tres
+interactions/actions/ShowCustomDialogueAction.gd
+interactions/actions/ShowCustomDialogueAction.gd.uid
+interactions/actions/ShowCustomDialogueAction.tres
+interactions/actions/ShowDialogueActiont.gd
+interactions/actions/ShowDialogueActiont.gd.uid
+interactions/actions/StartConversationAction.gd
+interactions/actions/StartConversationAction.gd.uid
+interactions/actions/TeleportAction.gd
+interactions/actions/TeleportAction.gd.uid
+interactions/actions/TeleportAction.tres
+interactions/actions/TriggerCutsceneAction.gd
+interactions/actions/TriggerCutsceneAction.gd.uid
+interactions/actions/TriggerCutsceneAction.tres
+interactions/actions/UniversalFlashAction.gd
+interactions/actions/UniversalFlashAction.gd.uid
+interactions/actions/interactable_outline.gdshader
+interactions/actions/interactable_outline.gdshader.uid
+interactions/actions/interactable_outline.tres
+interactions/actions/sneak_pills_action.tres
+interactions/interactable.gd
+interactions/interactable.gd.uid
+interactions/interactable.tscn
+invigirol.png
+invigirol.png.import
+iris_wipe.gdshader
+iris_wipe.gdshader.uid
+key.png
+key.png.import
+level_state_manager.tscn
+lewgend_arms_open.png
+lewgend_arms_open.png.import
+logo_exporter.tscn
+main.tscn
+main.tscn5296345394.tmp
+main.tscn8249773746.tmp
+mcbucketRee.PNG
+mcbucketRee.PNG.import
+med dispenser.png
+med dispenser.png.import
+medcabinetzoomed.png
+medcabinetzoomed.png.import
+memorybox.png
+memorybox.png.import
+old_paper.jpg
+old_paper.jpg.import
+project.godot
+repomix-output.xml
+table.png
+table.png.import
+television_screen.gdshader
+television_screen.gdshader.uid
+test_action.tres
+test_character_portrait.jpg
+test_character_portrait.jpg.import
+test_sprite_frames.tres
+testvideoplayer.gd
+testvideoplayer.gd.uid
+tubelight.png
+tubelight.png.import
+tv_sprite.png
+tv_sprite.png.import
+ui/ChapterButton.gd
+ui/ChapterButton.gd.uid
+ui/ChapterButton.tscn
+ui/DateInputWidget.gd
+ui/DateInputWidget.gd.uid
+ui/DateInputWidget.tscn
+ui/DigitSpinner.gd
+ui/DigitSpinner.gd.uid
+ui/DigitSpinner.tscn
+ui/InventoryUI.gd
+ui/InventoryUI.gd.uid
+ui/InventoryUI.tscn
+ui/LocationRow.gd
+ui/LocationRow.gd.uid
+ui/LocationRow.tscn
+ui/LogoSplash.gd
+ui/LogoSplash.gd.uid
+ui/MainMenu.gd
+ui/MainMenu.gd.uid
+ui/Notification.gd
+ui/Notification.gd.uid
+ui/Notification.tscn
+ui/TransitionLayer.gd
+ui/TransitionLayer.gd.uid
+ui/TransitionLayer.tscn
+ui/UI_Interactable.tscn
+ui/UI_Invigirol.tscn
+ui/UI_Zanopram.tscn
+ui/UI_cannathink.tscn
+ui/VerbUI.gd
+ui/VerbUI.gd.uid
+ui/VerbUI.tscn
+ui/black_screen_overlay.gd
+ui/black_screen_overlay.gd.uid
+ui/black_screen_overlay.tscn
+ui/chapter_button.tres
+ui/controls_menu.gd
+ui/controls_menu.gd.uid
+ui/controls_menu.tscn
+ui/credits_menu.gd
+ui/credits_menu.gd.uid
+ui/credits_menu.tscn
+ui/custom_cursor.gd
+ui/custom_cursor.gd.uid
+ui/custom_cursor.tscn
+ui/custom_cursor_control.gd
+ui/custom_cursor_control.gd.uid
+ui/dialogue_history_ui.gd
+ui/dialogue_history_ui.gd.uid
+ui/dialogue_history_ui.tscn
+ui/difficulty_select_screen.gd
+ui/difficulty_select_screen.gd.uid
+ui/difficulty_select_screen.tscn
+ui/explanation_layer.gd
+ui/explanation_layer.gd.uid
+ui/explanation_layer.gdshader
+ui/explanation_layer.gdshader.uid
+ui/explanation_layer.tscn
+ui/game_over.gd
+ui/game_over.gd.uid
+ui/game_over.tscn
+ui/input_blocker.gd
+ui/input_blocker.gd.uid
+ui/insurance_form.gd
+ui/insurance_form.gd.uid
+ui/insurance_form.tscn
+ui/insurance_form_button_ui.gd
+ui/insurance_form_button_ui.gd.uid
+ui/insurance_form_button_ui.tscn
+ui/insurance_form_field_font.tres
+ui/journal_button_ui.gd
+ui/journal_button_ui.gd.uid
+ui/journal_button_ui.tscn
+ui/journal_overlay.gd
+ui/journal_overlay.gd.uid
+ui/journal_overlay.tscn
+ui/loading_screen.gd
+ui/loading_screen.gd.uid
+ui/loading_screen.tscn
+ui/logo_cursor.gd
+ui/logo_cursor.gd.uid
+ui/logo_splash.tscn
+ui/main_menu.tscn
+ui/patreon_world_button.gd
+ui/patreon_world_button.gd.uid
+ui/pause_menu_ui.gd
+ui/pause_menu_ui.gd.uid
+ui/pause_menu_ui.tscn
+ui/settings_menu.gd
+ui/settings_menu.gd.uid
+ui/settings_menu.tscn
+ui/walk_indicator.gd
+ui/walk_indicator.gd.uid
+ui/walk_indicator.tscn
+ui_interactable.gd
+ui_interactable.gd.uid
+void
+washroom_sign_visual.tscn
+zanopram_map.png
+zanopram_map.png.import

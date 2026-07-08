@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cy1g0xpb3u0e2" path="res://conversation/character_conversation_overlay.gd" id="1_g3y2i"]
 [ext_resource type="Resource" path="res://mcbucket_cannathink.dialogue" id="2_g3y2i"]
-[ext_resource type="Texture2D" path="res://sergey.PNG" id="3_awfyy"]
+[ext_resource type="Texture2D" path="res://Sprites/dialogue sprites/sergey_dialogue_sprite.png" id="3_awfyy"]
 [ext_resource type="Texture2D" path="res://Protag.png" id="4_6hk7o"]
 [ext_resource type="Texture2D" uid="uid://bnw6il4t3eix7" path="res://Backgrounds/McBucket/high/mcbucket_high_base.png" id="5_g3y2i"]
 [ext_resource type="Material" uid="uid://dek82a5tuykas" path="res://Shaders/grayscale_material.tres" id="6_gray"]
