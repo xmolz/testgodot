@@ -499,18 +499,10 @@ func change_game_state(new_state: GameState):
 
 			# 3. Restore Main UI Visibility
 			if current_interaction_state == InteractionState.WORLD:
-				if is_instance_valid(verb_ui): verb_ui.visible = true
-				if is_instance_valid(inventory_ui): inventory_ui.visible = true
-				if is_instance_valid(journal_button_ui): journal_button_ui.visible = true
+				_set_gameplay_ui_visible(true)
 				if is_instance_valid(pause_menu_ui): pause_menu_ui.menu_panel.show()
-				if is_instance_valid(insurance_form_button_ui):
-					var should_be_visible = Flags.get_level_flag("insurance_button_unlocked")
-					insurance_form_button_ui.visible = should_be_visible
 			else:
-				if is_instance_valid(verb_ui): verb_ui.visible = false
-				if is_instance_valid(inventory_ui): inventory_ui.visible = false
-				if is_instance_valid(journal_button_ui): journal_button_ui.visible = false
-				if is_instance_valid(insurance_form_button_ui): insurance_form_button_ui.visible = false
+				_set_gameplay_ui_visible(false)
 				if is_instance_valid(pause_menu_ui): pause_menu_ui.menu_panel.hide()
 
 			# 5. Unblock Input (Remove the gray blocker)
@@ -534,10 +526,7 @@ func change_game_state(new_state: GameState):
 			
 		GameState.CUTSCENE:
 			# 1. Hide the UI
-			if is_instance_valid(verb_ui): verb_ui.visible = false
-			if is_instance_valid(inventory_ui): inventory_ui.visible = false
-			if is_instance_valid(insurance_form_button_ui): insurance_form_button_ui.visible = false
-			if is_instance_valid(journal_button_ui): journal_button_ui.visible = false # <--- ADD THIS LINE
+			_set_gameplay_ui_visible(false)
 			if is_instance_valid(pause_menu_ui): pause_menu_ui.menu_panel.hide()
 			
 			# 2. Block Input (Clicking on things in the world)
@@ -914,16 +903,7 @@ func _on_dialogue_started(_resource: Resource):
 
 	# Hide the main UI whenever any dialogue line appears.
 	# This handles both in-world dialogue and character conversations.
-	if is_instance_valid(verb_ui):
-		verb_ui.visible = false
-	if is_instance_valid(inventory_ui):
-		inventory_ui.visible = false
-	if is_instance_valid(journal_button_ui):
-		journal_button_ui.visible = false
-	if is_instance_valid(insurance_form_button_ui):
-		insurance_form_button_ui.visible = false
-	if is_instance_valid(patreon_world_ui):
-		patreon_world_ui.visible = false
+	_set_gameplay_ui_visible(false)
 
 
 func _on_dialogue_ended_for_object_dialogue(_resource: Resource):
@@ -934,17 +914,7 @@ func _on_dialogue_ended_for_object_dialogue(_resource: Resource):
 	# Restore the main UI as long as we are NOT in a full-screen conversation.
 	# This now correctly handles both the WORLD and the ZOOM_VIEW states.
 	if current_interaction_state != InteractionState.CONVERSATION and current_game_state == GameState.IN_GAME_PLAY:
-		if is_instance_valid(verb_ui):
-			verb_ui.visible = true
-		if is_instance_valid(inventory_ui):
-			inventory_ui.visible = true
-		if is_instance_valid(journal_button_ui):
-			journal_button_ui.visible = true
-		if is_instance_valid(insurance_form_button_ui):
-			var should_be_visible = Flags.get_level_flag("insurance_button_unlocked")
-			insurance_form_button_ui.visible = should_be_visible
-		if is_instance_valid(patreon_world_ui):
-			patreon_world_ui.visible = Flags.get_level_flag("dev_cta_completed")
+		_set_gameplay_ui_visible(true)
 
 	_complete_interaction_cycle()
 
@@ -1022,20 +992,21 @@ func _complete_interaction_cycle():
 		if current_interaction_state == InteractionState.WORLD and current_game_state == GameState.IN_GAME_PLAY:
 			player_node.set_can_move(true)
 
-	# Restore UI visibility (Verbs, Inventory, Journal, Form)
+	# Restore UI visibility
 	if current_interaction_state != InteractionState.CONVERSATION and current_game_state == GameState.IN_GAME_PLAY:
-		if is_instance_valid(verb_ui):
-			verb_ui.visible = true
-		if is_instance_valid(inventory_ui):
-			inventory_ui.visible = true
-		if is_instance_valid(journal_button_ui):
-			journal_button_ui.visible = true
-		if is_instance_valid(insurance_form_button_ui):
-			var should_be_visible = Flags.get_level_flag("insurance_button_unlocked")
-			insurance_form_button_ui.visible = should_be_visible
-	# --- FIX END ---
+		_set_gameplay_ui_visible(true)
 
 	update_sentence_line_ui()
+
+
+func _set_gameplay_ui_visible(show: bool):
+	if is_instance_valid(verb_ui): verb_ui.visible = show
+	if is_instance_valid(inventory_ui): inventory_ui.visible = show
+	if is_instance_valid(journal_button_ui): journal_button_ui.visible = show
+	if is_instance_valid(insurance_form_button_ui):
+		insurance_form_button_ui.visible = Flags.get_level_flag("insurance_button_unlocked") if show else false
+	if is_instance_valid(patreon_world_ui):
+		patreon_world_ui.visible = Flags.get_level_flag("dev_cta_completed") if show else false
 
 
 func _activate_verb_lock(active: bool):
@@ -1185,11 +1156,7 @@ func enter_conversation_state():
 		input_blocker_layer.visible = true
 
 	# Hide the game UI
-	if is_instance_valid(verb_ui): verb_ui.visible = false
-	if is_instance_valid(inventory_ui): inventory_ui.visible = false
-	if is_instance_valid(insurance_form_button_ui): insurance_form_button_ui.visible = false
-	if is_instance_valid(journal_button_ui): journal_button_ui.visible = false # <--- ADD THIS LINE
-	if is_instance_valid(patreon_world_ui): patreon_world_ui.visible = false
+	_set_gameplay_ui_visible(false)
 	if is_instance_valid(pause_menu_ui): pause_menu_ui.menu_panel.hide()
 	Events.interaction_state_changed.emit(current_interaction_state)
 
@@ -1231,24 +1198,10 @@ func exit_to_world_state():
 
 	if is_instance_valid(input_blocker_layer):
 		input_blocker_layer.visible = false
-	if is_instance_valid(verb_ui):
-		verb_ui.layer = 1
-		verb_ui.visible = true
-	if is_instance_valid(inventory_ui):
-		inventory_ui.layer = 1
-		inventory_ui.visible = true
-	if is_instance_valid(journal_button_ui): # <--- ADD THIS BLOCK
-		journal_button_ui.visible = true     # <---
-	if is_instance_valid(patreon_world_ui):
-		patreon_world_ui.visible = Flags.get_level_flag("dev_cta_completed")
+	if is_instance_valid(verb_ui): verb_ui.layer = 1
+	if is_instance_valid(inventory_ui): inventory_ui.layer = 1
+	_set_gameplay_ui_visible(true)
 	if is_instance_valid(pause_menu_ui): pause_menu_ui.menu_panel.show()
-
-	# --- THIS IS THE FIX (APPLIED HERE AS WELL) ---
-	# Check the flag here too, so the button reappears after future conversations.
-	if is_instance_valid(insurance_form_button_ui):
-		var should_be_visible = Flags.get_level_flag("insurance_button_unlocked")
-		insurance_form_button_ui.visible = should_be_visible
-	# --- END OF FIX ---
 
 	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
 		player_node.set_can_move(true)
@@ -1434,22 +1387,8 @@ func exit_explanation_state():
 	get_tree().paused = false
 
 	# Show the main game UI
-	if is_instance_valid(verb_ui): verb_ui.visible = true
-	if is_instance_valid(inventory_ui): inventory_ui.visible = true
-	
-	# --- FIX: Ensure the Journal comes back after the explanation finishes ---
-	if is_instance_valid(journal_button_ui): journal_button_ui.visible = true
-	# -----------------------------------------------------------------------
-	if is_instance_valid(patreon_world_ui):
-		patreon_world_ui.visible = Flags.get_level_flag("dev_cta_completed")
+	_set_gameplay_ui_visible(true)
 	if is_instance_valid(pause_menu_ui): pause_menu_ui.menu_panel.show()
-
-	# --- THIS IS THE FIX ---
-	# Instead of just showing the button, check if it has been unlocked.
-	if is_instance_valid(insurance_form_button_ui):
-		var should_be_visible = Flags.get_level_flag("insurance_button_unlocked")
-		insurance_form_button_ui.visible = should_be_visible
-	# --- END OF FIX ---
 
 	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
 		player_node.set_can_move(true)
@@ -1617,10 +1556,7 @@ func _on_intro_conversation_finished(_dialogue_resource):
 	# --- PREVENT MOVEMENT & UI DURING DARKNESS ---
 	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
 		player_node.set_can_move(false)
-	if is_instance_valid(verb_ui): verb_ui.hide()
-	if is_instance_valid(inventory_ui): inventory_ui.hide()
-	if is_instance_valid(journal_button_ui): journal_button_ui.hide()
-	if is_instance_valid(insurance_form_button_ui): insurance_form_button_ui.hide()
+	_set_gameplay_ui_visible(false)
 
 	if is_instance_valid(transition_layer):
 		# Wait 3 full seconds in the dark to let the player hear the environment
@@ -1632,11 +1568,7 @@ func _on_intro_conversation_finished(_dialogue_resource):
 	# --- RESTORE MOVEMENT & UI ---
 	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
 		player_node.set_can_move(true)
-	if is_instance_valid(verb_ui): verb_ui.show()
-	if is_instance_valid(inventory_ui): inventory_ui.show()
-	if is_instance_valid(journal_button_ui): journal_button_ui.show()
-	if is_instance_valid(insurance_form_button_ui):
-		insurance_form_button_ui.visible = Flags.get_level_flag("insurance_button_unlocked")
+	_set_gameplay_ui_visible(true)
 
 # --- JOURNAL FUNCTIONS ---
 func _on_journal_button_pressed():
