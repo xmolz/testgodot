@@ -8,7 +8,6 @@ const MAIN_MENU_SCENE_PATH = "res://main_menu.tscn"
 const INTRO_OVERLAY_SCENE_PATH = "res://AdvancedConversationOverlay.tscn"
 const INTRO_BACKGROUND_ANIMATIONS_PATH = "res://conversation_backgrounds.tres"
 const INTRO_INITIAL_ANIMATION_NAME = "float_loop"
-const FORM_DIALOGUE = preload("res://form_related_dialogue.dialogue")
 const INTRO_DIALOGUE = preload("res://dialogue/intro.dialogue")
 const GAME_OVER_SCENE = preload("res://game_over.tscn")
 const DIFFICULTY_SELECT_SCENE = preload("res://difficulty_select_screen.tscn")
@@ -1093,38 +1092,6 @@ func _find_and_assign_ui_nodes():
 		if not explanation_layer.explanation_finished.is_connected(exit_explanation_state):
 			explanation_layer.explanation_finished.connect(exit_explanation_state)
 		
-func _on_form_field_submitted(field_id: String, value):
-
-	match field_id:
-		"first_name":
-			var regex = RegEx.new()
-			regex.compile("(?i)^\\s*fiona\\s*$") 
-			
-			if regex.search(value):
-				if SoundManager: SoundManager.play_sfx("form_correct_input")
-				
-				if is_instance_valid(_insurance_form_instance):
-					_insurance_form_instance.lock_field("first_name", "FIONA")
-				
-				var balloon = DialogueManager.show_dialogue_balloon_scene(CONVERSATION_BALLOON_SCENE, FORM_DIALOGUE, "first_name_correct")
-				if is_instance_valid(balloon): balloon.process_mode = Node.PROCESS_MODE_ALWAYS
-				
-				Flags.set_game_flag("first_name_correct", true)
-				
-			else:
-				if SoundManager: SoundManager.play_sfx("form_incorrect_input")
-
-				var formatted_wrong_name = _format_wrong_name(value)
-				var temp_state = {"wrong_name": formatted_wrong_name}
-				var balloon = DialogueManager.show_dialogue_balloon_scene(CONVERSATION_BALLOON_SCENE, FORM_DIALOGUE, "first_name_incorrect", [temp_state])
-				if is_instance_valid(balloon): balloon.process_mode = Node.PROCESS_MODE_ALWAYS
-
-		_:
-			# Catch-all for unimplemented fields (Middle Name, Last Name, DOB, etc.)
-			if SoundManager: SoundManager.play_sfx("form_incorrect_input")
-			var balloon = DialogueManager.show_dialogue_balloon_scene(CONVERSATION_BALLOON_SCENE, FORM_DIALOGUE, "field_not_ready")
-			if is_instance_valid(balloon): balloon.process_mode = Node.PROCESS_MODE_ALWAYS
-
 # This function is called ONLY when the "Close Form" button is pressed.
 func _on_insurance_form_closed():
 
@@ -1191,10 +1158,7 @@ func _on_insurance_form_button_pressed():
 
 	_insurance_form_instance = INSURANCE_FORM_SCENE.instantiate()
 
-	_insurance_form_instance.field_submitted.connect(_on_form_field_submitted)
 	_insurance_form_instance.form_closed.connect(_on_insurance_form_closed)
-	
-	_insurance_form_instance.form_submit_requested.connect(_on_form_submit_requested)
 
 	get_tree().root.add_child(_insurance_form_instance)
 	_insurance_form_instance.show()
@@ -1368,42 +1332,6 @@ func _on_journal_closed():
 		
 	# Restore UI and unpause
 	exit_to_world_state()
-
-func _format_wrong_name(raw_name: String) -> String:
-	var clean = raw_name.strip_edges().to_lower()
-	if clean.length() == 0:
-		return "..." # If they just submitted a blank box
-	elif clean.length() <= 2:
-		# e.g., "bo" -> "Bo..."
-		return clean.substr(0, 1).to_upper() + clean.substr(1) + "..."
-	else:
-		# e.g., "joanna" -> "Jo...anna"
-		# First letter uppercase, second letter lowercase, dots, then the rest
-		var part1 = clean.substr(0, 1).to_upper() + clean.substr(1, 1)
-		var part2 = clean.substr(2)
-		return part1 + "..." + part2
-
-func _on_form_submit_requested():
-	# Check all 6 flags. If they haven't gotten one correct, it defaults to false.
-	var f_name = Flags.get_game_flag("first_name_correct")
-	var m_name = Flags.get_game_flag("middle_name_correct")
-	var l_name = Flags.get_game_flag("last_name_correct")
-	var dob = Flags.get_game_flag("dob_correct")
-	var phone = Flags.get_game_flag("phone_number_correct")
-	var account = Flags.get_game_flag("account_number_correct")
-	
-	if f_name and m_name and l_name and dob and phone and account:
-		# Success! (Likely unreachable in the demo, but good practice to include)
-		# Play a success sound
-		if SoundManager: SoundManager.play_sfx("form_correct_input")
-		var balloon = DialogueManager.show_dialogue_balloon_scene(CONVERSATION_BALLOON_SCENE, FORM_DIALOGUE, "complete_submit")
-		if is_instance_valid(balloon): balloon.process_mode = Node.PROCESS_MODE_ALWAYS
-	else:
-		# Incomplete/Incorrect (Demo behavior)
-		# Play an error sound
-		if SoundManager: SoundManager.play_sfx("form_incorrect_input")
-		var balloon = DialogueManager.show_dialogue_balloon_scene(CONVERSATION_BALLOON_SCENE, FORM_DIALOGUE, "incomplete_submit")
-		if is_instance_valid(balloon): balloon.process_mode = Node.PROCESS_MODE_ALWAYS
 
 func trigger_game_over(fade_duration: float = 1.5):
 	if _is_game_over_triggering:

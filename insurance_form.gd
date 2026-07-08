@@ -1,8 +1,9 @@
 extends CanvasLayer
 
-signal field_submitted(field_id: String, value)
 signal form_closed
-signal form_submit_requested
+
+const FORM_DIALOGUE = preload("res://form_related_dialogue.dialogue")
+const CONVERSATION_BALLOON_SCENE = preload("res://conversationballoon.tscn")
 
 # Inputs from LineEditContainer
 @onready var first_name_edit: LineEdit = $TabletFrame/Padding/ContentCanvas/LineEditContainer/FirstName_Edit
@@ -124,34 +125,27 @@ func _ready():
 # --- HANDLER FUNCTIONS FOR EACH "OKAY" BUTTON ---
 
 func _on_first_name_submit():
-	var value = first_name_edit.text
-	emit_signal("field_submitted", "first_name", value)
+	_handle_field_submitted("first_name", first_name_edit.text)
 
 func _on_middle_name_submit():
-	var value = middle_name_edit.text
-	emit_signal("field_submitted", "middle_name", value)
+	_handle_field_submitted("middle_name", middle_name_edit.text)
 
 func _on_last_name_submit():
-	var value = last_name_edit.text
-	emit_signal("field_submitted", "last_name", value)
+	_handle_field_submitted("last_name", last_name_edit.text)
 
 func _on_dob_submit():
-	var value = dob_edit.text
-	emit_signal("field_submitted", "date_of_birth", value)
+	_handle_field_submitted("date_of_birth", dob_edit.text)
 
 func _on_phone_number_submit():
-	var value = phone_number_edit.text
-	emit_signal("field_submitted", "phone_number", value)
+	_handle_field_submitted("phone_number", phone_number_edit.text)
 
 func _on_account_number_submit():
-	var value = account_number_edit.text
-	emit_signal("field_submitted", "account_number", value)
+	_handle_field_submitted("account_number", account_number_edit.text)
 
 # --- HANDLER FOR THE FINAL SUBMIT/CLOSE BUTTON ---
 
 func _on_submit_application_pressed():
-	# Tell the GameManager that we want to evaluate the whole form!
-	emit_signal("form_submit_requested")
+	_handle_submit_requested()
 
 func _on_submit_form():
 	# This function simply closes the form.
@@ -177,3 +171,61 @@ func lock_field(field_id: String, corrected_value: String):
 		#     last_name_edit.modulate = Color(0.5, 0.5, 0.5, 1.0)
 		#     last_name_button.disabled = true
 		#     last_name_button.modulate = Color(0.5, 0.5, 0.5, 1.0)
+
+# --- PUZZLE LOGIC (moved from GameManager) ---
+
+func _handle_field_submitted(field_id: String, value):
+	match field_id:
+		"first_name":
+			var regex = RegEx.new()
+			regex.compile("(?i)^\\s*fiona\\s*$")
+
+			if regex.search(value):
+				if SoundManager: SoundManager.play_sfx("form_correct_input")
+				lock_field("first_name", "FIONA")
+
+				var balloon = DialogueManager.show_dialogue_balloon_scene(CONVERSATION_BALLOON_SCENE, FORM_DIALOGUE, "first_name_correct")
+				if is_instance_valid(balloon): balloon.process_mode = Node.PROCESS_MODE_ALWAYS
+
+				Flags.set_game_flag("first_name_correct", true)
+
+			else:
+				if SoundManager: SoundManager.play_sfx("form_incorrect_input")
+
+				var formatted_wrong_name = _format_wrong_name(value)
+				var temp_state = {"wrong_name": formatted_wrong_name}
+				var balloon = DialogueManager.show_dialogue_balloon_scene(CONVERSATION_BALLOON_SCENE, FORM_DIALOGUE, "first_name_incorrect", [temp_state])
+				if is_instance_valid(balloon): balloon.process_mode = Node.PROCESS_MODE_ALWAYS
+
+		_:
+			if SoundManager: SoundManager.play_sfx("form_incorrect_input")
+			var balloon = DialogueManager.show_dialogue_balloon_scene(CONVERSATION_BALLOON_SCENE, FORM_DIALOGUE, "field_not_ready")
+			if is_instance_valid(balloon): balloon.process_mode = Node.PROCESS_MODE_ALWAYS
+
+func _format_wrong_name(raw_name: String) -> String:
+	var clean = raw_name.strip_edges().to_lower()
+	if clean.length() == 0:
+		return "..."
+	elif clean.length() <= 2:
+		return clean.substr(0, 1).to_upper() + clean.substr(1) + "..."
+	else:
+		var part1 = clean.substr(0, 1).to_upper() + clean.substr(1, 1)
+		var part2 = clean.substr(2)
+		return part1 + "..." + part2
+
+func _handle_submit_requested():
+	var f_name = Flags.get_game_flag("first_name_correct")
+	var m_name = Flags.get_game_flag("middle_name_correct")
+	var l_name = Flags.get_game_flag("last_name_correct")
+	var dob = Flags.get_game_flag("dob_correct")
+	var phone = Flags.get_game_flag("phone_number_correct")
+	var account = Flags.get_game_flag("account_number_correct")
+
+	if f_name and m_name and l_name and dob and phone and account:
+		if SoundManager: SoundManager.play_sfx("form_correct_input")
+		var balloon = DialogueManager.show_dialogue_balloon_scene(CONVERSATION_BALLOON_SCENE, FORM_DIALOGUE, "complete_submit")
+		if is_instance_valid(balloon): balloon.process_mode = Node.PROCESS_MODE_ALWAYS
+	else:
+		if SoundManager: SoundManager.play_sfx("form_incorrect_input")
+		var balloon = DialogueManager.show_dialogue_balloon_scene(CONVERSATION_BALLOON_SCENE, FORM_DIALOGUE, "incomplete_submit")
+		if is_instance_valid(balloon): balloon.process_mode = Node.PROCESS_MODE_ALWAYS
