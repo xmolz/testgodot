@@ -1,0 +1,67 @@
+# Settings.gd (Autoload) — user preferences + persistence (user://settings.cfg).
+extends Node
+
+signal auto_forward_toggled(is_on: bool)
+
+const SETTINGS_FILE_PATH = "user://settings.cfg"
+
+# --- Dialogue text ---
+var text_speed: float = 0.02
+var instant_text: bool = false
+var dialogue_text_scale: float = 1.0
+var auto_time_delay: float = 0.486
+var is_auto_playing: bool = false:
+	set(val):
+		is_auto_playing = val
+		auto_forward_toggled.emit(val)
+
+# --- Gameplay ---
+var assisted_mode: bool = false
+
+
+func _ready():
+	load_settings()
+
+
+func set_bus_volume(bus_name: String, linear_val: float):
+	var bus_idx = AudioServer.get_bus_index(bus_name)
+	if bus_idx != -1:
+		AudioServer.set_bus_volume_db(bus_idx, linear_to_db(linear_val))
+
+
+func get_bus_volume(bus_name: String) -> float:
+	var bus_idx = AudioServer.get_bus_index(bus_name)
+	if bus_idx != -1:
+		return db_to_linear(AudioServer.get_bus_volume_db(bus_idx))
+	return 1.0
+
+
+func save_settings():
+	var cfg = ConfigFile.new()
+	cfg.set_value("audio", "master", get_bus_volume("Master"))
+	cfg.set_value("audio", "music", get_bus_volume("Music"))
+	cfg.set_value("audio", "sfx", get_bus_volume("SFX"))
+	cfg.set_value("dialogue", "text_speed", text_speed)
+	cfg.set_value("dialogue", "instant_text", instant_text)
+	cfg.set_value("dialogue", "text_scale", dialogue_text_scale)
+	cfg.set_value("dialogue", "auto_forward", is_auto_playing)
+	cfg.set_value("dialogue", "auto_delay", auto_time_delay)
+	cfg.set_value("gameplay", "assisted_mode", assisted_mode)
+	var err = cfg.save(SETTINGS_FILE_PATH)
+	if err != OK:
+		push_warning("Settings: Could not save settings to %s (error %d)" % [SETTINGS_FILE_PATH, err])
+
+
+func load_settings():
+	var cfg = ConfigFile.new()
+	if cfg.load(SETTINGS_FILE_PATH) != OK:
+		return
+	set_bus_volume("Master", clampf(float(cfg.get_value("audio", "master", get_bus_volume("Master"))), 0.0, 1.0))
+	set_bus_volume("Music", clampf(float(cfg.get_value("audio", "music", get_bus_volume("Music"))), 0.0, 1.0))
+	set_bus_volume("SFX", clampf(float(cfg.get_value("audio", "sfx", get_bus_volume("SFX"))), 0.0, 1.0))
+	text_speed = clampf(float(cfg.get_value("dialogue", "text_speed", text_speed)), 0.005, 0.05)
+	instant_text = bool(cfg.get_value("dialogue", "instant_text", instant_text))
+	dialogue_text_scale = clampf(float(cfg.get_value("dialogue", "text_scale", dialogue_text_scale)), 0.5, 1.5)
+	is_auto_playing = bool(cfg.get_value("dialogue", "auto_forward", is_auto_playing))
+	auto_time_delay = clampf(float(cfg.get_value("dialogue", "auto_delay", auto_time_delay)), 0.125, 1.75)
+	assisted_mode = bool(cfg.get_value("gameplay", "assisted_mode", assisted_mode))
