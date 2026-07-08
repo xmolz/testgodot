@@ -2,7 +2,6 @@
 extends Node
 
 const MAIN_GAME_SCENE_PATH = "res://main.tscn"
-const PATREON_URL := "https://www.patreon.com/cw/lewgend"
 const INSURANCE_FORM_SCENE = preload("res://insurance_form.tscn")
 const JOURNAL_OVERLAY_SCENE = preload("res://journal_overlay.tscn") # <--- ADD THIS 
 const MAIN_MENU_SCENE_PATH = "res://main_menu.tscn"
@@ -32,18 +31,13 @@ signal verb_changed(new_verb_id: String)
 signal sentence_line_updated(text: String)
 signal interaction_complete # For VerbUI to reset its state
 signal available_verbs_changed(available_verb_data_array: Array[VerbData])
-signal item_picked_up(item_name: String)
-signal notification_requested(message: String)
 signal new_hint_available(is_available: bool)
 signal verb_lock_changed(is_active: bool)
-signal auto_forward_toggled(is_on: bool)
 
 # character conversation ended signal
 signal character_conversation_ended(dialogue_resource: DialogueResource)
 
-# Inventory Signals
-signal inventory_updated(inventory_items: Array[ItemData])
-signal selected_inventory_item_changed(selected_item_data: ItemData) # "In Hand" / "Selected"
+signal selected_inventory_item_changed(selected_item_data: ItemData)
 
 # --- High-Level Game State Management ---
 # 1. Define the game states using an enum for clarity and safety.
@@ -106,40 +100,6 @@ var _scan_tween: Tween
 var _is_game_over_triggering: bool = false
 const ICON_SCAN = preload("res://Icons/magnifying-glass.png")
 const ICON_CANCEL = preload("res://Icons/cancel.png")
-# --- Dialogue History ---
-const MAX_HISTORY_LOGS = 100
-var dialogue_history: Array[Dictionary] = []
-
-func add_dialogue_history_line(lookup_name: String, display_name: String, text: String):
-	dialogue_history.append({
-		"type": "line",
-		"lookup_name": lookup_name,
-		"display_name": display_name,
-		"text": text
-	})
-	if dialogue_history.size() > MAX_HISTORY_LOGS:
-		dialogue_history.pop_front()
-
-func add_dialogue_history_choice(lookup_name: String, display_name: String, options: Array[String], selected_index: int):
-	dialogue_history.append({
-		"type": "choice",
-		"lookup_name": lookup_name,
-		"display_name": display_name,
-		"options": options,
-		"selected_index": selected_index
-	})
-	if dialogue_history.size() > MAX_HISTORY_LOGS:
-		dialogue_history.pop_front()
-
-func add_dialogue_history_action(verb_name: String, object_name: String, item_name: String = ""):
-	dialogue_history.append({
-		"type": "action",
-		"verb": verb_name,
-		"object": object_name,
-		"item": item_name
-	})
-	if dialogue_history.size() > MAX_HISTORY_LOGS:
-		dialogue_history.pop_front()
 
 # --- State Variables ---
 var current_verb_id: String = ""
@@ -157,7 +117,6 @@ var _potential_hold_walk: bool = false
 #var debug_fps_label: Label = null
 var _signals_connected_to_interactable: Interactable = null # Tracks interactable for signal cleanup
 
-var current_level_state_manager: LevelStateManager = null # For current level's state
 var current_hint_manager: LevelHintManager = null
 
 
@@ -171,75 +130,12 @@ var active_scene_verb_ids: Array[String] = []
 
 # --- Inventory Management ---
 @export var all_item_data_resources: Array[ItemData] = []
-var player_inventory: Array[ItemData] = []
-var _item_data_map: Dictionary = {} # item_id -> ItemData
 
 
 
 
-# --- Game Flags (Global) ---
-var game_flags: Dictionary = {} # For flags that persist across levels
-var assisted_mode: bool = false
 var current_unread_hint: String = ""
 var last_read_hint: String = ""
-var visited_dialogue_responses: Dictionary = {} # Tracks clicked dialogue options
-
-# --- Global Settings ---
-var text_speed: float = 0.02 # Seconds per character (lower is faster)
-var instant_text: bool = false
-var dialogue_text_scale: float = 1.0
-
-var is_auto_playing: bool = false:
-	set(val):
-		is_auto_playing = val
-		auto_forward_toggled.emit(val)
-
-var auto_time_delay: float = 0.486
-
-func set_bus_volume(bus_name: String, linear_val: float):
-	var bus_idx = AudioServer.get_bus_index(bus_name)
-	if bus_idx != -1:
-		AudioServer.set_bus_volume_db(bus_idx, linear_to_db(linear_val))
-
-func get_bus_volume(bus_name: String) -> float:
-	var bus_idx = AudioServer.get_bus_index(bus_name)
-	if bus_idx != -1:
-		return db_to_linear(AudioServer.get_bus_volume_db(bus_idx))
-	return 1.0
-
-# =========================================================
-# SETTINGS PERSISTENCE (user://settings.cfg)
-# =========================================================
-const SETTINGS_FILE_PATH = "user://settings.cfg"
-
-func save_settings():
-	var cfg = ConfigFile.new()
-	cfg.set_value("audio", "master", get_bus_volume("Master"))
-	cfg.set_value("audio", "music", get_bus_volume("Music"))
-	cfg.set_value("audio", "sfx", get_bus_volume("SFX"))
-	cfg.set_value("dialogue", "text_speed", text_speed)
-	cfg.set_value("dialogue", "instant_text", instant_text)
-	cfg.set_value("dialogue", "text_scale", dialogue_text_scale)
-	cfg.set_value("dialogue", "auto_forward", is_auto_playing)
-	cfg.set_value("dialogue", "auto_delay", auto_time_delay)
-	cfg.set_value("gameplay", "assisted_mode", assisted_mode)
-	var err = cfg.save(SETTINGS_FILE_PATH)
-	if err != OK:
-		push_warning("GM: Could not save settings to %s (error %d)" % [SETTINGS_FILE_PATH, err])
-
-func load_settings():
-	var cfg = ConfigFile.new()
-	if cfg.load(SETTINGS_FILE_PATH) != OK:
-		return # First launch (or unreadable file) — keep in-script defaults.
-	set_bus_volume("Master", clampf(float(cfg.get_value("audio", "master", get_bus_volume("Master"))), 0.0, 1.0))
-	set_bus_volume("Music", clampf(float(cfg.get_value("audio", "music", get_bus_volume("Music"))), 0.0, 1.0))
-	set_bus_volume("SFX", clampf(float(cfg.get_value("audio", "sfx", get_bus_volume("SFX"))), 0.0, 1.0))
-	text_speed = clampf(float(cfg.get_value("dialogue", "text_speed", text_speed)), 0.005, 0.05)
-	instant_text = bool(cfg.get_value("dialogue", "instant_text", instant_text))
-	dialogue_text_scale = clampf(float(cfg.get_value("dialogue", "text_scale", dialogue_text_scale)), 0.5, 1.5)
-	is_auto_playing = bool(cfg.get_value("dialogue", "auto_forward", is_auto_playing))
-	auto_time_delay = clampf(float(cfg.get_value("dialogue", "auto_delay", auto_time_delay)), 0.125, 1.75)
-	assisted_mode = bool(cfg.get_value("gameplay", "assisted_mode", assisted_mode))
 
 
 # In GameManager.gd
@@ -247,7 +143,6 @@ func load_settings():
 # In GameManager.gd
 
 func _ready():
-	load_settings()
 	print("If I Remember Correctly — v%s" % str(ProjectSettings.get_setting("application/config/version", "unset")))
 	#print_rich("[color=cyan]GM: GameManager is Ready! Starting initialization...[/color]")
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
@@ -305,34 +200,11 @@ func _ready():
 	_emit_available_verbs_changed_update()
 	#print_rich("[color=green]GM: Verbs initialized. %s default verbs unlocked.[/color]" % unlocked_verb_ids.size())
 
-	# Initialize Item Data Map
-	#print_rich("[color=aqua]GM: Initializing item data map...[/color]")
-	if all_item_data_resources.is_empty():
-		pass
-		#print_rich("[color=yellow]GM: 'all_item_data_resources' array is empty. No items loaded from Inspector.[/color]")
-	else:
-		pass
-		#print_rich("[color=gray]GM: Found %s item resources in 'all_item_data_resources'.[/color]" % all_item_data_resources.size())
+	Inventory.setup(all_item_data_resources)
+	Events.item_removed.connect(_on_inventory_item_removed)
 
-	for item_data_res in all_item_data_resources:
-		if item_data_res and item_data_res.item_id != "":
-			if not _item_data_map.has(item_data_res.item_id):
-				_item_data_map[item_data_res.item_id] = item_data_res
-				#print_rich("  [color=gray]GM: Mapped item: ID='%s', Name='%s'[/color]" % [item_data_res.item_id, item_data_res.display_name])
-			else:
-				pass
-				#print_rich("[color=red]GM: Duplicate item_id found in all_item_data_resources: '%s'. Overwriting in map is problematic.[/color]" % item_data_res.item_id)
-		elif item_data_res and item_data_res.item_id == "":
-			pass
-			#print_rich("[color=orange]GM: ItemData resource '%s' found with EMPTY item_id. It cannot be used by ID.[/color]" % item_data_res.resource_path if item_data_res else "UNKNOWN")
-		elif not item_data_res:
-			pass
-			#print_rich("[color=yellow]GM: Found a null entry in 'all_item_data_resources'. Please check Inspector.[/color]")
-
-	#print_rich("[color=green]GM: Item data map initialized. %s items mapped.[/color]" % _item_data_map.size())
-	#print_rich("[color=cyan]GM: GameManager initialization complete.[/color]")
-
-	_create_world_patreon_button()
+	patreon_world_ui = PatreonWorldButton.new()
+	add_child(patreon_world_ui)
 
 	# --- DIRECT SCENE RUN CHECK ---
 	if current_game_state == GameState.BOOTING:
@@ -413,7 +285,7 @@ func _process(delta):
 		var evaluated_hint = current_hint_manager.evaluate_hint()
 		if evaluated_hint != "" and evaluated_hint != current_unread_hint and evaluated_hint != last_read_hint:
 			current_unread_hint = evaluated_hint
-			if assisted_mode:
+			if Settings.assisted_mode:
 				new_hint_available.emit(true)
 
 	if is_mouse_held_for_walk:
@@ -553,6 +425,7 @@ func change_game_state(new_state: GameState):
 
 	#print_rich("[color=yellow]GameManager: Changing state from %s to %s[/color]" % [GameState.keys()[current_game_state], GameState.keys()[new_state]])
 	current_game_state = new_state
+	Events.game_state_changed.emit(current_game_state)
 
 	# =========================================================
 	# 2. ENTERING THE NEW STATE (Setup)
@@ -631,7 +504,7 @@ func change_game_state(new_state: GameState):
 				if is_instance_valid(journal_button_ui): journal_button_ui.visible = true
 				if is_instance_valid(pause_menu_ui): pause_menu_ui.menu_panel.show()
 				if is_instance_valid(insurance_form_button_ui):
-					var should_be_visible = get_current_level_flag("insurance_button_unlocked")
+					var should_be_visible = Flags.get_level_flag("insurance_button_unlocked")
 					insurance_form_button_ui.visible = should_be_visible
 			else:
 				if is_instance_valid(verb_ui): verb_ui.visible = false
@@ -706,7 +579,7 @@ func select_verb(verb_id_to_select: String):
 			verb_changed.emit("")
 
 			if is_instance_valid(current_hint_manager):
-				var hint_res = current_hint_manager.hints_dialogue if assisted_mode else current_hint_manager.hints_adventure_dialogue
+				var hint_res = current_hint_manager.hints_dialogue if Settings.assisted_mode else current_hint_manager.hints_adventure_dialogue
 				if is_instance_valid(hint_res):
 					last_read_hint = current_hint_manager.evaluate_hint()
 					new_hint_available.emit(false)
@@ -719,7 +592,7 @@ func select_verb(verb_id_to_select: String):
 		# ------------------------------------------
 
 		# --- QOL FIX: Empty Inventory Give Check ---
-		if current_verb_id == "give" and player_inventory.is_empty():
+		if current_verb_id == "give" and Inventory.is_empty():
 			current_verb_id = ""
 			verb_changed.emit("")
 
@@ -1021,7 +894,7 @@ func _perform_actual_interaction(interactable_node: Interactable, verb_to_use_id
 	var verb_name = verb_data.display_text if verb_data else verb_to_use_id
 	var obj_name = interactable_node.object_display_name
 	var itm_name = item_in_hand_data.display_name if item_in_hand_data else ""
-	add_dialogue_history_action(verb_name, obj_name, itm_name)
+	DialogueHistory.add_action(verb_name, obj_name, itm_name)
 	# ------------------------------------
 
 	_disconnect_interactable_request_signals()
@@ -1029,19 +902,8 @@ func _perform_actual_interaction(interactable_node: Interactable, verb_to_use_id
 	_signals_connected_to_interactable = interactable_node
 	#print_rich("[color=gray]GM: Connecting signals to Interactable: %s for non-dialogue interaction.[/color]" % interactable_node.name)
 
-	if not interactable_node.display_dialogue.is_connected(_on_interactable_display_dialogue_console):
-		interactable_node.display_dialogue.connect(_on_interactable_display_dialogue_console)
 	if not interactable_node.interaction_processed.is_connected(_on_interactable_action_finished):
 		interactable_node.interaction_processed.connect(_on_interactable_action_finished)
-	if interactable_node.has_signal("request_remove_item_from_inventory") and not interactable_node.request_remove_item_from_inventory.is_connected(remove_item_from_inventory):
-		interactable_node.request_remove_item_from_inventory.connect(remove_item_from_inventory)
-	if interactable_node.has_signal("request_add_item_to_inventory") and not interactable_node.request_add_item_to_inventory.is_connected(add_item_to_inventory):
-		interactable_node.request_add_item_to_inventory.connect(add_item_to_inventory)
-	if interactable_node.has_signal("request_set_game_flag") and not interactable_node.request_set_game_flag.is_connected(set_game_flag):
-		interactable_node.request_set_game_flag.connect(set_game_flag)
-	if interactable_node.has_signal("request_set_level_flag") and not interactable_node.request_set_level_flag.is_connected(set_current_level_flag):
-		#print_rich("[color=darkcyan]GM: Connecting Interactable's request_set_level_flag to GM.set_current_level_flag[/color]")
-		interactable_node.request_set_level_flag.connect(set_current_level_flag)
 
 	interactable_node.attempt_interaction(verb_to_use_id, item_id_for_interaction)
 
@@ -1079,10 +941,10 @@ func _on_dialogue_ended_for_object_dialogue(_resource: Resource):
 		if is_instance_valid(journal_button_ui):
 			journal_button_ui.visible = true
 		if is_instance_valid(insurance_form_button_ui):
-			var should_be_visible = get_current_level_flag("insurance_button_unlocked")
+			var should_be_visible = Flags.get_level_flag("insurance_button_unlocked")
 			insurance_form_button_ui.visible = should_be_visible
 		if is_instance_valid(patreon_world_ui):
-			patreon_world_ui.visible = get_current_level_flag("dev_cta_completed")
+			patreon_world_ui.visible = Flags.get_level_flag("dev_cta_completed")
 
 	_complete_interaction_cycle()
 
@@ -1106,36 +968,22 @@ func _on_character_conversation_finished(resource: DialogueResource):
 
 
 # --- Interactable Signal Handlers ---
-func _on_interactable_display_dialogue_console(text: String):
-	pass
-	#print_rich("[color=yellow]GM (via Interactable Console): %s[/color]" % text)
-
 func _on_interactable_action_finished():
 	#print_rich("[color=aqua]GM: Interactable action finished. Completing interaction cycle.[/color]")
 	_complete_interaction_cycle()
+
+func _on_inventory_item_removed(item_id: String):
+	if current_selected_item_data and current_selected_item_data.item_id == item_id:
+		current_selected_item_data = null
+		selected_inventory_item_changed.emit(null)
 
 func _disconnect_interactable_request_signals():
 	if is_instance_valid(_signals_connected_to_interactable):
 		var node_to_disconnect_from = _signals_connected_to_interactable
 		#print_rich("[color=gray]GM: Disconnecting signals from Interactable: %s[/color]" % node_to_disconnect_from.name)
 
-		if node_to_disconnect_from.display_dialogue.is_connected(_on_interactable_display_dialogue_console):
-			node_to_disconnect_from.display_dialogue.disconnect(_on_interactable_display_dialogue_console)
 		if node_to_disconnect_from.interaction_processed.is_connected(_on_interactable_action_finished):
 			node_to_disconnect_from.interaction_processed.disconnect(_on_interactable_action_finished)
-		if node_to_disconnect_from.has_signal("request_remove_item_from_inventory") and \
-		   node_to_disconnect_from.request_remove_item_from_inventory.is_connected(remove_item_from_inventory):
-			node_to_disconnect_from.request_remove_item_from_inventory.disconnect(remove_item_from_inventory)
-		if node_to_disconnect_from.has_signal("request_add_item_to_inventory") and \
-		   node_to_disconnect_from.request_add_item_to_inventory.is_connected(add_item_to_inventory):
-			node_to_disconnect_from.request_add_item_to_inventory.disconnect(add_item_to_inventory)
-		if node_to_disconnect_from.has_signal("request_set_game_flag") and \
-		   node_to_disconnect_from.request_set_game_flag.is_connected(set_game_flag):
-			node_to_disconnect_from.request_set_game_flag.disconnect(set_game_flag)
-		if node_to_disconnect_from.has_signal("request_set_level_flag") and \
-		   node_to_disconnect_from.request_set_level_flag.is_connected(set_current_level_flag):
-			#print_rich("[color=gray]GM: Disconnecting Interactable's request_set_level_flag from GM.set_current_level_flag[/color]")
-			node_to_disconnect_from.request_set_level_flag.disconnect(set_current_level_flag)
 	else:
 		if _signals_connected_to_interactable != null:
 			pass
@@ -1183,7 +1031,7 @@ func _complete_interaction_cycle():
 		if is_instance_valid(journal_button_ui):
 			journal_button_ui.visible = true
 		if is_instance_valid(insurance_form_button_ui):
-			var should_be_visible = get_current_level_flag("insurance_button_unlocked")
+			var should_be_visible = Flags.get_level_flag("insurance_button_unlocked")
 			insurance_form_button_ui.visible = should_be_visible
 	# --- FIX END ---
 
@@ -1245,34 +1093,6 @@ func _cancel_scan():
 			if is_instance_valid(interactable): interactable.force_highlight(false)
 
 
-# --- LevelStateManager Registration & Flag Handling ---
-func register_level_state_manager(lsm: LevelStateManager):
-	current_level_state_manager = lsm
-	if is_instance_valid(lsm):
-		#print_rich("[color=LawnGreen]GM: Registered LevelStateManager: %s (from scene: %s)[/color]" % [lsm.name, lsm.get_parent().name if lsm.get_parent() else "N/A"])
-		if lsm.has_method("print_initial_flags"):
-			lsm.print_initial_flags()
-	else:
-		if lsm == null:
-			pass
-			#print_rich("[color=yellow]GM: LevelStateManager unregistered (set to null).[/color]")
-		else:
-			pass
-			#print_rich("[color=orange]GM: Attempted to register invalid LevelStateManager instance.[/color]")
-
-func set_current_level_flag(flag_name: String, value: bool):
-	if is_instance_valid(current_level_state_manager):
-		#print_rich("[color=darkcyan]GM: Routing to LevelStateManager to set flag: %s = %s[/color]" % [flag_name, value])
-		current_level_state_manager.set_level_flag(flag_name, value)
-	else:
-		pass
-		#print_rich("[color=orange]GM: No current LevelStateManager to set level flag '%s'. This might be an error if a level flag was intended.[/color]" % flag_name)
-
-func get_current_level_flag(flag_name: String) -> bool:
-	if is_instance_valid(current_level_state_manager):
-		return current_level_state_manager.get_level_flag(flag_name)
-	return false
-
 
 # --- Verb Data and Availability ---
 # In GameManager.gd
@@ -1332,77 +1152,6 @@ func is_verb_id_currently_active(verb_id_to_check: String) -> bool:
 	return active_scene_verb_ids.has(verb_id_to_check)
 
 
-# --- Inventory Management Functions ---
-func add_item_to_inventory(item_id_to_add: String):
-	#print_rich("[color=aqua]GM: Attempting add_item_to_inventory for ID: '%s'[/color]" % item_id_to_add)
-	var item_data = get_item_data_by_id(item_id_to_add)
-	if not item_data:
-		#print_rich("[color=red]GM: add_item_to_inventory - FAILED. ItemData for id '%s' is null after lookup.[/color]" % item_id_to_add)
-		return
-
-	if not item_data.is_stackable and has_item(item_id_to_add):
-		#print_rich("[color=yellow]GM: Item '%s' (Name: %s, non-stackable) already in inventory. Not adding duplicate.[/color]" % [item_id_to_add, item_data.display_name])
-		return
-
-	player_inventory.append(item_data)
-	inventory_updated.emit(player_inventory.duplicate())
-	#print_rich("[color=green]GM: Successfully added item '%s' (Name: %s) to inventory. Player now has %s items.[/color]" % [item_id_to_add, item_data.display_name, player_inventory.size()])
-	show_notification("Picked up: " + item_data.display_name)
-
-func remove_item_from_inventory(item_id_to_remove: String):
-	#print_rich("[color=aqua]GM: Attempting remove_item_from_inventory for ID: '%s'[/color]" % item_id_to_remove)
-	var item_data_ref = get_item_data_by_id(item_id_to_remove)
-	if not item_data_ref:
-		#print_rich("[color=red]GM: remove_item_from_inventory - FAILED. ItemData for id '%s' not found in master list.[/color]" % item_id_to_remove)
-		return
-
-	var item_found_and_removed = false
-	for i in range(player_inventory.size() - 1, -1, -1):
-		var item_data_in_inv: ItemData = player_inventory[i]
-		if item_data_in_inv.item_id == item_id_to_remove:
-			player_inventory.remove_at(i)
-			item_found_and_removed = true
-			#print_rich("[color=green]GM: Removed item '%s' (Name: %s) from inventory.[/color]" % [item_id_to_remove, item_data_in_inv.display_name])
-
-			if current_selected_item_data and current_selected_item_data.item_id == item_id_to_remove:
-				current_selected_item_data = null
-				selected_inventory_item_changed.emit(null)
-
-			inventory_updated.emit(player_inventory.duplicate())
-			if not item_data_ref.is_stackable: break
-
-	if not item_found_and_removed:
-		pass
-		#print_rich("[color=yellow]GM: Tried to remove item_id '%s' (Name: %s), but it was not found in player's inventory.[/color]" % [item_id_to_remove, item_data_ref.display_name])
-
-func has_item(item_id_to_check: String) -> bool:
-	for item_data_in_inv in player_inventory:
-		if item_data_in_inv.item_id == item_id_to_check:
-			return true
-	return false
-
-func get_item_data_by_id(item_id_to_find: String) -> ItemData:
-	if _item_data_map.has(item_id_to_find):
-		return _item_data_map[item_id_to_find]
-
-	#print_rich("[color=orange]GM: get_item_data_by_id - ItemData for id '%s' NOT FOUND in _item_data_map.[/color]" % item_id_to_find)
-	#print_rich("  [color=gray]GM: Current _item_data_map keys: %s[/color]" % str(_item_data_map.keys()))
-	#print_rich("  [color=gray]GM: Make sure '%s' is the exact item_id in your .tres file AND that .tres file is in 'all_item_data_resources' in GameManager Inspector.[/color]" % item_id_to_find)
-	return null
-
-func get_player_inventory() -> Array[ItemData]:
-	return player_inventory.duplicate()
-
-
-# --- Game Flag Management (Global) ---
-func set_game_flag(flag_name: String, value: bool):
-	if game_flags.get(flag_name, !value) == value:
-		return
-	game_flags[flag_name] = value
-	#print_rich("[color=green]GM: GLOBAL Flag set: '%s' = %s[/color]" % [flag_name, str(value)])
-
-func get_game_flag(flag_name: String) -> bool:
-	return game_flags.get(flag_name, false)
 
 # ADD THESE THREE NEW FUNCTIONS
 
@@ -1442,6 +1191,7 @@ func enter_conversation_state():
 	if is_instance_valid(journal_button_ui): journal_button_ui.visible = false # <--- ADD THIS LINE
 	if is_instance_valid(patreon_world_ui): patreon_world_ui.visible = false
 	if is_instance_valid(pause_menu_ui): pause_menu_ui.menu_panel.hide()
+	Events.interaction_state_changed.emit(current_interaction_state)
 
 func enter_zoom_view_state():
 	if current_interaction_state == InteractionState.ZOOM_VIEW: return
@@ -1473,6 +1223,7 @@ func enter_zoom_view_state():
 	# process_mode is set to "Always".
 	get_tree().paused = true
 	# -----------------------------
+	Events.interaction_state_changed.emit(current_interaction_state)
 
 func exit_to_world_state():
 	#print_rich("[color=Plum]GM: Exiting overlay, returning to WORLD state.[/color]")
@@ -1489,13 +1240,13 @@ func exit_to_world_state():
 	if is_instance_valid(journal_button_ui): # <--- ADD THIS BLOCK
 		journal_button_ui.visible = true     # <---
 	if is_instance_valid(patreon_world_ui):
-		patreon_world_ui.visible = get_current_level_flag("dev_cta_completed")
+		patreon_world_ui.visible = Flags.get_level_flag("dev_cta_completed")
 	if is_instance_valid(pause_menu_ui): pause_menu_ui.menu_panel.show()
 
 	# --- THIS IS THE FIX (APPLIED HERE AS WELL) ---
 	# Check the flag here too, so the button reappears after future conversations.
 	if is_instance_valid(insurance_form_button_ui):
-		var should_be_visible = get_current_level_flag("insurance_button_unlocked")
+		var should_be_visible = Flags.get_level_flag("insurance_button_unlocked")
 		insurance_form_button_ui.visible = should_be_visible
 	# --- END OF FIX ---
 
@@ -1503,6 +1254,7 @@ func exit_to_world_state():
 		player_node.set_can_move(true)
 
 	get_tree().paused = false
+	Events.interaction_state_changed.emit(current_interaction_state)
 
 
 # In GameManager.gd
@@ -1597,7 +1349,7 @@ func _on_form_field_submitted(field_id: String, value):
 				var balloon = DialogueManager.show_dialogue_balloon_scene(CONVERSATION_BALLOON_SCENE, FORM_DIALOGUE, "first_name_correct")
 				if is_instance_valid(balloon): balloon.process_mode = Node.PROCESS_MODE_ALWAYS
 				
-				set_game_flag("first_name_correct", true)
+				Flags.set_game_flag("first_name_correct", true)
 				
 			else:
 				# --- CHANGED AUDIO LINE ---
@@ -1689,13 +1441,13 @@ func exit_explanation_state():
 	if is_instance_valid(journal_button_ui): journal_button_ui.visible = true
 	# -----------------------------------------------------------------------
 	if is_instance_valid(patreon_world_ui):
-		patreon_world_ui.visible = get_current_level_flag("dev_cta_completed")
+		patreon_world_ui.visible = Flags.get_level_flag("dev_cta_completed")
 	if is_instance_valid(pause_menu_ui): pause_menu_ui.menu_panel.show()
 
 	# --- THIS IS THE FIX ---
 	# Instead of just showing the button, check if it has been unlocked.
 	if is_instance_valid(insurance_form_button_ui):
-		var should_be_visible = get_current_level_flag("insurance_button_unlocked")
+		var should_be_visible = Flags.get_level_flag("insurance_button_unlocked")
 		insurance_form_button_ui.visible = should_be_visible
 	# --- END OF FIX ---
 
@@ -1728,10 +1480,6 @@ func _on_insurance_form_button_pressed():
 	
 	enter_conversation_state()
 	get_tree().paused = true
-# This function receives data from ANY "OK" button on the form.
-func show_notification(message: String):
-	notification_requested.emit(message)
-
 
 # =========================================================
 # RUN-STATE RESET
@@ -1766,16 +1514,14 @@ func reset_run_state():
 		selected_inventory_item_changed.emit(null)
 
 	# --- Inventory ---
-	player_inventory.clear()
-	inventory_updated.emit(player_inventory.duplicate())
+	Inventory.reset()
 
 	# --- Global flags & dialogue memory ---
-	game_flags.clear()
-	visited_dialogue_responses.clear()
-	dialogue_history.clear()
+	Flags.reset_run_state()
+	DialogueHistory.reset()
 
 	# --- Hints & difficulty (difficulty select re-establishes these) ---
-	assisted_mode = false
+	Settings.assisted_mode = false
 	current_unread_hint = ""
 	last_read_hint = ""
 	new_hint_available.emit(false)
@@ -1793,7 +1539,6 @@ func reset_run_state():
 		ConversationEventManager.reset_run_state()
 
 	# --- Stale references (their owning scenes were freed on quit) ---
-	current_level_state_manager = null
 	current_hint_manager = null
 	_insurance_form_instance = null
 	_journal_overlay_instance = null
@@ -1811,9 +1556,9 @@ func _on_main_menu_new_game_requested():
 		transition_layer.global_fade_from_black(0.5)
 
 func _on_difficulty_chosen(is_assisted: bool):
-	assisted_mode = is_assisted
-	save_settings()
-	print_rich("[color=green]GM: Difficulty selected. Assisted Mode = %s[/color]" % str(assisted_mode))
+	Settings.assisted_mode = is_assisted
+	Settings.save_settings()
+	print_rich("[color=green]GM: Difficulty selected. Assisted Mode = %s[/color]" % str(Settings.assisted_mode))
 
 	unlock_verb("think")
 
@@ -1891,7 +1636,7 @@ func _on_intro_conversation_finished(_dialogue_resource):
 	if is_instance_valid(inventory_ui): inventory_ui.show()
 	if is_instance_valid(journal_button_ui): journal_button_ui.show()
 	if is_instance_valid(insurance_form_button_ui):
-		insurance_form_button_ui.visible = get_current_level_flag("insurance_button_unlocked")
+		insurance_form_button_ui.visible = Flags.get_level_flag("insurance_button_unlocked")
 
 # --- JOURNAL FUNCTIONS ---
 func _on_journal_button_pressed():
@@ -1935,12 +1680,12 @@ func _format_wrong_name(raw_name: String) -> String:
 # --- ADD THIS TO THE BOTTOM OF GameManager.gd ---
 func _on_form_submit_requested():
 	# Check all 6 flags. If they haven't gotten one correct, it defaults to false.
-	var f_name = get_game_flag("first_name_correct")
-	var m_name = get_game_flag("middle_name_correct")
-	var l_name = get_game_flag("last_name_correct")
-	var dob = get_game_flag("dob_correct")
-	var phone = get_game_flag("phone_number_correct")
-	var account = get_game_flag("account_number_correct")
+	var f_name = Flags.get_game_flag("first_name_correct")
+	var m_name = Flags.get_game_flag("middle_name_correct")
+	var l_name = Flags.get_game_flag("last_name_correct")
+	var dob = Flags.get_game_flag("dob_correct")
+	var phone = Flags.get_game_flag("phone_number_correct")
+	var account = Flags.get_game_flag("account_number_correct")
 	
 	if f_name and m_name and l_name and dob and phone and account:
 		# Success! (Likely unreachable in the demo, but good practice to include)
@@ -2050,66 +1795,8 @@ func refresh_hint_system():
 		var evaluated_hint = current_hint_manager.evaluate_hint()
 		if evaluated_hint != "":
 			current_unread_hint = evaluated_hint
-			if assisted_mode:
+			if Settings.assisted_mode:
 				new_hint_available.emit(true)
 			else:
 				new_hint_available.emit(false)
 
-func _create_world_patreon_button():
-	patreon_world_ui = CanvasLayer.new()
-	patreon_world_ui.layer = 1
-	add_child(patreon_world_ui)
-
-	var btn = Button.new()
-	patreon_world_ui.add_child(btn)
-
-	var tex = load("res://Icons/patreon_logo.png")
-	if tex:
-		var img = tex.get_image()
-		if img:
-			img.resize(48, 48, Image.INTERPOLATE_BILINEAR)
-			tex = ImageTexture.create_from_image(img)
-		btn.icon = tex
-
-	btn.text = " Support on Patreon"
-	btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	btn.add_theme_constant_override("h_separation", 10)
-	btn.add_theme_font_override("font", preload("res://Fonts/VarelaRound-Regular.ttf"))
-	btn.add_theme_font_size_override("font_size", 20)
-
-	var btn_normal = StyleBoxFlat.new()
-	btn_normal.bg_color = Color(0.15, 0.15, 0.15, 0.6)
-	btn_normal.corner_radius_top_left = 10
-	btn_normal.corner_radius_top_right = 10
-	btn_normal.corner_radius_bottom_left = 10
-	btn_normal.corner_radius_bottom_right = 10
-	btn_normal.content_margin_left = 15
-	btn_normal.content_margin_right = 20
-	btn_normal.content_margin_top = 10
-	btn_normal.content_margin_bottom = 10
-	btn_normal.border_width_left = 2
-	btn_normal.border_width_top = 2
-	btn_normal.border_width_right = 2
-	btn_normal.border_width_bottom = 2
-	btn_normal.border_color = Color(1.0, 1.0, 1.0, 0.0)
-
-	var btn_hover = btn_normal.duplicate()
-	btn_hover.bg_color = Color(0.1, 0.25, 0.3, 0.8)
-	btn_hover.border_color = Color(0.2, 0.85, 1.0, 0.8)
-
-	btn.add_theme_stylebox_override("normal", btn_normal)
-	btn.add_theme_stylebox_override("hover", btn_hover)
-	btn.add_theme_stylebox_override("focus", btn_hover)
-	btn.add_theme_stylebox_override("pressed", btn_hover)
-
-	btn.position = Vector2(20, 20)
-	if OS.has_feature("mobile"):
-		btn.position = Vector2(40, 40)
-		btn.add_theme_font_size_override("font_size", 28)
-
-	btn.pressed.connect(func():
-		if SoundManager and SoundManager.has_method("play_sfx"): SoundManager.play_sfx("ui_click")
-		OS.shell_open(PATREON_URL)
-	)
-
-	patreon_world_ui.hide()
