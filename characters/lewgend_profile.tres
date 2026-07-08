@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="CharacterProfile" format=3 uid="uid://c6mm5dugk4j3s"]
+
+[ext_resource type="Script" uid="uid://yiootngfe2lt" path="res://characters/CharacterProfile.gd" id="3_i8xhp"]
+
+[resource]
+script = ExtResource("3_i8xhp")
+actor_id = "Lewgend"
+default_scale = 0.8
+expressions = {
+"determined": "res://Sprites/characters/lewgend/lewgend_determined.png",
+"embarrassed": "res://Sprites/characters/lewgend/lewgend_embarrassed.png",
+"explaining_1": "res://Sprites/characters/lewgend/lewgend_explaining_1.png",
+"explaining_2": "res://Sprites/characters/lewgend/lewgend_explaining_2.png",
+"explaining_3": "res://Sprites/characters/lewgend/lewgend_explaining_3.png",
+"hand_on_chest": "res://Sprites/characters/lewgend/lewgend_hand_on_chest.png",
+"open_arms": "res://Sprites/characters/lewgend/lewgend_arms_open.png",
+"waving": "res://Sprites/characters/lewgend/lewgend_waving.png"
+}

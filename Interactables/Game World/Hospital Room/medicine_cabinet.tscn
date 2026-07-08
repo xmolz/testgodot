@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://crcjecrrvndr2"]
 
-[ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactable.gd" id="1_niuas"]
+[ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactions/interactable.gd" id="1_niuas"]
 [ext_resource type="Texture2D" uid="uid://t7yho2m7tt4m" path="res://Sprites/Hospital Room/medicine_cabinet.png" id="2_shog1"]
 [ext_resource type="Texture2D" uid="uid://xwufbgcjblgc" path="res://Sprites/Hospital Room/medicine_cabinet_glow.png" id="3_shoix"]
 [ext_resource type="Material" uid="uid://dww3d0txyl18g" path="res://interactions/actions/interactable_outline.tres" id="OutlineMaterial"]

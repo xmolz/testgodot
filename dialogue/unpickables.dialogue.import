@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://tfcqewa5lli"
+path="res://.godot/imported/unpickables.dialogue-54bd00fe478042b2b47e9be26c387f4d.tres"
+
+[deps]
+
+source_file="res://dialogue/unpickables.dialogue"
+dest_files=["res://.godot/imported/unpickables.dialogue-54bd00fe478042b2b47e9be26c387f4d.tres"]
+
+[params]
+
+defaults=true

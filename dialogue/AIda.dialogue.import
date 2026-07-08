@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://ccyinn2ynsx1p"
+path="res://.godot/imported/AIda.dialogue-e80aec08cf299972dd972bfe08cb4ad1.tres"
+
+[deps]
+
+source_file="res://dialogue/AIda.dialogue"
+dest_files=["res://.godot/imported/AIda.dialogue-e80aec08cf299972dd972bfe08cb4ad1.tres"]
+
+[params]
+
+defaults=true

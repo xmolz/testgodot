@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://bxxpgv80k23ug"
+path="res://.godot/imported/mcbucket_thinking_dialogue.dialogue-e0dd277fd5ad32cd06b0a367935b9849.tres"
+
+[deps]
+
+source_file="res://dialogue/mcbucket_thinking_dialogue.dialogue"
+dest_files=["res://.godot/imported/mcbucket_thinking_dialogue.dialogue-e0dd277fd5ad32cd06b0a367935b9849.tres"]
+
+[params]
+
+defaults=true

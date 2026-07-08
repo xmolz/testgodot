@@ -1,0 +1,176 @@
+[gd_scene format=3 uid="uid://bj3w6acg6sb7g"]
+
+[ext_resource type="Script" uid="uid://ctc8mysw5ic3e" path="res://ui/MainMenu.gd" id="1_ei257"]
+[ext_resource type="Texture2D" uid="uid://7b7ihqnd7ba2" path="res://Backgrounds/Main Menu Background/main_menu_background_no_logo.png" id="2_p8ri8"]
+[ext_resource type="FontFile" uid="uid://6fxwb86ujy6q" path="res://Fonts/IBMPlexSans-SemiBold.ttf" id="3_ubpvv"]
+[ext_resource type="FontFile" uid="uid://b1iquuxsqnjah" path="res://Fonts/RubikGlitch-Regular.ttf" id="4_arv2f"]
+[ext_resource type="Shader" uid="uid://b4348uwgsleyx" path="res://Icons/title_glitch.gdshader" id="5_5klac"]
+[ext_resource type="Texture2D" uid="uid://hopltlv76q36" path="res://Icons/logo_glass_icon.png" id="6_lsdqh"]
+
+[sub_resource type="Gradient" id="Gradient_eiy7p"]
+colors = PackedColorArray(0, 0, 0, 0, 0, 0, 0, 0.85882354)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_h7a2f"]
+gradient = SubResource("Gradient_eiy7p")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qe12f"]
+shader = ExtResource("5_5klac")
+shader_parameter/base_color = Color(1, 1, 1, 1)
+shader_parameter/extra_thickness = 28.090001334275
+shader_parameter/glitch_intensity = 0.082000003895
+shader_parameter/slice_count = 22.32400101289
+shader_parameter/static_seed = 33.958001613005
+
+[node name="MainMenu" type="CanvasLayer" unique_id=2112213141]
+script = ExtResource("1_ei257")
+
+[node name="Content" type="Control" parent="." unique_id=854175783]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="TextureRect" parent="Content" unique_id=1829304086]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_p8ri8")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Vignette" type="TextureRect" parent="Content" unique_id=1551462718]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_h7a2f")
+
+[node name="TitleBlock" type="VBoxContainer" parent="Content" unique_id=1154241700]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.264
+anchor_top = 0.004
+anchor_right = 0.71400005
+anchor_bottom = 0.25500003
+offset_left = -0.8800049
+offset_top = -0.32000017
+offset_right = -0.88012695
+offset_bottom = -0.4000244
+theme_override_constants/separation = -25
+alignment = 1
+
+[node name="Label" type="Label" parent="Content/TitleBlock" unique_id=1155361698]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9411765, 0.9411765, 0.9411765, 1)
+theme_override_fonts/font = ExtResource("3_ubpvv")
+theme_override_font_sizes/font_size = 71
+text = "I F   I   R E M E M B E R"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="Content/TitleBlock" unique_id=74775180]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5921569, 0.8627451, 0.92156863, 1)
+theme_override_fonts/font = ExtResource("4_arv2f")
+theme_override_font_sizes/font_size = 122
+text = "C     RRECTLY"
+horizontal_alignment = 1
+
+[node name="Control" type="TextureRect" parent="Content/TitleBlock/Label2" unique_id=684412801]
+material = SubResource("ShaderMaterial_qe12f")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.15200001
+anchor_top = 0.178
+anchor_right = 0.28500003
+anchor_bottom = 0.88400006
+offset_left = -0.32800293
+offset_top = 0.01199913
+offset_right = -0.24002075
+offset_bottom = -0.06401062
+texture = ExtResource("6_lsdqh")
+expand_mode = 1
+stretch_mode = 6
+flip_h = true
+
+[node name="ButtonBlock" type="VBoxContainer" parent="Content" unique_id=535756564]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.62100005
+anchor_top = 0.45400003
+anchor_right = 0.91200006
+anchor_bottom = 0.69900006
+offset_left = 0.67993164
+offset_top = -0.32003784
+offset_right = -0.040161133
+offset_bottom = 0.079956055
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="StartButton" type="Button" parent="Content/ButtonBlock" unique_id=293315540]
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.93333334, 0.93333334, 0.93333334, 1)
+theme_override_colors/font_pressed_color = Color(0.2684, 0.4335066, 0.61, 1)
+theme_override_colors/font_hover_color = Color(0.5921569, 0.8627451, 0.92156863, 1)
+theme_override_fonts/font = ExtResource("3_ubpvv")
+theme_override_font_sizes/font_size = 36
+text = "START DEMO"
+flat = true
+alignment = 2
+
+[node name="SettingsButton" type="Button" parent="Content/ButtonBlock" unique_id=569507614]
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.93333334, 0.93333334, 0.93333334, 1)
+theme_override_colors/font_pressed_color = Color(0.2684, 0.4335066, 0.61, 1)
+theme_override_colors/font_hover_color = Color(0.5921569, 0.8627451, 0.92156863, 1)
+theme_override_fonts/font = ExtResource("3_ubpvv")
+theme_override_font_sizes/font_size = 36
+text = "SETTINGS"
+flat = true
+alignment = 2
+
+[node name="CreditsButton" type="Button" parent="Content/ButtonBlock" unique_id=740859944]
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.93333334, 0.93333334, 0.93333334, 1)
+theme_override_colors/font_pressed_color = Color(0.2684, 0.4335066, 0.61, 1)
+theme_override_colors/font_hover_color = Color(0.5921569, 0.8627451, 0.92156863, 1)
+theme_override_fonts/font = ExtResource("3_ubpvv")
+theme_override_font_sizes/font_size = 36
+text = "CREDITS"
+flat = true
+alignment = 2
+
+[node name="QuitButton" type="Button" parent="Content/ButtonBlock" unique_id=652094384]
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.93333334, 0.93333334, 0.93333334, 1)
+theme_override_colors/font_pressed_color = Color(0.2684, 0.4335066, 0.61, 1)
+theme_override_colors/font_hover_color = Color(0.5921569, 0.8627451, 0.92156863, 1)
+theme_override_fonts/font = ExtResource("3_ubpvv")
+theme_override_font_sizes/font_size = 36
+text = "QUIT
+"
+flat = true
+alignment = 2
+
+[connection signal="pressed" from="Content/ButtonBlock/StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="Content/ButtonBlock/StartButton" to="." method="_on_new_game_button_pressed"]
+[connection signal="pressed" from="Content/ButtonBlock/SettingsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="pressed" from="Content/ButtonBlock/CreditsButton" to="." method="_on_credits_button_pressed"]
+[connection signal="pressed" from="Content/ButtonBlock/QuitButton" to="." method="_on_quit_button_pressed"]

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CharacterProfile" format=3 uid="uid://deutdb746jhqi"]
+
+[ext_resource type="Script" uid="uid://yiootngfe2lt" path="res://characters/CharacterProfile.gd" id="7_gidv2"]
+
+[resource]
+script = ExtResource("7_gidv2")
+actor_id = "Sergey"
+expressions = {
+"base": "res://Sprites/characters/sergey/sergey_base.png",
+"eyes_closed": "res://Sprites/characters/sergey/sergey_eyes_closed.png",
+"frown": "res://Sprites/characters/sergey/sergey_frown.png",
+"frown_look_away": "res://Sprites/characters/sergey/sergey_frown_look_away.png",
+"hand_behind_head": "res://Sprites/characters/sergey/sergey_hand_behind_head.png",
+"hand_up": "res://Sprites/characters/sergey/sergey_hand_up.png",
+"neutral_mouth_open": "res://Sprites/characters/sergey/sergey_neutral_mouth_open.png"
+}

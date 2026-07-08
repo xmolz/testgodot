@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="CharacterProfile" format=3 uid="uid://btxj50xynfv6y"]
+
+[ext_resource type="Script" uid="uid://yiootngfe2lt" path="res://characters/CharacterProfile.gd" id="8_5fx5s"]
+
+[resource]
+script = ExtResource("8_5fx5s")
+actor_id = "McBucket"
+expressions = {
+"mcbucket_default": "res://Sprites/characters/mcbucket/mcbucket_default.png",
+"mcbucket_high_base": "res://Sprites/characters/mcbucket/mcbucket_high_base.png",
+"mcbucket_high_explaining_eyes_closed_mouth_closed": "res://Sprites/characters/mcbucket/mcbucket_high_explaining_eyes_closed_mouth_closed.png",
+"mcbucket_high_explaining_eyes_closed_mouth_open": "res://Sprites/characters/mcbucket/mcbucket_high_explaining_eyes_closed_mouth_open.png",
+"mcbucket_high_explaining_eyes_open_mouth_closed": "res://Sprites/characters/mcbucket/mcbucket_high_explaining_eyes_open_mouth_closed.png",
+"mcbucket_high_hand_up": "res://Sprites/characters/mcbucket/mcbucket_high_hand_up.png",
+"mcbucket_high_happy": "res://Sprites/characters/mcbucket/mcbucket_high_happy.png",
+"mcbucket_invigirol_base": "res://Sprites/characters/mcbucket/mcbucket_invigirol_base.png",
+"mcbucket_ree": "res://Sprites/characters/mcbucket/mcbucket_ree.png"
+}

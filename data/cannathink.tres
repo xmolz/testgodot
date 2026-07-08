@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://xmq2iq7j8nup"]
+
+[ext_resource type="Texture2D" uid="uid://dtsjeievq6le" path="res://Sprites/inventory_items/cannathink_icon.png" id="1_ch4sg"]
+[ext_resource type="Script" uid="uid://by8o1t3tdwrep" path="res://data/ItemData.gd" id="2_q20wr"]
+
+[resource]
+script = ExtResource("2_q20wr")
+item_id = "cannathink"
+display_name = "CannaThink"
+icon = ExtResource("1_ch4sg")
+description = "An old, very rusty key. It looks like it might fit a simple lock."
+is_stackable = false
+max_stack_size = 1
+metadata/_custom_type_script = "uid://by8o1t3tdwrep"

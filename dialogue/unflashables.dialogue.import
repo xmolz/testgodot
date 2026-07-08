@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://c3kjrlxmlw02h"
+path="res://.godot/imported/unflashables.dialogue-8acbca4d4adcb980d85109da908964e5.tres"
+
+[deps]
+
+source_file="res://dialogue/unflashables.dialogue"
+dest_files=["res://.godot/imported/unflashables.dialogue-8acbca4d4adcb980d85109da908964e5.tres"]
+
+[params]
+
+defaults=true

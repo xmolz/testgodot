@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://c1jew5wpah7n5"
+path="res://.godot/imported/mcbucket_give_tp.dialogue-a8c884246b517bff347ae6d9f74f3ce6.tres"
+
+[deps]
+
+source_file="res://dialogue/mcbucket_give_tp.dialogue"
+dest_files=["res://.godot/imported/mcbucket_give_tp.dialogue-a8c884246b517bff347ae6d9f74f3ce6.tres"]
+
+[params]
+
+defaults=true

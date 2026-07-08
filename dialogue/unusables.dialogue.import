@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://dlyoiu6syhnqe"
+path="res://.godot/imported/unusables.dialogue-43feeaf01a9b7b653d8dc4c8efde0de7.tres"
+
+[deps]
+
+source_file="res://dialogue/unusables.dialogue"
+dest_files=["res://.godot/imported/unusables.dialogue-43feeaf01a9b7b653d8dc4c8efde0de7.tres"]
+
+[params]
+
+defaults=true

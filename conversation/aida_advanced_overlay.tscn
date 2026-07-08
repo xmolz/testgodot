@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://coj4oefv5bkk3"]
+
+[ext_resource type="PackedScene" uid="uid://kfct0osfvolx" path="res://conversation/AdvancedConversationOverlay.tscn" id="1_4ttk6"]
+[ext_resource type="Resource" uid="uid://ccyinn2ynsx1p" path="res://dialogue/AIda.dialogue" id="2_jwayt"]
+
+[node name="AdvancedConversationOverlay" unique_id=543555441 instance=ExtResource("1_4ttk6")]
+dialogue_resource = ExtResource("2_jwayt")
+background_aliases = {
+"aida_hospital_background": "res://Backgrounds/Levels/aida_hospital_background.png"
+}
+cg_aliases = {
+"memory_box": "res://Backgrounds/CGs/memory_box_cg.png",
+"scan_1": "res://Backgrounds/Protagonist/protag_hospital_base_1.png",
+"scan_2": "res://Backgrounds/Protagonist/protag_hospital_base_aida_green_eyes.png",
+"scan_3": "res://Backgrounds/Protagonist/protag_hospital_base_aida_red_eyes_gloves.png"
+}

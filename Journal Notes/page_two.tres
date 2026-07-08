@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="JournalPageData" format=3 uid="uid://yu75mdvsr8tw"]
 
 [ext_resource type="Texture2D" uid="uid://c1glgg230q4nu" path="res://Journal Notes/page_two.png" id="1_s5pvu"]
-[ext_resource type="Script" uid="uid://cxrhtr8seaits" path="res://Scripts/JournalPageData.gd" id="1_wnn72"]
+[ext_resource type="Script" uid="uid://cxrhtr8seaits" path="res://data/JournalPageData.gd" id="1_wnn72"]
 
 [resource]
 script = ExtResource("1_wnn72")

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dq1e26q2d8nix"]
 
 [ext_resource type="Script" uid="uid://dnvm6gaiggom5" path="res://Interactables/Game World/Hospital Bathroom/hospital_toilet.gd" id="1_1kp37"]
-[ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactable.gd" id="1_br1pn"]
+[ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactions/interactable.gd" id="1_br1pn"]
 [ext_resource type="Texture2D" uid="uid://bl6sy4jw0eepu" path="res://Sprites/Hospital Bathroom/hospital_bathroom_commode.PNG" id="2_sqtfq"]
 [ext_resource type="Texture2D" uid="uid://ccwgyb5recki5" path="res://Sprites/Hospital Bathroom/hospital_bathroom_commode_glow.PNG" id="3_1kp37"]
 [ext_resource type="Texture2D" uid="uid://bfuowd216d3ww" path="res://Sprites/Hospital Bathroom/hospital_bathroom_commode_error.png" id="5_hkb1v"]

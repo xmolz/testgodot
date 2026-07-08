@@ -1,0 +1,134 @@
+[gd_scene format=3 uid="uid://dxh3iucevq7uw"]
+
+[ext_resource type="Script" uid="uid://3ljv44t6bc3i" path="res://conversation/MemoryBoxOverlay.gd" id="1_nw7nd"]
+[ext_resource type="Theme" uid="uid://dn3c6kdmu6tyb" path="res://data/memorybox.tres" id="1_rxlxx"]
+[ext_resource type="Script" uid="uid://coccmochs1n0s" path="res://data/MemoryGroupData.gd" id="2_2chyr"]
+[ext_resource type="StyleBox" uid="uid://dxdc82o7pmbig" path="res://data/memoryboxbackbutton.tres" id="2_ut4ol"]
+[ext_resource type="Script" uid="uid://bfrll5vc6bmcg" path="res://data/MemoryChapterData.gd" id="3_krrhq"]
+[ext_resource type="Resource" uid="uid://bl0kuun15axhy" path="res://dialogue/dev_cta.dialogue" id="4_2chyr"]
+[ext_resource type="Texture2D" uid="uid://se0r37m0vxma" path="res://Memory Box Chapter Images/Chapters/Chapter 1 - University.png" id="4_krrhq"]
+[ext_resource type="Resource" uid="uid://bnm8g3a8idp2s" path="res://data/chapter_university_2.tres" id="5_877up"]
+[ext_resource type="Resource" uid="uid://o8gogh6pfshr" path="res://data/chapter_university_3.tres" id="6_fvrkw"]
+[ext_resource type="Resource" uid="uid://bkwnupwlp84j7" path="res://data/chapter_university_4.tres" id="7_ldlkn"]
+[ext_resource type="Resource" uid="uid://j60hdqi30bat" path="res://data/chapter_university_5.tres" id="8_i04l2"]
+[ext_resource type="Resource" uid="uid://cdwhaqqb1gb2j" path="res://data/chapter_university_6.tres" id="9_s3sw0"]
+[ext_resource type="Texture2D" uid="uid://016j71kposwn" path="res://Memory Box Chapter Images/Locations/University.png" id="10_bbg21"]
+
+[sub_resource type="Resource" id="Resource_kc2cv"]
+script = ExtResource("3_krrhq")
+chapter_name = "Keeping Busy"
+chapter_image = ExtResource("4_krrhq")
+triggers_dev_cta = true
+metadata/_custom_type_script = "uid://bfrll5vc6bmcg"
+
+[sub_resource type="Resource" id="Resource_vem0j"]
+script = ExtResource("2_2chyr")
+group_name = "University"
+group_image = ExtResource("10_bbg21")
+chapters = Array[ExtResource("3_krrhq")]([SubResource("Resource_kc2cv"), ExtResource("5_877up"), ExtResource("6_fvrkw"), ExtResource("7_ldlkn"), ExtResource("8_i04l2"), ExtResource("9_s3sw0")])
+metadata/_custom_type_script = "uid://coccmochs1n0s"
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2j1ub"]
+bg_color = Color(0.537255, 0.866667, 1, 0.392157)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kaas7"]
+bg_color = Color(0.537255, 0.866667, 1, 0.196078)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.537255, 0.866667, 1, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ut4ol"]
+
+[node name="MemoryBoxOverlay" type="CanvasLayer" unique_id=1376574176]
+script = ExtResource("1_nw7nd")
+all_memory_data = Array[ExtResource("2_2chyr")]([SubResource("Resource_vem0j")])
+dev_cta_dialogue = ExtResource("4_2chyr")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=2098391928]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.101961, 0.109804, 0.172549, 1)
+
+[node name="Panel" type="Panel" parent="." unique_id=123201530]
+anchors_preset = -1
+anchor_left = 0.019
+anchor_top = 0.051
+anchor_right = 0.981
+anchor_bottom = 0.939
+offset_left = 0.519997
+offset_top = -0.0800018
+offset_right = 0.479858
+offset_bottom = -0.120056
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_rxlxx")
+
+[node name="TitleLabel" type="Label" parent="Panel" unique_id=440893224]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.405
+anchor_top = 0.028
+anchor_right = 0.611
+anchor_bottom = 0.088
+offset_left = -0.0350342
+offset_top = 0.148001
+offset_right = 0.483032
+offset_bottom = -0.391998
+theme_override_colors/font_shadow_color = Color(0.537255, 0.866667, 1, 0.588235)
+theme_override_font_sizes/font_size = 30
+text = "M E M O R Y  B O X™"
+horizontal_alignment = 1
+
+[node name="BackButton" type="Button" parent="Panel" unique_id=544356990]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.022
+anchor_top = 0.029
+anchor_right = 0.058
+anchor_bottom = 0.084
+offset_left = -0.633991
+offset_top = 0.189009
+offset_right = 0.874008
+offset_bottom = 0.444008
+theme_override_font_sizes/font_size = 38
+theme_override_styles/normal = ExtResource("2_ut4ol")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_2j1ub")
+theme_override_styles/hover = SubResource("StyleBoxFlat_kaas7")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ut4ol")
+text = "<"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel" unique_id=2060821247]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.026
+anchor_top = 0.14
+anchor_right = 0.979
+anchor_bottom = 0.967
+offset_left = -0.0219994
+offset_top = -0.0460052
+offset_right = 0.786987
+offset_bottom = -0.353088
+
+[node name="LocationListContainer" type="VBoxContainer" parent="Panel/ScrollContainer" unique_id=1829714862]
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 20

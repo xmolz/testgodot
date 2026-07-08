@@ -1,0 +1,443 @@
+[gd_scene format=3 uid="uid://c8ew6m1cre37i"]
+
+[ext_resource type="Texture2D" uid="uid://pgh0fxgko7t2" path="res://Backgrounds/Levels/layla shower bg.png" id="1_l8jaq"]
+[ext_resource type="Texture2D" uid="uid://dhicjb67dx6fj" path="res://Sprites/characters/layla/layla_base.png" id="2_body"]
+[ext_resource type="Texture2D" uid="uid://bonhiqvu0mmkb" path="res://Sprites/dialogue sprites/layla_dialogue_sprite.png" id="3_lipip"]
+[ext_resource type="Texture2D" uid="uid://y2y1f3hkyh76" path="res://Sprites/dialogue sprites/protag_dialogue_sprite.png" id="4_playerpip"]
+[ext_resource type="Shader" uid="uid://d3ii3qgl4d2se" path="res://Dev/water_drip.gdshader" id="4_y88ty"]
+[ext_resource type="Theme" uid="uid://bbh4rjwcxnama" path="res://Themes/verb_and_inventory_theme.tres" id="5_theme"]
+[ext_resource type="FontFile" uid="uid://bd58xbyix7r6p" path="res://Fonts/VarelaRound-Regular.ttf" id="6_font"]
+[ext_resource type="Shader" uid="uid://6etx4og6oo6i" path="res://Dev/damp_skin.gdshader" id="8_damp"]
+[ext_resource type="Shader" uid="uid://bfgvlvhjk682t" path="res://Dev/steam_fog.gdshader" id="9_steam"]
+[ext_resource type="Shader" uid="uid://ndfeo37n6nww" path="res://Dev/glass_water_drops.gdshader" id="10_drops"]
+[ext_resource type="Shader" uid="uid://tiucesidxnk1" path="res://Dev/shower_stream.gdshader" id="10_trd8d"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_DampSkin"]
+shader = ExtResource("8_damp")
+shader_parameter/dampness = 0.25
+shader_parameter/damp_tint = Color(0.85, 0.9, 1, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_trd8d"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_52wk3"]
+noise = SubResource("FastNoiseLite_trd8d")
+seamless = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ld3cv"]
+shader = ExtResource("4_y88ty")
+shader_parameter/DropsNoise = SubResource("NoiseTexture2D_52wk3")
+shader_parameter/distortion_strength = 0.6250000296875
+shader_parameter/specular_intensity = 0.76400003629
+shader_parameter/speed_multiplier = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_Steam"]
+shader = ExtResource("9_steam")
+shader_parameter/steam_color = Color(0.9, 0.95, 1, 1)
+shader_parameter/fill_amount = 0.7410000351975
+shader_parameter/speed = 0.44400002109
+shader_parameter/scale = 2.17600005586
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_GlassDrops"]
+shader = ExtResource("10_drops")
+shader_parameter/drop_speed = 0.43800001754512
+shader_parameter/drop_density = 2.294000061465
+shader_parameter/distortion_strength = 0.0150000007125
+shader_parameter/highlight_color = Color(1, 1, 1, 0.101960786)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_PiP"]
+bg_color = Color(0.15, 0.15, 0.15, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(1, 0.51, 0.6, 1)
+corner_radius_top_left = 100
+corner_radius_top_right = 100
+corner_radius_bottom_right = 100
+corner_radius_bottom_left = 100
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Balloon"]
+content_margin_left = 20.0
+content_margin_top = 15.0
+content_margin_right = 20.0
+content_margin_bottom = 15.0
+bg_color = Color(1, 1, 1, 0.95)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.51, 0.6, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+shadow_color = Color(0, 0, 0, 0.15)
+shadow_size = 10
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_52wk3"]
+shader = ExtResource("10_trd8d")
+shader_parameter/stream_speed = 8.33900039284262
+shader_parameter/length_scale = 18.3600008246
+shader_parameter/stream_scale = 33.3450015363875
+shader_parameter/distortion_strength = 0.0010000000475
+shader_parameter/water_color = Color(0.8509804, 0.9490196, 1, 0)
+shader_parameter/droplet_density = 0.32900001236762
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_RightPanel"]
+bg_color = Color(0.1, 0.06, 0.07, 0.95)
+border_width_left = 4
+border_color = Color(1, 0.51, 0.6, 0.5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_MeterBg"]
+bg_color = Color(0.05, 0.03, 0.04, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.51, 0.6, 0.3)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_MeterFillArousal"]
+bg_color = Color(1, 0.51, 0.6, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+shadow_color = Color(1, 0.51, 0.6, 0.4)
+shadow_size = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_MeterFillClean"]
+bg_color = Color(0.2, 0.85, 1, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+shadow_color = Color(0.2, 0.85, 1, 0.4)
+shadow_size = 10
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_Focus"]
+
+[node name="SexySceneMockup" type="CanvasLayer" unique_id=1321271741]
+layer = 90
+
+[node name="Dimmer" type="ColorRect" parent="." unique_id=1369037939]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0, 0, 0, 0.85)
+
+[node name="MainSplit" type="HBoxContainer" parent="." unique_id=1334614173]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="LeftCanvas" type="Control" parent="MainSplit" unique_id=1986468702]
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 70.0
+
+[node name="Background" type="TextureRect" parent="MainSplit/LeftCanvas" unique_id=1913588634]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_l8jaq")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="CharacterBody" type="TextureRect" parent="MainSplit/LeftCanvas" unique_id=1898480588]
+material = SubResource("ShaderMaterial_DampSkin")
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -400.0
+offset_top = -1000.0
+offset_right = 400.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("2_body")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HandDrawnWaterOverlay" type="TextureRect" parent="MainSplit/LeftCanvas/CharacterBody" unique_id=1111478203]
+material = SubResource("ShaderMaterial_ld3cv")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_body")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="VolumetricSteam" type="ColorRect" parent="MainSplit/LeftCanvas" unique_id=219640221]
+material = SubResource("ShaderMaterial_Steam")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="CameraGlassDroplets" type="ColorRect" parent="MainSplit/LeftCanvas" unique_id=1174938736]
+material = SubResource("ShaderMaterial_GlassDrops")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="LIPiP_Panel" type="Panel" parent="MainSplit/LeftCanvas" unique_id=931782645]
+clip_children = 2
+layout_mode = 1
+offset_left = 40.0
+offset_top = 40.0
+offset_right = 220.0
+offset_bottom = 220.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_PiP")
+
+[node name="LIPiP_Image" type="TextureRect" parent="MainSplit/LeftCanvas/LIPiP_Panel" unique_id=1344094579]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 10.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_lipip")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LIDialogueBalloon" type="PanelContainer" parent="MainSplit/LeftCanvas" unique_id=144780960]
+layout_mode = 1
+offset_left = 240.0
+offset_top = 100.0
+offset_right = 640.0
+offset_bottom = 180.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_Balloon")
+
+[node name="Label" type="Label" parent="MainSplit/LeftCanvas/LIDialogueBalloon" unique_id=1725963963]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("6_font")
+theme_override_font_sizes/font_size = 28
+text = "Water is a bit cold... but it feels nice."
+autowrap_mode = 3
+
+[node name="PlayerPiP_Panel" type="Panel" parent="MainSplit/LeftCanvas" unique_id=189312503]
+clip_children = 2
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -220.0
+offset_top = -220.0
+offset_right = -40.0
+offset_bottom = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_PiP")
+
+[node name="PlayerPiP_Image" type="TextureRect" parent="MainSplit/LeftCanvas/PlayerPiP_Panel" unique_id=160374059]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 15.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_playerpip")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="PlayerDialogueBalloon" type="PanelContainer" parent="MainSplit/LeftCanvas" unique_id=1007465677]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -640.0
+offset_top = -180.0
+offset_right = -240.0
+offset_bottom = -100.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_Balloon")
+
+[node name="Label" type="Label" parent="MainSplit/LeftCanvas/PlayerDialogueBalloon" unique_id=1149324669]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("6_font")
+theme_override_font_sizes/font_size = 28
+text = "Let me get the soap..."
+horizontal_alignment = 2
+autowrap_mode = 3
+
+[node name="ShowerStream1" type="Line2D" parent="MainSplit/LeftCanvas" unique_id=1492776043]
+material = SubResource("ShaderMaterial_52wk3")
+position = Vector2(428, 140)
+points = PackedVector2Array(144, -124, 185, 965)
+width = 800.0
+texture_mode = 2
+
+[node name="RightSide" type="VBoxContainer" parent="MainSplit" unique_id=1700360058]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 30.0
+theme = ExtResource("5_theme")
+theme_override_constants/separation = 0
+
+[node name="ControlsPanel" type="PanelContainer" parent="MainSplit/RightSide" unique_id=926184420]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_RightPanel")
+
+[node name="Margin" type="MarginContainer" parent="MainSplit/RightSide/ControlsPanel" unique_id=185961694]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 25
+
+[node name="VBox" type="VBoxContainer" parent="MainSplit/RightSide/ControlsPanel/Margin" unique_id=1958041749]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="MetersHeader" type="Label" parent="MainSplit/RightSide/ControlsPanel/Margin/VBox" unique_id=1800632580]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.51, 0.6, 1)
+theme_override_font_sizes/font_size = 20
+text = "STATUS"
+horizontal_alignment = 1
+
+[node name="ArousalMeter" type="ProgressBar" parent="MainSplit/RightSide/ControlsPanel/Margin/VBox" unique_id=133796505]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_MeterBg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_MeterFillArousal")
+value = 45.0
+show_percentage = false
+
+[node name="CleanMeter" type="ProgressBar" parent="MainSplit/RightSide/ControlsPanel/Margin/VBox" unique_id=543510874]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_MeterBg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_MeterFillClean")
+value = 75.0
+show_percentage = false
+
+[node name="FinishButton" type="Button" parent="MainSplit/RightSide/ControlsPanel/Margin/VBox" unique_id=701411346]
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.8, 0.9, 1)
+theme_override_font_sizes/font_size = 20
+theme_override_styles/focus = SubResource("StyleBoxEmpty_Focus")
+disabled = true
+text = "FINISH UP"
+
+[node name="HSeparator1" type="HSeparator" parent="MainSplit/RightSide/ControlsPanel/Margin/VBox" unique_id=1824590359]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="VerbHeader" type="Label" parent="MainSplit/RightSide/ControlsPanel/Margin/VBox" unique_id=531407617]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.8, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "ACTIONS"
+horizontal_alignment = 1
+
+[node name="VerbGrid" type="GridContainer" parent="MainSplit/RightSide/ControlsPanel/Margin/VBox" unique_id=259556550]
+layout_mode = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 2
+
+[node name="TouchBtn" type="Button" parent="MainSplit/RightSide/ControlsPanel/Margin/VBox/VerbGrid" unique_id=388402523]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Touch"
+
+[node name="KissBtn" type="Button" parent="MainSplit/RightSide/ControlsPanel/Margin/VBox/VerbGrid" unique_id=229251329]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Kiss"
+
+[node name="TeaseBtn" type="Button" parent="MainSplit/RightSide/ControlsPanel/Margin/VBox/VerbGrid" unique_id=1328221160]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Tease"
+
+[node name="UseBtn" type="Button" parent="MainSplit/RightSide/ControlsPanel/Margin/VBox/VerbGrid" unique_id=613713485]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Use Item"
+
+[node name="HSeparator2" type="HSeparator" parent="MainSplit/RightSide/ControlsPanel/Margin/VBox" unique_id=1738547112]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="ItemsHeader" type="Label" parent="MainSplit/RightSide/ControlsPanel/Margin/VBox" unique_id=1768267827]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_font_sizes/font_size = 24
+text = "INVENTORY"
+horizontal_alignment = 1
+
+[node name="ItemsGrid" type="GridContainer" parent="MainSplit/RightSide/ControlsPanel/Margin/VBox" unique_id=1135482977]
+layout_mode = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 3
+
+[node name="Item1" type="Button" parent="MainSplit/RightSide/ControlsPanel/Margin/VBox/ItemsGrid" unique_id=662457845]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Soap"
+
+[node name="Item2" type="Button" parent="MainSplit/RightSide/ControlsPanel/Margin/VBox/ItemsGrid" unique_id=398363235]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+size_flags_horizontal = 3
+disabled = true
+text = "-"
+
+[node name="Item3" type="Button" parent="MainSplit/RightSide/ControlsPanel/Margin/VBox/ItemsGrid" unique_id=1550797179]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+size_flags_horizontal = 3
+disabled = true
+text = "-"
+
+[node name="Spacer" type="Control" parent="MainSplit/RightSide/ControlsPanel/Margin/VBox" unique_id=1981237605]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="BackButton" type="Button" parent="MainSplit/RightSide/ControlsPanel/Margin/VBox" unique_id=144638072]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+text = "Step Back"

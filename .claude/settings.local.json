@@ -4,7 +4,19 @@
       "Bash(grep:*)",
       "Bash(node:*)",
       "Bash(rm:*)",
-      "Bash(find *)"
+      "Bash(find *)",
+      "PowerShell(New-Item *)",
+      "Bash(python *)",
+      "Bash(curl -sL \"https://api.github.com/repos/hhyyrylainen/GodotPckTool/releases/latest\")",
+      "Bash(curl -sL -o \"C:/Godot/If I Remember Correctly/testgodot/godotpcktool.exe\" \"https://github.com/hhyyrylainen/GodotPckTool/releases/download/v2.2/godotpcktool.exe\")",
+      "PowerShell(& \"C:\\\\Godot\\\\If I Remember Correctly\\\\testgodot\\\\godotpcktool.exe\" \"C:\\\\Godot\\\\If I Remember Correctly\\\\testgodot\\\\dingdong\\\\If I Remember Correctly.pck\" -i \"sergey_dialogue_1\")",
+      "PowerShell(& \"C:\\\\Godot\\\\If I Remember Correctly\\\\testgodot\\\\godotpcktool.exe\" \"C:\\\\Godot\\\\If I Remember Correctly\\\\testgodot\\\\dingdong\\\\If I Remember Correctly.pck\" -a e -o \"C:\\\\Godot\\\\If I Remember Correctly\\\\testgodot\\\\dingdong\\\\extracted\" -i \"sergey_dialogue_1\")",
+      "Bash(awk 'NR>=1706 && NR<=1770 && /^[[:space:]]/ && !/^\\\\t/' GameManager.gd)",
+      "Bash(awk 'NR>=18 && NR<=22 && /^[[:space:]]/ && !/^\\\\t/' ConversationEventManager.gd)",
+      "Bash(npx repomix *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git log *)"
     ]
   }
 }

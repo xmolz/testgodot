@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cj8nc55uc3in"]
 
-[ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactable.gd" id="1_8n14r"]
+[ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactions/interactable.gd" id="1_8n14r"]
 [ext_resource type="Texture2D" uid="uid://bh7iuihr2gl5i" path="res://Sprites/Hospital Bathroom/hospital_bathroom_toilet_paper.PNG" id="2_e1ojk"]
 [ext_resource type="Material" uid="uid://dww3d0txyl18g" path="res://interactions/actions/interactable_outline.tres" id="OutlineMaterial"]
 

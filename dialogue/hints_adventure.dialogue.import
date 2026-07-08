@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://b4xdxqhu5a1b8"
+path="res://.godot/imported/hints_adventure.dialogue-11993e6f65d0410e25caa5d5ee965a01.tres"
+
+[deps]
+
+source_file="res://dialogue/hints_adventure.dialogue"
+dest_files=["res://.godot/imported/hints_adventure.dialogue-11993e6f65d0410e25caa5d5ee965a01.tres"]
+
+[params]
+
+defaults=true

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://uq5whvtm0m2i"]
 
 [ext_resource type="Script" uid="uid://droay01533cq1" path="res://Interactables/Game World/Hospital Room/medicine_dispenser.gd" id="1_hj5me"]
-[ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactable.gd" id="1_ipvca"]
+[ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactions/interactable.gd" id="1_ipvca"]
 [ext_resource type="Texture2D" uid="uid://455oyn0jubr2" path="res://Sprites/Cabinet Medicines/Invigirol.png" id="2_hcut2"]
 [ext_resource type="Texture2D" uid="uid://bmc3d1hil8030" path="res://Sprites/Cabinet Medicines/Cannathink.png" id="3_0wi8e"]
 [ext_resource type="Texture2D" uid="uid://dw2mykyc1xm5m" path="res://Animations/Game Objects/Hospital Room/Medicine Dispenser/Base Yellow Glow/Medicine Dispenser Yellow Glow.png" id="4_8sib2"]

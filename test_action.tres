@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="VerbData" load_steps=2 format=3 uid="uid://ltlqtdnj1qnt"]
+[gd_resource type="Resource" script_class="VerbData" format=3 uid="uid://ltlqtdnj1qnt"]
 
-[ext_resource type="Script" uid="uid://cn3ln508qp8dm" path="res://VerbData.gd" id="1_i4spn"]
+[ext_resource type="Script" uid="uid://cn3ln508qp8dm" path="res://data/VerbData.gd" id="1_i4spn"]
 
 [resource]
 script = ExtResource("1_i4spn")

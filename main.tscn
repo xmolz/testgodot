@@ -1,73 +1,73 @@
 [gd_scene format=3 uid="uid://cqtgjhr5nepn1"]
 
-[ext_resource type="PackedScene" uid="uid://bigouorladqds" path="res://VerbUI.tscn" id="1_1bvp3"]
+[ext_resource type="PackedScene" uid="uid://bigouorladqds" path="res://ui/VerbUI.tscn" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://suh4s1w73ooy" path="res://Main.gd" id="1_efxa6"]
-[ext_resource type="PackedScene" uid="uid://ba2cgdy2q1csl" path="res://player.tscn" id="1_pgf6g"]
-[ext_resource type="Resource" uid="uid://ccyinn2ynsx1p" path="res://AIda.dialogue" id="2_0cbny"]
+[ext_resource type="PackedScene" uid="uid://ba2cgdy2q1csl" path="res://characters/player.tscn" id="1_pgf6g"]
+[ext_resource type="Resource" uid="uid://ccyinn2ynsx1p" path="res://dialogue/AIda.dialogue" id="2_0cbny"]
 [ext_resource type="Texture2D" uid="uid://dldvj1j53uooh" path="res://Backgrounds/Levels/static_hospital_background.PNG" id="2_dg77c"]
-[ext_resource type="Script" uid="uid://dljo5cmv24o5h" path="res://camera_2d.gd" id="2_h2yge"]
-[ext_resource type="PackedScene" uid="uid://cud6uaak7lo18" path="res://InventoryUI.tscn" id="2_kek77"]
-[ext_resource type="Resource" uid="uid://d3deg4gqysr72" path="res://ExplanationData.tres" id="3_hrvbo"]
+[ext_resource type="Script" uid="uid://dljo5cmv24o5h" path="res://Non Interactables/camera_2d.gd" id="2_h2yge"]
+[ext_resource type="PackedScene" uid="uid://cud6uaak7lo18" path="res://ui/InventoryUI.tscn" id="2_kek77"]
+[ext_resource type="Resource" uid="uid://d3deg4gqysr72" path="res://data/ExplanationData.tres" id="3_hrvbo"]
 [ext_resource type="PackedScene" path="res://washroom_sign_visual.tscn" id="5_cyx1q"]
-[ext_resource type="PackedScene" uid="uid://btku3hrvme7k6" path="res://static_bathroom_background.tscn" id="5_f6a44"]
+[ext_resource type="PackedScene" uid="uid://btku3hrvme7k6" path="res://Non Interactables/static_bathroom_background.tscn" id="5_f6a44"]
 [ext_resource type="PackedScene" uid="uid://cj8nc55uc3in" path="res://Interactables/Game World/Hospital Bathroom/hospital_bathroom_toilet_paper.tscn" id="6_e71vb"]
 [ext_resource type="PackedScene" uid="uid://dq1e26q2d8nix" path="res://Interactables/Game World/Hospital Bathroom/hospital_toilet.tscn" id="6_uypp3"]
 [ext_resource type="Texture2D" uid="uid://bl6sy4jw0eepu" path="res://Sprites/Hospital Bathroom/hospital_bathroom_commode.PNG" id="7_6iyjs"]
 [ext_resource type="Resource" uid="uid://bivfrghh084ym" path="res://interactions/actions/DefaultExamineResponse.tres" id="7_jq2sk"]
 [ext_resource type="PackedScene" uid="uid://dwqwwrmp7uisr" path="res://Interactables/Game World/Hospital Bathroom/hospital_bathroom_toilet_flush.tscn" id="7_rnkwl"]
 [ext_resource type="AudioStream" uid="uid://cy8syrd23db10" path="res://Sfx/Game World/bathroom_music.mp3" id="7_wu3dr"]
-[ext_resource type="PackedScene" uid="uid://oy53tf8tvxe5" path="res://aida.tscn" id="8_vivmo"]
+[ext_resource type="PackedScene" uid="uid://oy53tf8tvxe5" path="res://characters/aida.tscn" id="8_vivmo"]
 [ext_resource type="Texture2D" uid="uid://bcxknipqlnnip" path="res://Sprites/Hospital Bathroom/hospital_bathroom_sink.png" id="9_4w656"]
 [ext_resource type="Script" uid="uid://nvyqoryt5sbh" path="res://interactions/actions/AddItemAction.gd" id="10_0rl1p"]
 [ext_resource type="Script" uid="uid://bs05cyo72v37l" path="res://LevelStateManager.gd" id="10_4c57u"]
-[ext_resource type="PackedScene" uid="uid://frycmvsnkt3j" path="res://Sergey.tscn" id="10_getpj"]
-[ext_resource type="Resource" uid="uid://buvvctce1wr7t" path="res://use_item_accompanying_dialogue.dialogue" id="10_vke2r"]
-[ext_resource type="PackedScene" uid="uid://c8w3xusvs4d7d" path="res://mcbucket.tscn" id="13_0odxb"]
-[ext_resource type="PackedScene" uid="uid://bjnf6egwtuqv5" path="res://MedCabinetzoomin.tscn" id="14_cegan"]
+[ext_resource type="PackedScene" uid="uid://frycmvsnkt3j" path="res://characters/Sergey.tscn" id="10_getpj"]
+[ext_resource type="Resource" uid="uid://buvvctce1wr7t" path="res://dialogue/use_item_accompanying_dialogue.dialogue" id="10_vke2r"]
+[ext_resource type="PackedScene" uid="uid://c8w3xusvs4d7d" path="res://characters/mcbucket.tscn" id="13_0odxb"]
+[ext_resource type="PackedScene" uid="uid://bjnf6egwtuqv5" path="res://conversation/MedCabinetzoomin.tscn" id="14_cegan"]
 [ext_resource type="Script" uid="uid://bfn877nkjq8gv" path="res://interactions/actions/PlaySoundAction.gd" id="14_ruth0"]
-[ext_resource type="Resource" uid="uid://dlyoiu6syhnqe" path="res://unusables.dialogue" id="15_uit24"]
-[ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactable.gd" id="16_2cqfq"]
+[ext_resource type="Resource" uid="uid://dlyoiu6syhnqe" path="res://dialogue/unusables.dialogue" id="15_uit24"]
+[ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactions/interactable.gd" id="16_2cqfq"]
 [ext_resource type="PackedScene" uid="uid://bkjbta25aa1fj" path="res://Interactables/Game World/Hospital Bathroom/hospital_bathroom_mirror.tscn" id="16_blkrb"]
 [ext_resource type="PackedScene" uid="uid://crcjecrrvndr2" path="res://Interactables/Game World/Hospital Room/medicine_cabinet.tscn" id="17_074og"]
 [ext_resource type="Script" uid="uid://7xsscyp60ilq" path="res://interactions/actions/CallMethodAction.gd" id="19_4k2k6"]
 [ext_resource type="Script" uid="uid://b4i2dd2kqpmun" path="res://interactions/actions/RemoveItemAction.gd" id="20_0rl1p"]
 [ext_resource type="Script" uid="uid://h83nrnu1277x" path="res://interactions/actions/StartConversationAction.gd" id="22_b1qrp"]
 [ext_resource type="Script" uid="uid://dosqfqbexlf5k" path="res://interactions/actions/OpenZoomViewAction.gd" id="24_ok6jj"]
-[ext_resource type="Script" uid="uid://bmq0s1nqhqi4j" path="res://InteractionResponse.gd" id="24_qsp4k"]
-[ext_resource type="Script" uid="uid://dltqnu07oiff" path="res://action.gd" id="25_kq58d"]
+[ext_resource type="Script" uid="uid://bmq0s1nqhqi4j" path="res://data/InteractionResponse.gd" id="24_qsp4k"]
+[ext_resource type="Script" uid="uid://dltqnu07oiff" path="res://interactions/action.gd" id="25_kq58d"]
 [ext_resource type="Script" uid="uid://8n5g87ifbnd5" path="res://interactions/actions/SetLevelFlagAction.gd" id="27_0n3wm"]
 [ext_resource type="PackedScene" uid="uid://ctrgw5138xyjg" path="res://hospital_bathroom_door.tscn" id="30_pjyto"]
 [ext_resource type="Script" uid="uid://bjrpwaag6vx20" path="res://interactions/actions/TriggerCutsceneAction.gd" id="32_ntx8l"]
 [ext_resource type="Shader" uid="uid://bi5b0454i0065" path="res://interactions/actions/interactable_outline.gdshader" id="35_0dhbp"]
-[ext_resource type="PackedScene" uid="uid://coj4oefv5bkk3" path="res://aida_advanced_overlay.tscn" id="35_cyx1q"]
-[ext_resource type="PackedScene" uid="uid://dmk5irmsf6dk8" path="res://sergey_advanced_overlay.tscn" id="38_cyx1q"]
-[ext_resource type="PackedScene" uid="uid://cymg2dkrvsnfy" path="res://explanation_layer.tscn" id="38_d2t1y"]
+[ext_resource type="PackedScene" uid="uid://coj4oefv5bkk3" path="res://conversation/aida_advanced_overlay.tscn" id="35_cyx1q"]
+[ext_resource type="PackedScene" uid="uid://dmk5irmsf6dk8" path="res://conversation/sergey_advanced_overlay.tscn" id="38_cyx1q"]
+[ext_resource type="PackedScene" uid="uid://cymg2dkrvsnfy" path="res://ui/explanation_layer.tscn" id="38_d2t1y"]
 [ext_resource type="Resource" path="res://interactions/actions/sneak_pills_action.tres" id="39_1vm84"]
 [ext_resource type="Texture2D" uid="uid://cawccc2uqrsj8" path="res://Sprites/Hospital Room/mcbucket_bandaid.png" id="40_34ol3"]
 [ext_resource type="PackedScene" uid="uid://cxo2auakscy0h" path="res://hospital_door.tscn" id="40_h8e4i"]
-[ext_resource type="PackedScene" uid="uid://cn3wt8p41equ0" path="res://insurance_form_button_ui.tscn" id="41_4lmeg"]
+[ext_resource type="PackedScene" uid="uid://cn3wt8p41equ0" path="res://ui/insurance_form_button_ui.tscn" id="41_4lmeg"]
 [ext_resource type="Script" uid="uid://dm3vji871klli" path="res://interactions/actions/TeleportAction.gd" id="44_0cbny"]
-[ext_resource type="PackedScene" uid="uid://cpvtyvf4t8pht" path="res://memory_box.tscn" id="44_gngh3"]
-[ext_resource type="Resource" uid="uid://bom2aj2a6w76n" path="res://generic_lines.dialogue" id="45_qnost"]
+[ext_resource type="PackedScene" uid="uid://cpvtyvf4t8pht" path="res://conversation/memory_box.tscn" id="44_gngh3"]
+[ext_resource type="Resource" uid="uid://bom2aj2a6w76n" path="res://dialogue/generic_lines.dialogue" id="45_qnost"]
 [ext_resource type="Script" uid="uid://bvfc7q2g4fum1" path="res://interactions/actions/OpenMemoryBoxAction.gd" id="45_wnkbs"]
 [ext_resource type="Script" uid="uid://8c6cnm8lo25p" path="res://interactions/actions/ShowCustomDialogueAction.gd" id="46_wnkbs"]
 [ext_resource type="Texture2D" uid="uid://dxrfme6ebfa8c" path="res://hospital bed.png" id="47_wnkbs"]
-[ext_resource type="PackedScene" uid="uid://b8abif6uqojn4" path="res://tv.tscn" id="48_f6a44"]
+[ext_resource type="PackedScene" uid="uid://b8abif6uqojn4" path="res://Interactables/Game World/Hospital Room/tv.tscn" id="48_f6a44"]
 [ext_resource type="PackedScene" uid="uid://b7ruec2vo6haw" path="res://Non Interactables/hospital_bathroom_sink.tscn" id="53_abqjc"]
-[ext_resource type="PackedScene" uid="uid://cd01yo706pdq1" path="res://journal_button_ui.tscn" id="58_wu3dr"]
+[ext_resource type="PackedScene" uid="uid://cd01yo706pdq1" path="res://ui/journal_button_ui.tscn" id="58_wu3dr"]
 [ext_resource type="Resource" uid="uid://c3tq5l5jdua2v" path="res://interactions/actions/OpenMemoryBoxAction.tres" id="62_0dhbp"]
 [ext_resource type="Script" uid="uid://c2cuhw0y84tao" path="res://Cutscenes/ToiletClogCutscene.gd" id="63_sm6fg"]
-[ext_resource type="Resource" uid="uid://dmkt054qdywph" path="res://aida_toilet_assistance.dialogue" id="64_b17eg"]
+[ext_resource type="Resource" uid="uid://dmkt054qdywph" path="res://dialogue/aida_toilet_assistance.dialogue" id="64_b17eg"]
 [ext_resource type="PackedScene" uid="uid://uq5whvtm0m2i" path="res://Interactables/Game World/Hospital Room/medicine_dispenser.tscn" id="66_uatky"]
-[ext_resource type="Resource" uid="uid://xp53l3fuethr" path="res://examinables.dialogue" id="67_1vm84"]
+[ext_resource type="Resource" uid="uid://xp53l3fuethr" path="res://dialogue/examinables.dialogue" id="67_1vm84"]
 [ext_resource type="Script" uid="uid://bmuxd8k0o3aw7" path="res://interactions/actions/ShowDialogueActiont.gd" id="68_wu3dr"]
 [ext_resource type="PackedScene" path="res://exit_sign_visual.tscn" id="69_wu3dr"]
 [ext_resource type="Script" uid="uid://bcakqi840s08m" path="res://LevelHintManager.gd" id="70_0dhbp"]
-[ext_resource type="PackedScene" uid="uid://p2iroc5a0o8y" path="res://exit_door.tscn" id="70_cyx1q"]
-[ext_resource type="Resource" uid="uid://cppyr6lerlx7s" path="res://hints.dialogue" id="71_jx0wj"]
-[ext_resource type="PackedScene" uid="uid://cqlvokl3ymyk8" path="res://pause_menu_ui.tscn" id="71_pause"]
-[ext_resource type="Script" uid="uid://cwgcwktmorn74" path="res://camera_region.gd" id="72_jx0wj"]
-[ext_resource type="Resource" uid="uid://b4xdxqhu5a1b8" path="res://hints_adventure.dialogue" id="72_kkkcx"]
+[ext_resource type="PackedScene" uid="uid://p2iroc5a0o8y" path="res://Interactables/Game World/Hospital Room/exit_door.tscn" id="70_cyx1q"]
+[ext_resource type="Resource" uid="uid://cppyr6lerlx7s" path="res://dialogue/hints.dialogue" id="71_jx0wj"]
+[ext_resource type="PackedScene" uid="uid://cqlvokl3ymyk8" path="res://ui/pause_menu_ui.tscn" id="71_pause"]
+[ext_resource type="Script" uid="uid://cwgcwktmorn74" path="res://Non Interactables/camera_region.gd" id="72_jx0wj"]
+[ext_resource type="Resource" uid="uid://b4xdxqhu5a1b8" path="res://dialogue/hints_adventure.dialogue" id="72_kkkcx"]
 
 [sub_resource type="Resource" id="Resource_4obbf"]
 script = ExtResource("10_0rl1p")
@@ -148,7 +148,7 @@ verb_id = "use"
 actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_yjja3"), SubResource("Resource_yvsr8")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_0dhbp"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1vm84"]
 resource_local_to_scene = true
 shader = ExtResource("35_0dhbp")
 shader_parameter/enable_outline = false
@@ -291,7 +291,7 @@ verb_id = "use"
 actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_l0gw7")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_34ol3"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wu3dr"]
 resource_local_to_scene = true
 shader = ExtResource("35_0dhbp")
 shader_parameter/enable_outline = false
@@ -347,7 +347,7 @@ verb_id = "talk_to"
 actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_f6a44")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_c2n8d"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cyx1q"]
 resource_local_to_scene = true
 shader = ExtResource("35_0dhbp")
 shader_parameter/enable_outline = false
@@ -390,7 +390,7 @@ verb_id = "use"
 actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_mcb_plain_use_act")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_wy5fy"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0dhbp"]
 resource_local_to_scene = true
 shader = ExtResource("35_0dhbp")
 shader_parameter/enable_outline = false
@@ -472,7 +472,7 @@ verb_id = "use"
 actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_pjyto")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_gx4rg"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jx0wj"]
 resource_local_to_scene = true
 shader = ExtResource("35_0dhbp")
 shader_parameter/enable_outline = false
@@ -724,7 +724,7 @@ position = Vector2(641, 2120)
 scale = Vector2(0.7, 0.7)
 
 [node name="ObjectSprite" parent="HospitalToilet" index="0" unique_id=128490347]
-material = SubResource("ShaderMaterial_0dhbp")
+material = SubResource("ShaderMaterial_1vm84")
 
 [node name="InteractionArea" parent="HospitalToilet" index="2" unique_id=1085681545]
 object_display_name = "Toilet"
@@ -834,7 +834,7 @@ position = Vector2(-8, 33)
 scale = Vector2(0.98, 0.98)
 
 [node name="ObjectSprite" parent="Aida_Path/AIda" index="1" unique_id=940694777]
-material = SubResource("ShaderMaterial_34ol3")
+material = SubResource("ShaderMaterial_wu3dr")
 
 [node name="MovementController" parent="Aida_Path/AIda" index="2" unique_id=825057676]
 movement_speed = 250.0
@@ -871,7 +871,7 @@ interactions = Array[ExtResource("24_qsp4k")]([SubResource("Resource_htxhm"), Su
 character_conversation_overlay_scene = ExtResource("38_cyx1q")
 
 [node name="ObjectSprite" parent="Sergei_Path/Sergei" index="4" unique_id=427518227]
-material = SubResource("ShaderMaterial_c2n8d")
+material = SubResource("ShaderMaterial_cyx1q")
 
 [node name="MedicalTube" type="Line2D" parent="." unique_id=1970149638]
 z_index = -2
@@ -902,7 +902,7 @@ interactions = Array[ExtResource("24_qsp4k")]([ExtResource("7_jq2sk"), SubResour
 
 [node name="ObjectSprite" parent="McBucket_Path/McBucket" index="4" unique_id=1554080546]
 z_index = 1
-material = SubResource("ShaderMaterial_wy5fy")
+material = SubResource("ShaderMaterial_0dhbp")
 
 [node name="McbucketBandaid" type="Sprite2D" parent="McBucket_Path/McBucket" unique_id=1105273087]
 z_index = 2
@@ -927,7 +927,13 @@ target_path = NodePath("../Player")
 
 [node name="LevelStateManager" type="Node" parent="." unique_id=1325462510]
 script = ExtResource("10_4c57u")
-override_give_techpass = true
+override_has_spoken_to_aida = true
+override_aida_explanation_shown = true
+override_insurance_button_unlocked = true
+override_has_tried_memory_box = true
+override_mcbucket_zanopram_used = true
+override_learned_techpass_from_aida = true
+override_learned_techpass_from_sergey = true
 
 [node name="VerbUI_CanvasLayer" parent="." unique_id=1400491569 instance=ExtResource("1_1bvp3")]
 unique_name_in_owner = true
@@ -1026,7 +1032,7 @@ z_index = -1
 position = Vector2(992, -22)
 
 [node name="ObjectSprite" parent="MedicineDispenser" index="1" unique_id=452912050]
-material = SubResource("ShaderMaterial_gx4rg")
+material = SubResource("ShaderMaterial_jx0wj")
 
 [node name="PulseOverlay" parent="MedicineDispenser" index="5" unique_id=1762419068]
 offset_left = -90.0
