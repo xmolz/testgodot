@@ -864,6 +864,10 @@ func _complete_interaction_cycle():
 		current_selected_item_data = null
 		selected_inventory_item_changed.emit(null)
 
+	# --- FIX START: Restore Player Control and UI ---
+	# Since we removed the unfreeze logic from the individual Dialogue actions,
+	# we must ensure the player is un-frozen here, at the absolute end of the chain.
+	
 	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
 		# Only unfreeze if we are in the normal gameplay state (not a full cutscene/zoom)
 		if current_interaction_state == InteractionState.WORLD and current_game_state == GameState.IN_GAME_PLAY:
@@ -1478,7 +1482,7 @@ func _cleanup_all_overlays(node: Node = null):
 			child.queue_free()
 		elif "Balloon" in child.name or "conversationballoon" in child.name.to_lower():
 			child.queue_free()
-		elif "DialogueHistory" in child.name:
+		elif "DialogueHistory" in child.name and child != DialogueHistory:
 			child.queue_free()
 		else:
 			_cleanup_all_overlays(child)
@@ -1498,4 +1502,3 @@ func refresh_hint_system():
 				new_hint_available.emit(true)
 			else:
 				new_hint_available.emit(false)
-
