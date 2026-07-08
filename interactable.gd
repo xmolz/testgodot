@@ -5,12 +5,7 @@ signal display_dialogue(text: String)
 signal self_destruct_requested
 signal interaction_processed
 
-# Global/GameManager state requests
-signal request_remove_item_from_inventory(item_id_to_remove: String)
-signal request_add_item_to_inventory(item_id_to_add: String)
-signal request_set_game_flag(flag_name: String, value: bool)
-signal request_set_level_flag(flag_name: String, value: bool)
-signal interaction_pending # Fired when the player clicks, but is still walking over
+signal interaction_pending
 signal interaction_started
 
 enum ObjectCategory { OBJECT, CHARACTER }

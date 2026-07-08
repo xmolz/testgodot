@@ -13,6 +13,6 @@ func execute(interactable_node: Interactable) -> bool:
 
 	# We use the interactable_node to emit the existing signal that the
 	# GameManager is already set up to listen for.
-	interactable_node.request_remove_item_from_inventory.emit(item_id_to_remove)
+	Inventory.remove_item(item_id_to_remove)
 	print_rich("[color=cyan]RemoveItemAction: Requested to remove item '%s' from inventory.[/color]" % item_id_to_remove)
 	return true

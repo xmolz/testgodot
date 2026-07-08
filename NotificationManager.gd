@@ -7,7 +7,7 @@ const NOTIFICATION_SCENE = preload("res://Notification.tscn")
 var active_notification: Node = null
 
 func _ready():
-	GameManager.notification_requested.connect(add_notification)
+	Events.notification_requested.connect(add_notification)
 
 func add_notification(message: String):
 	# Play the sound effect as soon as a notification is requested.
