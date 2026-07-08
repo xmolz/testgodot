@@ -1,10 +1,10 @@
 ~ start
 do change_background("test", "none", 0.0)
-if GameManager.get_current_level_flag("mcbucket_zanopram_used") == true:
+if Flags.get_level_flag("mcbucket_zanopram_used") == true:
 	=> sleeping_start
-elif GameManager.get_current_level_flag("mcbucket_cannathink_used") == true:
+elif Flags.get_level_flag("mcbucket_cannathink_used") == true:
 	=> high_start
-elif GameManager.get_current_level_flag("mcbucket_invigirol_used") == true or GameManager.get_current_level_flag("tv_turned_off") == true:
+elif Flags.get_level_flag("mcbucket_invigirol_used") == true or Flags.get_level_flag("tv_turned_off") == true:
 	=> invigirol_start
 else:
 	=> default_start
@@ -23,7 +23,7 @@ What do you want to say to him?
 	do SoundManager.play_sfx("mcbucket_scream")
 	do shake(0.5, 20.0)
 	Old Man: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
-	do GameManager.set_current_level_flag("mcbucket_has_screamed_at_player", true)
+	do Flags.set_level_flag("mcbucket_has_screamed_at_player", true)
 	do show_cg("mcbucket_normal_base")
 	Wow, that was quite something. What do you wanna say to him?
 	- What?
@@ -127,7 +127,7 @@ What do you want to say to him?
 	do SoundManager.play_sfx("mcbucket_scream")
 	do shake(0.5, 20.0)
 	Old Man: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
-	do GameManager.set_current_level_flag("mcbucket_has_screamed_at_player", true)
+	do Flags.set_level_flag("mcbucket_has_screamed_at_player", true)
 	do show_cg("mcbucket_normal_base")
 	Wow, that was quite something. What do you wanna say to him?
 	- What?

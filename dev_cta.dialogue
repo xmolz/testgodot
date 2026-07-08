@@ -176,5 +176,5 @@ do center_patreon_button_and_keep_alive()
 # Hide the text box and the actor so the button is front and center
 do hide_dialogue_ui()
 do actor_leave("Lewgend")
-do GameManager.set_current_level_flag("dev_cta_completed", true)
+do Flags.set_level_flag("dev_cta_completed", true)
 => END

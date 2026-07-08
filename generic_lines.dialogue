@@ -28,16 +28,16 @@ Player: (I might finally remember who I am.)
 ~ memory_box_locked
 Player: (Hmmm. The screen says I need to insert my TechPass™ to begin.)
 
-if GameManager.get_current_level_flag("learned_techpass_from_aida") == true and GameManager.get_current_level_flag("learned_techpass_from_sergey") == true
+if Flags.get_level_flag("learned_techpass_from_aida") == true and Flags.get_level_flag("learned_techpass_from_sergey") == true
 	Player: (This must be the card the Nurse and Sergey were talking about.)
-elif GameManager.get_current_level_flag("learned_techpass_from_aida") == true
+elif Flags.get_level_flag("learned_techpass_from_aida") == true
 	Player: (This must be the card the Nurse mentioned.)
-elif GameManager.get_current_level_flag("learned_techpass_from_sergey") == true
+elif Flags.get_level_flag("learned_techpass_from_sergey") == true
 	Player: (This must be the card Sergey was talking about.)
 else
 	Player: (Fuck is that, now?)
 
-do GameManager.set_current_level_flag("has_tried_memory_box", true)
+do Flags.set_level_flag("has_tried_memory_box", true)
 => END
 
 #mcbucket
@@ -62,9 +62,9 @@ Player: (This could probably get clogged easily...)
 AIda: Hey patient #122, that cabinet is reserved for clinical staff.
 AIda: If you are experiencing discomfort, I can assist with approved medication.
 Player: (Huh. Looks like I can’t open the medicine cabinet while she’s still around.)
-if GameManager.get_current_level_flag("mcbucket_interruption_happened") or (GameManager.get_current_level_flag("mcbucket_has_screamed_at_player") and GameManager.get_current_level_flag("learned_about_meds_from_aida"))
+if Flags.get_level_flag("mcbucket_interruption_happened") or (Flags.get_level_flag("mcbucket_has_screamed_at_player") and Flags.get_level_flag("learned_about_meds_from_aida"))
 	Player: (Is there any way I can send her to the other room?)
-do GameManager.set_current_level_flag("aida_stopped_cabinet", true)
+do Flags.set_level_flag("aida_stopped_cabinet", true)
 => END
 
 ~ mcbucket_not_put_to_sleep

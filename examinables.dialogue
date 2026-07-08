@@ -42,14 +42,14 @@ Player: (Label provides no description.)
 
 ~ mcbucket
 
-if GameManager.get_current_level_flag("mcbucket_zanopram_used")
+if Flags.get_level_flag("mcbucket_zanopram_used")
 	Old Man: Zzzzzzz...
 	Player: (Out like a log. He's not getting in my way now.)
-elif GameManager.get_current_level_flag("mcbucket_cannathink_used")
+elif Flags.get_level_flag("mcbucket_cannathink_used")
 	Player: (The old man stares blankly into space.)
 	Player: (Damn, seems like the cannathink got him to calm down.)
 	Player: (Maybe I should try talking to him now?)
-elif GameManager.get_current_level_flag("mcbucket_invigirol_used")
+elif Flags.get_level_flag("mcbucket_invigirol_used")
 	Player: (Damn, the geezer is huffin' an' puffin'.)
 	Player: (Can't be good.)
 else
@@ -86,10 +86,10 @@ Player: (I can make it outta here!)
 
 ~ television_screen
 
-if GameManager.get_current_level_flag("tv_turned_off") == true
+if Flags.get_level_flag("tv_turned_off") == true
 	Player: (A sleek wall-mounted TV that’s turned off.)
 	Player: (The room is quieter, but I like that better.)
-elif GameManager.get_current_level_flag("tv_examined") == false
+elif Flags.get_level_flag("tv_examined") == false
 	A sleek wall-mounted TV hums softly. The news seems to be on.
 
 	A young reporter sits across from a man in a flawless black suit. He looks neither young nor old. His face expressionless.
@@ -99,7 +99,7 @@ elif GameManager.get_current_level_flag("tv_examined") == false
 
 	CEO Voss: Oh, we don’t run the country.
 	CEO Voss: We simply maintain it. The country runs through us.
-	do GameManager.set_current_level_flag("tv_examined", true)
+	do Flags.set_level_flag("tv_examined", true)
 else
 	Player: (The interview with the CEO is still ongoing.)
 	Player: (I really don’t like the smug look of this prick.)
@@ -108,7 +108,7 @@ else
 
 ~ memory_box
 
-if GameManager.get_current_level_flag("has_spoken_to_aida") == true
+if Flags.get_level_flag("has_spoken_to_aida") == true
 	Player: (A console-like device.)
 	Player: (Must be the Memory Box™ that metallic nurse was talking about.)
 	Player: (I should try using this!)
@@ -134,10 +134,10 @@ Player: (Seems to be displaying the date and time on the top right.)
 => END
 
 ~ hospital_toilet
-if GameManager.get_current_level_flag("toilet_clogged")
+if Flags.get_level_flag("toilet_clogged")
 	Player: (I've successfully clogged this dumper.)
 	Player: (What now, though?)
-elif GameManager.get_current_level_flag("toilet_has_paper")
+elif Flags.get_level_flag("toilet_has_paper")
 	Player: (The dropped toilet paper has clumped together into a soggy ball.)
 	Player: (Probably won't flush well...)
 else

@@ -4,8 +4,8 @@ Player: (I don't think they want that.)
 
 ~ AIda_item_hospital_toilet_paper
 AIda: Thanks!
-do GameManager.remove_item_from_inventory("hospital_toilet_paper")
-do GameManager.show_notification("Toilet paper given to AIda.")
+do Inventory.remove_item("hospital_toilet_paper")
+do NotificationManager.add_notification("Toilet paper given to AIda.")
 => END
 
 ~ sergey_item_techpass
@@ -18,8 +18,8 @@ Player: (What am I thinking?)
 ~ sergey_item_hospital_toilet_paper
 Sergey: Oh. Toilet paper.
 Sergey: Ummm... Thanks?
-do GameManager.remove_item_from_inventory("hospital_toilet_paper")
-do GameManager.show_notification("Toilet paper given to Sergey.")
+do Inventory.remove_item("hospital_toilet_paper")
+do NotificationManager.add_notification("Toilet paper given to Sergey.")
 Player: (Hmmm. Maybe this wasn't the most thoughtful gift.)
 => END
 

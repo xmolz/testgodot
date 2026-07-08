@@ -79,5 +79,5 @@ AIda: Luckily, we have a MemoryBox ™ installed right here in this very unit. Y
 		AIda: Doing so ensures HAVEMORE Inc. can verify your identity, reconnect you with your coverage plan, and — most importantly — prevent your current balance from being transferred to our Collections Department.  
 		AIda: Consider it your lifeline back to solvency! Keep the form close, and update it whenever a missing piece of "you" resurfaces.  
 		AIda: The more complete your profile, the faster we can process your claim... and the lower your personal liability becomes.
-		do GameManager.set_current_level_flag("has_spoken_to_aida", true)
+		do Flags.set_level_flag("has_spoken_to_aida", true)
 			=> END

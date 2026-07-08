@@ -1,6 +1,6 @@
 ~ start
 # 1. Check if we already did the intro. If yes, jump straight to the hub!
-if GameManager.get_current_level_flag("has_spoken_to_aida") == true:
+if Flags.get_level_flag("has_spoken_to_aida") == true:
 	=> aida_hub
 
 # Setup the empty hospital background and bring AIda on stage!
@@ -122,7 +122,7 @@ AIda: Luckily, we have a MemoryBox™ installed right here in this very unit. Yo
 		- Fine, I'll check it out. [Leave]
 			do actor_change("AIda", "surprised")
 			AIda: Splendid! Here, I am providing you with this tablet. 
-			do GameManager.show_notification("Insurance Form Added!")
+			do NotificationManager.add_notification("Insurance Form Added!")
 			do actor_change("AIda", "base")
 			AIda: Once you piece your memory together using the MemoryBox™, fill out your personal details in the insurance form open in the tablet.  
 			AIda: Doing so ensures HAVEMORE Inc can verify your identity and reconnect you with your coverage plan.
@@ -131,7 +131,7 @@ AIda: Luckily, we have a MemoryBox™ installed right here in this very unit. Yo
 			do actor_change("AIda", "smiling") 
 			AIda: The more complete your profile, the faster we can process your claim.
 			AIda: ... and the lower your personal liability becomes.
-			do GameManager.set_current_level_flag("has_spoken_to_aida", true)
+			do Flags.set_level_flag("has_spoken_to_aida", true)
 			do SoundManager.fade_out_music(6.0)
 			
 			do actor_hide("AIda")
@@ -196,8 +196,8 @@ What do you want to say to AIda?
 	- Alright [Back].
 		=> conversation_return
 
-- The MemoryBox seems to be locked. [if GameManager.get_current_level_flag("has_tried_memory_box")]
-	do GameManager.set_current_level_flag("learned_techpass_from_aida", true)
+- The MemoryBox seems to be locked. [if Flags.get_level_flag("has_tried_memory_box")]
+	do Flags.set_level_flag("learned_techpass_from_aida", true)
 	do actor_change("AIda", "surprised")
 	AIda: Oh! I'm terribly sorry about that!
 	do actor_change("AIda", "pointing_up")
@@ -229,7 +229,7 @@ What do you want to say to AIda?
 
 		=> conversation_return
 
-- About the Old Man... [if GameManager.get_current_level_flag("mcbucket_zanopram_used")]
+- About the Old Man... [if Flags.get_level_flag("mcbucket_zanopram_used")]
 	do actor_change("AIda", "thinking")
 	AIda takes a quick glance over at Patient #67.
 
@@ -245,7 +245,7 @@ What do you want to say to AIda?
 
 	=> conversation_return
 
-- What's wrong with the Old Man? [if (GameManager.get_current_level_flag("mcbucket_interruption_happened") or GameManager.get_current_level_flag("mcbucket_has_screamed_at_player")) and not GameManager.get_current_level_flag("mcbucket_zanopram_used")]
+- What's wrong with the Old Man? [if (Flags.get_level_flag("mcbucket_interruption_happened") or Flags.get_level_flag("mcbucket_has_screamed_at_player")) and not Flags.get_level_flag("mcbucket_zanopram_used")]
 	do actor_change("AIda", "surprised")
 	AIda: Oh! You mean Patient #67.
 	do actor_change("AIda", "pointing_up")
@@ -286,7 +286,7 @@ What do you want to say to AIda?
 			Player: (So they do have meds for him.)
 			Player: (And they're probably kept somewhere in this room.)
 			Player: (I should look around.)
-			do GameManager.set_current_level_flag("learned_about_meds_from_aida", true)
+			do Flags.set_level_flag("learned_about_meds_from_aida", true)
 
 			=> mcbucket_enquiry_hub
 

@@ -7,7 +7,7 @@ Player: ...It wasn't very effective.
 
 ~ mcbucket_pre
 
-if GameManager.get_current_level_flag("mcbucket_cannathink_used"):
+if Flags.get_level_flag("mcbucket_cannathink_used"):
 	Player: Flash? This Old stoner?
 	Player: Hmm. Why not. Let's see how he reacts.
 	=> END
@@ -19,13 +19,13 @@ else:
 
 ~ mcbucket_post
 
-if GameManager.get_current_level_flag("mcbucket_zanopram_used"):
+if Flags.get_level_flag("mcbucket_zanopram_used"):
 	Player: Yeah... don't know what I was expecting to happen.
 	Player: Dangling a carrot in front of a sleeping rabbit like that.
 	=> END
-elif GameManager.get_current_level_flag("mcbucket_invigirol_used"):
+elif Flags.get_level_flag("mcbucket_invigirol_used"):
 	=> default_post
-elif GameManager.get_current_level_flag("mcbucket_cannathink_used"):
+elif Flags.get_level_flag("mcbucket_cannathink_used"):
 	Old Man: Aphrodite? Ye almighty Aphrodite?
 	Old Man: Ye bless me with yer presence?
 	Player: That's... flattering.
@@ -47,15 +47,15 @@ Player: (...Why did I do that?)
 => END
 
 ~ AIda_pre
-if GameManager.get_current_level_flag("has_spoken_to_aida") == false:
+if Flags.get_level_flag("has_spoken_to_aida") == false:
 	Player: (Umm... I think it'll be better to try talking to her first.)
-	do GameManager.set_game_flag("abort_flash", true)
+	do Flags.set_game_flag("abort_flash", true)
 => END
 
 ~ sergey_pre
-if GameManager.has_item("techpass") == false:
+if Inventory.has_item("techpass") == false:
 	Player: (For some reason, I don't think it will be a good idea to flash him just yet.)
-	do GameManager.set_game_flag("abort_flash", true)
+	do Flags.set_game_flag("abort_flash", true)
 => END
 
 ~ sergey_post

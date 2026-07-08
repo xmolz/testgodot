@@ -1,6 +1,6 @@
 ~ start
 do change_background("test", "none", 0.0)
-if GameManager.get_current_level_flag("mcbucket_interruption_happened") == true and GameManager.get_current_level_flag("mcbucket_zanopram_used") == true:
+if Flags.get_level_flag("mcbucket_interruption_happened") == true and Flags.get_level_flag("mcbucket_zanopram_used") == true:
 	=> drugged_branch_resume
 do show_cg("sergey_neutral", "fade", 0.5)
 
@@ -105,7 +105,7 @@ Sergey: So then… tell me. How can Sergey help?
 							Sergey: Hope you find peace in your new life. 
 							=> hub
 
-- How can I use the MemoryBox ™? [Proceed] [if GameManager.get_current_level_flag("has_spoken_to_aida") and GameManager.get_current_level_flag("has_tried_memory_box") and ConversationEventManager.asked_sergey_identity]
+- How can I use the MemoryBox ™? [Proceed] [if Flags.get_level_flag("has_spoken_to_aida") and Flags.get_level_flag("has_tried_memory_box") and ConversationEventManager.asked_sergey_identity]
 	do show_cg("sergey_hand_up")
 	Sergey: That machine? Simple. Just put in your TechPass™, turn the machine on, and put your hand on the scanner. Boom, you can access your memories.
 
@@ -123,7 +123,7 @@ Sergey: So then… tell me. How can Sergey help?
 	# change line above, there's only one option to say below
 
 	- What's a TechPass™?
-		do GameManager.set_current_level_flag("learned_techpass_from_sergey", true)
+		do Flags.set_level_flag("learned_techpass_from_sergey", true)
 		do show_cg("sergey_hand_up")
 		Sergey: Hah. You must have hit head [i]very[/i] hard. Everyone has TechPass™.
 		do show_cg("sergey_techpass_inhand")
@@ -390,7 +390,7 @@ Sergey: So then… tell me. How can Sergey help?
 							You lean forward, your lips inches from his ear.
 							Now is the time. You move your hand higher, aiming for the....but then-
 
-							if GameManager.get_current_level_flag("mcbucket_zanopram_used") == false
+							if Flags.get_level_flag("mcbucket_zanopram_used") == false
 								#slide to mcbucket
 								do SoundManager.stop_looping_sfx("heavy_breathing", 0.0)
 								do SoundManager.play_sfx("mcbucket_scream")
@@ -434,11 +434,11 @@ Sergey: So then… tell me. How can Sergey help?
 											'And I would really like your TechPass™, sweetheart' is what you want to say.
 											'Me too! Sergey.' is what you end up saying instead.
 											Okay then, comatose girl. Lets get this bread.
-											do GameManager.set_current_level_flag("mcbucket_interruption_happened", true)
+											do Flags.set_level_flag("mcbucket_interruption_happened", true)
 											do SoundManager.fade_out_music(3.0)
 											=> END
 							else
-								if GameManager.get_current_level_flag("mcbucket_interruption_happened") == true:
+								if Flags.get_level_flag("mcbucket_interruption_happened") == true:
 									Player: (Thankfully, the Old Man across the room is out cold.)
 									Player: (No interruptions this time.)
 								else:
@@ -556,7 +556,7 @@ The servos engage instantly.
 do show_cg("sergey_flat_and_embarrassed")
 The backrest drops, pulling him down until he lies flat beneath you.
 
-if GameManager.get_current_level_flag("mcbucket_interruption_happened") == true:
+if Flags.get_level_flag("mcbucket_interruption_happened") == true:
 	Player: (Well, I've got him where I want him.)
 	Player: (Back to where I left off last time...)
 else:
