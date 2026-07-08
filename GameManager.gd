@@ -808,6 +808,11 @@ func restore_world_after_object_dialogue(_resource: Resource):
 
 	_complete_interaction_cycle()
 
+func register_character_conversation(overlay: Node):
+	_current_character_conversation_overlay_instance = overlay
+	if overlay.has_signal("conversation_finished") and not overlay.conversation_finished.is_connected(_on_character_conversation_finished):
+		overlay.conversation_finished.connect(_on_character_conversation_finished, CONNECT_ONE_SHOT)
+
 func _on_character_conversation_finished(resource: DialogueResource):
 	exit_to_world_state()
 

@@ -26,16 +26,7 @@ func execute(interactable_node: Interactable) -> bool:
 		# Instantiate the scene and add it to the root of the tree.
 		var conversation_instance = conversation_scene.instantiate()
 		interactable_node.get_tree().root.add_child(conversation_instance)
-		if GameManager: GameManager._current_character_conversation_overlay_instance = conversation_instance
-
-		# The old GameManager logic connected a signal to know when the conversation
-		# was done. We must replicate that here to ensure the UI comes back!
-		# We connect to the existing function on the GameManager.
-		if conversation_instance.has_signal("conversation_finished"):
-			conversation_instance.conversation_finished.connect(
-				GameManager._on_character_conversation_finished,
-				CONNECT_ONE_SHOT
-			)
+		GameManager.register_character_conversation(conversation_instance)
 
 		print_rich("[color=cyan]StartConversationAction: Launched conversation for '%s'.[/color]" % interactable_node.object_display_name)
 
