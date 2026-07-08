@@ -119,7 +119,7 @@ func global_fade_from_black(duration: float = 1.0):
 func _set_gm_transitioning(is_active: bool):
 	if GameManager:
 		GameManager.is_transitioning = is_active
-		if GameManager.has_method("_update_top_hovered_object"):
-			GameManager._update_top_hovered_object()
+		if GameManager.has_method("refresh_hovered_object"):
+			GameManager.refresh_hovered_object()
 		if GameManager.has_method("update_sentence_line_ui"):
 			GameManager.update_sentence_line_ui()

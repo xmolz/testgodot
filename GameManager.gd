@@ -586,6 +586,9 @@ func clear_hovered_object(interactable: Interactable = null):
 		hovered_interactables.clear()
 	_update_top_hovered_object()
 
+func refresh_hovered_object():
+	_update_top_hovered_object()
+
 func _update_top_hovered_object():
 	# Clean out invalid instances just in case an object was destroyed while hovered
 	for i in range(hovered_interactables.size() - 1, -1, -1):
