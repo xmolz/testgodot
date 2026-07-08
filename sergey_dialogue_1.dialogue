@@ -169,7 +169,7 @@ Sergey: So then… tell me. How can Sergey help?
 			else:
 				Sergey: So, if you are OK waiting a few weeks, you can open their website and apply.
 				do show_cg("protag_closeup_curious")
-				if GameManager.get_game_flag("first_name_correct")
+				if Flags.get_game_flag("first_name_correct")
 					Little does he know you barely managed to remember your name.
 					An address would be a longshot.
 				else
@@ -581,7 +581,7 @@ Something from a language class you maybe took a lifetime ago.
 do reveal_shock_from_black("japan", 25.0)
 Player: ([i]Ooki Desu.[/i])
 Player: (Oh. So this is what my brain remembers.)
-if GameManager.get_game_flag("first_name_correct")
+if Flags.get_game_flag("first_name_correct")
 	Player: (Good. Who'd wanna be burdened with the knowledge of trivial things.)
 	Player: (You know, like who the fuck I really am?)
 else
@@ -785,7 +785,7 @@ do show_cg("protag_closeup_speaking")
 Player: Well... if you put it that way.
 Player: Thank you, Sergey.
 
-do GameManager.add_item_to_inventory("techpass")
+do Inventory.add_item("techpass")
 The air in the room returns back to normal.
 Player: Stay put Sergey, let me figure out who I am and come see you again?
 Sergey: Of course Devushka, I've got no where to go.
