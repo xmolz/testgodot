@@ -1561,7 +1561,7 @@ func show_patreon_button():
 	patreon_btn.pressed.connect(func():
 		if SoundManager and SoundManager.has_method("play_sfx"):
 			SoundManager.play_sfx("ui_click")
-		OS.shell_open(GameManager.PATREON_URL)
+		OS.shell_open(PatreonWorldButton.PATREON_URL)
 	)
 
 	# --- CRITICAL FIX: Add to the Dialogue Balloon so it sits on Layer 100! ---
