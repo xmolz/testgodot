@@ -936,6 +936,9 @@ func _on_scan_cancel_pressed():
 			_scan_tween.tween_interval(2.0)
 			_scan_tween.tween_callback(_cancel_scan)
 
+func is_scan_active() -> bool:
+	return _scan_active
+
 func _cancel_scan():
 	_scan_active = false
 	if _scan_tween: _scan_tween.kill()

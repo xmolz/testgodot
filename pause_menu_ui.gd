@@ -261,7 +261,7 @@ func _apply_style():
 	)
 	scan_cancel_panel.mouse_exited.connect(func():
 		if scan_style.border_color != Color(1.0, 0.3, 0.3, 1.0):
-			if GameManager and GameManager._scan_active:
+			if GameManager and GameManager.is_scan_active():
 				scan_style.border_color = Color(0.2, 0.85, 1.0, 1.0)
 			else:
 				scan_style.border_color = Color.WHITE
