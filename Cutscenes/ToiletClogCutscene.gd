@@ -55,7 +55,7 @@ func _execution_steps():
 
 	# --- STEP 1: AIDA DIALOGUE ---
 	if aida_scold_dialogue:
-		DialogueManager.show_dialogue_balloon_scene("res://conversationballoon.tscn", aida_scold_dialogue, scold_dialogue_start_id)
+		DialogueManager.show_dialogue_balloon_scene("res://conversation/conversationballoon.tscn", aida_scold_dialogue, scold_dialogue_start_id)
 		await DialogueManager.dialogue_ended
 	
 	# --- STEP 2: ENTER BATHROOM ---
@@ -73,7 +73,7 @@ func _execution_steps():
 	# --- NEW STEP 2.5: PLAYER MONOLOGUE ---
 	# Right after Aida disappears and we wait half a second, the player talks.
 	if aida_scold_dialogue and not player_monologue_start_id.is_empty():
-		DialogueManager.show_dialogue_balloon_scene("res://conversationballoon.tscn", aida_scold_dialogue, player_monologue_start_id)
+		DialogueManager.show_dialogue_balloon_scene("res://conversation/conversationballoon.tscn", aida_scold_dialogue, player_monologue_start_id)
 		await DialogueManager.dialogue_ended
 	
 	# Move Aida to her actual working position

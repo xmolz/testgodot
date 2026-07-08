@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 enum State { IDLE, HIGH, INVIGIROL, SLEEPING }
 
-const MCBUCKET_ADVANCED_OVERLAY = "res://mcbucket_advanced_overlay.tscn"
+const MCBUCKET_ADVANCED_OVERLAY = "res://conversation/mcbucket_advanced_overlay.tscn"
 
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var interactable_component = $InteractionArea
@@ -50,7 +50,7 @@ func _ready():
 		sleep_response.required_flag_value = true
 
 		var sleep_dialogue_action = ShowCustomDialogueAction.new()
-		sleep_dialogue_action.dialogue_resource = load("res://mcbucket_give_tp.dialogue")
+		sleep_dialogue_action.dialogue_resource = load("res://dialogue/mcbucket_give_tp.dialogue")
 		sleep_dialogue_action.dialogue_checkpoint = "sleeping"
 		sleep_response.actions_to_perform.append(sleep_dialogue_action)
 
@@ -62,7 +62,7 @@ func _ready():
 		give_tp_response.required_flag_value = false
 
 		var give_tp_action = ShowCustomDialogueAction.new()
-		give_tp_action.dialogue_resource = load("res://mcbucket_give_tp.dialogue")
+		give_tp_action.dialogue_resource = load("res://dialogue/mcbucket_give_tp.dialogue")
 		give_tp_action.dialogue_checkpoint = "start"
 
 		var remove_tp_action = RemoveItemAction.new()

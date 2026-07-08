@@ -87,7 +87,7 @@ func _on_character_conversation_ended(resource: DialogueResource):
 			GameManager.start_explanation(aida_explanation_data, self)
 
 func _inject_progression_blockers():
-	var generic_dialogue = preload("res://generic_lines.dialogue")
+	var generic_dialogue = preload("res://dialogue/generic_lines.dialogue")
 
 	var act_talk_no_aida = ShowCustomDialogueAction.new()
 	act_talk_no_aida.dialogue_resource = generic_dialogue

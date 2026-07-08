@@ -1,7 +1,7 @@
 # NotificationManager.gd
 extends CanvasLayer
 
-const NOTIFICATION_SCENE = preload("res://Notification.tscn")
+const NOTIFICATION_SCENE = preload("res://ui/Notification.tscn")
 
 @onready var notification_container = $NotificationContainer
 var active_notification: Node = null

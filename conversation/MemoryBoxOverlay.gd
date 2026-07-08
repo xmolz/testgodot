@@ -7,8 +7,8 @@ extends CanvasLayer
 @onready var back_button: Button = $Panel/BackButton
 @onready var panel: Panel = $Panel
 
-const LocationRowScene = preload("res://LocationRow.tscn")
-const ADVANCED_OVERLAY_SCENE = preload("res://AdvancedConversationOverlay.tscn")
+const LocationRowScene = preload("res://ui/LocationRow.tscn")
+const ADVANCED_OVERLAY_SCENE = preload("res://conversation/AdvancedConversationOverlay.tscn")
 
 func _ready():
 	back_button.pressed.connect(_on_back_button_pressed)

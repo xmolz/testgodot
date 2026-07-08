@@ -123,22 +123,22 @@ func toggle_pause():
 
 func _on_history_pressed():
 	if SoundManager: SoundManager.play_sfx("ui_click")
-	var log_scene = load("res://dialogue_history_ui.tscn")
+	var log_scene = load("res://ui/dialogue_history_ui.tscn")
 	if log_scene: get_tree().root.add_child(log_scene.instantiate())
 
 func _on_settings_pressed():
 	if SoundManager: SoundManager.play_sfx("ui_click")
-	var settings_scene = load("res://settings_menu.tscn")
+	var settings_scene = load("res://ui/settings_menu.tscn")
 	if settings_scene: get_tree().root.add_child(settings_scene.instantiate())
 
 func _on_controls_pressed():
 	if SoundManager: SoundManager.play_sfx("ui_click")
-	var controls_scene = load("res://controls_menu.tscn")
+	var controls_scene = load("res://ui/controls_menu.tscn")
 	if controls_scene: get_tree().root.add_child(controls_scene.instantiate())
 
 func _on_credits_pressed():
 	if SoundManager: SoundManager.play_sfx("ui_click")
-	var credits_scene = load("res://credits_menu.tscn")
+	var credits_scene = load("res://ui/credits_menu.tscn")
 	if credits_scene: get_tree().root.add_child(credits_scene.instantiate())
 
 func _on_quit_pressed():

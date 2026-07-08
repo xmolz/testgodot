@@ -2,16 +2,16 @@
 extends Node
 
 const MAIN_GAME_SCENE_PATH = "res://main.tscn"
-const INSURANCE_FORM_SCENE = preload("res://insurance_form.tscn")
-const JOURNAL_OVERLAY_SCENE = preload("res://journal_overlay.tscn")
-const MAIN_MENU_SCENE_PATH = "res://main_menu.tscn"
-const INTRO_OVERLAY_SCENE_PATH = "res://AdvancedConversationOverlay.tscn"
-const INTRO_BACKGROUND_ANIMATIONS_PATH = "res://conversation_backgrounds.tres"
+const INSURANCE_FORM_SCENE = preload("res://ui/insurance_form.tscn")
+const JOURNAL_OVERLAY_SCENE = preload("res://ui/journal_overlay.tscn")
+const MAIN_MENU_SCENE_PATH = "res://ui/main_menu.tscn"
+const INTRO_OVERLAY_SCENE_PATH = "res://conversation/AdvancedConversationOverlay.tscn"
+const INTRO_BACKGROUND_ANIMATIONS_PATH = "res://conversation/conversation_backgrounds.tres"
 const INTRO_INITIAL_ANIMATION_NAME = "float_loop"
 const INTRO_DIALOGUE = preload("res://dialogue/intro.dialogue")
-const GAME_OVER_SCENE = preload("res://game_over.tscn")
-const DIFFICULTY_SELECT_SCENE = preload("res://difficulty_select_screen.tscn")
-const CONVERSATION_BALLOON_SCENE = preload("res://conversationballoon.tscn")
+const GAME_OVER_SCENE = preload("res://ui/game_over.tscn")
+const DIFFICULTY_SELECT_SCENE = preload("res://ui/difficulty_select_screen.tscn")
+const CONVERSATION_BALLOON_SCENE = preload("res://conversation/conversationballoon.tscn")
 
 var _insurance_form_instance: CanvasLayer = null
 var _journal_overlay_instance: CanvasLayer = null
@@ -113,24 +113,24 @@ func _ready():
 	print("If I Remember Correctly — v%s" % str(ProjectSettings.get_setting("application/config/version", "unset")))
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 
-	var cursor_scene = load("res://custom_cursor.tscn")
+	var cursor_scene = load("res://ui/custom_cursor.tscn")
 	if cursor_scene and not OS.has_feature("mobile"):
 		custom_cursor_instance = cursor_scene.instantiate()
 		add_child(custom_cursor_instance)
 
-	var indicator_scene = load("res://walk_indicator.tscn")
+	var indicator_scene = load("res://ui/walk_indicator.tscn")
 	if indicator_scene:
 		walk_indicator_instance = indicator_scene.instantiate()
 		add_child(walk_indicator_instance)
 		walk_indicator_instance.set_physics_interpolation_mode(Node.PHYSICS_INTERPOLATION_MODE_OFF)
 
 	# Spawn our Global Transition Layer immediately
-	var transition_scene = preload("res://TransitionLayer.tscn")
+	var transition_scene = preload("res://ui/TransitionLayer.tscn")
 	transition_layer = transition_scene.instantiate()
 	add_child(transition_layer)
 
 	# Spawn our Global Pause Menu (lives on GameManager so it works in all states)
-	var pause_scene = preload("res://pause_menu_ui.tscn")
+	var pause_scene = preload("res://ui/pause_menu_ui.tscn")
 	pause_menu_ui = pause_scene.instantiate()
 	add_child(pause_menu_ui)
 
@@ -499,7 +499,7 @@ func select_verb(verb_id_to_select: String):
 			if not DialogueManager.dialogue_ended.is_connected(restore_world_after_object_dialogue):
 				DialogueManager.dialogue_ended.connect(restore_world_after_object_dialogue, CONNECT_ONE_SHOT)
 
-			var generic_lines = preload("res://generic_lines.dialogue")
+			var generic_lines = preload("res://dialogue/generic_lines.dialogue")
 			DialogueManager.show_dialogue_balloon_scene(CONVERSATION_BALLOON_SCENE, generic_lines, "give_empty_inventory")
 			return
 		# -------------------------------------------
@@ -708,7 +708,7 @@ func _initiate_interaction_flow(interactable_node: Interactable, verb_to_use_id:
 		if not DialogueManager.dialogue_ended.is_connected(restore_world_after_object_dialogue):
 			DialogueManager.dialogue_ended.connect(restore_world_after_object_dialogue, CONNECT_ONE_SHOT)
 
-		var generic_lines = preload("res://generic_lines.dialogue")
+		var generic_lines = preload("res://dialogue/generic_lines.dialogue")
 		DialogueManager.show_dialogue_balloon_scene(CONVERSATION_BALLOON_SCENE, generic_lines, "give_no_item_selected")
 		return
 	# -----------------------------------------------

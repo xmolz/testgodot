@@ -6,7 +6,7 @@ extends Action
 @export var dialogue_checkpoint: String = ""
 
 # Define the specific balloon scene
-const BALLOON_SCENE_PATH = "res://conversationballoon.tscn"
+const BALLOON_SCENE_PATH = "res://conversation/conversationballoon.tscn"
 
 # Change return type to Variant to allow 'await' to work correctly
 func execute(interactable_node: Interactable) -> Variant:

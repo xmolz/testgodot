@@ -58,7 +58,7 @@ func _start_caught_dialogue():
 			)
 
 	DialogueManager.show_dialogue_balloon_scene(
-		"res://conversationballoon.tscn",
+		"res://conversation/conversationballoon.tscn",
 		caught_dialogue_resource,
 		caught_dialogue_start_id
 	)

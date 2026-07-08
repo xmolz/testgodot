@@ -5,10 +5,10 @@ extends CanvasLayer
 
 # The list of massive files we want to pre-load.
 var load_queue = [
-	{"path": "res://main_menu.tscn", "name": "System Interfaces"},
-	{"path": "res://difficulty_select_screen.tscn", "name": "Game Configuration"},
-	{"path": "res://conversation_backgrounds.tres", "name": "Visual Assets"},
-	{"path": "res://AdvancedConversationOverlay.tscn", "name": "Narrative Engine"},
+	{"path": "res://ui/main_menu.tscn", "name": "System Interfaces"},
+	{"path": "res://ui/difficulty_select_screen.tscn", "name": "Game Configuration"},
+	{"path": "res://conversation/conversation_backgrounds.tres", "name": "Visual Assets"},
+	{"path": "res://conversation/AdvancedConversationOverlay.tscn", "name": "Narrative Engine"},
 	{"path": "res://main.tscn", "name": "Environment Data"}
 ]
 
@@ -66,9 +66,9 @@ func _process(_delta):
 		
 		# Save it to the GameManager based on what it is
 		match current_file["path"]:
-			"res://main_menu.tscn":
+			"res://ui/main_menu.tscn":
 				GameManager.cached_main_menu_scene = loaded_resource
-			"res://AdvancedConversationOverlay.tscn":
+			"res://conversation/AdvancedConversationOverlay.tscn":
 				GameManager.cached_intro_overlay_scene = loaded_resource
 			"res://main.tscn":
 				GameManager.cached_main_game_scene = loaded_resource

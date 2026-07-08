@@ -2,7 +2,7 @@
 class_name OpenMemoryBoxAction
 extends Action
 
-const MemoryBoxScene = preload("res://MemoryBoxOverlay.tscn")
+const MemoryBoxScene = preload("res://conversation/MemoryBoxOverlay.tscn")
 
 func execute(interactable_node: Interactable) -> Variant:
 	if not MemoryBoxScene:

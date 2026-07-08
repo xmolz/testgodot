@@ -2,10 +2,10 @@
 class_name ShowDialogueAction
 extends Action
 
-@export var dialogue_resource: DialogueResource = preload("res://examinables.dialogue")
+@export var dialogue_resource: DialogueResource = preload("res://dialogue/examinables.dialogue")
 
 # Define the specific balloon scene to ensure visual consistency
-const BALLOON_SCENE_PATH = "res://conversationballoon.tscn"
+const BALLOON_SCENE_PATH = "res://conversation/conversationballoon.tscn"
 
 func execute(interactable_node: Interactable) -> Variant:
 	# --- Safety Checks ---

@@ -156,7 +156,7 @@ func _ready():
 	if conversation_dialogue_file:
 		# [UPDATED] We capture the return value into 'current_balloon'
 		current_balloon = DialogueManager.show_dialogue_balloon_scene(
-			"res://conversationballoon.tscn",
+			"res://conversation/conversationballoon.tscn",
 			conversation_dialogue_file,
 			"start",
 			[self] # Pass 'self' as extra_game_state so balloon can find us

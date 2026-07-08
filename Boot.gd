@@ -1,7 +1,7 @@
 # Boot.gd
 extends Node
 
-const LOGO_SPLASH_SCENE_PATH = "res://logo_splash.tscn"
+const LOGO_SPLASH_SCENE_PATH = "res://ui/logo_splash.tscn"
 
 func _ready():
 	if not GameManager:
@@ -40,6 +40,6 @@ func _on_logo_splash_finished():
 	print_rich("[color=yellow]Boot: Logo splash finished. Transitioning to loading screen...[/color]")
 	
 	# Load and instance the loading screen
-	var loading_screen_scene = load("res://loading_screen.tscn")
+	var loading_screen_scene = load("res://ui/loading_screen.tscn")
 	var loading_instance = loading_screen_scene.instantiate()
 	add_child(loading_instance)

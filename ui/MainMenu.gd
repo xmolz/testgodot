@@ -34,14 +34,14 @@ func _on_quit_button_pressed():
 
 func _on_settings_button_pressed():
 	if SoundManager: SoundManager.play_sfx("ui_click")
-	var settings_scene = load("res://settings_menu.tscn")
+	var settings_scene = load("res://ui/settings_menu.tscn")
 	if settings_scene:
 		var instance = settings_scene.instantiate()
 		get_tree().root.add_child(instance)
 
 func _on_credits_button_pressed():
 	if SoundManager: SoundManager.play_sfx("ui_click")
-	var credits_scene = load("res://credits_menu.tscn")
+	var credits_scene = load("res://ui/credits_menu.tscn")
 	if credits_scene:
 		var instance = credits_scene.instantiate()
 		get_tree().root.add_child(instance)

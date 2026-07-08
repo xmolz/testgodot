@@ -2,8 +2,8 @@ extends CanvasLayer
 
 signal form_closed
 
-const FORM_DIALOGUE = preload("res://form_related_dialogue.dialogue")
-const CONVERSATION_BALLOON_SCENE = preload("res://conversationballoon.tscn")
+const FORM_DIALOGUE = preload("res://dialogue/form_related_dialogue.dialogue")
+const CONVERSATION_BALLOON_SCENE = preload("res://conversation/conversationballoon.tscn")
 
 # Inputs from LineEditContainer
 @onready var first_name_edit: LineEdit = $TabletFrame/Padding/ContentCanvas/LineEditContainer/FirstName_Edit

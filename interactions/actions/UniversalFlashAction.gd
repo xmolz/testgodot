@@ -15,7 +15,7 @@ func execute(interactable_node: Interactable) -> Variant:
 	# 1. Check Unflashables (Plays dialogue, skips animation, ends interaction)
 	var unflashable_id = obj_id + "_unflashable"
 	if flash_dialogue.titles.has(unflashable_id):
-		DialogueManager.show_dialogue_balloon_scene("res://conversationballoon.tscn", flash_dialogue, unflashable_id)
+		DialogueManager.show_dialogue_balloon_scene("res://conversation/conversationballoon.tscn", flash_dialogue, unflashable_id)
 		await DialogueManager.dialogue_ended
 		return true
 
@@ -25,7 +25,7 @@ func execute(interactable_node: Interactable) -> Variant:
 	# 2. Check Pre-Flash (Plays dialogue, then continues to animation)
 	var pre_id = obj_id + "_pre"
 	if flash_dialogue.titles.has(pre_id):
-		DialogueManager.show_dialogue_balloon_scene("res://conversationballoon.tscn", flash_dialogue, pre_id)
+		DialogueManager.show_dialogue_balloon_scene("res://conversation/conversationballoon.tscn", flash_dialogue, pre_id)
 		await DialogueManager.dialogue_ended
 
 	# Check if the dialogue requested the flash to be aborted
@@ -59,7 +59,7 @@ func execute(interactable_node: Interactable) -> Variant:
 		post_id = "default_post"
 
 	if flash_dialogue.titles.has(post_id):
-		DialogueManager.show_dialogue_balloon_scene("res://conversationballoon.tscn", flash_dialogue, post_id)
+		DialogueManager.show_dialogue_balloon_scene("res://conversation/conversationballoon.tscn", flash_dialogue, post_id)
 		await DialogueManager.dialogue_ended
 
 	return true

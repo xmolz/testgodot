@@ -58,7 +58,7 @@ func _ready():
 		solid_background.mouse_filter = Control.MOUSE_FILTER_STOP
 
 	current_balloon = DialogueManager.show_dialogue_balloon_scene(
-		preload("res://conversationballoon.tscn"),
+		preload("res://conversation/conversationballoon.tscn"),
 		dialogue_resource,
 		start_dialogue_id,
 		[self]

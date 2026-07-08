@@ -22,7 +22,7 @@ func _ready():
 
 	# 4. Instantiate the balloon inside the viewport
 	var dialogue_res = load("res://dialogue/alyssa_marketing.dialogue")
-	var balloon = preload("res://conversationballoon.tscn").instantiate()
+	var balloon = preload("res://conversation/conversationballoon.tscn").instantiate()
 	viewport.add_child(balloon)
 	balloon.start(dialogue_res, "start")
 

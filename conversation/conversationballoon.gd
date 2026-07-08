@@ -742,7 +742,7 @@ func _restore_dialogue_visibility() -> void:
 
 func _on_log_button_pressed() -> void:
 	if SoundManager: SoundManager.play_sfx("ui_click")
-	var log_scene = load("res://dialogue_history_ui.tscn")
+	var log_scene = load("res://ui/dialogue_history_ui.tscn")
 	if log_scene:
 		var log_instance = log_scene.instantiate()
 		get_tree().root.add_child(log_instance)
