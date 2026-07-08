@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dialogue_history_ui_001"]
 
-[ext_resource type="Script" uid="uid://dialogue_history_ui_script" path="res://dialogue_history_ui.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://dialogue_history_ui_script" path="res://ui/dialogue_history_ui.gd" id="1_script"]
 
 [node name="DialogueHistoryUI" type="CanvasLayer"]
 layer = 105

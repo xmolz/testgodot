@@ -30,7 +30,7 @@ do SoundManager.play_music_track("unnatural_city", 5.0)
 
 # 3. Spawn the procedural Dread right above the girl's head
 # (Adjust 960, 300 up or down if it doesn't align with her head perfectly)
-do spawn_cinematic_entity("dread", "res://dread_entity.tscn", 960, 300)
+do spawn_cinematic_entity("dread", "res://characters/dread_entity.tscn", 960, 300)
 
 ???: You come across [color=#FF00FF]Dread[/color].
 ???: Somehow, this doesn't feel like a discovery to you.
@@ -96,7 +96,7 @@ do remove_cinematic_entity("dread")
 ???: Suddenly—a warm presence grabs your hand.
 
 # 5. Spawn the procedural Hope
-do spawn_cinematic_entity("hope", "res://hope_entity.tscn", 960, 300)
+do spawn_cinematic_entity("hope", "res://characters/hope_entity.tscn", 960, 300)
 
 [color=#FFC8E3]Hope[/color]: I'm sorry it took me this long.
 ???: Late as always, it seems [color=#FFC8E3]Hope[/color] finally found you.

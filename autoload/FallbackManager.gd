@@ -1,4 +1,4 @@
-# res://scripts/FallbackManager.gd
+# res://autoload/FallbackManager.gd
 extends Node
 
 const DEFAULT_CHECKPOINT_NAME = "start"

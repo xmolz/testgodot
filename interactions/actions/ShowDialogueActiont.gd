@@ -1,4 +1,4 @@
-# res://interactions/actions/ShowDialogueAction.gd
+# res://interactions/actions/ShowDialogueActiont.gd
 class_name ShowDialogueAction
 extends Action
 

@@ -1,4 +1,4 @@
-# res://interactions/InteractionResponse.gd
+# res://data/InteractionResponse.gd
 class_name InteractionResponse
 extends Resource
 

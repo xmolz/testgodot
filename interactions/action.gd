@@ -1,4 +1,4 @@
-# res://interactions/Action.gd
+# res://interactions/action.gd
 class_name Action
 extends Resource
 

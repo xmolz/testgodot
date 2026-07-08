@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3]
 
-[ext_resource type="Script" path="res://game_over.gd" id="1_script"]
+[ext_resource type="Script" path="res://ui/game_over.gd" id="1_script"]
 [ext_resource type="FontFile" uid="uid://b1iquuxsqnjah" path="res://Fonts/RubikGlitch-Regular.ttf" id="2_rubik"]
 [ext_resource type="FontFile" uid="uid://6fxwb86ujy6q" path="res://Fonts/IBMPlexSans-SemiBold.ttf" id="3_ibm"]
 [ext_resource type="Theme" uid="uid://bbh4rjwcxnama" path="res://Themes/verb_and_inventory_theme.tres" id="4_theme"]
