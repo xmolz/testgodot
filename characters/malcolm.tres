@@ -1,11 +1,10 @@
-[gd_resource type="Resource" script_class="CharacterProfile" format=3]
+[gd_resource type="Resource" script_class="CharacterProfile" format=3 uid="uid://bpbrpdt045rfx"]
 
 [ext_resource type="Script" uid="uid://yiootngfe2lt" path="res://characters/CharacterProfile.gd" id="1_script"]
 
 [resource]
 script = ExtResource("1_script")
 actor_id = "Malcolm"
-default_scale = 1.0
 expressions = {
 "base": "res://Sprites/characters/malcolm/sm1_sensei_blush.png"
 }

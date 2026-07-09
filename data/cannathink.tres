@@ -9,6 +9,4 @@ item_id = "cannathink"
 display_name = "CannaThink"
 icon = ExtResource("1_ch4sg")
 description = "An old, very rusty key. It looks like it might fit a simple lock."
-is_stackable = false
-max_stack_size = 1
 metadata/_custom_type_script = "uid://by8o1t3tdwrep"

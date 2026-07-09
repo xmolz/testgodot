@@ -9,6 +9,4 @@ item_id = "invigirol"
 display_name = "Invigirol"
 icon = ExtResource("1_sguit")
 description = ""
-is_stackable = false
-max_stack_size = 1
 metadata/_custom_type_script = "uid://by8o1t3tdwrep"

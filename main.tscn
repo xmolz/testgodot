@@ -927,13 +927,6 @@ target_path = NodePath("../Player")
 
 [node name="LevelStateManager" type="Node" parent="." unique_id=1325462510]
 script = ExtResource("10_4c57u")
-override_has_spoken_to_aida = true
-override_aida_explanation_shown = true
-override_insurance_button_unlocked = true
-override_has_tried_memory_box = true
-override_mcbucket_zanopram_used = true
-override_learned_techpass_from_aida = true
-override_learned_techpass_from_sergey = true
 
 [node name="VerbUI_CanvasLayer" parent="." unique_id=1400491569 instance=ExtResource("1_1bvp3")]
 unique_name_in_owner = true
