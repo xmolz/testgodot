@@ -14,3 +14,5 @@ signal item_removed(item_id: String)
 
 # --- UI ---
 signal notification_requested(message: String)
+signal explanation_started(data: ExplanationData, root_node: Node)
+signal gameplay_ui_visibility_requested(visible: bool)

@@ -180,6 +180,11 @@ func _ready() -> void:
 		menu_button.pressed.connect(_on_menu_button_pressed)
 	if auto_button:
 		auto_button.pressed.connect(_on_auto_button_pressed)
+		#Restore the cyan hover color once the mouse leaves the button
+		auto_button.mouse_exited.connect(func():
+			if GameManager and not Settings.is_auto_playing:
+				auto_button.add_theme_color_override("font_hover_color", Color(0.6, 0.6, 0.6, 1.0) if OS.has_feature("mobile") else Color(0.2, 0.85, 1.0, 1.0))
+		)
 	if hide_button:
 		hide_button.pressed.connect(_on_hide_button_pressed)
 	balloon.hide()
@@ -483,7 +488,7 @@ func apply_dialogue_line() -> void:
 		# Safely check if this line has been visited using a truly unique ID
 		var unique_choice_id = resource.resource_path + "::" + response_obj.id
 		var is_visited = false
-		if GameManager and "visited_dialogue_responses" in GameManager:
+		if DialogueHistory:
 			is_visited = DialogueHistory.visited_responses.has(unique_choice_id)
 
 		# Default colors and icon
@@ -668,7 +673,7 @@ func _on_responses_menu_response_selected(response: DialogueResponse) -> void:
 
 	# Record visited response using a truly unique ID
 	var unique_choice_id = resource.resource_path + "::" + response.id
-	if GameManager and "visited_dialogue_responses" in GameManager:
+	if DialogueHistory:
 		DialogueHistory.visited_responses[unique_choice_id] = true
 
 	# --- RECORD CHOICE HISTORY ---
@@ -833,9 +838,16 @@ func _update_auto_button_visuals():
 	if GameManager and Settings.is_auto_playing:
 		auto_button.add_theme_color_override("font_color", Color(0.2, 0.85, 1.0, 1.0))
 		auto_button.add_theme_color_override("font_hover_color", Color(0.2, 0.85, 1.0, 1.0) if OS.has_feature("mobile") else Color(0.4, 0.95, 1.0, 1.0))
+		auto_button.add_theme_color_override("font_focus_color", Color(0.2, 0.85, 1.0, 1.0))
 	else:
 		auto_button.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6, 1.0))
-		auto_button.add_theme_color_override("font_hover_color", Color(0.6, 0.6, 0.6, 1.0) if OS.has_feature("mobile") else Color(0.2, 0.85, 1.0, 1.0))
+		auto_button.add_theme_color_override("font_focus_color", Color(0.6, 0.6, 0.6, 1.0)) # Prevent the button from sticking 'on' due to focus
+		
+		# Temporarily suppress the cyan hover color if we just clicked it off
+		if auto_button.is_hovered() and not OS.has_feature("mobile"):
+			auto_button.add_theme_color_override("font_hover_color", Color(0.6, 0.6, 0.6, 1.0))
+		else:
+			auto_button.add_theme_color_override("font_hover_color", Color(0.6, 0.6, 0.6, 1.0) if OS.has_feature("mobile") else Color(0.2, 0.85, 1.0, 1.0))
 
 func _on_menu_button_pressed() -> void:
 	if SoundManager: SoundManager.play_sfx("ui_click")

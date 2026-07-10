@@ -22,17 +22,19 @@ func _ready():
 		level_state_manager.set_level_flag("insurance_button_unlocked", true)
 		level_state_manager.set_level_flag("dev_cta_completed", false)
 
-		if is_instance_valid(GameManager.insurance_form_button_ui):
-			GameManager.insurance_form_button_ui.show()
+		# NOTE: This mockup scene has no GameUI node, so dialogue hide/restore
+		# and the journal/insurance button presses are not wired here (Screenshot scene).
+		var mock_insurance = get_node_or_null("%InsuranceFormButtonUI")
+		if is_instance_valid(mock_insurance): mock_insurance.show()
 
-		if is_instance_valid(GameManager.journal_button_ui):
-			GameManager.journal_button_ui.show()
+		var mock_journal = get_node_or_null("%JournalButtonUI")
+		if is_instance_valid(mock_journal): mock_journal.show()
 
-		if is_instance_valid(GameManager.verb_ui):
-			GameManager.verb_ui.show()
+		var mock_verb = get_node_or_null("%VerbUI_CanvasLayer")
+		if is_instance_valid(mock_verb): mock_verb.show()
 
-		if is_instance_valid(GameManager.inventory_ui):
-			GameManager.inventory_ui.show()
+		var mock_inventory = get_node_or_null("%InventoryUI_CanvasLayer")
+		if is_instance_valid(mock_inventory): mock_inventory.show()
 
 		if is_instance_valid(GameManager.patreon_world_ui):
 			GameManager.patreon_world_ui.hide()

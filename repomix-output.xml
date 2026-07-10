@@ -325,6 +325,7 @@ ui/explanation_layer.gdshader
 ui/explanation_layer.tscn
 ui/game_over.gd
 ui/game_over.tscn
+ui/game_ui.gd
 ui/input_blocker.gd
 ui/insurance_form_button_ui.gd
 ui/insurance_form_button_ui.tscn
@@ -368,6 +369,145 @@ washroom_sign_visual.tscn
 
 <files>
 This section contains the contents of the repository's files.
+
+<file path="ui/game_ui.gd">
+# game_ui.gd — owns visibility and layering of the gameplay HUD in main.tscn.
+# GameManager no longer holds references to these nodes; this script reacts to
+# the Events bus and DialogueManager, and manages the local UI itself.
+# It is freed together with the level scene, so no manual disconnects needed.
+extends Node
+
+@onready var verb_ui: CanvasLayer = %VerbUI_CanvasLayer
+@onready var inventory_ui: CanvasLayer = %InventoryUI_CanvasLayer
+@onready var journal_button_ui: CanvasLayer = %JournalButtonUI
+@onready var insurance_form_button_ui: CanvasLayer = %InsuranceFormButtonUI
+@onready var explanation_layer: CanvasLayer = %ExplanationLayer
+
+
+func _ready() -> void:
+	Events.game_state_changed.connect(_on_game_state_changed)
+	Events.interaction_state_changed.connect(_on_interaction_state_changed)
+	Events.explanation_started.connect(_on_explanation_started)
+	Events.gameplay_ui_visibility_requested.connect(_set_gameplay_ui_visible)
+
+	if DialogueManager:
+		DialogueManager.dialogue_started.connect(_on_dialogue_started)
+		DialogueManager.dialogue_ended.connect(_on_dialogue_ended)
+
+	if is_instance_valid(explanation_layer):
+		explanation_layer.explanation_finished.connect(GameManager.exit_explanation_state)
+
+	if is_instance_valid(insurance_form_button_ui):
+		insurance_form_button_ui.form_button_pressed.connect(GameManager.open_insurance_form)
+
+	if is_instance_valid(journal_button_ui):
+		journal_button_ui.journal_button_pressed.connect(GameManager.open_journal)
+
+	_sync_initial_visibility()
+
+
+# Applied once on scene load so both boot paths start correct:
+# - normal boot: change_game_state(IN_GAME_PLAY) instantiates main.tscn AFTER
+#   emitting game_state_changed, so we missed that first emission;
+# - direct scene run (F6 on main.tscn): no state event is emitted at all.
+func _sync_initial_visibility() -> void:
+	if not GameManager:
+		return
+	if GameManager.current_game_state == GameManager.GameState.CUTSCENE:
+		_set_gameplay_ui_visible(false)
+		return
+	_set_gameplay_ui_visible(GameManager.current_interaction_state == GameManager.InteractionState.WORLD)
+
+
+# --- Event handlers ---
+
+func _on_game_state_changed(new_state: int) -> void:
+	match new_state:
+		GameManager.GameState.IN_GAME_PLAY:
+			# Mirrors the old "restoration phase" in GameManager.change_game_state().
+			_set_gameplay_ui_visible(GameManager.current_interaction_state == GameManager.InteractionState.WORLD)
+		GameManager.GameState.CUTSCENE:
+			_set_gameplay_ui_visible(false)
+		_:
+			# PAUSED, EXPLANATION, etc. deliberately leave visibility untouched,
+			# exactly like the old GameManager code did.
+			pass
+
+
+func _on_interaction_state_changed(new_state: int) -> void:
+	match new_state:
+		GameManager.InteractionState.CONVERSATION:
+			_set_gameplay_ui_visible(false)
+		GameManager.InteractionState.ZOOM_VIEW:
+			# The zoom overlay sits on CanvasLayer 2; lift verb + inventory above it.
+			if is_instance_valid(verb_ui):
+				verb_ui.layer = 3
+				verb_ui.visible = true
+			if is_instance_valid(inventory_ui):
+				inventory_ui.layer = 3
+				inventory_ui.visible = true
+		GameManager.InteractionState.WORLD:
+			if is_instance_valid(verb_ui):
+				verb_ui.layer = 1
+			if is_instance_valid(inventory_ui):
+				inventory_ui.layer = 1
+			_set_gameplay_ui_visible(true)
+
+
+func _on_dialogue_started(_resource: Resource) -> void:
+	# Hide the HUD whenever any dialogue line appears (world dialogue,
+	# character conversations, insurance-form balloons — all of it).
+	_set_gameplay_ui_visible(false)
+
+
+func _on_dialogue_ended(_resource: Resource) -> void:
+	# Restore-without-unpausing, with the exact guards the old
+	# GameManager.restore_world_after_object_dialogue() used: never restore
+	# during a full-screen conversation, and only while actually in gameplay.
+	if GameManager.current_interaction_state != GameManager.InteractionState.CONVERSATION \
+			and GameManager.current_game_state == GameManager.GameState.IN_GAME_PLAY:
+		_set_gameplay_ui_visible(true)
+
+
+func _on_explanation_started(data: ExplanationData, root_node_to_search: Node) -> void:
+	# Moved verbatim from GameManager.start_explanation(): hide the HUD except
+	# for the nodes the ExplanationData explicitly spotlights.
+	var nodes_to_keep_visible: Array = []
+	if "exceptions_to_hide" in data:
+		for node_path in data.exceptions_to_hide:
+			var node = root_node_to_search.get_node_or_null(node_path)
+			if is_instance_valid(node):
+				nodes_to_keep_visible.append(node)
+
+	if is_instance_valid(verb_ui) and not verb_ui in nodes_to_keep_visible:
+		verb_ui.hide()
+	if is_instance_valid(inventory_ui) and not inventory_ui in nodes_to_keep_visible:
+		inventory_ui.hide()
+	if is_instance_valid(journal_button_ui) and not journal_button_ui in nodes_to_keep_visible:
+		journal_button_ui.hide()
+	if is_instance_valid(insurance_form_button_ui):
+		if insurance_form_button_ui in nodes_to_keep_visible:
+			insurance_form_button_ui.show()
+		else:
+			insurance_form_button_ui.hide()
+
+	if is_instance_valid(explanation_layer):
+		explanation_layer.show_explanation(data, root_node_to_search)
+
+
+# --- Core visibility helper (moved from GameManager, minus the global patreon
+# button, which stays with GameManager) ---
+
+func _set_gameplay_ui_visible(show: bool) -> void:
+	if is_instance_valid(verb_ui):
+		verb_ui.visible = show
+	if is_instance_valid(inventory_ui):
+		inventory_ui.visible = show
+	if is_instance_valid(journal_button_ui):
+		journal_button_ui.visible = show
+	if is_instance_valid(insurance_form_button_ui):
+		insurance_form_button_ui.visible = Flags.get_level_flag("insurance_button_unlocked") if show else false
+</file>
 
 <file path="addons/dialogue_manager/compiler/compiled_line.gd">
 ## A compiled line of dialogue.
@@ -2923,6 +3063,8 @@ signal item_removed(item_id: String)
 
 # --- UI ---
 signal notification_requested(message: String)
+signal explanation_started(data: ExplanationData, root_node: Node)
+signal gameplay_ui_visibility_requested(visible: bool)
 </file>
 
 <file path="autoload/flags.gd">
@@ -6749,21 +6891,6 @@ func _finish_cutscene():
 	cutscene_finished.emit()
 </file>
 
-<file path="data/cannathink.tres">
-[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://xmq2iq7j8nup"]
-
-[ext_resource type="Texture2D" uid="uid://dtsjeievq6le" path="res://Sprites/inventory_items/cannathink_icon.png" id="1_ch4sg"]
-[ext_resource type="Script" uid="uid://by8o1t3tdwrep" path="res://data/ItemData.gd" id="2_q20wr"]
-
-[resource]
-script = ExtResource("2_q20wr")
-item_id = "cannathink"
-display_name = "CannaThink"
-icon = ExtResource("1_ch4sg")
-description = "An old, very rusty key. It looks like it might fit a simple lock."
-metadata/_custom_type_script = "uid://by8o1t3tdwrep"
-</file>
-
 <file path="data/chapter_university_1.tres">
 [gd_resource type="Resource" script_class="MemoryChapterData" format=3 uid="uid://etyqyvpqbws"]
 
@@ -6903,19 +7030,6 @@ verb_id = "flash"
 display_text = "Flash"
 </file>
 
-<file path="data/give_verb.tres">
-[gd_resource type="Resource" script_class="VerbData" format=3 uid="uid://cywvad1lcqhjy"]
-
-[ext_resource type="Resource" uid="uid://clj8gjnqd22kl" path="res://dialogue/giveables.dialogue" id="1_dialogue"]
-[ext_resource type="Script" uid="uid://cn3ln508qp8dm" path="res://data/VerbData.gd" id="2_script"]
-
-[resource]
-script = ExtResource("2_script")
-verb_id = "give"
-display_text = "Give"
-fallback_dialogue_file = ExtResource("1_dialogue")
-</file>
-
 <file path="data/hospital_toilet_paper.tres">
 [gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://c2o4m1lmeyqpn"]
 
@@ -6928,21 +7042,6 @@ item_id = "hospital_toilet_paper"
 display_name = "Toilet Paper"
 icon = ExtResource("1_c4033")
 description = "A very thick piece of toilet paper. Can get your ass mighty clean."
-metadata/_custom_type_script = "uid://by8o1t3tdwrep"
-</file>
-
-<file path="data/invigirol.tres">
-[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://lr7bq8edhdbr"]
-
-[ext_resource type="Texture2D" uid="uid://c4le6pdm3xefh" path="res://Sprites/inventory_items/invigirol_icon.png" id="1_sguit"]
-[ext_resource type="Script" uid="uid://by8o1t3tdwrep" path="res://data/ItemData.gd" id="2_sqqev"]
-
-[resource]
-script = ExtResource("2_sqqev")
-item_id = "invigirol"
-display_name = "Invigirol"
-icon = ExtResource("1_sguit")
-description = ""
 metadata/_custom_type_script = "uid://by8o1t3tdwrep"
 </file>
 
@@ -7147,20 +7246,6 @@ fallback_dialogue_file = ExtResource("1_0agft")
 metadata/_custom_type_script = "uid://cn3ln508qp8dm"
 </file>
 
-<file path="data/talk_to_verb.tres">
-[gd_resource type="Resource" script_class="VerbData" format=3 uid="uid://bnekusymfhc2d"]
-
-[ext_resource type="Script" uid="uid://cn3ln508qp8dm" path="res://data/VerbData.gd" id="1_lx5kn"]
-[ext_resource type="Resource" uid="uid://b37t5tvw1wce5" path="res://dialogue/untalkables.dialogue" id="1_wyfv5"]
-
-[resource]
-script = ExtResource("1_lx5kn")
-verb_id = "talk_to"
-display_text = "Talk to"
-fallback_dialogue_file = ExtResource("1_wyfv5")
-metadata/_custom_type_script = "uid://cn3ln508qp8dm"
-</file>
-
 <file path="data/techpass.tres">
 [gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://d3wyrwv44q3fh"]
 
@@ -7190,20 +7275,6 @@ requires_target_object = false
 metadata/_custom_type_script = "uid://cn3ln508qp8dm"
 </file>
 
-<file path="data/use_verb.tres">
-[gd_resource type="Resource" script_class="VerbData" format=3 uid="uid://hs2nkbv1s6yx"]
-
-[ext_resource type="Resource" uid="uid://dlyoiu6syhnqe" path="res://dialogue/unusables.dialogue" id="1_bbqan"]
-[ext_resource type="Script" uid="uid://cn3ln508qp8dm" path="res://data/VerbData.gd" id="1_djdtg"]
-
-[resource]
-script = ExtResource("1_djdtg")
-verb_id = "use"
-display_text = "Use"
-fallback_dialogue_file = ExtResource("1_bbqan")
-metadata/_custom_type_script = "uid://cn3ln508qp8dm"
-</file>
-
 <file path="data/VerbData.gd">
 # VerbData.gd
 extends Resource
@@ -7230,21 +7301,6 @@ class_name VerbData # Makes it usable as a type hint
 @export var fallback_dialogue_file: DialogueResource
 # --- END OF ADDITION ---
 # i can add new properties here later!
-</file>
-
-<file path="data/zanopram.tres">
-[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://dle6p4hlq4yos"]
-
-[ext_resource type="Texture2D" uid="uid://801qaxy4ivhp" path="res://Sprites/inventory_items/zanopram_icon.png" id="1_s6e58"]
-[ext_resource type="Script" uid="uid://by8o1t3tdwrep" path="res://data/ItemData.gd" id="2_0lxtp"]
-
-[resource]
-script = ExtResource("2_0lxtp")
-item_id = "zanopram"
-display_name = "Zzzanopram"
-icon = ExtResource("1_s6e58")
-description = "An old, very rusty key. It looks like it might fit a simple lock."
-metadata/_custom_type_script = "uid://by8o1t3tdwrep"
 </file>
 
 <file path="Dev/damp_skin.gdshader">
@@ -7367,17 +7423,19 @@ func _ready():
 		level_state_manager.set_level_flag("insurance_button_unlocked", true)
 		level_state_manager.set_level_flag("dev_cta_completed", false)
 
-		if is_instance_valid(GameManager.insurance_form_button_ui):
-			GameManager.insurance_form_button_ui.show()
+		# NOTE: This mockup scene has no GameUI node, so dialogue hide/restore
+		# and the journal/insurance button presses are not wired here (Screenshot scene).
+		var mock_insurance = get_node_or_null("%InsuranceFormButtonUI")
+		if is_instance_valid(mock_insurance): mock_insurance.show()
 
-		if is_instance_valid(GameManager.journal_button_ui):
-			GameManager.journal_button_ui.show()
+		var mock_journal = get_node_or_null("%JournalButtonUI")
+		if is_instance_valid(mock_journal): mock_journal.show()
 
-		if is_instance_valid(GameManager.verb_ui):
-			GameManager.verb_ui.show()
+		var mock_verb = get_node_or_null("%VerbUI_CanvasLayer")
+		if is_instance_valid(mock_verb): mock_verb.show()
 
-		if is_instance_valid(GameManager.inventory_ui):
-			GameManager.inventory_ui.show()
+		var mock_inventory = get_node_or_null("%InventoryUI_CanvasLayer")
+		if is_instance_valid(mock_inventory): mock_inventory.show()
 
 		if is_instance_valid(GameManager.patreon_world_ui):
 			GameManager.patreon_world_ui.hide()
@@ -11256,16 +11314,6 @@ void fragment() {
     COLOR.rgb = mix(original_color.rgb, gray_rgb, strength);
     COLOR.a = original_color.a;
 }
-</file>
-
-<file path="Shaders/grayscale_material.tres">
-[gd_resource type="ShaderMaterial" format=3 uid="uid://dek82a5tuykas"]
-
-[ext_resource type="Shader" uid="uid://cpxf33c3wj4yj" path="res://Shaders/grayscale_material.gdshader" id="1_7vl1m"]
-
-[resource]
-shader = ExtResource("1_7vl1m")
-shader_parameter/strength = 0.0
 </file>
 
 <file path="Shaders/white_icon_shader.gdshader">
@@ -26928,18 +26976,12 @@ enum InteractionState {
 }
 var current_interaction_state: InteractionState = InteractionState.WORLD
 
-var verb_ui: CanvasLayer = null
-var journal_button_ui: CanvasLayer = null
-var inventory_ui: CanvasLayer = null
-var insurance_form_button_ui: CanvasLayer = null
-var explanation_layer: CanvasLayer = null
 var transition_layer: CanvasLayer = null
 
 var current_game_state: GameState = GameState.BOOTING
 var main_game_scene_instance: Node = null
 var main_menu_scene_instance: CanvasLayer = null
 var pause_menu_ui: CanvasLayer = null
-var input_blocker_layer: CanvasLayer = null
 var custom_cursor_instance: CanvasLayer = null
 var walk_indicator_instance: Node2D = null
 var patreon_world_ui: CanvasLayer = null
@@ -27004,6 +27046,7 @@ func _ready():
 	var pause_scene = preload("res://ui/pause_menu_ui.tscn")
 	pause_menu_ui = pause_scene.instantiate()
 	add_child(pause_menu_ui)
+	pause_menu_ui.scan_cancel_requested.connect(_on_scan_cancel_pressed)
 
 	if DialogueManager:
 		DialogueManager.dialogue_started.connect(_on_dialogue_started)
@@ -27035,9 +27078,6 @@ func _ready():
 			if not is_instance_valid(main_game_scene_instance):
 				# Fallback if owner is not set correctly
 				main_game_scene_instance = get_tree().get_root().get_child(-1)
-
-			# Find and assign the UI nodes now that the main scene is confirmed to exist.
-			_find_and_assign_ui_nodes()
 
 			# 3. Manually set the state.
 			current_game_state = GameState.IN_GAME_PLAY
@@ -27201,15 +27241,6 @@ func change_game_state(new_state: GameState):
 					main_game_scene_instance.queue_free()
 					main_game_scene_instance = null
 
-				# Aggressively clear UI references so they don't persist into the Main Menu
-				verb_ui = null
-				inventory_ui = null
-				insurance_form_button_ui = null
-				journal_button_ui = null
-				# pause_menu_ui is global, don't null it
-				explanation_layer = null
-				input_blocker_layer = null
-
 	current_game_state = new_state
 	Events.game_state_changed.emit(current_game_state)
 
@@ -27264,7 +27295,6 @@ func change_game_state(new_state: GameState):
 
 				main_game_scene_instance = main_packed_scene.instantiate()
 				get_tree().root.add_child(main_game_scene_instance)
-				_find_and_assign_ui_nodes()
 				
 				# Play music if we just loaded the game
 				# SoundManager.play_music() 
@@ -27275,24 +27305,18 @@ func change_game_state(new_state: GameState):
 
 			# --- B. RESTORATION PHASE (Run this EVERY time we enter IN_GAME_PLAY) ---
 			
-			# 1. Ensure UI nodes are found (in case of re-linking)
-			if not is_instance_valid(verb_ui): _find_and_assign_ui_nodes()
-
 			# 2. Find Player if missing
 			if not is_instance_valid(player_node):
 				player_node = get_tree().get_first_node_in_group("player")
 
-			# 3. Restore Main UI Visibility
+			# 3. Restore global UI. The scene HUD + input blocker restore
+			# themselves in game_ui.gd via Events.game_state_changed.
 			if current_interaction_state == InteractionState.WORLD:
-				_set_gameplay_ui_visible(true)
+				_set_patreon_visible(true)
 				if is_instance_valid(pause_menu_ui): pause_menu_ui.menu_panel.show()
 			else:
-				_set_gameplay_ui_visible(false)
+				_set_patreon_visible(false)
 				if is_instance_valid(pause_menu_ui): pause_menu_ui.menu_panel.hide()
-
-			# 5. Unblock Input (Remove the gray blocker)
-			if is_instance_valid(input_blocker_layer):
-				input_blocker_layer.visible = false
 
 			# 6. Unlock Player Movement
 			if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
@@ -27308,14 +27332,10 @@ func change_game_state(new_state: GameState):
 			pass
 			
 		GameState.CUTSCENE:
-			# 1. Hide the UI
-			_set_gameplay_ui_visible(false)
+			# 1. Hide the global UI (scene HUD + blocker handled by game_ui.gd)
+			_set_patreon_visible(false)
 			if is_instance_valid(pause_menu_ui): pause_menu_ui.menu_panel.hide()
 			
-			# 2. Block Input (Clicking on things in the world)
-			if is_instance_valid(input_blocker_layer):
-				input_blocker_layer.visible = true
-				
 			# 3. Stop the Player from moving
 			if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
 				player_node.set_can_move(false)
@@ -27664,19 +27684,17 @@ func _on_dialogue_started(_resource: Resource):
 	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
 		player_node.set_can_move(false)
 
-	# Hide the main UI whenever any dialogue line appears.
-	# This handles both in-world dialogue and character conversations.
-	_set_gameplay_ui_visible(false)
+	# The HUD itself is hidden by game_ui.gd. We only hide the Patreon button here.
+	_set_patreon_visible(false)
 
 func restore_world_after_object_dialogue(_resource: Resource):
 	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
 		if current_interaction_state == InteractionState.WORLD and current_game_state == GameState.IN_GAME_PLAY:
 			player_node.set_can_move(true)
 
-	# Restore the main UI as long as we are NOT in a full-screen conversation.
-	# This now correctly handles both the WORLD and the ZOOM_VIEW states.
+	# Restore the global UI. The scene HUD is handled by game_ui.gd.
 	if current_interaction_state != InteractionState.CONVERSATION and current_game_state == GameState.IN_GAME_PLAY:
-		_set_gameplay_ui_visible(true)
+		_set_patreon_visible(true)
 
 	_complete_interaction_cycle()
 
@@ -27751,16 +27769,14 @@ func _complete_interaction_cycle():
 
 	# Restore UI visibility
 	if current_interaction_state != InteractionState.CONVERSATION and current_game_state == GameState.IN_GAME_PLAY:
-		_set_gameplay_ui_visible(true)
+		_set_patreon_visible(true)
 
 	update_sentence_line_ui()
 
-func _set_gameplay_ui_visible(show: bool):
-	if is_instance_valid(verb_ui): verb_ui.visible = show
-	if is_instance_valid(inventory_ui): inventory_ui.visible = show
-	if is_instance_valid(journal_button_ui): journal_button_ui.visible = show
-	if is_instance_valid(insurance_form_button_ui):
-		insurance_form_button_ui.visible = Flags.get_level_flag("insurance_button_unlocked") if show else false
+# The patreon button is global (child of GameManager) so it can't be managed by
+# the level's game_ui.gd. It follows the same show/hide rhythm the gameplay HUD
+# always had, gated by the dev_cta_completed level flag.
+func _set_patreon_visible(show: bool):
 	if is_instance_valid(patreon_world_ui):
 		patreon_world_ui.visible = Flags.get_level_flag("dev_cta_completed") if show else false
 
@@ -27894,12 +27910,8 @@ func enter_conversation_state():
 
 	force_clear_all_hovered_interactables()
 
-	# Show the blocker on layer 1 to stop clicks to the world (layer 0)
-	if is_instance_valid(input_blocker_layer):
-		input_blocker_layer.visible = true
-
-	# Hide the game UI
-	_set_gameplay_ui_visible(false)
+	# Scene HUD + input blocker are handled by game_ui.gd via the signal below.
+	_set_patreon_visible(false)
 	if is_instance_valid(pause_menu_ui): pause_menu_ui.menu_panel.hide()
 	Events.interaction_state_changed.emit(current_interaction_state)
 
@@ -27909,16 +27921,8 @@ func enter_zoom_view_state():
 
 	force_clear_all_hovered_interactables()
 
-	if is_instance_valid(input_blocker_layer):
-		input_blocker_layer.visible = true
-	if is_instance_valid(verb_ui):
-		verb_ui.layer = 3
-		verb_ui.visible = true
-	if is_instance_valid(inventory_ui):
-		inventory_ui.layer = 3
-		inventory_ui.visible = true
-	if is_instance_valid(patreon_world_ui):
-		patreon_world_ui.visible = false
+	# Layer juggling for verb/inventory + input blocker live in game_ui.gd now.
+	_set_patreon_visible(false)
 
 	if is_instance_valid(player_node):
 		player_node.set_can_move(false)
@@ -27929,11 +27933,8 @@ func enter_zoom_view_state():
 func exit_to_world_state():
 	current_interaction_state = InteractionState.WORLD
 
-	if is_instance_valid(input_blocker_layer):
-		input_blocker_layer.visible = false
-	if is_instance_valid(verb_ui): verb_ui.layer = 1
-	if is_instance_valid(inventory_ui): inventory_ui.layer = 1
-	_set_gameplay_ui_visible(true)
+	# Scene HUD restore + layer reset + blocker are handled by game_ui.gd.
+	_set_patreon_visible(true)
 	if is_instance_valid(pause_menu_ui): pause_menu_ui.menu_panel.show()
 
 	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
@@ -27942,36 +27943,6 @@ func exit_to_world_state():
 	get_tree().paused = false
 	Events.interaction_state_changed.emit(current_interaction_state)
 
-func _find_and_assign_ui_nodes():
-	# Check if we even have a main scene to search in.
-	if not is_instance_valid(main_game_scene_instance):
-		return
-
-	# Tell Godot to look INSIDE the main scene for these nodes using their Unique Scene Names.
-	verb_ui = main_game_scene_instance.get_node_or_null("%VerbUI_CanvasLayer")
-	inventory_ui = main_game_scene_instance.get_node_or_null("%InventoryUI_CanvasLayer")
-	insurance_form_button_ui = main_game_scene_instance.get_node_or_null("%InsuranceFormButtonUI")
-	journal_button_ui = main_game_scene_instance.get_node_or_null("%JournalButtonUI")
-	input_blocker_layer = main_game_scene_instance.get_node_or_null("%InputBlockerLayer")
-	explanation_layer = main_game_scene_instance.get_node_or_null("%ExplanationLayer")
-	# pause_menu_ui is now spawned globally in GameManager._ready()
-
-	if is_instance_valid(pause_menu_ui):
-		if not pause_menu_ui.scan_cancel_requested.is_connected(_on_scan_cancel_pressed):
-			pause_menu_ui.scan_cancel_requested.connect(_on_scan_cancel_pressed)
-
-	if is_instance_valid(insurance_form_button_ui):
-		if not insurance_form_button_ui.form_button_pressed.is_connected(_on_insurance_form_button_pressed):
-			insurance_form_button_ui.form_button_pressed.connect(_on_insurance_form_button_pressed)
-
-	if is_instance_valid(journal_button_ui):
-		if not journal_button_ui.journal_button_pressed.is_connected(_on_journal_button_pressed):
-			journal_button_ui.journal_button_pressed.connect(_on_journal_button_pressed)
-
-	if is_instance_valid(explanation_layer):
-		if not explanation_layer.explanation_finished.is_connected(exit_explanation_state):
-			explanation_layer.explanation_finished.connect(exit_explanation_state)
-		
 # This function is called ONLY when the "Close Form" button is pressed.
 func _on_insurance_form_closed():
 
@@ -27982,40 +27953,20 @@ func _on_insurance_form_closed():
 	exit_to_world_state()
 
 func start_explanation(data: ExplanationData, root_node_to_search: Node):
-	if current_game_state == GameState.EXPLANATION or not is_instance_valid(explanation_layer):
+	if current_game_state == GameState.EXPLANATION or not is_instance_valid(main_game_scene_instance):
 		return
 
 	change_game_state(GameState.EXPLANATION)
 
-	var nodes_to_keep_visible = []
-	if "exceptions_to_hide" in data:
-		for node_path in data.exceptions_to_hide:
-			var node = root_node_to_search.get_node_or_null(node_path)
-			if is_instance_valid(node):
-				nodes_to_keep_visible.append(node)
-
-	if is_instance_valid(verb_ui) and not verb_ui in nodes_to_keep_visible:
-		verb_ui.hide()
-
-	if is_instance_valid(inventory_ui) and not inventory_ui in nodes_to_keep_visible:
-		inventory_ui.hide()
-		
-	if is_instance_valid(journal_button_ui) and not journal_button_ui in nodes_to_keep_visible:
-		journal_button_ui.hide()
-	if is_instance_valid(pause_menu_ui) and not pause_menu_ui in nodes_to_keep_visible:
-		pause_menu_ui.menu_panel.hide()
-
-	if is_instance_valid(insurance_form_button_ui):
-		if insurance_form_button_ui in nodes_to_keep_visible:
-			insurance_form_button_ui.show()
-		else:
-			insurance_form_button_ui.hide()
+	# game_ui.gd hides the HUD (honoring data.exceptions_to_hide) and starts
+	# the ExplanationLayer in response to this event.
+	if is_instance_valid(pause_menu_ui): pause_menu_ui.menu_panel.hide()
 
 	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
 		player_node.set_can_move(false)
 
 	get_tree().paused = true
-	explanation_layer.show_explanation(data, root_node_to_search)
+	Events.explanation_started.emit(data, root_node_to_search)
 
 func exit_explanation_state():
 	if current_game_state != GameState.EXPLANATION:
@@ -28024,7 +27975,7 @@ func exit_explanation_state():
 	get_tree().paused = false
 
 	# Show the main game UI
-	_set_gameplay_ui_visible(true)
+	_set_patreon_visible(true)
 	if is_instance_valid(pause_menu_ui): pause_menu_ui.menu_panel.show()
 
 	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
@@ -28032,7 +27983,7 @@ func exit_explanation_state():
 
 	change_game_state(GameState.IN_GAME_PLAY)
 
-func _on_insurance_form_button_pressed():
+func open_insurance_form():
 	if is_instance_valid(_insurance_form_instance):
 		return
 
@@ -28177,7 +28128,8 @@ func _on_intro_conversation_finished(_dialogue_resource):
 	# --- PREVENT MOVEMENT & UI DURING DARKNESS ---
 	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
 		player_node.set_can_move(false)
-	_set_gameplay_ui_visible(false)
+	_set_patreon_visible(false)
+	Events.gameplay_ui_visibility_requested.emit(false)
 
 	if is_instance_valid(transition_layer):
 		# Wait 3 full seconds in the dark to let the player hear the environment
@@ -28189,10 +28141,11 @@ func _on_intro_conversation_finished(_dialogue_resource):
 	# --- RESTORE MOVEMENT & UI ---
 	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
 		player_node.set_can_move(true)
-	_set_gameplay_ui_visible(true)
+	_set_patreon_visible(true)
+	Events.gameplay_ui_visibility_requested.emit(true)
 
 # --- JOURNAL FUNCTIONS ---
-func _on_journal_button_pressed():
+func open_journal():
 	if is_instance_valid(_journal_overlay_instance):
 		return
 
@@ -28394,19 +28347,6 @@ script = ExtResource("1_script")
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_script")
-</file>
-
-<file path="characters/malcolm.tres">
-[gd_resource type="Resource" script_class="CharacterProfile" format=3 uid="uid://bpbrpdt045rfx"]
-
-[ext_resource type="Script" uid="uid://yiootngfe2lt" path="res://characters/CharacterProfile.gd" id="1_script"]
-
-[resource]
-script = ExtResource("1_script")
-actor_id = "Malcolm"
-expressions = {
-"base": "res://Sprites/characters/malcolm/sm1_sensei_blush.png"
-}
 </file>
 
 <file path="characters/mcbucket.gd">
@@ -31200,6 +31140,11 @@ func _ready() -> void:
 		menu_button.pressed.connect(_on_menu_button_pressed)
 	if auto_button:
 		auto_button.pressed.connect(_on_auto_button_pressed)
+		#Restore the cyan hover color once the mouse leaves the button
+		auto_button.mouse_exited.connect(func():
+			if GameManager and not Settings.is_auto_playing:
+				auto_button.add_theme_color_override("font_hover_color", Color(0.6, 0.6, 0.6, 1.0) if OS.has_feature("mobile") else Color(0.2, 0.85, 1.0, 1.0))
+		)
 	if hide_button:
 		hide_button.pressed.connect(_on_hide_button_pressed)
 	balloon.hide()
@@ -31503,7 +31448,7 @@ func apply_dialogue_line() -> void:
 		# Safely check if this line has been visited using a truly unique ID
 		var unique_choice_id = resource.resource_path + "::" + response_obj.id
 		var is_visited = false
-		if GameManager and "visited_dialogue_responses" in GameManager:
+		if DialogueHistory:
 			is_visited = DialogueHistory.visited_responses.has(unique_choice_id)
 
 		# Default colors and icon
@@ -31688,7 +31633,7 @@ func _on_responses_menu_response_selected(response: DialogueResponse) -> void:
 
 	# Record visited response using a truly unique ID
 	var unique_choice_id = resource.resource_path + "::" + response.id
-	if GameManager and "visited_dialogue_responses" in GameManager:
+	if DialogueHistory:
 		DialogueHistory.visited_responses[unique_choice_id] = true
 
 	# --- RECORD CHOICE HISTORY ---
@@ -31853,9 +31798,16 @@ func _update_auto_button_visuals():
 	if GameManager and Settings.is_auto_playing:
 		auto_button.add_theme_color_override("font_color", Color(0.2, 0.85, 1.0, 1.0))
 		auto_button.add_theme_color_override("font_hover_color", Color(0.2, 0.85, 1.0, 1.0) if OS.has_feature("mobile") else Color(0.4, 0.95, 1.0, 1.0))
+		auto_button.add_theme_color_override("font_focus_color", Color(0.2, 0.85, 1.0, 1.0))
 	else:
 		auto_button.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6, 1.0))
-		auto_button.add_theme_color_override("font_hover_color", Color(0.6, 0.6, 0.6, 1.0) if OS.has_feature("mobile") else Color(0.2, 0.85, 1.0, 1.0))
+		auto_button.add_theme_color_override("font_focus_color", Color(0.6, 0.6, 0.6, 1.0)) # Prevent the button from sticking 'on' due to focus
+		
+		# Temporarily suppress the cyan hover color if we just clicked it off
+		if auto_button.is_hovered() and not OS.has_feature("mobile"):
+			auto_button.add_theme_color_override("font_hover_color", Color(0.6, 0.6, 0.6, 1.0))
+		else:
+			auto_button.add_theme_color_override("font_hover_color", Color(0.6, 0.6, 0.6, 1.0) if OS.has_feature("mobile") else Color(0.2, 0.85, 1.0, 1.0))
 
 func _on_menu_button_pressed() -> void:
 	if SoundManager: SoundManager.play_sfx("ui_click")
@@ -32625,6 +32577,34 @@ mouse_filter = 2
 color = Color(0, 0, 0, 1)
 </file>
 
+<file path="data/cannathink.tres">
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://xmq2iq7j8nup"]
+
+[ext_resource type="Texture2D" uid="uid://dtsjeievq6le" path="res://Sprites/inventory_items/cannathink_icon.png" id="1_ch4sg"]
+[ext_resource type="Script" uid="uid://by8o1t3tdwrep" path="res://data/ItemData.gd" id="2_q20wr"]
+
+[resource]
+script = ExtResource("2_q20wr")
+item_id = "cannathink"
+display_name = "CannaThink"
+icon = ExtResource("1_ch4sg")
+description = "An old, very rusty key. It looks like it might fit a simple lock."
+metadata/_custom_type_script = "uid://by8o1t3tdwrep"
+</file>
+
+<file path="data/give_verb.tres">
+[gd_resource type="Resource" script_class="VerbData" format=3 uid="uid://cywvad1lcqhjy"]
+
+[ext_resource type="Resource" uid="uid://clj8gjnqd22kl" path="res://dialogue/giveables.dialogue" id="1_dialogue"]
+[ext_resource type="Script" uid="uid://cn3ln508qp8dm" path="res://data/VerbData.gd" id="2_script"]
+
+[resource]
+script = ExtResource("2_script")
+verb_id = "give"
+display_text = "Give"
+fallback_dialogue_file = ExtResource("1_dialogue")
+</file>
+
 <file path="data/InteractionResponse.gd">
 # res://data/InteractionResponse.gd
 class_name InteractionResponse
@@ -32648,6 +32628,64 @@ extends Resource
 
 ## The sequence of actions to perform if the conditions are met.
 @export var actions_to_perform: Array[Action]
+</file>
+
+<file path="data/invigirol.tres">
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://lr7bq8edhdbr"]
+
+[ext_resource type="Texture2D" uid="uid://c4le6pdm3xefh" path="res://Sprites/inventory_items/invigirol_icon.png" id="1_sguit"]
+[ext_resource type="Script" uid="uid://by8o1t3tdwrep" path="res://data/ItemData.gd" id="2_sqqev"]
+
+[resource]
+script = ExtResource("2_sqqev")
+item_id = "invigirol"
+display_name = "Invigirol"
+icon = ExtResource("1_sguit")
+description = ""
+metadata/_custom_type_script = "uid://by8o1t3tdwrep"
+</file>
+
+<file path="data/talk_to_verb.tres">
+[gd_resource type="Resource" script_class="VerbData" format=3 uid="uid://bnekusymfhc2d"]
+
+[ext_resource type="Script" uid="uid://cn3ln508qp8dm" path="res://data/VerbData.gd" id="1_lx5kn"]
+[ext_resource type="Resource" uid="uid://b37t5tvw1wce5" path="res://dialogue/untalkables.dialogue" id="1_wyfv5"]
+
+[resource]
+script = ExtResource("1_lx5kn")
+verb_id = "talk_to"
+display_text = "Talk to"
+fallback_dialogue_file = ExtResource("1_wyfv5")
+metadata/_custom_type_script = "uid://cn3ln508qp8dm"
+</file>
+
+<file path="data/use_verb.tres">
+[gd_resource type="Resource" script_class="VerbData" format=3 uid="uid://hs2nkbv1s6yx"]
+
+[ext_resource type="Resource" uid="uid://dlyoiu6syhnqe" path="res://dialogue/unusables.dialogue" id="1_bbqan"]
+[ext_resource type="Script" uid="uid://cn3ln508qp8dm" path="res://data/VerbData.gd" id="1_djdtg"]
+
+[resource]
+script = ExtResource("1_djdtg")
+verb_id = "use"
+display_text = "Use"
+fallback_dialogue_file = ExtResource("1_bbqan")
+metadata/_custom_type_script = "uid://cn3ln508qp8dm"
+</file>
+
+<file path="data/zanopram.tres">
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://dle6p4hlq4yos"]
+
+[ext_resource type="Texture2D" uid="uid://801qaxy4ivhp" path="res://Sprites/inventory_items/zanopram_icon.png" id="1_s6e58"]
+[ext_resource type="Script" uid="uid://by8o1t3tdwrep" path="res://data/ItemData.gd" id="2_0lxtp"]
+
+[resource]
+script = ExtResource("2_0lxtp")
+item_id = "zanopram"
+display_name = "Zzzanopram"
+icon = ExtResource("1_s6e58")
+description = "An old, very rusty key. It looks like it might fit a simple lock."
+metadata/_custom_type_script = "uid://by8o1t3tdwrep"
 </file>
 
 <file path="Dev/alyssa_exporter.gd">
@@ -33141,6 +33179,16 @@ func evaluate_hint() -> String:
 		return "hint_use_memory_box"
 
 	return "hint_start"
+</file>
+
+<file path="Shaders/grayscale_material.tres">
+[gd_resource type="ShaderMaterial" format=3 uid="uid://dek82a5tuykas"]
+
+[ext_resource type="Shader" uid="uid://cpxf33c3wj4yj" path="res://Shaders/grayscale_material.gdshader" id="1_7vl1m"]
+
+[resource]
+shader = ExtResource("1_7vl1m")
+shader_parameter/strength = 0.0
 </file>
 
 <file path="television_screen.gdshader">
@@ -33895,6 +33943,12 @@ func toggle_pause():
 		_overlay_open_time_ms = Time.get_ticks_msec()
 		get_tree().paused = true
 		if GameManager: GameManager.change_game_state(GameManager.GameState.PAUSED)
+		
+		#releasing the damn keyboard focus
+		var current_focus = get_viewport().gui_get_focus_owner()
+		if is_instance_valid(current_focus):
+			current_focus.release_focus()
+			
 
 func _on_history_pressed():
 	if SoundManager: SoundManager.play_sfx("ui_click")
@@ -34132,6 +34186,19 @@ func _find_valid_checkpoint(resource: DialogueResource, object_id: String, item_
 	# Level 3: Generic Default
 	print_rich("[color=yellow]FallbackManager: No specific checkpoint found. Using default: '%s'[/color]" % DEFAULT_CHECKPOINT_NAME)
 	return DEFAULT_CHECKPOINT_NAME
+</file>
+
+<file path="characters/malcolm.tres">
+[gd_resource type="Resource" script_class="CharacterProfile" format=3 uid="uid://bpbrpdt045rfx"]
+
+[ext_resource type="Script" uid="uid://yiootngfe2lt" path="res://characters/CharacterProfile.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+actor_id = "Malcolm"
+expressions = {
+"base": "res://Sprites/characters/malcolm/sm1_sensei_blush.png"
+}
 </file>
 
 <file path="conversation/mcbucket_thinking_conversation.tscn">
@@ -34754,46 +34821,6 @@ func execute(interactable_node: Interactable) -> Variant:
 	return true
 </file>
 
-<file path="logo_exporter.tscn">
-[gd_scene format=3 uid="uid://386qts1w7abr"]
-
-[sub_resource type="GDScript" id="GDScript_0nbkt"]
-script/source = "extends Node
-
-func _ready():
-	var viewport = SubViewport.new()
-	viewport.transparent_bg = true
-	viewport.size = Vector2(1920, 1080)
-	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
-	add_child(viewport)
-
-	var main_menu = load(\"res://main_menu.tscn\").instantiate()
-	viewport.add_child(main_menu)
-
-	main_menu.get_node(\"Content/Background\").visible = false
-	main_menu.get_node(\"Content/Vignette\").visible = false
-	main_menu.get_node(\"Content/ButtonBlock\").visible = false
-
-	for i in range(5):
-		await get_tree().process_frame
-
-	var img = viewport.get_texture().get_image()
-
-	var used_rect = img.get_used_rect()
-	var cropped_img = img.get_region(used_rect)
-
-	var export_path = \"res://exported_logo.png\"
-	cropped_img.save_png(export_path)
-
-	print(\"SUCCESS! Logo exported to: \" + export_path)
-
-	get_tree().quit()
-"
-
-[node name="LogoExporter" type="Node" unique_id=1594016189]
-script = SubResource("GDScript_0nbkt")
-</file>
-
 <file path="Themes/general_theme.tres">
 [gd_resource type="Theme" load_steps=6 format=3 uid="uid://bo15lb6dkn0a2"]
 
@@ -35172,6 +35199,46 @@ func execute(interactable_node: Interactable) -> bool:
 		# We can use the simple dialogue system for a fallback line.
 		interactable_node.display_dialogue.emit("They don't seem to have much to say.")
 		return true # Return true because the interaction is "over".
+</file>
+
+<file path="logo_exporter.tscn">
+[gd_scene format=3 uid="uid://386qts1w7abr"]
+
+[sub_resource type="GDScript" id="GDScript_0nbkt"]
+script/source = "extends Node
+
+func _ready():
+	var viewport = SubViewport.new()
+	viewport.transparent_bg = true
+	viewport.size = Vector2(1920, 1080)
+	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	add_child(viewport)
+
+	var main_menu = load(\"res://main_menu.tscn\").instantiate()
+	viewport.add_child(main_menu)
+
+	main_menu.get_node(\"Content/Background\").visible = false
+	main_menu.get_node(\"Content/Vignette\").visible = false
+	main_menu.get_node(\"Content/ButtonBlock\").visible = false
+
+	for i in range(5):
+		await get_tree().process_frame
+
+	var img = viewport.get_texture().get_image()
+
+	var used_rect = img.get_used_rect()
+	var cropped_img = img.get_region(used_rect)
+
+	var export_path = \"res://exported_logo.png\"
+	cropped_img.save_png(export_path)
+
+	print(\"SUCCESS! Logo exported to: \" + export_path)
+
+	get_tree().quit()
+"
+
+[node name="LogoExporter" type="Node" unique_id=1594016189]
+script = SubResource("GDScript_0nbkt")
 </file>
 
 <file path="Themes/medfinance_theme.tres">
@@ -36298,11 +36365,6 @@ func _ready():
 	# We must wait for one frame. This is a crucial step.
 	await get_tree().process_frame
 
-	# --- Remove local PauseMenuUI (now spawned globally by GameManager) ---
-	var local_pause = get_node_or_null("%PauseMenuUI")
-	if is_instance_valid(local_pause):
-		local_pause.queue_free()
-
 	# --- DEBUG: Force Assisted Mode ---
 	if GameManager and force_assisted_mode:
 		Settings.assisted_mode = true
@@ -36312,14 +36374,9 @@ func _ready():
 	# ----------------------------------
 
 	# --- Apply Journal Notification Setting ---
-	if GameManager and is_instance_valid(GameManager.journal_button_ui):
-		GameManager.journal_button_ui.set_notification_enabled(enable_journal_notification)
-
-	# --- 1. Hide UI Button on Start ---
-	if is_instance_valid(GameManager.insurance_form_button_ui):
-		GameManager.insurance_form_button_ui.hide()
-	else:
-		print_rich("[color=orange]Main.gd: Could not hide insurance button on start, GameManager reference is invalid.[/color]")
+	var journal_button = get_node_or_null("%JournalButtonUI")
+	if is_instance_valid(journal_button):
+		journal_button.set_notification_enabled(enable_journal_notification)
 
 	# --- 2. Setup Global Signals ---
 	if GameManager:
@@ -36474,9 +36531,9 @@ func _inject_progression_blockers():
 [ext_resource type="Script" uid="uid://bcakqi840s08m" path="res://LevelHintManager.gd" id="70_0dhbp"]
 [ext_resource type="PackedScene" uid="uid://p2iroc5a0o8y" path="res://Interactables/Game World/Hospital Room/exit_door.tscn" id="70_cyx1q"]
 [ext_resource type="Resource" uid="uid://cppyr6lerlx7s" path="res://dialogue/hints.dialogue" id="71_jx0wj"]
-[ext_resource type="PackedScene" uid="uid://cqlvokl3ymyk8" path="res://ui/pause_menu_ui.tscn" id="71_pause"]
 [ext_resource type="Script" uid="uid://cwgcwktmorn74" path="res://Non Interactables/camera_region.gd" id="72_jx0wj"]
 [ext_resource type="Resource" uid="uid://b4xdxqhu5a1b8" path="res://dialogue/hints_adventure.dialogue" id="72_kkkcx"]
+[ext_resource type="Script" uid="uid://cotofljyqufvn" path="res://ui/game_ui.gd" id="90_gameui"]
 
 [sub_resource type="Resource" id="Resource_4obbf"]
 script = ExtResource("10_0rl1p")
@@ -37337,6 +37394,9 @@ target_path = NodePath("../Player")
 [node name="LevelStateManager" type="Node" parent="." unique_id=1325462510]
 script = ExtResource("10_4c57u")
 
+[node name="GameUI" type="Node" parent="." unique_id=1791351286]
+script = ExtResource("90_gameui")
+
 [node name="VerbUI_CanvasLayer" parent="." unique_id=1400491569 instance=ExtResource("1_1bvp3")]
 unique_name_in_owner = true
 layer = 2
@@ -37364,9 +37424,6 @@ interactions = Array[ExtResource("24_qsp4k")]([ExtResource("7_jq2sk"), SubResour
 unique_name_in_owner = true
 
 [node name="InsuranceFormButtonUI" parent="." unique_id=293195305 instance=ExtResource("41_4lmeg")]
-unique_name_in_owner = true
-
-[node name="PauseMenuUI" parent="." unique_id=1895116319 instance=ExtResource("71_pause")]
 unique_name_in_owner = true
 
 [node name="NotificationContainer" type="VBoxContainer" parent="." unique_id=937521291]

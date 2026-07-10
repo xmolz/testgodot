@@ -65,9 +65,9 @@
 [ext_resource type="Script" uid="uid://bcakqi840s08m" path="res://LevelHintManager.gd" id="70_0dhbp"]
 [ext_resource type="PackedScene" uid="uid://p2iroc5a0o8y" path="res://Interactables/Game World/Hospital Room/exit_door.tscn" id="70_cyx1q"]
 [ext_resource type="Resource" uid="uid://cppyr6lerlx7s" path="res://dialogue/hints.dialogue" id="71_jx0wj"]
-[ext_resource type="PackedScene" uid="uid://cqlvokl3ymyk8" path="res://ui/pause_menu_ui.tscn" id="71_pause"]
 [ext_resource type="Script" uid="uid://cwgcwktmorn74" path="res://Non Interactables/camera_region.gd" id="72_jx0wj"]
 [ext_resource type="Resource" uid="uid://b4xdxqhu5a1b8" path="res://dialogue/hints_adventure.dialogue" id="72_kkkcx"]
+[ext_resource type="Script" uid="uid://cotofljyqufvn" path="res://ui/game_ui.gd" id="90_gameui"]
 
 [sub_resource type="Resource" id="Resource_4obbf"]
 script = ExtResource("10_0rl1p")
@@ -928,6 +928,9 @@ target_path = NodePath("../Player")
 [node name="LevelStateManager" type="Node" parent="." unique_id=1325462510]
 script = ExtResource("10_4c57u")
 
+[node name="GameUI" type="Node" parent="." unique_id=1791351286]
+script = ExtResource("90_gameui")
+
 [node name="VerbUI_CanvasLayer" parent="." unique_id=1400491569 instance=ExtResource("1_1bvp3")]
 unique_name_in_owner = true
 layer = 2
@@ -955,9 +958,6 @@ interactions = Array[ExtResource("24_qsp4k")]([ExtResource("7_jq2sk"), SubResour
 unique_name_in_owner = true
 
 [node name="InsuranceFormButtonUI" parent="." unique_id=293195305 instance=ExtResource("41_4lmeg")]
-unique_name_in_owner = true
-
-[node name="PauseMenuUI" parent="." unique_id=1895116319 instance=ExtResource("71_pause")]
 unique_name_in_owner = true
 
 [node name="NotificationContainer" type="VBoxContainer" parent="." unique_id=937521291]

@@ -23,11 +23,6 @@ func _ready():
 	# We must wait for one frame. This is a crucial step.
 	await get_tree().process_frame
 
-	# --- Remove local PauseMenuUI (now spawned globally by GameManager) ---
-	var local_pause = get_node_or_null("%PauseMenuUI")
-	if is_instance_valid(local_pause):
-		local_pause.queue_free()
-
 	# --- DEBUG: Force Assisted Mode ---
 	if GameManager and force_assisted_mode:
 		Settings.assisted_mode = true
@@ -37,14 +32,9 @@ func _ready():
 	# ----------------------------------
 
 	# --- Apply Journal Notification Setting ---
-	if GameManager and is_instance_valid(GameManager.journal_button_ui):
-		GameManager.journal_button_ui.set_notification_enabled(enable_journal_notification)
-
-	# --- 1. Hide UI Button on Start ---
-	if is_instance_valid(GameManager.insurance_form_button_ui):
-		GameManager.insurance_form_button_ui.hide()
-	else:
-		print_rich("[color=orange]Main.gd: Could not hide insurance button on start, GameManager reference is invalid.[/color]")
+	var journal_button = get_node_or_null("%JournalButtonUI")
+	if is_instance_valid(journal_button):
+		journal_button.set_notification_enabled(enable_journal_notification)
 
 	# --- 2. Setup Global Signals ---
 	if GameManager:

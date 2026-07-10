@@ -57,18 +57,12 @@ enum InteractionState {
 }
 var current_interaction_state: InteractionState = InteractionState.WORLD
 
-var verb_ui: CanvasLayer = null
-var journal_button_ui: CanvasLayer = null
-var inventory_ui: CanvasLayer = null
-var insurance_form_button_ui: CanvasLayer = null
-var explanation_layer: CanvasLayer = null
 var transition_layer: CanvasLayer = null
 
 var current_game_state: GameState = GameState.BOOTING
 var main_game_scene_instance: Node = null
 var main_menu_scene_instance: CanvasLayer = null
 var pause_menu_ui: CanvasLayer = null
-var input_blocker_layer: CanvasLayer = null
 var custom_cursor_instance: CanvasLayer = null
 var walk_indicator_instance: Node2D = null
 var patreon_world_ui: CanvasLayer = null
@@ -133,6 +127,7 @@ func _ready():
 	var pause_scene = preload("res://ui/pause_menu_ui.tscn")
 	pause_menu_ui = pause_scene.instantiate()
 	add_child(pause_menu_ui)
+	pause_menu_ui.scan_cancel_requested.connect(_on_scan_cancel_pressed)
 
 	if DialogueManager:
 		DialogueManager.dialogue_started.connect(_on_dialogue_started)
@@ -164,9 +159,6 @@ func _ready():
 			if not is_instance_valid(main_game_scene_instance):
 				# Fallback if owner is not set correctly
 				main_game_scene_instance = get_tree().get_root().get_child(-1)
-
-			# Find and assign the UI nodes now that the main scene is confirmed to exist.
-			_find_and_assign_ui_nodes()
 
 			# 3. Manually set the state.
 			current_game_state = GameState.IN_GAME_PLAY
@@ -330,15 +322,6 @@ func change_game_state(new_state: GameState):
 					main_game_scene_instance.queue_free()
 					main_game_scene_instance = null
 
-				# Aggressively clear UI references so they don't persist into the Main Menu
-				verb_ui = null
-				inventory_ui = null
-				insurance_form_button_ui = null
-				journal_button_ui = null
-				# pause_menu_ui is global, don't null it
-				explanation_layer = null
-				input_blocker_layer = null
-
 	current_game_state = new_state
 	Events.game_state_changed.emit(current_game_state)
 
@@ -393,7 +376,6 @@ func change_game_state(new_state: GameState):
 
 				main_game_scene_instance = main_packed_scene.instantiate()
 				get_tree().root.add_child(main_game_scene_instance)
-				_find_and_assign_ui_nodes()
 				
 				# Play music if we just loaded the game
 				# SoundManager.play_music() 
@@ -404,24 +386,18 @@ func change_game_state(new_state: GameState):
 
 			# --- B. RESTORATION PHASE (Run this EVERY time we enter IN_GAME_PLAY) ---
 			
-			# 1. Ensure UI nodes are found (in case of re-linking)
-			if not is_instance_valid(verb_ui): _find_and_assign_ui_nodes()
-
 			# 2. Find Player if missing
 			if not is_instance_valid(player_node):
 				player_node = get_tree().get_first_node_in_group("player")
 
-			# 3. Restore Main UI Visibility
+			# 3. Restore global UI. The scene HUD + input blocker restore
+			# themselves in game_ui.gd via Events.game_state_changed.
 			if current_interaction_state == InteractionState.WORLD:
-				_set_gameplay_ui_visible(true)
+				_set_patreon_visible(true)
 				if is_instance_valid(pause_menu_ui): pause_menu_ui.menu_panel.show()
 			else:
-				_set_gameplay_ui_visible(false)
+				_set_patreon_visible(false)
 				if is_instance_valid(pause_menu_ui): pause_menu_ui.menu_panel.hide()
-
-			# 5. Unblock Input (Remove the gray blocker)
-			if is_instance_valid(input_blocker_layer):
-				input_blocker_layer.visible = false
 
 			# 6. Unlock Player Movement
 			if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
@@ -437,14 +413,10 @@ func change_game_state(new_state: GameState):
 			pass
 			
 		GameState.CUTSCENE:
-			# 1. Hide the UI
-			_set_gameplay_ui_visible(false)
+			# 1. Hide the global UI (scene HUD + blocker handled by game_ui.gd)
+			_set_patreon_visible(false)
 			if is_instance_valid(pause_menu_ui): pause_menu_ui.menu_panel.hide()
 			
-			# 2. Block Input (Clicking on things in the world)
-			if is_instance_valid(input_blocker_layer):
-				input_blocker_layer.visible = true
-				
 			# 3. Stop the Player from moving
 			if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
 				player_node.set_can_move(false)
@@ -793,19 +765,17 @@ func _on_dialogue_started(_resource: Resource):
 	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
 		player_node.set_can_move(false)
 
-	# Hide the main UI whenever any dialogue line appears.
-	# This handles both in-world dialogue and character conversations.
-	_set_gameplay_ui_visible(false)
+	# The HUD itself is hidden by game_ui.gd. We only hide the Patreon button here.
+	_set_patreon_visible(false)
 
 func restore_world_after_object_dialogue(_resource: Resource):
 	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
 		if current_interaction_state == InteractionState.WORLD and current_game_state == GameState.IN_GAME_PLAY:
 			player_node.set_can_move(true)
 
-	# Restore the main UI as long as we are NOT in a full-screen conversation.
-	# This now correctly handles both the WORLD and the ZOOM_VIEW states.
+	# Restore the global UI. The scene HUD is handled by game_ui.gd.
 	if current_interaction_state != InteractionState.CONVERSATION and current_game_state == GameState.IN_GAME_PLAY:
-		_set_gameplay_ui_visible(true)
+		_set_patreon_visible(true)
 
 	_complete_interaction_cycle()
 
@@ -880,16 +850,14 @@ func _complete_interaction_cycle():
 
 	# Restore UI visibility
 	if current_interaction_state != InteractionState.CONVERSATION and current_game_state == GameState.IN_GAME_PLAY:
-		_set_gameplay_ui_visible(true)
+		_set_patreon_visible(true)
 
 	update_sentence_line_ui()
 
-func _set_gameplay_ui_visible(show: bool):
-	if is_instance_valid(verb_ui): verb_ui.visible = show
-	if is_instance_valid(inventory_ui): inventory_ui.visible = show
-	if is_instance_valid(journal_button_ui): journal_button_ui.visible = show
-	if is_instance_valid(insurance_form_button_ui):
-		insurance_form_button_ui.visible = Flags.get_level_flag("insurance_button_unlocked") if show else false
+# The patreon button is global (child of GameManager) so it can't be managed by
+# the level's game_ui.gd. It follows the same show/hide rhythm the gameplay HUD
+# always had, gated by the dev_cta_completed level flag.
+func _set_patreon_visible(show: bool):
 	if is_instance_valid(patreon_world_ui):
 		patreon_world_ui.visible = Flags.get_level_flag("dev_cta_completed") if show else false
 
@@ -1023,12 +991,8 @@ func enter_conversation_state():
 
 	force_clear_all_hovered_interactables()
 
-	# Show the blocker on layer 1 to stop clicks to the world (layer 0)
-	if is_instance_valid(input_blocker_layer):
-		input_blocker_layer.visible = true
-
-	# Hide the game UI
-	_set_gameplay_ui_visible(false)
+	# Scene HUD + input blocker are handled by game_ui.gd via the signal below.
+	_set_patreon_visible(false)
 	if is_instance_valid(pause_menu_ui): pause_menu_ui.menu_panel.hide()
 	Events.interaction_state_changed.emit(current_interaction_state)
 
@@ -1038,16 +1002,8 @@ func enter_zoom_view_state():
 
 	force_clear_all_hovered_interactables()
 
-	if is_instance_valid(input_blocker_layer):
-		input_blocker_layer.visible = true
-	if is_instance_valid(verb_ui):
-		verb_ui.layer = 3
-		verb_ui.visible = true
-	if is_instance_valid(inventory_ui):
-		inventory_ui.layer = 3
-		inventory_ui.visible = true
-	if is_instance_valid(patreon_world_ui):
-		patreon_world_ui.visible = false
+	# Layer juggling for verb/inventory + input blocker live in game_ui.gd now.
+	_set_patreon_visible(false)
 
 	if is_instance_valid(player_node):
 		player_node.set_can_move(false)
@@ -1058,11 +1014,8 @@ func enter_zoom_view_state():
 func exit_to_world_state():
 	current_interaction_state = InteractionState.WORLD
 
-	if is_instance_valid(input_blocker_layer):
-		input_blocker_layer.visible = false
-	if is_instance_valid(verb_ui): verb_ui.layer = 1
-	if is_instance_valid(inventory_ui): inventory_ui.layer = 1
-	_set_gameplay_ui_visible(true)
+	# Scene HUD restore + layer reset + blocker are handled by game_ui.gd.
+	_set_patreon_visible(true)
 	if is_instance_valid(pause_menu_ui): pause_menu_ui.menu_panel.show()
 
 	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
@@ -1071,36 +1024,6 @@ func exit_to_world_state():
 	get_tree().paused = false
 	Events.interaction_state_changed.emit(current_interaction_state)
 
-func _find_and_assign_ui_nodes():
-	# Check if we even have a main scene to search in.
-	if not is_instance_valid(main_game_scene_instance):
-		return
-
-	# Tell Godot to look INSIDE the main scene for these nodes using their Unique Scene Names.
-	verb_ui = main_game_scene_instance.get_node_or_null("%VerbUI_CanvasLayer")
-	inventory_ui = main_game_scene_instance.get_node_or_null("%InventoryUI_CanvasLayer")
-	insurance_form_button_ui = main_game_scene_instance.get_node_or_null("%InsuranceFormButtonUI")
-	journal_button_ui = main_game_scene_instance.get_node_or_null("%JournalButtonUI")
-	input_blocker_layer = main_game_scene_instance.get_node_or_null("%InputBlockerLayer")
-	explanation_layer = main_game_scene_instance.get_node_or_null("%ExplanationLayer")
-	# pause_menu_ui is now spawned globally in GameManager._ready()
-
-	if is_instance_valid(pause_menu_ui):
-		if not pause_menu_ui.scan_cancel_requested.is_connected(_on_scan_cancel_pressed):
-			pause_menu_ui.scan_cancel_requested.connect(_on_scan_cancel_pressed)
-
-	if is_instance_valid(insurance_form_button_ui):
-		if not insurance_form_button_ui.form_button_pressed.is_connected(_on_insurance_form_button_pressed):
-			insurance_form_button_ui.form_button_pressed.connect(_on_insurance_form_button_pressed)
-
-	if is_instance_valid(journal_button_ui):
-		if not journal_button_ui.journal_button_pressed.is_connected(_on_journal_button_pressed):
-			journal_button_ui.journal_button_pressed.connect(_on_journal_button_pressed)
-
-	if is_instance_valid(explanation_layer):
-		if not explanation_layer.explanation_finished.is_connected(exit_explanation_state):
-			explanation_layer.explanation_finished.connect(exit_explanation_state)
-		
 # This function is called ONLY when the "Close Form" button is pressed.
 func _on_insurance_form_closed():
 
@@ -1111,40 +1034,20 @@ func _on_insurance_form_closed():
 	exit_to_world_state()
 
 func start_explanation(data: ExplanationData, root_node_to_search: Node):
-	if current_game_state == GameState.EXPLANATION or not is_instance_valid(explanation_layer):
+	if current_game_state == GameState.EXPLANATION or not is_instance_valid(main_game_scene_instance):
 		return
 
 	change_game_state(GameState.EXPLANATION)
 
-	var nodes_to_keep_visible = []
-	if "exceptions_to_hide" in data:
-		for node_path in data.exceptions_to_hide:
-			var node = root_node_to_search.get_node_or_null(node_path)
-			if is_instance_valid(node):
-				nodes_to_keep_visible.append(node)
-
-	if is_instance_valid(verb_ui) and not verb_ui in nodes_to_keep_visible:
-		verb_ui.hide()
-
-	if is_instance_valid(inventory_ui) and not inventory_ui in nodes_to_keep_visible:
-		inventory_ui.hide()
-		
-	if is_instance_valid(journal_button_ui) and not journal_button_ui in nodes_to_keep_visible:
-		journal_button_ui.hide()
-	if is_instance_valid(pause_menu_ui) and not pause_menu_ui in nodes_to_keep_visible:
-		pause_menu_ui.menu_panel.hide()
-
-	if is_instance_valid(insurance_form_button_ui):
-		if insurance_form_button_ui in nodes_to_keep_visible:
-			insurance_form_button_ui.show()
-		else:
-			insurance_form_button_ui.hide()
+	# game_ui.gd hides the HUD (honoring data.exceptions_to_hide) and starts
+	# the ExplanationLayer in response to this event.
+	if is_instance_valid(pause_menu_ui): pause_menu_ui.menu_panel.hide()
 
 	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
 		player_node.set_can_move(false)
 
 	get_tree().paused = true
-	explanation_layer.show_explanation(data, root_node_to_search)
+	Events.explanation_started.emit(data, root_node_to_search)
 
 func exit_explanation_state():
 	if current_game_state != GameState.EXPLANATION:
@@ -1153,7 +1056,7 @@ func exit_explanation_state():
 	get_tree().paused = false
 
 	# Show the main game UI
-	_set_gameplay_ui_visible(true)
+	_set_patreon_visible(true)
 	if is_instance_valid(pause_menu_ui): pause_menu_ui.menu_panel.show()
 
 	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
@@ -1161,7 +1064,7 @@ func exit_explanation_state():
 
 	change_game_state(GameState.IN_GAME_PLAY)
 
-func _on_insurance_form_button_pressed():
+func open_insurance_form():
 	if is_instance_valid(_insurance_form_instance):
 		return
 
@@ -1306,7 +1209,8 @@ func _on_intro_conversation_finished(_dialogue_resource):
 	# --- PREVENT MOVEMENT & UI DURING DARKNESS ---
 	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
 		player_node.set_can_move(false)
-	_set_gameplay_ui_visible(false)
+	_set_patreon_visible(false)
+	Events.gameplay_ui_visibility_requested.emit(false)
 
 	if is_instance_valid(transition_layer):
 		# Wait 3 full seconds in the dark to let the player hear the environment
@@ -1318,10 +1222,11 @@ func _on_intro_conversation_finished(_dialogue_resource):
 	# --- RESTORE MOVEMENT & UI ---
 	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
 		player_node.set_can_move(true)
-	_set_gameplay_ui_visible(true)
+	_set_patreon_visible(true)
+	Events.gameplay_ui_visibility_requested.emit(true)
 
 # --- JOURNAL FUNCTIONS ---
-func _on_journal_button_pressed():
+func open_journal():
 	if is_instance_valid(_journal_overlay_instance):
 		return
 

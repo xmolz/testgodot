@@ -120,6 +120,12 @@ func toggle_pause():
 		_overlay_open_time_ms = Time.get_ticks_msec()
 		get_tree().paused = true
 		if GameManager: GameManager.change_game_state(GameManager.GameState.PAUSED)
+		
+		#releasing the damn keyboard focus
+		var current_focus = get_viewport().gui_get_focus_owner()
+		if is_instance_valid(current_focus):
+			current_focus.release_focus()
+			
 
 func _on_history_pressed():
 	if SoundManager: SoundManager.play_sfx("ui_click")
