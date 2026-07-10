@@ -10,7 +10,7 @@ func execute(interactable_node: Interactable) -> bool:
 	if not is_instance_valid(player):
 		return false
 	
-	var target_node = GameManager.main_game_scene_instance.find_child(target_marker_name, true, false)
+	var target_node = SceneDirector.current_game_scene.find_child(target_marker_name, true, false)
 	if not target_node:
 		push_error("TeleportAction: Marker '%s' not found!" % target_marker_name)
 		return false

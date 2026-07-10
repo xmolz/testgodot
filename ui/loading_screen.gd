@@ -63,14 +63,14 @@ func _process(_delta):
 		# Grab the finished resource
 		var loaded_resource = ResourceLoader.load_threaded_get(current_file["path"])
 		
-		# Save it to the GameManager based on what it is
+		# Save it to the SceneDirector based on what it is
 		match current_file["path"]:
 			"res://ui/main_menu.tscn":
-				GameManager.cached_main_menu_scene = loaded_resource
+				SceneDirector.cached_main_menu_scene = loaded_resource
 			"res://conversation/AdvancedConversationOverlay.tscn":
-				GameManager.cached_intro_overlay_scene = loaded_resource
+				SceneDirector.cached_intro_overlay_scene = loaded_resource
 			"res://main.tscn":
-				GameManager.cached_main_game_scene = loaded_resource
+				SceneDirector.cached_main_game_scene = loaded_resource
 		
 		# Move to the next file
 		current_load_index += 1

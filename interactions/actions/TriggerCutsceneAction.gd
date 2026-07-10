@@ -11,11 +11,11 @@ func execute(interactable_node: Interactable) -> Variant:
 		return true
 
 	# --- THE FIX ---
-	# Because we load the game dynamically now, get_tree().current_scene might point 
-	# to the Boot scene. We must explicitly search the GameManager's main scene instance!
+	# Because we load the game dynamically now, get_tree().current_scene might point
+	# to the Boot scene. We must explicitly search the SceneDirector's main scene instance!
 	var root_node = null
-	if GameManager and is_instance_valid(GameManager.main_game_scene_instance):
-		root_node = GameManager.main_game_scene_instance
+	if GameManager and is_instance_valid(SceneDirector.current_game_scene):
+		root_node = SceneDirector.current_game_scene
 	else:
 		root_node = interactable_node.get_tree().current_scene
 		

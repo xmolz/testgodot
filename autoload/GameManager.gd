@@ -1,24 +1,13 @@
 # GameManager.gd
 extends Node
 
-const MAIN_GAME_SCENE_PATH = "res://main.tscn"
 const INSURANCE_FORM_SCENE = preload("res://ui/insurance_form.tscn")
 const JOURNAL_OVERLAY_SCENE = preload("res://ui/journal_overlay.tscn")
-const MAIN_MENU_SCENE_PATH = "res://ui/main_menu.tscn"
-const INTRO_OVERLAY_SCENE_PATH = "res://conversation/AdvancedConversationOverlay.tscn"
 const INTRO_DIALOGUE = preload("res://dialogue/intro.dialogue")
-const GAME_OVER_SCENE = preload("res://ui/game_over.tscn")
-const DIFFICULTY_SELECT_SCENE = preload("res://ui/difficulty_select_screen.tscn")
 const CONVERSATION_BALLOON_SCENE = preload("res://conversation/conversationballoon.tscn")
 
 var _insurance_form_instance: CanvasLayer = null
 var _journal_overlay_instance: CanvasLayer = null
-
-# --- Cached Scenes ---
-var cached_main_menu_scene: PackedScene = null
-var cached_intro_overlay_scene: PackedScene = null
-var cached_main_game_scene: PackedScene = null
-var _intro_overlay_instance: Node = null
 
 # --- Signals ---
 signal verb_changed(new_verb_id: String)
@@ -57,8 +46,6 @@ var current_interaction_state: InteractionState = InteractionState.WORLD
 var transition_layer: CanvasLayer = null
 
 var current_game_state: GameState = GameState.BOOTING
-var main_game_scene_instance: Node = null
-var main_menu_scene_instance: CanvasLayer = null
 var pause_menu_ui: CanvasLayer = null
 var custom_cursor_instance: CanvasLayer = null
 var walk_indicator_instance: Node2D = null
@@ -147,10 +134,10 @@ func _ready():
 			player_node = potential_player
 
 			# 2. Assign the main scene instance (assuming player is a child of the main scene)
-			main_game_scene_instance = player_node.get_owner()
-			if not is_instance_valid(main_game_scene_instance):
+			SceneDirector.current_game_scene = player_node.get_owner()
+			if not is_instance_valid(SceneDirector.current_game_scene):
 				# Fallback if owner is not set correctly
-				main_game_scene_instance = get_tree().get_root().get_child(-1)
+				SceneDirector.current_game_scene = get_tree().get_root().get_child(-1)
 
 			# 3. Manually set the state.
 			current_game_state = GameState.IN_GAME_PLAY
@@ -292,16 +279,12 @@ func change_game_state(new_state: GameState):
 	# =========================================================
 	match current_game_state:
 		GameState.MAIN_MENU:
-			_cleanup_all_overlays()
-			if is_instance_valid(main_menu_scene_instance):
-				main_menu_scene_instance.queue_free()
-				main_menu_scene_instance = null
+			SceneDirector._cleanup_all_overlays()
+			SceneDirector.free_main_menu()
 		GameState.INTRO_CONVERSATION:
 			if new_state == GameState.MAIN_MENU:
 				# Destroy the intro overlay if we are aborting to the main menu
-				if is_instance_valid(_intro_overlay_instance):
-					_intro_overlay_instance.queue_free()
-					_intro_overlay_instance = null
+				SceneDirector.free_intro_overlay()
 		GameState.IN_GAME_PLAY, GameState.PAUSED:
 			# When LEAVING the game (e.g. to Menu), stop music and ambience.
 			if new_state != GameState.CUTSCENE and new_state != GameState.EXPLANATION and new_state != GameState.PAUSED and new_state != GameState.IN_GAME_PLAY and new_state != GameState.INTRO_CONVERSATION:
@@ -309,10 +292,8 @@ func change_game_state(new_state: GameState):
 				SoundManager.stop_all_ambience()
 
 			if new_state == GameState.MAIN_MENU:
-				_cleanup_all_overlays()
-				if is_instance_valid(main_game_scene_instance):
-					main_game_scene_instance.queue_free()
-					main_game_scene_instance = null
+				SceneDirector._cleanup_all_overlays()
+				SceneDirector.teardown_game_scene()
 
 	current_game_state = new_state
 	Events.game_state_changed.emit(current_game_state)
@@ -324,26 +305,17 @@ func change_game_state(new_state: GameState):
 		GameState.MAIN_MENU:
 			_is_game_over_triggering = false
 			if is_instance_valid(pause_menu_ui): pause_menu_ui.menu_panel.hide()
-			if is_instance_valid(main_menu_scene_instance):
-				return
-
-			var menu_packed_scene = cached_main_menu_scene
-			if not menu_packed_scene:
-				# Fallback if testing the scene directly without the Boot loader
-				menu_packed_scene = load(MAIN_MENU_SCENE_PATH)
-				if not menu_packed_scene:
-					return
-
-			main_menu_scene_instance = menu_packed_scene.instantiate()
-			main_menu_scene_instance.new_game_requested.connect(_on_main_menu_new_game_requested)
-			main_menu_scene_instance.quit_game_requested.connect(_on_main_menu_quit_requested)
-
-			get_tree().root.add_child(main_menu_scene_instance)
+			var menu = SceneDirector.show_main_menu()
+			if is_instance_valid(menu):
+				if not menu.new_game_requested.is_connected(_on_main_menu_new_game_requested):
+					menu.new_game_requested.connect(_on_main_menu_new_game_requested)
+				if not menu.quit_game_requested.is_connected(_on_main_menu_quit_requested):
+					menu.quit_game_requested.connect(_on_main_menu_quit_requested)
 
 		GameState.DIFFICULTY_SELECT:
-			var difficulty_screen = DIFFICULTY_SELECT_SCENE.instantiate()
-			difficulty_screen.difficulty_chosen.connect(_on_difficulty_chosen)
-			get_tree().root.add_child(difficulty_screen)
+			var screen = SceneDirector.show_difficulty_select()
+			if is_instance_valid(screen):
+				screen.difficulty_chosen.connect(_on_difficulty_chosen)
 
 		GameState.EXPLANATION:
 			pass
@@ -351,24 +323,13 @@ func change_game_state(new_state: GameState):
 		GameState.INTRO_CONVERSATION:
 			if is_instance_valid(pause_menu_ui): pause_menu_ui.menu_panel.hide()
 
-			if not is_instance_valid(_intro_overlay_instance):
-				_start_intro_conversation()
+			if not is_instance_valid(SceneDirector.intro_overlay):
+				SceneDirector.start_intro_overlay(INTRO_DIALOGUE, _on_intro_conversation_finished)
 
 		GameState.IN_GAME_PLAY:
 			# --- A. LOADING PHASE ---
-			# Only load the scene if it doesn't exist (e.g. fresh boot)
-			if not is_instance_valid(main_game_scene_instance):
-				var main_packed_scene = cached_main_game_scene
-				if not main_packed_scene:
-					# Fallback: cache is null (preload failed/skipped, or scene run directly)
-					main_packed_scene = load(MAIN_GAME_SCENE_PATH)
-					if not main_packed_scene:
-						print_rich("[color=red]GameManager Error: Failed to load Main Game Scene.[/color]")
-						return
-
-				main_game_scene_instance = main_packed_scene.instantiate()
-				get_tree().root.add_child(main_game_scene_instance)
-				
+			var newly_loaded = SceneDirector.ensure_game_scene()
+			if newly_loaded:
 				# Play music if we just loaded the game
 				# SoundManager.play_music() 
 				
@@ -978,7 +939,7 @@ func _on_insurance_form_closed():
 	exit_to_world_state()
 
 func start_explanation(data: ExplanationData, root_node_to_search: Node):
-	if current_game_state == GameState.EXPLANATION or not is_instance_valid(main_game_scene_instance):
+	if current_game_state == GameState.EXPLANATION or not is_instance_valid(SceneDirector.current_game_scene):
 		return
 
 	change_game_state(GameState.EXPLANATION)
@@ -1114,36 +1075,13 @@ func _on_difficulty_chosen(is_assisted: bool):
 func _on_main_menu_quit_requested():
 	get_tree().quit()
 
-func _start_intro_conversation():
-
-	var intro_overlay_packed_scene = cached_intro_overlay_scene
-	if not intro_overlay_packed_scene:
-		# Fallback to loading from disk if the cache was somehow cleared
-		intro_overlay_packed_scene = load(INTRO_OVERLAY_SCENE_PATH)
-		if not intro_overlay_packed_scene:
-			print_rich("[color=red]GM Error: Failed to load Intro Overlay Scene at path: %s[/color]" % INTRO_OVERLAY_SCENE_PATH)
-			return
-
-	var intro_overlay = intro_overlay_packed_scene.instantiate()
-	intro_overlay.is_intro_sequence = true
-
-	# Configure its exported variables from code.
-	intro_overlay.dialogue_resource = INTRO_DIALOGUE
-
-	# Connect to its 'conversation_finished' signal.
-	intro_overlay.conversation_finished.connect(_on_intro_conversation_finished, CONNECT_ONE_SHOT)
-
-	# Add it to the scene tree so it becomes visible and starts running.
-	get_tree().root.add_child(intro_overlay)
-	_intro_overlay_instance = intro_overlay
-
 func _on_intro_conversation_finished(_dialogue_resource):
 	if is_instance_valid(transition_layer):
 		await transition_layer.play_iris_close()
 
 	# AWAIT the state change so the scene actually loads before we try to lock things!
 	await change_game_state(GameState.IN_GAME_PLAY)
-	_intro_overlay_instance = null
+	SceneDirector.intro_overlay = null
 
 	# --- PREVENT MOVEMENT & UI DURING DARKNESS ---
 	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
@@ -1194,8 +1132,8 @@ func trigger_game_over(fade_duration: float = 1.5):
 	print_rich("[color=red]GM: Game Over Triggered![/color]")
 
 	# Instantly hide the current dialogue balloon so the player knows their click registered!
-	if is_instance_valid(_intro_overlay_instance) and "current_balloon" in _intro_overlay_instance and is_instance_valid(_intro_overlay_instance.current_balloon):
-		_intro_overlay_instance.current_balloon.hide()
+	if is_instance_valid(SceneDirector.intro_overlay) and "current_balloon" in SceneDirector.intro_overlay and is_instance_valid(SceneDirector.intro_overlay.current_balloon):
+		SceneDirector.intro_overlay.current_balloon.hide()
 
 	# 1. Trigger the GLOBAL fade so it isn't destroyed during cleanup
 	if is_instance_valid(transition_layer) and transition_layer.has_method("global_fade_to_black"):
@@ -1212,24 +1150,21 @@ func trigger_game_over(fade_duration: float = 1.5):
 		if SoundManager.has_method("stop_all_ambience"): SoundManager.stop_all_ambience()
 
 	# 4. Clean up the main game scene if it exists
-	if is_instance_valid(main_game_scene_instance):
-		main_game_scene_instance.queue_free()
-		main_game_scene_instance = null
+	SceneDirector.teardown_game_scene()
 
 	# 5. Aggressively hunt down Overlays AND Dialogue Balloons to prevent crashes
-	_cleanup_all_overlays()
+	SceneDirector._cleanup_all_overlays()
 
 	# 5.5 Ensure the tree is unpaused (form/journal/zoom may have paused it)
 	get_tree().paused = false
 
 	# 6. Spawn the Game Over Scene
-	var game_over_instance = GAME_OVER_SCENE.instantiate()
-	get_tree().root.add_child(game_over_instance)
+	SceneDirector.show_game_over()
 
 func quit_to_main_menu_smooth():
 	if SoundManager:
 		SoundManager.stop_all_audio()
-	_cleanup_all_overlays()
+	SceneDirector._cleanup_all_overlays()
 
 	if is_instance_valid(transition_layer) and transition_layer.has_method("global_fade_to_black"):
 		await transition_layer.global_fade_to_black(1.0)
@@ -1241,42 +1176,13 @@ func quit_to_main_menu_smooth():
 	if is_instance_valid(transition_layer) and transition_layer.has_method("global_fade_from_black"):
 		transition_layer.global_fade_from_black(1.0)
 
-func clear_active_dialogue_balloons(node: Node = null):
-	if node == null:
-		node = get_tree().root
-
-	for child in node.get_children():
-		if "Balloon" in child.name or "conversationballoon" in child.name.to_lower():
-			child.queue_free()
-		else:
-			clear_active_dialogue_balloons(child)
-
-func _cleanup_all_overlays(node: Node = null):
-	if node == null:
-		node = get_tree().root
-		# Root-level tracked overlays (added via open_insurance_form / open_journal)
-		if is_instance_valid(_insurance_form_instance):
-			_insurance_form_instance.queue_free()
-		_insurance_form_instance = null
-		if is_instance_valid(_journal_overlay_instance):
-			_journal_overlay_instance.queue_free()
-		_journal_overlay_instance = null
-
-	for child in node.get_children():
-		if child is CharacterConversationOverlay or child is AdvancedConversationOverlay:
-			if "current_balloon" in child and is_instance_valid(child.current_balloon):
-				child.current_balloon.queue_free()
-			child.queue_free()
-		elif child is ObjectZoomOverlay:
-			child.queue_free()
-		elif "MemoryBoxOverlay" in child.name:
-			child.queue_free()
-		elif "Balloon" in child.name or "conversationballoon" in child.name.to_lower():
-			child.queue_free()
-		elif "DialogueHistory" in child.name and child != DialogueHistory:
-			child.queue_free()
-		else:
-			_cleanup_all_overlays(child)
+func force_close_tracked_overlays():
+	if is_instance_valid(_insurance_form_instance):
+		_insurance_form_instance.queue_free()
+	_insurance_form_instance = null
+	if is_instance_valid(_journal_overlay_instance):
+		_journal_overlay_instance.queue_free()
+	_journal_overlay_instance = null
 
 func has_unread_hint() -> bool:
 	return current_unread_hint != "" and current_unread_hint != last_read_hint
