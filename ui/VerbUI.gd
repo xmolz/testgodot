@@ -35,14 +35,13 @@ func _ready():
 		action_bubble_label.add_theme_font_size_override("normal_font_size", 28)
 
 	if GameManager:
-		GameManager.available_verbs_changed.connect(_on_available_verbs_changed)
+		Verbs.available_verbs_changed.connect(_on_available_verbs_changed)
 		GameManager.verb_changed.connect(_on_game_manager_verb_changed)
 		GameManager.sentence_line_updated.connect(_on_game_manager_sentence_line_updated)
 		GameManager.interaction_complete.connect(_on_interaction_complete)
 		GameManager.new_hint_available.connect(_on_new_hint_available)
 
-		if GameManager.has_method("get_currently_displayable_verbs"):
-			_on_available_verbs_changed(GameManager.get_currently_displayable_verbs())
+		_on_available_verbs_changed(Verbs.get_currently_displayable_verbs())
 
 	action_bubble_label.visible = false
 
@@ -151,7 +150,7 @@ func _on_game_manager_verb_changed(new_verb_id: String):
 	if new_verb_id == "":
 		action_bubble_label.visible = false
 	else:
-		var verb_data = GameManager.get_verb_data_by_id(new_verb_id) if GameManager else null
+		var verb_data = Verbs.get_verb_data_by_id(new_verb_id) if GameManager else null
 		if verb_data:
 			action_bubble_label.text = verb_data.display_text + ":"
 		else:

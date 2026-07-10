@@ -26,7 +26,7 @@ func _ready():
 	# --- DEBUG: Force Assisted Mode ---
 	if GameManager and force_assisted_mode:
 		Settings.assisted_mode = true
-		GameManager.unlock_verb("think")
+		Verbs.unlock_verb("think")
 		GameManager.current_unread_hint = ""
 		GameManager.last_read_hint = ""
 	# ----------------------------------

@@ -14,8 +14,8 @@ func _ready():
 	if GameManager:
 		var all_verbs: Array[String] = ["examine", "talk_to", "pickup", "use", "give", "flash", "think"]
 		for v in all_verbs:
-			GameManager.unlock_verb(v)
-		GameManager.set_active_scene_verbs(all_verbs)
+			Verbs.unlock_verb(v)
+		Verbs.set_active_scene_verbs(all_verbs)
 
 		Inventory.add_item("hospital_toilet_paper")
 

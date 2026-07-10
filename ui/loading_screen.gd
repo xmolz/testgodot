@@ -7,7 +7,6 @@ extends CanvasLayer
 var load_queue = [
 	{"path": "res://ui/main_menu.tscn", "name": "System Interfaces"},
 	{"path": "res://ui/difficulty_select_screen.tscn", "name": "Game Configuration"},
-	{"path": "res://conversation/conversation_backgrounds.tres", "name": "Visual Assets"},
 	{"path": "res://conversation/AdvancedConversationOverlay.tscn", "name": "Narrative Engine"},
 	{"path": "res://main.tscn", "name": "Environment Data"}
 ]

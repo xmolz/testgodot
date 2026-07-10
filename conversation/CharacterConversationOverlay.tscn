@@ -2,23 +2,23 @@
 
 [ext_resource type="Script" uid="uid://cy1g0xpb3u0e2" path="res://conversation/character_conversation_overlay.gd" id="1_ubaeu"]
 [ext_resource type="Resource" uid="uid://b7jdbk4b0natj" path="res://dialogue/npcs/faye.dialogue" id="2_5qcf0"]
-[ext_resource type="SpriteFrames" uid="uid://w63ywvs0833i" path="res://conversation/conversation_backgrounds.tres" id="3_4hhp7"]
-[ext_resource type="Texture2D" path="res://Protag.png" id="3_wh5aq"]
 [ext_resource type="FontFile" uid="uid://bd58xbyix7r6p" path="res://Fonts/VarelaRound-Regular.ttf" id="5_4hhp7"]
 [ext_resource type="AudioStream" uid="uid://ci8pnkj1cu7h7" path="res://Sfx/Music/Unnatural City.ogg" id="5_pfgg6"]
 
-[node name="CharacterConversationOverlay" type="CanvasLayer"]
+[sub_resource type="Resource" id="Resource_2ay25"]
+metadata/__load_path__ = "res://Protag.png"
+
+[node name="CharacterConversationOverlay" type="CanvasLayer" unique_id=879074859]
 process_mode = 3
 layer = 2
 script = ExtResource("1_ubaeu")
 conversation_dialogue_file = ExtResource("2_5qcf0")
-background_animations = ExtResource("3_4hhp7")
-scene_character_sprite_texture = ExtResource("3_wh5aq")
+scene_character_sprite_texture = SubResource("Resource_2ay25")
 music_tracks = Dictionary[String, AudioStream]({
 "unnatural_city": ExtResource("5_pfgg6")
 })
 
-[node name="RootContainer" type="Control" parent="."]
+[node name="RootContainer" type="Control" parent="." unique_id=2036782903]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -26,14 +26,14 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MentalImageSprite" type="Sprite2D" parent="RootContainer"]
+[node name="MentalImageSprite" type="Sprite2D" parent="RootContainer" unique_id=825137273]
 position = Vector2(962, 457)
 scale = Vector2(0.308889, 0.308889)
 
-[node name="BackgroundSprite" type="Sprite2D" parent="RootContainer"]
+[node name="BackgroundSprite" type="Sprite2D" parent="RootContainer" unique_id=737977375]
 scale = Vector2(0.5, 0.5)
 
-[node name="AnimatedBackground" type="TextureRect" parent="RootContainer"]
+[node name="AnimatedBackground" type="TextureRect" parent="RootContainer" unique_id=2024589097]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -45,7 +45,7 @@ size_flags_vertical = 3
 expand_mode = 1
 stretch_mode = 6
 
-[node name="CinematicBackground" type="ColorRect" parent="RootContainer"]
+[node name="CinematicBackground" type="ColorRect" parent="RootContainer" unique_id=1988576902]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -54,11 +54,11 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="CinematicSprite" type="AnimatedSprite2D" parent="RootContainer"]
+[node name="CinematicSprite" type="AnimatedSprite2D" parent="RootContainer" unique_id=318041651]
 position = Vector2(960, 540)
 scale = Vector2(0.938, 0.938)
 
-[node name="CinematicContinueButton" type="Button" parent="RootContainer"]
+[node name="CinematicContinueButton" type="Button" parent="RootContainer" unique_id=1315650349]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.91600007
@@ -73,7 +73,7 @@ theme_override_fonts/font = ExtResource("5_4hhp7")
 theme_override_font_sizes/font_size = 28
 text = "Continue"
 
-[node name="FadeOverlay" type="ColorRect" parent="RootContainer"]
+[node name="FadeOverlay" type="ColorRect" parent="RootContainer" unique_id=1833712948]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 15

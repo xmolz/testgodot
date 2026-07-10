@@ -184,7 +184,7 @@ func attempt_interaction(verb_id: String, item_id_used_with: String = ""):
 	
 	if GameManager:
 		# Use the original verb_id for fallback lookup (or effective, depending on your fallback setup)
-		var verb_data = GameManager.get_verb_data_by_id(verb_id) 
+		var verb_data = Verbs.get_verb_data_by_id(verb_id)
 		if is_instance_valid(verb_data) and is_instance_valid(verb_data.fallback_dialogue_file):
 			print_rich("[color=Goldenrod]No match found. Calling FallbackManager.[/color]")
 			if FallbackManager:

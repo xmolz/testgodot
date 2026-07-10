@@ -6,8 +6,6 @@ const INSURANCE_FORM_SCENE = preload("res://ui/insurance_form.tscn")
 const JOURNAL_OVERLAY_SCENE = preload("res://ui/journal_overlay.tscn")
 const MAIN_MENU_SCENE_PATH = "res://ui/main_menu.tscn"
 const INTRO_OVERLAY_SCENE_PATH = "res://conversation/AdvancedConversationOverlay.tscn"
-const INTRO_BACKGROUND_ANIMATIONS_PATH = "res://conversation/conversation_backgrounds.tres"
-const INTRO_INITIAL_ANIMATION_NAME = "float_loop"
 const INTRO_DIALOGUE = preload("res://dialogue/intro.dialogue")
 const GAME_OVER_SCENE = preload("res://ui/game_over.tscn")
 const DIFFICULTY_SELECT_SCENE = preload("res://ui/difficulty_select_screen.tscn")
@@ -26,7 +24,6 @@ var _intro_overlay_instance: Node = null
 signal verb_changed(new_verb_id: String)
 signal sentence_line_updated(text: String)
 signal interaction_complete # For VerbUI to reset its state
-signal available_verbs_changed(available_verb_data_array: Array[VerbData])
 signal new_hint_available(is_available: bool)
 signal verb_lock_changed(is_active: bool)
 
@@ -94,8 +91,6 @@ var current_hint_manager: LevelHintManager = null
 
 # --- Verb Management ---
 @export var all_verb_data_resources: Array[VerbData] = []
-var unlocked_verb_ids: Array[String] = []
-var active_scene_verb_ids: Array[String] = []
 
 # --- Inventory Management ---
 @export var all_item_data_resources: Array[ItemData] = []
@@ -133,11 +128,8 @@ func _ready():
 		DialogueManager.dialogue_started.connect(_on_dialogue_started)
 
 	# Initialize Verbs
-	for verb_data_res in all_verb_data_resources:
-		if verb_data_res and verb_data_res.unlocked_by_default and not verb_data_res.verb_id in unlocked_verb_ids:
-			unlocked_verb_ids.append(verb_data_res.verb_id)
-	active_scene_verb_ids = unlocked_verb_ids.duplicate()
-	_emit_available_verbs_changed_update()
+	Verbs.setup(all_verb_data_resources)
+	Verbs.available_verbs_changed.connect(_on_available_verbs_changed)
 
 	Inventory.setup(all_item_data_resources)
 	Events.item_removed.connect(_on_inventory_item_removed)
@@ -433,7 +425,7 @@ func select_verb(verb_id_to_select: String):
 		new_verb_id = ""
 	else:
 		var is_selectable = false
-		for verb_data in get_currently_displayable_verbs():
+		for verb_data in Verbs.get_currently_displayable_verbs():
 			if verb_data.verb_id == verb_id_to_select:
 				is_selectable = true; break
 		if verb_id_to_select == "" or is_selectable:
@@ -481,7 +473,7 @@ func select_verb(verb_id_to_select: String):
 			current_selected_item_data = null
 			selected_inventory_item_changed.emit(null)
 
-		var verb_data = get_verb_data_by_id(current_verb_id)
+		var verb_data = Verbs.get_verb_data_by_id(current_verb_id)
 		if verb_data and verb_data.requires_target_object and current_verb_id != "walk_to" and current_verb_id != "think":
 			_activate_verb_lock(true)
 		else:
@@ -616,7 +608,7 @@ func update_sentence_line_ui():
 	var bubble_text = ""
 
 	if current_verb_id != "":
-		var verb_data = get_verb_data_by_id(current_verb_id)
+		var verb_data = Verbs.get_verb_data_by_id(current_verb_id)
 		var verb_text = verb_data.display_text if verb_data else current_verb_id
 
 		if current_selected_item_data != null:
@@ -744,7 +736,7 @@ func _perform_actual_interaction(interactable_node: Interactable, verb_to_use_id
 		item_id_for_interaction = item_in_hand_data.item_id
 
 	# --- RECORD ACTION IN HISTORY LOG ---
-	var verb_data = get_verb_data_by_id(verb_to_use_id)
+	var verb_data = Verbs.get_verb_data_by_id(verb_to_use_id)
 	var verb_name = verb_data.display_text if verb_data else verb_to_use_id
 	var obj_name = interactable_node.object_display_name
 	var itm_name = item_in_hand_data.display_name if item_in_hand_data else ""
@@ -809,6 +801,10 @@ func _on_inventory_item_removed(item_id: String):
 	if current_selected_item_data and current_selected_item_data.item_id == item_id:
 		current_selected_item_data = null
 		selected_inventory_item_changed.emit(null)
+
+func _on_available_verbs_changed(_available_verbs: Array[VerbData]):
+	if current_verb_id != "" and not Verbs.is_verb_id_currently_active(current_verb_id):
+		select_verb("")
 
 func _disconnect_interactable_request_signals():
 	if is_instance_valid(_signals_connected_to_interactable):
@@ -918,59 +914,7 @@ func _cancel_scan():
 		for interactable in get_tree().get_nodes_in_group("interactables"):
 			if is_instance_valid(interactable): interactable.force_highlight(false)
 
-# --- Verb Data and Availability ---
-
-func get_verb_data_by_id(verb_id_to_find: String) -> VerbData:
-	for verb_data_res in all_verb_data_resources:
-		if verb_data_res and verb_data_res.verb_id == verb_id_to_find:
-			return verb_data_res
-	return null
-
-func get_currently_displayable_verbs() -> Array[VerbData]:
-	var displayable_verbs: Array[VerbData] = []
-	for verb_data_res in all_verb_data_resources:
-		if verb_data_res and verb_data_res.verb_id in unlocked_verb_ids:
-			if active_scene_verb_ids.is_empty() or verb_data_res.verb_id in active_scene_verb_ids:
-				displayable_verbs.append(verb_data_res)
-	return displayable_verbs
-
-func _emit_available_verbs_changed_update():
-	available_verbs_changed.emit(get_currently_displayable_verbs())
-
-func set_active_scene_verbs(verb_ids_for_scene: Array[String]):
-	active_scene_verb_ids = verb_ids_for_scene.duplicate()
-	_emit_available_verbs_changed_update()
-	if current_verb_id != "" and not is_verb_id_currently_active(current_verb_id):
-		select_verb("")
-
-func unlock_verb(verb_id_to_unlock: String):
-	var verb_data = get_verb_data_by_id(verb_id_to_unlock)
-	if verb_data and not verb_id_to_unlock in unlocked_verb_ids:
-		unlocked_verb_ids.append(verb_id_to_unlock)
-
-		if not active_scene_verb_ids.is_empty() and not verb_id_to_unlock in active_scene_verb_ids:
-			active_scene_verb_ids.append(verb_id_to_unlock)
-
-		_emit_available_verbs_changed_update()
-	elif not verb_data: print_rich("[color=red]GM: Tried to unlock non-existent verb: '%s'[/color]" % verb_id_to_unlock)
-	elif verb_id_to_unlock in unlocked_verb_ids: print_rich("[color=yellow]GM: Verb '%s' already unlocked.[/color]" % verb_id_to_unlock)
-
-func lock_verb(verb_id_to_lock: String):
-	if verb_id_to_lock in unlocked_verb_ids:
-		unlocked_verb_ids.erase(verb_id_to_lock)
-
-		if verb_id_to_lock in active_scene_verb_ids:
-			active_scene_verb_ids.erase(verb_id_to_lock)
-
-		_emit_available_verbs_changed_update()
-		if current_verb_id == verb_id_to_lock:
-			select_verb("")
-	else: print_rich("[color=orange]GM: Tried to lock verb '%s' that was not unlocked or doesn't exist.[/color]" % verb_id_to_lock)
-
-func is_verb_id_currently_active(verb_id_to_check: String) -> bool:
-	if not verb_id_to_check in unlocked_verb_ids: return false
-	if active_scene_verb_ids.is_empty(): return true
-	return active_scene_verb_ids.has(verb_id_to_check)
+# --- Verb Data and Availability (Moved to Verbs autoload) ---
 
 func force_clear_all_hovered_interactables():
 	var interactables_to_clear = hovered_interactables.duplicate()
@@ -1124,12 +1068,7 @@ func reset_run_state():
 	new_hint_available.emit(false)
 
 	# --- Verbs: re-derive defaults exactly like _ready() does ---
-	unlocked_verb_ids.clear()
-	for verb_data_res in all_verb_data_resources:
-		if verb_data_res and verb_data_res.unlocked_by_default and not verb_data_res.verb_id in unlocked_verb_ids:
-			unlocked_verb_ids.append(verb_data_res.verb_id)
-	active_scene_verb_ids = unlocked_verb_ids.duplicate()
-	_emit_available_verbs_changed_update()
+	Verbs.reset_run_state()
 
 	# --- Sibling autoload run-state (Sergey conversation memory etc.) ---
 	if ConversationEventManager and ConversationEventManager.has_method("reset_run_state"):
@@ -1157,7 +1096,7 @@ func _on_difficulty_chosen(is_assisted: bool):
 	Settings.save_settings()
 	print_rich("[color=green]GM: Difficulty selected. Assisted Mode = %s[/color]" % str(Settings.assisted_mode))
 
-	unlock_verb("think")
+	Verbs.unlock_verb("think")
 
 	if is_instance_valid(transition_layer):
 		await transition_layer.play_iris_close()
@@ -1280,6 +1219,9 @@ func trigger_game_over(fade_duration: float = 1.5):
 	# 5. Aggressively hunt down Overlays AND Dialogue Balloons to prevent crashes
 	_cleanup_all_overlays()
 
+	# 5.5 Ensure the tree is unpaused (form/journal/zoom may have paused it)
+	get_tree().paused = false
+
 	# 6. Spawn the Game Over Scene
 	var game_over_instance = GAME_OVER_SCENE.instantiate()
 	get_tree().root.add_child(game_over_instance)
@@ -1312,6 +1254,13 @@ func clear_active_dialogue_balloons(node: Node = null):
 func _cleanup_all_overlays(node: Node = null):
 	if node == null:
 		node = get_tree().root
+		# Root-level tracked overlays (added via open_insurance_form / open_journal)
+		if is_instance_valid(_insurance_form_instance):
+			_insurance_form_instance.queue_free()
+		_insurance_form_instance = null
+		if is_instance_valid(_journal_overlay_instance):
+			_journal_overlay_instance.queue_free()
+		_journal_overlay_instance = null
 
 	for child in node.get_children():
 		if child is CharacterConversationOverlay or child is AdvancedConversationOverlay:
