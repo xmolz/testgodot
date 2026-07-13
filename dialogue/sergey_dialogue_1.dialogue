@@ -345,7 +345,7 @@ Sergey: So then… tell me. How can Sergey help?
 								Player: I need you.
 							#sergei looks at us
 							do show_cg("sergey_eyes_only_eye_to_eye_intense")
-							Sergey: You need ..me?
+							Sergey: You need... me?
 							# EDIT: This is the ONLY moment he truly gives up.
 							#He exhales, a long, shuddering breath.
 							#The tension snaps.
@@ -413,7 +413,8 @@ Sergey: So then… tell me. How can Sergey help?
 										Sergey: I try to make conversation once. But he only screams. Never talks.
 										Sergey: Must be very bad case.
 										- Have you tried asking the Nurse about him?
-											Sergey: The Nurse is an AI. She does not share patient details with other patient.
+											Sergey: Once. But never learned much.
+											Sergey: Must be against HAVEMORE policy to share information. 
 											Sergey: I didn't know anything about you until you wake up either. => interrupted_hub
 									- But, I still want to continue! [Proceed]
 										#Good choice. You still need that TechPass™.

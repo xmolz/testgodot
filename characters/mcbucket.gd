@@ -40,6 +40,11 @@ func _ready():
 	if GameManager:
 		GameManager.interaction_complete.connect(_on_global_interaction_complete)
 
+	if not ConversationEventManager.mcbucket_tv_reaction_requested.is_connected(react_to_tv):
+		ConversationEventManager.mcbucket_tv_reaction_requested.connect(react_to_tv)
+	if not ConversationEventManager.mcbucket_state_change_requested.is_connected(change_state):
+		ConversationEventManager.mcbucket_state_change_requested.connect(change_state)
+
 	# Programmatically add the "Give Toilet Paper" interaction
 	if interactable_component:
 		# 1. Response for when McBucket is SLEEPING

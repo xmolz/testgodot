@@ -7,32 +7,33 @@ if Flags.get_level_flag("has_spoken_to_aida") == true:
 do change_background("aida_hospital_background", "none", 0.0)
 do actor_show("AIda", "base", "center")
 
-A woman in a Nurse's attire is busy at work.
-She notices you approaching before you could call for her.
+A woman in a nurse's attire is busy at work.
+She notices you approaching before you can call for her.
 do SoundManager.play_music_track("aida_theme", 4.0)
 
 do actor_change("AIda", "surprised")
-AIda: Oh, patient #122! You're finally awake. That is statistically encouraging!
+AIda: Oh, Patient #122! You're finally awake. That is statistically encouraging!
 AIda: Welcome back to the waking world!
 
 
 - Where am I? 
 	do actor_change("AIda", "pointing_up")
 	AIda: You are currently located at HAVEMORE Inc's Multispecialty Recovery Facility - Greendale Avenue branch.
-	do actor_change("AIda", "smiling") 
-	AIda: Congratulations! You’re receiving the most advanced care legally permitted in this precinct.
+	do actor_change("AIda", "smiling")
+	AIda: Congratulations! You're receiving the most advanced care legally permitted in this precinct.
+	AIda: This is truly the best place to be for someone with your condition!
 	AIda: I am AIda - Assigned Intelligence for Diagnostic Assistance! But you can just call me AIda.
 	- Condition? What Condition?
-	do actor_change("AIda", "thinking")
-	AIda: You were found unconscious on Christie Street.
-	AIda: We couldn't determine a definite cause through our preliminary scans.
-	AIda: Can you recall what happened?
-	- I can't. I don't remember a thing!
-		do actor_change("AIda", "concerned")
-		AIda: Oh no. That’s... quite unfortunate.
-		AIda: Cognitive impairment is not uncommon in cases like yours.
-		do actor_change("AIda", "pointing_up")
-		AIda: But don’t worry - HAVEMORE Inc is fully committed to restoring you to optimal operating status.
+		do actor_change("AIda", "thinking")
+		AIda: You were found unconscious on Christie Street thirteen days ago.
+		AIda: We couldn't determine a definite cause through our preliminary scans.
+		AIda: Can you recall what happened?
+		- I can't. I don't remember a thing!
+			do actor_change("AIda", "concerned")
+			AIda: Oh no. That's... quite unfortunate.
+			AIda: Cognitive impairment is not uncommon in cases like yours.
+			do actor_change("AIda", "pointing_up")
+			AIda: But don't worry - HAVEMORE Inc is fully committed to restoring you to optimal operating status.
 		do actor_change("AIda", "smiling")
 		AIda: Patient #122, can you try recalling your name for me?
 		- Sure! It's...
@@ -61,25 +62,25 @@ AIda: Welcome back to the waking world!
 				AIda: In short - to access your insurance, we need to know who you are.  
 				AIda: And to know who you are... well, we need access to your memories.
 				do actor_change("AIda", "pointing_up")
-				AIda: That’s why I recommend proceeding with the Neural Integrity Scan™. 
-				AIda: It’s your best chance to... [i]reconnect[/i] with yourself.
+				AIda: That's why I recommend proceeding with the Neural Integrity Scan™.
+				AIda: It's your best chance to... [i]reconnect[/i] with yourself.
 				- Fine, please begin the scan. 
 					=> begin_scan
 		- No, thanks.
 			do actor_change("AIda", "smiling")
-			AIda: Of course! Your autonomy is very important to us at HAVEMORE Inc 
+			AIda: Of course! Your autonomy is very important to us at HAVEMORE Inc.
 			do actor_change("AIda", "concerned")
-			AIda: That said - without a scan, we won’t be able to confirm the extent of your cognitive injuries.  
-			AIda: More importantly, we won’t be able to verify your identity or access your insurance profile.
+			AIda: That said - without a scan, we won't be able to confirm the extent of your cognitive injuries.
+			AIda: More importantly, we won't be able to verify your identity or access your insurance profile.
 			do actor_change("AIda", "base")
-			AIda: As it stands, your billing total is accumulating rapidly - and without insurance on file, all charges default to [b]you[/b].  
+			AIda: As it stands, your billing total is accumulating rapidly - and without insurance on file, all charges default to [b]you[/b].
 			AIda: Current estimate: $546,780 USD and counting! 
 			do actor_change("AIda", "pointing_up")
-			AIda: But don’t worry - there’s still time to reduce your liability!   
-			AIda: A successful scan might recover enough memory to reconnect you to your coverage plan.  
-			AIda: If not, I’ll refer your case to our Floor Administrator for alternate financing options.
+			AIda: But don't worry - there's still time to reduce your liability!
+			AIda: A successful scan might recover enough memory to reconnect you to your coverage plan.
+			AIda: If not, I'll refer your case to our Floor Administrator for alternate financing options.
 			do actor_change("AIda", "thinking") 
-			AIda: So - with all that in mind... are you sure you don’t want to reconsider?
+			AIda: So - with all that in mind... are you sure you don't want to reconsider?
 			- Fine, proceed with the scan.
 				=> begin_scan
 
@@ -100,7 +101,7 @@ do hide_cg("fade", 0.5)
 do actor_change("AIda", "base")
 AIda: Scan complete.
 do actor_change("AIda", "concerned")
-AIda: Thank you patient #122. Unfortunately, findings indicate substantial damage to your hippocampus and left temporal lobe.
+AIda: Thank you, Patient #122. Unfortunately, findings indicate substantial damage to your hippocampus and left temporal lobe.
 do actor_change("AIda", "thinking")
 AIda: That would explain your current inability to access long-term autobiographical memory.
 do actor_change("AIda", "surprised")
@@ -124,7 +125,7 @@ AIda: Luckily, we have a MemoryBox™ installed right here in this very unit. Yo
 			AIda: Splendid! Here, I am providing you with this tablet. 
 			do NotificationManager.add_notification("Insurance Form Added!")
 			do actor_change("AIda", "base")
-			AIda: Once you piece your memory together using the MemoryBox™, fill out your personal details in the insurance form open in the tablet.  
+			AIda: Once you piece your memory together using the MemoryBox™, fill out your personal details in the insurance form open in the tablet.
 			AIda: Doing so ensures HAVEMORE Inc can verify your identity and reconnect you with your coverage plan.
 			AIda: More importantly - it'll prevent your current balance from being transferred to our Collections Department. 
 			AIda: Consider it your lifeline back to solvency! 
@@ -162,32 +163,32 @@ What do you want to say to AIda?
 
 - What is this place?
 	do actor_change("AIda", "pointing_up")
-	AIda: This is Havemore's multispecialty recovery center.
+	AIda: This is HAVEMORE's multispecialty recovery center.
 	do actor_change("AIda", "smiling")
 	AIda: We provide the most advanced medical care available in the precinct!
-	AIda: You'll be taken care of wonderfully, here.
+	AIda: You'll be taken care of wonderfully here.
 	~ place_hub
 	There is a lot to unpack here.
 
 	- What's a 'Havemore'?
 		do actor_change("AIda", "pointing_up")
-		AIda: Havemore is America's number one administrative and tech partner.
+		AIda: HAVEMORE is the U.S.'s number one administrative and tech partner.
 		AIda: Our systems support healthcare, logistics, and urban management across the country.
 		do actor_change("AIda", "smiling")
-		AIda: Ever since entering into a partnership with Havemore, America has seen a 150% increase in its GDP!
+		AIda: Ever since entering into a partnership with HAVEMORE Inc, the U.S. has seen a 150% increase in its GDP!
 		AIda: That growth rate exceeds all other corporate and national economic blocs.
-		 - So like, are there no poor people now?
+		- So like, are there no poor people now?
 			do actor_change("AIda", "base")
 			AIda: Economic growth has significantly improved national prosperity.
 			do actor_change("AIda", "thinking")
 			AIda: However, individual financial outcomes may vary.
 			do actor_change("AIda", "smiling")
-			AIda: Havemore remains determined to make America a better experience for all residents.
+			AIda: HAVEMORE remains determined to make this country a better experience for all residents.
 			=> place_hub
 
 	- Precinct?
 		do actor_change("AIda", "pointing_up")
-		AIda: Indeed! All cities in America are divided into Havemore administered precincts.
+		AIda: Indeed! All cities in America are divided into HAVEMORE administered precincts.
 		AIda: We are currently in the Greendale precinct's medical facility.
 		do actor_change("AIda", "smiling")
 		AIda: This is a great place to be for someone with your condition!
@@ -240,7 +241,7 @@ What do you want to say to AIda?
 	do actor_change("AIda", "concerned")
 	AIda: We'll likely need to monitor this more closely.
 
-	Player: (Looks like she didn't notice your little slip.)
+	Player: (Looks like she didn't notice my little slip.)
 	Player: (Good.)
 
 	=> conversation_return
@@ -310,9 +311,9 @@ What do you want to say to AIda?
 
 		=> mcbucket_enquiry_hub
 
-	- Nevermind [Back]
+	- Never mind [Back]
 		=> conversation_return
 
-- Nevermind [Leave]
+- Never mind [Leave]
 	do SoundManager.fade_out_music(6.0)
 	=> END

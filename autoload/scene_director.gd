@@ -100,7 +100,7 @@ func _cleanup_all_overlays(node: Node = null):
 		GameManager.force_close_tracked_overlays()
 
 	for child in node.get_children():
-		if child is CharacterConversationOverlay or child is AdvancedConversationOverlay:
+		if child is AdvancedConversationOverlay:
 			if "current_balloon" in child and is_instance_valid(child.current_balloon):
 				child.current_balloon.queue_free()
 			child.queue_free()

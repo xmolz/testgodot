@@ -8,56 +8,68 @@ const PATREON_URL := "https://www.patreon.com/cw/lewgend"
 func _ready():
 	layer = 1
 
-	var btn = Button.new()
-	add_child(btn)
+	var panel = PanelContainer.new()
+	add_child(panel)
+
+	var margin = MarginContainer.new()
+	panel.add_child(margin)
+
+	var btn = TextureButton.new()
+	margin.add_child(btn)
 
 	var tex = load("res://Icons/patreon_logo.png")
-	if tex:
-		var img = tex.get_image()
-		if img:
-			img.resize(48, 48, Image.INTERPOLATE_BILINEAR)
-			tex = ImageTexture.create_from_image(img)
-		btn.icon = tex
-
-	btn.text = " Support on Patreon"
+	btn.texture_normal = tex
+	btn.ignore_texture_size = true
+	btn.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
+	btn.focus_mode = Control.FOCUS_NONE
 	btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	btn.add_theme_constant_override("h_separation", 10)
-	btn.add_theme_font_override("font", preload("res://Fonts/VarelaRound-Regular.ttf"))
-	btn.add_theme_font_size_override("font_size", 20)
+	btn.tooltip_text = "Support on Patreon"
 
-	var btn_normal = StyleBoxFlat.new()
-	btn_normal.bg_color = Color(0.15, 0.15, 0.15, 0.6)
-	btn_normal.corner_radius_top_left = 10
-	btn_normal.corner_radius_top_right = 10
-	btn_normal.corner_radius_bottom_left = 10
-	btn_normal.corner_radius_bottom_right = 10
-	btn_normal.content_margin_left = 15
-	btn_normal.content_margin_right = 20
-	btn_normal.content_margin_top = 10
-	btn_normal.content_margin_bottom = 10
-	btn_normal.border_width_left = 2
-	btn_normal.border_width_top = 2
-	btn_normal.border_width_right = 2
-	btn_normal.border_width_bottom = 2
-	btn_normal.border_color = Color(1.0, 1.0, 1.0, 0.0)
+	var panel_style = StyleBoxFlat.new()
+	panel_style.bg_color = Color(0, 0, 0, 0.5)
+	panel_style.border_width_left = 3
+	panel_style.border_width_top = 3
+	panel_style.border_width_right = 3
+	panel_style.border_width_bottom = 3
+	panel_style.border_color = Color.WHITE
+	panel_style.corner_radius_top_left = 10
+	panel_style.corner_radius_top_right = 10
+	panel_style.corner_radius_bottom_left = 10
+	panel_style.corner_radius_bottom_right = 10
 
-	var btn_hover = btn_normal.duplicate()
-	btn_hover.bg_color = Color(0.1, 0.25, 0.3, 0.8)
-	btn_hover.border_color = Color(0.2, 0.85, 1.0, 0.8)
+	panel.add_theme_stylebox_override("panel", panel_style)
 
-	btn.add_theme_stylebox_override("normal", btn_normal)
-	btn.add_theme_stylebox_override("hover", btn_hover)
-	btn.add_theme_stylebox_override("focus", btn_hover)
-	btn.add_theme_stylebox_override("pressed", btn_hover)
-
-	btn.position = Vector2(20, 20)
 	if OS.has_feature("mobile"):
-		btn.position = Vector2(40, 40)
-		btn.add_theme_font_size_override("font_size", 28)
+		panel.offset_left = 340
+		panel.offset_top = 20
+		panel.offset_right = 480
+		panel.offset_bottom = 130
+
+		margin.add_theme_constant_override("margin_top", 25)
+		margin.add_theme_constant_override("margin_bottom", 25)
+		margin.add_theme_constant_override("margin_left", 25)
+		margin.add_theme_constant_override("margin_right", 25)
+	else:
+		panel.offset_left = 210
+		panel.offset_top = 20
+		panel.offset_right = 290
+		panel.offset_bottom = 100
+
+		margin.add_theme_constant_override("margin_top", 15)
+		margin.add_theme_constant_override("margin_bottom", 15)
+		margin.add_theme_constant_override("margin_left", 15)
+		margin.add_theme_constant_override("margin_right", 15)
 
 	btn.pressed.connect(func():
 		if SoundManager and SoundManager.has_method("play_sfx"): SoundManager.play_sfx("ui_click")
 		OS.shell_open(PATREON_URL)
+	)
+
+	btn.mouse_entered.connect(func():
+		panel_style.border_color = Color(0.2, 0.85, 1.0, 1.0)
+	)
+	btn.mouse_exited.connect(func():
+		panel_style.border_color = Color.WHITE
 	)
 
 	hide()

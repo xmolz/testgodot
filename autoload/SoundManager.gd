@@ -32,6 +32,16 @@ var sfx_library: Dictionary = {
 	"scan_effect": preload("res://Sfx/Dialog/scan_effect.mp3")
 }
 
+# Sounds that must remain audible while the game is paused (UI / meta sounds).
+const UNPAUSABLE_SFX: Array[String] = [
+	"ui_click",
+	"start_game",
+	"notification_ping",
+	"swish",
+	"form_correct_input",
+	"form_incorrect_input",
+]
+
 # --- Music Library ---
 var music_library: Dictionary = {
 	"aida_theme": preload("res://Sfx/Music/aida_corporate_theme.mp3"),
@@ -100,7 +110,7 @@ func play_sfx(sound_name: String, pitch: float = 1.0, volume_db: float = 0.0, bu
 		return null 
 
 	var player = AudioStreamPlayer.new()
-	player.process_mode = Node.PROCESS_MODE_ALWAYS
+	player.process_mode = Node.PROCESS_MODE_ALWAYS if sound_name in UNPAUSABLE_SFX else Node.PROCESS_MODE_PAUSABLE
 	add_child(player)
 	
 	player.stream = sfx_library[sound_name]
@@ -246,7 +256,7 @@ func play_looping_sfx(sound_name: String, fade_duration: float = 1.0, target_vol
 	else:
 		# Create a new persistent player for this sound
 		player = AudioStreamPlayer.new()
-		player.process_mode = Node.PROCESS_MODE_ALWAYS
+		player.process_mode = Node.PROCESS_MODE_PAUSABLE
 		player.bus = "looping sfx" # Ensure you create this bus in the Audio tab!
 		add_child(player)
 		player.stream = sfx_library[sound_name]

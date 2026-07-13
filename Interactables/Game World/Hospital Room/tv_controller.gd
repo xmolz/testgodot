@@ -8,6 +8,7 @@ func _ready():
 	# We will use another shader (like the aurora one) for the "On" state.
 	# For now, this just sets the shutdown progress to 0.
 	tv_material.set_shader_parameter("progress", 0.0)
+	ConversationEventManager.tv_state_change_requested.connect(set_tv_state)
 
 
 func set_tv_state(is_off: bool):

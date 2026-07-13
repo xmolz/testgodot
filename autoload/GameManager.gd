@@ -1,3 +1,4 @@
+#region Constants & Signals
 # GameManager.gd
 extends Node
 
@@ -84,7 +85,9 @@ var current_hint_manager: LevelHintManager = null
 
 var current_unread_hint: String = ""
 var last_read_hint: String = ""
+#endregion
 
+#region App Shell (Boot)
 func _ready():
 	print("If I Remember Correctly — v%s" % str(ProjectSettings.get_setting("application/config/version", "unset")))
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
@@ -152,7 +155,9 @@ func _ready():
 			await get_tree().process_frame
 			SoundManager.play_ambience("room_tone_air", -5.0)
 			SoundManager.play_ambience("room_tone_electric", -15.0)
+#endregion
 
+# _process and _unhandled_input mix concerns (hint eval + hold-to-walk) and sit outside top-level regions to avoid moving code.
 func _process(delta):
 	# --- FIX 1: Cancel verb lock if player tries to move manually with A/D ---
 	if is_verb_lock_active and Input.get_axis("ui_left", "ui_right") != 0:
@@ -267,6 +272,7 @@ func _unhandled_input(event: InputEvent):
 				get_viewport().set_input_as_handled()
 				
 				
+#region App Shell (State Machine)
 func change_game_state(new_state: GameState):
 	if new_state == current_game_state:
 		return
@@ -373,8 +379,11 @@ func change_game_state(new_state: GameState):
 			# 3. Stop the Player from moving
 			if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
 				player_node.set_can_move(false)
-				
+#endregion
 
+
+#region Interaction Engine
+#region Verb & Item Selection
 func select_verb(verb_id_to_select: String):
 	# If the player manually selects or toggles a verb, clear any forced sticky state
 	persisting_verb_id = ""
@@ -495,7 +504,10 @@ func cancel_current_action(play_sound: bool = true):
 		update_sentence_line_ui()
 		# Play a slightly lower pitched click sound to indicate cancellation
 		if play_sound and SoundManager: SoundManager.play_sfx("ui_click")
+#endregion
 
+
+#region Hover Stack
 # --- UI and Interaction Flow ---
 func set_hovered_object(interactable: Interactable):
 	if not hovered_interactables.has(interactable):
@@ -558,7 +570,10 @@ func _update_top_hovered_object():
 
 	if is_instance_valid(custom_cursor_instance) and not is_mouse_held_for_walk:
 		custom_cursor_instance.set_hover_state(should_hover_cursor)
+#endregion
 
+
+#region Sentence Line
 func update_sentence_line_ui():
 	if is_mouse_held_for_walk or _is_player_walking or current_game_state == GameState.PAUSED or is_transitioning:
 		sentence_line_updated.emit("")
@@ -609,7 +624,10 @@ func update_sentence_line_ui():
 		player_node.show_thought_bubble(bubble_text)
 	elif is_instance_valid(player_node):
 		player_node.hide_thought_bubble()
+#endregion
 
+
+#region Click Routing & Walk-to-Interact
 func process_interaction_click(interactable_node: Interactable):
 	if is_transitioning: return
 	if not is_instance_valid(interactable_node): return
@@ -712,7 +730,10 @@ func _perform_actual_interaction(interactable_node: Interactable, verb_to_use_id
 		interactable_node.interaction_processed.connect(_on_interactable_action_finished)
 
 	interactable_node.attempt_interaction(verb_to_use_id, item_id_for_interaction)
+#endregion
 
+
+#region Interaction States
 # --- DialogueManager Signal Handlers (Global) ---
 func _on_dialogue_started(_resource: Resource):
 	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
@@ -753,11 +774,17 @@ func _on_character_conversation_finished(resource: DialogueResource):
 	_complete_interaction_cycle()
 
 	character_conversation_ended.emit(resource)
+#endregion
 
+
+#region Click Routing & Walk-to-Interact
 # --- Interactable Signal Handlers ---
 func _on_interactable_action_finished():
 	_complete_interaction_cycle()
+#endregion
 
+
+#region Verb & Item Selection
 func _on_inventory_item_removed(item_id: String):
 	if current_selected_item_data and current_selected_item_data.item_id == item_id:
 		current_selected_item_data = null
@@ -766,7 +793,10 @@ func _on_inventory_item_removed(item_id: String):
 func _on_available_verbs_changed(_available_verbs: Array[VerbData]):
 	if current_verb_id != "" and not Verbs.is_verb_id_currently_active(current_verb_id):
 		select_verb("")
+#endregion
 
+
+#region Click Routing & Walk-to-Interact
 func _disconnect_interactable_request_signals():
 	if is_instance_valid(_signals_connected_to_interactable):
 		var node_to_disconnect_from = _signals_connected_to_interactable
@@ -810,14 +840,20 @@ func _complete_interaction_cycle():
 		_set_patreon_visible(true)
 
 	update_sentence_line_ui()
+#endregion
 
+
+#region UI Utilities
 # The patreon button is global (child of GameManager) so it can't be managed by
 # the level's game_ui.gd. It follows the same show/hide rhythm the gameplay HUD
 # always had, gated by the dev_cta_completed level flag.
 func _set_patreon_visible(show: bool):
 	if is_instance_valid(patreon_world_ui):
 		patreon_world_ui.visible = Flags.get_level_flag("dev_cta_completed") if show else false
+#endregion
 
+
+#region Verb & Item Selection
 func _activate_verb_lock(active: bool):
 	is_verb_lock_active = active
 	verb_lock_changed.emit(active)
@@ -841,7 +877,10 @@ func _activate_verb_lock(active: bool):
 		if is_instance_valid(pause_menu_ui):
 			pause_menu_ui.set_cancel_mode(false)
 			pause_menu_ui.set_scan_highlight(false)
+#endregion
 
+
+#region Scan
 func _on_scan_cancel_pressed():
 	if SoundManager: SoundManager.play_sfx("ui_click")
 	if is_verb_lock_active:
@@ -874,7 +913,10 @@ func _cancel_scan():
 	if not (is_verb_lock_active and OS.has_feature("mobile")):
 		for interactable in get_tree().get_nodes_in_group("interactables"):
 			if is_instance_valid(interactable): interactable.force_highlight(false)
+#endregion
 
+
+#region Hover Stack
 # --- Verb Data and Availability (Moved to Verbs autoload) ---
 
 func force_clear_all_hovered_interactables():
@@ -889,7 +931,10 @@ func force_clear_all_hovered_interactables():
 	if is_instance_valid(custom_cursor_instance):
 		custom_cursor_instance.set_hover_state(false)
 	update_sentence_line_ui()
+#endregion
 
+
+#region Interaction States
 func enter_conversation_state():
 	if current_interaction_state == InteractionState.CONVERSATION: return
 	current_interaction_state = InteractionState.CONVERSATION
@@ -928,7 +973,11 @@ func exit_to_world_state():
 
 	get_tree().paused = false
 	Events.interaction_state_changed.emit(current_interaction_state)
+#endregion
+#endregion
 
+
+#region Screen & Overlay Lifecycle
 # This function is called ONLY when the "Close Form" button is pressed.
 func _on_insurance_form_closed():
 
@@ -982,7 +1031,10 @@ func open_insurance_form():
 	
 	enter_conversation_state()
 	get_tree().paused = true
+#endregion
 
+
+#region App Shell (Run-State and Quit)
 # =========================================================
 # RUN-STATE RESET
 # Called once per New Game (from _on_main_menu_new_game_requested)
@@ -1101,7 +1153,10 @@ func _on_intro_conversation_finished(_dialogue_resource):
 		player_node.set_can_move(true)
 	_set_patreon_visible(true)
 	Events.gameplay_ui_visibility_requested.emit(true)
+#endregion
 
+
+#region Screen & Overlay Lifecycle (Journal)
 # --- JOURNAL FUNCTIONS ---
 func open_journal():
 	if is_instance_valid(_journal_overlay_instance):
@@ -1123,7 +1178,10 @@ func _on_journal_closed():
 		
 	# Restore UI and unpause
 	exit_to_world_state()
+#endregion
 
+
+#region App Shell (Game Over)
 func trigger_game_over(fade_duration: float = 1.5):
 	if _is_game_over_triggering:
 		return
@@ -1175,7 +1233,10 @@ func quit_to_main_menu_smooth():
 
 	if is_instance_valid(transition_layer) and transition_layer.has_method("global_fade_from_black"):
 		transition_layer.global_fade_from_black(1.0)
+#endregion
 
+
+#region Screen & Overlay Lifecycle
 func force_close_tracked_overlays():
 	if is_instance_valid(_insurance_form_instance):
 		_insurance_form_instance.queue_free()
@@ -1183,7 +1244,10 @@ func force_close_tracked_overlays():
 	if is_instance_valid(_journal_overlay_instance):
 		_journal_overlay_instance.queue_free()
 	_journal_overlay_instance = null
+#endregion
 
+
+#region Hints
 func has_unread_hint() -> bool:
 	return current_unread_hint != "" and current_unread_hint != last_read_hint
 
@@ -1199,3 +1263,4 @@ func refresh_hint_system():
 				new_hint_available.emit(true)
 			else:
 				new_hint_available.emit(false)
+#endregion

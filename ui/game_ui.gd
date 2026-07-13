@@ -4,11 +4,15 @@
 # It is freed together with the level scene, so no manual disconnects needed.
 extends Node
 
+const ZOOM_CONTROLS_UI_SCENE = preload("res://ui/zoom_controls_ui.tscn")
+
 @onready var verb_ui: CanvasLayer = %VerbUI_CanvasLayer
 @onready var inventory_ui: CanvasLayer = %InventoryUI_CanvasLayer
 @onready var journal_button_ui: CanvasLayer = %JournalButtonUI
 @onready var insurance_form_button_ui: CanvasLayer = %InsuranceFormButtonUI
 @onready var explanation_layer: CanvasLayer = %ExplanationLayer
+
+var zoom_controls_ui: CanvasLayer = null
 
 
 func _ready() -> void:
@@ -16,6 +20,9 @@ func _ready() -> void:
 	Events.interaction_state_changed.connect(_on_interaction_state_changed)
 	Events.explanation_started.connect(_on_explanation_started)
 	Events.gameplay_ui_visibility_requested.connect(_set_gameplay_ui_visible)
+
+	zoom_controls_ui = ZOOM_CONTROLS_UI_SCENE.instantiate()
+	add_child(zoom_controls_ui)
 
 	if DialogueManager:
 		DialogueManager.dialogue_started.connect(_on_dialogue_started)
@@ -112,6 +119,8 @@ func _on_explanation_started(data: ExplanationData, root_node_to_search: Node) -
 		inventory_ui.hide()
 	if is_instance_valid(journal_button_ui) and not journal_button_ui in nodes_to_keep_visible:
 		journal_button_ui.hide()
+	if is_instance_valid(zoom_controls_ui) and not zoom_controls_ui in nodes_to_keep_visible:
+		zoom_controls_ui.set_gameplay_ui_visible(false)
 	if is_instance_valid(insurance_form_button_ui):
 		if insurance_form_button_ui in nodes_to_keep_visible:
 			insurance_form_button_ui.show()
@@ -132,5 +141,7 @@ func _set_gameplay_ui_visible(show: bool) -> void:
 		inventory_ui.visible = show
 	if is_instance_valid(journal_button_ui):
 		journal_button_ui.visible = show
+	if is_instance_valid(zoom_controls_ui):
+		zoom_controls_ui.set_gameplay_ui_visible(show)
 	if is_instance_valid(insurance_form_button_ui):
 		insurance_form_button_ui.visible = Flags.get_level_flag("insurance_button_unlocked") if show else false

@@ -33,6 +33,7 @@ var _was_paused_before_menu: bool = false
 var _pre_pause_game_state = null
 var _was_menu_visible: bool = false
 var _overlay_open_time_ms: int = 0
+var _scan_style: StyleBoxFlat = null
 
 func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -232,19 +233,25 @@ func _apply_style():
 	panel_style.corner_radius_bottom_left = 10
 	panel_style.corner_radius_bottom_right = 10
 
-	var scan_style = panel_style.duplicate()
-	scan_cancel_panel.add_theme_stylebox_override("panel", scan_style)
+	_scan_style = panel_style.duplicate()
+	scan_cancel_panel.add_theme_stylebox_override("panel", _scan_style)
+
+	# Desktop defaults
+	scan_cancel_panel.offset_left = -190
+	scan_cancel_panel.offset_top = 20
+	scan_cancel_panel.offset_right = -110
+	scan_cancel_panel.offset_bottom = 100
 
 	if OS.has_feature("mobile"):
-		scan_cancel_panel.offset_left = -160
-		scan_cancel_panel.offset_top = 170
-		scan_cancel_panel.offset_right = -20
-		scan_cancel_panel.offset_bottom = 300
+		scan_cancel_panel.offset_left = -320
+		scan_cancel_panel.offset_top = 20
+		scan_cancel_panel.offset_right = -180
+		scan_cancel_panel.offset_bottom = 130
 		var sc_margin = $ScanCancelPanel/MarginContainer
-		sc_margin.add_theme_constant_override("margin_top", 35)
-		sc_margin.add_theme_constant_override("margin_bottom", 35)
-		sc_margin.add_theme_constant_override("margin_left", 35)
-		sc_margin.add_theme_constant_override("margin_right", 35)
+		sc_margin.add_theme_constant_override("margin_top", 25)
+		sc_margin.add_theme_constant_override("margin_bottom", 25)
+		sc_margin.add_theme_constant_override("margin_left", 25)
+		sc_margin.add_theme_constant_override("margin_right", 25)
 
 	var menu_style = panel_style.duplicate()
 	menu_panel.add_theme_stylebox_override("panel", menu_style)
@@ -262,15 +269,15 @@ func _apply_style():
 	scan_cancel_btn.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 	scan_cancel_panel.mouse_entered.connect(func():
-		if scan_style.border_color != Color(1.0, 0.3, 0.3, 1.0):
-			scan_style.border_color = Color(0.2, 0.85, 1.0, 1.0)
+		if _scan_style.border_color != Color(1.0, 0.3, 0.3, 1.0):
+			_set_scan_visuals(Color(0.2, 0.85, 1.0, 1.0), Color(0.2, 0.85, 1.0, 1.0))
 	)
 	scan_cancel_panel.mouse_exited.connect(func():
-		if scan_style.border_color != Color(1.0, 0.3, 0.3, 1.0):
+		if _scan_style.border_color != Color(1.0, 0.3, 0.3, 1.0):
 			if GameManager and GameManager.is_scan_active():
-				scan_style.border_color = Color(0.2, 0.85, 1.0, 1.0)
+				_set_scan_visuals(Color(0.2, 0.85, 1.0, 1.0), Color(0.2, 0.85, 1.0, 1.0))
 			else:
-				scan_style.border_color = Color.WHITE
+				_set_scan_visuals(Color.WHITE, Color.WHITE)
 	)
 	scan_cancel_panel.gui_input.connect(func(event):
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
@@ -299,17 +306,23 @@ func _apply_style():
 		confirm_label.custom_minimum_size = Vector2(600, 0)
 
 func set_scan_highlight(is_active: bool):
-	var style = scan_cancel_panel.get_theme_stylebox("panel")
 	if is_active:
-		style.border_color = Color(0.2, 0.85, 1.0, 1.0)
+		_set_scan_visuals(Color(0.2, 0.85, 1.0, 1.0), Color(0.2, 0.85, 1.0, 1.0))
 	else:
-		style.border_color = Color.WHITE
+		_set_scan_visuals(Color.WHITE, Color.WHITE)
 
 func set_cancel_mode(is_cancel: bool):
-	var style = scan_cancel_panel.get_theme_stylebox("panel")
 	if is_cancel:
 		scan_cancel_btn.texture_normal = preload("res://Icons/cancel.png")
-		style.border_color = Color(1.0, 0.3, 0.3, 1.0)
+		_set_scan_visuals(Color(1.0, 0.3, 0.3, 1.0), Color.WHITE)
 	else:
 		scan_cancel_btn.texture_normal = preload("res://Icons/magnifying-glass.png")
-		style.border_color = Color.WHITE
+		_set_scan_visuals(Color.WHITE, Color.WHITE)
+
+# Single source of truth for the scan button's border + icon tint.
+# Every code path that changes one MUST go through here so they never desync.
+func _set_scan_visuals(border_color: Color, icon_color: Color):
+	if _scan_style:
+		_scan_style.border_color = border_color
+	if is_instance_valid(scan_cancel_btn):
+		scan_cancel_btn.modulate = icon_color

@@ -47,8 +47,7 @@ func _cleanup_and_queue_free():
 func _start_caught_dialogue():
 	print_rich("[color=red]MedicineCabinet: Playing Caught Dialogue.[/color]")
 
-	if GameManager and GameManager.has_method("clear_active_dialogue_balloons"):
-		GameManager.clear_active_dialogue_balloons()
+	SceneDirector.clear_active_dialogue_balloons()
 
 	if GameManager:
 		if not DialogueManager.dialogue_ended.is_connected(GameManager.restore_world_after_object_dialogue):

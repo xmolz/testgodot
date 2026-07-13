@@ -1,5 +1,7 @@
 extends Camera2D
 
+signal zoom_changed
+
 @export var target_path: NodePath
 var target_node: Node2D
 
@@ -7,9 +9,18 @@ var target_node: Node2D
 ## Increase this value (e.g., 1.5 or 2.0) to zoom the camera in closer for GIFs.
 @export var custom_zoom_level: float = 1.0
 
+@export_group("Player Zoom")
+## The customizable steps of the camera zoom. Keep values >= 1.0.
+@export var zoom_levels: Array[float] = [1.0, 1.1, 1.2]
+## Duration of the camera zoom transition.
+@export var zoom_tween_seconds: float = 0.25
+
+var _zoom_index: int = 0
+var _zoom_tween: Tween = null
+
 func _ready():
-	# Apply the custom zoom level immediately
-	zoom = Vector2(custom_zoom_level, custom_zoom_level)
+	# Apply the custom zoom level immediately at index 0
+	_apply_zoom(true)
 
 	if target_path:
 		target_node = get_node_or_null(target_path)
@@ -18,6 +29,48 @@ func _ready():
 
 	set_process(false)
 	set_physics_process(true)
+
+func can_zoom_in() -> bool:
+	var levels = zoom_levels if not zoom_levels.is_empty() else [1.0]
+	if levels.size() < 2: return false
+	return _zoom_index < levels.size() - 1
+
+func can_zoom_out() -> bool:
+	var levels = zoom_levels if not zoom_levels.is_empty() else [1.0]
+	if levels.size() < 2: return false
+	return _zoom_index > 0
+
+func zoom_in():
+	if can_zoom_in():
+		_zoom_index += 1
+		_apply_zoom()
+
+func zoom_out():
+	if can_zoom_out():
+		_zoom_index -= 1
+		_apply_zoom()
+
+func _apply_zoom(instant: bool = false):
+	if _zoom_tween:
+		_zoom_tween.kill()
+
+	var levels = zoom_levels if not zoom_levels.is_empty() else [1.0]
+	if _zoom_index < 0: _zoom_index = 0
+	if _zoom_index >= levels.size(): _zoom_index = levels.size() - 1
+
+	var target_zoom = Vector2.ONE * (custom_zoom_level * levels[_zoom_index])
+
+	if instant:
+		zoom = target_zoom
+		reset_physics_interpolation()
+		zoom_changed.emit()
+	else:
+		_zoom_tween = create_tween()
+		_zoom_tween.tween_property(self, "zoom", target_zoom, zoom_tween_seconds)\
+			.set_trans(Tween.TRANS_SINE)\
+			.set_ease(Tween.EASE_OUT)
+		_zoom_tween.tween_callback(reset_physics_interpolation)
+		_zoom_tween.tween_callback(zoom_changed.emit)
 
 func _physics_process(_delta):
 	if is_instance_valid(target_node):

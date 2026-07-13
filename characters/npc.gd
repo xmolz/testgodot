@@ -14,8 +14,3 @@ func _on_body_exited(body):
 	if body.is_in_group("player"):
 		player_in_zone = false
 		print("Player has left NPC interaction zone.")
-
-func _process(delta):
-	if player_in_zone and Input.is_action_just_pressed("talk_to_npc"):
-		var dlg = load("res://dialogue/testdialogue.dialogue")
-		DialogueManager.show_dialogue_balloon_scene("res://conversation/conversationballoon.tscn", dlg, "start")

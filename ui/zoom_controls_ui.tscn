@@ -1,0 +1,61 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ui/zoom_controls_ui.gd" id="1_script"]
+[ext_resource type="Shader" path="res://Shaders/white_icon_shader.gdshader" id="2_shader"]
+[ext_resource type="Texture2D" path="res://Icons/zoom in icon.png" id="3_zoomin"]
+[ext_resource type="Texture2D" path="res://Icons/zoom out icon.png" id="4_zoomout"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_white"]
+shader = ExtResource("2_shader")
+
+[node name="ZoomControlsUI" type="CanvasLayer"]
+layer = 100
+script = ExtResource("1_script")
+
+[node name="ZoomInPanel" type="PanelContainer" parent="."]
+anchors_preset = 0
+offset_left = 110.0
+offset_top = 20.0
+offset_right = 190.0
+offset_bottom = 100.0
+
+[node name="MarginContainer" type="MarginContainer" parent="ZoomInPanel"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="ZoomInButton" type="TextureButton" parent="ZoomInPanel/MarginContainer"]
+material = SubResource("ShaderMaterial_white")
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("3_zoomin")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ZoomOutPanel" type="PanelContainer" parent="."]
+anchors_preset = 0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 100.0
+offset_bottom = 100.0
+
+[node name="MarginContainer" type="MarginContainer" parent="ZoomOutPanel"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="ZoomOutButton" type="TextureButton" parent="ZoomOutPanel/MarginContainer"]
+material = SubResource("ShaderMaterial_white")
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("4_zoomout")
+ignore_texture_size = true
+stretch_mode = 5

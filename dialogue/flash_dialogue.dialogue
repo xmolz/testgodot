@@ -33,8 +33,8 @@ elif Flags.get_level_flag("mcbucket_cannathink_used"):
 else:
 	Player: (Wait... Something's happening to him.)
 
-# This command reaches into the main scene and forces his state to 2 (INVIGIROL/Hyper)
-do GameManager.main_game_scene_instance.get_node("McBucket_Path/McBucket").change_state(2)
+# This requests the state change via the ConversationEventManager bus to force his state to 2 (INVIGIROL/Hyper)
+do ConversationEventManager.request_mcbucket_state(2)
 
 => END
 

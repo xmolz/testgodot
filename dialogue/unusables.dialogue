@@ -58,24 +58,24 @@ Player: I don't think that's the best idea...
 
 if Flags.get_level_flag("tv_turned_off") == false
 	Player: (I'll just hit this switch here...)
-	do GameManager.main_game_scene_instance.get_node("television_screen/TVScreen").set_tv_state(true)
+	do ConversationEventManager.request_tv_state(true)
 	do Flags.set_level_flag("tv_turned_off", true)
 	do wait(1.0)
 	if Flags.get_level_flag("mcbucket_zanopram_used") == false and Flags.get_level_flag("mcbucket_cannathink_used") == false and Flags.get_level_flag("mcbucket_invigirol_used") == false
 		Player: (The TV shut off. Wait...)
 		Player: (What's up with the Old Man?)
-		do GameManager.main_game_scene_instance.get_node("McBucket_Path/McBucket").react_to_tv(true)
+		do ConversationEventManager.request_mcbucket_tv_reaction(true)
 	else
 		Player: (The TV shut off.)
 else
 	Player: (Let's turn that back on.)
-	do GameManager.main_game_scene_instance.get_node("television_screen/TVScreen").set_tv_state(false)
+	do ConversationEventManager.request_tv_state(false)
 	do Flags.set_level_flag("tv_turned_off", false)
 	do wait(1.0)
 	Player: (Ah, this soothing static.)
 	if Flags.get_level_flag("mcbucket_zanopram_used") == false and Flags.get_level_flag("mcbucket_cannathink_used") == false and Flags.get_level_flag("mcbucket_invigirol_used") == false
 		Player: (The Old Man seems to have calmed down, too.)
-		do GameManager.main_game_scene_instance.get_node("McBucket_Path/McBucket").react_to_tv(false)
+		do ConversationEventManager.request_mcbucket_tv_reaction(false)
 
 => END
 
