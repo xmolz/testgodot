@@ -19,6 +19,7 @@ config/version="0.1.0"
 run/main_scene="uid://vmpt4xerpfew"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="Lewgend/If I Remember Correctly"
+config/quit_on_go_back=false
 config/features=PackedStringArray("4.6", "GL Compatibility")
 run/max_fps=60
 boot_splash/bg_color=Color(0.039215688, 0.039215688, 0.05490196, 1)
@@ -53,7 +54,7 @@ runtime/balloon_path="uid://dmfq0fjxxjgay"
 
 window/size/viewport_width=1920
 window/size/viewport_height=1080
-window/size/mode=2
+window/size/mode=3
 window/stretch/mode="canvas_items"
 
 [editor_plugins]
@@ -95,10 +96,16 @@ talk_to_npc={
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":84,"key_label":0,"unicode":116,"location":0,"echo":false,"script":null)
 ]
 }
+toggle_fullscreen={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":true,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194309,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+, Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194342,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
 
 [internationalization]
 
-locale/translations_pot_files=PackedStringArray("res://dialogue/talkto.dialogue", "res://dialogue/intro.dialogue", "res://dialogue/flash_dialogue.dialogue", "res://dialogue/alyssa_marketing.dialogue", "res://dialogue/AIda.dialogue", "res://dialogue/aida_dialogue_hub.dialogue", "res://dialogue/aida_toilet_assistance.dialogue", "res://dialogue/dev_cta.dialogue", "res://dialogue/examinables.dialogue", "res://dialogue/form_related_dialogue.dialogue", "res://dialogue/generic_lines.dialogue", "res://dialogue/giveables.dialogue", "res://dialogue/hints.dialogue", "res://dialogue/hints_adventure.dialogue", "res://dialogue/mcbucket_give_tp.dialogue", "res://dialogue/mcbucket_thinking_dialogue.dialogue", "res://dialogue/mcbucket_unified.dialogue", "res://dialogue/sergey_dialogue_1.dialogue", "res://dialogue/sergey_dialogue_2.dialogue", "res://dialogue/testdialogue.dialogue", "res://dialogue/unflashables.dialogue", "res://dialogue/unpickables.dialogue", "res://dialogue/untalkables.dialogue", "res://dialogue/unusables.dialogue", "res://dialogue/use_item_accompanying_dialogue.dialogue")
+locale/translations_pot_files=PackedStringArray("res://dialogue/talkto.dialogue", "res://dialogue/intro.dialogue", "res://dialogue/flash_dialogue.dialogue", "res://dialogue/alyssa_marketing.dialogue", "res://dialogue/AIda.dialogue", "res://dialogue/aida_dialogue_hub.dialogue", "res://dialogue/aida_toilet_assistance.dialogue", "res://dialogue/dev_cta.dialogue", "res://dialogue/examinables.dialogue", "res://dialogue/form_related_dialogue.dialogue", "res://dialogue/generic_lines.dialogue", "res://dialogue/giveables.dialogue", "res://dialogue/hints.dialogue", "res://dialogue/hints_adventure.dialogue", "res://dialogue/mcbucket_give_tp.dialogue", "res://dialogue/mcbucket_unified.dialogue", "res://dialogue/testdialogue.dialogue", "res://dialogue/unflashables.dialogue", "res://dialogue/unpickables.dialogue", "res://dialogue/untalkables.dialogue", "res://dialogue/unusables.dialogue", "res://dialogue/use_item_accompanying_dialogue.dialogue", "res://dialogue/sergey_dialogue_1.dialogue", "res://dialogue/sergey_dialogue_2.dialogue")
 
 [physics]
 

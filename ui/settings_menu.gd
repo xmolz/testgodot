@@ -49,6 +49,8 @@ extends CanvasLayer
 # Gameplay Tab
 @onready var assisted_mode_toggle = %AssistedModeToggle
 @onready var assisted_mode_subtext = %AssistedModeSubtext
+@onready var fullscreen_toggle = %FullscreenToggle
+@onready var fullscreen_hbox = %FullscreenHBox
 
 @onready var close_button = %CloseButton
 
@@ -59,6 +61,8 @@ func _ready():
 	_open_time_ms = Time.get_ticks_msec()
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_apply_ui_polish()
+	if OS.has_feature("mobile"):
+		fullscreen_hbox.visible = false
 
 	# Load initial values
 	if GameManager:
@@ -77,6 +81,7 @@ func _ready():
 		_update_instant_text_visuals(Settings.instant_text)
 		_update_auto_forward_visuals(Settings.is_auto_playing)
 		_update_assisted_toggle_visuals(Settings.assisted_mode)
+		_update_fullscreen_toggle_visuals(Settings.fullscreen)
 
 	_update_labels()
 
@@ -106,6 +111,8 @@ func _ready():
 	instant_text_toggle.pressed.connect(_on_instant_text_pressed)
 	auto_forward_toggle.pressed.connect(_on_auto_forward_pressed)
 	assisted_mode_toggle.pressed.connect(_on_assisted_mode_pressed)
+	fullscreen_toggle.pressed.connect(_on_fullscreen_pressed)
+	Settings.fullscreen_toggled.connect(_update_fullscreen_toggle_visuals)
 	close_button.pressed.connect(_on_close_pressed)
 
 	# Close on background click (Mobile Only)
@@ -261,6 +268,15 @@ func _on_assisted_mode_pressed():
 
 func _update_assisted_toggle_visuals(is_on: bool):
 	_style_toggle_button(assisted_mode_toggle, is_on)
+
+
+func _on_fullscreen_pressed():
+	if SoundManager: SoundManager.play_sfx("ui_click")
+	Settings.set_fullscreen(not Settings.fullscreen)
+
+
+func _update_fullscreen_toggle_visuals(is_on: bool):
+	_style_toggle_button(fullscreen_toggle, is_on)
 
 func _style_toggle_button(btn: Button, is_on: bool):
 	var style = StyleBoxFlat.new()

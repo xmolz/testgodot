@@ -5,13 +5,13 @@ do set_solid_background("#0a0a0e", 0.0)
 # 2. Spawn the floating girl (Ensure this path is correct!)
 do show_intro_silhouette("res://Backgrounds/intro_silhouette.png")
 
-do SoundManager.play_music_track("unnatural_city", 5.0)
+do SoundManager.play_music_track("cicadas", 5.0)
 ???: A darkness folds over you like a sea.
 ???: You wake up to nothing.
 ???: You see nothing.
 ???: You hear nothing.
 ???: You [i]feel[/i] nothing.
-???: The sea of Dark is vast and heavy. You sink under its pressure.
+???: The sea of dark is vast and heavy. You sink under its pressure.
 ???: Going back to sleep wouldn't be so bad. Would it?
 ???: [speed=0.5]It's what you wanted originally, anyway.[/speed]
 - Go to sleep
@@ -22,7 +22,7 @@ do SoundManager.play_music_track("unnatural_city", 5.0)
 	???: Are you sure you want to sleep?
 	- I'm sure. Goodnight.
 		do GameManager.trigger_game_over(1.5)
-	- No. I  must continue. => meet_dread
+	- No. I must continue. => meet_dread
 - Struggle against the darkness => meet_dread
 
 ~ meet_dread
@@ -68,7 +68,7 @@ do spawn_cinematic_entity("dread", "res://characters/dread_entity.tscn", 960, 30
 # 4. Remove Dread
 do remove_cinematic_entity("dread")
 
-???: You decide to leave [color=#FF00FF]Dread[/color] alone and venture further into the vast ocean.
+???: You decide to leave [color=#FF00FF]Dread[/color] alone and venture farther into the vast ocean.
 ???: But the pressure doesn't lessen.
 ???: The dark stretches on endlessly. Not the faintest glimmer of light is close to you.
 ???: You've been swimming a while now. Your limbs burn.
@@ -78,13 +78,14 @@ do remove_cinematic_entity("dread")
 ???: To no longer want. To no longer need.
 ???: [speed=0.25]No longer feel.[/speed]
 ???: [speed=0.25]What do you do next?[/speed]
-- Lay to eternal rest.
+- Lie to eternal rest.
 	???: Your arms stop moving. Your legs grow entirely still.
 	???: You let the heavy abyss pull you under once and for all.
 	do GameManager.trigger_game_over(1.5)
 - Just... keep... pushing... => breaking_point
 
 ~ breaking_point
+do SoundManager.fade_out_music(3.0)
 ???: If anyone were watching you right now, they'd commend your bravery.
 ???: Sadly, bravery doesn't amount to much here.
 ???: You've pushed as hard as you can, but your body finally begins to give out.
@@ -92,14 +93,14 @@ do remove_cinematic_entity("dread")
 ???: You begin to sink.
 ???: "This is good," you think to yourself.
 ???: You tried your best.
-???: You tried your be—!!!
-???: Suddenly—a warm presence grabs your hand.
-
-# 5. Spawn the procedural Hope
+???: You tried your be-!!!
+???: Suddenly - a warm presence grabs your hand.
+do SoundManager.play_music_track("that_soft_touch", 3.0)
+# hope entry command
 do spawn_cinematic_entity("hope", "res://characters/hope_entity.tscn", 960, 300)
 
 [color=#FFC8E3]Hope[/color]: I'm sorry it took me this long.
-???: Late as always, it seems [color=#FFC8E3]Hope[/color] finally found you.
+???: Late as always, it seems [color=#FFC8E3]Hope[/color] has finally found you.
 [color=#FFC8E3]Hope[/color]: It's okay, love. Breathe. Just breathe.
 ???: Instinct screams against it. Breathe in when you're sinking in this heavy ocean?
 ???: However, something in Hope's voice compels you.
@@ -111,7 +112,7 @@ do spawn_cinematic_entity("hope", "res://characters/hope_entity.tscn", 960, 300)
 ???: But it's so far away. You think you'll [i]never[/i] reach it.
 ???: Suddenly, Hope wraps you in her warmth.
 
-# 6. Remove the Sun orb, and trigger the procedural Surround effect
+# hope to envelop player in a damn ball
 do remove_cinematic_entity("hope")
 do activate_hope_surround()
 

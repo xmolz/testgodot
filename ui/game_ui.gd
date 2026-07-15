@@ -14,12 +14,16 @@ const ZOOM_CONTROLS_UI_SCENE = preload("res://ui/zoom_controls_ui.tscn")
 
 var zoom_controls_ui: CanvasLayer = null
 
+var _zoom_show_verb_panel: bool = true
+var _zoom_show_inventory: bool = true
+
 
 func _ready() -> void:
 	Events.game_state_changed.connect(_on_game_state_changed)
 	Events.interaction_state_changed.connect(_on_interaction_state_changed)
 	Events.explanation_started.connect(_on_explanation_started)
 	Events.gameplay_ui_visibility_requested.connect(_set_gameplay_ui_visible)
+	Events.zoom_hud_config_requested.connect(_on_zoom_hud_config_requested)
 
 	zoom_controls_ui = ZOOM_CONTROLS_UI_SCENE.instantiate()
 	add_child(zoom_controls_ui)
@@ -53,6 +57,25 @@ func _sync_initial_visibility() -> void:
 	_set_gameplay_ui_visible(GameManager.current_interaction_state == GameManager.InteractionState.WORLD)
 
 
+func _on_zoom_hud_config_requested(show_verb_panel: bool, show_inventory: bool) -> void:
+	_zoom_show_verb_panel = show_verb_panel
+	_zoom_show_inventory = show_inventory
+	_apply_zoom_hud_visibility()
+
+
+# What the HUD should look like while a zoom view is active.
+func _apply_zoom_hud_visibility() -> void:
+	if is_instance_valid(verb_ui):
+		verb_ui.visible = true  # keep the CanvasLayer on: the action bubble lives here
+		verb_ui.set_panel_visible(_zoom_show_verb_panel)
+	if is_instance_valid(inventory_ui):
+		inventory_ui.visible = _zoom_show_inventory
+	if is_instance_valid(journal_button_ui):
+		journal_button_ui.visible = false
+	if is_instance_valid(insurance_form_button_ui):
+		insurance_form_button_ui.visible = false
+
+
 # --- Event handlers ---
 
 func _on_game_state_changed(new_state: int) -> void:
@@ -76,13 +99,17 @@ func _on_interaction_state_changed(new_state: int) -> void:
 			# The zoom overlay sits on CanvasLayer 2; lift verb + inventory above it.
 			if is_instance_valid(verb_ui):
 				verb_ui.layer = 3
-				verb_ui.visible = true
 			if is_instance_valid(inventory_ui):
 				inventory_ui.layer = 3
-				inventory_ui.visible = true
+			_zoom_show_verb_panel = true
+			_zoom_show_inventory = true
+			_apply_zoom_hud_visibility()
 		GameManager.InteractionState.WORLD:
+			_zoom_show_verb_panel = true
+			_zoom_show_inventory = true
 			if is_instance_valid(verb_ui):
 				verb_ui.layer = 1
+				verb_ui.set_panel_visible(true)
 			if is_instance_valid(inventory_ui):
 				inventory_ui.layer = 1
 			_set_gameplay_ui_visible(true)
@@ -95,12 +122,15 @@ func _on_dialogue_started(_resource: Resource) -> void:
 
 
 func _on_dialogue_ended(_resource: Resource) -> void:
-	# Restore-without-unpausing, with the exact guards the old
-	# GameManager.restore_world_after_object_dialogue() used: never restore
-	# during a full-screen conversation, and only while actually in gameplay.
-	if GameManager.current_interaction_state != GameManager.InteractionState.CONVERSATION \
-			and GameManager.current_game_state == GameManager.GameState.IN_GAME_PLAY:
-		_set_gameplay_ui_visible(true)
+	if GameManager.current_game_state != GameManager.GameState.IN_GAME_PLAY:
+		return
+	match GameManager.current_interaction_state:
+		GameManager.InteractionState.CONVERSATION:
+			pass  # never restore during a full-screen conversation (existing behavior)
+		GameManager.InteractionState.ZOOM_VIEW:
+			_apply_zoom_hud_visibility()
+		_:
+			_set_gameplay_ui_visible(true)
 
 
 func _on_explanation_started(data: ExplanationData, root_node_to_search: Node) -> void:

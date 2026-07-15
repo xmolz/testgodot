@@ -167,6 +167,42 @@ func _on_confirm_no():
 	if SoundManager: SoundManager.play_sfx("ui_click")
 	confirm_overlay.hide()
 
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_GO_BACK_REQUEST:
+		_on_system_back_requested()
+
+
+# Android back button / back gesture. quit_on_go_back is disabled in
+# project.godot, so the app no longer quits on its own — we decide here.
+# Mirrors the Escape-key behavior in _input(); back never hard-kills a run.
+func _on_system_back_requested() -> void:
+	# 1. A confirm dialog is open -> back means "No".
+	if is_instance_valid(confirm_overlay) and confirm_overlay.visible:
+		_on_confirm_no()
+		return
+
+	# 2. A sub-menu is open -> ignore, same as the Escape key does.
+	if get_tree().root.has_node("SettingsMenu") \
+			or get_tree().root.has_node("DialogueHistoryUI") \
+			or get_tree().root.has_node("CreditsMenu") \
+			or get_tree().root.has_node("ControlsMenu"):
+		return
+
+	if not GameManager:
+		return
+
+	# 3. On the main menu there is no progress to lose -> quit (Android convention).
+	if GameManager.current_game_state == GameManager.GameState.MAIN_MENU:
+		get_tree().quit()
+		return
+
+	# 4. In-game states -> toggle the pause menu, exactly like Escape.
+	if GameManager.current_game_state == GameManager.GameState.IN_GAME_PLAY \
+			or GameManager.current_game_state == GameManager.GameState.PAUSED \
+			or GameManager.current_game_state == GameManager.GameState.INTRO_CONVERSATION:
+		toggle_pause()
+
 func _apply_style():
 	# --- MOBILE: Scale up the Hamburger Menu Icon ---
 	if OS.has_feature("mobile"):

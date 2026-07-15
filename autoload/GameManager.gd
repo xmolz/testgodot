@@ -484,6 +484,12 @@ func select_inventory_item(item_data_to_select: ItemData):
 	update_sentence_line_ui()
 
 func cancel_current_action(play_sound: bool = true):
+	# While a zoom view forces a sticky verb, the player cannot cancel it
+	# (blocks right-click and the A/D verb-lock cancel in _process).
+	# Overlay cleanup clears persisting_verb_id BEFORE calling this, so closing still works.
+	if current_interaction_state == InteractionState.ZOOM_VIEW and persisting_verb_id != "":
+		return
+
 	var did_cancel = false
 
 	# If the player right-clicks to cancel, drop the sticky state

@@ -159,10 +159,10 @@ Lewgend: Anyway, that's all I had to say.
 Lewgend: If you liked the demo, you'll definitely be seeing more of me!
 
 do actor_change("Lewgend", "determined")
-Lewgend: I'm hoping to release the next major update within the next three months.
+Lewgend: I'm hoping to release the next major update within the next two months.
 
 do actor_change("Lewgend", "embarrassed")
-Lewgend: Well... no promises, though. Hehe.
+Lewgend: Wish me luck! I'm going to give it everything I've got.
 
 do actor_change("Lewgend", "hand_on_chest")
 Lewgend: Truly, thank you for taking the time to play my game!

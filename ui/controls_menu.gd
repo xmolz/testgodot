@@ -171,6 +171,7 @@ func _build_rows():
 		_add_row([_icon_or_chip(ICON_JOURNAL, "Journal")], "Open your journal")
 		if Flags.get_level_flag("insurance_button_unlocked"):
 			_add_row([_icon_or_chip(ICON_FORM, "Form")], "Open the insurance form")
+		_add_row([_chip("Alt"), _plain_label("+"), _chip("Enter")], "Toggle fullscreen")
 		_add_row([_chip("Esc")], "Pause / options")
 
 func _movement_keys_row() -> Array:

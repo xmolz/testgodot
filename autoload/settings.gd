@@ -2,6 +2,7 @@
 extends Node
 
 signal auto_forward_toggled(is_on: bool)
+signal fullscreen_toggled(is_on: bool)
 
 const SETTINGS_FILE_PATH = "user://settings.cfg"
 
@@ -18,9 +19,13 @@ var is_auto_playing: bool = false:
 # --- Gameplay ---
 var assisted_mode: bool = false
 
+# --- Display ---
+var fullscreen: bool = true
+
 
 func _ready():
 	load_settings()
+	apply_window_mode()
 
 
 func set_bus_volume(bus_name: String, linear_val: float):
@@ -47,6 +52,7 @@ func save_settings():
 	cfg.set_value("dialogue", "auto_forward", is_auto_playing)
 	cfg.set_value("dialogue", "auto_delay", auto_time_delay)
 	cfg.set_value("gameplay", "assisted_mode", assisted_mode)
+	cfg.set_value("display", "fullscreen", fullscreen)
 	var err = cfg.save(SETTINGS_FILE_PATH)
 	if err != OK:
 		push_warning("Settings: Could not save settings to %s (error %d)" % [SETTINGS_FILE_PATH, err])
@@ -65,3 +71,33 @@ func load_settings():
 	is_auto_playing = bool(cfg.get_value("dialogue", "auto_forward", is_auto_playing))
 	auto_time_delay = clampf(float(cfg.get_value("dialogue", "auto_delay", auto_time_delay)), 0.125, 1.75)
 	assisted_mode = bool(cfg.get_value("gameplay", "assisted_mode", assisted_mode))
+	fullscreen = bool(cfg.get_value("display", "fullscreen", fullscreen))
+	apply_window_mode()
+
+
+func apply_window_mode():
+	if OS.has_feature("mobile") or OS.has_feature("web"):
+		return
+	var target = DisplayServer.WINDOW_MODE_FULLSCREEN if fullscreen \
+		else DisplayServer.WINDOW_MODE_MAXIMIZED
+	if DisplayServer.window_get_mode() != target:
+		DisplayServer.window_set_mode(target)
+
+
+func set_fullscreen(val: bool):
+	fullscreen = val
+	apply_window_mode()
+	fullscreen_toggled.emit(val)
+	save_settings()
+
+
+func toggle_fullscreen():
+	set_fullscreen(not fullscreen)
+
+
+func _input(event):
+	if OS.has_feature("mobile") or OS.has_feature("web"):
+		return
+	if event.is_action_pressed("toggle_fullscreen"):
+		get_viewport().set_input_as_handled()
+		toggle_fullscreen()

@@ -45,11 +45,12 @@ const UNPAUSABLE_SFX: Array[String] = [
 # --- Music Library ---
 var music_library: Dictionary = {
 	"aida_theme": preload("res://Sfx/Music/aida_corporate_theme.mp3"),
-	"unnatural_city": preload("res://Sfx/Music/Unnatural City.ogg"),
 	"sergey_sad_theme": preload("res://Sfx/Music/sergey_sad_theme.mp3"),
 	"mcbucket_normal_theme": preload("res://Sfx/Music/mcbucket_regular_theme.mp3"),
 	"mcbucket_cannathink_theme": preload("res://Sfx/Music/mcbucket_cannathink_theme.mp3"),
-	"sergey_hj_music":preload("res://Sfx/Music/snake_city_run_boy_run.mp3")
+	"sergey_hj_music":preload("res://Sfx/Music/flip_that.ogg"),
+	"cicadas":preload("res://Sfx/Music/cicadas.ogg"),
+	"that_soft_touch":preload("res://Sfx/Music/that soft touch.ogg")
 }
 
 # A dedicated, persistent player for background music

@@ -22,8 +22,13 @@ func _ready():
 	btn.ignore_texture_size = true
 	btn.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
 	btn.focus_mode = Control.FOCUS_NONE
-	btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	btn.tooltip_text = "Support on Patreon"
+
+	# The button is visual-only; the whole panel (border included) is the hit area.
+	btn.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.mouse_filter = Control.MOUSE_FILTER_STOP
+	panel.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	panel.tooltip_text = "Support on Patreon"
 
 	var panel_style = StyleBoxFlat.new()
 	panel_style.bg_color = Color(0, 0, 0, 0.5)
@@ -60,15 +65,16 @@ func _ready():
 		margin.add_theme_constant_override("margin_left", 15)
 		margin.add_theme_constant_override("margin_right", 15)
 
-	btn.pressed.connect(func():
-		if SoundManager and SoundManager.has_method("play_sfx"): SoundManager.play_sfx("ui_click")
-		OS.shell_open(PATREON_URL)
+	panel.gui_input.connect(func(event):
+		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
+			if SoundManager and SoundManager.has_method("play_sfx"): SoundManager.play_sfx("ui_click")
+			OS.shell_open(PATREON_URL)
 	)
 
-	btn.mouse_entered.connect(func():
+	panel.mouse_entered.connect(func():
 		panel_style.border_color = Color(0.2, 0.85, 1.0, 1.0)
 	)
-	btn.mouse_exited.connect(func():
+	panel.mouse_exited.connect(func():
 		panel_style.border_color = Color.WHITE
 	)
 

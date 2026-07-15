@@ -23,3 +23,25 @@ Player: Open Sesame!
 Player: (... Well, that didn't work.)
 Player: (Maybe I should just 'use' this by swiping my hand over that glow-y thing?)
 => END
+
+~ toilet_paper_dispenser
+Player: ...I love you, toilet paper.
+=> END
+
+~ toilet_flush
+Player: (Wow, trying to talk to the flush button now, am I?)
+=> END
+
+~ hospital_toilet
+Player: You ever get tired of takin' all that shit, toilet?
+The... Toilet?: HAVEMORE Inc. prohibits smart-appliances from expressing negative emotions toward biological waste.
+The... Toilet?: Is there anything else I can help you with today?
+Player: ... NOPE!
+Player: (That was traumatizing...)
+=> END
+
+~ memory_box
+Player: I know you're a machine and can't talk and all, but damn... you've got a nice hourglass figure.
+MemoryBox™: Thank you, patient #122!
+Player: ... WHAT!?
+=> END

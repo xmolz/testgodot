@@ -64,6 +64,12 @@ func _process(_delta: float) -> void:
 	if action_bubble_label.visible:
 		action_bubble_label.global_position = get_viewport().get_mouse_position() + Vector2(15, 15)
 
+
+func set_panel_visible(panel_visible: bool) -> void:
+	if is_instance_valid(verb_grid_panel):
+		verb_grid_panel.visible = panel_visible
+
+
 func _on_available_verbs_changed(available_verb_data_array: Array[VerbData]):
 	active_verb_buttons.clear()
 	all_button_slots.clear()

@@ -5,10 +5,10 @@ if Flags.get_level_flag("mcbucket_interruption_happened") == true and Flags.get_
 do show_cg("sergey_neutral", "fade", 0.5)
 
 A man in his mid-forties sits upright on his bed.
-His sharp eyes track you as you stir. He looks Slavic.
+His sharp eyes track you as you approach.
 
 do show_cg("sergey_hand_up")
-Sergey: Ah. You wake. Good. Was not sure you ever would.
+Sergey: Ah. Finally you wake. Good. 
 do SoundManager.play_music_track("sergey_sad_theme", 5.0)
 
 ~ hub
@@ -46,7 +46,7 @@ Sergey: So then… tell me. How can Sergey help?
 		Sergey: Before this, I was research contractor for HAVEMORE Defense.
 		
 		do show_cg("sergey_neutral_mouth_open")
-		Sergey: Not soldier - I worked with machines. Autonomous systems… behavior models… things that are supposed to make security “more efficient”.
+		Sergey: Not soldier - I worked with machines. Autonomous systems… behavior models… things that are supposed to make security "more efficient".
 		
 		do show_cg("sergey_eyes_closed")
 		He gives a small, humorless laugh.
@@ -67,7 +67,7 @@ Sergey: So then… tell me. How can Sergey help?
 			Sergey: Felt lighter than I had in years. Finally, I could go home, see snow, maybe drink tea with my little sister.
 			
 			He taps his chest lightly.
-			Sergey: That night-boom. Heart decides to protest.
+			Sergey: That night... boom. Heart decides to protest.
 			Sergey: HAVEMORE doctors saved me, da. But their insurance only works if I am still employee.
 			Sergey: If I quit now… bills will finish me faster than heart ever tried.
 			
@@ -97,11 +97,11 @@ Sergey: So then… tell me. How can Sergey help?
 					- I can't recall anything.
 						do show_cg("sergey_frown")
 						set ConversationEventManager.has_heard_fresh_start_line = true 
-						Sergey: Really? that is not good.
+						Sergey: Really? That is not good.
 						Sergey: Did the Nurse tell you anything?
 						- They don't know the cause yet.
 							do show_cg("sergey_frown_look_away")
-							Sergey: Boze Moy. Sergey is sorry about that.
+							Sergey: Bozhe moy. Sergey is sorry about that.
 							Sergey: Hope you find peace in your new life. 
 							=> hub
 
@@ -110,10 +110,10 @@ Sergey: So then… tell me. How can Sergey help?
 	Sergey: That machine? Simple. Just put in your TechPass™, turn the machine on, and put your hand on the scanner. Boom, you can access your memories.
 
 	do show_cg("sergey_neutral_mouth_open")
-	Sergey: I tried once. Helps if you feel lost or..
+	Sergey: I tried once. Helps if you feel lost or...
 
 	do show_cg("sergey_closeup_lookaway_sad")
-	Sergey: ..Lonely.
+	Sergey: ...Lonely.
 
 	#He pauses, then shakes his head.
 	do show_cg("sergey_hand_behind_head")
@@ -179,7 +179,7 @@ Sergey: So then… tell me. How can Sergey help?
 				#Sergey raises both eyebrows.
 				Sergey: Borrow? Moya devushka, this is not phone charger.
 				Sergey: If someone else uses my Techpass, system records it against my name.
-				Sergey: It is..risky. I'm sorry.
+				Sergey: It is... risky. I'm sorry.
 				Sergey: I cannot do that.
 				#sergei look away
 				do show_cg("sergey_closeup_lookaway_sad")
@@ -287,7 +287,7 @@ Sergey: So then… tell me. How can Sergey help?
 								do show_cg("sergey_closeup_lookaway_sad")
 								Sergey: Company, yes. But… what kind of company you mean?
 								He shifts uncomfortably, the bed creaking beneath him.
-								Sergey: You should be resting. Doctors said—
+								Sergey: You should be resting. Doctors said-
 							- I’m just… curious about you, Sergey.
 								do show_cg("sergey_front_confused")
 								Sergey: Curious? About me?
@@ -302,7 +302,7 @@ Sergey: So then… tell me. How can Sergey help?
 							He’s holding his breath. He’s trying so hard to stay composed.
 							do play_cg_sequence(["hand_moved_two", "hand_moved_3"], 1.5, 0.5)
 							#hand over thigh
-							#You place your hand gently on his thigh—right over the blanket.
+							#You place your hand gently on his thigh-right over the blanket.
 							#Sergey stiffens immediately. His eyes dart across the room, then back to you.
 							
 							#sergei blushing speaking close up
@@ -339,7 +339,7 @@ Sergey: So then… tell me. How can Sergey help?
 								do show_cg("protag_touching_sergey")
 								Player: Listen Sergey, you ever wake up really horny?
 								Player: I usually do.
-								Player: And given how long I had been sleeping..
+								Player: And given how long I had been sleeping...
 								Player: I'm EXTRA horny.
 								Player: Won't you help a girl out?
 								Player: I need you.
@@ -350,7 +350,7 @@ Sergey: So then… tell me. How can Sergey help?
 							#He exhales, a long, shuddering breath.
 							#The tension snaps.
 							#The fight leaves him completely.
-							Sergey: Boze moy...
+							Sergey: Bozhe moy...
 							do show_cg("hand_moved_3")
 							#crack completely opening
 							This is it. The cracks have opened.
@@ -367,7 +367,7 @@ Sergey: So then… tell me. How can Sergey help?
 							The heat of his skin is a shock against your cold fingers.
 							#side view, head pulled back
 							#He flinches, a sharp intake of air hissing through his teeth. But he doesn't pull away. 
-							#Instead, his legs part just a fraction—a silent, desperate invitation.
+							#Instead, his legs part just a fraction-a silent, desperate invitation.
 
 							You don't rush. You take your time mapping the tension of his inner thigh.
 							Your palm circling the inside of his thigh.
@@ -422,18 +422,18 @@ Sergey: So then… tell me. How can Sergey help?
 										#He speaks softly and shyly.
 										do show_cg("sergey_eyes_only_looking_away")
 										Sergey: I...I do too.
-										Sergey: It is just..this guy. I cannot do anything in front of him.
+										Sergey: It is just... this guy. I cannot do anything in front of him.
 										do show_cg("sergey_closeup_lookaway_sad_mouth_open")
-										Sergey: If only there was anything that could calm him down for a little while..
+										Sergey: If only there was anything that could calm him down for a little while...
 										#Sergey continues to look defeated.
 										- Don't worry, I will take care of it [Leave].
 											do show_cg("sergey_closeup_surprised")
 											Sergey: Eh? You will?
 											Sergey: I do not know about that... But I hope you can figure this out.
-											Sergey: I would....really like that.
+											Sergey: I would... really like that.
 											do show_cg("protag_closeup_domme")
 											'And I would really like your TechPass™, sweetheart' is what you want to say.
-											'Me too! Sergey.' is what you end up saying instead.
+											'Me too, Sergey!' is what you end up saying instead.
 											Okay then, comatose girl. Lets get this bread.
 											do Flags.set_level_flag("mcbucket_interruption_happened", true)
 											do SoundManager.fade_out_music(3.0)
@@ -550,7 +550,7 @@ Player: (Mama's here.)
 You run a finger down the glowing haptic strip on the bed frame.
 
 #sound effect -zhooom * vzzzzzt*
-Sergey: Wait, what are you—
+Sergey: Wait, what are you-
 do SoundManager.play_music_track("sergey_hj_music", 5.0)
 *Vzzzzzt*
 The servos engage instantly.
@@ -592,7 +592,7 @@ Player: (Seriously? Whatever. He's... huge.)
 Player: (Much bigger than I estimated.)
 
 And, for some reason, a voice of justice pops up in your head\:
-Player: (Hmmm. You know, it [i]does[/i] feel kindda unfair for him to be the only one exposed here.)
+Player: (Hmmm. You know, it [i]does[/i] feel kinda unfair for him to be the only one exposed here.)
 
 
 
@@ -608,7 +608,7 @@ do show_cg("protag_top_off")
 The fabric slides down your shoulders, pooling at your waist and leaving you undone.
 #sergey blush / awestruck
 Sergey: Wow... Devushka...
-Sergey: You are.. extraordinarily beautiful.
+Sergey: You are... extraordinarily beautiful.
 
 - This is for your eyes only, Sergey.
 
@@ -634,7 +634,7 @@ Player: ([i]Interesting[/i].)
 #protag face looking down
 Player: (Perhaps in another life, I would've treated you better, Sergey.)
 Player: (Given you a chance to be known.)
-Player: (given myself one to be known by you, even.)
+Player: (Given myself one to be known by you, even.)
 
 Player: (But... in this life?)
 Player: (I just need you for a minute.)
@@ -655,9 +655,9 @@ Player: (Men.)
 Player: (So predictable.)
 You know exactly when he is going to break.
 
-3..
-2..
-..!
+3...
+2...
+...!
 do show_cg("hj_climax_image", "none")
 
 # 5. Stop Cinematic (Reveal the new BG)
@@ -696,18 +696,18 @@ You slide your finger against the bed's haptic strip again. Bringing him up.
 do show_cg("sergey_eyes_only_looking_away")
 His face is a shy red.
 Player: Want me to grab you some water, cutie?
-Sergey: No, it's alright. Thank you..
+Sergey: No, it's alright. Thank you...
 do SoundManager.fade_out_music(7.0)
 #fade to black
 do fade_to_black(1.5)
 For a moment, the room falls silent.
 You take a moment to fix your gown.
 do show_cg("sergey_closeup_lookaway_sad")
-Sergey tries to compose himself, pulling his gown back down to cover his gentlemen's package.
+Sergey tries to compose himself, pulling his gown back down to cover his gentleman's package.
 #sergey back to normal, neutral, shy (hair on his head)
 do fade_from_black(1.5)
 
-Sergey: Devushka..
+Sergey: Devushka...
 Sergey: I don't know what to say.
 
 - You don't need to say anything, Sergey.
@@ -733,8 +733,8 @@ He's primed.
 All you gotta do now is let him soak in the silence.
 
 3...
-2..
-1.
+2...
+1...
 
 #sergey talking / nervous
 do show_cg("sergey_closeup_hand_behind_head")
@@ -788,8 +788,8 @@ Player: Thank you, Sergey.
 
 do Inventory.add_item("techpass")
 The air in the room returns back to normal.
-Player: Stay put Sergey, let me figure out who I am and come see you again?
-Sergey: Of course Devushka, I've got no where to go.
+Player: Stay put, Sergey, let me figure out who I am and come see you again?
+Sergey: Of course, Devushka, I've got nowhere to go.
 
 Well, guess it's time to finally get to it, huh?
 

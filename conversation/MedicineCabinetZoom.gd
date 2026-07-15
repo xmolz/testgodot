@@ -26,23 +26,11 @@ func _trigger_forced_exit():
 	_cleanup_and_queue_free()
 
 func _cleanup_and_queue_free():
-	# Safely disconnect the signal to prevent crashes when Aida moves around later
+	# Safely disconnect the level-flag signal to prevent crashes when Aida moves around later
 	if GameManager and Flags.current_level_state_manager:
 		if Flags.current_level_state_manager.level_flag_changed.is_connected(_on_level_flag_changed):
 			Flags.current_level_state_manager.level_flag_changed.disconnect(_on_level_flag_changed)
-
-	# Inform the GameManager that we are returning to the main level.
-	if GameManager:
-		GameManager.persisting_verb_id = ""
-		GameManager.cancel_current_action(false)
-		if GameManager.has_method("exit_to_world_state"):
-			GameManager.exit_to_world_state()
-
-	# Emit our own signal before we disappear.
-	zoom_view_closed.emit()
-
-	# Remove the overlay from the game.
-	queue_free()
+	super._cleanup_and_queue_free()
 
 func _start_caught_dialogue():
 	print_rich("[color=red]MedicineCabinet: Playing Caught Dialogue.[/color]")

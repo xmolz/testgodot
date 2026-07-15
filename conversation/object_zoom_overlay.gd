@@ -6,6 +6,15 @@ signal zoom_view_closed
 @export var background_texture: Texture2D
 @export var default_verb_id: String = ""
 
+## HUD configuration for this zoom view (game_ui.gd applies these).
+@export var show_verb_panel: bool = true
+@export var show_inventory: bool = true
+## If non-empty, only these verb ids are selectable while this zoom is open.
+@export var allowed_verb_ids: Array[String] = []
+
+var _saved_scene_verb_ids: Array[String] = []
+var _verbs_restricted: bool = false
+
 @onready var close_button: Button = $RootContainer/CloseButton
 @onready var zoom_background: TextureRect = $RootContainer/ZoomBackground
 
@@ -72,6 +81,15 @@ func _ready():
 		# 1. Clear whatever verb/item got us into this view silently
 		GameManager.cancel_current_action(false)
 
+		# Restrict selectable verbs for the duration of this zoom view.
+		if not allowed_verb_ids.is_empty():
+			_saved_scene_verb_ids = Verbs.active_scene_verb_ids.duplicate()
+			_verbs_restricted = true
+			Verbs.set_active_scene_verbs(allowed_verb_ids)
+
+		# Tell game_ui.gd which HUD pieces this zoom wants.
+		Events.zoom_hud_config_requested.emit(show_verb_panel, show_inventory)
+
 		# 2. If a default verb is assigned in the inspector, select it automatically
 		if not default_verb_id.is_empty():
 			GameManager.select_verb(default_verb_id)
@@ -90,6 +108,10 @@ func _on_close_button_pressed():
 
 # --- Cleanup Functions ---
 func _cleanup_and_queue_free():
+	if _verbs_restricted:
+		_verbs_restricted = false
+		Verbs.set_active_scene_verbs(_saved_scene_verb_ids)
+
 	# Clear the sticky verb and the current action silently before returning to the world
 	if GameManager:
 		GameManager.persisting_verb_id = ""
