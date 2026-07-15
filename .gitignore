@@ -4,8 +4,6 @@
 
 # Godot general specific ignores (some from GitHub template, some standard)
 # .import/  # For Godot 3. For Godot 4, .godot/ covers this. Keep if you might use Godot 3.
-export_presets.cfg # Renamed from export.cfg in newer Godot versions, good to have both
-export.cfg
 export_credentials.cfg
 
 # Imported translations (automatically generated from CSV files)
