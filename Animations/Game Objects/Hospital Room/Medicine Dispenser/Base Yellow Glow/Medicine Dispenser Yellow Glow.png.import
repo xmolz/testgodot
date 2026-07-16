@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dw2mykyc1xm5m"
-path.bptc="res://.godot/imported/Medicine Dispenser Yellow Glow.png-2d323fecd2ee8517d509a2c85d2476ba.bptc.ctex"
-path.astc="res://.godot/imported/Medicine Dispenser Yellow Glow.png-2d323fecd2ee8517d509a2c85d2476ba.astc.ctex"
+path="res://.godot/imported/Medicine Dispenser Yellow Glow.png-2d323fecd2ee8517d509a2c85d2476ba.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Animations/Game Objects/Hospital Room/Medicine Dispenser/Base Yellow Glow/Medicine Dispenser Yellow Glow.png"
-dest_files=["res://.godot/imported/Medicine Dispenser Yellow Glow.png-2d323fecd2ee8517d509a2c85d2476ba.bptc.ctex", "res://.godot/imported/Medicine Dispenser Yellow Glow.png-2d323fecd2ee8517d509a2c85d2476ba.astc.ctex"]
+dest_files=["res://.godot/imported/Medicine Dispenser Yellow Glow.png-2d323fecd2ee8517d509a2c85d2476ba.ctex"]
 
 [params]
 

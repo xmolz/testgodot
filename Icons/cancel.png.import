@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://beqclvj4pfupt"
-path.bptc="res://.godot/imported/cancel.png-47139a385af2d5f7c7c0a43e2631e4c0.bptc.ctex"
-path.astc="res://.godot/imported/cancel.png-47139a385af2d5f7c7c0a43e2631e4c0.astc.ctex"
+path="res://.godot/imported/cancel.png-47139a385af2d5f7c7c0a43e2631e4c0.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Icons/cancel.png"
-dest_files=["res://.godot/imported/cancel.png-47139a385af2d5f7c7c0a43e2631e4c0.bptc.ctex", "res://.godot/imported/cancel.png-47139a385af2d5f7c7c0a43e2631e4c0.astc.ctex"]
+dest_files=["res://.godot/imported/cancel.png-47139a385af2d5f7c7c0a43e2631e4c0.ctex"]
 
 [params]
 

@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b7n0ijlistnog"
-path.bptc="res://.godot/imported/mcbucket_dialogue_sprite.PNG-72c9b3b4eb4f78d5fd59675e2ba09eee.bptc.ctex"
-path.astc="res://.godot/imported/mcbucket_dialogue_sprite.PNG-72c9b3b4eb4f78d5fd59675e2ba09eee.astc.ctex"
+path="res://.godot/imported/mcbucket_dialogue_sprite.PNG-72c9b3b4eb4f78d5fd59675e2ba09eee.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Sprites/dialogue sprites/mcbucket_dialogue_sprite.PNG"
-dest_files=["res://.godot/imported/mcbucket_dialogue_sprite.PNG-72c9b3b4eb4f78d5fd59675e2ba09eee.bptc.ctex", "res://.godot/imported/mcbucket_dialogue_sprite.PNG-72c9b3b4eb4f78d5fd59675e2ba09eee.astc.ctex"]
+dest_files=["res://.godot/imported/mcbucket_dialogue_sprite.PNG-72c9b3b4eb4f78d5fd59675e2ba09eee.ctex"]
 
 [params]
 

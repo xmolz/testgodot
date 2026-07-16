@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dey5vxmoiigrv"
-path.bptc="res://.godot/imported/protag_closeup_curious.png-9ecb6ac0920d2abde4e794664547e9d3.bptc.ctex"
-path.astc="res://.godot/imported/protag_closeup_curious.png-9ecb6ac0920d2abde4e794664547e9d3.astc.ctex"
+path="res://.godot/imported/protag_closeup_curious.png-9ecb6ac0920d2abde4e794664547e9d3.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Backgrounds/Protagonist/xSergei/protag_closeup_curious.png"
-dest_files=["res://.godot/imported/protag_closeup_curious.png-9ecb6ac0920d2abde4e794664547e9d3.bptc.ctex", "res://.godot/imported/protag_closeup_curious.png-9ecb6ac0920d2abde4e794664547e9d3.astc.ctex"]
+dest_files=["res://.godot/imported/protag_closeup_curious.png-9ecb6ac0920d2abde4e794664547e9d3.ctex"]
 
 [params]
 

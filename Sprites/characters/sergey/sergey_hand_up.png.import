@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b766hj0ouah5e"
-path.bptc="res://.godot/imported/sergey_hand_up.png-d8f483fbe7e08344d21b087f4ae419a7.bptc.ctex"
-path.astc="res://.godot/imported/sergey_hand_up.png-d8f483fbe7e08344d21b087f4ae419a7.astc.ctex"
+path="res://.godot/imported/sergey_hand_up.png-d8f483fbe7e08344d21b087f4ae419a7.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Sprites/characters/sergey/sergey_hand_up.png"
-dest_files=["res://.godot/imported/sergey_hand_up.png-d8f483fbe7e08344d21b087f4ae419a7.bptc.ctex", "res://.godot/imported/sergey_hand_up.png-d8f483fbe7e08344d21b087f4ae419a7.astc.ctex"]
+dest_files=["res://.godot/imported/sergey_hand_up.png-d8f483fbe7e08344d21b087f4ae419a7.ctex"]
 
 [params]
 

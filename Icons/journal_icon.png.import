@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cfjr0h20128di"
-path.bptc="res://.godot/imported/journal_icon.png-33129656e4e35ec6ede69d7e1564a626.bptc.ctex"
-path.astc="res://.godot/imported/journal_icon.png-33129656e4e35ec6ede69d7e1564a626.astc.ctex"
+path="res://.godot/imported/journal_icon.png-33129656e4e35ec6ede69d7e1564a626.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Icons/journal_icon.png"
-dest_files=["res://.godot/imported/journal_icon.png-33129656e4e35ec6ede69d7e1564a626.bptc.ctex", "res://.godot/imported/journal_icon.png-33129656e4e35ec6ede69d7e1564a626.astc.ctex"]
+dest_files=["res://.godot/imported/journal_icon.png-33129656e4e35ec6ede69d7e1564a626.ctex"]
 
 [params]
 

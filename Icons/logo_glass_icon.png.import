@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://hopltlv76q36"
-path.bptc="res://.godot/imported/logo_glass_icon.png-d9876f606bf57a4d8560a244e3d52495.bptc.ctex"
-path.astc="res://.godot/imported/logo_glass_icon.png-d9876f606bf57a4d8560a244e3d52495.astc.ctex"
+path="res://.godot/imported/logo_glass_icon.png-d9876f606bf57a4d8560a244e3d52495.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Icons/logo_glass_icon.png"
-dest_files=["res://.godot/imported/logo_glass_icon.png-d9876f606bf57a4d8560a244e3d52495.bptc.ctex", "res://.godot/imported/logo_glass_icon.png-d9876f606bf57a4d8560a244e3d52495.astc.ctex"]
+dest_files=["res://.godot/imported/logo_glass_icon.png-d9876f606bf57a4d8560a244e3d52495.ctex"]
 
 [params]
 

@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c1h4hfpty7dn4"
-path.bptc="res://.godot/imported/patreon_logo.png-1862c84b3db82ca92a66f50457d0ba7c.bptc.ctex"
-path.astc="res://.godot/imported/patreon_logo.png-1862c84b3db82ca92a66f50457d0ba7c.astc.ctex"
+path="res://.godot/imported/patreon_logo.png-1862c84b3db82ca92a66f50457d0ba7c.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Icons/patreon_logo.png"
-dest_files=["res://.godot/imported/patreon_logo.png-1862c84b3db82ca92a66f50457d0ba7c.bptc.ctex", "res://.godot/imported/patreon_logo.png-1862c84b3db82ca92a66f50457d0ba7c.astc.ctex"]
+dest_files=["res://.godot/imported/patreon_logo.png-1862c84b3db82ca92a66f50457d0ba7c.ctex"]
 
 [params]
 

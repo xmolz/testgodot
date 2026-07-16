@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://ctnfjsc248msb"
-path.bptc="res://.godot/imported/leave.png-6b68cd4cad09bc16c15555a2127c6958.bptc.ctex"
-path.astc="res://.godot/imported/leave.png-6b68cd4cad09bc16c15555a2127c6958.astc.ctex"
+path="res://.godot/imported/leave.png-6b68cd4cad09bc16c15555a2127c6958.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Icons/leave.png"
-dest_files=["res://.godot/imported/leave.png-6b68cd4cad09bc16c15555a2127c6958.bptc.ctex", "res://.godot/imported/leave.png-6b68cd4cad09bc16c15555a2127c6958.astc.ctex"]
+dest_files=["res://.godot/imported/leave.png-6b68cd4cad09bc16c15555a2127c6958.ctex"]
 
 [params]
 

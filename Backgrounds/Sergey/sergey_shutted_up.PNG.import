@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dp46litf27yov"
-path.bptc="res://.godot/imported/sergey_shutted_up.PNG-7b6f32c3a81ceb899c7459a044fa820c.bptc.ctex"
-path.astc="res://.godot/imported/sergey_shutted_up.PNG-7b6f32c3a81ceb899c7459a044fa820c.astc.ctex"
+path="res://.godot/imported/sergey_shutted_up.PNG-7b6f32c3a81ceb899c7459a044fa820c.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Backgrounds/Sergey/sergey_shutted_up.PNG"
-dest_files=["res://.godot/imported/sergey_shutted_up.PNG-7b6f32c3a81ceb899c7459a044fa820c.bptc.ctex", "res://.godot/imported/sergey_shutted_up.PNG-7b6f32c3a81ceb899c7459a044fa820c.astc.ctex"]
+dest_files=["res://.godot/imported/sergey_shutted_up.PNG-7b6f32c3a81ceb899c7459a044fa820c.ctex"]
 
 [params]
 

@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://t7yho2m7tt4m"
-path.bptc="res://.godot/imported/medicine_cabinet.png-7c6fb887744d851eae0f58a28a2cc29b.bptc.ctex"
-path.astc="res://.godot/imported/medicine_cabinet.png-7c6fb887744d851eae0f58a28a2cc29b.astc.ctex"
+path="res://.godot/imported/medicine_cabinet.png-7c6fb887744d851eae0f58a28a2cc29b.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Sprites/Hospital Room/medicine_cabinet.png"
-dest_files=["res://.godot/imported/medicine_cabinet.png-7c6fb887744d851eae0f58a28a2cc29b.bptc.ctex", "res://.godot/imported/medicine_cabinet.png-7c6fb887744d851eae0f58a28a2cc29b.astc.ctex"]
+dest_files=["res://.godot/imported/medicine_cabinet.png-7c6fb887744d851eae0f58a28a2cc29b.ctex"]
 
 [params]
 

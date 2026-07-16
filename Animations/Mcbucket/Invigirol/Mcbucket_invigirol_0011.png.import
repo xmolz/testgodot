@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b6lfc20y5ak5y"
-path.bptc="res://.godot/imported/Mcbucket_invigirol_0011.png-7ecfc677e12b458891179b89def093db.bptc.ctex"
-path.astc="res://.godot/imported/Mcbucket_invigirol_0011.png-7ecfc677e12b458891179b89def093db.astc.ctex"
+path="res://.godot/imported/Mcbucket_invigirol_0011.png-7ecfc677e12b458891179b89def093db.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Animations/Mcbucket/Invigirol/Mcbucket_invigirol_0011.png"
-dest_files=["res://.godot/imported/Mcbucket_invigirol_0011.png-7ecfc677e12b458891179b89def093db.bptc.ctex", "res://.godot/imported/Mcbucket_invigirol_0011.png-7ecfc677e12b458891179b89def093db.astc.ctex"]
+dest_files=["res://.godot/imported/Mcbucket_invigirol_0011.png-7ecfc677e12b458891179b89def093db.ctex"]
 
 [params]
 

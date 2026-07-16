@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://58fkn47an3i0"
-path.bptc="res://.godot/imported/lewgend_embarrassed.png-74d110d6b90518ef2ee05501880b4e77.bptc.ctex"
-path.astc="res://.godot/imported/lewgend_embarrassed.png-74d110d6b90518ef2ee05501880b4e77.astc.ctex"
+path="res://.godot/imported/lewgend_embarrassed.png-74d110d6b90518ef2ee05501880b4e77.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Sprites/characters/lewgend/lewgend_embarrassed.png"
-dest_files=["res://.godot/imported/lewgend_embarrassed.png-74d110d6b90518ef2ee05501880b4e77.bptc.ctex", "res://.godot/imported/lewgend_embarrassed.png-74d110d6b90518ef2ee05501880b4e77.astc.ctex"]
+dest_files=["res://.godot/imported/lewgend_embarrassed.png-74d110d6b90518ef2ee05501880b4e77.ctex"]
 
 [params]
 

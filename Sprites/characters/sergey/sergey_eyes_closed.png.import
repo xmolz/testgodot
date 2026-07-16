@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b6mnontl8swfp"
-path.bptc="res://.godot/imported/sergey_eyes_closed.png-c27d76c2ab9f47e3cc022177d46cca9d.bptc.ctex"
-path.astc="res://.godot/imported/sergey_eyes_closed.png-c27d76c2ab9f47e3cc022177d46cca9d.astc.ctex"
+path="res://.godot/imported/sergey_eyes_closed.png-c27d76c2ab9f47e3cc022177d46cca9d.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Sprites/characters/sergey/sergey_eyes_closed.png"
-dest_files=["res://.godot/imported/sergey_eyes_closed.png-c27d76c2ab9f47e3cc022177d46cca9d.bptc.ctex", "res://.godot/imported/sergey_eyes_closed.png-c27d76c2ab9f47e3cc022177d46cca9d.astc.ctex"]
+dest_files=["res://.godot/imported/sergey_eyes_closed.png-c27d76c2ab9f47e3cc022177d46cca9d.ctex"]
 
 [params]
 

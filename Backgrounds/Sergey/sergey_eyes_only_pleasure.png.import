@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c0xflvhq40wkh"
-path.bptc="res://.godot/imported/sergey_eyes_only_pleasure.png-22b1183a358c3fd1085e884330d07401.bptc.ctex"
-path.astc="res://.godot/imported/sergey_eyes_only_pleasure.png-22b1183a358c3fd1085e884330d07401.astc.ctex"
+path="res://.godot/imported/sergey_eyes_only_pleasure.png-22b1183a358c3fd1085e884330d07401.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Backgrounds/Sergey/sergey_eyes_only_pleasure.png"
-dest_files=["res://.godot/imported/sergey_eyes_only_pleasure.png-22b1183a358c3fd1085e884330d07401.bptc.ctex", "res://.godot/imported/sergey_eyes_only_pleasure.png-22b1183a358c3fd1085e884330d07401.astc.ctex"]
+dest_files=["res://.godot/imported/sergey_eyes_only_pleasure.png-22b1183a358c3fd1085e884330d07401.ctex"]
 
 [params]
 

@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://d3nb7jgrkd0yx"
-path.bptc="res://.godot/imported/protag_sergey_knees_touching.png-cea6b3fa342ff528c415b5343691176f.bptc.ctex"
-path.astc="res://.godot/imported/protag_sergey_knees_touching.png-cea6b3fa342ff528c415b5343691176f.astc.ctex"
+path="res://.godot/imported/protag_sergey_knees_touching.png-cea6b3fa342ff528c415b5343691176f.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Backgrounds/Protagonist/xSergei/protag_sergey_knees_touching.png"
-dest_files=["res://.godot/imported/protag_sergey_knees_touching.png-cea6b3fa342ff528c415b5343691176f.bptc.ctex", "res://.godot/imported/protag_sergey_knees_touching.png-cea6b3fa342ff528c415b5343691176f.astc.ctex"]
+dest_files=["res://.godot/imported/protag_sergey_knees_touching.png-cea6b3fa342ff528c415b5343691176f.ctex"]
 
 [params]
 

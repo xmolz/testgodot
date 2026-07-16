@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://btu7r8ifb3oni"
-path.bptc="res://.godot/imported/magnifying-glass.png-d0cbceab661b959facdc48e3f3d8edcc.bptc.ctex"
-path.astc="res://.godot/imported/magnifying-glass.png-d0cbceab661b959facdc48e3f3d8edcc.astc.ctex"
+path="res://.godot/imported/magnifying-glass.png-d0cbceab661b959facdc48e3f3d8edcc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Icons/magnifying-glass.png"
-dest_files=["res://.godot/imported/magnifying-glass.png-d0cbceab661b959facdc48e3f3d8edcc.bptc.ctex", "res://.godot/imported/magnifying-glass.png-d0cbceab661b959facdc48e3f3d8edcc.astc.ctex"]
+dest_files=["res://.godot/imported/magnifying-glass.png-d0cbceab661b959facdc48e3f3d8edcc.ctex"]
 
 [params]
 

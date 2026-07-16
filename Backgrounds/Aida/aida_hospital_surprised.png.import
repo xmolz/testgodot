@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://ceyp8djjebf88"
-path.bptc="res://.godot/imported/aida_hospital_surprised.png-310c4285630b4911edde31496fa1a74f.bptc.ctex"
-path.astc="res://.godot/imported/aida_hospital_surprised.png-310c4285630b4911edde31496fa1a74f.astc.ctex"
+path="res://.godot/imported/aida_hospital_surprised.png-310c4285630b4911edde31496fa1a74f.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Backgrounds/Aida/aida_hospital_surprised.png"
-dest_files=["res://.godot/imported/aida_hospital_surprised.png-310c4285630b4911edde31496fa1a74f.bptc.ctex", "res://.godot/imported/aida_hospital_surprised.png-310c4285630b4911edde31496fa1a74f.astc.ctex"]
+dest_files=["res://.godot/imported/aida_hospital_surprised.png-310c4285630b4911edde31496fa1a74f.ctex"]
 
 [params]
 

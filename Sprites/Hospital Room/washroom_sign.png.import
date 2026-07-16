@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://tafacn8enoj8"
-path.bptc="res://.godot/imported/washroom_sign.png-f9792d417a9925d30f536e77240f3b62.bptc.ctex"
-path.astc="res://.godot/imported/washroom_sign.png-f9792d417a9925d30f536e77240f3b62.astc.ctex"
+path="res://.godot/imported/washroom_sign.png-f9792d417a9925d30f536e77240f3b62.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Sprites/Hospital Room/washroom_sign.png"
-dest_files=["res://.godot/imported/washroom_sign.png-f9792d417a9925d30f536e77240f3b62.bptc.ctex", "res://.godot/imported/washroom_sign.png-f9792d417a9925d30f536e77240f3b62.astc.ctex"]
+dest_files=["res://.godot/imported/washroom_sign.png-f9792d417a9925d30f536e77240f3b62.ctex"]
 
 [params]
 

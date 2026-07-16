@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dfs6tn5wgolf7"
-path.bptc="res://.godot/imported/aida_thinking.png-b8f7e9b183a5e39c1fd575d7e0dec74c.bptc.ctex"
-path.astc="res://.godot/imported/aida_thinking.png-b8f7e9b183a5e39c1fd575d7e0dec74c.astc.ctex"
+path="res://.godot/imported/aida_thinking.png-b8f7e9b183a5e39c1fd575d7e0dec74c.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Sprites/characters/aida/aida_thinking.png"
-dest_files=["res://.godot/imported/aida_thinking.png-b8f7e9b183a5e39c1fd575d7e0dec74c.bptc.ctex", "res://.godot/imported/aida_thinking.png-b8f7e9b183a5e39c1fd575d7e0dec74c.astc.ctex"]
+dest_files=["res://.godot/imported/aida_thinking.png-b8f7e9b183a5e39c1fd575d7e0dec74c.ctex"]
 
 [params]
 

@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cwqcwhq1t3hr4"
-path.bptc="res://.godot/imported/Medicine dispenser cyan_0006.png-d4f47d2eba8eeae01212f3ead72c0f5f.bptc.ctex"
-path.astc="res://.godot/imported/Medicine dispenser cyan_0006.png-d4f47d2eba8eeae01212f3ead72c0f5f.astc.ctex"
+path="res://.godot/imported/Medicine dispenser cyan_0006.png-d4f47d2eba8eeae01212f3ead72c0f5f.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Animations/Game Objects/Hospital Room/Medicine Dispenser/Base Cyan Sprites/Medicine dispenser cyan_0006.png"
-dest_files=["res://.godot/imported/Medicine dispenser cyan_0006.png-d4f47d2eba8eeae01212f3ead72c0f5f.bptc.ctex", "res://.godot/imported/Medicine dispenser cyan_0006.png-d4f47d2eba8eeae01212f3ead72c0f5f.astc.ctex"]
+dest_files=["res://.godot/imported/Medicine dispenser cyan_0006.png-d4f47d2eba8eeae01212f3ead72c0f5f.ctex"]
 
 [params]
 

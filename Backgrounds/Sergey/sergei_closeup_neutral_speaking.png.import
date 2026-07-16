@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dyb72s07jqu5x"
-path.bptc="res://.godot/imported/sergei_closeup_neutral_speaking.png-0ab57c0e241ea62f655dffa67bf18c1c.bptc.ctex"
-path.astc="res://.godot/imported/sergei_closeup_neutral_speaking.png-0ab57c0e241ea62f655dffa67bf18c1c.astc.ctex"
+path="res://.godot/imported/sergei_closeup_neutral_speaking.png-0ab57c0e241ea62f655dffa67bf18c1c.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Backgrounds/Sergey/sergei_closeup_neutral_speaking.png"
-dest_files=["res://.godot/imported/sergei_closeup_neutral_speaking.png-0ab57c0e241ea62f655dffa67bf18c1c.bptc.ctex", "res://.godot/imported/sergei_closeup_neutral_speaking.png-0ab57c0e241ea62f655dffa67bf18c1c.astc.ctex"]
+dest_files=["res://.godot/imported/sergei_closeup_neutral_speaking.png-0ab57c0e241ea62f655dffa67bf18c1c.ctex"]
 
 [params]
 

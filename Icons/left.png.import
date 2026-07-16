@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://d4hfy5kvy1kkf"
-path.bptc="res://.godot/imported/left.png-848d1e249f817c7a6afe5bd3c4493253.bptc.ctex"
-path.astc="res://.godot/imported/left.png-848d1e249f817c7a6afe5bd3c4493253.astc.ctex"
+path="res://.godot/imported/left.png-848d1e249f817c7a6afe5bd3c4493253.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Icons/left.png"
-dest_files=["res://.godot/imported/left.png-848d1e249f817c7a6afe5bd3c4493253.bptc.ctex", "res://.godot/imported/left.png-848d1e249f817c7a6afe5bd3c4493253.astc.ctex"]
+dest_files=["res://.godot/imported/left.png-848d1e249f817c7a6afe5bd3c4493253.ctex"]
 
 [params]
 

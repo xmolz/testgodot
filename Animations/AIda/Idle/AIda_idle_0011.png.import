@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://6v2shbe06i71"
-path.bptc="res://.godot/imported/AIda_idle_0011.png-2b5b877bf338f8749f22b219448d9572.bptc.ctex"
-path.astc="res://.godot/imported/AIda_idle_0011.png-2b5b877bf338f8749f22b219448d9572.astc.ctex"
+path="res://.godot/imported/AIda_idle_0011.png-2b5b877bf338f8749f22b219448d9572.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Animations/AIda/Idle/AIda_idle_0011.png"
-dest_files=["res://.godot/imported/AIda_idle_0011.png-2b5b877bf338f8749f22b219448d9572.bptc.ctex", "res://.godot/imported/AIda_idle_0011.png-2b5b877bf338f8749f22b219448d9572.astc.ctex"]
+dest_files=["res://.godot/imported/AIda_idle_0011.png-2b5b877bf338f8749f22b219448d9572.ctex"]
 
 [params]
 

@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bonhiqvu0mmkb"
-path.bptc="res://.godot/imported/layla_dialogue_sprite.png-6c94325a53f56f763fc09abf03ada9c4.bptc.ctex"
-path.astc="res://.godot/imported/layla_dialogue_sprite.png-6c94325a53f56f763fc09abf03ada9c4.astc.ctex"
+path="res://.godot/imported/layla_dialogue_sprite.png-6c94325a53f56f763fc09abf03ada9c4.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Sprites/dialogue sprites/layla_dialogue_sprite.png"
-dest_files=["res://.godot/imported/layla_dialogue_sprite.png-6c94325a53f56f763fc09abf03ada9c4.bptc.ctex", "res://.godot/imported/layla_dialogue_sprite.png-6c94325a53f56f763fc09abf03ada9c4.astc.ctex"]
+dest_files=["res://.godot/imported/layla_dialogue_sprite.png-6c94325a53f56f763fc09abf03ada9c4.ctex"]
 
 [params]
 

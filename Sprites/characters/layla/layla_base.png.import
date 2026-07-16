@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dhicjb67dx6fj"
-path.bptc="res://.godot/imported/layla_base.png-cc38d6b052433a933e6bbeb839b58407.bptc.ctex"
-path.astc="res://.godot/imported/layla_base.png-cc38d6b052433a933e6bbeb839b58407.astc.ctex"
+path="res://.godot/imported/layla_base.png-cc38d6b052433a933e6bbeb839b58407.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Sprites/characters/layla/layla_base.png"
-dest_files=["res://.godot/imported/layla_base.png-cc38d6b052433a933e6bbeb839b58407.bptc.ctex", "res://.godot/imported/layla_base.png-cc38d6b052433a933e6bbeb839b58407.astc.ctex"]
+dest_files=["res://.godot/imported/layla_base.png-cc38d6b052433a933e6bbeb839b58407.ctex"]
 
 [params]
 

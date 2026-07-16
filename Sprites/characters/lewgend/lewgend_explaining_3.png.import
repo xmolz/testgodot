@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c5akifcrj0ldr"
-path.bptc="res://.godot/imported/lewgend_explaining_3.png-ce88c6055ffec154c35b9fca290ab217.bptc.ctex"
-path.astc="res://.godot/imported/lewgend_explaining_3.png-ce88c6055ffec154c35b9fca290ab217.astc.ctex"
+path="res://.godot/imported/lewgend_explaining_3.png-ce88c6055ffec154c35b9fca290ab217.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Sprites/characters/lewgend/lewgend_explaining_3.png"
-dest_files=["res://.godot/imported/lewgend_explaining_3.png-ce88c6055ffec154c35b9fca290ab217.bptc.ctex", "res://.godot/imported/lewgend_explaining_3.png-ce88c6055ffec154c35b9fca290ab217.astc.ctex"]
+dest_files=["res://.godot/imported/lewgend_explaining_3.png-ce88c6055ffec154c35b9fca290ab217.ctex"]
 
 [params]
 

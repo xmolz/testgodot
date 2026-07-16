@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bu2j4kokxinn2"
-path.bptc="res://.godot/imported/zoom in icon.png-589ac0abe3bacc0bd6e166d5db7d9141.bptc.ctex"
-path.astc="res://.godot/imported/zoom in icon.png-589ac0abe3bacc0bd6e166d5db7d9141.astc.ctex"
+path="res://.godot/imported/zoom in icon.png-589ac0abe3bacc0bd6e166d5db7d9141.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Icons/zoom in icon.png"
-dest_files=["res://.godot/imported/zoom in icon.png-589ac0abe3bacc0bd6e166d5db7d9141.bptc.ctex", "res://.godot/imported/zoom in icon.png-589ac0abe3bacc0bd6e166d5db7d9141.astc.ctex"]
+dest_files=["res://.godot/imported/zoom in icon.png-589ac0abe3bacc0bd6e166d5db7d9141.ctex"]
 
 [params]
 

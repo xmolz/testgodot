@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://7g7luudeoust"
-path.bptc="res://.godot/imported/mcbucket_default.png-3f7734a4cac6d3238ddc9dbebdfdbedc.bptc.ctex"
-path.astc="res://.godot/imported/mcbucket_default.png-3f7734a4cac6d3238ddc9dbebdfdbedc.astc.ctex"
+path="res://.godot/imported/mcbucket_default.png-3f7734a4cac6d3238ddc9dbebdfdbedc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Sprites/characters/mcbucket/mcbucket_default.png"
-dest_files=["res://.godot/imported/mcbucket_default.png-3f7734a4cac6d3238ddc9dbebdfdbedc.bptc.ctex", "res://.godot/imported/mcbucket_default.png-3f7734a4cac6d3238ddc9dbebdfdbedc.astc.ctex"]
+dest_files=["res://.godot/imported/mcbucket_default.png-3f7734a4cac6d3238ddc9dbebdfdbedc.ctex"]
 
 [params]
 

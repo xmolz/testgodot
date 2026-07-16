@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bhj2e6pwkymsb"
-path.bptc="res://.godot/imported/static_hospital_background_ventless.png-76c38f17e51df190f11b3fa3248b964d.bptc.ctex"
-path.astc="res://.godot/imported/static_hospital_background_ventless.png-76c38f17e51df190f11b3fa3248b964d.astc.ctex"
+path="res://.godot/imported/static_hospital_background_ventless.png-76c38f17e51df190f11b3fa3248b964d.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Backgrounds/Levels/static_hospital_background_ventless.png"
-dest_files=["res://.godot/imported/static_hospital_background_ventless.png-76c38f17e51df190f11b3fa3248b964d.bptc.ctex", "res://.godot/imported/static_hospital_background_ventless.png-76c38f17e51df190f11b3fa3248b964d.astc.ctex"]
+dest_files=["res://.godot/imported/static_hospital_background_ventless.png-76c38f17e51df190f11b3fa3248b964d.ctex"]
 
 [params]
 

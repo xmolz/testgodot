@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bvdrvhohdqu0b"
-path.bptc="res://.godot/imported/protag_hospital_base_aida_red_eyes.png-9bae153e16339dcc4d85bf5cc336d729.bptc.ctex"
-path.astc="res://.godot/imported/protag_hospital_base_aida_red_eyes.png-9bae153e16339dcc4d85bf5cc336d729.astc.ctex"
+path="res://.godot/imported/protag_hospital_base_aida_red_eyes.png-9bae153e16339dcc4d85bf5cc336d729.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Backgrounds/Protagonist/protag_hospital_base_aida_red_eyes.png"
-dest_files=["res://.godot/imported/protag_hospital_base_aida_red_eyes.png-9bae153e16339dcc4d85bf5cc336d729.bptc.ctex", "res://.godot/imported/protag_hospital_base_aida_red_eyes.png-9bae153e16339dcc4d85bf5cc336d729.astc.ctex"]
+dest_files=["res://.godot/imported/protag_hospital_base_aida_red_eyes.png-9bae153e16339dcc4d85bf5cc336d729.ctex"]
 
 [params]
 
