@@ -121,6 +121,7 @@ func _restore_patreon_button():
 	btn.name = "PersistentPatreonBtn"
 	btn.text = " Support on Patreon"
 	btn.icon = tex
+	btn.expand_icon = true
 	btn.add_theme_constant_override("icon_max_width", 96)
 	btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	btn.add_theme_constant_override("h_separation", 18)

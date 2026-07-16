@@ -1503,6 +1503,7 @@ func show_patreon_button():
 	patreon_btn = Button.new()
 	patreon_btn.text = " Support on Patreon"
 	patreon_btn.icon = tex
+	patreon_btn.expand_icon = true
 	patreon_btn.add_theme_constant_override("icon_max_width", 96)
 	patreon_btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	patreon_btn.add_theme_constant_override("h_separation", 18) # Space between icon and text
