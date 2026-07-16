@@ -3,27 +3,29 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dvlhom6et33g5"
-path="res://.godot/imported/Medicine dispenser yellow_0001.png-93f33250daeac2426c35a015104ddec1.ctex"
+path.bptc="res://.godot/imported/Medicine dispenser yellow_0001.png-93f33250daeac2426c35a015104ddec1.bptc.ctex"
+path.astc="res://.godot/imported/Medicine dispenser yellow_0001.png-93f33250daeac2426c35a015104ddec1.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://Sprites/Hospital Room/Medicine dispenser yellow_0001.png"
-dest_files=["res://.godot/imported/Medicine dispenser yellow_0001.png-93f33250daeac2426c35a015104ddec1.ctex"]
+dest_files=["res://.godot/imported/Medicine dispenser yellow_0001.png-93f33250daeac2426c35a015104ddec1.bptc.ctex", "res://.godot/imported/Medicine dispenser yellow_0001.png-93f33250daeac2426c35a015104ddec1.astc.ctex"]
 
 [params]
 
-compress/mode=0
-compress/high_quality=false
+compress/mode=2
+compress/high_quality=true
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

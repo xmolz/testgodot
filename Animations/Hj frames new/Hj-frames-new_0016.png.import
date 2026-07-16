@@ -3,27 +3,29 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://o0qkccqbi5ty"
-path="res://.godot/imported/Hj-frames-new_0016.png-2fb6f25fd0aaf33d454df76da3c7de15.ctex"
+path.bptc="res://.godot/imported/Hj-frames-new_0016.png-2fb6f25fd0aaf33d454df76da3c7de15.bptc.ctex"
+path.astc="res://.godot/imported/Hj-frames-new_0016.png-2fb6f25fd0aaf33d454df76da3c7de15.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://Animations/Hj frames new/Hj-frames-new_0016.png"
-dest_files=["res://.godot/imported/Hj-frames-new_0016.png-2fb6f25fd0aaf33d454df76da3c7de15.ctex"]
+dest_files=["res://.godot/imported/Hj-frames-new_0016.png-2fb6f25fd0aaf33d454df76da3c7de15.bptc.ctex", "res://.godot/imported/Hj-frames-new_0016.png-2fb6f25fd0aaf33d454df76da3c7de15.astc.ctex"]
 
 [params]
 
-compress/mode=0
-compress/high_quality=false
+compress/mode=2
+compress/high_quality=true
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

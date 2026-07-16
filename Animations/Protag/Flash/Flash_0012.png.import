@@ -3,27 +3,29 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dtenw1d7p3g0l"
-path="res://.godot/imported/Flash_0012.png-1265f15873e254a0148450af060ab529.ctex"
+path.bptc="res://.godot/imported/Flash_0012.png-1265f15873e254a0148450af060ab529.bptc.ctex"
+path.astc="res://.godot/imported/Flash_0012.png-1265f15873e254a0148450af060ab529.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://Animations/Protag/Flash/Flash_0012.png"
-dest_files=["res://.godot/imported/Flash_0012.png-1265f15873e254a0148450af060ab529.ctex"]
+dest_files=["res://.godot/imported/Flash_0012.png-1265f15873e254a0148450af060ab529.bptc.ctex", "res://.godot/imported/Flash_0012.png-1265f15873e254a0148450af060ab529.astc.ctex"]
 
 [params]
 
-compress/mode=0
-compress/high_quality=false
+compress/mode=2
+compress/high_quality=true
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
