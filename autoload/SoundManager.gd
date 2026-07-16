@@ -44,10 +44,10 @@ const UNPAUSABLE_SFX: Array[String] = [
 
 # --- Music Library ---
 var music_library: Dictionary = {
-	"aida_theme": preload("res://Sfx/Music/aida_corporate_theme.mp3"),
-	"sergey_sad_theme": preload("res://Sfx/Music/sergey_sad_theme.mp3"),
-	"mcbucket_normal_theme": preload("res://Sfx/Music/mcbucket_regular_theme.mp3"),
-	"mcbucket_cannathink_theme": preload("res://Sfx/Music/mcbucket_cannathink_theme.mp3"),
+	"aida_theme": preload("res://Sfx/Music/aida_corporate_theme.ogg"),
+	"sergey_sad_theme": preload("res://Sfx/Music/sergey_sad_theme.ogg"),
+	"mcbucket_normal_theme": preload("res://Sfx/Music/mcbucket_regular_theme.ogg"),
+	"mcbucket_cannathink_theme": preload("res://Sfx/Music/mcbucket_cannathink_theme.ogg"),
 	"sergey_hj_music":preload("res://Sfx/Music/flip_that.ogg"),
 	"cicadas":preload("res://Sfx/Music/cicadas.ogg"),
 	"that_soft_touch":preload("res://Sfx/Music/that soft touch.ogg")
