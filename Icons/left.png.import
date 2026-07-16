@@ -17,11 +17,11 @@ dest_files=["res://.godot/imported/left.png-848d1e249f817c7a6afe5bd3c4493253.bpt
 
 [params]
 
-compress/mode=2
+compress/mode=4
 compress/high_quality=true
 compress/lossy_quality=0.7
-compress/uastc_level=0
-compress/rdo_quality_loss=0.0
+compress/uastc_level=2
+compress/rdo_quality_loss=1.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0

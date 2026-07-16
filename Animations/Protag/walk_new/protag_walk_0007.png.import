@@ -17,11 +17,11 @@ dest_files=["res://.godot/imported/protag_walk_0007.png-fa912c127bf08f688d423ea9
 
 [params]
 
-compress/mode=2
+compress/mode=4
 compress/high_quality=true
 compress/lossy_quality=0.7
-compress/uastc_level=0
-compress/rdo_quality_loss=0.0
+compress/uastc_level=2
+compress/rdo_quality_loss=1.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0

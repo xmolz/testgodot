@@ -17,11 +17,11 @@ dest_files=["res://.godot/imported/Hj-frames-new_0014.png-1da4677b6268154dd8670f
 
 [params]
 
-compress/mode=2
+compress/mode=4
 compress/high_quality=true
 compress/lossy_quality=0.7
-compress/uastc_level=0
-compress/rdo_quality_loss=0.0
+compress/uastc_level=2
+compress/rdo_quality_loss=1.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
