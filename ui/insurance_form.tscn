@@ -179,18 +179,17 @@ text = "< Back"
 flat = true
 
 [node name="HeaderContainer" type="HBoxContainer" parent="TabletFrame/Padding/ContentCanvas" unique_id=945372682]
-mouse_filter = 2
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 offset_top = 10.0
 offset_bottom = 60.0
 grow_horizontal = 2
+mouse_filter = 2
 theme_override_constants/separation = 15
 alignment = 1
 
 [node name="HavemoreLabel" type="Label" parent="TabletFrame/Padding/ContentCanvas/HeaderContainer" unique_id=92924362]
-mouse_filter = 2
 layout_mode = 2
 theme_override_colors/font_color = Color(0.25, 0.88, 1, 1)
 theme_override_font_sizes/font_size = 40
@@ -198,7 +197,6 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_Logo")
 text = "havemore"
 
 [node name="Label2" type="Label" parent="TabletFrame/Padding/ContentCanvas/HeaderContainer" unique_id=1876400417]
-mouse_filter = 2
 layout_mode = 2
 theme_override_colors/font_color = Color(0.7, 0.75, 0.8, 1)
 theme_override_font_sizes/font_size = 28
