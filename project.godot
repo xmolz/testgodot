@@ -24,7 +24,7 @@ config/features=PackedStringArray("4.6", "GL Compatibility")
 run/max_fps=60
 boot_splash/bg_color=Color(0.039215688, 0.039215688, 0.05490196, 1)
 boot_splash/show_image=false
-config/icon="res://icon.svg"
+config/icon="res://App Icons/android 432x432.png"
 config/windows_native_icon="res://App Icons/IIRC.ico"
 
 [audio]

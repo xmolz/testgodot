@@ -50,3 +50,4 @@ Builds/
 # that are NOT covered above and you still want to ignore them, add them here.repomix-output.xml
 dingdong/web/test.zip
 dingdong/
+godotpcktool.exe
