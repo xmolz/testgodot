@@ -3,15 +3,17 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://ix560tjg1wj0"
-path="res://.godot/imported/Flash_0003.png-8fa19cf42e091872b026ca8dc1d440aa.ctex"
+path.bptc="res://.godot/imported/Flash_0003.png-8fa19cf42e091872b026ca8dc1d440aa.bptc.ctex"
+path.astc="res://.godot/imported/Flash_0003.png-8fa19cf42e091872b026ca8dc1d440aa.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://Animations/Protag/Flash/Flash_0003.png"
-dest_files=["res://.godot/imported/Flash_0003.png-8fa19cf42e091872b026ca8dc1d440aa.ctex"]
+dest_files=["res://.godot/imported/Flash_0003.png-8fa19cf42e091872b026ca8dc1d440aa.bptc.ctex", "res://.godot/imported/Flash_0003.png-8fa19cf42e091872b026ca8dc1d440aa.astc.ctex"]
 
 [params]
 

@@ -3,15 +3,17 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://blkdav8bil26f"
-path="res://.godot/imported/lewgend_dialogue_sprite.png-9ad7906b667d476e4d079c0884727b7d.ctex"
+path.bptc="res://.godot/imported/lewgend_dialogue_sprite.png-9ad7906b667d476e4d079c0884727b7d.bptc.ctex"
+path.astc="res://.godot/imported/lewgend_dialogue_sprite.png-9ad7906b667d476e4d079c0884727b7d.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://Sprites/dialogue sprites/lewgend_dialogue_sprite.png"
-dest_files=["res://.godot/imported/lewgend_dialogue_sprite.png-9ad7906b667d476e4d079c0884727b7d.ctex"]
+dest_files=["res://.godot/imported/lewgend_dialogue_sprite.png-9ad7906b667d476e4d079c0884727b7d.bptc.ctex", "res://.godot/imported/lewgend_dialogue_sprite.png-9ad7906b667d476e4d079c0884727b7d.astc.ctex"]
 
 [params]
 

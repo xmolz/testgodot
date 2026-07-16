@@ -3,15 +3,17 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dolrnmrmvy8st"
-path="res://.godot/imported/protag_sergey_gown_hand_slipped_in.png-114fac36c50743f2cf28d576f312b13c.ctex"
+path.bptc="res://.godot/imported/protag_sergey_gown_hand_slipped_in.png-114fac36c50743f2cf28d576f312b13c.bptc.ctex"
+path.astc="res://.godot/imported/protag_sergey_gown_hand_slipped_in.png-114fac36c50743f2cf28d576f312b13c.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://Backgrounds/Protagonist/xSergei/protag_sergey_gown_hand_slipped_in.png"
-dest_files=["res://.godot/imported/protag_sergey_gown_hand_slipped_in.png-114fac36c50743f2cf28d576f312b13c.ctex"]
+dest_files=["res://.godot/imported/protag_sergey_gown_hand_slipped_in.png-114fac36c50743f2cf28d576f312b13c.bptc.ctex", "res://.godot/imported/protag_sergey_gown_hand_slipped_in.png-114fac36c50743f2cf28d576f312b13c.astc.ctex"]
 
 [params]
 

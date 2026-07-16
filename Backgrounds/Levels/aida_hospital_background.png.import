@@ -3,15 +3,17 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c7tpcunxymd8g"
-path="res://.godot/imported/aida_hospital_background.png-3ed8305fc93e87b0931fa45dfec074ea.ctex"
+path.bptc="res://.godot/imported/aida_hospital_background.png-3ed8305fc93e87b0931fa45dfec074ea.bptc.ctex"
+path.astc="res://.godot/imported/aida_hospital_background.png-3ed8305fc93e87b0931fa45dfec074ea.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://Backgrounds/Levels/aida_hospital_background.png"
-dest_files=["res://.godot/imported/aida_hospital_background.png-3ed8305fc93e87b0931fa45dfec074ea.ctex"]
+dest_files=["res://.godot/imported/aida_hospital_background.png-3ed8305fc93e87b0931fa45dfec074ea.bptc.ctex", "res://.godot/imported/aida_hospital_background.png-3ed8305fc93e87b0931fa45dfec074ea.astc.ctex"]
 
 [params]
 

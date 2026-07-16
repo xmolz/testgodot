@@ -3,15 +3,17 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://ti7ab4sl2ci0"
-path="res://.godot/imported/sergey_flat_and_embarrassed.PNG-d4b78df33c9c8b1189532ce3deefb43a.ctex"
+path.bptc="res://.godot/imported/sergey_flat_and_embarrassed.PNG-d4b78df33c9c8b1189532ce3deefb43a.bptc.ctex"
+path.astc="res://.godot/imported/sergey_flat_and_embarrassed.PNG-d4b78df33c9c8b1189532ce3deefb43a.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://Backgrounds/Sergey/sergey_flat_and_embarrassed.PNG"
-dest_files=["res://.godot/imported/sergey_flat_and_embarrassed.PNG-d4b78df33c9c8b1189532ce3deefb43a.ctex"]
+dest_files=["res://.godot/imported/sergey_flat_and_embarrassed.PNG-d4b78df33c9c8b1189532ce3deefb43a.bptc.ctex", "res://.godot/imported/sergey_flat_and_embarrassed.PNG-d4b78df33c9c8b1189532ce3deefb43a.astc.ctex"]
 
 [params]
 

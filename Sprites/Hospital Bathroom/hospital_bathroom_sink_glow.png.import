@@ -3,15 +3,17 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://hbjklpou26b6"
-path="res://.godot/imported/hospital_bathroom_sink_glow.png-ffe48f1b6c755676419896ac0791ef9e.ctex"
+path.bptc="res://.godot/imported/hospital_bathroom_sink_glow.png-ffe48f1b6c755676419896ac0791ef9e.bptc.ctex"
+path.astc="res://.godot/imported/hospital_bathroom_sink_glow.png-ffe48f1b6c755676419896ac0791ef9e.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://Sprites/Hospital Bathroom/hospital_bathroom_sink_glow.png"
-dest_files=["res://.godot/imported/hospital_bathroom_sink_glow.png-ffe48f1b6c755676419896ac0791ef9e.ctex"]
+dest_files=["res://.godot/imported/hospital_bathroom_sink_glow.png-ffe48f1b6c755676419896ac0791ef9e.bptc.ctex", "res://.godot/imported/hospital_bathroom_sink_glow.png-ffe48f1b6c755676419896ac0791ef9e.astc.ctex"]
 
 [params]
 

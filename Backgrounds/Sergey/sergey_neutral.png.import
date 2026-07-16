@@ -3,15 +3,17 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dg6a8t20eu1yu"
-path="res://.godot/imported/sergey_neutral.png-d81d24431855fcd376603c51b6d933c1.ctex"
+path.bptc="res://.godot/imported/sergey_neutral.png-d81d24431855fcd376603c51b6d933c1.bptc.ctex"
+path.astc="res://.godot/imported/sergey_neutral.png-d81d24431855fcd376603c51b6d933c1.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://Backgrounds/Sergey/sergey_neutral.png"
-dest_files=["res://.godot/imported/sergey_neutral.png-d81d24431855fcd376603c51b6d933c1.ctex"]
+dest_files=["res://.godot/imported/sergey_neutral.png-d81d24431855fcd376603c51b6d933c1.bptc.ctex", "res://.godot/imported/sergey_neutral.png-d81d24431855fcd376603c51b6d933c1.astc.ctex"]
 
 [params]
 

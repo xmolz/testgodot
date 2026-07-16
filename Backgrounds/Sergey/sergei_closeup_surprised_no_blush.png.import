@@ -3,15 +3,17 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dgy0ed4g4nref"
-path="res://.godot/imported/sergei_closeup_surprised_no_blush.png-203cb5e7cc0e0438b88d4c15ac0fbaa4.ctex"
+path.bptc="res://.godot/imported/sergei_closeup_surprised_no_blush.png-203cb5e7cc0e0438b88d4c15ac0fbaa4.bptc.ctex"
+path.astc="res://.godot/imported/sergei_closeup_surprised_no_blush.png-203cb5e7cc0e0438b88d4c15ac0fbaa4.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://Backgrounds/Sergey/sergei_closeup_surprised_no_blush.png"
-dest_files=["res://.godot/imported/sergei_closeup_surprised_no_blush.png-203cb5e7cc0e0438b88d4c15ac0fbaa4.ctex"]
+dest_files=["res://.godot/imported/sergei_closeup_surprised_no_blush.png-203cb5e7cc0e0438b88d4c15ac0fbaa4.bptc.ctex", "res://.godot/imported/sergei_closeup_surprised_no_blush.png-203cb5e7cc0e0438b88d4c15ac0fbaa4.astc.ctex"]
 
 [params]
 

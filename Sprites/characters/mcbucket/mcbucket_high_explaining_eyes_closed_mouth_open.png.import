@@ -3,15 +3,17 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c0vyquj5afxi"
-path="res://.godot/imported/mcbucket_high_explaining_eyes_closed_mouth_open.png-3b59b09ebadef6e85fab8a5ef0e28552.ctex"
+path.bptc="res://.godot/imported/mcbucket_high_explaining_eyes_closed_mouth_open.png-3b59b09ebadef6e85fab8a5ef0e28552.bptc.ctex"
+path.astc="res://.godot/imported/mcbucket_high_explaining_eyes_closed_mouth_open.png-3b59b09ebadef6e85fab8a5ef0e28552.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://Sprites/characters/mcbucket/mcbucket_high_explaining_eyes_closed_mouth_open.png"
-dest_files=["res://.godot/imported/mcbucket_high_explaining_eyes_closed_mouth_open.png-3b59b09ebadef6e85fab8a5ef0e28552.ctex"]
+dest_files=["res://.godot/imported/mcbucket_high_explaining_eyes_closed_mouth_open.png-3b59b09ebadef6e85fab8a5ef0e28552.bptc.ctex", "res://.godot/imported/mcbucket_high_explaining_eyes_closed_mouth_open.png-3b59b09ebadef6e85fab8a5ef0e28552.astc.ctex"]
 
 [params]
 

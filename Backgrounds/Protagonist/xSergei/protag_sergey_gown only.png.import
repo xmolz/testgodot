@@ -3,15 +3,17 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cvs83tob7jh6c"
-path="res://.godot/imported/protag_sergey_gown only.png-a87dfae95bfeb5987a8770e2d6d56ee0.ctex"
+path.bptc="res://.godot/imported/protag_sergey_gown only.png-a87dfae95bfeb5987a8770e2d6d56ee0.bptc.ctex"
+path.astc="res://.godot/imported/protag_sergey_gown only.png-a87dfae95bfeb5987a8770e2d6d56ee0.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://Backgrounds/Protagonist/xSergei/protag_sergey_gown only.png"
-dest_files=["res://.godot/imported/protag_sergey_gown only.png-a87dfae95bfeb5987a8770e2d6d56ee0.ctex"]
+dest_files=["res://.godot/imported/protag_sergey_gown only.png-a87dfae95bfeb5987a8770e2d6d56ee0.bptc.ctex", "res://.godot/imported/protag_sergey_gown only.png-a87dfae95bfeb5987a8770e2d6d56ee0.astc.ctex"]
 
 [params]
 

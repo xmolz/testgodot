@@ -3,15 +3,17 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c4le6pdm3xefh"
-path="res://.godot/imported/invigirol_icon.png-9df2b29b5f2e07865a95487eda63ccd7.ctex"
+path.bptc="res://.godot/imported/invigirol_icon.png-9df2b29b5f2e07865a95487eda63ccd7.bptc.ctex"
+path.astc="res://.godot/imported/invigirol_icon.png-9df2b29b5f2e07865a95487eda63ccd7.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://Sprites/inventory_items/invigirol_icon.png"
-dest_files=["res://.godot/imported/invigirol_icon.png-9df2b29b5f2e07865a95487eda63ccd7.ctex"]
+dest_files=["res://.godot/imported/invigirol_icon.png-9df2b29b5f2e07865a95487eda63ccd7.bptc.ctex", "res://.godot/imported/invigirol_icon.png-9df2b29b5f2e07865a95487eda63ccd7.astc.ctex"]
 
 [params]
 

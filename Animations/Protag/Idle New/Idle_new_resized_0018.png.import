@@ -3,15 +3,17 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c7hne3706hnsx"
-path="res://.godot/imported/Idle_new_resized_0018.png-180b75f22eb43b343b694f04418382b4.ctex"
+path.bptc="res://.godot/imported/Idle_new_resized_0018.png-180b75f22eb43b343b694f04418382b4.bptc.ctex"
+path.astc="res://.godot/imported/Idle_new_resized_0018.png-180b75f22eb43b343b694f04418382b4.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://Animations/Protag/Idle New/Idle_new_resized_0018.png"
-dest_files=["res://.godot/imported/Idle_new_resized_0018.png-180b75f22eb43b343b694f04418382b4.ctex"]
+dest_files=["res://.godot/imported/Idle_new_resized_0018.png-180b75f22eb43b343b694f04418382b4.bptc.ctex", "res://.godot/imported/Idle_new_resized_0018.png-180b75f22eb43b343b694f04418382b4.astc.ctex"]
 
 [params]
 

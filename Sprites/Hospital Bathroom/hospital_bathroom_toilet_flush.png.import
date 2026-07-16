@@ -3,15 +3,17 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b6l5j3t3qweui"
-path="res://.godot/imported/hospital_bathroom_toilet_flush.png-38416186dc7d2593e2ade904e8c7e76c.ctex"
+path.bptc="res://.godot/imported/hospital_bathroom_toilet_flush.png-38416186dc7d2593e2ade904e8c7e76c.bptc.ctex"
+path.astc="res://.godot/imported/hospital_bathroom_toilet_flush.png-38416186dc7d2593e2ade904e8c7e76c.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://Sprites/Hospital Bathroom/hospital_bathroom_toilet_flush.png"
-dest_files=["res://.godot/imported/hospital_bathroom_toilet_flush.png-38416186dc7d2593e2ade904e8c7e76c.ctex"]
+dest_files=["res://.godot/imported/hospital_bathroom_toilet_flush.png-38416186dc7d2593e2ade904e8c7e76c.bptc.ctex", "res://.godot/imported/hospital_bathroom_toilet_flush.png-38416186dc7d2593e2ade904e8c7e76c.astc.ctex"]
 
 [params]
 

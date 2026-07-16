@@ -3,15 +3,17 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bj1jyu80uwohe"
-path="res://.godot/imported/tubelight.png-35c56c85283407f4faca2d6aa70a09e8.ctex"
+path.bptc="res://.godot/imported/tubelight.png-35c56c85283407f4faca2d6aa70a09e8.bptc.ctex"
+path.astc="res://.godot/imported/tubelight.png-35c56c85283407f4faca2d6aa70a09e8.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://tubelight.png"
-dest_files=["res://.godot/imported/tubelight.png-35c56c85283407f4faca2d6aa70a09e8.ctex"]
+dest_files=["res://.godot/imported/tubelight.png-35c56c85283407f4faca2d6aa70a09e8.bptc.ctex", "res://.godot/imported/tubelight.png-35c56c85283407f4faca2d6aa70a09e8.astc.ctex"]
 
 [params]
 

@@ -3,15 +3,17 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dighmlgepf06h"
-path="res://.godot/imported/mcbucket_high_hand_up.png-11104554300df7fe826644015949cf72.ctex"
+path.bptc="res://.godot/imported/mcbucket_high_hand_up.png-11104554300df7fe826644015949cf72.bptc.ctex"
+path.astc="res://.godot/imported/mcbucket_high_hand_up.png-11104554300df7fe826644015949cf72.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://Sprites/characters/mcbucket/mcbucket_high_hand_up.png"
-dest_files=["res://.godot/imported/mcbucket_high_hand_up.png-11104554300df7fe826644015949cf72.ctex"]
+dest_files=["res://.godot/imported/mcbucket_high_hand_up.png-11104554300df7fe826644015949cf72.bptc.ctex", "res://.godot/imported/mcbucket_high_hand_up.png-11104554300df7fe826644015949cf72.astc.ctex"]
 
 [params]
 

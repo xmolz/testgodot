@@ -1497,17 +1497,13 @@ func show_patreon_button():
 		push_warning("Could not load Patreon logo at res://Icons/patreon_logo.png")
 		return
 
-	# Resize the massive 2048x2048 image down to a clean 96x96 UI icon
-	var img = tex.get_image()
-	if img:
-		img.resize(96, 96, Image.INTERPOLATE_BILINEAR)
-		tex = ImageTexture.create_from_image(img)
-
+	# Set max icon width instead of resizing GPU-compressed textures
 	var custom_font = preload("res://Fonts/VarelaRound-Regular.ttf")
 
 	patreon_btn = Button.new()
 	patreon_btn.text = " Support on Patreon"
 	patreon_btn.icon = tex
+	patreon_btn.add_theme_constant_override("icon_max_width", 96)
 	patreon_btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	patreon_btn.add_theme_constant_override("h_separation", 18) # Space between icon and text
 

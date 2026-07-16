@@ -3,15 +3,17 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bxciean3l46wm"
-path="res://.godot/imported/layla_victory.png-cef37293536fb13e4d8a26cacaf2fb03.ctex"
+path.bptc="res://.godot/imported/layla_victory.png-cef37293536fb13e4d8a26cacaf2fb03.bptc.ctex"
+path.astc="res://.godot/imported/layla_victory.png-cef37293536fb13e4d8a26cacaf2fb03.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://Sprites/characters/layla/layla_victory.png"
-dest_files=["res://.godot/imported/layla_victory.png-cef37293536fb13e4d8a26cacaf2fb03.ctex"]
+dest_files=["res://.godot/imported/layla_victory.png-cef37293536fb13e4d8a26cacaf2fb03.bptc.ctex", "res://.godot/imported/layla_victory.png-cef37293536fb13e4d8a26cacaf2fb03.astc.ctex"]
 
 [params]
 

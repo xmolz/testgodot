@@ -3,15 +3,17 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://d0nk8fqa1flxy"
-path="res://.godot/imported/sergey_eyes_only_looking_away.png-8622c9aa00358ce1c83d159a28725bc8.ctex"
+path.bptc="res://.godot/imported/sergey_eyes_only_looking_away.png-8622c9aa00358ce1c83d159a28725bc8.bptc.ctex"
+path.astc="res://.godot/imported/sergey_eyes_only_looking_away.png-8622c9aa00358ce1c83d159a28725bc8.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://Backgrounds/Sergey/sergey_eyes_only_looking_away.png"
-dest_files=["res://.godot/imported/sergey_eyes_only_looking_away.png-8622c9aa00358ce1c83d159a28725bc8.ctex"]
+dest_files=["res://.godot/imported/sergey_eyes_only_looking_away.png-8622c9aa00358ce1c83d159a28725bc8.bptc.ctex", "res://.godot/imported/sergey_eyes_only_looking_away.png-8622c9aa00358ce1c83d159a28725bc8.astc.ctex"]
 
 [params]
 

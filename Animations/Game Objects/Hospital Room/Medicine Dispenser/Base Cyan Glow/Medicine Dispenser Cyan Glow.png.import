@@ -3,8 +3,8 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bmal4xmi1thmi"
-path.s3tc="res://.godot/imported/Medicine Dispenser Cyan Glow.png-864df2d3f34e298a61db740fb06bbe2e.s3tc.ctex"
-path.etc2="res://.godot/imported/Medicine Dispenser Cyan Glow.png-864df2d3f34e298a61db740fb06bbe2e.etc2.ctex"
+path.bptc="res://.godot/imported/Medicine Dispenser Cyan Glow.png-864df2d3f34e298a61db740fb06bbe2e.bptc.ctex"
+path.astc="res://.godot/imported/Medicine Dispenser Cyan Glow.png-864df2d3f34e298a61db740fb06bbe2e.astc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
@@ -13,7 +13,7 @@ metadata={
 [deps]
 
 source_file="res://Animations/Game Objects/Hospital Room/Medicine Dispenser/Base Cyan Glow/Medicine Dispenser Cyan Glow.png"
-dest_files=["res://.godot/imported/Medicine Dispenser Cyan Glow.png-864df2d3f34e298a61db740fb06bbe2e.s3tc.ctex", "res://.godot/imported/Medicine Dispenser Cyan Glow.png-864df2d3f34e298a61db740fb06bbe2e.etc2.ctex"]
+dest_files=["res://.godot/imported/Medicine Dispenser Cyan Glow.png-864df2d3f34e298a61db740fb06bbe2e.bptc.ctex", "res://.godot/imported/Medicine Dispenser Cyan Glow.png-864df2d3f34e298a61db740fb06bbe2e.astc.ctex"]
 
 [params]
 

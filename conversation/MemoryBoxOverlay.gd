@@ -115,17 +115,13 @@ func _restore_patreon_button():
 	if not tex:
 		return
 
-	var img = tex.get_image()
-	if img:
-		img.resize(96, 96, Image.INTERPOLATE_BILINEAR)
-		tex = ImageTexture.create_from_image(img)
-
 	var custom_font = load("res://Fonts/VarelaRound-Regular.ttf")
 
 	var btn = Button.new()
 	btn.name = "PersistentPatreonBtn"
 	btn.text = " Support on Patreon"
 	btn.icon = tex
+	btn.add_theme_constant_override("icon_max_width", 96)
 	btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	btn.add_theme_constant_override("h_separation", 18)
 

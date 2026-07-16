@@ -3,15 +3,17 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dhtl2e5562emf"
-path="res://.godot/imported/page_one.png-c670139229693625dd3299acd771cb36.ctex"
+path.bptc="res://.godot/imported/page_one.png-c670139229693625dd3299acd771cb36.bptc.ctex"
+path.astc="res://.godot/imported/page_one.png-c670139229693625dd3299acd771cb36.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://Journal Notes/page_one.png"
-dest_files=["res://.godot/imported/page_one.png-c670139229693625dd3299acd771cb36.ctex"]
+dest_files=["res://.godot/imported/page_one.png-c670139229693625dd3299acd771cb36.bptc.ctex", "res://.godot/imported/page_one.png-c670139229693625dd3299acd771cb36.astc.ctex"]
 
 [params]
 

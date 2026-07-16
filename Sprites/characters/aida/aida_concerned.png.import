@@ -3,15 +3,17 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://nvrcangyb1rs"
-path="res://.godot/imported/aida_concerned.png-2f1d703c57f5987218a26d40b13a35a2.ctex"
+path.bptc="res://.godot/imported/aida_concerned.png-2f1d703c57f5987218a26d40b13a35a2.bptc.ctex"
+path.astc="res://.godot/imported/aida_concerned.png-2f1d703c57f5987218a26d40b13a35a2.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://Sprites/characters/aida/aida_concerned.png"
-dest_files=["res://.godot/imported/aida_concerned.png-2f1d703c57f5987218a26d40b13a35a2.ctex"]
+dest_files=["res://.godot/imported/aida_concerned.png-2f1d703c57f5987218a26d40b13a35a2.bptc.ctex", "res://.godot/imported/aida_concerned.png-2f1d703c57f5987218a26d40b13a35a2.astc.ctex"]
 
 [params]
 

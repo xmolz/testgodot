@@ -3,8 +3,8 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://g51yo3gspa4e"
-path.s3tc="res://.godot/imported/protag_sergey_hand_hovering.png-cff9244ea39f18df4474341019a17356.s3tc.ctex"
-path.etc2="res://.godot/imported/protag_sergey_hand_hovering.png-cff9244ea39f18df4474341019a17356.etc2.ctex"
+path.bptc="res://.godot/imported/protag_sergey_hand_hovering.png-cff9244ea39f18df4474341019a17356.bptc.ctex"
+path.astc="res://.godot/imported/protag_sergey_hand_hovering.png-cff9244ea39f18df4474341019a17356.astc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
@@ -13,7 +13,7 @@ metadata={
 [deps]
 
 source_file="res://Backgrounds/Protagonist/xSergei/protag_sergey_hand_hovering.png"
-dest_files=["res://.godot/imported/protag_sergey_hand_hovering.png-cff9244ea39f18df4474341019a17356.s3tc.ctex", "res://.godot/imported/protag_sergey_hand_hovering.png-cff9244ea39f18df4474341019a17356.etc2.ctex"]
+dest_files=["res://.godot/imported/protag_sergey_hand_hovering.png-cff9244ea39f18df4474341019a17356.bptc.ctex", "res://.godot/imported/protag_sergey_hand_hovering.png-cff9244ea39f18df4474341019a17356.astc.ctex"]
 
 [params]
 

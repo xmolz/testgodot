@@ -3,8 +3,8 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://6v2shbe06i71"
-path.s3tc="res://.godot/imported/AIda_idle_0011.png-2b5b877bf338f8749f22b219448d9572.s3tc.ctex"
-path.etc2="res://.godot/imported/AIda_idle_0011.png-2b5b877bf338f8749f22b219448d9572.etc2.ctex"
+path.bptc="res://.godot/imported/AIda_idle_0011.png-2b5b877bf338f8749f22b219448d9572.bptc.ctex"
+path.astc="res://.godot/imported/AIda_idle_0011.png-2b5b877bf338f8749f22b219448d9572.astc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
@@ -13,7 +13,7 @@ metadata={
 [deps]
 
 source_file="res://Animations/AIda/Idle/AIda_idle_0011.png"
-dest_files=["res://.godot/imported/AIda_idle_0011.png-2b5b877bf338f8749f22b219448d9572.s3tc.ctex", "res://.godot/imported/AIda_idle_0011.png-2b5b877bf338f8749f22b219448d9572.etc2.ctex"]
+dest_files=["res://.godot/imported/AIda_idle_0011.png-2b5b877bf338f8749f22b219448d9572.bptc.ctex", "res://.godot/imported/AIda_idle_0011.png-2b5b877bf338f8749f22b219448d9572.astc.ctex"]
 
 [params]
 

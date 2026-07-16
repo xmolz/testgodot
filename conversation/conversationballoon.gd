@@ -310,11 +310,7 @@ func _ready() -> void:
 	var blank_img = Image.create_empty(32, 32, false, Image.FORMAT_RGBA8)
 	_blank_spacer_icon = ImageTexture.create_from_image(blank_img)
 
-	# Hard-resize the exported icons to exactly 32x32 so the layout engine doesn't crush them
-	proceed_icon = _resize_texture(proceed_icon, 32)
-	back_icon = _resize_texture(back_icon, 32)
-	leave_icon = _resize_texture(leave_icon, 32)
-
+	# Preloaded icons are used directly, size capped by theme overrides
 	# --- DYNAMIC TEXT SCALING (PC, Mobile & Marketing) ---
 	if GameManager:
 		if not Settings.text_scale_changed.is_connected(_update_text_scale):
@@ -510,6 +506,7 @@ func apply_dialogue_line() -> void:
 		button.icon = assigned_icon
 		button.expand_icon = false
 		button.icon_alignment = HORIZONTAL_ALIGNMENT_LEFT
+		button.add_theme_constant_override("icon_max_width", 32)
 		button.add_theme_constant_override("h_separation", 12)
 		# --------------------------------------------------------------------------------------
 
@@ -863,13 +860,3 @@ func _update_text_scale(scale_mult: float) -> void:
 			var btn = responses_menu.get_child(i)
 			if btn is Button:
 				btn.add_theme_font_size_override("font_size", resp_size)
-
-
-func _resize_texture(tex: Texture2D, size: int) -> Texture2D:
-	if not is_instance_valid(tex): return null
-	var img = tex.get_image()
-	if img:
-		if img.get_width() != size or img.get_height() != size:
-			img.resize(size, size, Image.INTERPOLATE_BILINEAR)
-		return ImageTexture.create_from_image(img)
-	return tex

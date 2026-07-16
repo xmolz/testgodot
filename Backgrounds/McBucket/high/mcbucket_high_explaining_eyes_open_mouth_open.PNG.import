@@ -3,15 +3,17 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://chk2t6ws5qy3o"
-path="res://.godot/imported/mcbucket_high_explaining_eyes_open_mouth_open.PNG-8c4337b36bd5155e18f9565655d51305.ctex"
+path.bptc="res://.godot/imported/mcbucket_high_explaining_eyes_open_mouth_open.PNG-8c4337b36bd5155e18f9565655d51305.bptc.ctex"
+path.astc="res://.godot/imported/mcbucket_high_explaining_eyes_open_mouth_open.PNG-8c4337b36bd5155e18f9565655d51305.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://Backgrounds/McBucket/high/mcbucket_high_explaining_eyes_open_mouth_open.PNG"
-dest_files=["res://.godot/imported/mcbucket_high_explaining_eyes_open_mouth_open.PNG-8c4337b36bd5155e18f9565655d51305.ctex"]
+dest_files=["res://.godot/imported/mcbucket_high_explaining_eyes_open_mouth_open.PNG-8c4337b36bd5155e18f9565655d51305.bptc.ctex", "res://.godot/imported/mcbucket_high_explaining_eyes_open_mouth_open.PNG-8c4337b36bd5155e18f9565655d51305.astc.ctex"]
 
 [params]
 

@@ -3,15 +3,17 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://3nal5rii5ei5"
-path="res://.godot/imported/lewgend_hand_on_chest.png-350458ca57208eebb2151adf84c02af5.ctex"
+path.bptc="res://.godot/imported/lewgend_hand_on_chest.png-350458ca57208eebb2151adf84c02af5.bptc.ctex"
+path.astc="res://.godot/imported/lewgend_hand_on_chest.png-350458ca57208eebb2151adf84c02af5.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://Sprites/characters/lewgend/lewgend_hand_on_chest.png"
-dest_files=["res://.godot/imported/lewgend_hand_on_chest.png-350458ca57208eebb2151adf84c02af5.ctex"]
+dest_files=["res://.godot/imported/lewgend_hand_on_chest.png-350458ca57208eebb2151adf84c02af5.bptc.ctex", "res://.godot/imported/lewgend_hand_on_chest.png-350458ca57208eebb2151adf84c02af5.astc.ctex"]
 
 [params]
 

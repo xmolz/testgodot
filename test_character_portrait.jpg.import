@@ -3,15 +3,17 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cfcg5pjkfv2av"
-path="res://.godot/imported/test_character_portrait.jpg-a085600012bb2a55cf2c62058f11336a.ctex"
+path.bptc="res://.godot/imported/test_character_portrait.jpg-a085600012bb2a55cf2c62058f11336a.bptc.ctex"
+path.astc="res://.godot/imported/test_character_portrait.jpg-a085600012bb2a55cf2c62058f11336a.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://test_character_portrait.jpg"
-dest_files=["res://.godot/imported/test_character_portrait.jpg-a085600012bb2a55cf2c62058f11336a.ctex"]
+dest_files=["res://.godot/imported/test_character_portrait.jpg-a085600012bb2a55cf2c62058f11336a.bptc.ctex", "res://.godot/imported/test_character_portrait.jpg-a085600012bb2a55cf2c62058f11336a.astc.ctex"]
 
 [params]
 

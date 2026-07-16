@@ -3,15 +3,17 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dxrfme6ebfa8c"
-path="res://.godot/imported/hospital bed.png-f565b83963b39be8f45d3ff37b0a9df6.ctex"
+path.bptc="res://.godot/imported/hospital bed.png-f565b83963b39be8f45d3ff37b0a9df6.bptc.ctex"
+path.astc="res://.godot/imported/hospital bed.png-f565b83963b39be8f45d3ff37b0a9df6.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://hospital bed.png"
-dest_files=["res://.godot/imported/hospital bed.png-f565b83963b39be8f45d3ff37b0a9df6.ctex"]
+dest_files=["res://.godot/imported/hospital bed.png-f565b83963b39be8f45d3ff37b0a9df6.bptc.ctex", "res://.godot/imported/hospital bed.png-f565b83963b39be8f45d3ff37b0a9df6.astc.ctex"]
 
 [params]
 

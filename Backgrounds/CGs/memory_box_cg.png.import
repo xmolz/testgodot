@@ -3,15 +3,17 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://uws8sgpdpokv"
-path="res://.godot/imported/memory_box_cg.png-529915648611c56a26a6f3768fa2b901.ctex"
+path.bptc="res://.godot/imported/memory_box_cg.png-529915648611c56a26a6f3768fa2b901.bptc.ctex"
+path.astc="res://.godot/imported/memory_box_cg.png-529915648611c56a26a6f3768fa2b901.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://Backgrounds/CGs/memory_box_cg.png"
-dest_files=["res://.godot/imported/memory_box_cg.png-529915648611c56a26a6f3768fa2b901.ctex"]
+dest_files=["res://.godot/imported/memory_box_cg.png-529915648611c56a26a6f3768fa2b901.bptc.ctex", "res://.godot/imported/memory_box_cg.png-529915648611c56a26a6f3768fa2b901.astc.ctex"]
 
 [params]
 

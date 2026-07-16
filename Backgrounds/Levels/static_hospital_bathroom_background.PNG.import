@@ -3,15 +3,17 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cigj6loe88g6u"
-path="res://.godot/imported/static_hospital_bathroom_background.PNG-c667b8b6ac38ac14bb5671e4ee80e81c.ctex"
+path.bptc="res://.godot/imported/static_hospital_bathroom_background.PNG-c667b8b6ac38ac14bb5671e4ee80e81c.bptc.ctex"
+path.astc="res://.godot/imported/static_hospital_bathroom_background.PNG-c667b8b6ac38ac14bb5671e4ee80e81c.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://Backgrounds/Levels/static_hospital_bathroom_background.PNG"
-dest_files=["res://.godot/imported/static_hospital_bathroom_background.PNG-c667b8b6ac38ac14bb5671e4ee80e81c.ctex"]
+dest_files=["res://.godot/imported/static_hospital_bathroom_background.PNG-c667b8b6ac38ac14bb5671e4ee80e81c.bptc.ctex", "res://.godot/imported/static_hospital_bathroom_background.PNG-c667b8b6ac38ac14bb5671e4ee80e81c.astc.ctex"]
 
 [params]
 

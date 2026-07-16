@@ -3,15 +3,17 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b1t1oh7cn1mgl"
-path="res://.godot/imported/sm1_sensei_blush.png-b0b1e7d61a159638a891a35f44cfacc4.ctex"
+path.bptc="res://.godot/imported/sm1_sensei_blush.png-b0b1e7d61a159638a891a35f44cfacc4.bptc.ctex"
+path.astc="res://.godot/imported/sm1_sensei_blush.png-b0b1e7d61a159638a891a35f44cfacc4.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://Sprites/characters/malcolm/sm1_sensei_blush.png"
-dest_files=["res://.godot/imported/sm1_sensei_blush.png-b0b1e7d61a159638a891a35f44cfacc4.ctex"]
+dest_files=["res://.godot/imported/sm1_sensei_blush.png-b0b1e7d61a159638a891a35f44cfacc4.bptc.ctex", "res://.godot/imported/sm1_sensei_blush.png-b0b1e7d61a159638a891a35f44cfacc4.astc.ctex"]
 
 [params]
 

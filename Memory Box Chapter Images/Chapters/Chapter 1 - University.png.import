@@ -3,15 +3,17 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://se0r37m0vxma"
-path="res://.godot/imported/Chapter 1 - University.png-0dba5c38d1e33a85f545cb4fed9364d5.ctex"
+path.bptc="res://.godot/imported/Chapter 1 - University.png-0dba5c38d1e33a85f545cb4fed9364d5.bptc.ctex"
+path.astc="res://.godot/imported/Chapter 1 - University.png-0dba5c38d1e33a85f545cb4fed9364d5.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://Memory Box Chapter Images/Chapters/Chapter 1 - University.png"
-dest_files=["res://.godot/imported/Chapter 1 - University.png-0dba5c38d1e33a85f545cb4fed9364d5.ctex"]
+dest_files=["res://.godot/imported/Chapter 1 - University.png-0dba5c38d1e33a85f545cb4fed9364d5.bptc.ctex", "res://.godot/imported/Chapter 1 - University.png-0dba5c38d1e33a85f545cb4fed9364d5.astc.ctex"]
 
 [params]
 

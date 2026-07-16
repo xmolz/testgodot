@@ -3,15 +3,17 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bt5bjupru8val"
-path="res://.godot/imported/hospital_bathroom_commode_error_glow.png-aa8a8300f1a091c3ccd95dd89358fb9e.ctex"
+path.bptc="res://.godot/imported/hospital_bathroom_commode_error_glow.png-aa8a8300f1a091c3ccd95dd89358fb9e.bptc.ctex"
+path.astc="res://.godot/imported/hospital_bathroom_commode_error_glow.png-aa8a8300f1a091c3ccd95dd89358fb9e.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://Sprites/Hospital Bathroom/hospital_bathroom_commode_error_glow.png"
-dest_files=["res://.godot/imported/hospital_bathroom_commode_error_glow.png-aa8a8300f1a091c3ccd95dd89358fb9e.ctex"]
+dest_files=["res://.godot/imported/hospital_bathroom_commode_error_glow.png-aa8a8300f1a091c3ccd95dd89358fb9e.bptc.ctex", "res://.godot/imported/hospital_bathroom_commode_error_glow.png-aa8a8300f1a091c3ccd95dd89358fb9e.astc.ctex"]
 
 [params]
 
