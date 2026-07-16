@@ -49,3 +49,4 @@ Builds/
 # Optional: If you had specific files in your local .gitignore (like 'my_secret_file.txt' from my example)
 # that are NOT covered above and you still want to ignore them, add them here.repomix-output.xml
 dingdong/web/test.zip
+dingdong/
