@@ -35,6 +35,7 @@ else:
 
 # This requests the state change via the ConversationEventManager bus to force his state to 2 (INVIGIROL/Hyper)
 do ConversationEventManager.request_mcbucket_state(2)
+do Flags.set_level_flag("mcbucket_state_from_flash", true)
 
 => END
 

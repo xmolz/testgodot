@@ -51,7 +51,6 @@ do actor_change("Layla", "proud")
 Layla: Oh, well, you know, just trying to keep my spirits up.
 do actor_change("Layla", "angry_1")
 Layla: Kinda hard, though... you know?
-do actor_change("Layla", "angry_2")
 Layla: Since you decided to give your protagonist bigger titties than me!
 do actor_change("Layla", "pout")
 do actor_change("Lewgend", "embarrassed")

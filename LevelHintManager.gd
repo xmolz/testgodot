@@ -11,7 +11,8 @@ func evaluate_hint() -> String:
 	var in_bathroom = is_instance_valid(GameManager.player_node) and GameManager.player_node.global_position.y > 1000.0
 
 	var has_any_drug = Inventory.has_item("zanopram") or Inventory.has_item("cannathink") or Inventory.has_item("invigirol")
-	var used_any_drug = Flags.get_level_flag("mcbucket_zanopram_used") or Flags.get_level_flag("mcbucket_cannathink_used") or Flags.get_level_flag("mcbucket_invigirol_used")
+	var state_from_flash = Flags.get_level_flag("mcbucket_state_from_flash")
+	var used_any_drug = (Flags.get_level_flag("mcbucket_zanopram_used") or Flags.get_level_flag("mcbucket_cannathink_used") or Flags.get_level_flag("mcbucket_invigirol_used")) and not state_from_flash
 	var cabinet_raided = has_any_drug or used_any_drug
 
 	# ==========================================
@@ -24,7 +25,7 @@ func evaluate_hint() -> String:
 		if needs_meds:
 			return "hint_return_to_sergey"
 
-	if Flags.get_level_flag("mcbucket_cannathink_used") or Flags.get_level_flag("mcbucket_invigirol_used"):
+	if (Flags.get_level_flag("mcbucket_cannathink_used") or Flags.get_level_flag("mcbucket_invigirol_used")) and not state_from_flash:
 		if needs_meds: return "hint_wrong_drugs"
 		else: return "hint_wrong_drugs_no_context"
 

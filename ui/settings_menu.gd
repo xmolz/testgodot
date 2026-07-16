@@ -76,7 +76,15 @@ func _ready():
 		var auto_mapped = remap(Settings.auto_time_delay, 0.125, 1.75, 1.0, 10.0)
 		auto_delay_slider.value = round(auto_mapped)
 
-		text_scale_slider.value = round((Settings.dialogue_text_scale - 0.5) * 10.0)
+		var current_scale = Settings.dialogue_text_scale
+		if OS.has_feature("mobile"):
+			current_scale = clamp(current_scale, 0.6, 1.1)
+			if current_scale <= 1.0:
+				text_scale_slider.value = round(remap(current_scale, 0.6, 1.0, 1.0, 5.0))
+			else:
+				text_scale_slider.value = round(remap(current_scale, 1.0, 1.1, 5.0, 10.0))
+		else:
+			text_scale_slider.value = round((current_scale - 0.5) * 10.0)
 
 		_update_instant_text_visuals(Settings.instant_text)
 		_update_auto_forward_visuals(Settings.is_auto_playing)
@@ -256,7 +264,13 @@ func _on_auto_delay_changed(value: float):
 func _on_text_scale_changed(value: float):
 	_update_labels()
 	if GameManager:
-		Settings.dialogue_text_scale = 0.5 + (value * 0.1)
+		if OS.has_feature("mobile"):
+			if value <= 5.0:
+				Settings.dialogue_text_scale = remap(value, 1.0, 5.0, 0.6, 1.0)
+			else:
+				Settings.dialogue_text_scale = remap(value, 5.0, 10.0, 1.0, 1.1)
+		else:
+			Settings.dialogue_text_scale = 0.5 + (value * 0.1)
 
 func _on_assisted_mode_pressed():
 	if SoundManager: SoundManager.play_sfx("ui_click")

@@ -76,12 +76,11 @@ var _base_ambience_volume: float = 0.0
 # --- Initialization ---
 func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	# Capture the Ambience bus index and its default volume so we can restore it later
-	_ambience_bus_index = AudioServer.get_bus_index("Ambience")
-	if _ambience_bus_index != -1:
-		_base_ambience_volume = AudioServer.get_bus_volume_db(_ambience_bus_index)
 
 	# --- MOBILE AUDIO ENHANCEMENT ---
+	# Must run BEFORE _base_ambience_volume is captured below, otherwise the
+	# ambience duck/restore cycle would restore to the un-boosted level and
+	# silently undo the mobile boost.
 	if OS.has_feature("mobile"):
 		var master_bus_idx = AudioServer.get_bus_index("Master")
 		if master_bus_idx != -1:
@@ -93,6 +92,18 @@ func _ready():
 			compressor.ratio = 3.0
 			compressor.release_ms = 250.0
 			AudioServer.add_bus_effect(master_bus_idx, compressor)
+
+		# Phone speakers swallow low frequencies; give the quiet diegetic
+		# layers extra headroom on top of the Master boost.
+		for quiet_bus_name in ["Footsteps", "Ambience", "looping sfx"]:
+			var quiet_idx = AudioServer.get_bus_index(quiet_bus_name)
+			if quiet_idx != -1:
+				AudioServer.set_bus_volume_db(quiet_idx, AudioServer.get_bus_volume_db(quiet_idx) + 3.0)
+
+	# Capture the Ambience bus index and its default volume so we can restore it later
+	_ambience_bus_index = AudioServer.get_bus_index("Ambience")
+	if _ambience_bus_index != -1:
+		_base_ambience_volume = AudioServer.get_bus_volume_db(_ambience_bus_index)
 
 func _initialize_music_player():
 	if is_instance_valid(_music_player):

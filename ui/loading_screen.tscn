@@ -21,10 +21,41 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
-[node name="LoadingScreen" type="CanvasLayer"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_normal"]
+bg_color = Color(0.0666667, 0.133333, 0.109804, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.403922, 0.831373, 0.713725, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_pressed"]
+bg_color = Color(0.403922, 0.831373, 0.713725, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_hover"]
+bg_color = Color(0.109804, 0.219608, 0.180392, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.835294, 0.94902, 0.572549, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="LoadingScreen" type="CanvasLayer" unique_id=227702973]
 script = ExtResource("1_script")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Background" type="ColorRect" parent="." unique_id=406422016]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -32,28 +63,131 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.101961, 0.101961, 0.101961, 1)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
+[node name="Layout" type="MarginContainer" parent="." unique_id=902330197]
+anchors_preset = 15
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -600.0
-offset_top = -200.0
-offset_right = 600.0
-offset_bottom = -100.0
 grow_horizontal = 2
-grow_vertical = 0
-theme_override_constants/separation = 10
+grow_vertical = 2
+theme_override_constants/margin_left = 80
+theme_override_constants/margin_top = 36
+theme_override_constants/margin_right = 80
+theme_override_constants/margin_bottom = 40
 
-[node name="LoadingInfoLabel" type="Label" parent="VBoxContainer"]
+[node name="Column" type="VBoxContainer" parent="Layout" unique_id=1877675655]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TitleLabel" type="Label" parent="Layout/Column" unique_id=1839285065]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.403922, 0.831373, 0.713725, 1)
+theme_override_font_sizes/font_size = 42
+text = "DEMO BUILD"
+horizontal_alignment = 1
+
+[node name="BodyLabel" type="Label" parent="Layout/Column" unique_id=229870346]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.87, 0.87, 0.87, 1)
+theme_override_font_sizes/font_size = 22
+text = "This 25-40 minute demo showcases the core game loop. Story, characters, and setting details may evolve in future releases - the heart of the game will stay the same.
+
+The main love interests don't appear in this demo, so here's a sneak peek. Four more will join them later, and patrons vote on who they'll be."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="SpacerTop" type="Control" parent="Layout/Column" unique_id=1402588826]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.5
+
+[node name="CaptionLabel" type="Label" parent="Layout/Column" unique_id=981626314]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.835294, 0.94902, 0.572549, 1)
+theme_override_font_sizes/font_size = 26
+text = "SNEAK PEEK - THE LOVE INTERESTS"
+horizontal_alignment = 1
+
+[node name="PortraitRow" type="HBoxContainer" parent="Layout/Column" unique_id=1844888947]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 3.0
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="PatronLabel" type="Label" parent="Layout/Column" unique_id=517687307]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+theme_override_font_sizes/font_size = 20
+text = "Patrons vote on upcoming love interests."
+horizontal_alignment = 1
+
+[node name="SpacerBottom" type="Control" parent="Layout/Column" unique_id=174422449]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.5
+
+[node name="BottomSlot" type="Control" parent="Layout/Column" unique_id=1735606071]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+
+[node name="LoadingBox" type="VBoxContainer" parent="Layout/Column/BottomSlot" unique_id=1267402072]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="LoadingInfoLabel" type="Label" parent="Layout/Column/BottomSlot/LoadingBox" unique_id=294928958]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Loading..."
 horizontal_alignment = 1
 
-[node name="ProgressBar" type="ProgressBar" parent="VBoxContainer"]
+[node name="ProgressBar" type="ProgressBar" parent="Layout/Column/BottomSlot/LoadingBox" unique_id=1503107734]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_bg")
 theme_override_styles/fill = SubResource("StyleBoxFlat_fill")
+
+[node name="ContinueBox" type="VBoxContainer" parent="Layout/Column/BottomSlot" unique_id=1378926799]
+visible = false
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="AgeAckLabel" type="Label" parent="Layout/Column/BottomSlot/ContinueBox" unique_id=425800280]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.75, 0.75, 1)
+theme_override_font_sizes/font_size = 18
+text = "By continuing, you confirm that you are 18 or older."
+horizontal_alignment = 1
+
+[node name="ButtonSlot" type="CenterContainer" parent="Layout/Column/BottomSlot/ContinueBox" unique_id=1596854976]
+layout_mode = 2
+
+[node name="ContinueButton" type="Button" parent="Layout/Column/BottomSlot/ContinueBox/ButtonSlot" unique_id=783211227]
+custom_minimum_size = Vector2(380, 52)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.403922, 0.831373, 0.713725, 1)
+theme_override_colors/font_pressed_color = Color(0.0666667, 0.133333, 0.109804, 1)
+theme_override_colors/font_hover_color = Color(0.835294, 0.94902, 0.572549, 1)
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_btn_hover")
+text = "Continue"
+
+[node name="FooterLabel" type="Label" parent="Layout/Column" unique_id=892599444]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.55, 0.55, 1)
+theme_override_font_sizes/font_size = 15
+text = "This game contains adult content intended for audiences 18+. All characters depicted in sexual content are 18 years of age or older. All characters are fictional. All content complies with Patreon's content guidelines."
+horizontal_alignment = 1
+autowrap_mode = 3

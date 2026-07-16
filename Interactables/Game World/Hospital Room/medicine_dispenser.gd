@@ -22,11 +22,37 @@ var _target_drug_scale: Vector2
 
 func _ready():
 	_update_screen_visuals("normal")
-	
+
 	if drug_display:
 		# 1. Capture the scale you set in the Inspector BEFORE hiding it
 		_target_drug_scale = drug_display.scale
 		drug_display.visible = false
+
+	# React when McBucket's state is changed by conversation events (e.g. a
+	# successful flash) and not only by drugs used directly on the dispenser.
+	if not ConversationEventManager.mcbucket_state_change_requested.is_connected(_on_mcbucket_state_change):
+		ConversationEventManager.mcbucket_state_change_requested.connect(_on_mcbucket_state_change)
+
+	# Sync the vitals screen with McBucket's saved state on load, mirroring the
+	# flag checks in mcbucket.gd (same priority order).
+	await get_tree().process_frame
+	if Flags.get_level_flag("mcbucket_cannathink_used"):
+		_update_screen_visuals("cannathink")
+	elif Flags.get_level_flag("mcbucket_invigirol_used"):
+		_update_screen_visuals("invigirol")
+	elif Flags.get_level_flag("mcbucket_zanopram_used"):
+		_update_screen_visuals("zanopram")
+
+func _on_mcbucket_state_change(new_state: int):
+	# McBucket's State enum: 0 = IDLE, 1 = HIGH (cannathink), 2 = INVIGIROL,
+	# 3 = SLEEPING (zanopram). Update the vitals screen only — no dispensing
+	# animation and no drug-pop sprite, because nothing was dispensed; the
+	# patient's state changed by other means.
+	match new_state:
+		0: _update_screen_visuals("normal")
+		1: _update_screen_visuals("cannathink")
+		2: _update_screen_visuals("invigirol")
+		3: _update_screen_visuals("zanopram")
 
 func on_drug_used(_item_id: String):
 	print("Dispenser: Request to use '%s'." % _item_id)
@@ -36,7 +62,9 @@ func on_drug_used(_item_id: String):
 		return
 	
 	current_state = State.IN_USE
-	
+	# A real drug is being dispensed — McBucket's state no longer comes from a flash.
+	Flags.set_level_flag("mcbucket_state_from_flash", false)
+
 	if anim_player_glow: anim_player_glow.play("in_use")
 	if anim_player_sprite: anim_player_sprite.play("in_use")
 	

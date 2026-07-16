@@ -316,27 +316,10 @@ func _ready() -> void:
 	leave_icon = _resize_texture(leave_icon, 32)
 
 	# --- DYNAMIC TEXT SCALING (PC, Mobile & Marketing) ---
-	var scale_mult: float = Settings.dialogue_text_scale if GameManager else 1.0
-
-	var base_diag_size = 44 if OS.has_feature("mobile") else 28
-	var base_name_size = 44 if OS.has_feature("mobile") else 30
-	var base_resp_size = 38 if OS.has_feature("mobile") else 28
-
-	var diag_size = int(base_diag_size * scale_mult)
-	var name_size = int(base_name_size * scale_mult)
-	var resp_size = int(base_resp_size * scale_mult)
-
-	dialogue_label.add_theme_font_size_override("normal_font_size", diag_size)
-	dialogue_label.add_theme_font_size_override("bold_font_size", diag_size)
-	dialogue_label.add_theme_font_size_override("italics_font_size", diag_size)
-	dialogue_label.add_theme_font_size_override("bold_italics_font_size", diag_size)
-
-	character_label.add_theme_font_size_override("normal_font_size", name_size)
-	character_label.add_theme_font_size_override("bold_font_size", name_size)
-
-	var template_btn_ref = responses_menu.response_template as Button
-	if template_btn_ref:
-		template_btn_ref.add_theme_font_size_override("font_size", resp_size)
+	if GameManager:
+		if not Settings.text_scale_changed.is_connected(_update_text_scale):
+			Settings.text_scale_changed.connect(_update_text_scale)
+	_update_text_scale(Settings.dialogue_text_scale if GameManager else 1.0)
 
 
 func _unhandled_input(_event: InputEvent) -> void:
@@ -855,6 +838,32 @@ func _on_menu_button_pressed() -> void:
 		GameManager.pause_menu_ui.toggle_pause()
 
 #endregion
+
+func _update_text_scale(scale_mult: float) -> void:
+	var base_diag_size = 44 if OS.has_feature("mobile") else 28
+	var base_name_size = 44 if OS.has_feature("mobile") else 30
+	var base_resp_size = 38 if OS.has_feature("mobile") else 28
+
+	var diag_size = int(base_diag_size * scale_mult)
+	var name_size = int(base_name_size * scale_mult)
+	var resp_size = int(base_resp_size * scale_mult)
+
+	if is_instance_valid(dialogue_label):
+		dialogue_label.add_theme_font_size_override("normal_font_size", diag_size)
+		dialogue_label.add_theme_font_size_override("bold_font_size", diag_size)
+		dialogue_label.add_theme_font_size_override("italics_font_size", diag_size)
+		dialogue_label.add_theme_font_size_override("bold_italics_font_size", diag_size)
+
+	if is_instance_valid(character_label):
+		character_label.add_theme_font_size_override("normal_font_size", name_size)
+		character_label.add_theme_font_size_override("bold_font_size", name_size)
+
+	if is_instance_valid(responses_menu):
+		for i in range(responses_menu.get_child_count()):
+			var btn = responses_menu.get_child(i)
+			if btn is Button:
+				btn.add_theme_font_size_override("font_size", resp_size)
+
 
 func _resize_texture(tex: Texture2D, size: int) -> Texture2D:
 	if not is_instance_valid(tex): return null

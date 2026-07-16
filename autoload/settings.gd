@@ -3,13 +3,17 @@ extends Node
 
 signal auto_forward_toggled(is_on: bool)
 signal fullscreen_toggled(is_on: bool)
+signal text_scale_changed(new_scale: float)
 
 const SETTINGS_FILE_PATH = "user://settings.cfg"
 
 # --- Dialogue text ---
 var text_speed: float = 0.02
 var instant_text: bool = false
-var dialogue_text_scale: float = 1.0
+var dialogue_text_scale: float = 1.0:
+	set(val):
+		dialogue_text_scale = val
+		text_scale_changed.emit(val)
 var auto_time_delay: float = 0.486
 var is_auto_playing: bool = false:
 	set(val):
@@ -67,7 +71,12 @@ func load_settings():
 	set_bus_volume("SFX", clampf(float(cfg.get_value("audio", "sfx", get_bus_volume("SFX"))), 0.0, 1.0))
 	text_speed = clampf(float(cfg.get_value("dialogue", "text_speed", text_speed)), 0.005, 0.05)
 	instant_text = bool(cfg.get_value("dialogue", "instant_text", instant_text))
-	dialogue_text_scale = clampf(float(cfg.get_value("dialogue", "text_scale", dialogue_text_scale)), 0.5, 1.5)
+	
+	if OS.has_feature("mobile"):
+		dialogue_text_scale = clampf(float(cfg.get_value("dialogue", "text_scale", dialogue_text_scale)), 0.6, 1.1)
+	else:
+		dialogue_text_scale = clampf(float(cfg.get_value("dialogue", "text_scale", dialogue_text_scale)), 0.5, 1.5)
+		
 	is_auto_playing = bool(cfg.get_value("dialogue", "auto_forward", is_auto_playing))
 	auto_time_delay = clampf(float(cfg.get_value("dialogue", "auto_delay", auto_time_delay)), 0.125, 1.75)
 	assisted_mode = bool(cfg.get_value("gameplay", "assisted_mode", assisted_mode))
