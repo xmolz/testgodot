@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://jnvkqqbwrd5s"
-path.bptc="res://.godot/imported/android 192x192.png-7a5306e61319f26e56985021431585c8.bptc.ctex"
-path.astc="res://.godot/imported/android 192x192.png-7a5306e61319f26e56985021431585c8.astc.ctex"
+path="res://.godot/imported/android 192x192.png-7a5306e61319f26e56985021431585c8.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://App Icons/android 192x192.png"
-dest_files=["res://.godot/imported/android 192x192.png-7a5306e61319f26e56985021431585c8.bptc.ctex", "res://.godot/imported/android 192x192.png-7a5306e61319f26e56985021431585c8.astc.ctex"]
+dest_files=["res://.godot/imported/android 192x192.png-7a5306e61319f26e56985021431585c8.ctex"]
 
 [params]
 

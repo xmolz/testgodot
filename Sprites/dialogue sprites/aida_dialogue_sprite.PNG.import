@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b20vg4n5xt8u3"
-path.bptc="res://.godot/imported/aida_dialogue_sprite.PNG-17263712c5d124402eb19366f04f0838.bptc.ctex"
-path.astc="res://.godot/imported/aida_dialogue_sprite.PNG-17263712c5d124402eb19366f04f0838.astc.ctex"
+path="res://.godot/imported/aida_dialogue_sprite.PNG-17263712c5d124402eb19366f04f0838.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Sprites/dialogue sprites/aida_dialogue_sprite.PNG"
-dest_files=["res://.godot/imported/aida_dialogue_sprite.PNG-17263712c5d124402eb19366f04f0838.bptc.ctex", "res://.godot/imported/aida_dialogue_sprite.PNG-17263712c5d124402eb19366f04f0838.astc.ctex"]
+dest_files=["res://.godot/imported/aida_dialogue_sprite.PNG-17263712c5d124402eb19366f04f0838.ctex"]
 
 [params]
 

@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dgk0sdf4tcs83"
-path.bptc="res://.godot/imported/sergey_frown.png-77348850f70ea29a2cf1a215f8c68351.bptc.ctex"
-path.astc="res://.godot/imported/sergey_frown.png-77348850f70ea29a2cf1a215f8c68351.astc.ctex"
+path="res://.godot/imported/sergey_frown.png-77348850f70ea29a2cf1a215f8c68351.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Sprites/characters/sergey/sergey_frown.png"
-dest_files=["res://.godot/imported/sergey_frown.png-77348850f70ea29a2cf1a215f8c68351.bptc.ctex", "res://.godot/imported/sergey_frown.png-77348850f70ea29a2cf1a215f8c68351.astc.ctex"]
+dest_files=["res://.godot/imported/sergey_frown.png-77348850f70ea29a2cf1a215f8c68351.ctex"]
 
 [params]
 
@@ -38,5 +36,5 @@ process/premult_alpha=false
 process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
-process/size_limit=0
+process/size_limit=1920
 detect_3d/compress_to=1

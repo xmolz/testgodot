@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://nxyxqna2oq6d"
-path.bptc="res://.godot/imported/intro_silhouette.png-9f14dfc2a25672c34656414a18833c79.bptc.ctex"
-path.astc="res://.godot/imported/intro_silhouette.png-9f14dfc2a25672c34656414a18833c79.astc.ctex"
+path="res://.godot/imported/intro_silhouette.png-9f14dfc2a25672c34656414a18833c79.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Backgrounds/intro_silhouette.png"
-dest_files=["res://.godot/imported/intro_silhouette.png-9f14dfc2a25672c34656414a18833c79.bptc.ctex", "res://.godot/imported/intro_silhouette.png-9f14dfc2a25672c34656414a18833c79.astc.ctex"]
+dest_files=["res://.godot/imported/intro_silhouette.png-9f14dfc2a25672c34656414a18833c79.ctex"]
 
 [params]
 

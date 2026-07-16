@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cm2ox64kxa7v6"
-path.bptc="res://.godot/imported/walk_new_resized_0004.png-89a844a8571e1513df2f0fe144e69dad.bptc.ctex"
-path.astc="res://.godot/imported/walk_new_resized_0004.png-89a844a8571e1513df2f0fe144e69dad.astc.ctex"
+path="res://.godot/imported/walk_new_resized_0004.png-89a844a8571e1513df2f0fe144e69dad.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Animations/Protag/Walk New Resized/walk_new_resized_0004.png"
-dest_files=["res://.godot/imported/walk_new_resized_0004.png-89a844a8571e1513df2f0fe144e69dad.bptc.ctex", "res://.godot/imported/walk_new_resized_0004.png-89a844a8571e1513df2f0fe144e69dad.astc.ctex"]
+dest_files=["res://.godot/imported/walk_new_resized_0004.png-89a844a8571e1513df2f0fe144e69dad.ctex"]
 
 [params]
 

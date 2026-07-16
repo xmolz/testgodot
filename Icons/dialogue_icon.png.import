@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dw8y5fa5osigw"
-path.bptc="res://.godot/imported/dialogue_icon.png-0d274a3c8f87effd780fa9d2e9f8353f.bptc.ctex"
-path.astc="res://.godot/imported/dialogue_icon.png-0d274a3c8f87effd780fa9d2e9f8353f.astc.ctex"
+path="res://.godot/imported/dialogue_icon.png-0d274a3c8f87effd780fa9d2e9f8353f.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Icons/dialogue_icon.png"
-dest_files=["res://.godot/imported/dialogue_icon.png-0d274a3c8f87effd780fa9d2e9f8353f.bptc.ctex", "res://.godot/imported/dialogue_icon.png-0d274a3c8f87effd780fa9d2e9f8353f.astc.ctex"]
+dest_files=["res://.godot/imported/dialogue_icon.png-0d274a3c8f87effd780fa9d2e9f8353f.ctex"]
 
 [params]
 

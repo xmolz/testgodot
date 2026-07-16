@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c7fta1fbm43hf"
-path.bptc="res://.godot/imported/up_arrow.png-1c80abe10f402f4a4eef78eb2e54f7cf.bptc.ctex"
-path.astc="res://.godot/imported/up_arrow.png-1c80abe10f402f4a4eef78eb2e54f7cf.astc.ctex"
+path="res://.godot/imported/up_arrow.png-1c80abe10f402f4a4eef78eb2e54f7cf.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Icons/up_arrow.png"
-dest_files=["res://.godot/imported/up_arrow.png-1c80abe10f402f4a4eef78eb2e54f7cf.bptc.ctex", "res://.godot/imported/up_arrow.png-1c80abe10f402f4a4eef78eb2e54f7cf.astc.ctex"]
+dest_files=["res://.godot/imported/up_arrow.png-1c80abe10f402f4a4eef78eb2e54f7cf.ctex"]
 
 [params]
 

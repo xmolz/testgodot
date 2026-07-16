@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://ccvfleb4jlin5"
-path.bptc="res://.godot/imported/Hj-frames-new_0011.png-70f24372696fd687dbee3ffe8c48aede.bptc.ctex"
-path.astc="res://.godot/imported/Hj-frames-new_0011.png-70f24372696fd687dbee3ffe8c48aede.astc.ctex"
+path="res://.godot/imported/Hj-frames-new_0011.png-70f24372696fd687dbee3ffe8c48aede.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Animations/Hj frames new/Hj-frames-new_0011.png"
-dest_files=["res://.godot/imported/Hj-frames-new_0011.png-70f24372696fd687dbee3ffe8c48aede.bptc.ctex", "res://.godot/imported/Hj-frames-new_0011.png-70f24372696fd687dbee3ffe8c48aede.astc.ctex"]
+dest_files=["res://.godot/imported/Hj-frames-new_0011.png-70f24372696fd687dbee3ffe8c48aede.ctex"]
 
 [params]
 

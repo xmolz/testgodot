@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b3ywl1tp2cp83"
-path.bptc="res://.godot/imported/protag_walk_0004.png-658a20d72e74ed5e88db04234d6a58f5.bptc.ctex"
-path.astc="res://.godot/imported/protag_walk_0004.png-658a20d72e74ed5e88db04234d6a58f5.astc.ctex"
+path="res://.godot/imported/protag_walk_0004.png-658a20d72e74ed5e88db04234d6a58f5.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Animations/Protag/walk_new/protag_walk_0004.png"
-dest_files=["res://.godot/imported/protag_walk_0004.png-658a20d72e74ed5e88db04234d6a58f5.bptc.ctex", "res://.godot/imported/protag_walk_0004.png-658a20d72e74ed5e88db04234d6a58f5.astc.ctex"]
+dest_files=["res://.godot/imported/protag_walk_0004.png-658a20d72e74ed5e88db04234d6a58f5.ctex"]
 
 [params]
 
@@ -38,5 +36,5 @@ process/premult_alpha=false
 process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
-process/size_limit=0
+process/size_limit=540
 detect_3d/compress_to=0

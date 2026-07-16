@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c8ajowofpcgc8"
-path.bptc="res://.godot/imported/techpass_inventory_item.png-21cdb4f49f9b161919e4025fcec3b04e.bptc.ctex"
-path.astc="res://.godot/imported/techpass_inventory_item.png-21cdb4f49f9b161919e4025fcec3b04e.astc.ctex"
+path="res://.godot/imported/techpass_inventory_item.png-21cdb4f49f9b161919e4025fcec3b04e.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Sprites/inventory_items/techpass_inventory_item.png"
-dest_files=["res://.godot/imported/techpass_inventory_item.png-21cdb4f49f9b161919e4025fcec3b04e.bptc.ctex", "res://.godot/imported/techpass_inventory_item.png-21cdb4f49f9b161919e4025fcec3b04e.astc.ctex"]
+dest_files=["res://.godot/imported/techpass_inventory_item.png-21cdb4f49f9b161919e4025fcec3b04e.ctex"]
 
 [params]
 

@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://6rxirp1vpl7s"
-path.bptc="res://.godot/imported/insurance_form_icon.png-3b6a46232d7bcfdefa35c0705804c9b8.bptc.ctex"
-path.astc="res://.godot/imported/insurance_form_icon.png-3b6a46232d7bcfdefa35c0705804c9b8.astc.ctex"
+path="res://.godot/imported/insurance_form_icon.png-3b6a46232d7bcfdefa35c0705804c9b8.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Icons/insurance_form_icon.png"
-dest_files=["res://.godot/imported/insurance_form_icon.png-3b6a46232d7bcfdefa35c0705804c9b8.bptc.ctex", "res://.godot/imported/insurance_form_icon.png-3b6a46232d7bcfdefa35c0705804c9b8.astc.ctex"]
+dest_files=["res://.godot/imported/insurance_form_icon.png-3b6a46232d7bcfdefa35c0705804c9b8.ctex"]
 
 [params]
 

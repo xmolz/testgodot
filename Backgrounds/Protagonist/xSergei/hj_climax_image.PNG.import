@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cfdvs615gmnd7"
-path.bptc="res://.godot/imported/hj_climax_image.PNG-416532c2e8d8a355f24f4aae2e966bf2.bptc.ctex"
-path.astc="res://.godot/imported/hj_climax_image.PNG-416532c2e8d8a355f24f4aae2e966bf2.astc.ctex"
+path="res://.godot/imported/hj_climax_image.PNG-416532c2e8d8a355f24f4aae2e966bf2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Backgrounds/Protagonist/xSergei/hj_climax_image.PNG"
-dest_files=["res://.godot/imported/hj_climax_image.PNG-416532c2e8d8a355f24f4aae2e966bf2.bptc.ctex", "res://.godot/imported/hj_climax_image.PNG-416532c2e8d8a355f24f4aae2e966bf2.astc.ctex"]
+dest_files=["res://.godot/imported/hj_climax_image.PNG-416532c2e8d8a355f24f4aae2e966bf2.ctex"]
 
 [params]
 

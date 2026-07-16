@@ -3,8 +3,8 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bouk7sl0n68i2"
-path.bptc="res://.godot/imported/Mcbucket_high_0011.png-edaec4127bd0568bb145b460fff83a71.bptc.ctex"
-path.astc="res://.godot/imported/Mcbucket_high_0011.png-edaec4127bd0568bb145b460fff83a71.astc.ctex"
+path.s3tc="res://.godot/imported/Mcbucket_high_0011.png-edaec4127bd0568bb145b460fff83a71.s3tc.ctex"
+path.etc2="res://.godot/imported/Mcbucket_high_0011.png-edaec4127bd0568bb145b460fff83a71.etc2.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
@@ -13,7 +13,7 @@ metadata={
 [deps]
 
 source_file="res://Animations/Mcbucket/High/Mcbucket_high_0011.png"
-dest_files=["res://.godot/imported/Mcbucket_high_0011.png-edaec4127bd0568bb145b460fff83a71.bptc.ctex", "res://.godot/imported/Mcbucket_high_0011.png-edaec4127bd0568bb145b460fff83a71.astc.ctex"]
+dest_files=["res://.godot/imported/Mcbucket_high_0011.png-edaec4127bd0568bb145b460fff83a71.s3tc.ctex", "res://.godot/imported/Mcbucket_high_0011.png-edaec4127bd0568bb145b460fff83a71.etc2.ctex"]
 
 [params]
 

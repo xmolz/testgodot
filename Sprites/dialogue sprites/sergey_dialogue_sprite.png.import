@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://sw11qjqyjhtn"
-path.bptc="res://.godot/imported/sergey_dialogue_sprite.png-2e994c9311f46f66efee9b4db2cf7fdb.bptc.ctex"
-path.astc="res://.godot/imported/sergey_dialogue_sprite.png-2e994c9311f46f66efee9b4db2cf7fdb.astc.ctex"
+path="res://.godot/imported/sergey_dialogue_sprite.png-2e994c9311f46f66efee9b4db2cf7fdb.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Sprites/dialogue sprites/sergey_dialogue_sprite.png"
-dest_files=["res://.godot/imported/sergey_dialogue_sprite.png-2e994c9311f46f66efee9b4db2cf7fdb.bptc.ctex", "res://.godot/imported/sergey_dialogue_sprite.png-2e994c9311f46f66efee9b4db2cf7fdb.astc.ctex"]
+dest_files=["res://.godot/imported/sergey_dialogue_sprite.png-2e994c9311f46f66efee9b4db2cf7fdb.ctex"]
 
 [params]
 

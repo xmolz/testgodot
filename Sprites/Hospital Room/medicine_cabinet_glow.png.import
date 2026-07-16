@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://xwufbgcjblgc"
-path.bptc="res://.godot/imported/medicine_cabinet_glow.png-caa19ea94fa26229efb78ac0134c0c21.bptc.ctex"
-path.astc="res://.godot/imported/medicine_cabinet_glow.png-caa19ea94fa26229efb78ac0134c0c21.astc.ctex"
+path="res://.godot/imported/medicine_cabinet_glow.png-caa19ea94fa26229efb78ac0134c0c21.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Sprites/Hospital Room/medicine_cabinet_glow.png"
-dest_files=["res://.godot/imported/medicine_cabinet_glow.png-caa19ea94fa26229efb78ac0134c0c21.bptc.ctex", "res://.godot/imported/medicine_cabinet_glow.png-caa19ea94fa26229efb78ac0134c0c21.astc.ctex"]
+dest_files=["res://.godot/imported/medicine_cabinet_glow.png-caa19ea94fa26229efb78ac0134c0c21.ctex"]
 
 [params]
 
@@ -38,5 +36,5 @@ process/premult_alpha=false
 process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
-process/size_limit=0
+process/size_limit=550
 detect_3d/compress_to=1

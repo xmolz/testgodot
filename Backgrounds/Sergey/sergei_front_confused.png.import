@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://1wjhdwc0ax4m"
-path.bptc="res://.godot/imported/sergei_front_confused.png-fae3121aa479c827b601af8225ac555a.bptc.ctex"
-path.astc="res://.godot/imported/sergei_front_confused.png-fae3121aa479c827b601af8225ac555a.astc.ctex"
+path="res://.godot/imported/sergei_front_confused.png-fae3121aa479c827b601af8225ac555a.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Backgrounds/Sergey/sergei_front_confused.png"
-dest_files=["res://.godot/imported/sergei_front_confused.png-fae3121aa479c827b601af8225ac555a.bptc.ctex", "res://.godot/imported/sergei_front_confused.png-fae3121aa479c827b601af8225ac555a.astc.ctex"]
+dest_files=["res://.godot/imported/sergei_front_confused.png-fae3121aa479c827b601af8225ac555a.ctex"]
 
 [params]
 

@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c7c6qst6e2m3u"
-path.bptc="res://.godot/imported/mcbucket_high_happy.png-2d769ff63754fe1059bf29148c7cff8e.bptc.ctex"
-path.astc="res://.godot/imported/mcbucket_high_happy.png-2d769ff63754fe1059bf29148c7cff8e.astc.ctex"
+path="res://.godot/imported/mcbucket_high_happy.png-2d769ff63754fe1059bf29148c7cff8e.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Sprites/characters/mcbucket/mcbucket_high_happy.png"
-dest_files=["res://.godot/imported/mcbucket_high_happy.png-2d769ff63754fe1059bf29148c7cff8e.bptc.ctex", "res://.godot/imported/mcbucket_high_happy.png-2d769ff63754fe1059bf29148c7cff8e.astc.ctex"]
+dest_files=["res://.godot/imported/mcbucket_high_happy.png-2d769ff63754fe1059bf29148c7cff8e.ctex"]
 
 [params]
 
@@ -38,5 +36,5 @@ process/premult_alpha=false
 process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
-process/size_limit=0
+process/size_limit=1200
 detect_3d/compress_to=1

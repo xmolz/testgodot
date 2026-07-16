@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cj4rhqkqaf3dc"
-path.bptc="res://.godot/imported/sergey_front_neutral_mouth_closed.png-4d48a20c1bf44523bbb5db73cbcf4626.bptc.ctex"
-path.astc="res://.godot/imported/sergey_front_neutral_mouth_closed.png-4d48a20c1bf44523bbb5db73cbcf4626.astc.ctex"
+path="res://.godot/imported/sergey_front_neutral_mouth_closed.png-4d48a20c1bf44523bbb5db73cbcf4626.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Backgrounds/Sergey/sergey_front_neutral_mouth_closed.png"
-dest_files=["res://.godot/imported/sergey_front_neutral_mouth_closed.png-4d48a20c1bf44523bbb5db73cbcf4626.bptc.ctex", "res://.godot/imported/sergey_front_neutral_mouth_closed.png-4d48a20c1bf44523bbb5db73cbcf4626.astc.ctex"]
+dest_files=["res://.godot/imported/sergey_front_neutral_mouth_closed.png-4d48a20c1bf44523bbb5db73cbcf4626.ctex"]
 
 [params]
 

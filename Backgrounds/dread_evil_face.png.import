@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dbgal8akqs66p"
-path.bptc="res://.godot/imported/dread_evil_face.png-bc089eb7a9ff415c39b955fe97a54cc9.bptc.ctex"
-path.astc="res://.godot/imported/dread_evil_face.png-bc089eb7a9ff415c39b955fe97a54cc9.astc.ctex"
+path="res://.godot/imported/dread_evil_face.png-bc089eb7a9ff415c39b955fe97a54cc9.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Backgrounds/dread_evil_face.png"
-dest_files=["res://.godot/imported/dread_evil_face.png-bc089eb7a9ff415c39b955fe97a54cc9.bptc.ctex", "res://.godot/imported/dread_evil_face.png-bc089eb7a9ff415c39b955fe97a54cc9.astc.ctex"]
+dest_files=["res://.godot/imported/dread_evil_face.png-bc089eb7a9ff415c39b955fe97a54cc9.ctex"]
 
 [params]
 

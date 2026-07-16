@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cw8spcqu40qtf"
-path.bptc="res://.godot/imported/sergey_handjob_frame_one.png-a5664a13ad9b3259b1fa126f4c0a8349.bptc.ctex"
-path.astc="res://.godot/imported/sergey_handjob_frame_one.png-a5664a13ad9b3259b1fa126f4c0a8349.astc.ctex"
+path="res://.godot/imported/sergey_handjob_frame_one.png-a5664a13ad9b3259b1fa126f4c0a8349.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Backgrounds/Protagonist/xSergei/sergey_handjob_frame_one.png"
-dest_files=["res://.godot/imported/sergey_handjob_frame_one.png-a5664a13ad9b3259b1fa126f4c0a8349.bptc.ctex", "res://.godot/imported/sergey_handjob_frame_one.png-a5664a13ad9b3259b1fa126f4c0a8349.astc.ctex"]
+dest_files=["res://.godot/imported/sergey_handjob_frame_one.png-a5664a13ad9b3259b1fa126f4c0a8349.ctex"]
 
 [params]
 

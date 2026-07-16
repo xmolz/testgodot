@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cmcok0e1btdjm"
-path.bptc="res://.godot/imported/toilet_dialogue_sprite.png-f4a4706f93759190a36a98167776655e.bptc.ctex"
-path.astc="res://.godot/imported/toilet_dialogue_sprite.png-f4a4706f93759190a36a98167776655e.astc.ctex"
+path="res://.godot/imported/toilet_dialogue_sprite.png-f4a4706f93759190a36a98167776655e.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Sprites/dialogue sprites/toilet_dialogue_sprite.png"
-dest_files=["res://.godot/imported/toilet_dialogue_sprite.png-f4a4706f93759190a36a98167776655e.bptc.ctex", "res://.godot/imported/toilet_dialogue_sprite.png-f4a4706f93759190a36a98167776655e.astc.ctex"]
+dest_files=["res://.godot/imported/toilet_dialogue_sprite.png-f4a4706f93759190a36a98167776655e.ctex"]
 
 [params]
 

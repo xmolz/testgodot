@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cwkj6fty0kfyn"
-path.bptc="res://.godot/imported/toilet_paper_inventory_sprite.png-323d6c653fcf90a27bf9763e90d91eb3.bptc.ctex"
-path.astc="res://.godot/imported/toilet_paper_inventory_sprite.png-323d6c653fcf90a27bf9763e90d91eb3.astc.ctex"
+path="res://.godot/imported/toilet_paper_inventory_sprite.png-323d6c653fcf90a27bf9763e90d91eb3.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Sprites/inventory_items/toilet_paper_inventory_sprite.png"
-dest_files=["res://.godot/imported/toilet_paper_inventory_sprite.png-323d6c653fcf90a27bf9763e90d91eb3.bptc.ctex", "res://.godot/imported/toilet_paper_inventory_sprite.png-323d6c653fcf90a27bf9763e90d91eb3.astc.ctex"]
+dest_files=["res://.godot/imported/toilet_paper_inventory_sprite.png-323d6c653fcf90a27bf9763e90d91eb3.ctex"]
 
 [params]
 

@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://v1wq5s3rq7nw"
-path.bptc="res://.godot/imported/hospital_bathroom_door.PNG-67eb6f4484fad4be83d1c46573adf68b.bptc.ctex"
-path.astc="res://.godot/imported/hospital_bathroom_door.PNG-67eb6f4484fad4be83d1c46573adf68b.astc.ctex"
+path="res://.godot/imported/hospital_bathroom_door.PNG-67eb6f4484fad4be83d1c46573adf68b.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Sprites/Hospital Bathroom/hospital_bathroom_door.PNG"
-dest_files=["res://.godot/imported/hospital_bathroom_door.PNG-67eb6f4484fad4be83d1c46573adf68b.bptc.ctex", "res://.godot/imported/hospital_bathroom_door.PNG-67eb6f4484fad4be83d1c46573adf68b.astc.ctex"]
+dest_files=["res://.godot/imported/hospital_bathroom_door.PNG-67eb6f4484fad4be83d1c46573adf68b.ctex"]
 
 [params]
 
@@ -38,5 +36,5 @@ process/premult_alpha=false
 process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
-process/size_limit=0
+process/size_limit=550
 detect_3d/compress_to=1

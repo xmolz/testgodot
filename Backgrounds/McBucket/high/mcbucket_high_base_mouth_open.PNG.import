@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://igdmkqkiatij"
-path.bptc="res://.godot/imported/mcbucket_high_base_mouth_open.PNG-e65887b26fc9e7a48e120af6c0979f3e.bptc.ctex"
-path.astc="res://.godot/imported/mcbucket_high_base_mouth_open.PNG-e65887b26fc9e7a48e120af6c0979f3e.astc.ctex"
+path="res://.godot/imported/mcbucket_high_base_mouth_open.PNG-e65887b26fc9e7a48e120af6c0979f3e.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Backgrounds/McBucket/high/mcbucket_high_base_mouth_open.PNG"
-dest_files=["res://.godot/imported/mcbucket_high_base_mouth_open.PNG-e65887b26fc9e7a48e120af6c0979f3e.bptc.ctex", "res://.godot/imported/mcbucket_high_base_mouth_open.PNG-e65887b26fc9e7a48e120af6c0979f3e.astc.ctex"]
+dest_files=["res://.godot/imported/mcbucket_high_base_mouth_open.PNG-e65887b26fc9e7a48e120af6c0979f3e.ctex"]
 
 [params]
 

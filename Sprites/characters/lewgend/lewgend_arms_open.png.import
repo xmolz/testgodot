@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bi44v5ya48n0"
-path.bptc="res://.godot/imported/lewgend_arms_open.png-33b9901665081ae4a8a742f7c61c1ed6.bptc.ctex"
-path.astc="res://.godot/imported/lewgend_arms_open.png-33b9901665081ae4a8a742f7c61c1ed6.astc.ctex"
+path="res://.godot/imported/lewgend_arms_open.png-33b9901665081ae4a8a742f7c61c1ed6.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Sprites/characters/lewgend/lewgend_arms_open.png"
-dest_files=["res://.godot/imported/lewgend_arms_open.png-33b9901665081ae4a8a742f7c61c1ed6.bptc.ctex", "res://.godot/imported/lewgend_arms_open.png-33b9901665081ae4a8a742f7c61c1ed6.astc.ctex"]
+dest_files=["res://.godot/imported/lewgend_arms_open.png-33b9901665081ae4a8a742f7c61c1ed6.ctex"]
 
 [params]
 

@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cxo3lj8hyamin"
-path.bptc="res://.godot/imported/sergey_eyes_only_eye_to_eye.png-52b374de131f65816690f8721a59ca7e.bptc.ctex"
-path.astc="res://.godot/imported/sergey_eyes_only_eye_to_eye.png-52b374de131f65816690f8721a59ca7e.astc.ctex"
+path="res://.godot/imported/sergey_eyes_only_eye_to_eye.png-52b374de131f65816690f8721a59ca7e.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Backgrounds/Sergey/sergey_eyes_only_eye_to_eye.png"
-dest_files=["res://.godot/imported/sergey_eyes_only_eye_to_eye.png-52b374de131f65816690f8721a59ca7e.bptc.ctex", "res://.godot/imported/sergey_eyes_only_eye_to_eye.png-52b374de131f65816690f8721a59ca7e.astc.ctex"]
+dest_files=["res://.godot/imported/sergey_eyes_only_eye_to_eye.png-52b374de131f65816690f8721a59ca7e.ctex"]
 
 [params]
 

@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bmidi6l33bump"
-path.bptc="res://.godot/imported/image0(6).png-6fc1f627914171458cbfc1b2e82fc8a7.bptc.ctex"
-path.astc="res://.godot/imported/image0(6).png-6fc1f627914171458cbfc1b2e82fc8a7.astc.ctex"
+path="res://.godot/imported/image0(6).png-6fc1f627914171458cbfc1b2e82fc8a7.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://image0(6).png"
-dest_files=["res://.godot/imported/image0(6).png-6fc1f627914171458cbfc1b2e82fc8a7.bptc.ctex", "res://.godot/imported/image0(6).png-6fc1f627914171458cbfc1b2e82fc8a7.astc.ctex"]
+dest_files=["res://.godot/imported/image0(6).png-6fc1f627914171458cbfc1b2e82fc8a7.ctex"]
 
 [params]
 

@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b1icbs408h5wg"
-path.bptc="res://.godot/imported/sergey_part_reveal.PNG-ace8a512d5a0783f474d78380a83b195.bptc.ctex"
-path.astc="res://.godot/imported/sergey_part_reveal.PNG-ace8a512d5a0783f474d78380a83b195.astc.ctex"
+path="res://.godot/imported/sergey_part_reveal.PNG-ace8a512d5a0783f474d78380a83b195.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Backgrounds/Protagonist/xSergei/sergey_part_reveal.PNG"
-dest_files=["res://.godot/imported/sergey_part_reveal.PNG-ace8a512d5a0783f474d78380a83b195.bptc.ctex", "res://.godot/imported/sergey_part_reveal.PNG-ace8a512d5a0783f474d78380a83b195.astc.ctex"]
+dest_files=["res://.godot/imported/sergey_part_reveal.PNG-ace8a512d5a0783f474d78380a83b195.ctex"]
 
 [params]
 

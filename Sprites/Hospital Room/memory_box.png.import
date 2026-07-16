@@ -3,17 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://db5vtehjd40ox"
-path.bptc="res://.godot/imported/memory_box.png-03ddb004566feb12808514c88e906a89.bptc.ctex"
-path.astc="res://.godot/imported/memory_box.png-03ddb004566feb12808514c88e906a89.astc.ctex"
+path="res://.godot/imported/memory_box.png-03ddb004566feb12808514c88e906a89.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Sprites/Hospital Room/memory_box.png"
-dest_files=["res://.godot/imported/memory_box.png-03ddb004566feb12808514c88e906a89.bptc.ctex", "res://.godot/imported/memory_box.png-03ddb004566feb12808514c88e906a89.astc.ctex"]
+dest_files=["res://.godot/imported/memory_box.png-03ddb004566feb12808514c88e906a89.ctex"]
 
 [params]
 
