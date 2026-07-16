@@ -2,7 +2,7 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://crnc1jb06omtv"
+uid="uid://c7tpcunxymd8g"
 path="res://.godot/imported/aida_hospital_background.png-3ed8305fc93e87b0931fa45dfec074ea.ctex"
 metadata={
 "vram_texture": false
@@ -36,5 +36,5 @@ process/premult_alpha=false
 process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
-process/size_limit=1920
+process/size_limit=0
 detect_3d/compress_to=1

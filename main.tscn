@@ -927,6 +927,7 @@ target_path = NodePath("../Player")
 
 [node name="LevelStateManager" type="Node" parent="." unique_id=1325462510]
 script = ExtResource("10_4c57u")
+override_give_techpass = true
 
 [node name="GameUI" type="Node" parent="." unique_id=1791351286]
 script = ExtResource("90_gameui")
