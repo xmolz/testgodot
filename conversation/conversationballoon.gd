@@ -30,6 +30,7 @@ var locals: Dictionary = {}
 
 var _locale: String = TranslationServer.get_locale()
 var _is_responses_clickable: bool = false
+var _is_simulating_choice: bool = false
 
 # --- CACHED OBJECTS (avoid per-line allocations) ---
 var _bbcode_regex: RegEx
@@ -318,7 +319,33 @@ func _ready() -> void:
 	_update_text_scale(Settings.dialogue_text_scale if GameManager else 1.0)
 
 
-func _unhandled_input(_event: InputEvent) -> void:
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed(next_action):
+		# Mirror the gui_input behaviour: unhide the UI first if it's hidden
+		if is_ui_hidden:
+			get_viewport().set_input_as_handled()
+			set_ui_hidden(false)
+			return
+
+		# Select the response if exactly one is visible on screen.
+		# Use get_menu_items() (not dialogue_line.responses) so hidden/failed
+		# responses are excluded correctly (hide_failed_responses is true).
+		if dialogue_line != null and not dialogue_label.is_typing and responses_menu.visible and _is_responses_clickable:
+			var items: Array = responses_menu.get_menu_items()
+			if items.size() == 1:
+				get_viewport().set_input_as_handled()
+				_simulate_single_response_click(items[0].get_meta("response"))
+				return
+
+		# Fallback advance for lines with no responses, in case the balloon
+		# lost keyboard focus (e.g. after closing the history log).
+		if is_waiting_for_input and dialogue_line != null and dialogue_line.responses.size() == 0:
+			get_viewport().set_input_as_handled()
+			if SoundManager: SoundManager.play_sfx("ui_click")
+			next(dialogue_line.next_id)
+			return
+
+	# Existing behaviour: swallow all other input while dialogue is on screen
 	get_viewport().set_input_as_handled()
 
 
@@ -345,6 +372,7 @@ func apply_dialogue_line() -> void:
 	auto_advance_timer.stop()
 
 	is_waiting_for_input = false
+	_is_simulating_choice = false
 	balloon.focus_mode = Control.FOCUS_ALL
 	balloon.grab_focus()
 
@@ -626,7 +654,7 @@ func _on_balloon_gui_input(event: InputEvent) -> void:
 	# See if we need to skip typing of the dialogue
 	if dialogue_label.is_typing:
 		var mouse_was_clicked: bool = event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed()
-		var skip_button_was_pressed: bool = event.is_action_pressed(skip_action)
+		var skip_button_was_pressed: bool = event.is_action_pressed(skip_action) or event.is_action_pressed(next_action)
 		if mouse_was_clicked or skip_button_was_pressed:
 			get_viewport().set_input_as_handled()
 			dialogue_label.skip_typing()
@@ -782,6 +810,8 @@ func _on_auto_advance_timeout():
 		_simulate_single_response_click(dialogue_line.responses[0])
 
 func _simulate_single_response_click(response: DialogueResponse):
+	if _is_simulating_choice: return
+	_is_simulating_choice = true
 	var target_btn: Button = null
 	for i in range(responses_menu.get_child_count()):
 		var btn = responses_menu.get_child(i)
