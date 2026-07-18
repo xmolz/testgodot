@@ -1,10 +1,6 @@
 [gd_scene format=3 uid="uid://d0bmof3h7q6fm"]
 
 [ext_resource type="Script" uid="uid://bm3av77ululiw" path="res://ui/loading_screen.gd" id="1_script"]
-[ext_resource type="Texture2D" uid="uid://bcog6u3ujkwjd" path="res://Backgrounds/Sneak Peeks/love_interest_1.png" id="2_sneak1"]
-[ext_resource type="Texture2D" uid="uid://bcwa76l66p50u" path="res://Backgrounds/Sneak Peeks/love_interest_2.png" id="3_sneak2"]
-[ext_resource type="Texture2D" uid="uid://bdy0hrpd2x80h" path="res://Backgrounds/Sneak Peeks/love_interest_3.png" id="4_sneak3"]
-[ext_resource type="Texture2D" uid="uid://dcxd2n144j1g5" path="res://Backgrounds/Sneak Peeks/love_interest_4.png" id="5_sneak4"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
 bg_color = Color(0.0666667, 0.133333, 0.109804, 1)
@@ -117,34 +113,6 @@ size_flags_vertical = 3
 size_flags_stretch_ratio = 3.0
 theme_override_constants/separation = 24
 alignment = 1
-
-[node name="Portrait1" type="TextureRect" parent="Layout/Column/PortraitRow"]
-layout_mode = 2
-size_flags_horizontal = 3
-texture = ExtResource("2_sneak1")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="Portrait2" type="TextureRect" parent="Layout/Column/PortraitRow"]
-layout_mode = 2
-size_flags_horizontal = 3
-texture = ExtResource("3_sneak2")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="Portrait3" type="TextureRect" parent="Layout/Column/PortraitRow"]
-layout_mode = 2
-size_flags_horizontal = 3
-texture = ExtResource("4_sneak3")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="Portrait4" type="TextureRect" parent="Layout/Column/PortraitRow"]
-layout_mode = 2
-size_flags_horizontal = 3
-texture = ExtResource("5_sneak4")
-expand_mode = 1
-stretch_mode = 5
 
 [node name="PatronLabel" type="Label" parent="Layout/Column" unique_id=517687307]
 layout_mode = 2

@@ -18,10 +18,10 @@ extends CanvasLayer
 # Sprites of any height/crop work: each portrait scales keep-aspect to fill the
 # flexible band the layout gives it.
 const LOVE_INTEREST_PORTRAITS: Array[String] = [
-	"res://Sprites/characters/layla/layla_base.png",
-	"res://Sprites/characters/layla/layla_base.png",
-	"res://Sprites/characters/layla/layla_base.png",
-	"res://Sprites/characters/layla/layla_base.png",
+	"res://Backgrounds/Sneak Peeks/love_interest_1.png",
+	"res://Backgrounds/Sneak Peeks/love_interest_2.png",
+	"res://Backgrounds/Sneak Peeks/love_interest_3.png",
+	"res://Backgrounds/Sneak Peeks/love_interest_4.png",
 ]
 
 # The list of massive files we want to pre-load.
