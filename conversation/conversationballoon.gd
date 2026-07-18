@@ -312,6 +312,29 @@ func _ready() -> void:
 	_blank_spacer_icon = ImageTexture.create_from_image(blank_img)
 
 	# Preloaded icons are used directly, size capped by theme overrides
+	# --- FAUX BOLD/ITALIC FONTS (Varela Round ships Regular only) ---
+	var base_font: Font = dialogue_label.get_theme_font("normal_font")
+
+	var vn_bold_font := FontVariation.new()
+	vn_bold_font.base_font = base_font
+	vn_bold_font.variation_embolden = 0.6
+
+	var vn_italic_font := FontVariation.new()
+	vn_italic_font.base_font = base_font
+	vn_italic_font.variation_transform = Transform2D(Vector2(1, 0), Vector2(0.2, 1), Vector2.ZERO)
+
+	var vn_bold_italic_font := FontVariation.new()
+	vn_bold_italic_font.base_font = base_font
+	vn_bold_italic_font.variation_embolden = 0.6
+	vn_bold_italic_font.variation_transform = Transform2D(Vector2(1, 0), Vector2(0.2, 1), Vector2.ZERO)
+
+	dialogue_label.add_theme_font_override("bold_font", vn_bold_font)
+	dialogue_label.add_theme_font_override("italics_font", vn_italic_font)
+	dialogue_label.add_theme_font_override("bold_italics_font", vn_bold_italic_font)
+
+	# The nameplate wraps every name in [b]...[/b], so it needs the bold variant too
+	character_label.add_theme_font_override("bold_font", vn_bold_font)
+
 	# --- DYNAMIC TEXT SCALING (PC, Mobile & Marketing) ---
 	if GameManager:
 		if not Settings.text_scale_changed.is_connected(_update_text_scale):
@@ -320,25 +343,47 @@ func _ready() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	# --- Arrow keys summon the highlight when no option is focused ---
+	# (When an option IS focused, arrow presses are consumed by Godot's native
+	# focus navigation and Space/Enter by the focused button, so they never
+	# reach _unhandled_input. Only the "nothing focused" case lands here.)
+	if responses_menu.visible and not is_ui_hidden and not dialogue_label.is_typing:
+		var items: Array = responses_menu.get_menu_items()
+		if items.size() > 0:
+			if event.is_action_pressed("ui_down"):
+				get_viewport().set_input_as_handled()
+				items[0].grab_focus()
+				return
+			if event.is_action_pressed("ui_up"):
+				get_viewport().set_input_as_handled()
+				items[items.size() - 1].grab_focus()
+				return
+
 	if event.is_action_pressed(next_action):
-		# Mirror the gui_input behaviour: unhide the UI first if it's hidden
+		# Unhide the UI if hidden (mirrors the gui_input path)
 		if is_ui_hidden:
 			get_viewport().set_input_as_handled()
 			set_ui_hidden(false)
 			return
 
-		# Select the response if exactly one is visible on screen.
-		# Use get_menu_items() (not dialogue_line.responses) so hidden/failed
-		# responses are excluded correctly (hide_failed_responses is true).
-		if dialogue_line != null and not dialogue_label.is_typing and responses_menu.visible and _is_responses_clickable:
+		if dialogue_line != null and not dialogue_label.is_typing and responses_menu.visible:
 			var items: Array = responses_menu.get_menu_items()
-			if items.size() == 1:
+
+			# Exactly one option: select it immediately (existing behaviour)
+			if items.size() == 1 and _is_responses_clickable:
 				get_viewport().set_input_as_handled()
 				_simulate_single_response_click(items[0].get_meta("response"))
 				return
 
+			# Multiple options, nothing highlighted yet:
+			# the first press summons the highlight instead of selecting
+			if items.size() > 1:
+				get_viewport().set_input_as_handled()
+				items[0].grab_focus()
+				return
+
 		# Fallback advance for lines with no responses, in case the balloon
-		# lost keyboard focus (e.g. after closing the history log).
+		# lost keyboard focus (e.g. after closing the history log)
 		if is_waiting_for_input and dialogue_line != null and dialogue_line.responses.size() == 0:
 			get_viewport().set_input_as_handled()
 			if SoundManager: SoundManager.play_sfx("ui_click")
@@ -540,20 +585,26 @@ func apply_dialogue_line() -> void:
 
 		# Text colors
 		button.add_theme_color_override("font_color", resting_color)
-		button.add_theme_color_override("font_focus_color", resting_color)
+		button.add_theme_color_override("font_focus_color", hover_color)
 		button.add_theme_color_override("font_hover_color", hover_color)
 		button.add_theme_color_override("font_pressed_color", hover_color)
 
 		# Icon colors
 		button.add_theme_color_override("icon_normal_color", resting_color)
-		button.add_theme_color_override("icon_focus_color", resting_color)
+		button.add_theme_color_override("icon_focus_color", hover_color)
 		button.add_theme_color_override("icon_hover_color", hover_color)
 		button.add_theme_color_override("icon_pressed_color", hover_color)
 
-		button.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+		if OS.has_feature("mobile"):
+			button.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+		else:
+			# Keyboard focus draws the same panel as mouse hover
+			button.add_theme_stylebox_override("focus", button.get_theme_stylebox("hover"))
 		if OS.has_feature("mobile"):
 			button.add_theme_color_override("font_hover_color", resting_color)
 			button.add_theme_color_override("icon_hover_color", resting_color)
+			button.add_theme_color_override("font_focus_color", resting_color)
+			button.add_theme_color_override("icon_focus_color", resting_color)
 
 		# --- Fix sticky hover state by dropping focus on mouse exit ---
 		if not button.mouse_exited.is_connected(button.release_focus):

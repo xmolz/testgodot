@@ -1,7 +1,7 @@
 # DialogueHistory.gd (Autoload) — session log of dialogue lines, choices, and player actions.
 extends Node
 
-const MAX_ENTRIES = 100
+const MAX_ENTRIES = 500
 var entries: Array[Dictionary] = []
 var visited_responses: Dictionary = {}
 

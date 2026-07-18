@@ -111,6 +111,16 @@ func _populate_log():
 
 	var previous_character = ""
 	var custom_font = preload("res://Fonts/VarelaRound-Regular.ttf")
+	var log_bold_font := FontVariation.new()
+	log_bold_font.base_font = custom_font
+	log_bold_font.variation_embolden = 0.6
+	var log_italic_font := FontVariation.new()
+	log_italic_font.base_font = custom_font
+	log_italic_font.variation_transform = Transform2D(Vector2(1, 0), Vector2(0.2, 1), Vector2.ZERO)
+	var log_bold_italic_font := FontVariation.new()
+	log_bold_italic_font.base_font = custom_font
+	log_bold_italic_font.variation_embolden = 0.6
+	log_bold_italic_font.variation_transform = Transform2D(Vector2(1, 0), Vector2(0.2, 1), Vector2.ZERO)
 
 	for entry in DialogueHistory.entries:
 		var align_right = false
@@ -197,6 +207,9 @@ func _populate_log():
 			text_label.mouse_filter = Control.MOUSE_FILTER_PASS
 			text_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			text_label.add_theme_font_override("normal_font", custom_font)
+			text_label.add_theme_font_override("bold_font", log_bold_font)
+			text_label.add_theme_font_override("italics_font", log_italic_font)
+			text_label.add_theme_font_override("bold_italics_font", log_bold_italic_font)
 			text_label.add_theme_font_size_override("normal_font_size", 42 if OS.has_feature("mobile") else 28)
 			text_label.add_theme_color_override("default_color", Color(0.9, 0.9, 0.9))
 
@@ -219,6 +232,9 @@ func _populate_log():
 				choice_label.mouse_filter = Control.MOUSE_FILTER_PASS
 				choice_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 				choice_label.add_theme_font_override("normal_font", custom_font)
+				choice_label.add_theme_font_override("bold_font", log_bold_font)
+				choice_label.add_theme_font_override("italics_font", log_italic_font)
+				choice_label.add_theme_font_override("bold_italics_font", log_bold_italic_font)
 				choice_label.add_theme_font_size_override("normal_font_size", 38 if OS.has_feature("mobile") else 26)
 
 				if i == selected_index:
