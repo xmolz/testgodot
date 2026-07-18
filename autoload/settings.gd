@@ -2,6 +2,7 @@
 extends Node
 
 signal auto_forward_toggled(is_on: bool)
+signal skip_toggled(is_on: bool)
 signal fullscreen_toggled(is_on: bool)
 signal text_scale_changed(new_scale: float)
 
@@ -15,6 +16,10 @@ var dialogue_text_scale: float = 1.0:
 		dialogue_text_scale = val
 		text_scale_changed.emit(val)
 var auto_time_delay: float = 0.486
+var is_skipping: bool = false:
+	set(val):
+		is_skipping = val
+		skip_toggled.emit(val)
 var is_auto_playing: bool = false:
 	set(val):
 		is_auto_playing = val

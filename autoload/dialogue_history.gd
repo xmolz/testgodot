@@ -5,6 +5,28 @@ const MAX_ENTRIES = 500
 var entries: Array[Dictionary] = []
 var visited_responses: Dictionary = {}
 
+const SEEN_LINES_PATH = "user://seen_dialogue.save"
+var seen_lines: Dictionary = {}
+
+func _ready():
+	load_seen_lines()
+
+func mark_line_seen(key: String) -> void:
+	seen_lines[key] = true
+
+func is_line_seen(key: String) -> bool:
+	return seen_lines.has(key)
+
+func save_seen_lines() -> void:
+	var f = FileAccess.open(SEEN_LINES_PATH, FileAccess.WRITE)
+	if f: f.store_var(seen_lines)
+
+func load_seen_lines() -> void:
+	if FileAccess.file_exists(SEEN_LINES_PATH):
+		var f = FileAccess.open(SEEN_LINES_PATH, FileAccess.READ)
+		if f:
+			var data = f.get_var()
+			if data is Dictionary: seen_lines = data
 
 func add_line(lookup_name: String, display_name: String, text: String):
 	entries.append({

@@ -31,6 +31,8 @@ var locals: Dictionary = {}
 var _locale: String = TranslationServer.get_locale()
 var _is_responses_clickable: bool = false
 var _is_simulating_choice: bool = false
+var skip_button: Button
+var _skip_accumulator: float = 0.0
 
 # --- CACHED OBJECTS (avoid per-line allocations) ---
 var _bbcode_regex: RegEx
@@ -186,6 +188,16 @@ func _ready() -> void:
 			if GameManager and not Settings.is_auto_playing:
 				auto_button.add_theme_color_override("font_hover_color", Color(0.6, 0.6, 0.6, 1.0) if OS.has_feature("mobile") else Color(0.2, 0.85, 1.0, 1.0))
 		)
+	if auto_button and GameManager:
+		skip_button = auto_button.duplicate() as Button
+		skip_button.name = "SkipButton"
+		skip_button.text = "Skip"
+		auto_button.get_parent().add_child(skip_button)
+		auto_button.get_parent().move_child(skip_button, auto_button.get_index() + 1)
+		skip_button.pressed.connect(_on_skip_button_pressed)
+		if not Settings.skip_toggled.is_connected(_on_global_skip_toggled):
+			Settings.skip_toggled.connect(_on_global_skip_toggled)
+		_update_skip_button_visuals()
 	if hide_button:
 		hide_button.pressed.connect(_on_hide_button_pressed)
 	balloon.hide()
@@ -418,6 +430,9 @@ func apply_dialogue_line() -> void:
 
 	is_waiting_for_input = false
 	_is_simulating_choice = false
+	_skip_accumulator = 0.0
+	if GameManager and resource and not dialogue_line.text.is_empty():
+		DialogueHistory.mark_line_seen(_current_line_seen_key())
 	balloon.focus_mode = Control.FOCUS_ALL
 	balloon.grab_focus()
 
@@ -628,6 +643,8 @@ func apply_dialogue_line() -> void:
 		await dialogue_label.finished_typing
 
 	if dialogue_line.responses.size() > 0:
+		if GameManager and Settings.is_skipping:
+			Settings.is_skipping = false
 		balloon.focus_mode = Control.FOCUS_NONE
 
 		# --- Fade-In Cooldown to prevent spam-clicking ---
@@ -707,6 +724,7 @@ func _on_balloon_gui_input(event: InputEvent) -> void:
 		var mouse_was_clicked: bool = event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed()
 		var skip_button_was_pressed: bool = event.is_action_pressed(skip_action) or event.is_action_pressed(next_action)
 		if mouse_was_clicked or skip_button_was_pressed:
+			if GameManager and Settings.is_skipping: Settings.is_skipping = false
 			get_viewport().set_input_as_handled()
 			dialogue_label.skip_typing()
 			return
@@ -717,10 +735,12 @@ func _on_balloon_gui_input(event: InputEvent) -> void:
 	get_viewport().set_input_as_handled()
 
 	if event is InputEventMouseButton and event.is_pressed() and event.button_index == MOUSE_BUTTON_LEFT:
+		if GameManager and Settings.is_skipping: Settings.is_skipping = false
 		if SoundManager: SoundManager.play_sfx("ui_click")
 		next(dialogue_line.next_id)
 
 	elif event.is_action_pressed(next_action) and get_viewport().gui_get_focus_owner() == balloon:
+		if GameManager and Settings.is_skipping: Settings.is_skipping = false
 		if SoundManager: SoundManager.play_sfx("ui_click")
 		next(dialogue_line.next_id)
 
@@ -847,6 +867,7 @@ func _on_global_auto_toggled(is_on: bool):
 		auto_advance_timer.stop()
 
 func _start_auto_advance_timer():
+	if GameManager and Settings.is_skipping: return
 	if _is_log_open or is_ui_hidden:
 		return
 
@@ -910,6 +931,43 @@ func _update_auto_button_visuals():
 		else:
 			auto_button.add_theme_color_override("font_hover_color", Color(0.6, 0.6, 0.6, 1.0) if OS.has_feature("mobile") else Color(0.2, 0.85, 1.0, 1.0))
 
+func _on_skip_button_pressed() -> void:
+	if SoundManager: SoundManager.play_sfx("ui_click")
+	if GameManager:
+		Settings.is_skipping = not Settings.is_skipping
+
+func _on_global_skip_toggled(_is_on: bool) -> void:
+	_update_skip_button_visuals()
+
+func _update_skip_button_visuals() -> void:
+	if not skip_button: return
+	if GameManager and Settings.is_skipping:
+		skip_button.add_theme_color_override("font_color", Color(0.2, 0.85, 1.0, 1.0))
+		skip_button.add_theme_color_override("font_hover_color", Color(0.2, 0.85, 1.0, 1.0) if OS.has_feature("mobile") else Color(0.4, 0.95, 1.0, 1.0))
+		skip_button.add_theme_color_override("font_focus_color", Color(0.2, 0.85, 1.0, 1.0))
+	else:
+		skip_button.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6, 1.0))
+		skip_button.add_theme_color_override("font_focus_color", Color(0.6, 0.6, 0.6, 1.0))
+		if skip_button.is_hovered() and not OS.has_feature("mobile"):
+			skip_button.add_theme_color_override("font_hover_color", Color(0.6, 0.6, 0.6, 1.0))
+		else:
+			skip_button.add_theme_color_override("font_hover_color", Color(0.6, 0.6, 0.6, 1.0) if OS.has_feature("mobile") else Color(0.2, 0.85, 1.0, 1.0))
+
+func _current_line_seen_key() -> String:
+	return resource.resource_path + "::" + dialogue_line.id
+
+func _should_skip_now() -> bool:
+	if not GameManager: return false
+	if dialogue_line == null: return false
+	if dialogue_line.responses.size() > 0: return false
+	if _is_log_open or is_ui_hidden: return false
+	if Input.is_key_pressed(KEY_CTRL): return true
+	if Settings.is_skipping:
+		if DialogueHistory.is_line_seen(_current_line_seen_key()):
+			return true
+		Settings.is_skipping = false  # reached unseen text: auto-disable
+	return false
+
 func _on_menu_button_pressed() -> void:
 	if SoundManager: SoundManager.play_sfx("ui_click")
 	if GameManager and is_instance_valid(GameManager.pause_menu_ui):
@@ -941,3 +999,22 @@ func _update_text_scale(scale_mult: float) -> void:
 			var btn = responses_menu.get_child(i)
 			if btn is Button:
 				btn.add_theme_font_size_override("font_size", resp_size)
+
+func _process(delta: float) -> void:
+	if not _should_skip_now(): 
+		_skip_accumulator = 0.0
+		return
+	if dialogue_label.is_typing:
+		dialogue_label.skip_typing()
+		return
+	if is_waiting_for_input:
+		_skip_accumulator += delta
+		if _skip_accumulator >= 0.06:
+			_skip_accumulator = 0.0
+			is_waiting_for_input = false  # re-entrancy guard across the async next()
+			next(dialogue_line.next_id)
+
+func _exit_tree() -> void:
+	if GameManager:
+		Settings.is_skipping = false
+		DialogueHistory.save_seen_lines()
