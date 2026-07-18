@@ -168,11 +168,28 @@ func _build_rows():
 		_add_row([_accent_label("Inventory")], "Select an item, then click where to use or give it")
 		_add_row([_icon_or_chip(ICON_RIGHT_CLICK, "RMB")], "Cancel the current action / back out of menus")
 		_add_row([_icon_or_chip(ICON_LEFT_CLICK, "LMB")], "Continue dialogue")
+		_add_row([_chip("Space")], "Complete the sentence / continue dialogue")
+		_add_row([_chip("Ctrl"), _plain_label("(hold)")], "Fast-forward dialogue")
+		_add_row(_choice_keys_row(), "Highlight and pick dialogue choices")
+		_add_row([_accent_label("Skip")], "Auto-advance dialogue you've already read")
+		_add_row([_chip("H")], "Hide / show the dialogue box")
+		_add_row([_accent_label("Scroll Up")], "Open the dialogue log")
 		_add_row([_icon_or_chip(ICON_JOURNAL, "Journal")], "Open your journal")
 		if Flags.get_level_flag("insurance_button_unlocked"):
 			_add_row([_icon_or_chip(ICON_FORM, "Form")], "Open the insurance form")
 		_add_row([_chip("Alt"), _plain_label("+"), _chip("Enter")], "Toggle fullscreen")
 		_add_row([_chip("Esc")], "Pause / options")
+
+func _choice_keys_row() -> Array:
+	var items: Array = []
+	if CUSTOM_FONT.has_char(0x2191) and CUSTOM_FONT.has_char(0x2193):
+		items.append(_chip("\u2191"))
+		items.append(_chip("\u2193"))
+	else:
+		items.append(_accent_label("Arrow Keys"))
+	items.append(_plain_label("+"))
+	items.append(_chip("Space"))
+	return items
 
 func _movement_keys_row() -> Array:
 	var items: Array = [_chip("A"), _plain_label("/"), _chip("D"), _plain_label("or")]
