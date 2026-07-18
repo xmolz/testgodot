@@ -39,7 +39,7 @@ var _cached_name_styles: Dictionary = {}  # lookup_key -> StyleBoxFlat
 
 # --- Character Background Color Lookup Table (For the Nameplate) ---
 var character_colors: Dictionary = {
-	"AIda": Color("#20B2AA"),   # Light Sea Green
+	"aiDA": Color("#20B2AA"),   # Light Sea Green
 	"Sergey": Color("#DAA520"), # Goldenrod
 	"McBucket": Color("#FF4500"), # Orange-Red
 	"Old Man": Color("#FF4500"),
@@ -55,7 +55,7 @@ var character_colors: Dictionary = {
 
 # --- Character Portrait Lookup Table ---
 var character_portraits: Dictionary = {
-	"AIda": preload("res://Sprites/dialogue sprites/aida_dialogue_sprite.PNG"),
+	"aiDA": preload("res://Sprites/dialogue sprites/aida_dialogue_sprite.PNG"),
 	"Sergey": preload("res://Sprites/dialogue sprites/sergey_dialogue_sprite.png"),
 	"McBucket": preload("res://Sprites/dialogue sprites/mcbucket_dialogue_sprite.PNG"),
 	"Old Man": preload("res://Sprites/dialogue sprites/mcbucket_dialogue_sprite.PNG"),
@@ -69,7 +69,7 @@ var character_portraits: Dictionary = {
 
 # --- Character Shader Background Colors ---
 var character_bg_colors: Dictionary = {
-	"AIda": {
+	"aiDA": {
 		"top": Color("#c22b64"),
 		"bot": Color("#ffffff"),
 		"dot": Color(1.0, 1.0, 1.0, 0.4)

@@ -59,8 +59,8 @@ Player: (This could probably get clogged easily...)
 
 ~ medicine_cabinet_interrupt
 
-AIda: Hey patient #122, that cabinet is reserved for clinical staff.
-AIda: If you are experiencing discomfort, I can assist with approved medication.
+aiDA: Hey patient #122, that cabinet is reserved for clinical staff.
+aiDA: If you are experiencing discomfort, I can assist with approved medication.
 Player: (Huh. Looks like I can’t open the medicine cabinet while she’s still around.)
 if Flags.get_level_flag("mcbucket_interruption_happened") or (Flags.get_level_flag("mcbucket_has_screamed_at_player") and Flags.get_level_flag("learned_about_meds_from_aida"))
 	Player: (Is there any way I can send her to the other room?)

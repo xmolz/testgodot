@@ -842,7 +842,7 @@ wait_duration = 15.0
 waypoints = Array[NodePath]([NodePath("../../Waypoint1"), NodePath("../../Waypoint2")])
 
 [node name="InteractionArea" parent="Aida_Path/AIda" index="3" unique_id=989885246]
-object_display_name = "AIda"
+object_display_name = "aiDA"
 object_id = "AIda"
 category = 1
 interactions = Array[ExtResource("24_qsp4k")]([ExtResource("7_jq2sk"), SubResource("Resource_wnkbs")])

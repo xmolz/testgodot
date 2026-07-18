@@ -1,7 +1,7 @@
 ~ start
 
 # 1. Normal Dialogue
-AIda: I'm going to play the tape now.
+aiDA: I'm going to play the tape now.
 
 # 2. Start Cinematic (Cutscene Mode)
 # Args: "default", HideBalloon=true, ForceLock=true, "dissolve"
@@ -13,9 +13,9 @@ do play_cinematic("default", true, true, "dissolve")
 # --- AT THIS POINT, THE PLAYER CLICKED CONTINUE ---
 # The script showed the Balloon again. The video is STILL playing.
 
-AIda: Do you see that shadow moving?
-AIda: It looks like someone is walking in the hallway.
-AIda: But the timestamp says 3:00 AM.
+aiDA: Do you see that shadow moving?
+aiDA: It looks like someone is walking in the hallway.
+aiDA: But the timestamp says 3:00 AM.
 
 # 4. The Switch (Sneaky Trick!)
 # We change the background sprite NOW, while the Cinematic is still covering it.
@@ -26,7 +26,7 @@ do change_background_sprite("res://Backgrounds/Aida/aida_hospital_base.png", "no
 # The video fades out, revealing the NEW background we just set.
 do stop_cinematic("dissolve")
 
-AIda: And then the camera cuts out.
-AIda: Creepy, right?
+aiDA: And then the camera cuts out.
+aiDA: Creepy, right?
 
 => END

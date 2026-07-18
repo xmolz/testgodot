@@ -9,7 +9,7 @@ const PLAYER_NAMES = ["Player"]
 var custom_font = preload("res://Fonts/VarelaRound-Regular.ttf")
 
 var character_colors: Dictionary = {
-	"AIda": Color("#20B2AA"),
+	"aiDA": Color("#20B2AA"),
 	"Sergey": Color("#DAA520"),
 	"McBucket": Color("#FF4500"),
 	"Old Man": Color("#FF4500"),
@@ -24,7 +24,7 @@ var character_colors: Dictionary = {
 }
 
 var character_portraits: Dictionary = {
-	"AIda": preload("res://Sprites/dialogue sprites/aida_dialogue_sprite.PNG"),
+	"aiDA": preload("res://Sprites/dialogue sprites/aida_dialogue_sprite.PNG"),
 	"Sergey": preload("res://Sprites/dialogue sprites/sergey_dialogue_sprite.png"),
 	"McBucket": preload("res://Sprites/dialogue sprites/mcbucket_dialogue_sprite.PNG"),
 	"Old Man": preload("res://Sprites/dialogue sprites/mcbucket_dialogue_sprite.PNG"),

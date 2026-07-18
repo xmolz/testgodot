@@ -40,9 +40,9 @@ do Flags.set_level_flag("mcbucket_state_from_flash", true)
 => END
 
 ~ AIda_post
-AIda: Oh wow, Patient #122! Your mammary tissue health appears statistically outstanding!
-AIda: Would you like a full clinical breast examination? I can perform a thorough scan and palpation on the spot!
-AIda: Havemore Inc provides tests at [i]very[/i] competitive rates. The charge will simply be added to your current tab.
+aiDA: Oh wow, Patient #122! Your mammary tissue health appears statistically outstanding!
+aiDA: Would you like a full clinical breast examination? I can perform a thorough scan and palpation on the spot!
+aiDA: Havemore Inc provides tests at [i]very[/i] competitive rates. The charge will simply be added to your current tab.
 Player: Nah, I'm good.
 Player: (...Why did I do that?)
 => END

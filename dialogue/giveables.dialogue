@@ -3,7 +3,7 @@ Player: (I don't think they want that.)
 => END
 
 ~ AIda_item_hospital_toilet_paper
-AIda: Thanks!
+aiDA: Thanks!
 do Inventory.remove_item("hospital_toilet_paper")
 do NotificationManager.add_notification("Toilet paper given to AIda.")
 => END
