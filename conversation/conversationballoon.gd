@@ -33,6 +33,7 @@ var _is_responses_clickable: bool = false
 var _is_simulating_choice: bool = false
 var skip_button: Button
 var _skip_accumulator: float = 0.0
+var _current_line_was_seen: bool = false
 
 # --- CACHED OBJECTS (avoid per-line allocations) ---
 var _bbcode_regex: RegEx
@@ -195,6 +196,7 @@ func _ready() -> void:
 		auto_button.get_parent().add_child(skip_button)
 		auto_button.get_parent().move_child(skip_button, auto_button.get_index() + 1)
 		skip_button.pressed.connect(_on_skip_button_pressed)
+		skip_button.mouse_exited.connect(_update_skip_button_visuals)
 		if not Settings.skip_toggled.is_connected(_on_global_skip_toggled):
 			Settings.skip_toggled.connect(_on_global_skip_toggled)
 		_update_skip_button_visuals()
@@ -270,6 +272,7 @@ func _ready() -> void:
 		log_button.add_theme_font_size_override("font_size", 44)
 		auto_button.add_theme_font_size_override("font_size", 44)
 		hide_button.add_theme_font_size_override("font_size", 44)
+		if skip_button: skip_button.add_theme_font_size_override("font_size", 44)
 
 		for qbtn in [menu_button, log_button, hide_button]:
 			qbtn.add_theme_color_override("font_hover_color", Color(0.6, 0.6, 0.6, 1.0))
@@ -431,8 +434,17 @@ func apply_dialogue_line() -> void:
 	is_waiting_for_input = false
 	_is_simulating_choice = false
 	_skip_accumulator = 0.0
-	if GameManager and resource and not dialogue_line.text.is_empty():
-		DialogueHistory.mark_line_seen(_current_line_seen_key())
+	if dialogue_line.text.is_empty():
+		_current_line_was_seen = true  # structural/empty line: don't interrupt a skip run
+	elif GameManager and resource:
+		var seen_key := _current_line_seen_key()
+		_current_line_was_seen = DialogueHistory.is_line_seen(seen_key)
+		DialogueHistory.mark_line_seen(seen_key)
+	else:
+		_current_line_was_seen = false
+	
+	_update_skip_button_visuals()
+
 	balloon.focus_mode = Control.FOCUS_ALL
 	balloon.grab_focus()
 
@@ -932,6 +944,8 @@ func _update_auto_button_visuals():
 			auto_button.add_theme_color_override("font_hover_color", Color(0.6, 0.6, 0.6, 1.0) if OS.has_feature("mobile") else Color(0.2, 0.85, 1.0, 1.0))
 
 func _on_skip_button_pressed() -> void:
+	if GameManager and not Settings.is_skipping and not _is_skip_available():
+		return  # nothing to skip on this line — button is inert
 	if SoundManager: SoundManager.play_sfx("ui_click")
 	if GameManager:
 		Settings.is_skipping = not Settings.is_skipping
@@ -941,20 +955,40 @@ func _on_global_skip_toggled(_is_on: bool) -> void:
 
 func _update_skip_button_visuals() -> void:
 	if not skip_button: return
+	var cyan := Color(0.2, 0.85, 1.0, 1.0)
+	var cyan_bright := Color(0.4, 0.95, 1.0, 1.0)
+	var gray := Color(0.6, 0.6, 0.6, 1.0)
+	var gray_dim := Color(0.45, 0.45, 0.45, 1.0)
+
 	if GameManager and Settings.is_skipping:
-		skip_button.add_theme_color_override("font_color", Color(0.2, 0.85, 1.0, 1.0))
-		skip_button.add_theme_color_override("font_hover_color", Color(0.2, 0.85, 1.0, 1.0) if OS.has_feature("mobile") else Color(0.4, 0.95, 1.0, 1.0))
-		skip_button.add_theme_color_override("font_focus_color", Color(0.2, 0.85, 1.0, 1.0))
-	else:
-		skip_button.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6, 1.0))
-		skip_button.add_theme_color_override("font_focus_color", Color(0.6, 0.6, 0.6, 1.0))
+		# ACTIVE — currently fast-forwarding seen text
+		skip_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		skip_button.add_theme_color_override("font_color", cyan)
+		skip_button.add_theme_color_override("font_focus_color", cyan)
+		skip_button.add_theme_color_override("font_hover_color", cyan if OS.has_feature("mobile") else cyan_bright)
+	elif _is_skip_available():
+		# AVAILABLE — current line already seen; clickable
+		skip_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		skip_button.add_theme_color_override("font_color", gray)
+		skip_button.add_theme_color_override("font_focus_color", gray)
 		if skip_button.is_hovered() and not OS.has_feature("mobile"):
-			skip_button.add_theme_color_override("font_hover_color", Color(0.6, 0.6, 0.6, 1.0))
+			# suppress cyan flash right after clicking it off; mouse_exited restores it
+			skip_button.add_theme_color_override("font_hover_color", gray)
 		else:
-			skip_button.add_theme_color_override("font_hover_color", Color(0.6, 0.6, 0.6, 1.0) if OS.has_feature("mobile") else Color(0.2, 0.85, 1.0, 1.0))
+			skip_button.add_theme_color_override("font_hover_color", gray if OS.has_feature("mobile") else cyan)
+	else:
+		# UNAVAILABLE — unseen line or a choice screen; inert, no hover response
+		skip_button.mouse_default_cursor_shape = Control.CURSOR_ARROW
+		skip_button.add_theme_color_override("font_color", gray_dim)
+		skip_button.add_theme_color_override("font_focus_color", gray_dim)
+		skip_button.add_theme_color_override("font_hover_color", gray_dim)
 
 func _current_line_seen_key() -> String:
 	return resource.resource_path + "::" + dialogue_line.id
+
+func _is_skip_available() -> bool:
+	return GameManager != null and dialogue_line != null \
+		and _current_line_was_seen and dialogue_line.responses.size() == 0
 
 func _should_skip_now() -> bool:
 	if not GameManager: return false
@@ -963,9 +997,9 @@ func _should_skip_now() -> bool:
 	if _is_log_open or is_ui_hidden: return false
 	if Input.is_key_pressed(KEY_CTRL): return true
 	if Settings.is_skipping:
-		if DialogueHistory.is_line_seen(_current_line_seen_key()):
+		if _current_line_was_seen:
 			return true
-		Settings.is_skipping = false  # reached unseen text: auto-disable
+		Settings.is_skipping = false
 	return false
 
 func _on_menu_button_pressed() -> void:
