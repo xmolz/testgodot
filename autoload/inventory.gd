@@ -40,7 +40,7 @@ func remove_item(item_id_to_remove: String):
 			if not item_data_ref.is_stackable:
 				break
 	if removed_any:
-		SoundManager.play_sfx("notification_ping_reverse", 1.0, -3.0)
+		SoundManager.play_sfx("item_remove", 1.0, -3.0)
 
 
 func has_item(item_id_to_check: String) -> bool:
