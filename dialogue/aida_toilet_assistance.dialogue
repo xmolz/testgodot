@@ -17,3 +17,8 @@ Player: Anyway... what was I gonna do?
 Player: (Oh crap, she's coming back!)
 Player: (Better close this before she catches me snooping in here.)
 => END
+
+~ bathroom_door_blocked
+Player: I might wanna wait until the nurse comes out...
+Player: Also, wasn't I gonna do something important behind her back?
+=> END

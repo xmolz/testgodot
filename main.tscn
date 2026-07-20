@@ -435,6 +435,19 @@ verb_id = "use"
 actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_phcyf")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
+[sub_resource type="Resource" id="Resource_door_wait_line"]
+script = ExtResource("46_wnkbs")
+dialogue_resource = ExtResource("64_b17eg")
+dialogue_checkpoint = "bathroom_door_blocked"
+metadata/_custom_type_script = "uid://8c6cnm8lo25p"
+
+[sub_resource type="Resource" id="Resource_door_blocked_use"]
+script = ExtResource("24_qsp4k")
+verb_id = "use"
+required_flag_id = "aida_fixing_toilet"
+actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_door_wait_line")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
 [sub_resource type="Resource" id="Resource_vke2r"]
 script = ExtResource("45_wnkbs")
 metadata/_custom_type_script = "uid://bvfc7q2g4fum1"
@@ -956,7 +969,7 @@ position = Vector2(40, -91)
 scale = Vector2(0.43, 0.43)
 object_display_name = "Bathroom Door"
 object_id = "bathroom_door"
-interactions = Array[ExtResource("24_qsp4k")]([ExtResource("7_jq2sk"), SubResource("Resource_rnkwl")])
+interactions = Array[ExtResource("24_qsp4k")]([ExtResource("7_jq2sk"), SubResource("Resource_door_blocked_use"), SubResource("Resource_rnkwl")])
 
 [node name="JournalButtonUI" parent="." unique_id=1650026667 instance=ExtResource("58_wu3dr")]
 unique_name_in_owner = true
