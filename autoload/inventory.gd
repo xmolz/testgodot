@@ -30,13 +30,17 @@ func remove_item(item_id_to_remove: String):
 	var item_data_ref = get_item_data_by_id(item_id_to_remove)
 	if not item_data_ref:
 		return
+	var removed_any: bool = false
 	for i in range(items.size() - 1, -1, -1):
 		if items[i].item_id == item_id_to_remove:
 			items.remove_at(i)
+			removed_any = true
 			inventory_updated.emit(items.duplicate())
 			Events.item_removed.emit(item_id_to_remove)
 			if not item_data_ref.is_stackable:
 				break
+	if removed_any:
+		SoundManager.play_sfx("notification_ping_reverse", 1.0, -3.0)
 
 
 func has_item(item_id_to_check: String) -> bool:
