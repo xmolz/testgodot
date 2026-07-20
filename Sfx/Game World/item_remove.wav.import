@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://be60natwpr7hy"
+path="res://.godot/imported/item_remove.wav-fb7bfe38f3726a96a43593a9ad59449a.sample"
+
+[deps]
+
+source_file="res://Sfx/Game World/item_remove.wav"
+dest_files=["res://.godot/imported/item_remove.wav-fb7bfe38f3726a96a43593a9ad59449a.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

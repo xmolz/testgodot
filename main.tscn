@@ -424,17 +424,6 @@ verb_id = "use"
 actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_0cp0l")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
-[sub_resource type="Resource" id="Resource_phcyf"]
-script = ExtResource("44_0cbny")
-target_marker_name = "BathroomSpawnPoint"
-metadata/_custom_type_script = "uid://dm3vji871klli"
-
-[sub_resource type="Resource" id="Resource_rnkwl"]
-script = ExtResource("24_qsp4k")
-verb_id = "use"
-actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_phcyf")])
-metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
-
 [sub_resource type="Resource" id="Resource_door_wait_line"]
 script = ExtResource("46_wnkbs")
 dialogue_resource = ExtResource("64_b17eg")
@@ -446,6 +435,17 @@ script = ExtResource("24_qsp4k")
 verb_id = "use"
 required_flag_id = "aida_fixing_toilet"
 actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_door_wait_line")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="Resource" id="Resource_phcyf"]
+script = ExtResource("44_0cbny")
+target_marker_name = "BathroomSpawnPoint"
+metadata/_custom_type_script = "uid://dm3vji871klli"
+
+[sub_resource type="Resource" id="Resource_rnkwl"]
+script = ExtResource("24_qsp4k")
+verb_id = "use"
+actions_to_perform = Array[ExtResource("25_kq58d")]([SubResource("Resource_phcyf")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
 [sub_resource type="Resource" id="Resource_vke2r"]

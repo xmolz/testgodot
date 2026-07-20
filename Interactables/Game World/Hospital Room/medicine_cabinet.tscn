@@ -1,9 +1,12 @@
 [gd_scene format=3 uid="uid://crcjecrrvndr2"]
 
 [ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactions/interactable.gd" id="1_niuas"]
-[ext_resource type="Texture2D" uid="uid://t7yho2m7tt4m" path="res://Sprites/Hospital Room/medicine_cabinet.png" id="2_shog1"]
-[ext_resource type="Texture2D" uid="uid://xwufbgcjblgc" path="res://Sprites/Hospital Room/medicine_cabinet_glow.png" id="3_shoix"]
+[ext_resource type="Texture2D" uid="uid://d3obs1ed36udi" path="res://Sprites/Hospital Room/medicine_cabinet.png" id="4_m2n17"]
+[ext_resource type="Texture2D" uid="uid://ck3d68gwg57mi" path="res://Sprites/Hospital Room/medicine_cabinet_glow.png" id="5_x3oxh"]
 [ext_resource type="Material" uid="uid://dww3d0txyl18g" path="res://interactions/actions/interactable_outline.tres" id="OutlineMaterial"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_shoix"]
+load_path = "res://.godot/imported/medicine_cabinet.png-7c6fb887744d851eae0f58a28a2cc29b.ctex"
 
 [sub_resource type="Gradient" id="Gradient_hiqhm"]
 interpolation_mode = 2
@@ -64,16 +67,19 @@ object_id = "MedicineCabinet"
 
 [node name="Contact shadow" type="Sprite2D" parent="." unique_id=1355763920]
 modulate = Color(0, 0, 0, 0.08235294)
-texture = ExtResource("2_shog1")
+scale = Vector2(0.435, 0.435)
+texture = SubResource("CompressedTexture2D_shoix")
 offset = Vector2(20.16, 15.235)
 
 [node name="ObjectSprite" type="Sprite2D" parent="." unique_id=424775488]
 material = ExtResource("OutlineMaterial")
-texture = ExtResource("2_shog1")
+scale = Vector2(0.435, 0.435)
+texture = ExtResource("4_m2n17")
 
 [node name="glow" type="Sprite2D" parent="." unique_id=721848485]
-position = Vector2(-16, -3)
-texture = ExtResource("3_shoix")
+position = Vector2(-8, -1)
+scale = Vector2(0.435, 0.435)
+texture = ExtResource("5_x3oxh")
 
 [node name="FloorShadow" type="Sprite2D" parent="." unique_id=1813748034]
 modulate = Color(0.16546667, 0.126, 0.2, 0.32941177)
@@ -82,6 +88,7 @@ scale = Vector2(7.65625, 1.7708337)
 texture = SubResource("GradientTexture2D_shog1")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1095235607]
+visible = false
 position = Vector2(-0.5, 2)
 shape = SubResource("RectangleShape2D_rhf3t")
 
