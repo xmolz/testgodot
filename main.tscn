@@ -72,6 +72,8 @@
 [sub_resource type="Resource" id="Resource_4obbf"]
 script = ExtResource("10_0rl1p")
 item_id_to_add = "hospital_toilet_paper"
+already_have_dialogue = ExtResource("45_qnost")
+already_have_checkpoint = "tp_already_have"
 metadata/_custom_type_script = "uid://nvyqoryt5sbh"
 
 [sub_resource type="Resource" id="Resource_f1p13"]
@@ -83,6 +85,8 @@ metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 [sub_resource type="Resource" id="Resource_u81y6"]
 script = ExtResource("10_0rl1p")
 item_id_to_add = "hospital_toilet_paper"
+already_have_dialogue = ExtResource("45_qnost")
+already_have_checkpoint = "tp_already_have"
 metadata/_custom_type_script = "uid://nvyqoryt5sbh"
 
 [sub_resource type="Resource" id="Resource_rt5wr"]
