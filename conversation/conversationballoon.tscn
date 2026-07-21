@@ -3,11 +3,15 @@
 [ext_resource type="Script" uid="uid://cynyquih1wama" path="res://conversation/conversationballoon.gd" id="1_313u1"]
 [ext_resource type="Texture2D" uid="uid://c55vv35scl4ih" path="res://Icons/proceed.png" id="2_8cepw"]
 [ext_resource type="PackedScene" uid="uid://ckvgyvclnwggo" path="res://addons/dialogue_manager/dialogue_label.tscn" id="2_313u1"]
+[ext_resource type="Script" path="res://conversation/custom_dialogue_label.gd" id="6_custom_label"]
 [ext_resource type="FontFile" uid="uid://bd58xbyix7r6p" path="res://Fonts/VarelaRound-Regular.ttf" id="3_313u1"]
 [ext_resource type="Texture2D" uid="uid://c8gv5jbuhdxxr" path="res://Icons/back.png" id="3_571bl"]
 [ext_resource type="Script" uid="uid://bb52rsfwhkxbn" path="res://addons/dialogue_manager/dialogue_responses_menu.gd" id="3_ibrr4"]
 [ext_resource type="Texture2D" uid="uid://ctnfjsc248msb" path="res://Icons/leave.png" id="4_74fxk"]
 [ext_resource type="Texture2D" path="res://Sprites/dialogue sprites/sergey_dialogue_sprite.png" id="5_sergey"]
+[ext_resource type="FontVariation" path="res://Fonts/varela_round_italic.tres" id="10_italic"]
+[ext_resource type="FontVariation" path="res://Fonts/varela_round_bold.tres" id="11_bold"]
+[ext_resource type="FontVariation" path="res://Fonts/varela_round_bold_italic.tres" id="12_bold_italic"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oijet"]
 bg_color = Color(0, 0, 0, 0.745098)
@@ -130,13 +134,18 @@ size_flags_vertical = 3
 theme_override_colors/default_color = Color(1, 1, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.19607843)
 theme_override_fonts/normal_font = ExtResource("3_313u1")
+theme_override_fonts/bold_font = ExtResource("11_bold")
+theme_override_fonts/bold_italics_font = ExtResource("12_bold_italic")
+theme_override_fonts/italics_font = ExtResource("10_italic")
 theme_override_font_sizes/normal_font_size = 28
 theme_override_font_sizes/bold_font_size = 28
 theme_override_font_sizes/bold_italics_font_size = 28
 theme_override_font_sizes/italics_font_size = 28
 theme_override_font_sizes/mono_font_size = 28
+script = ExtResource("6_custom_label")
 text = "Dialogue..."
 seconds_per_step = 0.018
+skip_pause_at_abbreviations = PackedStringArray("Mr", "Mrs", "Ms", "Dr", "etc", "eg", "ex", "Inc")
 
 [node name="PortraitContainer" type="PanelContainer" parent="Balloon" unique_id=1340763811]
 unique_name_in_owner = true
@@ -186,6 +195,7 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.19607843)
 theme_override_constants/shadow_outline_size = 1
 theme_override_constants/outline_size = 4
 theme_override_fonts/normal_font = ExtResource("3_313u1")
+theme_override_fonts/bold_font = ExtResource("11_bold")
 theme_override_font_sizes/normal_font_size = 30
 theme_override_font_sizes/bold_font_size = 30
 bbcode_enabled = true

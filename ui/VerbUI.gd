@@ -50,6 +50,9 @@ func _ready():
 	action_bubble_label.scroll_active = false
 	action_bubble_label.autowrap_mode = TextServer.AUTOWRAP_OFF
 	action_bubble_label.add_theme_font_override("normal_font", preload("res://Fonts/VarelaRound-Regular.ttf"))
+	action_bubble_label.add_theme_font_override("bold_font", preload("res://Fonts/varela_round_bold.tres"))
+	action_bubble_label.add_theme_font_override("italics_font", preload("res://Fonts/varela_round_italic.tres"))
+	action_bubble_label.add_theme_font_override("bold_italics_font", preload("res://Fonts/varela_round_bold_italic.tres"))
 	action_bubble_label.add_theme_font_size_override("normal_font_size", 24)
 	action_bubble_label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.5))
 	action_bubble_label.add_theme_constant_override("shadow_outline_size", 1)

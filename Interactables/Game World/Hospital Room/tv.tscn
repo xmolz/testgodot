@@ -10,13 +10,6 @@
 [ext_resource type="Resource" uid="uid://dlyoiu6syhnqe" path="res://dialogue/unusables.dialogue" id="8_tv001"]
 [ext_resource type="Resource" uid="uid://bivfrghh084ym" path="res://interactions/actions/DefaultExamineResponse.tres" id="9_tv001"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_arbd3"]
-shader = ExtResource("1_rlxh4")
-shader_parameter/progress = 0.0
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_arbd3"]
-size = Vector2(474, 261)
-
 [sub_resource type="Resource" id="Resource_tv_act"]
 script = ExtResource("7_tv001")
 dialogue_resource = ExtResource("8_tv001")
@@ -28,6 +21,13 @@ script = ExtResource("5_tv001")
 verb_id = "use"
 actions_to_perform = Array[ExtResource("6_tv001")]([SubResource("Resource_tv_act")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_arbd3"]
+shader = ExtResource("1_rlxh4")
+shader_parameter/progress = 0.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_arbd3"]
+size = Vector2(474, 261)
 
 [node name="television_screen" type="Area2D" unique_id=296554066]
 script = ExtResource("1_06tmt")

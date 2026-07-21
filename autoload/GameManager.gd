@@ -530,24 +530,12 @@ func clear_hovered_object(interactable: Interactable = null):
 func refresh_hovered_object():
 	_update_top_hovered_object()
 
-func _update_top_hovered_object():
-	# Clean out invalid instances just in case an object was destroyed while hovered
-	for i in range(hovered_interactables.size() - 1, -1, -1):
-		if not is_instance_valid(hovered_interactables[i]):
-			hovered_interactables.remove_at(i)
-
-	# --- TRANSITION OVERRIDE ---
-	if hovered_interactables.is_empty() or is_transitioning:
-		hovered_interactable = null
-		if is_instance_valid(custom_cursor_instance):
-			custom_cursor_instance.set_hover_state(false)
-		update_sentence_line_ui()
-		return
-
-	# Find the top-most interactable
-	var top_interactable = hovered_interactables[0]
-	for i in range(1, hovered_interactables.size()):
-		var candidate = hovered_interactables[i]
+func _pick_top_interactable(candidates: Array[Interactable]) -> Interactable:
+	if candidates.is_empty():
+		return null
+	var top_interactable = candidates[0]
+	for i in range(1, candidates.size()):
+		var candidate = candidates[i]
 
 		# Safely get effective Z-index (checking parent if needed)
 		var top_z = top_interactable.z_index
@@ -564,8 +552,23 @@ func _update_top_hovered_object():
 			# If Z-index is tied, lower on the screen (higher Y) is in front
 			if candidate.global_position.y > top_interactable.global_position.y:
 				top_interactable = candidate
+	return top_interactable
 
-	hovered_interactable = top_interactable
+func _update_top_hovered_object():
+	# Clean out invalid instances just in case an object was destroyed while hovered
+	for i in range(hovered_interactables.size() - 1, -1, -1):
+		if not is_instance_valid(hovered_interactables[i]):
+			hovered_interactables.remove_at(i)
+
+	# --- TRANSITION OVERRIDE ---
+	if hovered_interactables.is_empty() or is_transitioning:
+		hovered_interactable = null
+		if is_instance_valid(custom_cursor_instance):
+			custom_cursor_instance.set_hover_state(false)
+		update_sentence_line_ui()
+		return
+
+	hovered_interactable = _pick_top_interactable(hovered_interactables)
 
 	update_sentence_line_ui()
 
@@ -634,7 +637,32 @@ func update_sentence_line_ui():
 
 
 #region Click Routing & Walk-to-Interact
+var _pending_click_candidates: Array[Interactable] = []
+
 func process_interaction_click(interactable_node: Interactable):
+	if is_transitioning: return
+	if not is_instance_valid(interactable_node): return
+	if _pending_click_candidates.is_empty():
+		_resolve_pending_click.call_deferred()
+	if not _pending_click_candidates.has(interactable_node):
+		_pending_click_candidates.append(interactable_node)
+
+func _resolve_pending_click():
+	var candidates: Array[Interactable] = []
+	for c in _pending_click_candidates:
+		if is_instance_valid(c):
+			candidates.append(c)
+	_pending_click_candidates.clear()
+	if candidates.is_empty(): return
+	var winner: Interactable = null
+	# Source of truth: whatever the cursor label is showing
+	if is_instance_valid(hovered_interactable) and candidates.has(hovered_interactable):
+		winner = hovered_interactable
+	else:
+		winner = _pick_top_interactable(candidates)  # touch input / no-hover fallback
+	_process_interaction_click_resolved(winner)
+
+func _process_interaction_click_resolved(interactable_node: Interactable):
 	if is_transitioning: return
 	if not is_instance_valid(interactable_node): return
 

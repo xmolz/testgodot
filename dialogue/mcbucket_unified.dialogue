@@ -9,12 +9,14 @@ elif Flags.get_level_flag("mcbucket_invigirol_used") == true or Flags.get_level_
 else:
 	=> default_start
 do change_background("test", "none", 0.0)
+
 ~ default_start
 do show_cg("mcbucket_normal_base", "none", 0.0)
 An ancient man stares at you intently.
 Or at least, so you think. The squint makes it hard to tell.
 do SoundManager.play_music_track("mcbucket_normal_theme", 5.0)
 What do you want to say to him?
+
 ~ default_hub
 - Hey, how are you?
 	The old man is still and silent.
@@ -33,28 +35,7 @@ What do you want to say to him?
 		do show_cg("mcbucket_normal_base")
 		The old man seems to know only one response.
 		What would you like to do?
-		- Scream back at him
-			That's it. Only one way to tell the bastard who's in charge.
-			You put on your work face.
-			Suck all the air you can into your stomach.
-			You're gonna do it. Scream it back at him.
-			3...2...1...
-			do show_cg("mcbucket_normal_ree")
-			do shake(0.5, 20.0)
-			do SoundManager.play_sfx("mcbucket_scream")
-			Old Man: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
-			do show_cg("mcbucket_normal_base")
-			You let all that air out.
-			Fucker beat you to it, it seems.
-			~ ree_hub
-			do show_cg("mcbucket_normal_ree")
-			do shake(0.5, 20.0)
-			Old Man: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
-			- REEEEEEEEEEE~~~~~!!! => ree_hub
-			- Leave [Leave]
-				"Goodbye, old man," you say to the character in front of you.
-				do SoundManager.fade_out_music(3.0)
-				=> END
+		- Scream back at him => scream_back
 		- Leave [Leave]
 			"Goodbye, old man," you say to the character in front of you.
 			do SoundManager.fade_out_music(3.0)
@@ -66,26 +47,7 @@ What do you want to say to him?
 		do show_cg("mcbucket_normal_base")
 		The old man seems to know only one response.
 		What would you like to do?
-		- Scream back at him
-			That's it. Only one way to tell the bastard who's in charge.
-			You put on your work face.
-			Suck all the air you can into your stomach.
-			You're gonna do it. Scream it back at him.
-			3...2...1...
-			do show_cg("mcbucket_normal_ree")
-			do shake(0.5, 20.0)
-			Old Man: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
-			do show_cg("mcbucket_normal_base")
-			You let all that air out.
-			Fucker beat you to it, it seems.
-			do show_cg("mcbucket_normal_ree")
-			do shake(0.5, 20.0)
-			Old Man: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
-			- REEEEEEEEEEE~~~~~!!! => ree_hub
-			- Leave [Leave]
-				"Goodbye, old man," you say to the character in front of you.
-				do SoundManager.fade_out_music(3.0)
-				=> END
+		- Scream back at him => scream_back
 		- Leave [Leave]
 			"Goodbye, old man," you say to the character in front of you.
 			do SoundManager.fade_out_music(3.0)
@@ -97,25 +59,7 @@ What do you want to say to him?
 		do show_cg("mcbucket_normal_base")
 		The old man seems to know only one response.
 		What would you like to do?
-		- Scream back at him
-			That's it. Only one way to tell the bastard who's in charge.
-			You put on your work face.
-			Suck all the air you can into your stomach.
-			You're gonna do it. Scream it back at him.
-			3...2...1...
-			do show_cg("mcbucket_normal_ree")
-			do shake(0.5, 20.0)
-			Old Man: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
-			do show_cg("mcbucket_normal_base")
-			You let all that air out.
-			Fucker beat you to it, it seems.
-			do show_cg("mcbucket_normal_ree")
-			do shake(0.5, 20.0)
-			Old Man: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
-			- REEEEEEEEEEE~~~~~!!! => ree_hub
-			- Leave [Leave]
-				do SoundManager.fade_out_music(3.0)
-				=> END
+		- Scream back at him => scream_back
 		- Leave [Leave]
 			"Goodbye, old man," you say to the character in front of you.
 			do SoundManager.fade_out_music(3.0)
@@ -137,26 +81,7 @@ What do you want to say to him?
 		do show_cg("mcbucket_normal_base")
 		The old man seems to know only one response.
 		What would you like to do?
-		- Scream back at him
-			That's it. Only one way to tell the bastard who's in charge.
-			You put on your work face.
-			Suck all the air you can into your stomach.
-			You're gonna do it. Scream it back at him.
-			3...2...1...
-			do show_cg("mcbucket_normal_ree")
-			do shake(0.5, 20.0)
-			Old Man: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
-			do show_cg("mcbucket_normal_base")
-			You let all that air out.
-			Fucker beat you to it, it seems.
-			do show_cg("mcbucket_normal_ree")
-			do shake(0.5, 20.0)
-			Old Man: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
-			- REEEEEEEEEEE~~~~~!!! => ree_hub
-			- Leave [Leave]
-				"Goodbye, old man," you say to the character in front of you.
-				do SoundManager.fade_out_music(3.0)
-				=> END
+		- Scream back at him => scream_back
 		- Leave [Leave]
 			"Goodbye, old man," you say to the character in front of you.
 			do SoundManager.fade_out_music(3.0)
@@ -168,26 +93,7 @@ What do you want to say to him?
 		do show_cg("mcbucket_normal_base")
 		The old man seems to know only one response.
 		What would you like to do?
-		- Scream back at him
-			That's it. Only one way to tell the bastard who's in charge.
-			You put on your work face.
-			Suck all the air you can into your stomach.
-			You're gonna do it. Scream it back at him.
-			3...2...1...
-			do show_cg("mcbucket_normal_ree")
-			do shake(0.5, 20.0)
-			Old Man: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
-			do show_cg("mcbucket_normal_base")
-			You let all that air out.
-			Fucker beat you to it, it seems.
-			do show_cg("mcbucket_normal_ree")
-			do shake(0.5, 20.0)
-			Old Man: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
-			- REEEEEEEEEEE~~~~~!!! => ree_hub
-			- Leave [Leave]
-				"Goodbye, old man," you say to the character in front of you.
-				do SoundManager.fade_out_music(3.0)
-				=> END
+		- Scream back at him => scream_back
 		- Leave [Leave]
 			"Goodbye, old man," you say to the character in front of you.
 			do SoundManager.fade_out_music(3.0)
@@ -199,25 +105,7 @@ What do you want to say to him?
 		do show_cg("mcbucket_normal_base")
 		The old man seems to know only one response.
 		What would you like to do?
-		- Scream back at him
-			That's it. Only one way to tell the bastard who's in charge.
-			You put on your work face.
-			Suck all the air you can into your stomach.
-			You're gonna do it. Scream it back at him.
-			3...2...1...
-			do show_cg("mcbucket_normal_ree")
-			do shake(0.5, 20.0)
-			Old Man: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
-			do show_cg("mcbucket_normal_base")
-			You let all that air out.
-			Fucker beat you to it, it seems.
-			do show_cg("mcbucket_normal_ree")
-			do shake(0.5, 20.0)
-			Old Man: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
-			- REEEEEEEEEEE~~~~~!!! => ree_hub
-			- Leave [Leave]
-				do SoundManager.fade_out_music(3.0)
-				=> END
+		- Scream back at him => scream_back
 		- Leave [Leave]
 			"Goodbye, old man," you say to the character in front of you.
 			do SoundManager.fade_out_music(3.0)
@@ -226,6 +114,30 @@ What do you want to say to him?
 	do SoundManager.fade_out_music(3.0)
 	=> END
 
+~ scream_back
+That's it. Only one way to tell the bastard who's in charge.
+You put on your work face.
+Suck all the air you can into your stomach.
+You're gonna do it. Scream it back at him.
+3...2...1...
+do show_cg("mcbucket_normal_ree")
+do shake(0.5, 20.0)
+do SoundManager.play_sfx("mcbucket_scream")
+Old Man: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
+do show_cg("mcbucket_normal_base")
+You let all that air out.
+Fucker beat you to it, it seems.
+=> ree_hub
+
+~ ree_hub
+do show_cg("mcbucket_normal_ree")
+do shake(0.5, 20.0)
+Old Man: REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE~~~~~!!!
+- REEEEEEEEEEE~~~~~!!! => ree_hub
+- Leave [Leave]
+	"Goodbye, old man," you say to the character in front of you.
+	do SoundManager.fade_out_music(3.0)
+	=> END
 
 ~ high_start
 do show_cg("mcbucket_high_base", "none", 0.0)

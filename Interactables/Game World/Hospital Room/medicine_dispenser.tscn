@@ -289,8 +289,9 @@ scale = Vector2(12.578125, 1.7708337)
 texture = SubResource("GradientTexture2D_shog1")
 
 [node name="DrugDisplay" type="Sprite2D" parent="." unique_id=1949413966]
-position = Vector2(-2, -32)
-scale = Vector2(0.1, 0.09)
+texture_filter = 3
+position = Vector2(-0.99999994, -32)
+scale = Vector2(0.1, 0.075)
 
 [node name="PulseOverlay" type="ColorRect" parent="." unique_id=1762419068]
 material = SubResource("ShaderMaterial_xhc8i")
@@ -298,6 +299,7 @@ offset_left = -97.0
 offset_top = -202.0
 offset_right = 3.0
 offset_bottom = -133.0
+mouse_filter = 2
 
 [node name="VitalsLabel" type="Label" parent="." unique_id=200852913]
 modulate = Color(1, 1, 1, 0.039215688)

@@ -60,6 +60,9 @@ func _ready():
 	bubble_style.corner_radius_bottom_right = 20
 	$ThoughtBubblePivot/ThoughtBubble.add_theme_stylebox_override("panel", bubble_style)
 	prompt_label.add_theme_font_override("normal_font", preload("res://Fonts/VarelaRound-Regular.ttf"))
+	prompt_label.add_theme_font_override("bold_font", preload("res://Fonts/varela_round_bold.tres"))
+	prompt_label.add_theme_font_override("italics_font", preload("res://Fonts/varela_round_italic.tres"))
+	prompt_label.add_theme_font_override("bold_italics_font", preload("res://Fonts/varela_round_bold_italic.tres"))
 	prompt_label.add_theme_font_size_override("normal_font_size", 44)
 	prompt_label.fit_content = true
 	prompt_label.autowrap_mode = TextServer.AUTOWRAP_OFF

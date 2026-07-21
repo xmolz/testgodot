@@ -6,11 +6,15 @@ aiDA: Most patients are unable to do that!
 => END
 
 ~ Player
-
-Player: Ah, amazing.
-Player: The Robo-Nurse thinks I just took a big boy shit.
-Player: Anyway... what was I gonna do?
-
+if Flags.get_level_flag("toilet_scold_seen"):
+	Player: Ah. Of course. Again.
+	Player: (At this point the Robo-Nurse must think I've got diarrhea or something.)
+	Player: Anyway... what was I gonna do?
+else:
+	do Flags.set_level_flag("toilet_scold_seen", true)
+	Player: Ah, amazing.
+	Player: The Robo-Nurse thinks I just took a big boy shit.
+	Player: Anyway... what was I gonna do?
 => END
 
 ~ aida_caught_snooping
