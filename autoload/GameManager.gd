@@ -1191,7 +1191,7 @@ func _on_intro_conversation_finished(_dialogue_resource):
 
 
 #region Screen & Overlay Lifecycle (Journal)
-# --- JOURNAL FUNCTIONS ---
+# journal stuff
 func open_journal():
 	if is_instance_valid(_journal_overlay_instance):
 		return
@@ -1201,7 +1201,7 @@ func open_journal():
 
 	get_tree().root.add_child(_journal_overlay_instance)
 
-	# Hide the main UI using the conversation state
+	# hide main ui 
 	enter_conversation_state()
 	get_tree().paused = true
 
@@ -1210,7 +1210,7 @@ func _on_journal_closed():
 		_journal_overlay_instance.queue_free()
 		_journal_overlay_instance = null
 		
-	# Restore UI and unpause
+	# restore ui , unpasue
 	exit_to_world_state()
 #endregion
 
@@ -1223,20 +1223,20 @@ func trigger_game_over(fade_duration: float = 1.5):
 
 	print_rich("[color=red]GM: Game Over Triggered![/color]")
 
-	# Instantly hide the current dialogue balloon so the player knows their click registered!
+	# hide balloon
 	if is_instance_valid(SceneDirector.intro_overlay) and "current_balloon" in SceneDirector.intro_overlay and is_instance_valid(SceneDirector.intro_overlay.current_balloon):
 		SceneDirector.intro_overlay.current_balloon.hide()
 
-	# 1. Trigger the GLOBAL fade so it isn't destroyed during cleanup
+	# Trigger the GLOBAL fade avoiding destruction during cleanup
 	if is_instance_valid(transition_layer) and transition_layer.has_method("global_fade_to_black"):
 		await transition_layer.global_fade_to_black(fade_duration)
 	else:
 		await get_tree().create_timer(fade_duration).timeout
 
-	# 2. Change state to stop player input
+	# change the state, stop player input
 	change_game_state(GameState.GAME_OVER)
 
-	# 3. Stop all audio aggressively
+	# stop all audio
 	if SoundManager:
 		if SoundManager.has_method("stop_music"): SoundManager.stop_music()
 		if SoundManager.has_method("stop_all_ambience"): SoundManager.stop_all_ambience()
