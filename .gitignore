@@ -1,53 +1,47 @@
 # Godot 4+ specific ignores
 .godot/
-# .nomedia # Generally not needed unless you have specific reasons for media scanning
-
-# Godot general specific ignores (some from GitHub template, some standard)
-# .import/  # For Godot 3. For Godot 4, .godot/ covers this. Keep if you might use Godot 3.
-export_credentials.cfg
-
-# Imported translations (automatically generated from CSV files)
 *.translation
 
 # Mono-specific ignores
 .mono/
-# data_mono/ # Often better to explicitly add data folders if needed, than wildcard ignore
-# *.pidb
-# *.userprefs
-# *.suo
-mono_crash.*.json # From GitHub template
+mono_crash.*.json
 
-# Visual Studio Code (Common editor)
+# VS Code & other editors
 .vscode/
+.claude/
 
-# Builds (Very important to ignore these)
+# Exports / builds (this project exports into dingdong/)
+dingdong/
+export/
 build/
 Build/
 builds/
 Builds/
 *.apk
 *.aab
-*.xap
-*.ipa
+*.exe
+*.dll
+*.pck
+*.zip
+*.tar.gz
+*.tar.bz2
+*.7z
 *.dmg
 *.pkg
 *.deb
 *.rpm
-*.exe
-*.dll
-*.pck
-*.zip     # Be careful if you use zips for actual assets, but usually build artifacts
-*.tar.gz
-*.tar.bz2
-*.7z
 
-# User-specific files & sensitive data (NEVER commit these)
-# Example:
-# secrets.gd
-# .env
+# Secrets — never commit these
+*.keystore
+*.jks
+*.p12
+*.pem
+export_credentials.cfg
 
-# Optional: If you had specific files in your local .gitignore (like 'my_secret_file.txt' from my example)
-# that are NOT covered above and you still want to ignore them, add them here.repomix-output.xml
-dingdong/web/test.zip
-dingdong/
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Other temp files
+repomix-output.xml
 godotpcktool.exe
