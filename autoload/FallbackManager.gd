@@ -1,4 +1,4 @@
-# res://autoload/FallbackManager.gd
+# res://autoload/fallbackmanager.gd
 extends Node
 
 const DEFAULT_CHECKPOINT_NAME = "start"
@@ -25,23 +25,23 @@ func trigger_fallback(verb_data: VerbData, object_id: String, item_id: String):
 	DialogueManager.show_dialogue_balloon_scene("res://conversation/conversationballoon.tscn", fallback_resource, checkpoint_to_use)
 
 
-# This function now uses the correct method to check for checkpoints.
+# this function now uses the
 func _find_valid_checkpoint(resource: DialogueResource, object_id: String, item_id: String) -> String:
-	# Level 1: Item + Object Combination
+	# level 1: item + object combination
 	if not item_id.is_empty():
 		var item_specific_checkpoint = "%s_item_%s" % [object_id, item_id]
-		# Use the confirmed method: check the 'titles' dictionary directly.
+		# use the confirmed method: check
 		if resource.titles.has(item_specific_checkpoint):
 			print_rich("[color=green]FallbackManager: Found item-specific checkpoint: '%s'[/color]" % item_specific_checkpoint)
 			return item_specific_checkpoint
 
-	# Level 2: Object-Only (Only run this if NO item was used)
+	# level 2: object-only (only run
 	if item_id.is_empty() and not object_id.is_empty():
 		var object_specific_checkpoint = object_id
 		if resource.titles.has(object_specific_checkpoint):
 			print_rich("[color=green]FallbackManager: Found object-specific checkpoint: '%s'[/color]" % object_specific_checkpoint)
 			return object_specific_checkpoint
 
-	# Level 3: Generic Default
+	# level 3: generic default
 	print_rich("[color=yellow]FallbackManager: No specific checkpoint found. Using default: '%s'[/color]" % DEFAULT_CHECKPOINT_NAME)
 	return DEFAULT_CHECKPOINT_NAME

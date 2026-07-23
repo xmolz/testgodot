@@ -3,13 +3,13 @@ extends Node2D
 enum State { IDLE, IN_USE }
 var current_state: State = State.IDLE
 
-# --- Texture Exports ---
+# -----------------------[texture exports]
 @export_group("Drug Textures")
 @export var invigirol_texture: Texture2D
 @export var cannathink_texture: Texture2D
 @export var zanopram_texture: Texture2D
 
-# --- References ---
+# ////////////////// references
 @onready var anim_player_glow: AnimationPlayer = $AnimationPlayerGlow
 @onready var anim_player_sprite: AnimationPlayer = $AnimationPlayerSprite
 @onready var pulse_overlay: ColorRect = $PulseOverlay
@@ -17,23 +17,23 @@ var current_state: State = State.IDLE
 @onready var drug_display: Sprite2D = $DrugDisplay
 
 var _screen_tween: Tween
-# Variable to store the size you set in the Inspector
+# variable to store the size you set in the inspector
 var _target_drug_scale: Vector2 
 
 func _ready():
 	_update_screen_visuals("normal")
 
 	if drug_display:
-		# 1. Capture the scale you set in the Inspector BEFORE hiding it
+		# capture the scale you set
 		_target_drug_scale = drug_display.scale
 		drug_display.visible = false
 
-	# React when McBucket's state is changed by conversation events (e.g. a
-	# successful flash) and not only by drugs used directly on the dispenser.
+	# react when mcbucket's state is
+	# uccessful flash) and not only
 	if not ConversationEventManager.mcbucket_state_change_requested.is_connected(_on_mcbucket_state_change):
 		ConversationEventManager.mcbucket_state_change_requested.connect(_on_mcbucket_state_change)
 
-	# Sync the vitals screen with McBucket's saved state on load, mirroring the
+	# sync the vitals screen with
 	# flag checks in mcbucket.gd (same priority order).
 	await get_tree().process_frame
 	if Flags.get_level_flag("mcbucket_cannathink_used"):
@@ -44,9 +44,9 @@ func _ready():
 		_update_screen_visuals("zanopram")
 
 func _on_mcbucket_state_change(new_state: int):
-	# McBucket's State enum: 0 = IDLE, 1 = HIGH (cannathink), 2 = INVIGIROL,
-	# 3 = SLEEPING (zanopram). Update the vitals screen only — no dispensing
-	# animation and no drug-pop sprite, because nothing was dispensed; the
+	# mcbucket's state enum: 0 =
+	# 3 = sleeping (zanopram). update
+	# animation and no drug-pop sprite,
 	# patient's state changed by other means.
 	match new_state:
 		0: _update_screen_visuals("normal")
@@ -62,7 +62,7 @@ func on_drug_used(_item_id: String):
 		return
 	
 	current_state = State.IN_USE
-	# A real drug is being dispensed — McBucket's state no longer comes from a flash.
+	# a real drug is being
 	Flags.set_level_flag("mcbucket_state_from_flash", false)
 
 	if anim_player_glow: anim_player_glow.play("in_use")
@@ -90,13 +90,13 @@ func _update_drug_sprite(drug_type: String):
 		drug_display.texture = new_texture
 		drug_display.visible = true
 		
-		# --- Pop Animation Fixed ---
-		# Start at 10% of your desired size
+		# **********[pop animation fixed]
+		# start at 10% of your desired size
 		drug_display.scale = _target_drug_scale * 0.1 
 		
 		var pop_tween = create_tween()
 		
-		# Animate to the captured Inspector scale (_target_drug_scale) instead of (1,1)
+		# animate to the captured inspector
 		pop_tween.tween_property(drug_display, "scale", _target_drug_scale, 0.4)\
 			.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 			

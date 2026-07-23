@@ -5,7 +5,7 @@ const GRAVITY = 800.0
 const WALK_TO_THRESHOLD_X = 5.0
 const INTERACTION_OFFSET_X = 30.0
 
-# Variable to hold the calculated safe stopping distance
+# variable to hold the calculated safe stopping distance
 var player_half_width: float = 65.0 
 
 @onready var sprite_2d: Sprite2D = $Sprite
@@ -25,24 +25,23 @@ var _interactable_after_walk: Interactable = null
 var _verb_for_interaction: String = ""
 var _item_for_interaction: ItemData = null
 var _can_move: bool = true
-var _stuck_timer: float = 0.0 # To track how long we've been stuck
+var _stuck_timer: float = 0.0
 var _is_manual_walking: bool = false
 
 func _ready():
-	#if not sprite_2d: print_rich("[color=red]Player: Sprite2D node not found![/color]")
-	#if not animation_player: print_rich("[color=red]Player: AnimationPlayer node not found![/color]")
+	# if not sprite_2d: print_rich("[color=red]player: sprite2d
+	# ***********[if not animation_player: print_rich("[color=red]player: animationplayer node not found![/color]")]
 	
-	# --- AUTO-CALCULATE WIDTH ---
-	# This makes the wall-stopping logic screen-size and scale independent.
+	# *****************[auto-calculate width]
+	# this makes the wall-stopping logic
 	if collision_shape_2d and collision_shape_2d.shape is RectangleShape2D:
 		var shape_w = collision_shape_2d.shape.size.x
-		# Formula: (Shape Width / 2) * Object Scale + Buffer
+		# formula: (shape width / 2) * object scale + buffer
 		player_half_width = (shape_w * global_scale.x / 2.0) + 15.0
-		#print("Player: Auto-calculated stopping distance: ", player_half_width)
+		# print("player: auto-calculated stopping distance: ",
 	else:
 		pass
-		#print_rich("[color=yellow]Player: Could not calc width (Shape missing or not Rectangle). Using default 65.0[/color]")
-	# ----------------------------
+		# print_rich("[color=yellow]player: could not calc width
 	
 	play_animation("idle")
 
@@ -77,16 +76,16 @@ func _physics_process(delta: float):
 		move_and_slide()
 		return
 
-	# --- UNIFIED MANUAL MOVEMENT (Keyboard & Mouse Hold) ---
+	# ************[unified manual movement (keyboard & mouse hold)]
 	var manual_direction = Input.get_axis("ui_left", "ui_right")
 
 	if GameManager and GameManager.is_mouse_held_for_walk:
 		var mouse_x = get_global_mouse_position().x
 		var dist = abs(mouse_x - global_position.x)
 
-		# HYSTERESIS:
-		# If she is already walking, she won't stop until she gets very close to the cursor (20px).
-		# If she is standing still, she won't start until the cursor is further away (150px).
+		# ////////////////////[hysteresis:]
+		# if she is already walking,
+		# if she is standing still,
 		var active_deadzone = 20.0 if _is_manual_walking else 150.0
 
 		if dist > active_deadzone:
@@ -94,7 +93,7 @@ func _physics_process(delta: float):
 
 	if manual_direction != 0:
 		if _is_walking_to_target:
-			_stop_walking() # Override the point-and-click click
+			_stop_walking()
 
 		_is_manual_walking = true
 		velocity.x = manual_direction * SPEED
@@ -113,7 +112,7 @@ func _physics_process(delta: float):
 		return
 
 	elif _is_manual_walking:
-		# She reached the 20px inner deadzone OR the player let go of the mouse. Smooth stop.
+		# she reached the 20px inner
 		_is_manual_walking = false
 		velocity.x = 0
 		set_animation_state("idle")
@@ -123,13 +122,13 @@ func _physics_process(delta: float):
 
 		move_and_slide()
 		return
-	# -------------------------------------------------------
+	#
 
 	if _is_walking_to_target:
 		var direction_to_destination = global_position.direction_to(_actual_walk_destination)
 		var x_distance_to_destination = abs(global_position.x - _actual_walk_destination.x)
 
-		# --- STUCK FAILSAFE ---
+		# ***********[stuck failsafe]
 		if abs(get_real_velocity().x) < 10.0:
 			_stuck_timer += delta
 		else:
@@ -138,12 +137,12 @@ func _physics_process(delta: float):
 		if _stuck_timer > 0.2:
 			_stop_walking()
 			return
-		# ----------------------
+		#
 
-		# Calculate exactly how far we will move this frame
+		# calculate exactly how far we will move this frame
 		var step_distance = SPEED * delta
 
-		# If the distance to the target is larger than our step distance PLUS the threshold, keep walking
+		# if the distance to the
 		if x_distance_to_destination > (step_distance + WALK_TO_THRESHOLD_X):
 			velocity.x = sign(_actual_walk_destination.x - global_position.x) * SPEED
 
@@ -153,7 +152,7 @@ func _physics_process(delta: float):
 			if is_instance_valid(sprite_2d): sprite_2d.flip_h = (velocity.x < 0)
 			set_animation_state("walk")
 
-		else: # Reached destination (We are close enough that the next step would overshoot)
+		else:
 			_stop_walking()
 
 			if is_instance_valid(_interactable_after_walk):
@@ -172,7 +171,7 @@ func _physics_process(delta: float):
 		move_and_slide()
 		return
 
-	# Idle Physics
+	# idle physic
 	if not is_on_floor():
 		velocity.y += GRAVITY * delta
 
@@ -183,7 +182,7 @@ func _physics_process(delta: float):
 
 	move_and_slide()
 
-# Helper to cleanly stop walking
+# helper to cleanly stop walking
 func _stop_walking():
 	_is_walking_to_target = false
 	_stuck_timer = 0.0
@@ -207,10 +206,10 @@ func walk_to_point(destination_pos: Vector2):
 	var result = space_state.intersect_ray(query)
 
 	if result:
-		#print_rich("[color=green]Hit Wall at %s. Adjusting destination.[/color]" % result.position)
+		# print_rich("[color=green]hit wall at %s. adjusting
 		var direction_back = (global_position - result.position).normalized()
 		
-		# --- DYNAMIC STOPPING DISTANCE ---
+		# ////////////////////[dynamic stopping distance]
 		_actual_walk_destination = result.position + (direction_back * player_half_width)
 		_actual_walk_destination.y = global_position.y
 	else:
@@ -230,13 +229,13 @@ func walk_to_and_interact(interactable_walk_to_point_pos: Vector2, interactable_
 
 	var target_x = interactable_walk_to_point_pos.x
 
-	# --- CUSTOM OFFSET LOGIC ---
+	# ////////////[custom offset logic]
 	var current_offset = INTERACTION_OFFSET_X
 	if verb_id == "flash":
 		current_offset = 270.0
-	# ---------------------------
+	#
 
-	# --- APPROACH SIDE OVERRIDE ---
+	# ////////////[approach side override]
 	var forced_side = 0
 	if is_instance_valid(interactable_node) and "approach_side" in interactable_node:
 		forced_side = interactable_node.approach_side
@@ -250,7 +249,7 @@ func walk_to_and_interact(interactable_walk_to_point_pos: Vector2, interactable_
 			_actual_walk_destination.x = target_x - current_offset
 		else:
 			_actual_walk_destination.x = target_x + current_offset
-	# ------------------------------
+	#
 
 	_actual_walk_destination.y = global_position.y
 
@@ -290,7 +289,7 @@ func show_thought_bubble(text: String):
 	if is_instance_valid(thought_bubble_pos):
 		var target_x = thought_bubble_pos.position.x
 		if sprite_2d and sprite_2d.flip_h:
-			# Apply a manual offset to compensate for the character's visual center shifting when the sprite is flipped
+			# apply a manual offset to
 			target_x = -target_x - (-10.0)
 
 		thought_bubble_pivot.position = Vector2(target_x, thought_bubble_pos.position.y)
@@ -305,18 +304,18 @@ func hide_thought_bubble():
 	if _thought_bounce_tween: _thought_bounce_tween.kill()
 
 var _last_step_time: int = 0
-const STEP_COOLDOWN_MSEC: int = 350 # Time in milliseconds (increase to slow down sounds)
+const STEP_COOLDOWN_MSEC: int = 350
 
 func on_footstep_frame():
-	# 1. Check if we are moving
+	# check if we are moving
 	if velocity.length() < 1.0:
 		return
 
-	# 2. Check Time Cooldown
+	# check time cooldown
 	var current_time = Time.get_ticks_msec()
 	if current_time - _last_step_time < STEP_COOLDOWN_MSEC:
-		return # Too soon! Skip this sound.
+		return
 
-	# 3. Play Sound & Reset Timer
+	# /////////////////[3. play sound & reset timer]
 	SoundManager.play_random_footstep()
 	_last_step_time = current_time

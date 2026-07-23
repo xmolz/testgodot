@@ -10,7 +10,7 @@ Player: (Let's make this quick.)
 Player: (You need to get the fuck out of here.)
 Player: (And he is holding the key.)
 #back on bed sprite
-do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_brushing_hair_on_bed.PNG")
+do change_background_sprite("res://Backgrounds/Protagonist/xSergei/protag_brushing_hair_on_bed.png")
 You put your game face on and prop yourself back up on his bed.
 
 - Missed me?

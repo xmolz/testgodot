@@ -1,7 +1,7 @@
-# game_ui.gd — owns visibility and layering of the gameplay HUD in main.tscn.
-# GameManager no longer holds references to these nodes; this script reacts to
-# the Events bus and DialogueManager, and manages the local UI itself.
-# It is freed together with the level scene, so no manual disconnects needed.
+# game_ui.gd — owns visibility and
+# gamemanager no longer holds references
+# the events bus and dialoguemanager,
+# it is freed together with
 extends Node
 
 const ZOOM_CONTROLS_UI_SCENE = preload("res://ui/zoom_controls_ui.tscn")
@@ -44,10 +44,10 @@ func _ready() -> void:
 	_sync_initial_visibility()
 
 
-# Applied once on scene load so both boot paths start correct:
-# - normal boot: change_game_state(IN_GAME_PLAY) instantiates main.tscn AFTER
-#   emitting game_state_changed, so we missed that first emission;
-# - direct scene run (F6 on main.tscn): no state event is emitted at all.
+# applied once on scene load
+# normal boot: change_game_state(in_game_play) instantiates main.tscn
+# emitting game_state_changed, so we missed
+# direct scene run (f6 on
 func _sync_initial_visibility() -> void:
 	if not GameManager:
 		return
@@ -63,10 +63,10 @@ func _on_zoom_hud_config_requested(show_verb_panel: bool, show_inventory: bool) 
 	_apply_zoom_hud_visibility()
 
 
-# What the HUD should look like while a zoom view is active.
+# what the hud should look
 func _apply_zoom_hud_visibility() -> void:
 	if is_instance_valid(verb_ui):
-		verb_ui.visible = true  # keep the CanvasLayer on: the action bubble lives here
+		verb_ui.visible = true
 		verb_ui.set_panel_visible(_zoom_show_verb_panel)
 	if is_instance_valid(inventory_ui):
 		inventory_ui.visible = _zoom_show_inventory
@@ -76,18 +76,18 @@ func _apply_zoom_hud_visibility() -> void:
 		insurance_form_button_ui.visible = false
 
 
-# --- Event handlers ---
+# ///////////////// event handlers
 
 func _on_game_state_changed(new_state: int) -> void:
 	match new_state:
 		GameManager.GameState.IN_GAME_PLAY:
-			# Mirrors the old "restoration phase" in GameManager.change_game_state().
+			# mirrors the old "restoration phase"
 			_set_gameplay_ui_visible(GameManager.current_interaction_state == GameManager.InteractionState.WORLD)
 		GameManager.GameState.CUTSCENE:
 			_set_gameplay_ui_visible(false)
 		_:
-			# PAUSED, EXPLANATION, etc. deliberately leave visibility untouched,
-			# exactly like the old GameManager code did.
+			# paused, explanation, etc. deliberately leave
+			# exactly like the old gamemanager code did.
 			pass
 
 
@@ -96,7 +96,7 @@ func _on_interaction_state_changed(new_state: int) -> void:
 		GameManager.InteractionState.CONVERSATION:
 			_set_gameplay_ui_visible(false)
 		GameManager.InteractionState.ZOOM_VIEW:
-			# The zoom overlay sits on CanvasLayer 2; lift verb + inventory above it.
+			# the zoom overlay sits on
 			if is_instance_valid(verb_ui):
 				verb_ui.layer = 3
 			if is_instance_valid(inventory_ui):
@@ -116,8 +116,8 @@ func _on_interaction_state_changed(new_state: int) -> void:
 
 
 func _on_dialogue_started(_resource: Resource) -> void:
-	# Hide the HUD whenever any dialogue line appears (world dialogue,
-	# character conversations, insurance-form balloons — all of it).
+	# hide the hud whenever any
+	# character conversations, insurance-form balloons —
 	_set_gameplay_ui_visible(false)
 
 
@@ -126,7 +126,7 @@ func _on_dialogue_ended(_resource: Resource) -> void:
 		return
 	match GameManager.current_interaction_state:
 		GameManager.InteractionState.CONVERSATION:
-			pass  # never restore during a full-screen conversation (existing behavior)
+			pass
 		GameManager.InteractionState.ZOOM_VIEW:
 			_apply_zoom_hud_visibility()
 		_:
@@ -134,8 +134,8 @@ func _on_dialogue_ended(_resource: Resource) -> void:
 
 
 func _on_explanation_started(data: ExplanationData, root_node_to_search: Node) -> void:
-	# Moved verbatim from GameManager.start_explanation(): hide the HUD except
-	# for the nodes the ExplanationData explicitly spotlights.
+	# moved verbatim from gamemanager.start_explanation(): hide
+	# for the nodes the explanationdata
 	var nodes_to_keep_visible: Array = []
 	if "exceptions_to_hide" in data:
 		for node_path in data.exceptions_to_hide:
@@ -161,8 +161,8 @@ func _on_explanation_started(data: ExplanationData, root_node_to_search: Node) -
 		explanation_layer.show_explanation(data, root_node_to_search)
 
 
-# --- Core visibility helper (moved from GameManager, minus the global patreon
-# button, which stays with GameManager) ---
+# ------------------ core visibility helper (moved from gamemanager, minus the global patreon
+# ////////////[button, which stays with gamemanager)]
 
 func _set_gameplay_ui_visible(show: bool) -> void:
 	if is_instance_valid(verb_ui):

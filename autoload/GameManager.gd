@@ -1,5 +1,5 @@
 #region Constants & Signals
-# GameManager.gd
+# gamemanager.gd
 extends Node
 
 const INSURANCE_FORM_SCENE = preload("res://ui/insurance_form.tscn")
@@ -10,10 +10,10 @@ const CONVERSATION_BALLOON_SCENE = preload("res://conversation/conversationballo
 var _insurance_form_instance: CanvasLayer = null
 var _journal_overlay_instance: CanvasLayer = null
 
-# --- Signals ---
+# ***** signals *****
 signal verb_changed(new_verb_id: String)
 signal sentence_line_updated(text: String)
-signal interaction_complete # For VerbUI to reset its state
+signal interaction_complete # for verbui to reset its state
 signal new_hint_available(is_available: bool)
 signal verb_lock_changed(is_active: bool)
 
@@ -22,7 +22,7 @@ signal character_conversation_ended(dialogue_resource: DialogueResource)
 
 signal selected_inventory_item_changed(selected_item_data: ItemData)
 
-# --- High-Level Game State Management ---
+# ***** high-level game state management *****
 enum GameState {
 	BOOTING,
 	LOGO_SPLASH,
@@ -36,7 +36,7 @@ enum GameState {
 	GAME_OVER
 }
 
-# --- Interaction Context Management ---
+# ***** interaction context management *****
 enum InteractionState {
 	WORLD,
 	CONVERSATION,
@@ -60,10 +60,10 @@ var _is_game_over_triggering: bool = false
 const ICON_SCAN = preload("res://Icons/magnifying-glass.png")
 const ICON_CANCEL = preload("res://Icons/cancel.png")
 
-# --- State Variables ---
+# ***** state variables *****
 var current_verb_id: String = ""
 var persisting_verb_id: String = ""
-var current_selected_item_data: ItemData = null # "In Hand" / "Selected" item
+var current_selected_item_data: ItemData = null # "in hand" / "selected" item
 var hovered_interactable: Interactable = null
 var hovered_interactables: Array[Interactable] = []
 var player_node: CharacterBody2D
@@ -77,10 +77,10 @@ var _signals_connected_to_interactable: Interactable = null
 
 var current_hint_manager: LevelHintManager = null
 
-# --- Verb Management ---
+# ***** verb management *****
 @export var all_verb_data_resources: Array[VerbData] = []
 
-# --- Inventory Management ---
+# ***** inventory management *****
 @export var all_item_data_resources: Array[ItemData] = []
 
 var current_unread_hint: String = ""
@@ -103,12 +103,12 @@ func _ready():
 		add_child(walk_indicator_instance)
 		walk_indicator_instance.set_physics_interpolation_mode(Node.PHYSICS_INTERPOLATION_MODE_OFF)
 
-	# Spawn our Global Transition Layer immediately
+	# spawn our global transition layer immediately
 	var transition_scene = preload("res://ui/TransitionLayer.tscn")
 	transition_layer = transition_scene.instantiate()
 	add_child(transition_layer)
 
-	# Spawn our Global Pause Menu (lives on GameManager so it works in all states)
+	# spawn our global pause menu (lives on gamemanager so it works in all states)
 	var pause_scene = preload("res://ui/pause_menu_ui.tscn")
 	pause_menu_ui = pause_scene.instantiate()
 	add_child(pause_menu_ui)
@@ -117,7 +117,7 @@ func _ready():
 	if DialogueManager:
 		DialogueManager.dialogue_started.connect(_on_dialogue_started)
 
-	# Initialize Verbs
+	# initialize verbs
 	Verbs.setup(all_verb_data_resources)
 	Verbs.available_verbs_changed.connect(_on_available_verbs_changed)
 
@@ -127,25 +127,25 @@ func _ready():
 	patreon_world_ui = PatreonWorldButton.new()
 	add_child(patreon_world_ui)
 
-	# --- DIRECT SCENE RUN CHECK ---
+	# ***** direct scene run check *****
 	if current_game_state == GameState.BOOTING:
 		var potential_player = get_tree().get_first_node_in_group("player")
 
 		if is_instance_valid(potential_player):
 
-			# 1. Manually assign the player node
+			# manually assign the player node
 			player_node = potential_player
 
-			# 2. Assign the main scene instance (assuming player is a child of the main scene)
+			# assign the main scene instance (assuming player is a child of the main scene)
 			SceneDirector.current_game_scene = player_node.get_owner()
 			if not is_instance_valid(SceneDirector.current_game_scene):
-				# Fallback if owner is not set correctly
+				# fallback if owner is not set correctly
 				SceneDirector.current_game_scene = get_tree().get_root().get_child(-1)
 
-			# 3. Manually set the state.
+			# manually set the state.
 			current_game_state = GameState.IN_GAME_PLAY
 
-			# 4. Ensure the player can move
+			# ensure the player can move
 			if player_node.has_method("set_can_move"):
 				player_node.set_can_move(true)
 
@@ -159,11 +159,11 @@ func _ready():
 
 # _process and _unhandled_input mix concerns (hint eval + hold-to-walk) and sit outside top-level regions to avoid moving code.
 func _process(delta):
-	# --- FIX 1: Cancel verb lock if player tries to move manually with A/D ---
+	# ***** fix 1: cancel verb lock if player tries to move manually with a/d *****
 	if is_verb_lock_active and Input.get_axis("ui_left", "ui_right") != 0:
 		cancel_current_action(false)
 
-	# --- FIX 2: Mobile Hold-to-Walk overriding interactable clicks ---
+	# ***** fix 2: mobile hold-to-walk overriding interactable clicks *****
 	if _potential_hold_walk and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		if not is_mouse_held_for_walk and current_interaction_state == InteractionState.WORLD and current_game_state == GameState.IN_GAME_PLAY:
 			_mouse_held_timer += delta
@@ -179,7 +179,7 @@ func _process(delta):
 		if not Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 			_potential_hold_walk = false
 
-	# --- (Original Logic Continues Below) ---
+	# ***** (original logic continues below) *****
 	if current_game_state == GameState.IN_GAME_PLAY and is_instance_valid(current_hint_manager):
 		var evaluated_hint = current_hint_manager.evaluate_hint()
 		if evaluated_hint != "" and evaluated_hint != current_unread_hint and evaluated_hint != last_read_hint:
@@ -193,17 +193,17 @@ func _process(delta):
 			if is_instance_valid(walk_indicator_instance):
 				walk_indicator_instance.hide()
 
-			# Restore the cursor hover state if we stopped walking while currently over an object
+			# restore the cursor hover state if we stopped walking while currently over an object
 			if is_instance_valid(custom_cursor_instance):
 				custom_cursor_instance.set_hover_state(hovered_interactable != null)
 
-			# Restore UI text instantly upon release
+			# restore ui text instantly upon release
 			update_sentence_line_ui()
 		else:
 			if current_game_state == GameState.IN_GAME_PLAY and is_instance_valid(player_node):
 				var mouse_world_pos = player_node.get_global_mouse_position()
 
-				# Mirror the Hysteresis logic from player.gd
+				# mirror the hysteresis logic from player.gd
 				var is_player_manually_walking = player_node.get("_is_manual_walking")
 				var active_deadzone = 20.0 if is_player_manually_walking else 150.0
 
@@ -218,27 +218,27 @@ func _process(delta):
 func _unhandled_input(event: InputEvent):
 	if event is InputEventMouseButton and event.is_pressed():
 
-		# --- RIGHT CLICK: Cancel Current Action ---
+		# ***** right click: cancel current action *****
 		if event.button_index == MOUSE_BUTTON_RIGHT:
 			if current_verb_id != "" or current_selected_item_data != null:
 				cancel_current_action()
 				get_viewport().set_input_as_handled()
 			return
 
-		# --- LEFT CLICK: Walk to Point / Hold to Walk ---
+		# ***** left click: walk to point / hold to walk *****
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if current_game_state != GameState.IN_GAME_PLAY or current_interaction_state != InteractionState.WORLD:
 				return
 			if is_transitioning:
 				return
 
-			# --- FIX: Register that the click landed in the Game World! ---
+			# ***** fix: register that the click landed in the game world! *****
 			_potential_hold_walk = true
 
 			var mouse_world_pos = player_node.get_global_mouse_position()
 
-			# To fix touch/mouse sync issues, we cast a point exactly where the player clicked
-			# to see if an Interactable is underneath. This completely bypasses the hover delay.
+			# to fix touch/mouse sync issues, we cast a point exactly where the player clicked
+			# to see if an interactable is underneath. this completely bypasses the hover delay.
 			var clicked_interactable = false
 			if is_instance_valid(player_node):
 				var space_state = player_node.get_world_2d().direct_space_state
@@ -253,17 +253,17 @@ func _unhandled_input(event: InputEvent):
 						break
 
 			if clicked_interactable:
-				# We clicked an object! DO NOT cancel the verb. DO NOT walk immediately.
-				# Just return, and let the Area2D's _input_event catch this click and process it.
-				# (If the finger stays down, _potential_hold_walk will upgrade it to continuous movement!)
+				# we clicked an object! do not cancel the verb. do not walk immediately.
+				# just return, and let the area2d's _input_event catch this click and process it.
+				# (if the finger stays down, _potential_hold_walk will upgrade it to continuous movement!)
 				return
 
-			# We clicked empty space / the floor.
-			# Cancel the verb and drop the item (if any).
+			# we clicked empty space / the floor.
+			# cancel the verb and drop the item (if any).
 			if current_verb_id != "" or current_selected_item_data != null:
 				cancel_current_action()
 
-			# Start walking to that point
+			# start walking to that point
 			if is_instance_valid(player_node) and player_node.has_method("walk_to_point"):
 				if _scan_active: _cancel_scan()
 				_is_player_walking = true
@@ -277,22 +277,20 @@ func change_game_state(new_state: GameState):
 	if new_state == current_game_state:
 		return
 
-	# Wait for the end of the current frame so UI interactions clear
+	# wait for the end of the current frame so ui interactions clear
 	await get_tree().process_frame
 
-	# =========================================================
-	# 1. LEAVING THE OLD STATE (Cleanup)
-	# =========================================================
+	# leaving the old state (cleanup)
 	match current_game_state:
 		GameState.MAIN_MENU:
 			SceneDirector._cleanup_all_overlays()
 			SceneDirector.free_main_menu()
 		GameState.INTRO_CONVERSATION:
 			if new_state == GameState.MAIN_MENU:
-				# Destroy the intro overlay if we are aborting to the main menu
+				# destroy the intro overlay if we are aborting to the main menu
 				SceneDirector.free_intro_overlay()
 		GameState.IN_GAME_PLAY, GameState.PAUSED:
-			# When LEAVING the game (e.g. to Menu), stop music and ambience.
+			# when leaving the game (e.g. to menu), stop music and ambience.
 			if new_state != GameState.CUTSCENE and new_state != GameState.EXPLANATION and new_state != GameState.PAUSED and new_state != GameState.IN_GAME_PLAY and new_state != GameState.INTRO_CONVERSATION:
 				SoundManager.stop_music()
 				SoundManager.stop_all_ambience()
@@ -304,9 +302,7 @@ func change_game_state(new_state: GameState):
 	current_game_state = new_state
 	Events.game_state_changed.emit(current_game_state)
 
-	# =========================================================
-	# 2. ENTERING THE NEW STATE (Setup)
-	# =========================================================
+	# entering the state (setup)
 	match current_game_state:
 		GameState.MAIN_MENU:
 			_is_game_over_triggering = false
@@ -333,24 +329,24 @@ func change_game_state(new_state: GameState):
 				SceneDirector.start_intro_overlay(INTRO_DIALOGUE, _on_intro_conversation_finished)
 
 		GameState.IN_GAME_PLAY:
-			# --- A. LOADING PHASE ---
+			# ***** a. loading phase *****
 			var newly_loaded = SceneDirector.ensure_game_scene()
 			if newly_loaded:
-				# Play music if we just loaded the game
-				# SoundManager.play_music() 
+				# play music if we just loaded the game
+				# soundmanager.play_music()
 				
-				# --- START AMBIENCE FOR MAIN GAME ---
+				# ***** start ambience for main game *****
 				SoundManager.play_ambience("room_tone_air", -5.0) 
 				SoundManager.play_ambience("room_tone_electric", -15.0)
 
-			# --- B. RESTORATION PHASE (Run this EVERY time we enter IN_GAME_PLAY) ---
+			# ***** b. restoration phase (run this every time we enter in_game_play) *****
 			
-			# 2. Find Player if missing
+			# find player if missing
 			if not is_instance_valid(player_node):
 				player_node = get_tree().get_first_node_in_group("player")
 
-			# 3. Restore global UI. The scene HUD + input blocker restore
-			# themselves in game_ui.gd via Events.game_state_changed.
+			# restore global ui. the scene hud + input blocker restore
+			# themselves in game_ui.gd via events.game_state_changed.
 			if current_interaction_state == InteractionState.WORLD:
 				_set_patreon_visible(true)
 				if is_instance_valid(pause_menu_ui): pause_menu_ui.menu_panel.show()
@@ -358,11 +354,11 @@ func change_game_state(new_state: GameState):
 				_set_patreon_visible(false)
 				if is_instance_valid(pause_menu_ui): pause_menu_ui.menu_panel.hide()
 
-			# 6. Unlock Player Movement
+			# unlock player movement
 			if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
 				player_node.set_can_move(true)
 
-			# Force the sentence line to refresh in case we had a verb or item selected before pausing
+			# force the sentence line to refresh in case we had a verb or item selected before pausing
 			update_sentence_line_ui()
 
 		GameState.PAUSED:
@@ -372,11 +368,11 @@ func change_game_state(new_state: GameState):
 			pass
 			
 		GameState.CUTSCENE:
-			# 1. Hide the global UI (scene HUD + blocker handled by game_ui.gd)
+			# hide the global ui (scene hud + blocker handled by game_ui.gd)
 			_set_patreon_visible(false)
 			if is_instance_valid(pause_menu_ui): pause_menu_ui.menu_panel.hide()
 			
-			# 3. Stop the Player from moving
+			# stop the player from moving
 			if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
 				player_node.set_can_move(false)
 #endregion
@@ -385,7 +381,7 @@ func change_game_state(new_state: GameState):
 #region Interaction Engine
 #region Verb & Item Selection
 func select_verb(verb_id_to_select: String):
-	# If the player manually selects or toggles a verb, clear any forced sticky state
+	# if the player manually selects or toggles a verb, clear any forced sticky state
 	persisting_verb_id = ""
 
 	var previously_selected_verb_id = current_verb_id
@@ -407,7 +403,7 @@ func select_verb(verb_id_to_select: String):
 		current_verb_id = new_verb_id
 		verb_changed.emit(current_verb_id)
 
-		# --- Think Verb Interception ---
+		# ***** think verb interception *****
 		if current_verb_id == "think":
 			current_verb_id = ""
 			verb_changed.emit("")
@@ -423,9 +419,9 @@ func select_verb(verb_id_to_select: String):
 
 					DialogueManager.show_dialogue_balloon_scene(CONVERSATION_BALLOON_SCENE, hint_res, last_read_hint)
 			return
-		# ------------------------------------------
+		#
 
-		# --- QOL FIX: Empty Inventory Give Check ---
+		# ***** qol fix: empty inventory give check *****
 		if current_verb_id == "give" and Inventory.is_empty():
 			current_verb_id = ""
 			verb_changed.emit("")
@@ -436,9 +432,9 @@ func select_verb(verb_id_to_select: String):
 			var generic_lines = preload("res://dialogue/generic_lines.dialogue")
 			DialogueManager.show_dialogue_balloon_scene(CONVERSATION_BALLOON_SCENE, generic_lines, "give_empty_inventory")
 			return
-		# -------------------------------------------
+		#
 
-		# If we select a verb that DOES NOT use items, or if we toggle the verb OFF, drop the in-hand item
+		# if we select a verb that does not use items, or if we toggle the verb off, drop the in-hand item
 		if (current_verb_id == "" or (current_verb_id != "use" and current_verb_id != "give")) and current_selected_item_data != null:
 			current_selected_item_data = null
 			selected_inventory_item_changed.emit(null)
@@ -468,31 +464,31 @@ func select_inventory_item(item_data_to_select: ItemData):
 		current_selected_item_data = item_data_to_select
 		selected_inventory_item_changed.emit(current_selected_item_data)
 
-		# If we select an item, but the current verb isn't item-compatible, drop the verb.
+		# if we select an item, but the current verb isn't item-compatible, drop the verb.
 		if current_verb_id != "" and not previous_verb_id_was_item_compatible:
 			current_verb_id = ""
 			verb_changed.emit("")
 
-		# If no verb is selected, default to "use" when picking up an item
+		# if no verb is selected, default to "use" when picking up an item
 		if current_verb_id == "":
 			current_verb_id = "use"
 			verb_changed.emit("use")
 
-		# --- FIX: Turn on the Verb Lock so the thought bubble and highlights appear! ---
+		# ***** fix: turn on the verb lock so the thought bubble and highlights appear! *****
 		_activate_verb_lock(true)
 
 	update_sentence_line_ui()
 
 func cancel_current_action(play_sound: bool = true):
-	# While a zoom view forces a sticky verb, the player cannot cancel it
-	# (blocks right-click and the A/D verb-lock cancel in _process).
-	# Overlay cleanup clears persisting_verb_id BEFORE calling this, so closing still works.
+	# while a zoom view forces a sticky verb, the player cannot cancel it
+	# (blocks right-click and the a/d verb-lock cancel in _process).
+	# overlay cleanup clears persisting_verb_id before calling this, so closing still works.
 	if current_interaction_state == InteractionState.ZOOM_VIEW and persisting_verb_id != "":
 		return
 
 	var did_cancel = false
 
-	# If the player right-clicks to cancel, drop the sticky state
+	# if the player right-clicks to cancel, drop the sticky state
 	persisting_verb_id = ""
 
 	if current_verb_id != "":
@@ -508,13 +504,13 @@ func cancel_current_action(play_sound: bool = true):
 	if did_cancel:
 		_activate_verb_lock(false)
 		update_sentence_line_ui()
-		# Play a slightly lower pitched click sound to indicate cancellation
+		# play a slightly lower pitched click sound to indicate cancellation
 		if play_sound and SoundManager: SoundManager.play_sfx("ui_click")
 #endregion
 
 
 #region Hover Stack
-# --- UI and Interaction Flow ---
+# ***** ui and interaction flow *****
 func set_hovered_object(interactable: Interactable):
 	if not hovered_interactables.has(interactable):
 		hovered_interactables.append(interactable)
@@ -537,7 +533,7 @@ func _pick_top_interactable(candidates: Array[Interactable]) -> Interactable:
 	for i in range(1, candidates.size()):
 		var candidate = candidates[i]
 
-		# Safely get effective Z-index (checking parent if needed)
+		# safely get effective z-index (checking parent if needed)
 		var top_z = top_interactable.z_index
 		if top_z == 0 and top_interactable.get_parent() is Node2D:
 			top_z = top_interactable.get_parent().z_index
@@ -549,18 +545,18 @@ func _pick_top_interactable(candidates: Array[Interactable]) -> Interactable:
 		if cand_z > top_z:
 			top_interactable = candidate
 		elif cand_z == top_z:
-			# If Z-index is tied, lower on the screen (higher Y) is in front
+			# if z-index is tied, lower on the screen (higher y) is in front
 			if candidate.global_position.y > top_interactable.global_position.y:
 				top_interactable = candidate
 	return top_interactable
 
 func _update_top_hovered_object():
-	# Clean out invalid instances just in case an object was destroyed while hovered
+	# clean out invalid instances just in case an object was destroyed while hovered
 	for i in range(hovered_interactables.size() - 1, -1, -1):
 		if not is_instance_valid(hovered_interactables[i]):
 			hovered_interactables.remove_at(i)
 
-	# --- TRANSITION OVERRIDE ---
+	# ***** transition override *****
 	if hovered_interactables.is_empty() or is_transitioning:
 		hovered_interactable = null
 		if is_instance_valid(custom_cursor_instance):
@@ -572,7 +568,7 @@ func _update_top_hovered_object():
 
 	update_sentence_line_ui()
 
-	# --- QOL FIX: Cursor state for incomplete Give ---
+	# ***** qol fix: cursor state for incomplete give *****
 	var should_hover_cursor = true
 	if current_verb_id == "give" and current_selected_item_data == null:
 		should_hover_cursor = false
@@ -655,7 +651,7 @@ func _resolve_pending_click():
 	_pending_click_candidates.clear()
 	if candidates.is_empty(): return
 	var winner: Interactable = null
-	# Source of truth: whatever the cursor label is showing
+	# source of truth: whatever the cursor label is showing
 	if is_instance_valid(hovered_interactable) and candidates.has(hovered_interactable):
 		winner = hovered_interactable
 	else:
@@ -678,7 +674,7 @@ func _initiate_interaction_flow(interactable_node: Interactable, verb_to_use_id:
 	if not is_instance_valid(interactable_node):
 		_complete_interaction_cycle(); return
 
-	# --- QOL FIX: Prevent "Give" without an item ---
+	# ***** qol fix: prevent "give" without an item *****
 	if verb_to_use_id == "give" and item_data_to_use == null:
 		cancel_current_action(false)
 
@@ -688,7 +684,7 @@ func _initiate_interaction_flow(interactable_node: Interactable, verb_to_use_id:
 		var generic_lines = preload("res://dialogue/generic_lines.dialogue")
 		DialogueManager.show_dialogue_balloon_scene(CONVERSATION_BALLOON_SCENE, generic_lines, "give_no_item_selected")
 		return
-	# -----------------------------------------------
+	#
 
 	if interactable_node.has_method("notify_interaction_pending"):
 		interactable_node.notify_interaction_pending()
@@ -712,7 +708,7 @@ func _initiate_interaction_flow(interactable_node: Interactable, verb_to_use_id:
 	if walk_needed:
 		_is_player_walking = true
 
-		# Force the UI to instantly suppress the action label upon clicking
+		# force the ui to instantly suppress the action label upon clicking
 		update_sentence_line_ui()
 
 		if not is_instance_valid(player_node):
@@ -748,13 +744,13 @@ func _perform_actual_interaction(interactable_node: Interactable, verb_to_use_id
 		item_name_for_log = item_in_hand_data.display_name
 		item_id_for_interaction = item_in_hand_data.item_id
 
-	# --- RECORD ACTION IN HISTORY LOG ---
+	# ***** record action in history log *****
 	var verb_data = Verbs.get_verb_data_by_id(verb_to_use_id)
 	var verb_name = verb_data.display_text if verb_data else verb_to_use_id
 	var obj_name = interactable_node.object_display_name
 	var itm_name = item_in_hand_data.display_name if item_in_hand_data else ""
 	DialogueHistory.add_action(verb_name, obj_name, itm_name)
-	# ------------------------------------
+	#
 
 	_disconnect_interactable_request_signals()
 
@@ -768,12 +764,12 @@ func _perform_actual_interaction(interactable_node: Interactable, verb_to_use_id
 
 
 #region Interaction States
-# --- DialogueManager Signal Handlers (Global) ---
+# ***** dialoguemanager signal handlers (global) *****
 func _on_dialogue_started(_resource: Resource):
 	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
 		player_node.set_can_move(false)
 
-	# The HUD itself is hidden by game_ui.gd. We only hide the Patreon button here.
+	# the hud itself is hidden by game_ui.gd. we only hide the patreon button here.
 	_set_patreon_visible(false)
 
 func restore_world_after_object_dialogue(_resource: Resource):
@@ -781,7 +777,7 @@ func restore_world_after_object_dialogue(_resource: Resource):
 		if current_interaction_state == InteractionState.WORLD and current_game_state == GameState.IN_GAME_PLAY:
 			player_node.set_can_move(true)
 
-	# Restore the global UI. The scene HUD is handled by game_ui.gd.
+	# restore the global ui. the scene hud is handled by game_ui.gd.
 	if current_interaction_state != InteractionState.CONVERSATION and current_game_state == GameState.IN_GAME_PLAY:
 		_set_patreon_visible(true)
 
@@ -795,11 +791,11 @@ func register_character_conversation(overlay: Node):
 func _on_character_conversation_finished(resource: DialogueResource):
 	exit_to_world_state()
 
-	# Do NOT queue_free the overlay here — it cleans itself up
+	# do not queue_free the overlay here — it cleans itself up
 	# via _destroy_and_clear_cache / _cleanup_and_queue_free.
-	# Calling queue_free here races with the overlay's own cleanup
+	# calling queue_free here races with the overlay's own cleanup
 	# and prevents texture references from being properly nulled,
-	# causing large textures to linger in VRAM until GC collects them.
+	# causing large textures to linger in vram until gc collects them.
 	_current_character_conversation_overlay_instance = null
 
 	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
@@ -812,7 +808,7 @@ func _on_character_conversation_finished(resource: DialogueResource):
 
 
 #region Click Routing & Walk-to-Interact
-# --- Interactable Signal Handlers ---
+# ***** interactable signal handlers *****
 func _on_interactable_action_finished():
 	_complete_interaction_cycle()
 #endregion
@@ -844,7 +840,7 @@ func _complete_interaction_cycle():
 	interaction_complete.emit()
 	_activate_verb_lock(false)
 
-	# --- STICKY VERB FIX ---
+	# ***** sticky verb fix *****
 	if persisting_verb_id != "":
 		current_verb_id = persisting_verb_id
 		verb_changed.emit(current_verb_id)
@@ -854,22 +850,22 @@ func _complete_interaction_cycle():
 			verb_changed.emit("")
 		else:
 			current_verb_id = ""
-	# -----------------------
+	#
 
 	if current_selected_item_data:
 		current_selected_item_data = null
 		selected_inventory_item_changed.emit(null)
 
-	# --- FIX START: Restore Player Control and UI ---
-	# Since we removed the unfreeze logic from the individual Dialogue actions,
+	# ***** fix start: restore player control and ui *****
+	# since we removed the unfreeze logic from the individual dialogue actions,
 	# we must ensure the player is un-frozen here, at the absolute end of the chain.
 	
 	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
-		# Only unfreeze if we are in the normal gameplay state (not a full cutscene/zoom)
+		# only unfreeze if we are in the normal gameplay state (not a full cutscene/zoom)
 		if current_interaction_state == InteractionState.WORLD and current_game_state == GameState.IN_GAME_PLAY:
 			player_node.set_can_move(true)
 
-	# Restore UI visibility
+	# restore ui visibility
 	if current_interaction_state != InteractionState.CONVERSATION and current_game_state == GameState.IN_GAME_PLAY:
 		_set_patreon_visible(true)
 
@@ -878,8 +874,8 @@ func _complete_interaction_cycle():
 
 
 #region UI Utilities
-# The patreon button is global (child of GameManager) so it can't be managed by
-# the level's game_ui.gd. It follows the same show/hide rhythm the gameplay HUD
+# For some reason the patreon button is global (child of gamemanager) so it can't be managed by
+# the level's game_ui.gd. it follows the same show/hide rhythm the gameplay hud
 # always had, gated by the dev_cta_completed level flag.
 func _set_patreon_visible(show: bool):
 	if is_instance_valid(patreon_world_ui):
@@ -951,7 +947,7 @@ func _cancel_scan():
 
 
 #region Hover Stack
-# --- Verb Data and Availability (Moved to Verbs autoload) ---
+# ***** verb data and availability (moved to verbs autoload) *****
 
 func force_clear_all_hovered_interactables():
 	var interactables_to_clear = hovered_interactables.duplicate()
@@ -975,7 +971,7 @@ func enter_conversation_state():
 
 	force_clear_all_hovered_interactables()
 
-	# Scene HUD + input blocker are handled by game_ui.gd via the signal below.
+	# scene hud + input blocker are handled by game_ui.gd via the signal below.
 	_set_patreon_visible(false)
 	if is_instance_valid(pause_menu_ui): pause_menu_ui.menu_panel.hide()
 	Events.interaction_state_changed.emit(current_interaction_state)
@@ -986,7 +982,7 @@ func enter_zoom_view_state():
 
 	force_clear_all_hovered_interactables()
 
-	# Layer juggling for verb/inventory + input blocker live in game_ui.gd now.
+	# layer juggling for verb/inventory + input blocker live in game_ui.gd now.
 	_set_patreon_visible(false)
 
 	if is_instance_valid(player_node):
@@ -998,7 +994,7 @@ func enter_zoom_view_state():
 func exit_to_world_state():
 	current_interaction_state = InteractionState.WORLD
 
-	# Scene HUD restore + layer reset + blocker are handled by game_ui.gd.
+	# scene hud restore + layer reset + blocker are handled by game_ui.gd.
 	_set_patreon_visible(true)
 	if is_instance_valid(pause_menu_ui): pause_menu_ui.menu_panel.show()
 
@@ -1012,13 +1008,13 @@ func exit_to_world_state():
 
 
 #region Screen & Overlay Lifecycle
-# This function is called ONLY when the "Close Form" button is pressed.
+# this function is called only when the "close form" button is pressed.
 func _on_insurance_form_closed():
 
-	# Clean up our reference to the form instance. This is important.
+	# clean up our reference to the form instance. this is important.
 	_insurance_form_instance = null
 
-	# Return control to the player and un-pause the game.
+	# return control to the player and un-pause the game.
 	exit_to_world_state()
 
 func start_explanation(data: ExplanationData, root_node_to_search: Node):
@@ -1027,8 +1023,8 @@ func start_explanation(data: ExplanationData, root_node_to_search: Node):
 
 	change_game_state(GameState.EXPLANATION)
 
-	# game_ui.gd hides the HUD (honoring data.exceptions_to_hide) and starts
-	# the ExplanationLayer in response to this event.
+	# game_ui.gd hides the hud (honoring data.exceptions_to_hide) and starts
+	# the explanationlayer in response to this event.
 	if is_instance_valid(pause_menu_ui): pause_menu_ui.menu_panel.hide()
 
 	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
@@ -1043,7 +1039,7 @@ func exit_explanation_state():
 
 	get_tree().paused = false
 
-	# Show the main game UI
+	# show the main game ui
 	_set_patreon_visible(true)
 	if is_instance_valid(pause_menu_ui): pause_menu_ui.menu_panel.show()
 
@@ -1069,16 +1065,14 @@ func open_insurance_form():
 
 
 #region App Shell (Run-State and Quit)
-# =========================================================
-# RUN-STATE RESET
-# Called once per New Game (from _on_main_menu_new_game_requested)
+# ***** run-state reset *****
+# What this is for: called once per game (from _on_main_menu_new_game_requested)
 # so a second playthrough in the same session starts clean.
-# Intentionally does NOT touch user preferences (text_speed,
+# intentionally does not touch user preferences (text_speed,
 # instant_text, dialogue_text_scale, is_auto_playing), the
-# cached_* PackedScenes, or is_transitioning (TransitionLayer owns it).
-# =========================================================
+# cached_* packedscenes, or is_transitioning (transitionlayer owns it).
 func reset_run_state():
-	# --- Interaction / input transients ---
+	# ***** interaction / input transients *****
 	_disconnect_interactable_request_signals()
 	hovered_interactables.clear()
 	hovered_interactable = null
@@ -1092,7 +1086,7 @@ func reset_run_state():
 	_is_game_over_triggering = false
 	_activate_verb_lock(false)
 
-	# --- Verb & item selection ---
+	# ***** verb & item selection *****
 	persisting_verb_id = ""
 	if current_verb_id != "":
 		current_verb_id = ""
@@ -1101,27 +1095,27 @@ func reset_run_state():
 		current_selected_item_data = null
 		selected_inventory_item_changed.emit(null)
 
-	# --- Inventory ---
+	# ***** inventory *****
 	Inventory.reset()
 
-	# --- Global flags & dialogue memory ---
+	# ***** global flags & dialogue memory *****
 	Flags.reset_run_state()
 	DialogueHistory.reset()
 
-	# --- Hints & difficulty (difficulty select re-establishes these) ---
+	# ***** hints & difficulty (difficulty select re-establishes these) *****
 	Settings.assisted_mode = false
 	current_unread_hint = ""
 	last_read_hint = ""
 	new_hint_available.emit(false)
 
-	# --- Verbs: re-derive defaults exactly like _ready() does ---
+	# ***** verbs: re-derive defaults exactly like _ready() does *****
 	Verbs.reset_run_state()
 
-	# --- Sibling autoload run-state (Sergey conversation memory etc.) ---
+	# ***** sibling autoload run-state (sergey conversation memory etc., all dat crap) *****
 	if ConversationEventManager and ConversationEventManager.has_method("reset_run_state"):
 		ConversationEventManager.reset_run_state()
 
-	# --- Stale references (their owning scenes were freed on quit) ---
+	# ***** stale references (their owning scenes were freed on quit) *****
 	current_hint_manager = null
 	_insurance_form_instance = null
 	_journal_overlay_instance = null
@@ -1165,24 +1159,24 @@ func _on_intro_conversation_finished(_dialogue_resource):
 	if is_instance_valid(transition_layer):
 		await transition_layer.play_iris_close()
 
-	# AWAIT the state change so the scene actually loads before we try to lock things!
+	# await the state change so the scene actually loads before we try to lock things!
 	await change_game_state(GameState.IN_GAME_PLAY)
 	SceneDirector.intro_overlay = null
 
-	# --- PREVENT MOVEMENT & UI DURING DARKNESS ---
+	# ***** prevent movement & ui during darkness *****
 	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
 		player_node.set_can_move(false)
 	_set_patreon_visible(false)
 	Events.gameplay_ui_visibility_requested.emit(false)
 
 	if is_instance_valid(transition_layer):
-		# Wait 3 full seconds in the dark to let the player hear the environment
+		# wait 3 full seconds in the dark to let the player hear the environment
 		await get_tree().create_timer(3.0).timeout
 
-		# Now open the eyes
+		# now open the eyes
 		await transition_layer.play_iris_open()
 
-	# --- RESTORE MOVEMENT & UI ---
+	# ***** restore movement & ui *****
 	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
 		player_node.set_can_move(true)
 	_set_patreon_visible(true)
@@ -1201,7 +1195,7 @@ func open_journal():
 
 	get_tree().root.add_child(_journal_overlay_instance)
 
-	# hide main ui 
+	# hide main ui
 	enter_conversation_state()
 	get_tree().paused = true
 
@@ -1227,7 +1221,7 @@ func trigger_game_over(fade_duration: float = 1.5):
 	if is_instance_valid(SceneDirector.intro_overlay) and "current_balloon" in SceneDirector.intro_overlay and is_instance_valid(SceneDirector.intro_overlay.current_balloon):
 		SceneDirector.intro_overlay.current_balloon.hide()
 
-	# Trigger the GLOBAL fade avoiding destruction during cleanup
+	# trigger the global fade avoiding destruction during cleanup
 	if is_instance_valid(transition_layer) and transition_layer.has_method("global_fade_to_black"):
 		await transition_layer.global_fade_to_black(fade_duration)
 	else:
@@ -1241,16 +1235,16 @@ func trigger_game_over(fade_duration: float = 1.5):
 		if SoundManager.has_method("stop_music"): SoundManager.stop_music()
 		if SoundManager.has_method("stop_all_ambience"): SoundManager.stop_all_ambience()
 
-	# 4. Clean up the main game scene if it exists
+	# clean up the main game scene if it exists
 	SceneDirector.teardown_game_scene()
 
-	# 5. Aggressively hunt down Overlays AND Dialogue Balloons to prevent crashes
+	# aggressively hunt down overlays and dialogue balloons to prevent crashes
 	SceneDirector._cleanup_all_overlays()
 
-	# 5.5 Ensure the tree is unpaused (form/journal/zoom may have paused it)
+	# 5 ensure the tree is unpaused (form/journal/zoom may have paused it)
 	get_tree().paused = false
 
-	# 6. Spawn the Game Over Scene
+	# spawn the game over scene
 	SceneDirector.show_game_over()
 
 func quit_to_main_menu_smooth():

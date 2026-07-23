@@ -1,35 +1,35 @@
-# InventoryUI.gd
+# inventoryui.gd
 extends CanvasLayer
 
-# --- Node References ---
+# /////////////////////[node references]
 @onready var item_name_hover_label: Label = $ItemNameHoverLabel
 @onready var inventory_grid_container: GridContainer = $InventoryGridPanel/InventoryGridContainer
 @onready var up_button: Button = $InventoryGridPanel/UpButton
 @onready var down_button: Button = $InventoryGridPanel/DownButton
 
-# --- Configuration ---
-const ITEMS_PER_PAGE: int = 6 # 3 columns * 2 rows
+# //////////////////////[configuration]
+const ITEMS_PER_PAGE: int = 6
 const EQUIPPED_INDICATOR_NODE_NAME: String = "EquippedIndicator"
 const ITEM_ICON_NODE_NAME: String = "ItemIcon"
 
-# --- State Variables ---
-var all_inventory_slots: Array[Button] = [] # Will hold the 6 Button nodes for slots
-var current_player_inventory_cache: Array[ItemData] = [] # Local cache of player's items
+# //////////////////[state variables]
+var all_inventory_slots: Array[Button] = []
+var current_player_inventory_cache: Array[ItemData] = []
 var current_page_index: int = 0
 var total_pages: int = 0
 
 
 func _ready():
-	# Validate node paths
+	# validate node path
 	if not item_name_hover_label: print_rich("[color=red]InventoryUI: ItemNameHoverLabel not found![/color]")
 	if not inventory_grid_container: print_rich("[color=red]InventoryUI: InventoryGridContainer not found![/color]"); return
 	if not up_button: print_rich("[color=red]InventoryUI: UpButton not found![/color]")
 	if not down_button: print_rich("[color=red]InventoryUI: DownButton not found![/color]")
 
 	if inventory_grid_container:
-		inventory_grid_container.columns = 3 # Ensure 3 columns for 3x2 layout
+		inventory_grid_container.columns = 3
 
-	# Enforce horizontal anchors to prevent overlapping
+	# enforce horizontal anchors to prevent overlapping
 	$InventoryGridPanel.anchor_left = 0.46
 	$InventoryGridPanel.anchor_right = 0.76
 
@@ -46,12 +46,12 @@ func _ready():
 		if up_button: up_button.add_theme_font_size_override("font_size", 24)
 		if down_button: down_button.add_theme_font_size_override("font_size", 24)
 
-	# --- Initialize Hover Label ---
+	# *********************[initialize hover label]
 	if item_name_hover_label:
 		item_name_hover_label.visible = false
 
-	# --- Initialize exactly ITEMS_PER_PAGE slot buttons ---
-	# Clear any existing children from the editor (good practice)
+	# *********************[initialize exactly items_per_page slot buttons]
+	# clear any existing children from the editor (good practice)
 	for child in inventory_grid_container.get_children():
 		inventory_grid_container.remove_child(child)
 		child.queue_free()
@@ -71,7 +71,7 @@ func _ready():
 		slot_button.focus_mode = Control.FOCUS_NONE
 		slot_button.clip_text = true
 
-		# Add a TextureRect inside the button for the icon
+		# add a texturerect inside the button for the icon
 		var icon_rect = TextureRect.new()
 		icon_rect.name = ITEM_ICON_NODE_NAME
 		icon_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
@@ -83,7 +83,7 @@ func _ready():
 		all_inventory_slots.append(slot_button)
 		inventory_grid_container.add_child(slot_button)
 
-	# --- Connect to GameManager Signals ---
+	# *****************[connect to gamemanager signals]
 	if GameManager:
 		Inventory.inventory_updated.connect(_on_game_manager_inventory_updated)
 		GameManager.selected_inventory_item_changed.connect(_on_game_manager_selected_item_changed)
@@ -98,7 +98,7 @@ func _ready():
 	else:
 		print_rich("[color=red]InventoryUI: GameManager not found![/color]")
 
-	# --- Connect Pagination Buttons ---
+	# *********************[connect pagination buttons]
 	if up_button:
 		up_button.pressed.connect(_on_up_button_pressed)
 		up_button.text = ""
@@ -109,7 +109,7 @@ func _ready():
 		down_button.text = ""
 		_setup_button_icon(down_button, true)
 
-	_update_pagination_buttons_state() # Initial state
+	_update_pagination_buttons_state()
 
 
 func _process(_delta: float) -> void:
@@ -118,12 +118,12 @@ func _process(_delta: float) -> void:
 
 
 func _on_game_manager_inventory_updated(full_inventory_data: Array[ItemData]):
-	current_player_inventory_cache = full_inventory_data.duplicate() # Store a copy
+	current_player_inventory_cache = full_inventory_data.duplicate()
 
 	total_pages = 1 if current_player_inventory_cache.is_empty() else ceil(float(current_player_inventory_cache.size()) / ITEMS_PER_PAGE)
 	current_page_index = clamp(current_page_index, 0, max(0, total_pages - 1))
 
-	_render_current_page() # This will also update selected state via its call to _update_slot_selected_visual_state
+	_render_current_page()
 	_update_pagination_buttons_state()
 
 
@@ -143,7 +143,7 @@ func _render_current_page():
 
 		var icon_rect: TextureRect = slot_button.get_node_or_null(ITEM_ICON_NODE_NAME)
 
-		# Safely disconnect any existing connections bound to this script
+		# safely disconnect any existing connections
 		for conn in slot_button.pressed.get_connections():
 			if conn.callable.get_object() == self:
 				slot_button.pressed.disconnect(conn.callable)
@@ -178,7 +178,7 @@ func _render_current_page():
 				icon_rect.visible = (item_data.icon != null)
 
 				if icon_rect.visible:
-					slot_button.text = "" # Clear button text if icon is visible
+					slot_button.text = ""
 				else:
 					slot_button.text = item_data.display_name.substr(0, 3) if item_data.display_name else "???"
 			else:
@@ -189,17 +189,17 @@ func _render_current_page():
 			slot_button.mouse_entered.connect(_on_slot_mouse_entered.bind(item_data, slot_button))
 			slot_button.mouse_exited.connect(_on_slot_mouse_exited)
 		else:
-			# This slot is empty for the current page
+			# this slot is empty for the current page
 			slot_button.disabled = true
 			slot_button.set_meta("item_data", null)
 			if icon_rect:
 				icon_rect.texture = null
 				icon_rect.visible = false
 			var equipped_label: Label = slot_button.get_node_or_null(EQUIPPED_INDICATOR_NODE_NAME)
-			if equipped_label: equipped_label.visible = false # Hide for empty slots
-			slot_button.text = "-" # Placeholder for empty slot
+			if equipped_label: equipped_label.visible = false
+			slot_button.text = "-"
 
-	# After rendering all slots, update visual state for selected item
+	# after rendering all slots, update
 	if GameManager:
 		_update_slot_selected_visual_state(GameManager.current_selected_item_data)
 	else:
@@ -215,13 +215,13 @@ func _on_inventory_slot_pressed(item_data_pressed: ItemData):
 
 
 func _on_slot_mouse_entered(item_data_hovered: ItemData, _slot_button_node: Button):
-	# Touchscreens do not have a persistent cursor, so hover labels get stuck when tapped.
+	# touchscreens do not have a
 	if OS.has_feature("mobile"):
 		return
 
 	if item_name_hover_label and item_data_hovered:
 		item_name_hover_label.text = item_data_hovered.display_name
-		item_name_hover_label.reset_size() # <--- Forces the box to shrink to the text size
+		item_name_hover_label.reset_size()
 		item_name_hover_label.visible = true
 
 func _on_slot_mouse_exited():
@@ -291,7 +291,7 @@ func _update_slot_selected_visual_state(selected_item_data: ItemData):
 		slot_button.add_theme_stylebox_override("focus", style)
 		slot_button.add_theme_stylebox_override("pressed", style)
 
-# --- Pagination Logic ---
+# ///////////////[pagination logic]
 func _on_up_button_pressed():
 	SoundManager.play_sfx("ui_click")
 	if current_page_index > 0:

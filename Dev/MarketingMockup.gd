@@ -22,8 +22,8 @@ func _ready():
 		level_state_manager.set_level_flag("insurance_button_unlocked", true)
 		level_state_manager.set_level_flag("dev_cta_completed", false)
 
-		# NOTE: This mockup scene has no GameUI node, so dialogue hide/restore
-		# and the journal/insurance button presses are not wired here (Screenshot scene).
+		# note: this mockup scene has
+		# and the journal/insurance button presses
 		var mock_insurance = get_node_or_null("%InsuranceFormButtonUI")
 		if is_instance_valid(mock_insurance): mock_insurance.show()
 

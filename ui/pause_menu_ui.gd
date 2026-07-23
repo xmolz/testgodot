@@ -67,7 +67,7 @@ func _process(_delta):
 		scan_cancel_panel.visible = menu_panel.visible
 
 func _input(event):
-	# 1. Handle Escape Key (Toggles Pause ON and OFF)
+	# handle escape key (toggles pause on and off)
 	if event.is_action_pressed("ui_cancel") or (event is InputEventKey and event.keycode == KEY_ESCAPE and event.is_pressed() and not event.is_echo()):
 		if confirm_overlay.visible:
 			get_viewport().set_input_as_handled()
@@ -81,7 +81,7 @@ func _input(event):
 			get_viewport().set_input_as_handled()
 			toggle_pause()
 
-	# 2. Handle Right-Click (Acts as "Back" / "Unpause" ONLY when menu is open)
+	# handle right-click (acts as "back"
 	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.is_pressed():
 		if confirm_overlay.visible:
 			get_viewport().set_input_as_handled()
@@ -122,7 +122,7 @@ func toggle_pause():
 		get_tree().paused = true
 		if GameManager: GameManager.change_game_state(GameManager.GameState.PAUSED)
 		
-		#releasing the damn keyboard focus
+		# releasing the damn keyboard focus
 		var current_focus = get_viewport().gui_get_focus_owner()
 		if is_instance_valid(current_focus):
 			current_focus.release_focus()
@@ -173,16 +173,16 @@ func _notification(what: int) -> void:
 		_on_system_back_requested()
 
 
-# Android back button / back gesture. quit_on_go_back is disabled in
-# project.godot, so the app no longer quits on its own — we decide here.
-# Mirrors the Escape-key behavior in _input(); back never hard-kills a run.
+# android back button / back
+# project.godot, so the app no
+# mirrors the escape-key behavior in
 func _on_system_back_requested() -> void:
-	# 1. A confirm dialog is open -> back means "No".
+	# a confirm dialog is open -> back means "no".
 	if is_instance_valid(confirm_overlay) and confirm_overlay.visible:
 		_on_confirm_no()
 		return
 
-	# 2. A sub-menu is open -> ignore, same as the Escape key does.
+	# a sub-menu is open -> ignore, same as the escape key does.
 	if get_tree().root.has_node("SettingsMenu") \
 			or get_tree().root.has_node("DialogueHistoryUI") \
 			or get_tree().root.has_node("CreditsMenu") \
@@ -192,19 +192,19 @@ func _on_system_back_requested() -> void:
 	if not GameManager:
 		return
 
-	# 3. On the main menu there is no progress to lose -> quit (Android convention).
+	# on the main menu there
 	if GameManager.current_game_state == GameManager.GameState.MAIN_MENU:
 		get_tree().quit()
 		return
 
-	# 4. In-game states -> toggle the pause menu, exactly like Escape.
+	# in-game states -> toggle the
 	if GameManager.current_game_state == GameManager.GameState.IN_GAME_PLAY \
 			or GameManager.current_game_state == GameManager.GameState.PAUSED \
 			or GameManager.current_game_state == GameManager.GameState.INTRO_CONVERSATION:
 		toggle_pause()
 
 func _apply_style():
-	# --- MOBILE: Scale up the Hamburger Menu Icon ---
+	# ----------[mobile: scale up the hamburger menu icon]
 	if OS.has_feature("mobile"):
 		menu_panel.offset_left = -160
 		menu_panel.offset_bottom = 130
@@ -272,7 +272,7 @@ func _apply_style():
 	_scan_style = panel_style.duplicate()
 	scan_cancel_panel.add_theme_stylebox_override("panel", _scan_style)
 
-	# Desktop defaults
+	# desktop defaults
 	scan_cancel_panel.offset_left = -190
 	scan_cancel_panel.offset_top = 20
 	scan_cancel_panel.offset_right = -110
@@ -355,8 +355,8 @@ func set_cancel_mode(is_cancel: bool):
 		scan_cancel_btn.texture_normal = preload("res://Icons/magnifying-glass.png")
 		_set_scan_visuals(Color.WHITE, Color.WHITE)
 
-# Single source of truth for the scan button's border + icon tint.
-# Every code path that changes one MUST go through here so they never desync.
+# single source of truth for
+# every code path that changes
 func _set_scan_visuals(border_color: Color, icon_color: Color):
 	if _scan_style:
 		_scan_style.border_color = border_color

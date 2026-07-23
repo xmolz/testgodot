@@ -14,8 +14,8 @@ extends CanvasLayer
 @onready var footer_label: Label = $Layout/Column/FooterLabel
 @onready var bottom_slot: Control = $Layout/Column/BottomSlot
 
-# TODO: Replace these with the real love-interest base sprites when they're ready.
-# Sprites of any height/crop work: each portrait scales keep-aspect to fill the
+# todo: replace these with the
+# sprites of any height/crop work:
 # flexible band the layout gives it.
 const LOVE_INTEREST_PORTRAITS: Array[String] = [
 	"res://Backgrounds/Sneak Peeks/love_interest_1.png",
@@ -24,7 +24,7 @@ const LOVE_INTEREST_PORTRAITS: Array[String] = [
 	"res://Backgrounds/Sneak Peeks/love_interest_4.png",
 ]
 
-# The list of massive files we want to pre-load.
+# the list of massive files we want to pre-load.
 var load_queue = [
 	{"path": "res://ui/main_menu.tscn", "name": "System Interfaces"},
 	{"path": "res://ui/difficulty_select_screen.tscn", "name": "Game Configuration"},
@@ -44,9 +44,9 @@ func _ready():
 	progress_bar.add_theme_font_override("font", custom_font)
 	continue_button.add_theme_font_override("font", custom_font)
 
-	# --- MOBILE SCALING ---
-	# Only fonts and minimum sizes change here; the container layout handles
-	# all positioning, so nothing can overlap regardless of text height.
+	# //////////////////// mobile scaling
+	# only fonts and minimum sizes
+	# all positioning, so nothing can
 	if OS.has_feature("mobile"):
 		info_label.add_theme_font_size_override("font_size", 40)
 		progress_bar.custom_minimum_size.y = 70
@@ -91,11 +91,11 @@ func _build_portrait_row():
 		rect.modulate.a = 0.0
 		portrait_row.add_child(rect)
 
-	# Portraits resize to fill whatever height the layout gives the row
+	# portraits resize to fill whatever
 	portrait_row.resized.connect(_resize_portraits)
 	_resize_portraits.call_deferred()
 
-	# Staggered fade-in so the row feels authored rather than popping in
+	# staggered fade-in so the row
 	for i in portrait_row.get_child_count():
 		var child := portrait_row.get_child(i)
 		var tw := create_tween()
@@ -110,7 +110,7 @@ func _resize_portraits():
 	var total_aspect := 0.0
 	for child in portrait_row.get_children():
 		total_aspect += child.get_meta("aspect", 0.5)
-	# Fill the band's height, capped so all portraits plus gaps fit the width.
+	# fill the band's height, capped
 	var h: float = portrait_row.size.y
 	var max_h: float = (portrait_row.size.x - sep * (count - 1)) / total_aspect
 	h = minf(h, max_h)
@@ -127,18 +127,18 @@ func _start_next_load():
 	var current_file = load_queue[current_load_index]
 	info_label.text = "Loading: " + current_file["name"] + "..."
 
-	# Start loading the file on a background CPU thread
+	# start loading the file on a background cpu thread
 	ResourceLoader.load_threaded_request(current_file["path"])
 	set_process(true)
 
 func _process(_delta):
 	var current_file = load_queue[current_load_index]
 
-	# Check the status of the background thread
+	# check the status of the background thread
 	var load_status = ResourceLoader.load_threaded_get_status(current_file["path"], progress_array)
 
 	if load_status == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
-		# Calculate overall progress across all files
+		# calculate overall progress across all file
 		var base_progress = (float(current_load_index) / load_queue.size()) * 100.0
 		var file_progress = (progress_array[0] * 100.0) / load_queue.size()
 		progress_bar.value = base_progress + file_progress
@@ -146,10 +146,10 @@ func _process(_delta):
 	elif load_status == ResourceLoader.THREAD_LOAD_LOADED:
 		set_process(false)
 
-		# Grab the finished resource
+		# grab the finished resource
 		var loaded_resource = ResourceLoader.load_threaded_get(current_file["path"])
 
-		# Save it to the SceneDirector based on what it is
+		# save it to the scenedirector based on what it i
 		match current_file["path"]:
 			"res://ui/main_menu.tscn":
 				SceneDirector.cached_main_menu_scene = loaded_resource
@@ -158,7 +158,7 @@ func _process(_delta):
 			"res://main.tscn":
 				SceneDirector.cached_main_game_scene = loaded_resource
 
-		# Move to the next file
+		# move to the next file
 		current_load_index += 1
 		_start_next_load()
 
@@ -173,11 +173,11 @@ func _finish_loading():
 	progress_bar.value = 100
 	info_label.text = "Loading Complete!"
 
-	# Let the player see 100% before the swap
+	# let the player see 100% before the swap
 	await get_tree().create_timer(0.4).timeout
 
-	# Fade out the loading box, fade in the age line + Continue button.
-	# Both live inside the fixed-height BottomSlot, so the column never reflows.
+	# fade out the loading box,
+	# both live inside the fixed-height
 	var tween_out := create_tween()
 	tween_out.tween_property(loading_box, "modulate:a", 0.0, 0.25)
 	await tween_out.finished
@@ -189,10 +189,10 @@ func _finish_loading():
 	tween_in.tween_property(continue_box, "modulate:a", 1.0, 0.3)
 	await tween_in.finished
 
-	# Keyboard / gamepad accept works immediately
+	# keyboard / gamepad accept works immediately
 	continue_button.grab_focus()
 
-	# Gentle pulse so the button reads as alive
+	# gentle pulse so the button reads as alive
 	continue_button.pivot_offset = continue_button.size / 2.0
 	_pulse_tween = create_tween().set_loops()
 	_pulse_tween.tween_property(continue_button, "scale", Vector2(1.04, 1.04), 0.6).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
@@ -208,6 +208,6 @@ func _on_continue_pressed():
 	if SoundManager:
 		SoundManager.play_sfx("start_game")
 
-	# Tell the GameManager to boot up the Main Menu!
+	# tell the gamemanager to boot up the main menu!
 	GameManager.change_game_state(GameManager.GameState.MAIN_MENU)
 	queue_free()

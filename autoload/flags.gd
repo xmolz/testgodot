@@ -1,11 +1,11 @@
-# Flags.gd (Autoload) — global (cross-level) flags + routing to the current level's flags.
+# flags.gd (autoload) — global (cross-level)
 extends Node
 
 var game_flags: Dictionary = {}
 var current_level_state_manager: LevelStateManager = null
 
 
-# --- Global flags ---
+# /////////////////// global flags
 func set_game_flag(flag_name: String, value: bool):
 	if game_flags.get(flag_name, !value) == value:
 		return
@@ -16,7 +16,7 @@ func get_game_flag(flag_name: String) -> bool:
 	return game_flags.get(flag_name, false)
 
 
-# --- Current level's flags ---
+# ////////////////[current level's flags]
 func register_level_state_manager(lsm: LevelStateManager):
 	current_level_state_manager = lsm
 	if is_instance_valid(lsm) and lsm.has_method("print_initial_flags"):

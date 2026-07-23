@@ -1,6 +1,6 @@
-# MainMenu.gd
+# mainmenu.gd
 extends CanvasLayer
-# The GameManager is listening for these specific signals
+# the gamemanager is listening for these specific signal
 signal new_game_requested
 signal quit_game_requested
 
@@ -23,7 +23,7 @@ func _ready():
 	_add_version_label()
 
 func _on_new_game_button_pressed():
-	# Verify the click is working in the Output log
+	# verify the click is working in the output log
 	print("MainMenu: New Game Button Pressed")
 	if SoundManager: SoundManager.play_sfx("start_game")
 	new_game_requested.emit()

@@ -1,8 +1,8 @@
-# WaypointMovement.gd
+# **********************(waypointmovement.gd)
 class_name WaypointMovement
 extends Node
 
-# --- Configuration ---
+# ///////////////////////[configuration]
 @export var enabled: bool = true
 @export var movement_speed: float = 50.0
 @export var wait_duration: float = 2.0 
@@ -12,7 +12,7 @@ extends Node
 enum LoopType { ONE_SHOT, LOOP, PING_PONG }
 @export var loop_type: LoopType = LoopType.LOOP
 
-# --- Internal State ---
+# *********** internal state
 var _target_node: CharacterBody2D
 var _animation_player: AnimationPlayer
 var _sprite_2d: Sprite2D 
@@ -34,7 +34,7 @@ func _ready():
 
 	_animation_player = _target_node.get_node_or_null("AnimationPlayer")
 	
-	# Try to find the sprite
+	# try to find the sprite
 	_sprite_2d = _target_node.get_node_or_null("Sprite")
 	if not _sprite_2d:
 		_sprite_2d = _target_node.get_node_or_null("ObjectSprite")
@@ -103,11 +103,11 @@ func _move_towards(target_position: Vector2):
 func _on_wait_timer_timeout():
 	_is_waiting = false 
 
-# --- NEW PUBLIC FUNCTIONS FOR AIDA TO CONTROL ---
+# //////////////////////// public functions for aida to control
 func pause_movement():
-	set_physics_process(false) # Stops the _physics_process loop
+	set_physics_process(false)
 	
-	# Only pause the timer if it actually got created!
+	# only pause the timer if it actually got created!
 	if is_instance_valid(_wait_timer):
 		_wait_timer.paused = true  
 		
@@ -117,21 +117,21 @@ func pause_movement():
 		_animation_player.play("idle")
 
 func resume_movement():
-	# Only unpause the timer if it actually got created!
+	# only unpause the timer if it actually got created!
 	if is_instance_valid(_wait_timer):
 		_wait_timer.paused = false 
 		
-	# Only resume the physics loop if they actually have waypoints to walk to!
+	# only resume the physics loop
 	if enabled and not waypoints.is_empty():
 		set_physics_process(true)
 	
-# --- CUTSCENE CONTROL ---
+# ------------(cutscene control)
 
-# This function is a "Coroutine". We can 'await' it!
+# this function is a "coroutine". we can 'await' it!
 func move_to_position_async(target_pos: Vector2, stop_distance: float = 5.0, timeout: float = 8.0) -> void:
 	pause_movement()
 	
-	#print_rich("[color=orange]AidaMove: START. From %s to %s. Timeout: %ss[/color]" % [_target_node.global_position, target_pos, timeout])
+	# print_rich("[color=orange]aidamove: start. from %s to
 	
 	var start_time = Time.get_ticks_msec()
 	var arrived = false
@@ -139,37 +139,37 @@ func move_to_position_async(target_pos: Vector2, stop_distance: float = 5.0, tim
 	while not arrived:
 		if not is_instance_valid(_target_node): return
 
-		# --- DEBUGGING EVERY SECOND ---
-		# We use modulo to print only occasionally, otherwise console floods
+		# /////////////////////[debugging every second]
+		# we use modulo to print
 		if Time.get_ticks_msec() % 1000 < 20: 
 			var dist = _target_node.global_position.distance_to(target_pos)
-			#print("AidaMove: Dist: %.2f | Velocity: %s | TargetY: %.2f vs MyY: %.2f" % [dist, _target_node.velocity, target_pos.y, _target_node.global_position.y])
+			# print("aidamove: dist: %.2f | velocity:
 
-		# 1. CHECK TIMEOUT (The Safety Net)
+		# check timeout (the safety net)
 		var elapsed = (Time.get_ticks_msec() - start_time) / 1000.0
 		if elapsed > timeout:
-			#print_rich("[color=red]AidaMove: TIMEOUT! Force teleporting.[/color]")
+			# print_rich("[color=red]aidamove: timeout! force teleporting.[/color]")
 			_target_node.global_position = target_pos
 			arrived = true
 			break
 
-		# 2. CALCULATE HORIZONTAL DISTANCE ONLY (The Logic Fix)
-		# We only care about X distance, ignoring Y height differences
+		# calculate horizontal distance only (the logic fix)
+		# we only care about x
 		var x_distance = abs(_target_node.global_position.x - target_pos.x)
 		
 		if x_distance <= stop_distance:
 			arrived = true
 			_target_node.velocity = Vector2.ZERO
 			if _animation_player: _animation_player.play("idle")
-			#print_rich("[color=green]AidaMove: Arrived at X coordinate.[/color]")
+			# print_rich("[color=green]aidamove: arrived at x coordinate.[/color]")
 		else:
-			# 3. MOVE HORIZONTALLY ONLY
-			# Determine direction: 1.0 (Right) or -1.0 (Left)
+			# ************* 3. move horizontally only
+			# determine direction: 1.0 (right) or -1.0 (left)
 			var direction_x = sign(target_pos.x - _target_node.global_position.x)
 			
-			# Apply velocity only to X. Leave Y alone (or apply gravity if needed)
+			# apply velocity only to x.
 			_target_node.velocity.x = direction_x * movement_speed
-			_target_node.velocity.y = 0 # Or apply gravity here if she needs it
+			_target_node.velocity.y = 0
 			
 			_target_node.move_and_slide()
 			
@@ -185,6 +185,6 @@ func move_to_position_async(target_pos: Vector2, stop_distance: float = 5.0, tim
 func set_target_waypoint_index(index: int):
 	if waypoints.is_empty(): return
 	
-	# Clamp ensures we don't crash if you give a bad number
+	# clamp ensures we don't crash if you give a bad number
 	_current_waypoint_index = clamp(index, 0, waypoints.size() - 1)
-	#print("WaypointMovement: Manually reset target to waypoint index %s" % _current_waypoint_index)
+	# ------------------- print("waypointmovement: manually reset target to waypoint index %s" % _current_waypoint_index)

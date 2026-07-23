@@ -14,7 +14,7 @@ func _ready():
 	adventure_button.pressed.connect(func(): _on_selection(false))
 	story_button.pressed.connect(func(): _on_selection(true))
 
-	# --- MOBILE TEXT SCALING ---
+	# ****************[mobile text scaling]
 	if OS.has_feature("mobile"):
 		var title = $CenterContainer/VBoxContainer/TitleLabel
 		var subtitle = $CenterContainer/VBoxContainer/SubtitleLabel

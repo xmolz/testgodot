@@ -6,20 +6,20 @@ signal zoom_changed
 var target_node: Node2D
 
 @export_group("Marketing & Debug")
-## Increase this value (e.g., 1.5 or 2.0) to zoom the camera in closer for GIFs.
+# increase this value (e.g., 1.5
 @export var custom_zoom_level: float = 1.0
 
 @export_group("Player Zoom")
-## The customizable steps of the camera zoom. Keep values >= 1.0.
+# the customizable steps of the
 @export var zoom_levels: Array[float] = [1.0, 1.1, 1.2]
-## Duration of the camera zoom transition.
+# duration of the camera zoom transition.
 @export var zoom_tween_seconds: float = 0.25
 
 var _zoom_index: int = 0
 var _zoom_tween: Tween = null
 
 func _ready():
-	# Apply the custom zoom level immediately at index 0
+	# apply the custom zoom level immediately at index 0
 	_apply_zoom(true)
 
 	if target_path:
@@ -74,9 +74,9 @@ func _apply_zoom(instant: bool = false):
 
 func _physics_process(_delta):
 	if is_instance_valid(target_node):
-		# 3. Snap perfectly to the player in the physics step.
-		# Because Physics Interpolation is ON globally, Godot will now automatically 
-		# smooth the visual rendering of BOTH the player and the camera together!
+		# snap perfectly to the player in the physics step.
+		# --------------- because physics interpolation is on globally, godot will now automatically
+		# mooth the visual rendering of
 		global_position = target_node.global_position
 
 func snap_to_target():

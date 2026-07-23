@@ -1,6 +1,6 @@
 extends CanvasLayer
 
-# Tabbed credits screen (Team / Patrons). Content comes from data/credits_data.gd.
+# tabbed credits screen (team /
 
 const ACCENT := Color("#33d9ff")
 const CUSTOM_FONT := preload("res://Fonts/VarelaRound-Regular.ttf")
@@ -132,7 +132,7 @@ func _style_static_controls():
 		btn.add_theme_font_override("font", CUSTOM_FONT)
 		btn.add_theme_font_size_override("font_size", _tab_font_size)
 
-	# --- Close button: identical styling to the Settings menu close button ---
+	# ******************* close button: identical styling to the settings menu close button
 	close_button.add_theme_font_override("font", CUSTOM_FONT)
 	close_button.add_theme_font_size_override("font_size", 46 if _is_mobile else 28)
 
@@ -167,7 +167,7 @@ func _style_static_controls():
 	close_button.add_theme_color_override("font_pressed_color", Color.WHITE)
 
 func _style_tab_button(btn: Button, is_active: bool):
-	# --- Identical styling to the Settings menu tab buttons ---
+	# -----------------------[identical styling to the settings menu tab buttons]
 	var style = StyleBoxFlat.new()
 	style.corner_radius_top_left = 6
 	style.corner_radius_top_right = 6
@@ -195,7 +195,7 @@ func _style_tab_button(btn: Button, is_active: bool):
 	btn.add_theme_color_override("font_pressed_color", Color(0.1, 0.1, 0.1, 1.0) if is_active else Color.WHITE)
 
 func _style_scrollbar():
-	# --- Identical to the Settings menu scrollbar ---
+	# ------------------[identical to the settings menu scrollbar]
 	var vbar: VScrollBar = scroll.get_v_scroll_bar()
 	vbar.custom_minimum_size.x = 24 if _is_mobile else 12
 

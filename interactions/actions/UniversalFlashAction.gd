@@ -12,28 +12,28 @@ func execute(interactable_node: Interactable) -> Variant:
 		push_error("UniversalFlashAction: Could not load flash_dialogue.dialogue!")
 		return true
 
-	# 1. Check Unflashables (Plays dialogue, skips animation, ends interaction)
+	# check unflashables (plays dialogue, skips
 	var unflashable_id = obj_id + "_unflashable"
 	if flash_dialogue.titles.has(unflashable_id):
 		DialogueManager.show_dialogue_balloon_scene("res://conversation/conversationballoon.tscn", flash_dialogue, unflashable_id)
 		await DialogueManager.dialogue_ended
 		return true
 
-	# Reset the abort flag before starting
+	# reset the abort flag before starting
 	Flags.set_game_flag("abort_flash", false)
 
-	# 2. Check Pre-Flash (Plays dialogue, then continues to animation)
+	# check pre-flash (plays dialogue, then
 	var pre_id = obj_id + "_pre"
 	if flash_dialogue.titles.has(pre_id):
 		DialogueManager.show_dialogue_balloon_scene("res://conversation/conversationballoon.tscn", flash_dialogue, pre_id)
 		await DialogueManager.dialogue_ended
 
-	# Check if the dialogue requested the flash to be aborted
+	# check if the dialogue requested the flash to be aborted
 	if Flags.get_game_flag("abort_flash") == true:
 		Flags.set_game_flag("abort_flash", false)
 		return true
 
-	# 3. Perform Flash Animation
+	# //////////////// 3. perform flash animation
 	if is_instance_valid(player):
 		if player.has_method("face_target"):
 			player.face_target(interactable_node.global_position)
@@ -41,7 +41,7 @@ func execute(interactable_node: Interactable) -> Variant:
 		if player.has_method("set_animation_state"):
 			player.set_animation_state("flash")
 
-		# if SoundManager: SoundManager.play_sfx("flashlight_click")
+		# ////////////////////(if soundmanager: soundmanager.play_sfx("flashlight_click"))
 
 		var anim_duration: float = 1.0
 		var anim_player = player.get_node_or_null("AnimationPlayer")
@@ -53,7 +53,7 @@ func execute(interactable_node: Interactable) -> Variant:
 		if player.has_method("set_animation_state"):
 			player.set_animation_state("idle")
 
-	# 4. Check Post-Flash (Plays specific post-flash, or defaults to generic)
+	# check post-flash (plays specific post-flash,
 	var post_id = obj_id + "_post"
 	if not flash_dialogue.titles.has(post_id):
 		post_id = "default_post"

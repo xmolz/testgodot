@@ -22,20 +22,20 @@ func change_state(new_state_int: int):
 	var new_state = new_state_int as ToiletState
 	
 	if GameManager:
-		# --- UPDATED LOGIC: Explicitly handle ALL flags ---
+		# ***************** updated logic: explicitly handle all flags
 		match new_state:
 			ToiletState.NORMAL:
-				# Clear ALL flags when normal
+				# clear all flags when normal
 				Flags.set_level_flag("toilet_has_paper", false)
 				Flags.set_level_flag("toilet_clogged", false)
 			ToiletState.HAS_PAPER:
 				Flags.set_level_flag("toilet_has_paper", true)
-				# Ensure clogged is false
+				# ensure clogged is false
 				Flags.set_level_flag("toilet_clogged", false)
 			ToiletState.CLOGGED:
 				Flags.set_level_flag("toilet_clogged", true)
-				# (Optional: keep has_paper true if you want, or clear it. Usually clogged implies paper is stuck)
-				# Flags.set_level_flag("toilet_has_paper", true) 
+				# (optional: keep has_paper true if
+				# flags.set_level_flag("toilet_has_paper", true)
 
 	match new_state:
 		ToiletState.NORMAL:

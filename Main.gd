@@ -1,7 +1,7 @@
-# Main.gd (script attached to your 'Main' root node)
+# main.gd (script attached to your 'main' root node)
 extends Control
 
-# --- Level-Specific Event Resources ---
+# ----------(level-specific event resources)
 @export var aida_dialogue_resource: DialogueResource
 @export var aida_explanation_data: ExplanationData
 
@@ -9,7 +9,7 @@ extends Control
 @export var enable_journal_notification: bool = true
 @export var force_assisted_mode: bool = false
 
-# --- Node References ---
+# /////////////(node references)
 @onready var level_state_manager: LevelStateManager = $LevelStateManager
 @onready var sergey_interactable: Interactable = $Sergei_Path/Sergei/InteractionArea
 @onready var mcbucket_interactable: Interactable = $McBucket_Path/McBucket/InteractionArea
@@ -20,28 +20,28 @@ extends Control
 func _ready():
 	_inject_progression_blockers()
 
-	# We must wait for one frame. This is a crucial step.
+	# we must wait for one frame. this is a crucial step.
 	await get_tree().process_frame
 
-	# --- DEBUG: Force Assisted Mode ---
+	# ********************** debug: force assisted mode
 	if GameManager and force_assisted_mode:
 		Settings.assisted_mode = true
 		Verbs.unlock_verb("think")
 		GameManager.current_unread_hint = ""
 		GameManager.last_read_hint = ""
-	# ----------------------------------
+	#
 
-	# --- Apply Journal Notification Setting ---
+	# ----------------(apply journal notification setting)
 	var journal_button = get_node_or_null("%JournalButtonUI")
 	if is_instance_valid(journal_button):
 		journal_button.set_notification_enabled(enable_journal_notification)
 
-	# --- 2. Setup Global Signals ---
+	# ////////////// 2. setup global signals
 	if GameManager:
-		# Connect to signal so we know when Aida finishes talking
+		# connect to signal so we know when aida finishes talking
 		GameManager.character_conversation_ended.connect(_on_character_conversation_ended)
 
-		# Register this level's state manager
+		# register this level's state manager
 		if is_instance_valid(level_state_manager):
 			Flags.register_level_state_manager(level_state_manager)
 		if is_instance_valid(level_hint_manager):
@@ -60,7 +60,7 @@ func _exit_tree():
 			print_rich("[color=yellow]%s: Unregistered its LevelStateManager.[/color]" % name)
 
 
-# --- SIGNAL HANDLERS ---
+# ////////////////// signal handlers
 
 func _on_character_conversation_ended(resource: DialogueResource):
 	if resource == aida_dialogue_resource:
@@ -71,7 +71,7 @@ func _on_character_conversation_ended(resource: DialogueResource):
 			level_state_manager.set_level_flag("aida_explanation_shown", true)
 			level_state_manager.set_level_flag("insurance_button_unlocked", true)
 
-			# Add a slight delay to let the game world "breathe" before the pop-up
+			# add a slight delay to
 			await get_tree().create_timer(0.5).timeout
 
 			GameManager.start_explanation(aida_explanation_data, self)

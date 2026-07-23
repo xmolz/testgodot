@@ -1,6 +1,6 @@
 extends CanvasLayer
 
-# Device-aware controls screen: keycap chips, mouse/UI icons, opaque panel, scrollable rows.
+# device-aware controls screen: keycap chips,
 
 const ACCENT := Color("#33d9ff")
 const CUSTOM_FONT := preload("res://Fonts/VarelaRound-Regular.ttf")
@@ -80,7 +80,7 @@ func _style_static_controls():
 	title_label.add_theme_font_override("font", CUSTOM_FONT)
 	title_label.add_theme_font_size_override("font_size", 52 if _is_mobile else 44)
 
-	# --- Close button: identical styling to the Settings menu close button ---
+	# ----------- close button: identical styling to the settings menu close button
 	close_button.add_theme_font_override("font", CUSTOM_FONT)
 	close_button.add_theme_font_size_override("font_size", 46 if _is_mobile else 28)
 
@@ -115,7 +115,7 @@ func _style_static_controls():
 	close_button.add_theme_color_override("font_pressed_color", Color.WHITE)
 
 func _style_scrollbar():
-	# --- Identical to the Settings menu scrollbar ---
+	# ----------------[identical to the settings menu scrollbar]
 	var vbar: VScrollBar = scroll.get_v_scroll_bar()
 	vbar.custom_minimum_size.x = 24 if _is_mobile else 12
 

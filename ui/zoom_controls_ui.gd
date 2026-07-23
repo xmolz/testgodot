@@ -18,7 +18,7 @@ var _zoom_out_style: StyleBoxFlat
 func _ready():
 	_apply_style()
 	
-	# Buttons are visual-only; the whole panel (border included) is the hit area.
+	# buttons are visual-only; the whole
 	zoom_in_button.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	zoom_out_button.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	zoom_in_panel.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -36,7 +36,7 @@ func _ready():
 		interaction_state_world = (GameManager.current_interaction_state == GameManager.InteractionState.WORLD)
 	update_visibility()
 	
-	# Defer camera connection until tree is ready, in case camera takes a frame to spawn
+	# defer camera connection until tree
 	call_deferred("_setup_camera_connection")
 
 func _apply_style():
@@ -57,7 +57,7 @@ func _apply_style():
 	zoom_in_panel.add_theme_stylebox_override("panel", _zoom_in_style)
 	zoom_out_panel.add_theme_stylebox_override("panel", _zoom_out_style)
 
-	# Position panels
+	# position panel
 	if OS.has_feature("mobile"):
 		zoom_out_panel.offset_left = 20
 		zoom_out_panel.offset_top = 20

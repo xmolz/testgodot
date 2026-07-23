@@ -1,12 +1,12 @@
-# res://interactions/actions/PlaySoundAction.gd
+# ----------------------(res://interactions/actions/playsoundaction.gd)
 extends Action
 class_name PlaySoundAction
 
-## The key name of the sound to play (must exist in SoundManager.sfx_library).
+# /////////// the key name of the sound to play (must exist in soundmanager.sfx_library).
 @export var sound_name: String = ""
 
-## If true, the game will wait for the sound to finish before starting the next action.
-## Useful for "Sound -> Then Dialogue" sequences.
+# if true, the game will
+# -----------[useful for "sound -> then dialogue" sequences.]
 @export var wait_for_completion: bool = false
 
 @export_range(0.1, 4.0) var pitch: float = 1.0
@@ -17,11 +17,11 @@ func execute(_interactable_node: Interactable) -> Variant:
 		push_warning("PlaySoundAction: No sound_name specified.")
 		return true
 
-	# Call the manager and get the player instance back
+	# call the manager and get the player instance back
 	var audio_player = SoundManager.play_sfx(sound_name, pitch, volume_db)
 
 	if wait_for_completion and is_instance_valid(audio_player):
-		# This pauses the interaction sequence until the sound finishes
+		# this pauses the interaction sequence
 		await audio_player.finished
 	
 	return true

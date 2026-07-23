@@ -5,7 +5,7 @@ signal form_closed
 const FORM_DIALOGUE = preload("res://dialogue/form_related_dialogue.dialogue")
 const CONVERSATION_BALLOON_SCENE = preload("res://conversation/conversationballoon.tscn")
 
-# Inputs from LineEditContainer
+# inputs from lineeditcontainer
 @onready var first_name_edit: LineEdit = $TabletFrame/Padding/ContentCanvas/LineEditContainer/FirstName_Edit
 @onready var middle_name_edit: LineEdit = $TabletFrame/Padding/ContentCanvas/LineEditContainer/MiddleName_Edit
 @onready var last_name_edit: LineEdit = $TabletFrame/Padding/ContentCanvas/LineEditContainer/LastName_Edit
@@ -13,7 +13,7 @@ const CONVERSATION_BALLOON_SCENE = preload("res://conversation/conversationballo
 @onready var phone_number_edit: LineEdit = $TabletFrame/Padding/ContentCanvas/LineEditContainer/PhoneNumber_Edit
 @onready var account_number_edit: LineEdit = $TabletFrame/Padding/ContentCanvas/LineEditContainer/AccountNumber_Edit
 
-# Buttons from ButtonContainer
+# buttons from buttoncontainer
 @onready var first_name_button: Button = $TabletFrame/Padding/ContentCanvas/ButtonContainer/FirstName_Button
 @onready var middle_name_button: Button = $TabletFrame/Padding/ContentCanvas/ButtonContainer/MiddleName_Button
 @onready var last_name_button: Button = $TabletFrame/Padding/ContentCanvas/ButtonContainer/LastName_Button
@@ -21,13 +21,13 @@ const CONVERSATION_BALLOON_SCENE = preload("res://conversation/conversationballo
 @onready var phone_number_button: Button = $TabletFrame/Padding/ContentCanvas/ButtonContainer/PhoneNumber_Button
 @onready var account_number_button: Button = $TabletFrame/Padding/ContentCanvas/ButtonContainer/AccountNumber_Button
 
-# The Submit and Back buttons
+# the submit and back button
 @onready var submit_button: Button = $TabletFrame/Padding/ContentCanvas/Submit_Button
 @onready var back_button: Button = $TabletFrame/Padding/ContentCanvas/Back_Button
 
 func _ready():
 	hide()
-	# Connect every single button to its own function.
+	# connect every single button to its own function.
 	first_name_button.pressed.connect(_on_first_name_submit)
 	middle_name_button.pressed.connect(_on_middle_name_submit)
 	last_name_button.pressed.connect(_on_last_name_submit)
@@ -36,9 +36,9 @@ func _ready():
 	account_number_button.pressed.connect(_on_account_number_submit)
 
 	submit_button.pressed.connect(_on_submit_application_pressed)
-	back_button.pressed.connect(_on_submit_form) # Route the back button to close the form
+	back_button.pressed.connect(_on_submit_form)
 
-	# --- BACK BUTTON OUTLINE (PC & Mobile) ---
+	# /////////////////(back button outline (pc & mobile))
 	back_button.flat = false
 	var back_normal = StyleBoxFlat.new()
 	back_normal.bg_color = Color(0.1, 0.15, 0.2, 0.8)
@@ -65,7 +65,7 @@ func _ready():
 	back_button.add_theme_stylebox_override("focus", back_hover)
 	back_button.add_theme_stylebox_override("pressed", back_hover)
 
-	# --- MOBILE SCALING FOR INSURANCE FORM ---
+	# ***********************[mobile scaling for insurance form]
 	if OS.has_feature("mobile"):
 		$TabletFrame.anchor_left = 0.05
 		$TabletFrame.anchor_right = 0.95
@@ -103,26 +103,26 @@ func _ready():
 				child.add_theme_font_size_override("font_size", 30)
 				child.custom_minimum_size.y = 80
 
-	# --- DYNAMIC UI ADJUSTMENTS ---
-	# Change all "Confirm" buttons to "Check"
+	# ********** dynamic ui adjustments
+	# change all "confirm" buttons to "check"
 	var check_buttons = [first_name_button, middle_name_button, last_name_button, dob_button, phone_number_button, account_number_button]
 	for btn in check_buttons:
 		btn.text = "Check"
 
-	# Visually "disable" the submit button (but keep it clickable for dialogue)
+	# visually "disable" the submit button
 	submit_button.modulate = Color(0.5, 0.5, 0.5, 1.0)
 
-	# --- RESTORE PREVIOUSLY SOLVED FIELDS ---
+	# ////////////(restore previously solved fields)
 	if GameManager and Flags.get_game_flag("first_name_correct"):
 		lock_field("first_name", "FIONA")
 
-	# Close form when clicking the dark background
+	# close form when clicking the dark background
 	$ColorRect/BackgroundButton.pressed.connect(func():
 		if SoundManager: SoundManager.play_sfx("ui_click")
 		_on_submit_form()
 	)
 
-# --- HANDLER FUNCTIONS FOR EACH "OKAY" BUTTON ---
+# ---------------[handler functions for each "okay" button]
 
 func _on_first_name_submit():
 	_handle_field_submitted("first_name", first_name_edit.text)
@@ -142,37 +142,37 @@ func _on_phone_number_submit():
 func _on_account_number_submit():
 	_handle_field_submitted("account_number", account_number_edit.text)
 
-# --- HANDLER FOR THE FINAL SUBMIT/CLOSE BUTTON ---
+# -----------------------[handler for the final submit/close button]
 
 func _on_submit_application_pressed():
 	_handle_submit_requested()
 
 func _on_submit_form():
-	# This function simply closes the form.
+	# this function simply closes the form.
 	emit_signal("form_closed")
 	queue_free()
 
-# --- UI LOCKING LOGIC ---
+# //////////////////////[ui locking logic]
 
 func lock_field(field_id: String, corrected_value: String):
 	match field_id:
 		"first_name":
 			first_name_edit.text = corrected_value
 			first_name_edit.editable = false
-			first_name_edit.modulate = Color(0.5, 0.5, 0.5, 1.0) # Grey out text box
+			first_name_edit.modulate = Color(0.5, 0.5, 0.5, 1.0)
 			
 			first_name_button.disabled = true
-			first_name_button.modulate = Color(0.5, 0.5, 0.5, 1.0) # Grey out button
+			first_name_button.modulate = Color(0.5, 0.5, 0.5, 1.0)
 			
-		# You can add additional fields here as you expand the logic!
+		# you can add additional fields
 		# "last_name":
-		#     last_name_edit.text = corrected_value
-		#     last_name_edit.editable = false
-		#     last_name_edit.modulate = Color(0.5, 0.5, 0.5, 1.0)
-		#     last_name_button.disabled = true
-		#     last_name_button.modulate = Color(0.5, 0.5, 0.5, 1.0)
+		# last_name_edit.text = corrected_value
+		# last_name_edit.editable = false
+		# last_name_edit.modulate = color(0.5, 0.5, 0.5, 1.0)
+		# last_name_button.disabled = true
+		# last_name_button.modulate = color(0.5, 0.5, 0.5, 1.0)
 
-# --- PUZZLE LOGIC (moved from GameManager) ---
+# ********************* puzzle logic (moved from gamemanager)
 
 func _handle_field_submitted(field_id: String, value):
 	match field_id:

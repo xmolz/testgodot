@@ -1,4 +1,4 @@
-# LocationRow.gd
+# locationrow.gd
 extends HBoxContainer
 signal chapter_selected(data: MemoryChapterData)
 
@@ -17,18 +17,18 @@ func _ready():
 	left_arrow_button.pressed.connect(_on_left_arrow_pressed)
 	right_arrow_button.pressed.connect(_on_right_arrow_pressed)
 
-	# Connect the native scrollbar so arrows update dynamically when the user swipes
+	# connect the native scrollbar so
 	var viewport_panel = $ChaptersAreaPanel/HBoxContainer/ViewportPanel
 	viewport_panel.get_h_scroll_bar().value_changed.connect(func(_val): _update_arrow_state())
 
-	# --- TOUCH SCROLL FIX ---
-	# Ensure the container itself doesn't block touch input
+	# ///////////// touch scroll fix
+	# ensure the container itself doesn't block touch input
 	viewport_panel.mouse_filter = Control.MOUSE_FILTER_PASS
 	chapter_list_container.mouse_filter = Control.MOUSE_FILTER_PASS
 
-	# --- MOBILE SCALING FOR LOCATION ROW ---
+	# ----------------------- mobile scaling for location row
 	if OS.has_feature("mobile"):
-		# Scaled to ~70% for mobile so the row doesn't dominate the screen
+		# scaled to ~70% for mobile
 		$LocationInfoPanel.custom_minimum_size = Vector2(205, 190)
 		location_name_label.add_theme_font_size_override("font_size", 24)
 
@@ -38,7 +38,7 @@ func _ready():
 		right_arrow_button.add_theme_font_size_override("font_size", 48)
 		right_arrow_button.custom_minimum_size.x = 72
 
-		# Tighten the gap between chapter buttons (scene default is 50, desktop keeps that)
+		# tighten the gap between chapter
 		chapter_list_container.add_theme_constant_override("separation", 34)
 
 func populate(data: MemoryGroupData):

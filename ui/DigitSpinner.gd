@@ -1,60 +1,60 @@
-# This script MUST extend "Control" because its root node is a Control node.
+# this script must extend "control"
 extends Control
 
-# This signal is how the spinner communicates with the outside world.
-# It will be used later if you want to validate the date as it's being entered.
+# this signal is how the
+# it will be used later
 signal digit_changed(new_digit: int)
 
-# Get direct references to the nodes within this scene.
+# get direct references to the nodes within this scene.
 @onready var up_button: Button = $VBoxContainer/UpButton
 @onready var down_button: Button = $VBoxContainer/DownButton
 @onready var digit_label: Label = $VBoxContainer/DigitLabel
 
-# This variable holds the "state" or current value of this spinner.
+# this variable holds the "state"
 var current_digit: int = 0
 
 
-# The _ready function runs once, when the node is first added to the scene.
-# It's the perfect place for setup.
+# the _ready function runs once,
+# it's the perfect place for setup.
 func _ready():
-	# --- MOBILE SCALING ---
+	# --------------------(mobile scaling)
 	if OS.has_feature("mobile"):
 		custom_minimum_size = Vector2(80, 200)
 		up_button.add_theme_font_size_override("font_size", 42)
 		down_button.add_theme_font_size_override("font_size", 42)
 		digit_label.add_theme_font_size_override("font_size", 46)
 
-	# Set the label to its starting value.
+	# set the label to its starting value.
 	_update_label()
-	# Connect the buttons' 'pressed' signals to our functions below.
+	# connect the buttons' 'pressed' signals
 	up_button.pressed.connect(_on_up_pressed)
 	down_button.pressed.connect(_on_down_pressed)
 
 
-# This function is called ONLY when the up_button is pressed.
+# this function is called only
 func _on_up_pressed():
-	# Increment the digit, wrapping from 9 back to 0 using the modulo operator.
+	# increment the digit, wrapping from
 	current_digit = (current_digit + 1) % 10
-	# Update the visual text.
+	# update the visual text.
 	_update_label()
-	# Announce that the digit has changed and what its new value is.
+	# announce that the digit has
 	emit_signal("digit_changed", current_digit)
 
 
-# This function is called ONLY when the down_button is pressed.
+# this function is called only
 func _on_down_pressed():
-	# Decrement the digit, wrapping from 0 back to 9.
+	# decrement the digit, wrapping from 0 back to 9.
 	if current_digit == 0:
 		current_digit = 9
 	else:
 		current_digit -= 1
-	# Update the visual text.
+	# update the visual text.
 	_update_label()
-	# Announce that the digit has changed and what its new value is.
+	# announce that the digit has
 	emit_signal("digit_changed", current_digit)
 
 
-# A helper function to avoid repeating the same line of code.
-# It simply updates the Label's text to match our current_digit variable.
+# a helper function to avoid
+# it simply updates the label's
 func _update_label():
 	digit_label.text = str(current_digit)

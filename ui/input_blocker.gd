@@ -1,4 +1,4 @@
-# Attach this script to your InputBlocker ColorRect node temporarily
+# attach this script to your
 extends ColorRect
 
 func _ready():
@@ -7,5 +7,5 @@ func _ready():
 func _gui_input(event):
 	if event is InputEventMouseButton:
 		print_rich("[color=red]InputBlocker caught mouse click! This should block world input.[/color]")
-		# Accept the event to consume it
+		# accept the event to consume it
 		accept_event()

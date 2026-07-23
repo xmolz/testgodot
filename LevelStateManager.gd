@@ -1,16 +1,16 @@
-# LevelStateManager.gd
+# levelstatemanager.gd
 extends Node
 class_name LevelStateManager
 
 signal level_flag_changed(flag_name: String, new_value: bool)
 
-# All level flags stored in a single dictionary. No need to edit this script to add new flags —
-# just call set_level_flag("my_new_flag", true) from anywhere.
+# all level flags stored in
+# just call set_level_flag("my_new_flag", true) from
 var _flags: Dictionary = {}
 
-# Default flag values for this level. Only needed for flags that start as true.
-# NOTE: Flags in _defaults without a debug toggle override:
-#   - aida_in_main_room
+# default flag values for this
+# note: flags in _defaults without
+# aida_in_main_room
 var _defaults: Dictionary = {
 	"aida_in_main_room": true
 }
@@ -39,7 +39,7 @@ func _ready():
 	for key in _defaults:
 		_flags[key] = _defaults[key]
 
-	# Apply individual debug toggles (only if true, so unchecked = no effect)
+	# apply individual debug toggles (only
 	var _toggles := {
 		"has_spoken_to_aida": override_has_spoken_to_aida,
 		"aida_explanation_shown": override_aida_explanation_shown,
@@ -62,7 +62,7 @@ func _ready():
 		if _toggles[flag_name]:
 			_flags[flag_name] = true
 
-	# Debug: give techpass item directly
+	# debug: give techpass item directly
 	if override_give_techpass and GameManager:
 		Inventory.add_item("techpass")
 

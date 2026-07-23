@@ -1,12 +1,12 @@
 extends Sprite2D
 
-# We need a reference to the shader material to change its parameters.
+# we need a reference to
 @onready var tv_material: ShaderMaterial = material
 
 func _ready():
-	# Ensure the TV starts in the "On" state.
-	# We will use another shader (like the aurora one) for the "On" state.
-	# For now, this just sets the shutdown progress to 0.
+	# ensure the tv starts in the "on" state.
+	# we will use another shader
+	# for now, this just sets the shutdown progress to 0.
 	tv_material.set_shader_parameter("progress", 0.0)
 	ConversationEventManager.tv_state_change_requested.connect(set_tv_state)
 

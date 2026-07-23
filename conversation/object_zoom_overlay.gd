@@ -6,10 +6,10 @@ signal zoom_view_closed
 @export var background_texture: Texture2D
 @export var default_verb_id: String = ""
 
-## HUD configuration for this zoom view (game_ui.gd applies these).
+# hud configuration for this zoom
 @export var show_verb_panel: bool = true
 @export var show_inventory: bool = true
-## If non-empty, only these verb ids are selectable while this zoom is open.
+# if non-empty, only these verb
 @export var allowed_verb_ids: Array[String] = []
 
 var _saved_scene_verb_ids: Array[String] = []
@@ -19,7 +19,7 @@ var _verbs_restricted: bool = false
 @onready var zoom_background: TextureRect = $RootContainer/ZoomBackground
 
 func _ready():
-	# --- Set the Background Texture from the Inspector ---
+	# -------------------[set the background texture from the inspector]
 	if zoom_background:
 		if background_texture:
 			zoom_background.texture = background_texture
@@ -28,11 +28,11 @@ func _ready():
 	else:
 		print_rich("[color=red]ObjectZoomOverlay: The 'ZoomBackground' node was not found under RootContainer![/color]")
 
-	# --- Connect the Close Button ---
+	# **********************[connect the close button]
 	if close_button:
 		close_button.pressed.connect(_on_close_button_pressed)
 
-		# --- APPLY POLISHED STYLING ---
+		# ----------[apply polished styling]
 		var custom_font = preload("res://Fonts/VarelaRound-Regular.ttf")
 		close_button.text = "Close"
 		close_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -74,59 +74,59 @@ func _ready():
 	else:
 		print_rich("[color=red]ObjectZoomOverlay: The 'CloseButton' node was not found! The player may get stuck.[/color]")
 
-	# --- Inform the GameManager about the state change ---
+	# ////////// inform the gamemanager about the state change
 	if GameManager and GameManager.has_method("enter_zoom_view_state"):
 		GameManager.enter_zoom_view_state()
 
-		# 1. Clear whatever verb/item got us into this view silently
+		# clear whatever verb/item got us into this view silently
 		GameManager.cancel_current_action(false)
 
-		# Restrict selectable verbs for the duration of this zoom view.
+		# restrict selectable verbs for the
 		if not allowed_verb_ids.is_empty():
 			_saved_scene_verb_ids = Verbs.active_scene_verb_ids.duplicate()
 			_verbs_restricted = true
 			Verbs.set_active_scene_verbs(allowed_verb_ids)
 
-		# Tell game_ui.gd which HUD pieces this zoom wants.
+		# tell game_ui.gd which hud pieces this zoom wants.
 		Events.zoom_hud_config_requested.emit(show_verb_panel, show_inventory)
 
-		# 2. If a default verb is assigned in the inspector, select it automatically
+		# if a default verb is
 		if not default_verb_id.is_empty():
 			GameManager.select_verb(default_verb_id)
-			# Make it sticky so it doesn't unselect after one use
+			# make it sticky so it doesn't unselect after one use
 			GameManager.persisting_verb_id = default_verb_id
 	else:
 		print_rich("[color=orange]ObjectZoomOverlay: GameManager or enter_zoom_view_state() not found.[/color]")
 
 
-# --- THIS IS THE MISSING FUNCTION ---
+# ///////////(this is the missing function)
 func _on_close_button_pressed():
 	if SoundManager: SoundManager.play_sfx("ui_click")
-	# When the button is pressed, we start the cleanup process.
+	# when the button is pressed,
 	_cleanup_and_queue_free()
 
 
-# --- Cleanup Functions ---
+# /////////////////// cleanup functions
 func _cleanup_and_queue_free():
 	if _verbs_restricted:
 		_verbs_restricted = false
 		Verbs.set_active_scene_verbs(_saved_scene_verb_ids)
 
-	# Clear the sticky verb and the current action silently before returning to the world
+	# clear the sticky verb and
 	if GameManager:
 		GameManager.persisting_verb_id = ""
 		GameManager.cancel_current_action(false)
 
-	# Inform the GameManager that we are returning to the main level.
+	# inform the gamemanager that we
 	if GameManager and GameManager.has_method("exit_to_world_state"):
 		GameManager.exit_to_world_state()
 
-	# Disconnect the signal to be tidy.
+	# disconnect the signal to be tidy.
 	if close_button and close_button.pressed.is_connected(_on_close_button_pressed):
 		close_button.pressed.disconnect(_on_close_button_pressed)
 
-	# Emit our own signal before we disappear.
+	# emit our own signal before we disappear.
 	zoom_view_closed.emit()
 
-	# Remove the overlay from the game.
+	# remove the overlay from the game.
 	queue_free()

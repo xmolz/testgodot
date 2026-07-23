@@ -4,7 +4,7 @@ var custom_font = preload("res://Fonts/VarelaRound-Regular.ttf")
 
 signal journal_closed
 
-# --- NOW EXPORTED TO THE INSPECTOR ---
+# ------------------(now exported to the inspector)
 @export var journal_entries: Array[JournalPageData] = []
 
 @onready var left_page_layers = %LeftPageLayers
@@ -18,7 +18,7 @@ var current_spread: int = 0
 var total_spreads: int = 1
 
 func _ready():
-	# Calculate how many total spreads (pairs of pages) we need
+	# calculate how many total spreads
 	var max_page = 0
 	for entry in journal_entries:
 		if entry and entry.page_index > max_page:
@@ -31,7 +31,7 @@ func _ready():
 	next_button.pressed.connect(_on_next_pressed)
 	close_button.pressed.connect(_on_close_pressed)
 
-	# --- MOBILE SCALING FOR JOURNAL ---
+	# *******************(mobile scaling for journal)
 	if OS.has_feature("mobile"):
 		$CenterContainer/LayoutAnchor.custom_minimum_size = Vector2(1400, 800)
 		page_indicator_label.add_theme_font_size_override("font_size", 46)
@@ -52,7 +52,7 @@ func _ready():
 		next_icon.offset_top = -24; next_icon.offset_bottom = 24
 		next_icon.pivot_offset = Vector2(24, 24)
 
-	# --- CLOSE BUTTON POLISH ---
+	# --------------------- close button polish
 	close_button.text = "Close"
 	close_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	close_button.add_theme_font_override("font", custom_font)
@@ -89,7 +89,7 @@ func _ready():
 	close_button.add_theme_color_override("font_hover_color", Color.WHITE)
 	close_button.add_theme_color_override("font_pressed_color", Color.WHITE)
 
-	# Close journal when clicking the dark background
+	# close journal when clicking the dark background
 	$DimBackground/BackgroundButton.pressed.connect(func():
 		_on_close_pressed()
 	)
@@ -97,21 +97,21 @@ func _ready():
 	update_display()
 
 func update_display():
-	# 1. Clear old images from the pages
+	# clear old images from the page
 	for child in left_page_layers.get_children(): child.queue_free()
 	for child in right_page_layers.get_children(): child.queue_free()
 	
-	# 2. Calculate which pages we are looking at
+	# calculate which pages we are looking at
 	var left_idx = current_spread * 2
 	var right_idx = current_spread * 2 + 1
 	
-	# 3. Stack the transparent PNGs
+	# stack the transparent png
 	for entry in journal_entries:
-		# Safety check if an array slot is empty or missing a texture
+		# safety check if an array
 		if not entry or not entry.page_texture:
 			continue
 			
-		# Check if this layer requires a flag to be visible
+		# check if this layer requires a flag to be visible
 		if entry.required_flag != "":
 			var flag_name = entry.required_flag
 			var is_unlocked = false
@@ -121,20 +121,20 @@ func update_display():
 				is_unlocked = true
 				
 			if not is_unlocked:
-				continue # Skip adding this image layer!
+				continue
 		
-		# Add the image to the correct side of the book
+		# add the image to the correct side of the book
 		if entry.page_index == left_idx:
 			_add_image_layer(left_page_layers, entry.page_texture)
 		elif entry.page_index == right_idx:
 			_add_image_layer(right_page_layers, entry.page_texture)
 
-	# 4. Update UI
+	# update ui
 	page_indicator_label.text = str(current_spread + 1) + " / " + str(total_spreads)
 	prev_button.disabled = (current_spread == 0)
 	next_button.disabled = (current_spread >= total_spreads - 1)
 
-# Helper function to spawn a TextureRect dynamically using the assigned Texture
+# /////////////[helper function to spawn a texturerect dynamically using the assigned texture]
 func _add_image_layer(parent: Control, tex: Texture2D):
 	var rect = TextureRect.new()
 	rect.texture = tex

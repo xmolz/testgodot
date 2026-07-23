@@ -1,6 +1,6 @@
 ~ default_post
-Player: I used FLASH!
-Player: ...It wasn't very effective.
+Player: (I used FLASH!)
+Player: (...It wasn't very effective.)
 => END
 
 # --- EXAMPLES OF HOW TO USE THIS FILE ---
@@ -8,8 +8,8 @@ Player: ...It wasn't very effective.
 ~ mcbucket_pre
 
 if Flags.get_level_flag("mcbucket_cannathink_used"):
-	Player: Flash? This Old stoner?
-	Player: Hmm. Why not. Let's see how he reacts.
+	Player: (Flash? This Old stoner?)
+	Player: (Hmm. Why not. Let's see how he reacts.)
 	=> END
 
 else:
@@ -20,15 +20,15 @@ else:
 ~ mcbucket_post
 
 if Flags.get_level_flag("mcbucket_zanopram_used"):
-	Player: Yeah... don't know what I was expecting to happen.
-	Player: Dangling a carrot in front of a sleeping rabbit like that.
+	Player: (Yeah... don't know what I was expecting to happen.)
+	Player: (Dangling a carrot in front of a sleeping rabbit like that.)
 	=> END
 elif Flags.get_level_flag("mcbucket_invigirol_used"):
 	=> default_post
 elif Flags.get_level_flag("mcbucket_cannathink_used"):
 	Old Man: Aphrodite? Ye almighty Aphrodite?
 	Old Man: Ye bless me with yer presence?
-	Player: That's... flattering.
+	Player: (That's... flattering.)
 	=> END
 else:
 	Player: (Wait... Something's happening to him.)

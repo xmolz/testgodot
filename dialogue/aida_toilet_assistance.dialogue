@@ -7,14 +7,14 @@ aiDA: Most patients are unable to do that!
 
 ~ Player
 if Flags.get_level_flag("toilet_scold_seen"):
-	Player: Ah. Of course. Again.
+	Player: (Ah. Of course. Again.)
 	Player: (At this point the Robo-Nurse must think I've got diarrhea or something.)
-	Player: Anyway... what was I gonna do?
+	Player: (Anyway... what was I gonna do?)
 else:
 	do Flags.set_level_flag("toilet_scold_seen", true)
-	Player: Ah, amazing.
-	Player: The Robo-Nurse thinks I just took a big boy shit.
-	Player: Anyway... what was I gonna do?
+	Player: (Ah, amazing.)
+	Player: (The Robo-Nurse thinks I just took a big boy shit.)
+	Player: (Anyway... what was I gonna do?)
 => END
 
 ~ aida_caught_snooping
@@ -23,6 +23,6 @@ Player: (Better close this before she catches me snooping in here.)
 => END
 
 ~ bathroom_door_blocked
-Player: I might wanna wait until the nurse comes out...
-Player: Also, wasn't I gonna do something important behind her back?
+Player: (I might wanna wait until the nurse comes out...)
+Player: (Also, wasn't I gonna do something important behind her back?)
 => END

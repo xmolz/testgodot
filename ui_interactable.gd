@@ -1,25 +1,25 @@
-# UI_Interactable.gd
-# Attach this script to the root TextureButton node.
+# ui_interactable.gd
+# attach this script to the root texturebutton node.
 
 extends TextureButton
 
-# Get a reference to the child node that has all the real game logic.
-# The '$' syntax is a shorthand way to get a direct child node.
+# get a reference to the
+# the '$' syntax is a
 @onready var interactable_logic: Interactable = $Interactable
 
 
 func _ready():
-	# When this UI button is pressed, call our custom function.
+	# when this ui button is
 	pressed.connect(_on_button_pressed)
 
-	# Connect the hover signals to keep your outline effect!
-	# This forwards the UI hover event to the Interactable's existing functions.
+	# connect the hover signals to keep your outline effect!
+	# this forwards the ui hover
 	mouse_entered.connect(interactable_logic._on_mouse_entered)
 	mouse_exited.connect(interactable_logic._on_mouse_exited)
 
 
 func _on_button_pressed():
-	# When clicked, tell the GameManager to process an interaction,
-	# but pass in our child node, which has all the data and logic.
+	# when clicked, tell the gamemanager
+	# but pass in our child
 	if GameManager:
 		GameManager.process_interaction_click(interactable_logic)

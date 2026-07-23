@@ -19,14 +19,14 @@ func _on_level_flag_changed(flag_name: String, new_value: bool):
 		_trigger_forced_exit()
 
 func _trigger_forced_exit():
-	# Trigger the dialogue FIRST, before we delete this node
+	# trigger the dialogue first, before we delete this node
 	if caught_dialogue_resource:
 		_start_caught_dialogue()
 
 	_cleanup_and_queue_free()
 
 func _cleanup_and_queue_free():
-	# Safely disconnect the level-flag signal to prevent crashes when Aida moves around later
+	# safely disconnect the level-flag signal
 	if GameManager and Flags.current_level_state_manager:
 		if Flags.current_level_state_manager.level_flag_changed.is_connected(_on_level_flag_changed):
 			Flags.current_level_state_manager.level_flag_changed.disconnect(_on_level_flag_changed)

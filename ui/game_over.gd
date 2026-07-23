@@ -9,12 +9,12 @@ func _on_main_menu_button_pressed():
 	if SoundManager and SoundManager.has_method("play_sfx"):
 		SoundManager.play_sfx("ui_click")
 
-	# Swap back to Main Menu state
+	# swap back to main menu state
 	GameManager.change_game_state(GameManager.GameState.MAIN_MENU)
 
-	# Fade the black screen away smoothly so we can see the menu
+	# fade the black screen away
 	if is_instance_valid(GameManager.transition_layer) and GameManager.transition_layer.has_method("global_fade_from_black"):
 		GameManager.transition_layer.global_fade_from_black(1.5)
 
-	# Destroy this game over screen
+	# destroy this game over screen
 	queue_free()

@@ -4,7 +4,7 @@ extends CharacterBody2D
 @onready var interactable_component = $InteractionArea
 @onready var movement_controller: WaypointMovement = $MovementController
 
-# --- Interaction State Variables ---
+# //////////////////////[interaction state variables]
 var _is_interacting_with_me: bool = false
 var _resume_walk_timer: Timer
 var _patience_timer: Timer
@@ -12,21 +12,21 @@ var _patience_timer: Timer
 func _ready():
 	animation_player.play("idle")
 
-	# 1. Setup Resume Timer (Wait after talking)
+	# ///////////////// 1. setup resume timer (wait after talking)
 	_resume_walk_timer = Timer.new()
 	_resume_walk_timer.one_shot = true
 	_resume_walk_timer.wait_time = 5.0
 	add_child(_resume_walk_timer)
 	_resume_walk_timer.timeout.connect(_on_resume_timer_timeout)
 
-	# 2. Setup Patience Timer (Wait for player to arrive)
+	# ***************(2. setup patience timer (wait for player to arrive))
 	_patience_timer = Timer.new()
 	_patience_timer.one_shot = true
 	_patience_timer.wait_time = 8.0 
 	add_child(_patience_timer)
 	_patience_timer.timeout.connect(_on_patience_timeout)
 
-	# 3. Connect signals
+	# connect signal
 	if interactable_component:
 		if not interactable_component.interaction_pending.is_connected(_on_interaction_pending):
 			interactable_component.interaction_pending.connect(_on_interaction_pending)
@@ -38,7 +38,7 @@ func _ready():
 	if GameManager:
 		GameManager.interaction_complete.connect(_on_global_interaction_complete)
 
-# --- SIGNAL HANDLERS ---
+# //////////////////// signal handlers
 
 func _on_interaction_pending():
 	_is_interacting_with_me = true 

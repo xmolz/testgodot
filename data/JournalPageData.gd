@@ -1,11 +1,11 @@
 extends Resource
 class_name JournalPageData
 
-## 0 = First Left, 1 = First Right, 2 = Second Left, etc.
+# 0 = first left, 1 = first right, 2 = second left, etc.
 @export var page_index: int = 0
 
-## Drag your transparent PNG from CSP here!
+# drag your transparent png from csp here!
 @export var page_texture: Texture2D
 
-## Leave blank to always show. Type a flag name to hide until unlocked.
+# leave blank to always show.
 @export var required_flag: String = ""

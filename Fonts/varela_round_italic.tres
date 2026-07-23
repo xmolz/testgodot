@@ -1,7 +1,9 @@
-[gd_resource type="FontVariation" load_steps=2 format=3]
+[gd_resource type="FontVariation" format=3 uid="uid://gi5orb74srrd"]
 
 [ext_resource type="FontFile" uid="uid://bd58xbyix7r6p" path="res://Fonts/VarelaRound-Regular.ttf" id="1_regular"]
 
 [resource]
 base_font = ExtResource("1_regular")
-variation_transform = Transform2D(1, 0, 0.2, 1, 0, 0)
+variation_embolden = -0.3
+variation_transform = Transform2D(1, 0, 0.1, 1, 0, 0)
+spacing_glyph = 1

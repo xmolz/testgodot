@@ -1,6 +1,6 @@
 extends Cutscene
 
-# --- REFERENCES ---
+# **************** references
 @export_group("Actors")
 @export var aida_npc: CharacterBody2D
 @export var player: CharacterBody2D
@@ -17,8 +17,8 @@ extends Cutscene
 
 @export_group("Dialogue")
 @export var aida_scold_dialogue: DialogueResource
-@export var scold_dialogue_start_id: String = "AIda" # Updated to match your inspector
-# --- NEW: Added the player's checkpoint ID here ---
+@export var scold_dialogue_start_id: String = "AIda"
+# *****************[added the player's checkpoint id here]
 @export var player_monologue_start_id: String = "Player" 
 
 @export_group("Settings")
@@ -27,17 +27,17 @@ extends Cutscene
 func _execution_steps():
 	print_rich("[color=magenta][Time: %s] Cutscene START.[/color]" % Time.get_ticks_msec())
 	
-	# --- STEP 0: PRE-SETUP ---
+	# *********** step 0: pre-setup
 	Flags.set_level_flag("aida_fixing_toilet", true)
 	
 	var aida_mover = aida_npc.get_node_or_null("MovementController")
 	if aida_mover: aida_mover.pause_movement()
 	
-	# Teleport Aida to waiting spot
+	# teleport aida to waiting spot
 	aida_npc.global_position = main_room_door_pos.global_position
 	aida_npc.visible = true 
 	
-	# Face Aida
+	# face aida
 	var target_x = 0.0
 	if player_spawn_pos: target_x = player_spawn_pos.global_position.x
 	elif player: target_x = player.global_position.x
@@ -46,51 +46,51 @@ func _execution_steps():
 	else:
 		if aida_npc.has_node("Sprite"): aida_npc.get_node("Sprite").flip_h = false
 
-	# Wait for fade-in
+	# wait for fade-in
 	await get_tree().create_timer(1.0).timeout
 
-	# Face Player
+	# face player
 	if player and player.has_method("face_target"):
 		player.face_target(aida_npc.global_position)
 
-	# --- STEP 1: AIDA DIALOGUE ---
+	# **************(step 1: aida dialogue)
 	if aida_scold_dialogue:
 		DialogueManager.show_dialogue_balloon_scene("res://conversation/conversationballoon.tscn", aida_scold_dialogue, scold_dialogue_start_id)
 		await DialogueManager.dialogue_ended
 	
-	# --- STEP 2: ENTER BATHROOM ---
+	# ********************[step 2: enter bathroom]
 	if SoundManager: 
 		SoundManager.play_sfx("door_open")
 	
-	await get_tree().create_timer(0.2).timeout # Wait a split second to hear the door open
+	await get_tree().create_timer(0.2).timeout
 	aida_npc.visible = false 
 	
 	if SoundManager: 
 		SoundManager.play_sfx("door_close")
 		
-	await get_tree().create_timer(0.3).timeout # Finish the original 0.5 second pause
+	await get_tree().create_timer(0.3).timeout
 	
-	# --- NEW STEP 2.5: PLAYER MONOLOGUE ---
-	# Right after Aida disappears and we wait half a second, the player talks.
+	# --------------------[step 2.5: player monologue]
+	# right after aida disappears and
 	if aida_scold_dialogue and not player_monologue_start_id.is_empty():
 		DialogueManager.show_dialogue_balloon_scene("res://conversation/conversationballoon.tscn", aida_scold_dialogue, player_monologue_start_id)
 		await DialogueManager.dialogue_ended
 	
-	# Move Aida to her actual working position
+	# move aida to her actual working position
 	aida_npc.global_position = bathroom_entry_pos.global_position
 	aida_npc.visible = true
 	
-	# EARLY RELEASE (Player regains control here, while Aida works in the background)
+	# early release (player regains control
 	print_rich("[color=magenta][Time: %s] Releasing Player Control.[/color]" % Time.get_ticks_msec())
 	GameManager.change_game_state(GameManager.GameState.IN_GAME_PLAY)
 	
-	# --- BACKGROUND LOGIC ---
+	# --------------------(background logic)
 	
-	# --- STEP 3: WALK TO TOILET ---
+	# ---------------- step 3: walk to toilet
 	if aida_mover:
 		await aida_mover.move_to_position_async(toilet_fix_pos.global_position, 5.0, 10.0)
 	
-	# --- STEP 4: PLAY FIX ANIMATION ---
+	# ************************(step 4: play fix animation)
 	var anim_player = aida_npc.get_node_or_null("AnimationPlayer")
 	if anim_player and anim_player.has_animation("fix_toilet"):
 		anim_player.play("fix_toilet")
@@ -99,7 +99,7 @@ func _execution_steps():
 	else:
 		await get_tree().create_timer(5.0).timeout
 	
-	# --- STEP 5: UNCLOG TOILET ---
+	# ----------------(step 5: unclog toilet)
 	if toilet_interactable:
 		Flags.set_level_flag("toilet_clogged", false)
 		Flags.set_level_flag("toilet_has_paper", false)
@@ -108,22 +108,22 @@ func _execution_steps():
 		if toilet_root and toilet_root.has_method("change_state"):
 			toilet_root.change_state(0) 
 	
-	# --- STEP 6: LEAVE BATHROOM ---
+	# ////////////[step 6: leave bathroom]
 	if aida_mover:
 		await aida_mover.move_to_position_async(bathroom_entry_pos.global_position)
 	
 	aida_npc.visible = false
 	await get_tree().create_timer(0.5).timeout
 	
-	# Teleport to Main Room Return Pos
+	# teleport to main room return po
 	aida_npc.global_position = main_room_return_pos.global_position
 	aida_npc.visible = true
 	
-	# ### MOVED FLAG RESET HERE ###
+	# //////////////////////(moved flag reset here)
 	Flags.set_level_flag("aida_fixing_toilet", false)
-	# ---------------------------
+	#
 	
-	# --- STEP 7: RETURN TO PATROL ---
+	# ------------------[step 7: return to patrol]
 	print_rich("[color=magenta][Time: %s] Aida returning to desk...[/color]" % Time.get_ticks_msec())
 	
 	if aida_mover:
@@ -132,7 +132,7 @@ func _execution_steps():
 			
 		aida_mover.resume_movement()
 		
-	# Reset Busy Flag
+	# reset busy flag
 	Flags.set_level_flag("aida_fixing_toilet", false)
 	
 	print_rich("[color=magenta][Time: %s] Cutscene Script Complete.[/color]" % Time.get_ticks_msec())

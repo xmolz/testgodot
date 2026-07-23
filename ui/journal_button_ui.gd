@@ -10,7 +10,7 @@ var custom_font = preload("res://Fonts/VarelaRound-Regular.ttf")
 var pulse_tween: Tween
 
 func _ready():
-	# --- UNIVERSAL LAYOUT (PC & Mobile) ---
+	# //////////////////////[universal layout (pc & mobile)]
 	var journal_panel = $JournalPanel
 	var tab_panel = $JournalPanel/TabPanel
 	var tab_label = $JournalPanel/TabPanel/Label
@@ -27,15 +27,15 @@ func _ready():
 		journal_panel.anchor_top = 0.75
 		tab_panel.offset_top = -50
 		tab_label.add_theme_font_size_override("font_size", 28)
-	# --------------------------------------
+	#
 
 	texture_button.pressed.connect(_on_texture_button_pressed)
 	texture_button.mouse_entered.connect(_on_hover_enter)
 	texture_button.mouse_exited.connect(_on_hover_exit)
 
-	# Style the Badge
+	# style the badge
 	var badge_style = StyleBoxFlat.new()
-	badge_style.bg_color = Color("#D4A017") # Dark Golden Yellow
+	badge_style.bg_color = Color("#D4A017")
 	badge_style.corner_radius_top_left = 20
 	badge_style.corner_radius_top_right = 20
 	badge_style.corner_radius_bottom_left = 20
@@ -51,11 +51,11 @@ func _ready():
 	badge_label.add_theme_font_size_override("font_size", 24)
 	badge_label.add_theme_color_override("font_color", Color.BLACK)
 
-	# Check Flag
+	# check flag
 	if GameManager:
 		badge.visible = not Flags.get_game_flag("journal_opened_once")
 
-	# Start pulsing if visible
+	# start pulsing if visible
 	if badge.visible:
 		_start_pulse_animation()
 
@@ -63,10 +63,10 @@ func _start_pulse_animation():
 	if pulse_tween:
 		pulse_tween.kill()
 
-	# Create an infinite looping tween
+	# create an infinite looping tween
 	pulse_tween = create_tween().set_loops()
 
-	# Fade down to 30% opacity, then back to 100% opacity
+	# fade down to 30% opacity, then back to 100% opacity
 	pulse_tween.tween_property(badge, "modulate:a", 0.3, 0.6).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	pulse_tween.tween_property(badge, "modulate:a", 1.0, 0.6).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
@@ -87,7 +87,7 @@ func _on_texture_button_pressed():
 	if SoundManager:
 		SoundManager.play_sfx("ui_click")
 
-	# Hide badge, kill tween, and save flag
+	# hide badge, kill tween, and save flag
 	if GameManager:
 		Flags.set_game_flag("journal_opened_once", true)
 
@@ -95,7 +95,7 @@ func _on_texture_button_pressed():
 		pulse_tween.kill()
 
 	badge.visible = false
-	badge.modulate.a = 1.0 # Reset alpha just in case
+	badge.modulate.a = 1.0
 
 	emit_signal("journal_button_pressed")
 

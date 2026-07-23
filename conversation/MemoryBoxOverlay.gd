@@ -1,4 +1,4 @@
-# MemoryBoxOverlay.gd
+# memoryboxoverlay.gd
 extends CanvasLayer
 
 @export var all_memory_data: Array[MemoryGroupData] = []
@@ -13,9 +13,9 @@ const ADVANCED_OVERLAY_SCENE = preload("res://conversation/AdvancedConversationO
 func _ready():
 	back_button.pressed.connect(_on_back_button_pressed)
 
-	# --- MOBILE SCALING FOR MEMORY BOX MAIN UI ---
+	# ************ mobile scaling for memory box main ui
 	if OS.has_feature("mobile"):
-		# Perfectly center the Title
+		# perfectly center the title
 		var title = $Panel/TitleLabel
 		title.add_theme_font_size_override("font_size", 64)
 		title.anchor_left = 0.0
@@ -23,34 +23,34 @@ func _ready():
 		title.offset_left = 0
 		title.offset_right = 0
 
-		# Make the Back button much larger
+		# make the back button much larger
 		back_button.add_theme_font_size_override("font_size", 72)
 		back_button.custom_minimum_size = Vector2(100, 100)
 
-		# Push the chapter list down to create a gap below the main title
+		# push the chapter list down
 		var scroll = $Panel/ScrollContainer
 		scroll.anchor_top = 0.20
 
 	_populate_list()
 
-	# Hide the panel instantly before the screen even becomes visible
+	# hide the panel instantly before
 	panel.modulate.a = 0.0
 
 	call_deferred("_restore_patreon_button")
 
 func _populate_list():
-	# First, clear any location rows that are already there.
+	# first, clear any location rows that are already there.
 	for child in location_list_container.get_children():
 		child.queue_free()
 
-	# Show every memory group (category filtering removed with the Story/Spicy toggle).
+	# show every memory group (category
 	for memory_group in all_memory_data:
 		var new_row = LocationRowScene.instantiate()
 		location_list_container.add_child(new_row)
 		new_row.populate(memory_group)
 		new_row.chapter_selected.connect(_on_chapter_selected)
 
-# --- Signal Handlers ---
+# ------------------- signal handlers
 
 func _on_back_button_pressed():
 	if SoundManager: SoundManager.play_sfx("ui_click")
@@ -66,7 +66,7 @@ func _on_chapter_selected(data: MemoryChapterData):
 		if not dev_cta_dialogue:
 			push_warning("MemoryBoxOverlay: triggers_dev_cta is set but dev_cta_dialogue is not assigned.")
 			return
-		# Clear the persistent Patreon button if they replay the scene
+		# clear the persistent patreon button
 		var old_btn = get_node_or_null("PersistentPatreonBtn")
 		if is_instance_valid(old_btn):
 			old_btn.queue_free()
@@ -77,25 +77,25 @@ func _on_chapter_selected(data: MemoryChapterData):
 	else:
 		print("Loading scene: ", data.scene_path_to_load)
 
-# --- RELAXED RETRO BOOT SEQUENCE ---
+# -----------(relaxed retro boot sequence)
 func play_boot_sequence():
-	# 1. Setup Initial State: Transparent, slightly smaller, slightly shifted down
+	# ************[1. setup initial state: transparent, slightly smaller, slightly shifted down]
 	panel.pivot_offset = panel.size / 2.0
 	panel.scale = Vector2(0.95, 0.95)
 	panel.position.y += 20.0
 	panel.modulate.a = 0.0
 	
-	# (Future Audio Spot: A deep, ambient synth hum goes here!)
-	# if SoundManager: SoundManager.play_sfx("ps2_ambient_hum")
+	# *****************((future audio spot: a deep, ambient synth hum goes here!))
+	# /////////// if soundmanager: soundmanager.play_sfx("ps2_ambient_hum")
 	
-	# 2. Smooth, chill tweens
+	# smooth, chill tween
 	var tween = create_tween().set_parallel(true)
 	
-	# Phase A: Fade in slowly over 1.5 seconds
+	# phase a: fade in slowly over 1.5 second
 	tween.tween_property(panel, "modulate:a", 1.0, 1.5)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	
-	# Phase B: Gently float up and expand to full size over 2.0 seconds
+	# phase b: gently float up
 	tween.tween_property(panel, "scale", Vector2(1.0, 1.0), 2.0)\
 		.set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
 		

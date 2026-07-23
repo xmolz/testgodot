@@ -1,4 +1,4 @@
-# Inventory.gd (Autoload) — the player's items + master item-data registry.
+# inventory.gd (autoload) — the player's
 extends Node
 
 signal inventory_updated(items: Array[ItemData])

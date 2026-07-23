@@ -1,9 +1,9 @@
-# ConversationEventManager.gd
+# conversationeventmanager.gd
 extends Node
 
 
-# Signal to request a background change in the active conversation overlay
-# We pass the new texture path as an argument.
+# signal to request a background
+# we pass the texture path as an argument.
 signal change_conversation_background(new_background_texture_path: String)
 signal tv_state_change_requested(is_off: bool)
 signal mcbucket_tv_reaction_requested(is_tv_off: bool)
@@ -18,11 +18,11 @@ func request_mcbucket_tv_reaction(is_tv_off: bool) -> void:
 func request_mcbucket_state(new_state: int) -> void:
 	mcbucket_state_change_requested.emit(new_state)
 
-# You can add more conversation-related signals here later if needed,
-# e.g., for character sprite changes, sound effects, etc.
+# you can add more conversation-related
+# g., for character sprite changes, sound effects, etc.
 var show_special_response: bool = false
 
-#Sergey's variables
+# sergey's variable
 var has_heard_fresh_start_line: bool = false
 var asked_sergey_duration: bool = false
 var asked_sergey_identity: bool = false

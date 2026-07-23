@@ -8,27 +8,27 @@ const MCBUCKET_ADVANCED_OVERLAY = "res://conversation/mcbucket_advanced_overlay.
 @onready var interactable_component = $InteractionArea
 @onready var movement_controller: WaypointMovement = $MovementController
 
-# --- Interaction State Variables ---
+# -----------[interaction state variables]
 var _is_interacting_with_me: bool = false
 var _resume_walk_timer: Timer
 var _patience_timer: Timer 
 
 func _ready():
-	# 1. Setup Resume Timer (Wait after talking)
+	# ////////////////////[1. setup resume timer (wait after talking)]
 	_resume_walk_timer = Timer.new()
 	_resume_walk_timer.one_shot = true
 	_resume_walk_timer.wait_time = 5.0
 	add_child(_resume_walk_timer)
 	_resume_walk_timer.timeout.connect(_on_resume_timer_timeout)
 
-	# 2. Setup Patience Timer (Wait for player to arrive)
+	# -------------[2. setup patience timer (wait for player to arrive)]
 	_patience_timer = Timer.new()
 	_patience_timer.one_shot = true
 	_patience_timer.wait_time = 8.0 
 	add_child(_patience_timer)
 	_patience_timer.timeout.connect(_on_patience_timeout)
 
-	# 3. Connect signals
+	# connect signal
 	if interactable_component:
 		if not interactable_component.interaction_pending.is_connected(_on_interaction_pending):
 			interactable_component.interaction_pending.connect(_on_interaction_pending)
@@ -45,9 +45,9 @@ func _ready():
 	if not ConversationEventManager.mcbucket_state_change_requested.is_connected(change_state):
 		ConversationEventManager.mcbucket_state_change_requested.connect(change_state)
 
-	# Programmatically add the "Give Toilet Paper" interaction
+	# programmatically add the "give toilet
 	if interactable_component:
-		# 1. Response for when McBucket is SLEEPING
+		# response for when mcbucket is sleeping
 		var sleep_response = InteractionResponse.new()
 		sleep_response.verb_id = "give"
 		sleep_response.required_item_id = "hospital_toilet_paper"
@@ -59,7 +59,7 @@ func _ready():
 		sleep_dialogue_action.dialogue_checkpoint = "sleeping"
 		sleep_response.actions_to_perform.append(sleep_dialogue_action)
 
-		# 2. Response for when McBucket is AWAKE
+		# response for when mcbucket is awake
 		var give_tp_response = InteractionResponse.new()
 		give_tp_response.verb_id = "give"
 		give_tp_response.required_item_id = "hospital_toilet_paper"
@@ -73,15 +73,15 @@ func _ready():
 		var remove_tp_action = RemoveItemAction.new()
 		remove_tp_action.item_id_to_remove = "hospital_toilet_paper"
 
-		# Append dialogue first, then remove item
+		# append dialogue first, then remove item
 		give_tp_response.actions_to_perform.append(give_tp_action)
 		give_tp_response.actions_to_perform.append(remove_tp_action)
 
-		# Add both to the interactable component
+		# add both to the interactable component
 		interactable_component.interactions.append(sleep_response)
 		interactable_component.interactions.append(give_tp_response)
 
-	# 4. Check State
+	# check state
 	await get_tree().process_frame
 	if not GameManager: return
 
@@ -116,10 +116,10 @@ func change_state(new_state: State):
 			interactable_component.character_conversation_scene_path = MCBUCKET_ADVANCED_OVERLAY
 		State.SLEEPING:
 			animation_player.play("sleeping")
-			interactable_component.character_conversation_scene_path = "" # Cannot talk to him
+			interactable_component.character_conversation_scene_path = ""
 
 
-# --- SIGNAL HANDLERS ---
+# ************** signal handlers
 
 func _on_interaction_pending():
 	_is_interacting_with_me = true 

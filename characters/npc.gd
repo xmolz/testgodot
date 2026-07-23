@@ -3,7 +3,7 @@ extends Area2D
 var player_in_zone := false
 
 func _ready():
-	set_process(true)  # Enables the _process() function
+	set_process(true)
 
 func _on_body_entered(body):
 	if body.is_in_group("player"):

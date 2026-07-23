@@ -19,7 +19,7 @@ func _ready():
 	sun_sprite.pivot_offset = Vector2(200, 200)
 	add_child(sun_sprite)
 
-	# Gentle pulsing glow
+	# gentle pulsing glow
 	var pulse_tween = create_tween().set_loops()
 	pulse_tween.tween_property(sun_sprite, "scale", Vector2(1.15, 1.15), 2.0).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	pulse_tween.tween_property(sun_sprite, "scale", Vector2(0.85, 0.85), 2.0).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)

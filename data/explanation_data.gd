@@ -3,12 +3,12 @@ extends Resource
 
 class_name ExplanationData
 
-## The node we want the spotlight to focus on.
+# the node we want the spotlight to focus on.
 @export var target_node_path: NodePath
 
-## The lines of text that will be displayed one by one.
+# the lines of text that will be displayed one by one.
 @export var explanation_lines: PackedStringArray
 
-# You can still add more properties here later, like a title!
-# @export var title: String
+# you can still add more
+# @export var title: string
 @export var exceptions_to_hide: Array[NodePath]

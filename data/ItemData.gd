@@ -1,46 +1,46 @@
-# ItemData.gd
+# itemdata.gd
 extends Resource
-class_name ItemData # Makes this usable as a type hint and for creating new resources easily
+class_name ItemData
 
-## The unique identifier for this item (e.g., "key_main_door", "burger_mystery_meat").
-## Use snake_case, all lowercase, for consistency with verb_ids.
+# the unique identifier for this
+# use snake_case, all lowercase, for
 @export var item_id: String = ""
 
-## The name of the item as it will be displayed to the player (e.g., in inventory, in dialogue).
+# the name of the item
 @export var display_name: String = "New Item"
 
-## The texture to use as an icon for this item in the inventory UI.
+# the texture to use as
 @export var icon: Texture2D = null
 
-## The description of the item that the player sees/thinks when they "Examine" it
-## (either directly in inventory or if they use "Examine" on the item in the world before picking it up).
+# the description of the item
+# (either directly in inventory or
 @export_multiline var description: String = "It's an item."
 
-## Can this item be stacked in the inventory? (e.g., arrows, coins)
-## For most classic point-and-click adventure items, this will be false.
+# can this item be stacked
+# for most classic point-and-click adventure
 @export var is_stackable: bool = false
 
-## If is_stackable is true, what's the maximum number that can be in one stack?
-## (Not highly relevant if is_stackable is usually false).
+# if is_stackable is true, what's
+# (not highly relevant if is_stackable is usually false).
 @export var max_stack_size: int = 1
 
-## (Optional) A list of verb_ids that this item can be *primarily* used with.
-## This is more for filtering or providing hints, as the actual "Use Item X with Y"
-## logic is usually defined on the target interactable (Y).
-## Example: A key might primarily be for "use_item" (on a door). A food item might be for "give" or "use_item" (on self).
-# @export var compatible_verb_ids: Array[String] = []
+# (optional) a list of verb_ids
+# this is more for filtering
+# logic is usually defined on
+# example: a key might primarily
+# @export var compatible_verb_ids: array[string] = []
 
-# You can add more game-specific properties here later, for example:
+# you can add more game-specific
 # @export var is_quest_item: bool = false
-# @export var value: int = 0 # If you had currency
-# @export var sfx_on_pickup: AudioStream = null
-# @export var sfx_on_use: AudioStream = null
+# @export var value: int = 0 # if you had currency
+# ////////// @export var sfx_on_pickup: audiostream = null
+# ------------------(@export var sfx_on_use: audiostream = null)
 
-# No functions are strictly needed in this Resource script itself for basic data storage.
-# Its purpose is to define a data structure that you can edit in the Inspector.
+# no functions are strictly needed
+# its purpose is to define
 
 func _init(id: String = "", name: String = "", tex: Texture2D = null, desc: String = ""):
-	# Optional constructor for creating instances from code, though mostly you'll use .tres files
+	# optional constructor for creating instances
 	if id != "": item_id = id
 	if name != "": display_name = name
 	if tex != null: icon = tex

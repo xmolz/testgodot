@@ -1,12 +1,10 @@
 class_name CreditsData
-# ============================================================
-#  EDIT THIS FILE to update the credits. Nothing else needs
-#  to change — the credits menu reads it at runtime.
+# edit this file to update the credits. nothing else need
+# to change — the credits menu reads it at runtime.
 #
-#  PATRON_TIERS: add/remove names inside a tier's "names" list,
-#  or copy a whole { } block to add a new tier. Tiers are shown
-#  in the order they appear here.
-# ============================================================
+# patron_tiers: add/remove names inside a
+# or copy a whole {
+# in the order they appear here.
 
 const PATRON_TIERS := [
 	{
@@ -17,18 +15,18 @@ const PATRON_TIERS := [
 			"Mattia Sant",
 			"Ryan Duncan",
 			"seemron",
-			"dev_pec",
+			"dev_pecx",
 			"Ishaan",
-			"Abdul"
+			"AGKhan"
 		]
 	},
 ]
 
 const TEAM := [
-	{ "role": "Biggest Supporter", "names": ["My Mom"] },
+	{ "role": "OG Supporter", "names": ["My Mom"] },
 	{ "role": "Story, Programming & Secondary Art", "names": ["Lewgend"] },
 	{ "role": "Primary Artist", "names": ["ZonGrey"] },
-	{ "role": "Icons", "names": ["Flaticon — flaticon.com"] },
-	{ "role": "Sound & Music", "names": ["Freesound.org", "Pixabay", "JDSherbert — jdsherbert.itch.io"] },
-	{ "role": "Additional Sprite Art", "names": ["Potat0Master — potat0master.itch.io"] },
+	{ "role": "Icons", "names": ["Flaticon - flaticon.com"] },
+	{ "role": "Sound & Music", "names": ["Freesound.org", "Pixabay", "JDSherbert - jdsherbert.itch.io"] },
+	{ "role": "Additional Sprite Art", "names": ["Potat0Master - potat0master.itch.io"] },
 ]

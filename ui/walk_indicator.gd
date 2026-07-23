@@ -3,7 +3,7 @@ extends Node2D
 var _pulse_time: float = 0.0
 
 func _ready():
-	z_index = 10 # Sit above floor, below player
+	z_index = 10
 	hide()
 
 func _process(delta):

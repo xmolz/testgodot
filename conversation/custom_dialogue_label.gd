@@ -1,5 +1,5 @@
 extends DialogueLabel
-## Skips the typewriter auto-pause for single-capital-letter acronym periods (U.S., F.B.I.)
+# skips the typewriter auto-pause for
 
 func _should_auto_pause() -> bool:
 	var parsed_text: String = get_parsed_text()

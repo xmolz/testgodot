@@ -1,4 +1,4 @@
-# PatreonWorldButton.gd — self-building "Support on Patreon" world-UI button.
+# patreonworldbutton.gd — self-building "support on
 class_name PatreonWorldButton
 extends CanvasLayer
 
@@ -23,7 +23,7 @@ func _ready():
 	btn.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
 	btn.focus_mode = Control.FOCUS_NONE
 
-	# The button is visual-only; the whole panel (border included) is the hit area.
+	# the button is visual-only; the
 	btn.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	panel.mouse_filter = Control.MOUSE_FILTER_STOP

@@ -2,11 +2,11 @@ extends CanvasLayer
 
 signal form_button_pressed
 
-# We updated the node path to match the new panel structure
+# we updated the node path
 @onready var texture_button: TextureButton = $FormPanel/MarginContainer/TextureButton
 
 func _ready():
-	# --- UNIVERSAL LAYOUT (PC & Mobile) ---
+	# ******************* universal layout (pc & mobile)
 	var form_panel = $FormPanel
 	var tab_panel = $FormPanel/TabPanel
 	var tab_label = $FormPanel/TabPanel/Label
@@ -23,36 +23,36 @@ func _ready():
 		form_panel.anchor_top = 0.75
 		tab_panel.offset_top = -50
 		tab_label.add_theme_font_size_override("font_size", 28)
-	# --------------------------------------
+	#
 
 	texture_button.pressed.connect(_on_texture_button_pressed)
 	
-	# Add hover effects to make it feel responsive
+	# add hover effects to make it feel responsive
 	texture_button.mouse_entered.connect(_on_hover_enter)
 	texture_button.mouse_exited.connect(_on_hover_exit)
 
 func _on_hover_enter():
-	# --- FIX: Prevent hover effects during explanations ---
+	# --------------(fix: prevent hover effects during explanations)
 	if GameManager and GameManager.current_game_state == GameManager.GameState.EXPLANATION:
 		return
 		
-	# Tint it bright cyan when hovered
+	# tint it bright cyan when hovered
 	texture_button.modulate = Color(0.2, 0.85, 1.0, 1.0)
 
 func _on_hover_exit():
-	# --- FIX: Prevent hover effects during explanations ---
+	# -------------- fix: prevent hover effects during explanations
 	if GameManager and GameManager.current_game_state == GameManager.GameState.EXPLANATION:
 		return
 		
-	# Return to normal colors
+	# return to normal color
 	texture_button.modulate = Color(1.0, 1.0, 1.0, 1.0)
 
 func _on_texture_button_pressed():
-	# --- FIX: Prevent clicking the button during explanations ---
+	# ************[fix: prevent clicking the button during explanations]
 	if GameManager and GameManager.current_game_state == GameManager.GameState.EXPLANATION:
 		return
 		
-	# Play a UI click sound
+	# play a ui click sound
 	if SoundManager:
 		SoundManager.play_sfx("ui_click")
 		

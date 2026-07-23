@@ -1,4 +1,4 @@
-# Boot.gd
+# boot.gd
 extends Node
 
 const LOGO_SPLASH_SCENE_PATH = "res://ui/logo_splash.tscn"
@@ -20,7 +20,7 @@ func start_logo_splash():
 	var logo_splash_packed_scene = load(LOGO_SPLASH_SCENE_PATH)
 	if not logo_splash_packed_scene:
 		print_rich("[color=red]Boot Error: Failed to load Logo Splash Scene at path: %s[/color]" % LOGO_SPLASH_SCENE_PATH)
-		# If the logo fails, go straight to the menu
+		# if the logo fails, go straight to the menu
 		if GameManager:
 			GameManager.change_game_state(GameManager.GameState.MAIN_MENU)
 		return
@@ -39,7 +39,7 @@ func start_logo_splash():
 func _on_logo_splash_finished():
 	print_rich("[color=yellow]Boot: Logo splash finished. Transitioning to loading screen...[/color]")
 	
-	# Load and instance the loading screen
+	# load and instance the loading screen
 	var loading_screen_scene = load("res://ui/loading_screen.tscn")
 	var loading_instance = loading_screen_scene.instantiate()
 	add_child(loading_instance)

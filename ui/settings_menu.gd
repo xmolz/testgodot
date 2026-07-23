@@ -2,7 +2,7 @@ extends CanvasLayer
 
 @onready var title = %Title
 
-# Tabs
+# *********************[tabs]
 @onready var tab_audio_btn = %TabAudio
 @onready var tab_dialogue_btn = %TabDialogue
 @onready var tab_gameplay_btn = %TabGameplay
@@ -10,7 +10,7 @@ extends CanvasLayer
 @onready var tab_dialogue_content = %TabDialogueContent
 @onready var tab_gameplay_content = %TabGameplayContent
 
-# Audio Tab
+# *********************[audio tab]
 @onready var master_slider = %MasterSlider
 @onready var master_label = %MasterLabel
 @onready var master_minus = %MasterMinus
@@ -26,7 +26,7 @@ extends CanvasLayer
 @onready var sfx_minus = %SFXMinus
 @onready var sfx_plus = %SFXPlus
 
-# Dialogue Tab
+# ******************[dialogue tab]
 @onready var text_scale_slider = %TextScaleSlider
 @onready var text_scale_label = %TextScaleLabel
 @onready var text_scale_minus = %TextScaleMinus
@@ -46,7 +46,7 @@ extends CanvasLayer
 @onready var auto_delay_minus = %AutoDelayMinus
 @onready var auto_delay_plus = %AutoDelayPlus
 
-# Gameplay Tab
+# ***************************[gameplay tab]
 @onready var assisted_mode_toggle = %AssistedModeToggle
 @onready var assisted_mode_subtext = %AssistedModeSubtext
 @onready var fullscreen_toggle = %FullscreenToggle
@@ -64,7 +64,7 @@ func _ready():
 	if OS.has_feature("mobile"):
 		fullscreen_hbox.visible = false
 
-	# Load initial values
+	# load initial values
 	if GameManager:
 		master_slider.value = round(Settings.get_bus_volume("Master") * 7.0)
 		music_slider.value = round(Settings.get_bus_volume("Music") * 7.0)
@@ -93,15 +93,15 @@ func _ready():
 
 	_update_labels()
 
-	# Connect tab buttons
+	# connect tab buttons
 	tab_audio_btn.pressed.connect(_switch_tab.bind(0))
 	tab_dialogue_btn.pressed.connect(_switch_tab.bind(1))
 	tab_gameplay_btn.pressed.connect(_switch_tab.bind(2))
 
-	# Start on Audio tab
+	# start on audio tab
 	_switch_tab(0, false)
 
-	# Connect +/- buttons
+	# connect +/- buttons
 	_connect_increment_buttons(master_minus, master_plus, master_slider)
 	_connect_increment_buttons(music_minus, music_plus, music_slider)
 	_connect_increment_buttons(sfx_minus, sfx_plus, sfx_slider)
@@ -109,7 +109,7 @@ func _ready():
 	_connect_increment_buttons(text_speed_minus, text_speed_plus, text_speed_slider)
 	_connect_increment_buttons(auto_delay_minus, auto_delay_plus, auto_delay_slider)
 
-	# Connect sliders & toggles
+	# connect sliders & toggles
 	master_slider.value_changed.connect(_on_master_changed)
 	music_slider.value_changed.connect(_on_music_changed)
 	sfx_slider.value_changed.connect(_on_sfx_changed)
@@ -123,7 +123,7 @@ func _ready():
 	Settings.fullscreen_toggled.connect(_update_fullscreen_toggle_visuals)
 	close_button.pressed.connect(_on_close_pressed)
 
-	# Close on background click (Mobile Only)
+	# mobile background click close
 	if OS.has_feature("mobile"):
 		$ColorRect.gui_input.connect(func(event):
 			if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
@@ -135,7 +135,7 @@ func _input(event):
 	if event is InputEventKey and event.keycode == KEY_ESCAPE and event.is_pressed() and not event.is_echo():
 		get_viewport().set_input_as_handled()
 		_on_close_pressed()
-	# Right-click to close (PC Only)
+	# pc right click close
 	elif not OS.has_feature("mobile") and event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.is_pressed():
 		get_viewport().set_input_as_handled()
 		_on_close_pressed()
@@ -322,23 +322,23 @@ func _exit_tree():
 		Settings.save_settings()
 
 func _apply_ui_polish():
-	# Fonts and main text sizing
+	# **************************[fonts and main text sizing]
 	title.add_theme_font_override("font", custom_font)
 	title.add_theme_font_size_override("font_size", 72 if OS.has_feature("mobile") else 48)
 	title.add_theme_color_override("font_color", Color(0.2, 0.85, 1.0, 1.0))
 
 	var mobile_mult = 1.5 if OS.has_feature("mobile") else 1.0
-	var label_size = int(28 * mobile_mult) # Increased for readability
+	var label_size = int(28 * mobile_mult)
 	var toggle_size = int(24 * mobile_mult)
 	var tab_size = int(30 * mobile_mult)
 	var plus_minus_size = int(28 * mobile_mult)
 
-	# Apply font to Tabs
+	# **********************[apply font to tabs]
 	for btn in [tab_audio_btn, tab_dialogue_btn, tab_gameplay_btn]:
 		btn.add_theme_font_override("font", custom_font)
 		btn.add_theme_font_size_override("font_size", tab_size)
 
-	# Build Square style for the +/- buttons
+	# build square style for the +/- buttons
 	var square_btn_style = StyleBoxFlat.new()
 	square_btn_style.bg_color = Color(0.15, 0.15, 0.15, 0.85)
 	square_btn_style.corner_radius_top_left = 6
@@ -365,7 +365,7 @@ func _apply_ui_polish():
 		auto_delay_minus, auto_delay_plus
 	]
 
-	# Apply font to all Labels and Toggles
+	# apply fonts
 	var all_nodes = tab_audio_content.get_children() + tab_dialogue_content.get_children() + tab_gameplay_content.get_children()
 	for child in all_nodes:
 		if child is Label:
@@ -389,25 +389,25 @@ func _apply_ui_polish():
 
 	assisted_mode_subtext.add_theme_font_size_override("font_size", int(18 * mobile_mult))
 
-	# --- CUSTOM SLIDER STYLE (Thicker track, bigger bar) ---
+	# ******************[custom slider style (thicker track, bigger bar)]
 	var slider_bg = StyleBoxFlat.new()
-	slider_bg.bg_color = Color(0.1, 0.12, 0.15, 1.0) # Dark solid track
+	slider_bg.bg_color = Color(0.1, 0.12, 0.15, 1.0)
 	slider_bg.corner_radius_top_left = 2
 	slider_bg.corner_radius_top_right = 2
 	slider_bg.corner_radius_bottom_left = 2
 	slider_bg.corner_radius_bottom_right = 2
-	# Thicker track limits
+	# thicker track limits
 	slider_bg.content_margin_top = 26 if OS.has_feature("mobile") else 16
 	slider_bg.content_margin_bottom = 26 if OS.has_feature("mobile") else 16
 
-	# The area left of the grabber is completely transparent so the dark track shows through
+	# transparent slider pre-area
 	var slider_fill = StyleBoxEmpty.new()
 
-	# Create a custom ImageTexture for the vertical bar grabber (Taller and slightly wider)
+	# custom grabber texture
 	var grabber_width = 12 if OS.has_feature("mobile") else 8
 	var grabber_height = 50 if OS.has_feature("mobile") else 32
 	var grabber_img = Image.create_empty(grabber_width, grabber_height, false, Image.FORMAT_RGBA8)
-	grabber_img.fill(Color(0.2, 0.85, 1.0, 1.0)) # Bright Cyan line
+	grabber_img.fill(Color(0.2, 0.85, 1.0, 1.0))
 	var grabber_tex = ImageTexture.create_from_image(grabber_img)
 
 	var sliders = [master_slider, music_slider, sfx_slider, text_speed_slider, auto_delay_slider, text_scale_slider]
@@ -419,7 +419,7 @@ func _apply_ui_polish():
 		s.add_theme_icon_override("grabber", grabber_tex)
 		s.add_theme_icon_override("grabber_highlight", grabber_tex)
 
-	# Close Button Styling
+	# close button styling
 	close_button.add_theme_font_override("font", custom_font)
 	close_button.add_theme_font_size_override("font_size", 46 if OS.has_feature("mobile") else 28)
 
@@ -447,7 +447,7 @@ func _apply_ui_polish():
 	close_button.add_theme_color_override("font_hover_color", Color(0.8, 0.8, 0.8, 1.0) if OS.has_feature("mobile") else Color.WHITE)
 	close_button.add_theme_color_override("font_pressed_color", Color.WHITE)
 
-	# --- SCROLLBAR STYLE ---
+	# *************************[scrollbar style]
 	var tab_scroll: ScrollContainer = %TabScroll
 	var vbar: VScrollBar = tab_scroll.get_v_scroll_bar()
 	vbar.custom_minimum_size.x = 24 if OS.has_feature("mobile") else 12

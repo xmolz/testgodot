@@ -9,7 +9,7 @@ signal interaction_pending
 signal interaction_started
 
 enum ObjectCategory { OBJECT, CHARACTER }
-# --- NEW ENUM TO DEFINE WHERE THE INTERACTABLE EXISTS ---
+# ************(enum to define where the interactable exists)
 enum InteractionLocation { WORLD, UI_OVERLAY }
 
 enum ApproachSide { ANY, LEFT_SIDE, RIGHT_SIDE }
@@ -18,12 +18,12 @@ enum ApproachSide { ANY, LEFT_SIDE, RIGHT_SIDE }
 @export var object_id: String = ""
 @export var state_flag_id: String = ""
 @export var category: ObjectCategory = ObjectCategory.OBJECT
-# --- NEW EXPORT VARIABLE FOR THE LOCATION CONTEXT ---
+# ------------------------(export variable for the location context)
 @export var interaction_location: InteractionLocation = InteractionLocation.WORLD
 @export var approach_side: ApproachSide = ApproachSide.ANY
 
 
-# --- THE NEW SYSTEM IS NOW THE ONLY SYSTEM ---
+# ******************(the system is now the only system)
 @export var interactions: Array[InteractionResponse] = [preload("res://interactions/actions/DefaultExamineResponse.tres")]
 
 @onready var object_sprite: Sprite2D = _find_object_sprite()
@@ -54,12 +54,12 @@ func _ready():
 	input_event.connect(_on_input_event)
 	self_destruct_requested.connect(queue_free)
 
-	# Save the material and remove it to save GPU power
+	# save the material and remove it to save gpu power
 	var sprite = _find_object_sprite()
 	if sprite and sprite.material:
 		_outline_material = sprite.material
 		sprite.material = null
-	# --- AUTO-INJECT UNIVERSAL FLASH VERB ---
+	# *****************[auto-inject universal flash verb]
 	var has_flash_assigned = false
 	for response in interactions:
 		if response and response.verb_id == "flash":
@@ -75,7 +75,7 @@ func _ready():
 		flash_response.actions_to_perform.append(universal_flash)
 		
 		interactions.append(flash_response)
-	# ----------------------------------------
+	#
 
 func _on_mouse_entered():
 	if GameManager:
@@ -132,7 +132,7 @@ func _on_input_event(_v: Viewport, event: InputEvent, _sidx: int):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
 		if GameManager: GameManager.process_interaction_click(self)
 
-# --- FULLY REFACTORED CORE LOGIC ---
+# ********************(fully refactored core logic)
 func attempt_interaction(verb_id: String, item_id_used_with: String = ""):
 	interaction_started.emit()
 	print_rich("[color=Orchid]--- Interactable '%s': attempt_interaction --- Verb: '%s', ItemID: '%s'[/color]" % [object_display_name, verb_id, item_id_used_with])
@@ -154,7 +154,7 @@ func attempt_interaction(verb_id: String, item_id_used_with: String = ""):
 				flag_matches = false
 
 		if verb_matches and item_matches and flag_matches:
-			# --- NEW CHECK: Ensure the match actually has actions ---
+			# ///////////////////// check: ensure the match actually has actions
 			var has_valid_actions = false
 			for action in response.actions_to_perform:
 				if action != null:
@@ -164,7 +164,7 @@ func attempt_interaction(verb_id: String, item_id_used_with: String = ""):
 			if not has_valid_actions:
 				print_rich("[color=yellow]Match found for '%s', but actions_to_perform is empty. Skipping to fallback.[/color]" % verb_id)
 				continue
-			# --- END NEW CHECK ---
+			# ****************** end check
 
 			print_rich("[color=LimeGreen]Match found at index %s for Verb '%s' and Item '%s'.[/color]" % [i, verb_id, item_id_used_with])
 
@@ -172,18 +172,18 @@ func attempt_interaction(verb_id: String, item_id_used_with: String = ""):
 				if action:
 					var should_continue = await action.execute(self)
 
-					# If the action explicitly returns false, HALT the interaction chain.
-					# This prevents GameManager from resetting the UI prematurely.
+					# if the action explicitly returns
+					# this prevents gamemanager from resetting
 					if typeof(should_continue) == TYPE_BOOL and should_continue == false:
 						return
 
 			interaction_processed.emit()
 			return
 
-	# --- FALLBACK LOGIC (If no match found above) ---
+	# ////////////(fallback logic (if no match found above))
 	
 	if GameManager:
-		# Use the original verb_id for fallback lookup (or effective, depending on your fallback setup)
+		# use the original verb_id for
 		var verb_data = Verbs.get_verb_data_by_id(verb_id)
 		if is_instance_valid(verb_data) and is_instance_valid(verb_data.fallback_dialogue_file):
 			print_rich("[color=Goldenrod]No match found. Calling FallbackManager.[/color]")
@@ -191,7 +191,7 @@ func attempt_interaction(verb_id: String, item_id_used_with: String = ""):
 				FallbackManager.trigger_fallback(verb_data, self.object_id, item_id_used_with)
 			return
 
-	# Final safety net if no fallback is configured
+	# final safety net if no fallback is configured
 	print_rich("[color=Red]No interaction response and no fallback file found for verb '%s'.[/color]" % verb_id)
 	display_dialogue.emit("I can't seem to do that.")
 	interaction_processed.emit()
@@ -200,40 +200,40 @@ func get_walk_to_position() -> Vector2:
 	if walk_to_point: return walk_to_point.global_position
 	return get_parent().global_position
 
-# --- CORRECTED VERSION OF THIS FUNCTION ---
-# This function provides simple, reliable logic for walking.
+# ****************(corrected version of this function)
+# this function provides simple, reliable
 func does_verb_require_walk(verb_id_to_check: String, item_data_used: ItemData = null) -> bool:
-	# 1. "Walk to" always requires walking.
+	# "walk to" always requires walking.
 	if verb_id_to_check == "walk_to":
 		return true
 
-	# 2. Determine the Item ID we are checking against
+	# determine the item id we are checking against
 	var item_id_checking = ""
 	if item_data_used:
 		item_id_checking = item_data_used.item_id
 
-	# 3. Search through the interactions array to find the SPECIFIC response that will trigger.
-	# We use the exact same matching logic as attempt_interaction() to find the right one.
+	# search through the interactions array
+	# we use the exact same
 	for response in interactions:
 		if not response: continue
 
-		# Check basic matches
+		# check basic matche
 		var verb_matches: bool = (response.verb_id == verb_id_to_check)
 		var item_matches: bool = (response.required_item_id == item_id_checking)
 
-		# Check flag matches (Logic matching attempt_interaction)
+		# check flag matches (logic matching attempt_interaction)
 		var flag_matches: bool = true
 		if not response.required_flag_id.is_empty():
-			# If a flag ID is specified, we must check it.
+			# if a flag id is specified, we must check it.
 			flag_matches = (Flags.get_level_flag(response.required_flag_id) == response.required_flag_value)
 
-		# If we found the valid interaction response that is going to fire:
+		# if we found the valid
 		if verb_matches and item_matches and flag_matches:
-			# Return the custom setting from the Inspector
+			# return the custom setting from the inspector
 			return response.requires_walk
 
-	# 4. Fallback defaults if no specific interaction was found in the list.
-	# If the specific interaction isn't defined, we fall back to generic rules.
+	# fallback defaults if no specific
+	# if the specific interaction isn't
 	
 	if verb_id_to_check == "examine":
 		return false
@@ -241,7 +241,7 @@ func does_verb_require_walk(verb_id_to_check: String, item_data_used: ItemData =
 	if verb_id_to_check == "talk_to" and category == ObjectCategory.CHARACTER:
 		return true
 
-	# Default safety net: If we don't know what to do, walk to it.
+	# default safety net: if we
 	return true
 
 
@@ -249,13 +249,13 @@ func notify_interaction_pending():
 	interaction_pending.emit()
 
 func _find_object_sprite() -> Sprite2D:
-	# Check children of the Area2D
+	# check children of the area2d
 	if has_node("ObjectSprite"):
 		return $ObjectSprite as Sprite2D
 	if has_node("Sprite"):
 		return $Sprite as Sprite2D
 		
-	# Check siblings (children of the parent)
+	# check siblings (children of the parent)
 	var p = get_parent()
 	if p:
 		if p.has_node("ObjectSprite"):

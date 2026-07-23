@@ -1,4 +1,4 @@
-# VerbUI.gd
+# verbui.gd
 extends CanvasLayer
 
 @onready var action_bubble_label: RichTextLabel = $ActionBubbleLabel
@@ -81,7 +81,7 @@ func _on_available_verbs_changed(available_verb_data_array: Array[VerbData]):
 		if child is HBoxContainer:
 			child.queue_free()
 
-	# Sort verbs: preferred order first, then the rest
+	# sort verbs: preferred order first, then the rest
 	var sorted_verbs: Array[VerbData] = []
 	var remaining: Array[VerbData] = available_verb_data_array.duplicate()
 	for preferred_id in PREFERRED_ORDER:

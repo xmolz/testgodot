@@ -1,4 +1,4 @@
-# TransitionLayer.gd
+# transitionlayer.gd
 extends CanvasLayer
 
 signal transition_halfway 
@@ -13,7 +13,7 @@ func _ready():
 	open_instant()
 
 func open_instant():
-	# If Godot runs this before the screen is ready, safely abort to prevent crashes.
+	# if godot runs this before
 	if not left_shutter or not right_shutter: return
 	
 	var viewport_width = get_viewport().get_visible_rect().size.x
@@ -24,7 +24,7 @@ func open_instant():
 		iris_rect.material.set_shader_parameter("circle_size", 1.5)
 		iris_rect.visible = false
 
-# --- 1. SCI-FI DOOR TRANSITION (Used for Teleporting) ---
+# ***************(1. sci-fi door transition (used for teleporting))
 func play_transition_sequence():
 	if not left_shutter or not right_shutter: return
 
@@ -43,7 +43,7 @@ func play_transition_sequence():
 	
 	emit_signal("transition_halfway")
 	
-	# 1.2 second delay while screen is black (1 second longer)
+	# 2 second delay while screen is black (1 second longer)
 	await get_tree().create_timer(1.2).timeout
 	
 	SoundManager.play_sfx("door_open")
@@ -59,7 +59,7 @@ func play_transition_sequence():
 	emit_signal("transition_finished")
 
 
-# --- 2. IRIS "EYE" TRANSITIONS (Used for loading states) ---
+# ************[2. iris "eye" transitions (used for loading states)]
 func play_iris_close(duration: float = 1.0):
 	_set_gm_transitioning(true)
 	if not iris_rect or not iris_rect.material:
@@ -68,10 +68,10 @@ func play_iris_close(duration: float = 1.0):
 		return
 	
 	iris_rect.visible = true
-	iris_rect.material.set_shader_parameter("circle_size", 1.5) # Start wide open
+	iris_rect.material.set_shader_parameter("circle_size", 1.5)
 	
 	var tween = create_tween()
-	# Tween to -0.1 to completely swallow the soft edge!
+	# tween to -0.1 to completely swallow the soft edge!
 	tween.tween_property(iris_rect.material, "shader_parameter/circle_size", -0.1, duration)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	
@@ -86,7 +86,7 @@ func play_iris_open(duration: float = 1.0):
 		return
 
 	iris_rect.visible = true
-	iris_rect.material.set_shader_parameter("circle_size", -0.1) # Start completely closed
+	iris_rect.material.set_shader_parameter("circle_size", -0.1)
 
 	var tween = create_tween()
 	tween.tween_property(iris_rect.material, "shader_parameter/circle_size", 1.5, duration)\
@@ -97,7 +97,7 @@ func play_iris_open(duration: float = 1.0):
 	_set_gm_transitioning(false)
 	emit_signal("transition_finished")
 
-# --- 3. TRADITIONAL FADES (For Game Over) ---
+# ----------------------(3. traditional fades (for game over))
 func global_fade_to_black(duration: float = 3.0):
 	_set_gm_transitioning(true)
 	if global_fade_rect:

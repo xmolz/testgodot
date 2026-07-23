@@ -38,22 +38,22 @@ var character_portraits: Dictionary = {
 
 func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	layer = 115 # Above the dialogue balloon and Pause Menu (110)
+	layer = 115
 	close_button.pressed.connect(_close_log)
 	_populate_log()
 
-	# --- UI POLISH: Title Label ---
+	# **********************[ui polish: title label]
 	title_label.add_theme_font_override("font", custom_font)
 	title_label.add_theme_font_size_override("font_size", 54 if OS.has_feature("mobile") else 36)
-	title_label.add_theme_color_override("font_color", Color(0.2, 0.85, 1.0, 1.0)) # Cyan accent
+	title_label.add_theme_color_override("font_color", Color(0.2, 0.85, 1.0, 1.0))
 
-	# --- UI POLISH: Close Button ---
+	# ------------(ui polish: close button)
 	close_button.text = "Close"
 	close_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	close_button.add_theme_font_override("font", custom_font)
 	close_button.add_theme_font_size_override("font_size", 40 if OS.has_feature("mobile") else 24)
 
-	# Remove the "flat" property if it was set in the inspector so our styleboxes work
+	# remove the "flat" property if
 	close_button.flat = false
 
 	var normal_style = StyleBoxFlat.new()
@@ -70,12 +70,12 @@ func _ready():
 	normal_style.border_width_top = 2
 	normal_style.border_width_right = 2
 	normal_style.border_width_bottom = 2
-	normal_style.border_color = Color(1.0, 1.0, 1.0, 0.0) # Invisible border to prevent jitter
+	normal_style.border_color = Color(1.0, 1.0, 1.0, 0.0)
 	normal_style.anti_aliasing = false
 
 	var hover_style = normal_style.duplicate()
-	hover_style.bg_color = Color(0.1, 0.25, 0.3, 0.9) # Subtle cyan tint
-	hover_style.border_color = Color(0.2, 0.85, 1.0, 0.8) # Crisp cyan border
+	hover_style.bg_color = Color(0.1, 0.25, 0.3, 0.9)
+	hover_style.border_color = Color(0.2, 0.85, 1.0, 0.8)
 
 	close_button.add_theme_stylebox_override("normal", normal_style)
 	close_button.add_theme_stylebox_override("hover", hover_style)
@@ -85,22 +85,22 @@ func _ready():
 	close_button.add_theme_color_override("font_color", Color(0.8, 0.8, 0.8, 1.0))
 	close_button.add_theme_color_override("font_hover_color", Color.WHITE)
 	close_button.add_theme_color_override("font_pressed_color", Color.WHITE)
-	# ------------------------------
+	#
 
 	if OS.has_feature("mobile"):
 		scroll_container.scroll_deadzone = 24
 
-	# Wait one frame for the VBoxContainer to calculate its size, then scroll to bottom
+	# wait one frame for the
 	await get_tree().process_frame
 	scroll_container.scroll_vertical = int(scroll_container.get_v_scroll_bar().max_value)
 
 func _input(event):
-	# Close on Right Click
+	# close on right click
 	if event is InputEventMouseButton and event.is_pressed():
 		if event.button_index == MOUSE_BUTTON_RIGHT:
 			get_viewport().set_input_as_handled()
 			_close_log()
-	# Close on Escape or H
+	# close on escape or h
 	elif event is InputEventKey and event.is_pressed() and not event.is_echo():
 		if event.keycode == KEY_ESCAPE or event.keycode == KEY_H:
 			get_viewport().set_input_as_handled()
@@ -127,11 +127,11 @@ func _populate_log():
 		var lookup_name = entry.get("lookup_name", "")
 		var display_name = entry.get("display_name", "")
 
-		# Determine if this is a continuation of the same speaker
+		# determine if this is a continuation of the same speaker
 		var is_continuation = (lookup_name == previous_character and lookup_name != "")
 		previous_character = lookup_name
 
-		# --- ACTION LOGGING LOGIC (FIXED) ---
+		# -------------- action logging logic (fixed)
 		if entry["type"] == "action":
 			var action_label = RichTextLabel.new()
 			action_label.bbcode_enabled = true
@@ -160,10 +160,10 @@ func _populate_log():
 
 			history_list.add_child(action_margin)
 
-			# Reset previous character so the next dialogue line forces a nameplate/portrait
+			# reset previous character so the
 			previous_character = ""
 			continue
-		# -----------------------------
+		#
 
 		if lookup_name in PLAYER_NAMES:
 			align_right = true
@@ -244,7 +244,7 @@ func _populate_log():
 
 				text_vbox.add_child(choice_label)
 
-		# Assemble the row
+		# assemble the row
 		if align_right:
 			row_box.add_child(text_vbox)
 			row_box.add_child(portrait)

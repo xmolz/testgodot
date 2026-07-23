@@ -133,7 +133,7 @@ do actor_move("Lewgend", "center_right", 0.5)
 do show_patreon_button()
 
 do actor_change("Lewgend", "open_arms")
-Lewgend: The best way to support would be to join my Patreon as a paying subscriber!
+Lewgend: The best way to support would be to subscribe to my Patreon!
 
 do actor_change("Lewgend", "determined")
 Lewgend: Patrons get the newest version of the game AS SOON as it's ready!

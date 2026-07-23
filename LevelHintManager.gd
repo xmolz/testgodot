@@ -15,9 +15,7 @@ func evaluate_hint() -> String:
 	var used_any_drug = (Flags.get_level_flag("mcbucket_zanopram_used") or Flags.get_level_flag("mcbucket_cannathink_used") or Flags.get_level_flag("mcbucket_invigirol_used")) and not state_from_flash
 	var cabinet_raided = has_any_drug or used_any_drug
 
-	# ==========================================
-	# THE ACTION CHAIN (Physical Puzzles)
-	# ==========================================
+	# the action chain (physical puzzles)
 	if Inventory.has_item("techpass"):
 		return "hint_has_techpass"
 
@@ -46,9 +44,7 @@ func evaluate_hint() -> String:
 			if in_bathroom: return "hint_clog_toilet_bathroom"
 			else: return "hint_clog_toilet_main"
 
-	# ==========================================
-	# THE CONTEXT CHAIN (Story Objectives)
-	# ==========================================
+	# the context chain (story objectives)
 	if needs_meds:
 		return "hint_need_distraction"
 

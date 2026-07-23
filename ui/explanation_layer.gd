@@ -1,12 +1,12 @@
 extends CanvasLayer
 signal explanation_finished
 
-# --- Node References ---
+# --------------------(node references)
 @onready var color_rect: ColorRect = $ColorRect
 @onready var explanation_label: Label = $PanelContainer/VBoxContainer/ExplanationLabel
 @onready var next_button: Button = $PanelContainer/VBoxContainer/NextButton
 
-# --- State Variables ---
+# /////////////////[state variables]
 var current_explanation_data: ExplanationData = null
 var current_line_index: int = 0
 
@@ -76,7 +76,7 @@ func hide_explanation():
 
 func update_spotlight_position(pos: Vector2):
 	if color_rect.material is ShaderMaterial:
-		# Send the Viewport size to the shader to fix the scaling bug
+		# send the viewport size to
 		var screen_size = get_viewport().get_visible_rect().size
 		color_rect.material.set_shader_parameter("screen_size", screen_size)
 		color_rect.material.set_shader_parameter("hole_position", pos)
@@ -90,7 +90,7 @@ func _update_display():
 		next_button.text = "Next"
 
 func _on_next_button_pressed():
-	# Play the exact same sound used in the dialogue balloon
+	# play the exact same sound used in the dialogue balloon
 	if SoundManager:
 		SoundManager.play_sfx("ui_click")
 	current_line_index += 1

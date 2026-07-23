@@ -1,4 +1,4 @@
-# DialogueHistory.gd (Autoload) — session log of dialogue lines, choices, and player actions.
+# dialoguehistory.gd (autoload) — session log
 extends Node
 
 const MAX_ENTRIES = 500

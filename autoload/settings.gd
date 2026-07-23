@@ -1,4 +1,4 @@
-# Settings.gd (Autoload) — user preferences + persistence (user://settings.cfg).
+# ******************* settings.gd (autoload) — user preferences + persistence (user://settings.cfg).
 extends Node
 
 signal auto_forward_toggled(is_on: bool)
@@ -8,7 +8,7 @@ signal text_scale_changed(new_scale: float)
 
 const SETTINGS_FILE_PATH = "user://settings.cfg"
 
-# --- Dialogue text ---
+# ///////////////////[dialogue text]
 var text_speed: float = 0.02
 var instant_text: bool = false
 var dialogue_text_scale: float = 1.0:
@@ -25,10 +25,10 @@ var is_auto_playing: bool = false:
 		is_auto_playing = val
 		auto_forward_toggled.emit(val)
 
-# --- Gameplay ---
+# ////////////////(gameplay)
 var assisted_mode: bool = false
 
-# --- Display ---
+# -----------------(display)
 var fullscreen: bool = true
 
 
@@ -37,16 +37,30 @@ func _ready():
 	apply_window_mode()
 
 
+func _master_boost_db() -> float:
+	# ------------- soundmanager applies a mobile-only boost to the master bus. compensate here
+	# o linear values seen by
+	if SoundManager and "mobile_master_boost" in SoundManager:
+		return SoundManager.mobile_master_boost
+	return 0.0
+
+
 func set_bus_volume(bus_name: String, linear_val: float):
 	var bus_idx = AudioServer.get_bus_index(bus_name)
 	if bus_idx != -1:
-		AudioServer.set_bus_volume_db(bus_idx, linear_to_db(linear_val))
+		var target_db = linear_to_db(linear_val)
+		if bus_name == "Master":
+			target_db += _master_boost_db()
+		AudioServer.set_bus_volume_db(bus_idx, target_db)
 
 
 func get_bus_volume(bus_name: String) -> float:
 	var bus_idx = AudioServer.get_bus_index(bus_name)
 	if bus_idx != -1:
-		return db_to_linear(AudioServer.get_bus_volume_db(bus_idx))
+		var db = AudioServer.get_bus_volume_db(bus_idx)
+		if bus_name == "Master":
+			db -= _master_boost_db()
+		return db_to_linear(db)
 	return 1.0
 
 
