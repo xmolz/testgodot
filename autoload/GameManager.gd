@@ -1255,6 +1255,7 @@ func quit_to_main_menu_smooth():
 	if is_instance_valid(transition_layer) and transition_layer.has_method("global_fade_to_black"):
 		await transition_layer.global_fade_to_black(1.0)
 
+	get_tree().paused = false
 	current_interaction_state = InteractionState.WORLD
 
 	change_game_state(GameState.MAIN_MENU)

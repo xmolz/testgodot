@@ -154,7 +154,6 @@ func _on_quit_pressed():
 
 func _on_confirm_yes():
 	if SoundManager: SoundManager.play_sfx("ui_click")
-	get_tree().paused = false
 	confirm_overlay.hide()
 	overlay.hide()
 	if GameManager:
