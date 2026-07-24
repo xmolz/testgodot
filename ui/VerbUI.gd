@@ -74,6 +74,9 @@ func set_panel_visible(panel_visible: bool) -> void:
 
 
 func _on_available_verbs_changed(available_verb_data_array: Array[VerbData]):
+	if think_pulse_tween and think_pulse_tween.is_valid():
+		think_pulse_tween.kill()
+
 	active_verb_buttons.clear()
 	all_button_slots.clear()
 
@@ -194,8 +197,8 @@ func _on_interaction_complete():
 
 func _update_button_selected_visual_state(selected_verb_id: String):
 	for button_node in all_button_slots:
-		var button_verb_id = button_node.get_meta("verb_id", "")
 		if is_instance_valid(button_node):
+			var button_verb_id = button_node.get_meta("verb_id", "")
 			if button_verb_id == "think" and think_pulse_tween and think_pulse_tween.is_valid():
 				continue
 
@@ -213,7 +216,7 @@ func _on_new_hint_available(is_available: bool):
 
 	if is_available and GameManager and Settings.assisted_mode:
 		btn.modulate = Color.WHITE
-		think_pulse_tween = create_tween().set_loops()
+		think_pulse_tween = create_tween().bind_node(btn).set_loops()
 		think_pulse_tween.tween_property(btn, "modulate", Color(1.0, 1.0, 0.0, 1.0), 0.6).set_trans(Tween.TRANS_SINE)
 		think_pulse_tween.tween_property(btn, "modulate", Color.WHITE, 0.6).set_trans(Tween.TRANS_SINE)
 	else:
