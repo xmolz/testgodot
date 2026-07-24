@@ -33,6 +33,10 @@ func _ready():
 	if not ConversationEventManager.mcbucket_state_change_requested.is_connected(_on_mcbucket_state_change):
 		ConversationEventManager.mcbucket_state_change_requested.connect(_on_mcbucket_state_change)
 
+	# also react when the tv changes mcbucket's state, guarded so real drugs win
+	if not ConversationEventManager.mcbucket_tv_reaction_requested.is_connected(_on_mcbucket_tv_reaction):
+		ConversationEventManager.mcbucket_tv_reaction_requested.connect(_on_mcbucket_tv_reaction)
+
 	# sync the vitals screen with
 	# flag checks in mcbucket.gd (same priority order).
 	await get_tree().process_frame
@@ -53,6 +57,15 @@ func _on_mcbucket_state_change(new_state: int):
 		1: _update_screen_visuals("cannathink")
 		2: _update_screen_visuals("invigirol")
 		3: _update_screen_visuals("zanopram")
+
+func _on_mcbucket_tv_reaction(is_tv_off: bool):
+	# real drug states always override the tv reaction (same guards as mcbucket.gd)
+	if Flags.get_level_flag("mcbucket_cannathink_used") or Flags.get_level_flag("mcbucket_invigirol_used") or Flags.get_level_flag("mcbucket_zanopram_used"):
+		return
+	if is_tv_off:
+		_update_screen_visuals("invigirol")
+	else:
+		_update_screen_visuals("normal")
 
 func on_drug_used(_item_id: String):
 	print("Dispenser: Request to use '%s'." % _item_id)
