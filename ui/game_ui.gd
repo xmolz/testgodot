@@ -16,6 +16,7 @@ var zoom_controls_ui: CanvasLayer = null
 
 var _zoom_show_verb_panel: bool = true
 var _zoom_show_inventory: bool = true
+var _dialogue_active: bool = false
 
 
 func _ready() -> void:
@@ -116,12 +117,14 @@ func _on_interaction_state_changed(new_state: int) -> void:
 
 
 func _on_dialogue_started(_resource: Resource) -> void:
+	_dialogue_active = true
 	# hide the hud whenever any
 	# character conversations, insurance-form balloons —
 	_set_gameplay_ui_visible(false)
 
 
 func _on_dialogue_ended(_resource: Resource) -> void:
+	_dialogue_active = false
 	if GameManager.current_game_state != GameManager.GameState.IN_GAME_PLAY:
 		return
 	match GameManager.current_interaction_state:
@@ -165,6 +168,8 @@ func _on_explanation_started(data: ExplanationData, root_node_to_search: Node) -
 # ////////////[button, which stays with gamemanager)]
 
 func _set_gameplay_ui_visible(show: bool) -> void:
+	if show and _dialogue_active:
+		show = false
 	if is_instance_valid(verb_ui):
 		verb_ui.visible = show
 	if is_instance_valid(inventory_ui):
