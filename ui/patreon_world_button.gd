@@ -2,7 +2,7 @@
 class_name PatreonWorldButton
 extends CanvasLayer
 
-const PATREON_URL := "https://www.patreon.com/cw/lewgend"
+const PATREON_URL := "https://www.patreon.com/cw/lewgend/membership"
 
 
 func _ready():
