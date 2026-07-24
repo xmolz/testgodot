@@ -1255,6 +1255,10 @@ func quit_to_main_menu_smooth():
 	if is_instance_valid(transition_layer) and transition_layer.has_method("global_fade_to_black"):
 		await transition_layer.global_fade_to_black(1.0)
 
+	# the screen is now black: tear the world down while it is still frozen,
+	# then unpause so the main menu is responsive. (mirrors trigger_game_over)
+	SceneDirector._cleanup_all_overlays()
+	SceneDirector.teardown_game_scene()
 	get_tree().paused = false
 	current_interaction_state = InteractionState.WORLD
 

@@ -10,6 +10,9 @@ signal transition_finished
 @onready var global_fade_rect = get_node_or_null("GlobalFadeRect")
 
 func _ready():
+	# this layer drives quit/game-over fades while the tree is paused,
+	# so it must never pause with the rest of the world.
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	open_instant()
 
 func open_instant():
