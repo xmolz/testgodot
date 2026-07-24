@@ -7,7 +7,7 @@ func _ready():
 	super._ready()
 	
 	print_rich("[color=orange]MedicineCabinet: Zoom opened. Forcing Game Unpause to allow Aida to move.[/color]")
-	get_tree().paused = false
+	get_tree().set_deferred("paused", false)
 	
 	if GameManager and Flags.current_level_state_manager:
 		if not Flags.current_level_state_manager.level_flag_changed.is_connected(_on_level_flag_changed):
