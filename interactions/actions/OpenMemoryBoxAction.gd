@@ -20,9 +20,9 @@ func execute(interactable_node: Interactable) -> Variant:
 	if GameManager and GameManager.transition_layer:
 		await GameManager.transition_layer.play_iris_close(1.0)
 
-	# spawn the ui (while screen is black)
+	# spawn the ui safely (while screen is black)
 	var instance = MemoryBoxScene.instantiate()
-	interactable_node.get_tree().root.add_child(instance)
+	interactable_node.get_tree().root.add_child.call_deferred(instance)
 
 	await interactable_node.get_tree().process_frame
 

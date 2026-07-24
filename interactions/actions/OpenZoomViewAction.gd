@@ -12,9 +12,9 @@ func execute(interactable_node: Interactable) -> bool:
 		if GameManager:
 			GameManager.enter_zoom_view_state()
 
-		# instantiate the scene and add it to the tree.
+		# instantiate the scene and add it to the tree safely
 		var zoom_instance = interactable_node.object_zoom_overlay_scene.instantiate()
-		interactable_node.get_tree().root.add_child(zoom_instance)
+		interactable_node.get_tree().root.add_child.call_deferred(zoom_instance)
 
 		print_rich("[color=cyan]OpenZoomViewAction: Opened zoom view for '%s'.[/color]" % interactable_node.object_display_name)
 

@@ -23,9 +23,9 @@ func execute(interactable_node: Interactable) -> bool:
 		# tell the gamemanager to hide
 		GameManager.enter_conversation_state()
 
-		# instantiate the scene and add
+		# instantiate the scene and add safely
 		var conversation_instance = conversation_scene.instantiate()
-		interactable_node.get_tree().root.add_child(conversation_instance)
+		interactable_node.get_tree().root.add_child.call_deferred(conversation_instance)
 		GameManager.register_character_conversation(conversation_instance)
 
 		print_rich("[color=cyan]StartConversationAction: Launched conversation for '%s'.[/color]" % interactable_node.object_display_name)
