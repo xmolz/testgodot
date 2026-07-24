@@ -1,0 +1,13 @@
+conversation/mcbucket_advanced_overlay.tscn : res://Backgrounds/McBucket/high/mcbucket_high_explaining_eyes_closed_mouth_open.PNG -> res://Backgrounds/McBucket/high/mcbucket_high_explaining_eyes_closed_mouth_open.png
+conversation/mcbucket_advanced_overlay.tscn : res://Backgrounds/McBucket/invigirol/mcbucket_ivigirol_base.PNG -> res://Backgrounds/McBucket/invigirol/mcbucket_ivigirol_base.png
+conversation/mcbucket_advanced_overlay.tscn : res://Backgrounds/McBucket/default/mcbucket_normal_base.PNG -> res://Backgrounds/McBucket/default/mcbucket_normal_base.png
+conversation/mcbucket_advanced_overlay.tscn : res://Backgrounds/McBucket/default/mcbucket_normal_ree.PNG -> res://Backgrounds/McBucket/default/mcbucket_normal_ree.png
+conversation/mcbucket_advanced_overlay.tscn : res://Backgrounds/McBucket/high/mcbucket_high_hand_up.PNG -> res://Backgrounds/McBucket/high/mcbucket_high_hand_up.png
+conversation/mcbucket_advanced_overlay.tscn : res://Backgrounds/McBucket/high/mcbucket_high_happy.PNG -> res://Backgrounds/McBucket/high/mcbucket_high_happy.png
+conversation/mcbucket_advanced_overlay.tscn : res://Backgrounds/McBucket/high/mcbucket_high_base.PNG -> res://Backgrounds/McBucket/high/mcbucket_high_base.png
+conversation/sergey_advanced_overlay.tscn : res://Backgrounds/Protagonist/xSergei/protag_brushing_hair_on_bed.png -> res://Backgrounds/Protagonist/xSergei/protag_brushing_hair_on_bed.PNG
+conversation/sergey_advanced_overlay.tscn : res://Backgrounds/McBucket/default/mcbucket_normal_base.PNG -> res://Backgrounds/McBucket/default/mcbucket_normal_base.png
+conversation/sergey_advanced_overlay.tscn : res://Backgrounds/McBucket/default/mcbucket_normal_ree.PNG -> res://Backgrounds/McBucket/default/mcbucket_normal_ree.png
+conversation/sergey_advanced_overlay.tscn : res://Backgrounds/Sergey/sergey_flat_and_embarrassed.PNG -> res://Backgrounds/Sergey/sergey_flat_and_embarrassed.png
+conversation/sergey_advanced_overlay.tscn : res://Backgrounds/Sergey/sergey_flat_and_drained.PNG -> res://Backgrounds/Sergey/sergey_flat_and_drained.png
+dialogue/sergey_dialogue_2.dialogue : res://Backgrounds/Protagonist/xSergei/protag_brushing_hair_on_bed.png -> res://Backgrounds/Protagonist/xSergei/protag_brushing_hair_on_bed.PNG

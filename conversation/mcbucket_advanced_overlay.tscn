@@ -9,14 +9,14 @@ background_aliases = {
 "test": "res://Backgrounds/Levels/static_hospital_background_ventless.png"
 }
 cg_aliases = {
-"mcbucket_high_base": "res://Backgrounds/McBucket/high/mcbucket_high_base.PNG",
+"mcbucket_high_base": "res://Backgrounds/McBucket/high/mcbucket_high_base.png",
 "mcbucket_high_base_mouth_open": "res://Backgrounds/McBucket/high/mcbucket_high_base_mouth_open.PNG",
-"mcbucket_high_explaining_eyes_closed_mouth_open": "res://Backgrounds/McBucket/high/mcbucket_high_explaining_eyes_closed_mouth_open.PNG",
+"mcbucket_high_explaining_eyes_closed_mouth_open": "res://Backgrounds/McBucket/high/mcbucket_high_explaining_eyes_closed_mouth_open.png",
 "mcbucket_high_explaining_eyes_open_mouth_open": "res://Backgrounds/McBucket/high/mcbucket_high_explaining_eyes_open_mouth_open.PNG",
 "mcbucket_high_explaining_eyes_open_mouth_open_2": "res://Backgrounds/McBucket/high/mcbucket_high_explaining_eyes_open_mouth_open (2).PNG",
-"mcbucket_high_hand_up": "res://Backgrounds/McBucket/high/mcbucket_high_hand_up.PNG",
-"mcbucket_high_happy": "res://Backgrounds/McBucket/high/mcbucket_high_happy.PNG",
-"mcbucket_invigirol_base": "res://Backgrounds/McBucket/invigirol/mcbucket_ivigirol_base.PNG",
-"mcbucket_normal_base": "res://Backgrounds/McBucket/default/mcbucket_normal_base.PNG",
-"mcbucket_normal_ree": "res://Backgrounds/McBucket/default/mcbucket_normal_ree.PNG"
+"mcbucket_high_hand_up": "res://Backgrounds/McBucket/high/mcbucket_high_hand_up.png",
+"mcbucket_high_happy": "res://Backgrounds/McBucket/high/mcbucket_high_happy.png",
+"mcbucket_invigirol_base": "res://Backgrounds/McBucket/invigirol/mcbucket_ivigirol_base.png",
+"mcbucket_normal_base": "res://Backgrounds/McBucket/default/mcbucket_normal_base.png",
+"mcbucket_normal_ree": "res://Backgrounds/McBucket/default/mcbucket_normal_ree.png"
 }

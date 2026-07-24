@@ -1,0 +1,8 @@
+logo_exporter.tscn : res://exported_logo.png
+Dev/alyssa_exporter.gd : res://Backgrounds/layla_marketing_image.png
+Dev/alyssa_exporter.gd : res://alyssa_marketing_post_final.png
+Dev/MarketingMockup.tscn : res://screenshot_related/screenshot.png
+dialogue/sergey_dialogue_2.dialogue : res://haluwa.png
+dialogue/testdialogue.dialogue : res://Backgrounds/Aida/aida_hospital_base.png
+Interactables/Game World/Hospital Room/medicine_cabinet.tscn : res://.godot/imported/medicine_cabinet.png
+Interactables/Game World/Hospital Room/Zanopram.tscn : res://zanopram.png
