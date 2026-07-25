@@ -35,6 +35,9 @@ func execute(interactable_node: Interactable) -> Variant:
 
 	# //////////////// 3. perform flash animation
 	if is_instance_valid(player):
+		if player.has_method("set_can_move"):
+			player.set_can_move(false)
+
 		if player.has_method("face_target"):
 			player.face_target(interactable_node.global_position)
 
@@ -61,5 +64,9 @@ func execute(interactable_node: Interactable) -> Variant:
 	if flash_dialogue.titles.has(post_id):
 		DialogueManager.show_dialogue_balloon_scene("res://conversation/conversationballoon.tscn", flash_dialogue, post_id)
 		await DialogueManager.dialogue_ended
+
+	if is_instance_valid(player) and player.has_method("set_can_move"):
+		if GameManager.current_interaction_state == GameManager.InteractionState.WORLD and GameManager.current_game_state == GameManager.GameState.IN_GAME_PLAY:
+			player.set_can_move(true)
 
 	return true

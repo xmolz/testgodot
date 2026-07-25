@@ -232,6 +232,10 @@ func _unhandled_input(event: InputEvent):
 			if is_transitioning:
 				return
 
+			# player is frozen mid-action (e.g. flash animation): ignore world/floor clicks
+			if is_instance_valid(player_node) and player_node.get("_can_move") == false:
+				return
+
 			# ***** fix: register that the click landed in the game world! *****
 			_potential_hold_walk = true
 
@@ -869,6 +873,7 @@ func _complete_interaction_cycle():
 	if current_interaction_state != InteractionState.CONVERSATION and current_game_state == GameState.IN_GAME_PLAY:
 		_set_patreon_visible(true)
 
+	_is_player_walking = false
 	update_sentence_line_ui()
 #endregion
 

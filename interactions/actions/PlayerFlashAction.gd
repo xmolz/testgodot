@@ -7,6 +7,9 @@ func execute(interactable_node: Interactable) -> Variant:
 	var player = GameManager.player_node
 
 	if is_instance_valid(player):
+		if player.has_method("set_can_move"):
+			player.set_can_move(false)
+
 		if player.has_method("face_target"):
 			player.face_target(interactable_node.global_position)
 
@@ -25,5 +28,9 @@ func execute(interactable_node: Interactable) -> Variant:
 
 		if player.has_method("set_animation_state"):
 			player.set_animation_state("idle")
+
+	if is_instance_valid(player) and player.has_method("set_can_move"):
+		if GameManager.current_interaction_state == GameManager.InteractionState.WORLD and GameManager.current_game_state == GameManager.GameState.IN_GAME_PLAY:
+			player.set_can_move(true)
 
 	return true
