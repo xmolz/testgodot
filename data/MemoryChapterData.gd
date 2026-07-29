@@ -39,3 +39,7 @@ enum ChapterType { STORY, SPICY }
 
 # if true, the detail drawer shows an "OPTIONAL" tag beside the chapter name.
 @export var is_optional: bool = false
+
+# optional monologue shown over the portal swirl while the chapter loads.
+# one line per newline. empty = no monologue (minimum hold still applies).
+@export_multiline var launch_monologue: String = ""
