@@ -31,6 +31,7 @@ var _idle_target: float = 0.0
 var _idle_angle: float = 0.0
 var _idle_breathe: float = 0.0
 var _debug_phase_tag: String = ""
+var _active_balloon: Node = null
 
 @onready var left_shutter = get_node_or_null("LeftShutter")
 @onready var right_shutter = get_node_or_null("RightShutter")
@@ -294,6 +295,9 @@ func portal_exit(duration: float = 0.8) -> void:
 func portal_abort() -> void:
 	_portal_active = false
 	_debug_phase_tag = ""
+	if is_instance_valid(_active_balloon):
+		_active_balloon.queue_free()
+	_active_balloon = null
 	# vram discipline: drop every reference to the art before the node frees.
 	if is_instance_valid(_portal_rect):
 		_portal_rect.texture = null
@@ -305,6 +309,13 @@ func portal_abort() -> void:
 	if ChapterLaunchSequence.PORTAL_DEBUG:
 		print_rich("[color=magenta][PORTAL DEBUG] cleanup done at %d ms[/color]" % Time.get_ticks_msec())
 	DebugVRAM.snapshot("portal_exit end")
+
+func portal_fade_abort(fade_duration: float = 0.4) -> void:
+	if is_instance_valid(_portal_rect):
+		var fade = create_tween().bind_node(_portal_rect)
+		fade.tween_property(_portal_rect, "modulate:a", 0.0, fade_duration)
+		await fade.finished
+	portal_abort()
 
 const PORTAL_MIN_HOLD := 0.8
 const CHAPTER_LAUNCH_DIALOGUE_PATH := "res://dialogue/chapter_launch.dialogue"

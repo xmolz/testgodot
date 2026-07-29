@@ -6,6 +6,9 @@ const PORTAL_DEBUG := true
 
 var _launching: bool = false
 
+var _preloaded_dialogue_resource: DialogueResource = null
+var _preloaded_balloon_scene: PackedScene = null
+
 func launch(data: MemoryChapterData, overlay: CanvasLayer, drawer: Control) -> void:
 	if _launching:
 		return
@@ -16,19 +19,31 @@ func launch(data: MemoryChapterData, overlay: CanvasLayer, drawer: Control) -> v
 
 	# Front-load loads before any visual change
 	var monologue_title = data.launch_dialogue_title
-	var preloaded_dialogue_resource: DialogueResource = null
-	var preloaded_balloon_scene: PackedScene = null
+	_preloaded_dialogue_resource = null
+	_preloaded_balloon_scene = null
 
 	if not monologue_title.strip_edges().is_empty():
 		if ResourceLoader.exists("res://dialogue/chapter_launch.dialogue"):
-			preloaded_dialogue_resource = load("res://dialogue/chapter_launch.dialogue") as DialogueResource
+			_preloaded_dialogue_resource = load("res://dialogue/chapter_launch.dialogue") as DialogueResource
 		if ResourceLoader.exists("res://conversation/conversationballoon.tscn"):
-			preloaded_balloon_scene = load("res://conversation/conversationballoon.tscn") as PackedScene
+			_preloaded_balloon_scene = load("res://conversation/conversationballoon.tscn") as PackedScene
 
 	if PORTAL_DEBUG:
 		print_rich("[color=magenta][PORTAL DEBUG] loads completed at %d ms[/color]" % Time.get_ticks_msec())
 
 	var path = data.scene_path_to_load
+
+	# Pre-flight check: if non-empty path does not exist, fall back to empty path test behavior!
+	var real_path_exists = false
+	if not path.is_empty():
+		if ResourceLoader.exists(path):
+			real_path_exists = true
+			ResourceLoader.load_threaded_request(path)
+			if PORTAL_DEBUG:
+				print_rich("[color=magenta][PORTAL DEBUG] scene load requested: %s at %d ms[/color]" % [path, Time.get_ticks_msec()])
+		else:
+			push_error("ChapterLaunchSequence: scene path '%s' does not exist! Falling back to test-slice behavior." % path)
+			path = "" # forces empty path test-slice fallback branch
 
 	# grab drawer art texture and global rect before drawer is closed
 	var portal_texture: Texture2D = null
@@ -63,11 +78,11 @@ func launch(data: MemoryChapterData, overlay: CanvasLayer, drawer: Control) -> v
 
 		# play monologue/hold during test slice
 		if GameManager and is_instance_valid(GameManager.transition_layer):
-			await GameManager.transition_layer.play_portal_monologue(monologue_title, preloaded_dialogue_resource, preloaded_balloon_scene)
+			await GameManager.transition_layer.play_portal_monologue(monologue_title, _preloaded_dialogue_resource, _preloaded_balloon_scene)
 
 		# immediately release preloaded references once done
-		preloaded_dialogue_resource = null
-		preloaded_balloon_scene = null
+		_preloaded_dialogue_resource = null
+		_preloaded_balloon_scene = null
 
 		# portal_exit started
 		if PORTAL_DEBUG:
@@ -109,13 +124,10 @@ func launch(data: MemoryChapterData, overlay: CanvasLayer, drawer: Control) -> v
 	# immediately release portal_texture reference once enter finishes
 	portal_texture = null
 
-	# start threaded background load and monologue under the hold
-	ResourceLoader.load_threaded_request(path)
-
 	var monologue_finished = false
 	var load_monologue_task = func():
 		if GameManager and is_instance_valid(GameManager.transition_layer):
-			await GameManager.transition_layer.play_portal_monologue(monologue_title, preloaded_dialogue_resource, preloaded_balloon_scene)
+			await GameManager.transition_layer.play_portal_monologue(monologue_title, _preloaded_dialogue_resource, _preloaded_balloon_scene)
 		monologue_finished = true
 
 	# run monologue in background (it is awaitable)
@@ -127,8 +139,9 @@ func launch(data: MemoryChapterData, overlay: CanvasLayer, drawer: Control) -> v
 	
 	overlay = null
 	drawer = null
-	preloaded_dialogue_resource = null
-	preloaded_balloon_scene = null
+	
+	await get_tree().process_frame
+	await get_tree().process_frame
 
 	if PORTAL_DEBUG:
 		print_rich("[color=magenta][PORTAL DEBUG] overlay freed at %d ms[/color]" % Time.get_ticks_msec())
@@ -138,24 +151,43 @@ func launch(data: MemoryChapterData, overlay: CanvasLayer, drawer: Control) -> v
 	# poll load status while waiting for monologue to finish
 	var progress = []
 	var loaded_packed_scene: PackedScene = null
+	var _load_wait_start := Time.get_ticks_msec()
+	var _last_status := -1
+
 	while true:
 		var status = ResourceLoader.load_threaded_get_status(path, progress)
+
+		if PORTAL_DEBUG and status != _last_status:
+			print_rich("[color=magenta][PORTAL DEBUG] scene load status changed: %d at %d ms[/color]" % [status, Time.get_ticks_msec()])
+			_last_status = status
+
 		if status == ResourceLoader.THREAD_LOAD_LOADED:
 			loaded_packed_scene = ResourceLoader.load_threaded_get(path)
+			if PORTAL_DEBUG:
+				print_rich("[color=magenta][PORTAL DEBUG] scene load completed at %d ms[/color]" % Time.get_ticks_msec())
 			break
 		elif status == ResourceLoader.THREAD_LOAD_FAILED or status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
-			push_error("ChapterLaunchSequence: Threaded load failed for path: " + path)
-			if GameManager and is_instance_valid(GameManager.transition_layer):
-				GameManager.transition_layer.portal_abort()
-			if NotificationManager:
-				NotificationManager.add_notification("Chapter failed to load.")
-			_launching = false
+			push_error("ChapterLaunchSequence: threaded load failed (status %d) for: %s" % [status, path])
+			await _abort_launch_revealing_world()
+			return
+		elif Time.get_ticks_msec() - _load_wait_start > 15000:
+			push_error("ChapterLaunchSequence: scene load timed out for: " + path)
+			await _abort_launch_revealing_world()
 			return
 		await get_tree().process_frame
 
 	# wait until monologue is also finished
 	while not monologue_finished:
 		await get_tree().process_frame
+
+	if loaded_packed_scene == null:
+		push_error("ChapterLaunchSequence: loaded scene packed is null for: " + path)
+		await _abort_launch_revealing_world()
+		return
+
+	# release preloaded monologue references
+	_preloaded_dialogue_resource = null
+	_preloaded_balloon_scene = null
 
 	# switch scene
 	if loaded_packed_scene:
@@ -166,7 +198,7 @@ func launch(data: MemoryChapterData, overlay: CanvasLayer, drawer: Control) -> v
 	loaded_packed_scene = null
 
 	if PORTAL_DEBUG:
-		print_rich("[color=magenta][PORTAL DEBUG] scene change done at %d ms[/color]" % Time.get_ticks_msec())
+		print_rich("[color=magenta][PORTAL DEBUG] scene swap called at %d ms[/color]" % Time.get_ticks_msec())
 
 	DebugVRAM.snapshot("after scene change")
 
@@ -198,3 +230,20 @@ func launch(data: MemoryChapterData, overlay: CanvasLayer, drawer: Control) -> v
 		await GameManager.transition_layer.portal_exit()
 
 	_launching = false
+
+func _abort_launch_revealing_world() -> void:
+	if GameManager and is_instance_valid(GameManager.transition_layer):
+		# fade and abort portal
+		await GameManager.transition_layer.portal_fade_abort(0.4)
+	
+	if NotificationManager:
+		NotificationManager.add_notification("The memory slips away... (chapter failed to load)")
+	
+	if GameManager:
+		GameManager.enter_chapter_state()
+	
+	_launching = false
+	
+	# release all preloaded references
+	_preloaded_dialogue_resource = null
+	_preloaded_balloon_scene = null
