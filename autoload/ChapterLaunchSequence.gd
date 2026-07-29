@@ -124,14 +124,13 @@ func launch(data: MemoryChapterData, overlay: CanvasLayer, drawer: Control) -> v
 	# immediately release portal_texture reference once enter finishes
 	portal_texture = null
 
-	var monologue_finished = false
-	var load_monologue_task = func():
-		if GameManager and is_instance_valid(GameManager.transition_layer):
-			await GameManager.transition_layer.play_portal_monologue(monologue_title, _preloaded_dialogue_resource, _preloaded_balloon_scene)
-		monologue_finished = true
+	# play monologue/hold during real launch
+	if GameManager and is_instance_valid(GameManager.transition_layer):
+		await GameManager.transition_layer.play_portal_monologue(monologue_title, _preloaded_dialogue_resource, _preloaded_balloon_scene)
 
-	# run monologue in background (it is awaitable)
-	load_monologue_task.call()
+	# release preloaded monologue references immediately
+	_preloaded_dialogue_resource = null
+	_preloaded_balloon_scene = null
 
 	# free the overlay immediately so it doesn't survive the scene change (hold is established)
 	if is_instance_valid(overlay):
@@ -148,7 +147,7 @@ func launch(data: MemoryChapterData, overlay: CanvasLayer, drawer: Control) -> v
 
 	DebugVRAM.snapshot("after overlay freed")
 
-	# poll load status while waiting for monologue to finish
+	# poll load status sequentially (state-based polling loop)
 	var progress = []
 	var loaded_packed_scene: PackedScene = null
 	var _load_wait_start := Time.get_ticks_msec()
@@ -176,18 +175,10 @@ func launch(data: MemoryChapterData, overlay: CanvasLayer, drawer: Control) -> v
 			return
 		await get_tree().process_frame
 
-	# wait until monologue is also finished
-	while not monologue_finished:
-		await get_tree().process_frame
-
 	if loaded_packed_scene == null:
 		push_error("ChapterLaunchSequence: loaded scene packed is null for: " + path)
 		await _abort_launch_revealing_world()
 		return
-
-	# release preloaded monologue references
-	_preloaded_dialogue_resource = null
-	_preloaded_balloon_scene = null
 
 	# switch scene
 	if loaded_packed_scene:
@@ -206,7 +197,7 @@ func launch(data: MemoryChapterData, overlay: CanvasLayer, drawer: Control) -> v
 	var current_scene = get_tree().current_scene
 	if is_instance_valid(current_scene) and current_scene.has_signal("first_visuals_ready"):
 		var ready_flag = false
-		current_scene.first_visuals_ready.connect(func(): ready_flag = true)
+		current_scene.first_visuals_ready.connect(func(): ready_flag = true, CONNECT_ONE_SHOT)
 		
 		# 5-second timeout fallback
 		var elapsed = 0.0
