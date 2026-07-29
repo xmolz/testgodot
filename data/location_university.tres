@@ -8,11 +8,10 @@
 [ext_resource type="Resource" uid="uid://bkwnupwlp84j7" path="res://data/chapter_university_4.tres" id="6_chapter4"]
 [ext_resource type="Resource" uid="uid://j60hdqi30bat" path="res://data/chapter_university_5.tres" id="7_chapter5"]
 [ext_resource type="Resource" uid="uid://cdwhaqqb1gb2j" path="res://data/chapter_university_6.tres" id="8_chapter6"]
-[ext_resource type="Texture2D" uid="uid://016j71kposwn" path="res://Memory Box Chapter Images/Locations/University.png" id="9_group_image"]
 
 [resource]
 script = ExtResource("2_ayeaq")
 group_name = "University"
-group_image = ExtResource("9_group_image")
+group_thumbnail_path = "res://Memory Box Chapter Images/Locations/University.png"
 chapters = Array[ExtResource("1_rnoe7")]([ExtResource("3_chapter1"), ExtResource("4_chapter2"), ExtResource("5_chapter3"), ExtResource("6_chapter4"), ExtResource("7_chapter5"), ExtResource("8_chapter6")])
 metadata/_custom_type_script = "uid://coccmochs1n0s"

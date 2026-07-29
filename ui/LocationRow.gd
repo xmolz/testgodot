@@ -45,7 +45,8 @@ func populate(data: MemoryGroupData):
 	self.memory_data = data
 
 	location_name_label.text = memory_data.group_name
-	location_image_rect.texture = memory_data.group_image
+	if not memory_data.group_thumbnail_path.is_empty() and ResourceLoader.exists(memory_data.group_thumbnail_path):
+		location_image_rect.texture = load(memory_data.group_thumbnail_path)
 
 	for child in chapter_list_container.get_children():
 		child.queue_free()
@@ -86,3 +87,6 @@ func _on_right_arrow_pressed():
 	var max_scroll = max(0.0, content_width - viewport_panel.size.x)
 	var target = min(max_scroll, viewport_panel.scroll_horizontal + viewport_panel.size.x)
 	create_tween().tween_property(viewport_panel, "scroll_horizontal", target, scroll_speed).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+
+func _exit_tree():
+	location_image_rect.texture = null

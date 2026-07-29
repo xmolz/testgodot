@@ -5,8 +5,9 @@ extends Resource
 # the name of the chapter displayed on the button.
 @export var chapter_name: String = "Chapter Title"
 
-# the image displayed on the button.
-@export var chapter_image: Texture2D
+# path to the button thumbnail. loaded lazily by ChapterButton and
+# released when the button leaves the tree, to keep VRAM usage low.
+@export_file("*.png", "*.jpg", "*.webp") var thumbnail_path: String = ""
 
 # the scene that will be
 @export var scene_path_to_load: String = ""

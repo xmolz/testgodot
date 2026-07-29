@@ -211,8 +211,9 @@ func _apply_data():
 	if not chapter_data.detail_image_path.is_empty():
 		loaded_texture = load(chapter_data.detail_image_path)
 		detail_image.texture = loaded_texture
-	else:
-		detail_image.texture = chapter_data.chapter_image
+	elif not chapter_data.thumbnail_path.is_empty():
+		loaded_texture = load(chapter_data.thumbnail_path)
+		detail_image.texture = loaded_texture
 		
 	_update_detail_image_height()
 

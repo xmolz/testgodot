@@ -1,12 +1,11 @@
 [gd_resource type="Resource" script_class="MemoryChapterData" format=3 uid="uid://bnm8g3a8idp2s"]
 
-[ext_resource type="Texture2D" uid="uid://dmy1iixmc7uvn" path="res://1080test1.jpg" id="1_cfeq8"]
-[ext_resource type="Script" uid="uid://bfrll5vc6bmcg" path="res://data/MemoryChapterData.gd" id="2_pwyih"]
+[ext_resource type="Script" uid="uid://bfrll5vc6bmcg" path="res://data/MemoryChapterData.gd" id="1_pwyih"]
 
 [resource]
-script = ExtResource("2_pwyih")
+script = ExtResource("1_pwyih")
 chapter_name = "A Date with Layla"
-chapter_image = ExtResource("1_cfeq8")
+thumbnail_path = "res://1080test1.jpg"
 chapter_type = 1
 chapter_description = "Sneak out to the local market after midnight for a late-night street food adventure. Be careful not to wake up the supervisor."
 content_tags = Array[String](["Placeholder Tag", "Another Tag"])

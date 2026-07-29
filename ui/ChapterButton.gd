@@ -37,7 +37,8 @@ func populate(data: MemoryChapterData):
 
 	# ////////////////////////(1. set the visuals)
 	chapter_name_label.text = chapter_data.chapter_name
-	chapter_image_rect.texture = chapter_data.chapter_image
+	if not chapter_data.thumbnail_path.is_empty() and ResourceLoader.exists(chapter_data.thumbnail_path):
+		chapter_image_rect.texture = load(chapter_data.thumbnail_path)
 
 	# if chapter is SPICY, apply pinkish-red styling
 	if chapter_data.chapter_type == MemoryChapterData.ChapterType.SPICY:
@@ -69,3 +70,6 @@ func populate(data: MemoryChapterData):
 
 	# if there's no unlock_flag, the
 	# o we don't need to do anything.
+
+func _exit_tree():
+	chapter_image_rect.texture = null
