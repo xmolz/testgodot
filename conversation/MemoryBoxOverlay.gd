@@ -16,6 +16,9 @@ var _active_drawer: Control = null
 func _ready():
 	back_button.pressed.connect(_on_back_button_pressed)
 
+	# forces shader pipeline compilation while the memory box is booting
+	_pre_warm_shader()
+
 	# ************ mobile scaling for memory box main ui
 	if OS.has_feature("mobile"):
 		# perfectly center the title
@@ -196,3 +199,20 @@ func _restore_patreon_button():
 	btn.pivot_offset = btn.size / 2.0
 	var screen_size = get_viewport().get_visible_rect().size
 	btn.position = Vector2(screen_size.x * 0.5 - (btn.size.x / 2.0), screen_size.y * 0.65 - (btn.size.y / 2.0))
+
+func _pre_warm_shader() -> void:
+	var warm_rect = TextureRect.new()
+	warm_rect.name = "PortalPreWarm"
+	warm_rect.texture = PlaceholderTexture2D.new()
+	warm_rect.texture.set_size(Vector2(2, 2))
+	var warm_mat = ShaderMaterial.new()
+	warm_mat.shader = preload("res://ui/chapter_portal.gdshader")
+	warm_rect.material = warm_mat
+	warm_rect.modulate.a = 0.0
+	add_child(warm_rect)
+	# await two process frames to force draw compile
+	await get_tree().process_frame
+	await get_tree().process_frame
+	warm_rect.material = null
+	warm_rect.queue_free()
+	warm_mat = null
