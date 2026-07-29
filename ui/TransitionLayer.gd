@@ -19,6 +19,14 @@ var _portal_rect: TextureRect = null
 var _portal_mat: ShaderMaterial = null
 var _portal_active: bool = false
 
+const IDLE_RAMP_TIME := 0.6
+const IDLE_SPIN_SPEED := 1.2
+
+var _idle_strength: float = 0.0
+var _idle_target: float = 0.0
+var _idle_angle: float = 0.0
+var _idle_breathe: float = 0.0
+
 @onready var left_shutter = get_node_or_null("LeftShutter")
 @onready var right_shutter = get_node_or_null("RightShutter")
 @onready var iris_rect = get_node_or_null("IrisColorRect")
@@ -29,6 +37,14 @@ func _ready():
 	# so it must never pause with the rest of the world.
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	open_instant()
+
+func _process(delta: float) -> void:
+	if _portal_active and is_instance_valid(_portal_rect) and _portal_mat:
+		_idle_strength = move_toward(_idle_strength, _idle_target, delta / IDLE_RAMP_TIME)
+		_idle_angle += delta * IDLE_SPIN_SPEED * _idle_strength
+		_idle_breathe = sin(_idle_angle * 1.6) * 0.15 * _idle_strength
+		_portal_mat.set_shader_parameter("idle_angle", _idle_angle)
+		_portal_mat.set_shader_parameter("idle_breathe", _idle_breathe)
 
 func open_instant():
 	# if godot runs this before
@@ -159,6 +175,11 @@ func portal_enter(texture: Texture2D, start_rect: Rect2, duration: float = 1.0) 
 	_portal_active = true
 	_set_gm_transitioning(true)
 
+	_idle_strength = 0.0
+	_idle_target = 0.0
+	_idle_angle = 0.0
+	_idle_breathe = 0.0
+
 	var vp_size: Vector2 = get_viewport().get_visible_rect().size
 
 	_portal_rect = TextureRect.new()
@@ -175,7 +196,8 @@ func portal_enter(texture: Texture2D, start_rect: Rect2, duration: float = 1.0) 
 	_portal_mat = ShaderMaterial.new()
 	_portal_mat.shader = CHAPTER_PORTAL_SHADER
 	_portal_mat.set_shader_parameter("progress", 0.0)
-	_portal_mat.set_shader_parameter("idle_strength", 0.0)
+	_portal_mat.set_shader_parameter("idle_angle", 0.0)
+	_portal_mat.set_shader_parameter("idle_breathe", 0.0)
 	_portal_mat.set_shader_parameter("aspect_correction", Vector2(maxf(vp_size.x, 1.0) / maxf(vp_size.y, 1.0), 1.0))
 	_portal_rect.material = _portal_mat
 
@@ -196,6 +218,9 @@ func portal_enter(texture: Texture2D, start_rect: Rect2, duration: float = 1.0) 
 	grow.set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_IN)
 	grow.tween_property(_portal_rect, "position", Vector2.ZERO, duration * PORTAL_GROW_FRACTION)
 	grow.tween_property(_portal_rect, "size", vp_size, duration * PORTAL_GROW_FRACTION)
+	grow.chain().tween_callback(func():
+		_idle_target = 1.0
+	)
 
 	# phase b: start the warp before the growth finishes so the two read as one motion.
 	await get_tree().create_timer(duration * PORTAL_WARP_START_FRACTION).timeout
@@ -207,11 +232,6 @@ func portal_enter(texture: Texture2D, start_rect: Rect2, duration: float = 1.0) 
 	var warp = create_tween().bind_node(_portal_rect)
 	warp.tween_property(_portal_mat, "shader_parameter/progress", PORTAL_HOLD_PROGRESS, duration * PORTAL_WARP_FRACTION)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-		
-	# tween idle_strength 0 -> 1 near the end
-	var idle_tween = create_tween().bind_node(_portal_rect)
-	idle_tween.tween_property(_portal_mat, "shader_parameter/idle_strength", 1.0, duration * PORTAL_WARP_FRACTION)\
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
 	await warp.finished
 
@@ -220,8 +240,9 @@ func portal_exit(duration: float = 0.8) -> void:
 		portal_abort()
 		return
 
-	var exit_tween = create_tween().set_parallel(true).bind_node(_portal_rect)
-	exit_tween.tween_property(_portal_mat, "shader_parameter/idle_strength", 0.0, duration * 0.5)
+	_idle_target = 0.0
+
+	var exit_tween = create_tween().bind_node(_portal_rect)
 	exit_tween.tween_property(_portal_mat, "shader_parameter/progress", 1.0, duration)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 	await exit_tween.finished
