@@ -32,6 +32,8 @@ func launch(data: MemoryChapterData, overlay: CanvasLayer, drawer: Control) -> v
 		print_rich("[color=magenta][PORTAL DEBUG] loads completed at %d ms[/color]" % Time.get_ticks_msec())
 
 	var path = data.scene_path_to_load
+	var intro_path = data.intro_overlay_path
+	var has_intro_overlay = false
 
 	# Pre-flight check: if non-empty path does not exist, fall back to empty path test behavior!
 	var real_path_exists = false
@@ -41,6 +43,16 @@ func launch(data: MemoryChapterData, overlay: CanvasLayer, drawer: Control) -> v
 			ResourceLoader.load_threaded_request(path)
 			if PORTAL_DEBUG:
 				print_rich("[color=magenta][PORTAL DEBUG] scene load requested: %s at %d ms[/color]" % [path, Time.get_ticks_msec()])
+			
+			# Front-load intro overlay if defined
+			if not intro_path.strip_edges().is_empty():
+				if ResourceLoader.exists(intro_path):
+					has_intro_overlay = true
+					ResourceLoader.load_threaded_request(intro_path)
+					if PORTAL_DEBUG:
+						print_rich("[color=magenta][PORTAL DEBUG] intro overlay load requested: %s at %d ms[/color]" % [intro_path, Time.get_ticks_msec()])
+				else:
+					push_warning("ChapterLaunchSequence: intro overlay path '%s' does not exist." % intro_path)
 		else:
 			push_error("ChapterLaunchSequence: scene path '%s' does not exist! Falling back to test-slice behavior." % path)
 			path = "" # forces empty path test-slice fallback branch
@@ -180,6 +192,25 @@ func launch(data: MemoryChapterData, overlay: CanvasLayer, drawer: Control) -> v
 		await _abort_launch_revealing_world()
 		return
 
+	# Load intro overlay scene if requested and registered
+	var loaded_intro_scene: PackedScene = null
+	if has_intro_overlay:
+		var _intro_wait_start := Time.get_ticks_msec()
+		while true:
+			var status = ResourceLoader.load_threaded_get_status(intro_path)
+			if status == ResourceLoader.THREAD_LOAD_LOADED:
+				loaded_intro_scene = ResourceLoader.load_threaded_get(intro_path)
+				break
+			elif status == ResourceLoader.THREAD_LOAD_FAILED or status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+				push_warning("ChapterLaunchSequence: intro overlay load failed (status %d) for: %s" % [status, intro_path])
+				has_intro_overlay = false
+				break
+			elif Time.get_ticks_msec() - _intro_wait_start > 10000:
+				push_warning("ChapterLaunchSequence: intro overlay load timed out.")
+				has_intro_overlay = false
+				break
+			await get_tree().process_frame
+
 	# switch scene
 	if loaded_packed_scene:
 		get_tree().change_scene_to_packed(loaded_packed_scene)
@@ -193,11 +224,28 @@ func launch(data: MemoryChapterData, overlay: CanvasLayer, drawer: Control) -> v
 
 	DebugVRAM.snapshot("after scene change")
 
-	# ready gate: await first_visuals_ready with 5s timeout or await one extra frame
-	var current_scene = get_tree().current_scene
-	if is_instance_valid(current_scene) and current_scene.has_signal("first_visuals_ready"):
+	# instantiate and display intro overlay if loaded
+	var intro_instance: Node = null
+	var intro_conversation_finished = false
+	if has_intro_overlay and loaded_intro_scene:
+		intro_instance = loaded_intro_scene.instantiate()
+		get_tree().root.add_child.call_deferred(intro_instance)
+		
+		# Connect to conversation_finished one-shot to avoid race
+		intro_instance.conversation_finished.connect(func(_res):
+			intro_conversation_finished = true
+		, CONNECT_ONE_SHOT)
+		
+		loaded_intro_scene = null # Release Pack reference
+		
+		if PORTAL_DEBUG:
+			print_rich("[color=magenta][PORTAL DEBUG] intro overlay shown at %d ms[/color]" % Time.get_ticks_msec())
+
+	# ready gate: await first_visuals_ready on the correct target (intro overlay if present, else current scene)
+	var ready_target = intro_instance if is_instance_valid(intro_instance) else get_tree().current_scene
+	if is_instance_valid(ready_target) and ready_target.has_signal("first_visuals_ready"):
 		var ready_flag = false
-		current_scene.first_visuals_ready.connect(func(): ready_flag = true, CONNECT_ONE_SHOT)
+		ready_target.first_visuals_ready.connect(func(): ready_flag = true, CONNECT_ONE_SHOT)
 		
 		# 5-second timeout fallback
 		var elapsed = 0.0
@@ -207,18 +255,29 @@ func launch(data: MemoryChapterData, overlay: CanvasLayer, drawer: Control) -> v
 	else:
 		await get_tree().process_frame
 
-	# reset interaction state
-	if GameManager:
-		GameManager.enter_chapter_state()
-
-	# TODO: reverse portal (chapter -> main) hooks in here.
-
 	# portal_exit started
 	if PORTAL_DEBUG:
 		print_rich("[color=magenta][PORTAL DEBUG] portal_exit called at %d ms[/color]" % Time.get_ticks_msec())
 
 	if GameManager and is_instance_valid(GameManager.transition_layer):
 		await GameManager.transition_layer.portal_exit()
+
+	# Handle intro conversation phase sequence
+	if is_instance_valid(intro_instance):
+		# wait until conversation is finished
+		while not intro_conversation_finished:
+			await get_tree().process_frame
+		
+		if PORTAL_DEBUG:
+			print_rich("[color=magenta][PORTAL DEBUG] intro conversation finished at %d ms[/color]" % Time.get_ticks_msec())
+			
+		# release player control now that dialogue is done
+		if GameManager:
+			GameManager.enter_chapter_state()
+	else:
+		# normal behavior: release control immediately
+		if GameManager:
+			GameManager.enter_chapter_state()
 
 	_launching = false
 

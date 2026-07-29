@@ -43,3 +43,8 @@ enum ChapterType { STORY, SPICY }
 # title inside dialogue/chapter_launch.dialogue played over the portal swirl
 # while the chapter loads. empty = no monologue (minimum hold still applies).
 @export var launch_dialogue_title: String = ""
+
+# optional conversation overlay scene (an AdvancedConversationOverlay variant)
+# played over the level right after the portal, before control is handed to the
+# player. loaded on demand. empty = straight into the level.
+@export_file("*.tscn") var intro_overlay_path: String = ""
