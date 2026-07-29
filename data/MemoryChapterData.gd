@@ -30,7 +30,7 @@ enum ChapterType { STORY, SPICY }
 
 # path to a large detail image for the drawer. loaded on demand and
 # freed when the drawer closes, to keep VRAM usage low. if empty,
-# the drawer falls back to chapter_image.
+# the drawer falls back to thumbnail_path.
 @export_file("*.png", "*.jpg", "*.webp") var detail_image_path: String = ""
 
 # optional content tags shown below the description in the detail
