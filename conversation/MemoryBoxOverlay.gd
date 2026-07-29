@@ -12,7 +12,6 @@ const ADVANCED_OVERLAY_SCENE = preload("res://conversation/AdvancedConversationO
 const ChapterDetailDrawerScene = preload("res://ui/ChapterDetailDrawer.tscn")
 
 var _active_drawer: Control = null
-var _launching: bool = false
 
 func _ready():
 	back_button.pressed.connect(_on_back_button_pressed)
@@ -91,76 +90,8 @@ func _on_chapter_selected(data: MemoryChapterData):
 		# Open when ready in the tree
 		_active_drawer.ready.connect(func(): _active_drawer.open())
 
-# TODO: replace with ChapterLaunchSequence (transition shader + dialogue + CG preload pipeline). Keep it minimal — it is a seam, not the final system.
 func _launch_chapter(data: MemoryChapterData):
-	if _launching:
-		return
-	_launching = true
-
-	# ***** phase 1: portal transition *****
-	await _play_chapter_portal_phase()
-
-	var path = data.scene_path_to_load
-	if path.is_empty():
-		if NotificationManager:
-			NotificationManager.add_notification("This chapter does not have a scene path assigned yet!")
-		else:
-			print("MemoryBoxOverlay: No scene path assigned for chapter ", data.chapter_name)
-		return
-		
-	# Start threaded background load
-	ResourceLoader.load_threaded_request(path)
-	
-	if is_instance_valid(_active_drawer):
-		_active_drawer.close()
-		
-	# Poll for completion in a process frame loop
-	var progress = []
-	while true:
-		var status = ResourceLoader.load_threaded_get_status(path, progress)
-		if status == ResourceLoader.THREAD_LOAD_LOADED:
-			var packed_scene = ResourceLoader.load_threaded_get(path)
-			if packed_scene:
-				get_tree().change_scene_to_packed(packed_scene)
-			break
-		elif status == ResourceLoader.THREAD_LOAD_FAILED or status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
-			push_error("MemoryBoxOverlay: Threaded load failed for path: " + path)
-			break
-		await get_tree().process_frame
-
-# grabs the drawer art, fades the memory box out under it, and hands the art to the
-# transition layer to grow and warp. returns once the portal has played out.
-func _play_chapter_portal_phase() -> void:
-	# grab the art and its screen rect BEFORE close() drops the drawer's reference.
-	var portal_texture: Texture2D = null
-	var start_rect: Rect2 = Rect2()
-	if is_instance_valid(_active_drawer):
-		if _active_drawer.has_method("get_detail_texture"):
-			portal_texture = _active_drawer.get_detail_texture()
-		if _active_drawer.has_method("get_detail_image_global_rect"):
-			start_rect = _active_drawer.get_detail_image_global_rect()
-
-	# fade the memory box and the drawer chrome out under the growing art.
-	var fade = create_tween().set_parallel(true)
-	fade.tween_property(panel, "modulate:a", 0.0, 0.35)
-	if is_instance_valid(_active_drawer):
-		fade.tween_property(_active_drawer, "modulate:a", 0.0, 0.35)
-
-	if GameManager and is_instance_valid(GameManager.transition_layer) \
-			and GameManager.transition_layer.has_method("play_chapter_portal"):
-		await GameManager.transition_layer.play_chapter_portal(portal_texture, start_rect)
-	else:
-		push_warning("MemoryBoxOverlay: transition_layer has no play_chapter_portal(); portal skipped.")
-
-	if is_instance_valid(_active_drawer):
-		_active_drawer.close()
-
-	# ***** TEST SLICE ONLY: restore the memory box so the portal can be replayed
-	# without restarting the game. delete once the CG phase takes over. *****
-	panel.modulate.a = 1.0
-	_launching = false
-	if NotificationManager:
-		NotificationManager.add_notification("Portal complete — chapter launch pipeline not built yet.")
+	ChapterLaunchSequence.launch(data, self, _active_drawer)
 
 # -----------(relaxed retro boot sequence)
 func play_boot_sequence():

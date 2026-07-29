@@ -1008,6 +1008,17 @@ func exit_to_world_state():
 
 	get_tree().paused = false
 	Events.interaction_state_changed.emit(current_interaction_state)
+
+func enter_chapter_state():
+	# TODO(design): developer needs to flesh out any additional chapter initialization/state setups
+	current_interaction_state = InteractionState.WORLD
+	
+	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
+		player_node.set_can_move(true)
+		
+	persisting_verb_id = ""
+	_is_player_walking = false
+	Events.interaction_state_changed.emit(current_interaction_state)
 #endregion
 #endregion
 
