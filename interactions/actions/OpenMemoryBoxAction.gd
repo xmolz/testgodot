@@ -2,12 +2,10 @@
 class_name OpenMemoryBoxAction
 extends Action
 
-const MemoryBoxScene = preload("res://conversation/MemoryBoxOverlay.tscn")
+const MEMORY_BOX_SCENE_PATH = "res://conversation/MemoryBoxOverlay.tscn"
 
 func execute(interactable_node: Interactable) -> Variant:
-	if not MemoryBoxScene:
-		push_warning("OpenMemoryBoxAction failed: Scene could not be loaded.")
-		return true
+	ResourceLoader.load_threaded_request(MEMORY_BOX_SCENE_PATH)
 
 	# ///////////////////[1. enter ui state before fade]
 	# this instantly hides the ui and locks player movement
@@ -20,8 +18,24 @@ func execute(interactable_node: Interactable) -> Variant:
 	if GameManager and GameManager.transition_layer:
 		await GameManager.transition_layer.play_iris_close(1.0)
 
+	# Poll for completion of the threaded load
+	var progress = []
+	while true:
+		var status = ResourceLoader.load_threaded_get_status(MEMORY_BOX_SCENE_PATH, progress)
+		if status == ResourceLoader.THREAD_LOAD_LOADED:
+			break
+		elif status == ResourceLoader.THREAD_LOAD_FAILED or status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+			push_error("OpenMemoryBoxAction: Threaded load failed for path: " + MEMORY_BOX_SCENE_PATH)
+			return true
+		await interactable_node.get_tree().process_frame
+
+	var packed_scene = ResourceLoader.load_threaded_get(MEMORY_BOX_SCENE_PATH)
+	if not packed_scene:
+		push_warning("OpenMemoryBoxAction failed: Scene could not be loaded from " + MEMORY_BOX_SCENE_PATH)
+		return true
+
 	# spawn the ui safely (while screen is black)
-	var instance = MemoryBoxScene.instantiate()
+	var instance = packed_scene.instantiate()
 	interactable_node.get_tree().root.add_child.call_deferred(instance)
 
 	await interactable_node.get_tree().process_frame
