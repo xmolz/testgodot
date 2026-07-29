@@ -5,6 +5,7 @@ uniform float progress : hint_range(0.0, 1.0) = 0.0;
 // dynamic continuous idle rotation/breathing uniforms
 uniform float idle_angle = 0.0;
 uniform float idle_breathe = 0.0;
+uniform float idle_swirl_boost = 0.0;
 // keeps the portal circular on a non-square rect. set from gdscript.
 uniform vec2 aspect_correction = vec2(1.0, 1.0);
 // how hard the image spirals as it collapses inward.
@@ -27,7 +28,7 @@ void fragment() {
 	float ang = atan(centred.y, centred.x);
 
 	// spiral harder toward the centre than at the edges.
-	ang += p * swirl_strength * (1.0 - clamp(r * 1.4, 0.0, 1.0));
+	ang += p * swirl_strength * (1.0 + idle_swirl_boost) * (1.0 - clamp(r * 1.4, 0.0, 1.0));
 
 	// continuous idle swirl rotation & breathing drift
 	ang += (idle_angle + idle_breathe) * (1.0 - clamp(r * 1.4, 0.0, 1.0));

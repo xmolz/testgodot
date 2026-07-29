@@ -43,10 +43,10 @@ Settings="*res://autoload/settings.gd"
 Verbs="*res://autoload/verbs.gd"
 SceneDirector="*res://autoload/scene_director.gd"
 GameManager="*res://autoload/GameManager.tscn"
-ChapterLaunchSequence="*res://autoload/ChapterLaunchSequence.gd"
 ConversationEventManager="*res://autoload/ConversationEventManager.gd"
 FallbackManager="*res://autoload/FallbackManager.gd"
 NotificationManager="*res://autoload/NotificationManager.tscn"
+ChapterLaunchSequence="*res://autoload/ChapterLaunchSequence.gd"
 
 [dialogue_manager]
 
@@ -108,7 +108,7 @@ toggle_fullscreen={
 
 [internationalization]
 
-locale/translations_pot_files=PackedStringArray("res://dialogue/talkto.dialogue", "res://dialogue/intro.dialogue", "res://dialogue/flash_dialogue.dialogue", "res://dialogue/alyssa_marketing.dialogue", "res://dialogue/AIda.dialogue", "res://dialogue/aida_dialogue_hub.dialogue", "res://dialogue/aida_toilet_assistance.dialogue", "res://dialogue/dev_cta.dialogue", "res://dialogue/examinables.dialogue", "res://dialogue/form_related_dialogue.dialogue", "res://dialogue/generic_lines.dialogue", "res://dialogue/giveables.dialogue", "res://dialogue/hints.dialogue", "res://dialogue/hints_adventure.dialogue", "res://dialogue/mcbucket_give_tp.dialogue", "res://dialogue/mcbucket_unified.dialogue", "res://dialogue/testdialogue.dialogue", "res://dialogue/unflashables.dialogue", "res://dialogue/unpickables.dialogue", "res://dialogue/untalkables.dialogue", "res://dialogue/unusables.dialogue", "res://dialogue/use_item_accompanying_dialogue.dialogue", "res://dialogue/sergey_dialogue_1.dialogue", "res://dialogue/sergey_dialogue_2.dialogue")
+locale/translations_pot_files=PackedStringArray("res://dialogue/talkto.dialogue", "res://dialogue/intro.dialogue", "res://dialogue/flash_dialogue.dialogue", "res://dialogue/alyssa_marketing.dialogue", "res://dialogue/AIda.dialogue", "res://dialogue/aida_dialogue_hub.dialogue", "res://dialogue/aida_toilet_assistance.dialogue", "res://dialogue/dev_cta.dialogue", "res://dialogue/examinables.dialogue", "res://dialogue/form_related_dialogue.dialogue", "res://dialogue/generic_lines.dialogue", "res://dialogue/giveables.dialogue", "res://dialogue/hints.dialogue", "res://dialogue/hints_adventure.dialogue", "res://dialogue/mcbucket_give_tp.dialogue", "res://dialogue/mcbucket_unified.dialogue", "res://dialogue/testdialogue.dialogue", "res://dialogue/unflashables.dialogue", "res://dialogue/unpickables.dialogue", "res://dialogue/untalkables.dialogue", "res://dialogue/unusables.dialogue", "res://dialogue/use_item_accompanying_dialogue.dialogue", "res://dialogue/sergey_dialogue_1.dialogue", "res://dialogue/sergey_dialogue_2.dialogue", "res://dialogue/chapter_launch.dialogue")
 
 [physics]
 

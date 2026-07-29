@@ -19,13 +19,17 @@ var _portal_rect: TextureRect = null
 var _portal_mat: ShaderMaterial = null
 var _portal_active: bool = false
 
-const IDLE_RAMP_TIME := 0.6
-const IDLE_SPIN_SPEED := 1.2
+# ----------- portal churn tuning knobs (developer: tune by feel)
+const IDLE_SPIN_SPEED: float = 3.0     # was 1.2 — radians/sec at full churn
+const IDLE_BREATHE_AMOUNT: float = 0.25  # was 0.15 — periodic wobble amplitude
+const IDLE_SWIRL_BOOST: float = 0.30   # extra vortex pull at full churn (0..1)
+const IDLE_RAMP_TIME: float = 0.6
 
 var _idle_strength: float = 0.0
 var _idle_target: float = 0.0
 var _idle_angle: float = 0.0
 var _idle_breathe: float = 0.0
+var _debug_phase_tag: String = ""
 
 @onready var left_shutter = get_node_or_null("LeftShutter")
 @onready var right_shutter = get_node_or_null("RightShutter")
@@ -42,9 +46,14 @@ func _process(delta: float) -> void:
 	if _portal_active and is_instance_valid(_portal_rect) and _portal_mat:
 		_idle_strength = move_toward(_idle_strength, _idle_target, delta / IDLE_RAMP_TIME)
 		_idle_angle += delta * IDLE_SPIN_SPEED * _idle_strength
-		_idle_breathe = sin(_idle_angle * 1.6) * 0.15 * _idle_strength
+		_idle_breathe = sin(_idle_angle * 1.6) * IDLE_BREATHE_AMOUNT * _idle_strength
 		_portal_mat.set_shader_parameter("idle_angle", _idle_angle)
 		_portal_mat.set_shader_parameter("idle_breathe", _idle_breathe)
+		_portal_mat.set_shader_parameter("idle_swirl_boost", IDLE_SWIRL_BOOST * _idle_strength)
+		
+		# Task D Frame-spike watcher
+		if ChapterLaunchSequence.PORTAL_DEBUG and not _debug_phase_tag.is_empty() and delta > 0.025:
+			print_rich("[color=red][PORTAL SPIKE] %s: %.1f ms[/color]" % [_debug_phase_tag, delta * 1000.0])
 
 func open_instant():
 	# if godot runs this before
@@ -162,7 +171,10 @@ func _set_gm_transitioning(is_active: bool):
 # awaited directly by its caller, so it deliberately does NOT emit transition_halfway or
 # transition_finished — emitting those would wake any unrelated coroutine awaiting them.
 func portal_enter(texture: Texture2D, start_rect: Rect2, duration: float = 1.0) -> void:
-	DebugVRAM.snapshot("portal_enter start")
+	_debug_phase_tag = "portal_enter"
+	if ChapterLaunchSequence.PORTAL_DEBUG:
+		print_rich("[color=magenta][PORTAL DEBUG] portal_enter called at %d ms[/color]" % Time.get_ticks_msec())
+
 	if _portal_active:
 		push_warning("TransitionLayer: portal_enter called when already active!")
 		return
@@ -205,6 +217,10 @@ func portal_enter(texture: Texture2D, start_rect: Rect2, duration: float = 1.0) 
 	add_child.call_deferred(_portal_rect)
 	await get_tree().process_frame
 
+	_debug_phase_tag = "portal_rect_added"
+	if ChapterLaunchSequence.PORTAL_DEBUG:
+		print_rich("[color=magenta][PORTAL DEBUG] portal rect added to tree at %d ms[/color]" % Time.get_ticks_msec())
+
 	if not is_instance_valid(_portal_rect):
 		_portal_active = false
 		_set_gm_transitioning(false)
@@ -212,6 +228,10 @@ func portal_enter(texture: Texture2D, start_rect: Rect2, duration: float = 1.0) 
 
 	# *****************((future audio spot: a rising portal whoosh goes here!))
 	# /////////// if soundmanager: soundmanager.play_sfx("portal_open")
+
+	_debug_phase_tag = "grow_started"
+	if ChapterLaunchSequence.PORTAL_DEBUG:
+		print_rich("[color=magenta][PORTAL DEBUG] grow started at %d ms[/color]" % Time.get_ticks_msec())
 
 	# phase a: grow the art from the drawer's rect to fill the screen.
 	var grow = create_tween().set_parallel(true).bind_node(_portal_rect)
@@ -229,13 +249,26 @@ func portal_enter(texture: Texture2D, start_rect: Rect2, duration: float = 1.0) 
 		_set_gm_transitioning(false)
 		return
 
+	_debug_phase_tag = "warp_started"
+	if ChapterLaunchSequence.PORTAL_DEBUG:
+		print_rich("[color=magenta][PORTAL DEBUG] warp started at %d ms[/color]" % Time.get_ticks_msec())
+
 	var warp = create_tween().bind_node(_portal_rect)
 	warp.tween_property(_portal_mat, "shader_parameter/progress", PORTAL_HOLD_PROGRESS, duration * PORTAL_WARP_FRACTION)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 
 	await warp.finished
 
+	_debug_phase_tag = "hold_established"
+	if ChapterLaunchSequence.PORTAL_DEBUG:
+		print_rich("[color=magenta][PORTAL DEBUG] hold established at %d ms[/color]" % Time.get_ticks_msec())
+	DebugVRAM.snapshot("portal_hold_established")
+
 func portal_exit(duration: float = 0.8) -> void:
+	_debug_phase_tag = "portal_exit"
+	if ChapterLaunchSequence.PORTAL_DEBUG:
+		print_rich("[color=magenta][PORTAL DEBUG] portal_exit called at %d ms[/color]" % Time.get_ticks_msec())
+
 	if not is_instance_valid(_portal_rect) or not is_instance_valid(_portal_mat):
 		portal_abort()
 		return
@@ -261,6 +294,7 @@ func portal_exit(duration: float = 0.8) -> void:
 
 func portal_abort() -> void:
 	_portal_active = false
+	_debug_phase_tag = ""
 	# vram discipline: drop every reference to the art before the node frees.
 	if is_instance_valid(_portal_rect):
 		_portal_rect.texture = null
@@ -269,31 +303,36 @@ func portal_abort() -> void:
 	_portal_rect = null
 	_portal_mat = null
 	_set_gm_transitioning(false)
+	if ChapterLaunchSequence.PORTAL_DEBUG:
+		print_rich("[color=magenta][PORTAL DEBUG] cleanup done at %d ms[/color]" % Time.get_ticks_msec())
 	DebugVRAM.snapshot("portal_exit end")
 
 const PORTAL_MIN_HOLD := 0.8
 const CHAPTER_LAUNCH_DIALOGUE_PATH := "res://dialogue/chapter_launch.dialogue"
 const CONVERSATION_BALLOON_SCENE := "res://conversation/conversationballoon.tscn"
 
-func play_portal_monologue(dialogue_title: String) -> void:
+func play_portal_monologue(dialogue_title: String, preloaded_resource: DialogueResource = null, preloaded_scene: PackedScene = null) -> void:
 	if dialogue_title.strip_edges().is_empty():
 		await get_tree().create_timer(PORTAL_MIN_HOLD).timeout
 		return
 
-	if not ResourceLoader.exists(CHAPTER_LAUNCH_DIALOGUE_PATH):
-		push_warning("TransitionLayer: Chapter launch dialogue file not found.")
-		await get_tree().create_timer(PORTAL_MIN_HOLD).timeout
-		return
+	var dialogue_resource = preloaded_resource
+	if not dialogue_resource:
+		if not ResourceLoader.exists(CHAPTER_LAUNCH_DIALOGUE_PATH):
+			push_warning("TransitionLayer: Chapter launch dialogue file not found.")
+			await get_tree().create_timer(PORTAL_MIN_HOLD).timeout
+			return
+		dialogue_resource = load(CHAPTER_LAUNCH_DIALOGUE_PATH)
 
-	var dialogue_resource = load(CHAPTER_LAUNCH_DIALOGUE_PATH)
 	if not dialogue_resource or not dialogue_resource.titles.has(dialogue_title):
 		push_warning("TransitionLayer: Dialogue title '%s' not found in chapter_launch.dialogue." % dialogue_title)
 		await get_tree().create_timer(PORTAL_MIN_HOLD).timeout
 		return
 
 	# Spawn the standard balloon
+	var balloon_to_use = preloaded_scene if preloaded_scene else CONVERSATION_BALLOON_SCENE
 	var balloon = DialogueManager.show_dialogue_balloon_scene(
-		CONVERSATION_BALLOON_SCENE,
+		balloon_to_use,
 		dialogue_resource,
 		dialogue_title
 	)
@@ -306,7 +345,15 @@ func play_portal_monologue(dialogue_title: String) -> void:
 
 		balloon.process_mode = Node.PROCESS_MODE_ALWAYS
 
+	_debug_phase_tag = "balloon_shown"
+	if ChapterLaunchSequence.PORTAL_DEBUG:
+		print_rich("[color=magenta][PORTAL DEBUG] balloon shown at %d ms[/color]" % Time.get_ticks_msec())
+
 	await DialogueManager.dialogue_ended
+
+	_debug_phase_tag = "dialogue_ended"
+	if ChapterLaunchSequence.PORTAL_DEBUG:
+		print_rich("[color=magenta][PORTAL DEBUG] dialogue ended at %d ms[/color]" % Time.get_ticks_msec())
 
 	if is_instance_valid(balloon):
 		balloon.queue_free()
