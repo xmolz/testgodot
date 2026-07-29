@@ -24,12 +24,15 @@ const IDLE_SPIN_SPEED: float = 3.0     # was 1.2 — radians/sec at full churn
 const IDLE_BREATHE_AMOUNT: float = 0.25  # was 0.15 — periodic wobble amplitude
 const IDLE_SWIRL_BOOST: float = 0.30   # extra vortex pull at full churn (0..1)
 const IDLE_RAMP_TIME: float = 0.6
+const IDLE_FLOW_SPEED: float = 0.07  # uv radius per second of outward wash at full churn
+const IDLE_FLOW_MAX: float = 0.45    # cap on total wash. raise for a harder drain.
 const PORTAL_SPIKE_THRESHOLD_MS := 40.0
 
 var _idle_strength: float = 0.0
 var _idle_target: float = 0.0
 var _idle_angle: float = 0.0
 var _idle_breathe: float = 0.0
+var _idle_flow: float = 0.0
 var _debug_phase_tag: String = ""
 var _active_balloon: Node = null
 
@@ -49,8 +52,11 @@ func _process(delta: float) -> void:
 		_idle_strength = move_toward(_idle_strength, _idle_target, delta / IDLE_RAMP_TIME)
 		_idle_angle += delta * IDLE_SPIN_SPEED * _idle_strength
 		_idle_breathe = sin(_idle_angle * 1.6) * IDLE_BREATHE_AMOUNT * _idle_strength
+		_idle_flow = min(_idle_flow + delta * IDLE_FLOW_SPEED * _idle_strength, IDLE_FLOW_MAX)
 		_portal_mat.set_shader_parameter("idle_angle", _idle_angle)
 		_portal_mat.set_shader_parameter("idle_breathe", _idle_breathe)
+		_portal_mat.set_shader_parameter("idle_flow", _idle_flow)
+		_portal_mat.set_shader_parameter("idle_strength", _idle_strength)
 		_portal_mat.set_shader_parameter("idle_swirl_boost", IDLE_SWIRL_BOOST * _idle_strength)
 		
 		# Task D Frame-spike watcher
@@ -191,6 +197,7 @@ func portal_enter(texture: Texture2D, start_rect: Rect2, duration: float = 1.0) 
 	_idle_target = 0.0
 	_idle_angle = 0.0
 	_idle_breathe = 0.0
+	_idle_flow = 0.0
 
 	var vp_size: Vector2 = get_viewport().get_visible_rect().size
 
@@ -210,6 +217,8 @@ func portal_enter(texture: Texture2D, start_rect: Rect2, duration: float = 1.0) 
 	_portal_mat.set_shader_parameter("progress", 0.0)
 	_portal_mat.set_shader_parameter("idle_angle", 0.0)
 	_portal_mat.set_shader_parameter("idle_breathe", 0.0)
+	_portal_mat.set_shader_parameter("idle_flow", 0.0)
+	_portal_mat.set_shader_parameter("idle_strength", 0.0)
 	_portal_mat.set_shader_parameter("aspect_correction", Vector2(maxf(vp_size.x, 1.0) / maxf(vp_size.y, 1.0), 1.0))
 	_portal_rect.material = _portal_mat
 
