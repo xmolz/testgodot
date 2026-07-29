@@ -4,6 +4,15 @@ extends CanvasLayer
 signal transition_halfway 
 signal transition_finished
 
+const CHAPTER_PORTAL_SHADER = preload("res://ui/chapter_portal.gdshader")
+
+# portal pacing, as fractions of the total duration passed to play_chapter_portal().
+# grow and warp deliberately overlap so it reads as one motion rather than two events.
+const PORTAL_GROW_FRACTION: float = 0.40
+const PORTAL_WARP_START_FRACTION: float = 0.32
+const PORTAL_WARP_FRACTION: float = 0.53
+const PORTAL_HOLD_FRACTION: float = 0.15
+
 @onready var left_shutter = get_node_or_null("LeftShutter")
 @onready var right_shutter = get_node_or_null("RightShutter")
 @onready var iris_rect = get_node_or_null("IrisColorRect")
@@ -126,3 +135,80 @@ func _set_gm_transitioning(is_active: bool):
 			GameManager.refresh_hovered_object()
 		if GameManager.has_method("update_sentence_line_ui"):
 			GameManager.update_sentence_line_ui()
+
+# ************[3. chapter portal (grows the chapter art, then warps it into a portal)]
+# awaited directly by its caller, so it deliberately does NOT emit transition_halfway or
+# transition_finished — emitting those would wake any unrelated coroutine awaiting them.
+func play_chapter_portal(texture: Texture2D, start_rect: Rect2, duration: float = 1.6) -> void:
+	if texture == null:
+		# nothing to grow. fall back to the iris so the caller still gets a transition.
+		await play_iris_close(duration * 0.5)
+		return
+
+	_set_gm_transitioning(true)
+
+	var vp_size: Vector2 = get_viewport().get_visible_rect().size
+
+	var portal_rect := TextureRect.new()
+	portal_rect.name = "ChapterPortalRect"
+	portal_rect.texture = texture
+	portal_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	portal_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	portal_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	# this layer runs while the tree is paused, so the portal node must too.
+	portal_rect.process_mode = Node.PROCESS_MODE_ALWAYS
+	portal_rect.position = start_rect.position
+	portal_rect.size = start_rect.size
+
+	var mat: ShaderMaterial = ShaderMaterial.new()
+	mat.shader = CHAPTER_PORTAL_SHADER
+	mat.set_shader_parameter("progress", 0.0)
+	mat.set_shader_parameter("aspect_correction", Vector2(maxf(vp_size.x, 1.0) / maxf(vp_size.y, 1.0), 1.0))
+	portal_rect.material = mat
+
+	# begin_pressed fires during input processing, so never add_child directly here.
+	add_child.call_deferred(portal_rect)
+	await get_tree().process_frame
+
+	if not is_instance_valid(portal_rect):
+		_set_gm_transitioning(false)
+		return
+
+	# *****************((future audio spot: a rising portal whoosh goes here!))
+	# /////////// if soundmanager: soundmanager.play_sfx("portal_open")
+
+	# phase a: grow the art from the drawer's rect to fill the screen.
+	var grow = create_tween().set_parallel(true).bind_node(portal_rect)
+	grow.set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_IN)
+	grow.tween_property(portal_rect, "position", Vector2.ZERO, duration * PORTAL_GROW_FRACTION)
+	grow.tween_property(portal_rect, "size", vp_size, duration * PORTAL_GROW_FRACTION)
+
+	# phase b: start the warp before the growth finishes so the two read as one motion.
+	await get_tree().create_timer(duration * PORTAL_WARP_START_FRACTION).timeout
+	if not is_instance_valid(portal_rect):
+		_set_gm_transitioning(false)
+		return
+
+	var warp = create_tween().bind_node(portal_rect)
+	warp.tween_property(mat, "shader_parameter/progress", 1.0, duration * PORTAL_WARP_FRACTION)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	await warp.finished
+
+	# phase c: hold on the flash. the CG phase's dialogue will start under this.
+	await get_tree().create_timer(duration * PORTAL_HOLD_FRACTION).timeout
+
+	# ***** TEST SLICE TAIL: fade the flash out and clean up. this whole block gets
+	# replaced by the CG hand-off once the conversation scene exists. *****
+	if is_instance_valid(portal_rect):
+		var out = create_tween().bind_node(portal_rect)
+		out.tween_property(portal_rect, "modulate:a", 0.0, 0.4)
+		await out.finished
+
+	# vram discipline: drop every reference to the art before the node frees.
+	if is_instance_valid(portal_rect):
+		portal_rect.texture = null
+		portal_rect.material = null
+		portal_rect.queue_free()
+	mat = null
+
+	_set_gm_transitioning(false)
