@@ -24,6 +24,7 @@ const IDLE_SPIN_SPEED: float = 3.0     # was 1.2 — radians/sec at full churn
 const IDLE_BREATHE_AMOUNT: float = 0.25  # was 0.15 — periodic wobble amplitude
 const IDLE_SWIRL_BOOST: float = 0.30   # extra vortex pull at full churn (0..1)
 const IDLE_RAMP_TIME: float = 0.6
+const PORTAL_SPIKE_THRESHOLD_MS := 40.0
 
 var _idle_strength: float = 0.0
 var _idle_target: float = 0.0
@@ -172,8 +173,6 @@ func _set_gm_transitioning(is_active: bool):
 # transition_finished — emitting those would wake any unrelated coroutine awaiting them.
 func portal_enter(texture: Texture2D, start_rect: Rect2, duration: float = 1.0) -> void:
 	_debug_phase_tag = "portal_enter"
-	if ChapterLaunchSequence.PORTAL_DEBUG:
-		print_rich("[color=magenta][PORTAL DEBUG] portal_enter called at %d ms[/color]" % Time.get_ticks_msec())
 
 	if _portal_active:
 		push_warning("TransitionLayer: portal_enter called when already active!")
