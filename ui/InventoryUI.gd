@@ -91,10 +91,7 @@ func _ready():
 		GameManager.verb_changed.connect(_on_game_manager_verb_changed)
 		GameManager.verb_lock_changed.connect(_on_game_manager_verb_lock_changed)
 
-		if GameManager.has_method("get_player_inventory"):
-			_on_game_manager_inventory_updated(Inventory.get_items())
-		else:
-			print_rich("[color=orange]InventoryUI: GameManager has no get_player_inventory method.[/color]")
+		_on_game_manager_inventory_updated(Inventory.get_items())
 	else:
 		print_rich("[color=red]InventoryUI: GameManager not found![/color]")
 
