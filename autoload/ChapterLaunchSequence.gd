@@ -35,7 +35,7 @@ func launch(data: MemoryChapterData, overlay: CanvasLayer, drawer: Control) -> v
 
 		# play monologue/hold during test slice
 		if GameManager and is_instance_valid(GameManager.transition_layer):
-			await GameManager.transition_layer.play_portal_monologue(data.launch_monologue)
+			await GameManager.transition_layer.play_portal_monologue(data.launch_dialogue_title)
 
 		# portal exit
 		if GameManager and is_instance_valid(GameManager.transition_layer):
@@ -72,7 +72,7 @@ func launch(data: MemoryChapterData, overlay: CanvasLayer, drawer: Control) -> v
 	var monologue_finished = false
 	var load_monologue_task = func():
 		if GameManager and is_instance_valid(GameManager.transition_layer):
-			await GameManager.transition_layer.play_portal_monologue(data.launch_monologue)
+			await GameManager.transition_layer.play_portal_monologue(data.launch_dialogue_title)
 		monologue_finished = true
 
 	# run monologue in background (it is awaitable)

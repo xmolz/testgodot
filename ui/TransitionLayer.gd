@@ -272,103 +272,41 @@ func portal_abort() -> void:
 	DebugVRAM.snapshot("portal_exit end")
 
 const PORTAL_MIN_HOLD := 0.8
+const CHAPTER_LAUNCH_DIALOGUE_PATH := "res://dialogue/chapter_launch.dialogue"
+const CONVERSATION_BALLOON_SCENE := "res://conversation/conversationballoon.tscn"
 
-func play_portal_monologue(text: String) -> void:
-	if text.strip_edges().is_empty():
+func play_portal_monologue(dialogue_title: String) -> void:
+	if dialogue_title.strip_edges().is_empty():
 		await get_tree().create_timer(PORTAL_MIN_HOLD).timeout
 		return
 
-	# fullscreen input catcher to swallow clicks/taps
-	var catcher = Control.new()
-	catcher.name = "PortalMonologueCatcher"
-	catcher.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	catcher.mouse_filter = Control.MOUSE_FILTER_STOP
-	catcher.process_mode = Node.PROCESS_MODE_ALWAYS
-	add_child(catcher)
+	if not ResourceLoader.exists(CHAPTER_LAUNCH_DIALOGUE_PATH):
+		push_warning("TransitionLayer: Chapter launch dialogue file not found.")
+		await get_tree().create_timer(PORTAL_MIN_HOLD).timeout
+		return
 
-	# monologue label centered lower-center above portal
-	var label = Label.new()
-	label.name = "PortalMonologueLabel"
-	label.process_mode = Node.PROCESS_MODE_ALWAYS
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	
-	# style options
-	var custom_font = load("res://Fonts/VarelaRound-Regular.ttf")
-	if custom_font:
-		label.add_theme_font_override("font", custom_font)
-	
-	var is_mobile = OS.has_feature("mobile")
-	label.add_theme_font_size_override("font_size", 38 if is_mobile else 26)
-	label.add_theme_color_override("font_color", Color(0.878431, 0.980392, 1.0, 1.0)) # cyan-white
-	label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.75))
-	label.add_theme_constant_override("shadow_offset_x", 2)
-	label.add_theme_constant_override("shadow_offset_y", 2)
+	var dialogue_resource = load(CHAPTER_LAUNCH_DIALOGUE_PATH)
+	if not dialogue_resource or not dialogue_resource.titles.has(dialogue_title):
+		push_warning("TransitionLayer: Dialogue title '%s' not found in chapter_launch.dialogue." % dialogue_title)
+		await get_tree().create_timer(PORTAL_MIN_HOLD).timeout
+		return
 
-	label.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
-	# shift slightly up so it's lower-center
-	label.anchor_top = 0.70
-	label.anchor_bottom = 0.85
-	label.offset_left = 50
-	label.offset_right = -50
-
-	add_child(label)
-
-	var lines = text.split("\n")
-	var click_advanced = false
-	var skip_requested = false
-
-	# we can connect gui_input on catcher to detect click/taps
-	catcher.gui_input.connect(func(event: InputEvent):
-		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			click_advanced = true
+	# Spawn the standard balloon
+	var balloon = DialogueManager.show_dialogue_balloon_scene(
+		CONVERSATION_BALLOON_SCENE,
+		dialogue_resource,
+		dialogue_title
 	)
 
-	# we can also listen to ui_accept manually
-	# wait, can we do a custom input listener? Yes, _unhandled_input works but since catcher is a Control, gui_input is better.
-	# We can use a small loop for each line
-	for line in lines:
-		line = line.strip_edges()
-		if line.is_empty():
-			continue
+	if is_instance_valid(balloon):
+		if balloon.get_parent():
+			balloon.reparent(self)
+		else:
+			add_child(balloon)
 
-		if not is_instance_valid(label):
-			break
+		balloon.process_mode = Node.PROCESS_MODE_ALWAYS
 
-		label.text = ""
-		click_advanced = false
-		skip_requested = false
+	await DialogueManager.dialogue_ended
 
-		# Typewriter effect
-		var chars_to_show = line.length()
-		var delay_per_char = 1.0 / 30.0 # ~30 chars per second
-		
-		for i in range(1, chars_to_show + 1):
-			if not is_instance_valid(label):
-				return
-			if click_advanced or Input.is_action_just_pressed("ui_accept"):
-				label.text = line
-				click_advanced = false
-				skip_requested = true
-				break
-			label.text = line.left(i)
-			await get_tree().create_timer(delay_per_char).timeout
-
-		# Wait for click/tap or ui_accept, OR auto-advance after 3.5s
-		if not skip_requested:
-			click_advanced = false
-			var elapsed = 0.0
-			var poll_interval = 0.05
-			while elapsed < 3.5:
-				if not is_instance_valid(label):
-					return
-				if click_advanced or Input.is_action_just_pressed("ui_accept"):
-					break
-				await get_tree().create_timer(poll_interval).timeout
-				elapsed += poll_interval
-
-	# Clean up nodes
-	if is_instance_valid(label):
-		label.queue_free()
-	if is_instance_valid(catcher):
-		catcher.queue_free()
+	if is_instance_valid(balloon):
+		balloon.queue_free()

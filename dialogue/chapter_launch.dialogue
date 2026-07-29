@@ -1,0 +1,7 @@
+# res://dialogue/chapter_launch.dialogue
+# Launch monologues shown over the portal swirl, one title per chapter.
+
+~ university_2
+Player: (The night air already smells like fried garlic and bad decisions.)
+Player: (If the supervisor catches me, I'm dead. Worth it.)
+=> END

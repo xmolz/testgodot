@@ -10,4 +10,5 @@ chapter_type = 1
 chapter_description = "Sneak out to the local market after midnight for a late-night street food adventure. Be careful not to wake up the supervisor."
 content_tags = Array[String](["Placeholder Tag", "Another Tag"])
 is_optional = true
+launch_dialogue_title = "university_2"
 metadata/_custom_type_script = "uid://bfrll5vc6bmcg"
