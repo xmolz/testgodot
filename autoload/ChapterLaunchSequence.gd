@@ -81,6 +81,8 @@ func launch(data: MemoryChapterData, overlay: CanvasLayer, drawer: Control) -> v
 	# free the overlay immediately so it doesn't survive the scene change
 	if is_instance_valid(overlay):
 		overlay.queue_free()
+	
+	DebugVRAM.snapshot("after overlay freed")
 
 	# poll load status while waiting for monologue to finish
 	var progress = []
@@ -108,6 +110,8 @@ func launch(data: MemoryChapterData, overlay: CanvasLayer, drawer: Control) -> v
 	if loaded_packed_scene:
 		get_tree().change_scene_to_packed(loaded_packed_scene)
 	await get_tree().process_frame
+
+	DebugVRAM.snapshot("after scene change")
 
 	# ready gate: await first_visuals_ready with 5s timeout or await one extra frame
 	var current_scene = get_tree().current_scene

@@ -1284,6 +1284,7 @@ func _destroy_and_clear_cache():
 
 	# delete node to flush vram
 	queue_free()
+	DebugVRAM.snapshot("ACO destroyed")
 
 # *********************[engine-driven cinematic functions]
 func set_solid_background(hex_color: String, duration: float = 1.0):

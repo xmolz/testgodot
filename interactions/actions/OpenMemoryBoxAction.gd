@@ -50,4 +50,5 @@ func execute(interactable_node: Interactable) -> Variant:
 
 	print_rich("[color=cyan]OpenMemoryBoxAction: Opened the Memory Box overlay.[/color]")
 
+	DebugVRAM.snapshot("memory box opened")
 	return false

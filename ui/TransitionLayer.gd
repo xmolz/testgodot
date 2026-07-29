@@ -146,6 +146,7 @@ func _set_gm_transitioning(is_active: bool):
 # awaited directly by its caller, so it deliberately does NOT emit transition_halfway or
 # transition_finished — emitting those would wake any unrelated coroutine awaiting them.
 func portal_enter(texture: Texture2D, start_rect: Rect2, duration: float = 1.0) -> void:
+	DebugVRAM.snapshot("portal_enter start")
 	if _portal_active:
 		push_warning("TransitionLayer: portal_enter called when already active!")
 		return
@@ -247,6 +248,7 @@ func portal_abort() -> void:
 	_portal_rect = null
 	_portal_mat = null
 	_set_gm_transitioning(false)
+	DebugVRAM.snapshot("portal_exit end")
 
 const PORTAL_MIN_HOLD := 0.8
 

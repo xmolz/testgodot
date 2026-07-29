@@ -61,6 +61,7 @@ func _on_back_button_pressed():
 		GameManager.exit_to_world_state()
 
 	print("Back button pressed, closing overlay.")
+	DebugVRAM.snapshot("memory box closed")
 	queue_free()
 
 
