@@ -58,9 +58,16 @@ func launch(data: MemoryChapterData, overlay: CanvasLayer, drawer: Control) -> v
 		if GameManager and is_instance_valid(GameManager.transition_layer):
 			await GameManager.transition_layer.portal_enter(portal_texture, start_rect)
 
+		# immediately release portal_texture reference once enter finishes
+		portal_texture = null
+
 		# play monologue/hold during test slice
 		if GameManager and is_instance_valid(GameManager.transition_layer):
 			await GameManager.transition_layer.play_portal_monologue(monologue_title, preloaded_dialogue_resource, preloaded_balloon_scene)
+
+		# immediately release preloaded references once done
+		preloaded_dialogue_resource = null
+		preloaded_balloon_scene = null
 
 		# portal_exit started
 		if PORTAL_DEBUG:
@@ -74,6 +81,9 @@ func launch(data: MemoryChapterData, overlay: CanvasLayer, drawer: Control) -> v
 			overlay.panel.modulate.a = 1.0
 		if is_instance_valid(drawer):
 			drawer.close()
+
+		overlay = null
+		drawer = null
 
 		if NotificationManager:
 			NotificationManager.add_notification("Portal complete — chapter launch pipeline not built yet.")
@@ -96,6 +106,9 @@ func launch(data: MemoryChapterData, overlay: CanvasLayer, drawer: Control) -> v
 	if GameManager and is_instance_valid(GameManager.transition_layer):
 		await GameManager.transition_layer.portal_enter(portal_texture, start_rect)
 
+	# immediately release portal_texture reference once enter finishes
+	portal_texture = null
+
 	# start threaded background load and monologue under the hold
 	ResourceLoader.load_threaded_request(path)
 
@@ -112,6 +125,11 @@ func launch(data: MemoryChapterData, overlay: CanvasLayer, drawer: Control) -> v
 	if is_instance_valid(overlay):
 		overlay.queue_free()
 	
+	overlay = null
+	drawer = null
+	preloaded_dialogue_resource = null
+	preloaded_balloon_scene = null
+
 	if PORTAL_DEBUG:
 		print_rich("[color=magenta][PORTAL DEBUG] overlay freed at %d ms[/color]" % Time.get_ticks_msec())
 
@@ -143,6 +161,9 @@ func launch(data: MemoryChapterData, overlay: CanvasLayer, drawer: Control) -> v
 	if loaded_packed_scene:
 		get_tree().change_scene_to_packed(loaded_packed_scene)
 	await get_tree().process_frame
+
+	# immediately release the packed scene reference
+	loaded_packed_scene = null
 
 	if PORTAL_DEBUG:
 		print_rich("[color=magenta][PORTAL DEBUG] scene change done at %d ms[/color]" % Time.get_ticks_msec())
