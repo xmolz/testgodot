@@ -1,0 +1,15 @@
+# res://dialogue/test_chapter_intro.dialogue
+# Intro conversation for chapter 2 played over the portal swirl.
+
+~ start
+do change_background("test", "none", 0.0)
+do show_cg("sergey_neutral", "fade", 0.5)
+Sergey: You arrive. I was beginning to think the memory would remain locked.
+do show_cg("sergey_hand_up")
+Sergey: This is where it all started, da? The day we met in the clinic.
+do show_cg("sergey_frown")
+Sergey: But do not let your guard down. Things are not always as they seem.
+do show_cg("sergey_eyes_closed")
+Sergey: Take a deep breath. Focus on the details. Let us begin.
+do hide_cg("fade", 0.5)
+=> END

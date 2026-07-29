@@ -1,0 +1,16 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" uid="uid://kfct0osfvolx" path="res://conversation/AdvancedConversationOverlay.tscn" id="1_aco"]
+[ext_resource type="Resource" path="res://dialogue/test_chapter_intro.dialogue" id="2_diag"]
+
+[node name="AdvancedConversationOverlay" instance=ExtResource("1_aco")]
+dialogue_resource = ExtResource("2_diag")
+background_aliases = {
+"test": "res://Backgrounds/Levels/static_hospital_background_ventless.png"
+}
+cg_aliases = {
+"sergey_neutral": "res://Backgrounds/Sergey/sergey_neutral.png",
+"sergey_hand_up": "res://Backgrounds/Sergey/sergey_hand_up.png",
+"sergey_frown": "res://Backgrounds/Sergey/sergey_frown.png",
+"sergey_eyes_closed": "res://Backgrounds/Sergey/sergey_eyes_closed.png"
+}
