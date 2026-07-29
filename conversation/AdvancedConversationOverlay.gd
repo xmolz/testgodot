@@ -2,6 +2,7 @@ extends CanvasLayer
 class_name AdvancedConversationOverlay
 
 signal conversation_finished(dialogue_resource: DialogueResource)
+signal first_visuals_ready
 
 @export var dialogue_resource: DialogueResource
 @export var start_dialogue_id: String = "start"
@@ -48,6 +49,8 @@ var _mental_image_tween: Tween
 # *********************[predictive preloader]
 var _texture_cache: Dictionary = {}
 var _loading_paths: Dictionary = {}
+var _discard_when_loaded: Dictionary = {}
+var _has_emitted_ready: bool = false
 const LOOKAHEAD_DEPTH: int = 20
 
 
@@ -1072,7 +1075,12 @@ func _update_predictive_cache(line: DialogueLine):
 			to_remove.append(path)
 	for path in to_remove:
 		_texture_cache.erase(path)
-		_loading_paths.erase(path)
+		if _loading_paths.has(path):
+			_discard_when_loaded[path] = true
+			_loading_paths.erase(path)
+
+	# poll and clean discarded paths
+	_poll_discard_queue()
 
 	# request background thread preloading
 	for path in needed_paths:
@@ -1080,6 +1088,24 @@ func _update_predictive_cache(line: DialogueLine):
 			if ResourceLoader.exists(path):
 				_loading_paths[path] = true
 				ResourceLoader.load_threaded_request(path)
+
+	if not _has_emitted_ready:
+		_has_emitted_ready = true
+		get_tree().create_timer(0.2).timeout.connect(func(): first_visuals_ready.emit())
+
+
+func _poll_discard_queue():
+	var completed: Array = []
+	for path in _discard_when_loaded:
+		var status = ResourceLoader.load_threaded_get_status(path)
+		if status == ResourceLoader.THREAD_LOAD_LOADED:
+			# fetch and discard
+			var _discard = ResourceLoader.load_threaded_get(path)
+			completed.append(path)
+		elif status == ResourceLoader.THREAD_LOAD_FAILED or status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+			completed.append(path)
+	for path in completed:
+		_discard_when_loaded.erase(path)
 
 
 func _collect_upcoming_paths(line_id: String, depth: int, out_paths: Dictionary, visited: Dictionary):
@@ -1198,23 +1224,39 @@ func _get_texture_async(path: String) -> Texture2D:
 	if _texture_cache.has(path):
 		return _texture_cache[path]
 
-	# a threaded load was already
+	# a threaded load was already in progress
 	if _loading_paths.has(path):
 		while ResourceLoader.load_threaded_get_status(path) == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
 			await get_tree().process_frame
-		var tex: Texture2D = ResourceLoader.load_threaded_get(path)
-		_texture_cache[path] = tex
-		_loading_paths.erase(path)
-		return tex
+		
+		# re-check cache immediately after awaiting
+		if _texture_cache.has(path):
+			return _texture_cache[path]
+			
+		# fetch exactly once
+		var status = ResourceLoader.load_threaded_get_status(path)
+		if status == ResourceLoader.THREAD_LOAD_LOADED:
+			var tex: Texture2D = ResourceLoader.load_threaded_get(path)
+			_texture_cache[path] = tex
+			_loading_paths.erase(path)
+			return tex
 
 	# start threaded load
 	if ResourceLoader.exists(path):
+		_loading_paths[path] = true
 		ResourceLoader.load_threaded_request(path)
 		while ResourceLoader.load_threaded_get_status(path) == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
 			await get_tree().process_frame
-		var tex: Texture2D = ResourceLoader.load_threaded_get(path)
-		_texture_cache[path] = tex
-		return tex
+			
+		if _texture_cache.has(path):
+			return _texture_cache[path]
+			
+		var status = ResourceLoader.load_threaded_get_status(path)
+		if status == ResourceLoader.THREAD_LOAD_LOADED:
+			var tex: Texture2D = ResourceLoader.load_threaded_get(path)
+			_texture_cache[path] = tex
+			_loading_paths.erase(path)
+			return tex
 
 	# fallback sync load
 	var tex: Texture2D = load(path)
