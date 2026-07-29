@@ -5,6 +5,7 @@ extends Node
 const PORTAL_DEBUG := true
 
 var _launching: bool = false
+var _intro_conversation_finished: bool = false
 
 var _preloaded_dialogue_resource: DialogueResource = null
 var _preloaded_balloon_scene: PackedScene = null
@@ -224,60 +225,58 @@ func launch(data: MemoryChapterData, overlay: CanvasLayer, drawer: Control) -> v
 
 	DebugVRAM.snapshot("after scene change")
 
-	# instantiate and display intro overlay if loaded
+	# instantiate the intro overlay above the swapped level, but do NOT let it talk yet.
 	var intro_instance: Node = null
-	var intro_conversation_finished = false
+	_intro_conversation_finished = false
+
 	if has_intro_overlay and loaded_intro_scene:
 		intro_instance = loaded_intro_scene.instantiate()
-		get_tree().root.add_child.call_deferred(intro_instance)
-		
-		# Connect to conversation_finished one-shot to avoid race
-		intro_instance.conversation_finished.connect(func(_res):
-			intro_conversation_finished = true
-		, CONNECT_ONE_SHOT)
-		
-		loaded_intro_scene = null # Release Pack reference
-		
-		if PORTAL_DEBUG:
-			print_rich("[color=magenta][PORTAL DEBUG] intro overlay shown at %d ms[/color]" % Time.get_ticks_msec())
 
-	# ready gate: await first_visuals_ready on the correct target (intro overlay if present, else current scene)
-	var ready_target = intro_instance if is_instance_valid(intro_instance) else get_tree().current_scene
-	if is_instance_valid(ready_target) and ready_target.has_signal("first_visuals_ready"):
-		var ready_flag = false
-		ready_target.first_visuals_ready.connect(func(): ready_flag = true, CONNECT_ONE_SHOT)
-		
-		# 5-second timeout fallback
-		var elapsed = 0.0
-		while not ready_flag and elapsed < 5.0:
-			await get_tree().process_frame
-			elapsed += get_process_delta_time()
-	else:
+		# must be set before _ready() runs, or the balloon spawns under the portal flash.
+		if "autostart" in intro_instance:
+			intro_instance.autostart = false
+
+		intro_instance.conversation_finished.connect(
+			_on_intro_conversation_finished, CONNECT_ONE_SHOT)
+
+		get_tree().root.add_child.call_deferred(intro_instance)
+		loaded_intro_scene = null # release pack reference
+
+		# let the deferred add_child flush so _ready() ran and @onready refs exist.
+		await get_tree().process_frame
 		await get_tree().process_frame
 
-	# portal_exit started
-	if PORTAL_DEBUG:
-		print_rich("[color=magenta][PORTAL DEBUG] portal_exit called at %d ms[/color]" % Time.get_ticks_msec())
+		if PORTAL_DEBUG:
+			print_rich("[color=magenta][PORTAL DEBUG] intro overlay staged at %d ms[/color]" % Time.get_ticks_msec())
 
+		# stage the opening CG while the flash still hides it.
+		if is_instance_valid(intro_instance) and intro_instance.has_method("prestage_visuals"):
+			await intro_instance.prestage_visuals()
+			if PORTAL_DEBUG:
+				print_rich("[color=magenta][PORTAL DEBUG] intro visuals prestaged at %d ms[/color]" % Time.get_ticks_msec())
+
+	# clear the portal. TransitionLayer.portal_exit() prints its own debug line, so this
+	# function deliberately does not print one (that was the duplicated log entry).
 	if GameManager and is_instance_valid(GameManager.transition_layer):
 		await GameManager.transition_layer.portal_exit()
 
-	# Handle intro conversation phase sequence
+	# only now, with the flash gone and the CG already visible, let the dialogue run.
 	if is_instance_valid(intro_instance):
-		# wait until conversation is finished
-		while not intro_conversation_finished:
+		if intro_instance.has_method("begin_conversation"):
+			intro_instance.begin_conversation()
+			if PORTAL_DEBUG:
+				print_rich("[color=magenta][PORTAL DEBUG] intro conversation started at %d ms[/color]" % Time.get_ticks_msec())
+
+		# is_instance_valid() in the condition is load-bearing: the overlay frees itself shortly
+		# after emitting, so this loop can never hang even if the signal is missed.
+		while is_instance_valid(intro_instance) and not _intro_conversation_finished:
 			await get_tree().process_frame
-		
+
 		if PORTAL_DEBUG:
 			print_rich("[color=magenta][PORTAL DEBUG] intro conversation finished at %d ms[/color]" % Time.get_ticks_msec())
-			
-		# release player control now that dialogue is done
-		if GameManager:
-			GameManager.enter_chapter_state()
-	else:
-		# normal behavior: release control immediately
-		if GameManager:
-			GameManager.enter_chapter_state()
+
+	if GameManager:
+		GameManager.enter_chapter_state()
 
 	_launching = false
 
@@ -297,3 +296,6 @@ func _abort_launch_revealing_world() -> void:
 	# release all preloaded references
 	_preloaded_dialogue_resource = null
 	_preloaded_balloon_scene = null
+
+func _on_intro_conversation_finished(_resource) -> void:
+	_intro_conversation_finished = true

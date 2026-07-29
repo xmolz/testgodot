@@ -5,6 +5,9 @@
 
 [node name="AdvancedConversationOverlay" instance=ExtResource("1_aco")]
 dialogue_resource = ExtResource("2_diag")
+prestage_background = ""
+prestage_cg = "sergey_eyes_closed"
+prestage_dream = 1.0
 background_aliases = {
 "test": "res://Backgrounds/Levels/static_hospital_background_ventless.png"
 }

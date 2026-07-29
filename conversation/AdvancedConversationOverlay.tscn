@@ -8,6 +8,16 @@
 [ext_resource type="Resource" uid="uid://deutdb746jhqi" path="res://characters/sergey.tres" id="6_bf5dx"]
 [ext_resource type="Resource" uid="uid://btxj50xynfv6y" path="res://characters/mcbucket.tres" id="7_owce5"]
 [ext_resource type="Resource" path="res://characters/malcolm.tres" id="8_2nhb4"]
+[ext_resource type="Shader" path="res://ui/dream_haze.gdshader" id="9_dream_haze"]
+[ext_resource type="Shader" path="res://ui/eyelid_blink.gdshader" id="10_eyelid_blink"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dream_haze"]
+shader = ExtResource("9_dream_haze")
+shader_parameter/amount = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_eyelid_blink"]
+shader = ExtResource("10_eyelid_blink")
+shader_parameter/openness = 1.0
 
 [node name="AdvancedConversationOverlay2" type="CanvasLayer" unique_id=543555441]
 layer = 75
@@ -95,6 +105,20 @@ mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
+[node name="DreamHaze" type="ColorRect" parent="." unique_id=2093847291]
+visible = false
+material = SubResource("ShaderMaterial_dream_haze")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -40.0
+offset_right = 40.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
 [node name="CinematicBackground" type="ColorRect" parent="." unique_id=1345671385]
 visible = false
 anchors_preset = 15
@@ -131,3 +155,12 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
+
+[node name="EyelidOverlay" type="ColorRect" parent="." unique_id=2093847292]
+visible = false
+material = SubResource("ShaderMaterial_eyelid_blink")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

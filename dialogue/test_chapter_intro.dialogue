@@ -1,15 +1,27 @@
 # res://dialogue/test_chapter_intro.dialogue
-# Intro conversation for chapter 2 played over the portal swirl.
+# Chapter 2 intro. The dream CG and the dream haze are already on screen before the first line:
+# both are staged by prestage_cg / prestage_dream on test_chapter_intro_overlay.tscn while the
+# portal flash is still opaque.
 
 ~ start
+???: ...
+???: You always did sleep through the parts that mattered.
+do dream_pulse(1.0, 1.4)
+???: Do you even remember what you came here to find?
+do shake(-1, 3.0)
+???: ...
+???: Wake up.
+
+# the CG swap happens UNDER the black on purpose. do it after wake_blink() and the eye opens
+# onto the dream CG for a beat before it changes.
+do cut_to_black(0.9)
 do change_background("test", "none", 0.0)
-do show_cg("sergey_neutral", "fade", 0.5)
-Sergey: You arrive. I was beginning to think the memory would remain locked.
-do show_cg("sergey_hand_up")
+do show_cg("sergey_neutral", "none", 0.0)
+do wake_blink(1.0)
+
+Sergey: There you are. You were twitching in your sleep, my friend.
 Sergey: This is where it all started, da? The day we met in the clinic.
 do show_cg("sergey_frown")
 Sergey: But do not let your guard down. Things are not always as they seem.
-do show_cg("sergey_eyes_closed")
-Sergey: Take a deep breath. Focus on the details. Let us begin.
 do hide_cg("fade", 0.5)
 => END

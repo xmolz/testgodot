@@ -11,6 +11,21 @@ signal first_visuals_ready
 @export var cg_aliases: Dictionary = {}
 @export var mental_image_shader: ShaderMaterial
 
+# when false, _ready() will NOT spawn the balloon. the owner must call begin_conversation()
+# itself. ChapterLaunchSequence uses this so the dialogue cannot start underneath the portal.
+@export var autostart: bool = true
+
+# optional opening visuals, staged before the first line runs. lets the launch pipeline put the
+# first CG on screen while the portal flash still hides it, so the art is already there when the
+# flash clears. leave empty to skip.
+@export var prestage_background: String = ""
+@export var prestage_cg: String = ""
+
+# dream haze intensity to arm before the portal flash clears. 0.0 = no dream.
+@export var prestage_dream: float = 0.0
+
+var _conversation_started: bool = false
+
 var active_actors: Dictionary = {}
 
 var _scan_active: bool = false
@@ -40,6 +55,12 @@ var _camera_offset: Vector2 = Vector2.ZERO
 @onready var cinematic_sprite: AnimatedSprite2D = $CinematicSprite
 @onready var continue_button: Button = $CinematicContinueButton
 @onready var fade_overlay: ColorRect = $FadeOverlay
+@onready var dream_haze: ColorRect = $DreamHaze
+@onready var eyelid_overlay: ColorRect = $EyelidOverlay
+
+var _dream_mat: ShaderMaterial = null
+var _eyelid_mat: ShaderMaterial = null
+var _dream_tween: Tween = null
 var _intro_silhouette: TextureRect = null
 var _spawned_entities: Dictionary = {}
 var is_cinematic_lock_active: bool = false
@@ -60,15 +81,24 @@ func _ready():
 	if is_instance_valid(solid_background):
 		solid_background.mouse_filter = Control.MOUSE_FILTER_STOP
 
-	current_balloon = DialogueManager.show_dialogue_balloon_scene(
-		preload("res://conversation/conversationballoon.tscn"),
-		dialogue_resource,
-		start_dialogue_id,
-		[self]
-	)
-	DialogueManager.dialogue_ended.connect(_on_dialogue_ended)
-	DialogueManager.got_dialogue.connect(_on_got_dialogue)
 	_shake_rng.randomize()
+
+	# the dream/eyelid materials are scene sub-resources and are shared between instances of
+	# this scene, so reset their uniforms explicitly rather than trusting the saved defaults.
+	if is_instance_valid(dream_haze):
+		_dream_mat = dream_haze.material as ShaderMaterial
+		if _dream_mat:
+			_dream_mat.set_shader_parameter("amount", 0.0)
+		dream_haze.visible = false
+
+	if is_instance_valid(eyelid_overlay):
+		_eyelid_mat = eyelid_overlay.material as ShaderMaterial
+		if _eyelid_mat:
+			_eyelid_mat.set_shader_parameter("openness", 1.0)
+		eyelid_overlay.visible = false
+
+	if autostart:
+		begin_conversation()
 
 	if continue_button:
 		continue_button.hide()
@@ -122,6 +152,38 @@ func _ready():
 		continue_button.add_theme_color_override("font_color", Color(0.8, 0.8, 0.8, 1.0))
 		continue_button.add_theme_color_override("font_hover_color", Color.WHITE)
 		continue_button.add_theme_color_override("font_pressed_color", Color.WHITE)
+
+
+# spawns the balloon and starts the dialogue. safe to call twice; the second call is ignored.
+func begin_conversation() -> void:
+	if _conversation_started:
+		return
+	_conversation_started = true
+
+	current_balloon = DialogueManager.show_dialogue_balloon_scene(
+		preload("res://conversation/conversationballoon.tscn"),
+		dialogue_resource,
+		start_dialogue_id,
+		[self]
+	)
+
+	if not DialogueManager.dialogue_ended.is_connected(_on_dialogue_ended):
+		DialogueManager.dialogue_ended.connect(_on_dialogue_ended)
+	if not DialogueManager.got_dialogue.is_connected(_on_got_dialogue):
+		DialogueManager.got_dialogue.connect(_on_got_dialogue)
+
+
+# puts the opening background/CG on screen instantly, without starting the dialogue.called by
+# ChapterLaunchSequence while the portal flash is still opaque, so the flash clears onto a
+# fully formed scene with no pop.
+func prestage_visuals() -> void:
+	if not prestage_background.is_empty():
+		await change_background(prestage_background, "none", 0.0)
+	if not prestage_cg.is_empty():
+		await show_cg(prestage_cg, "none", 0.0)
+	if prestage_dream > 0.0:
+		await dream_set(prestage_dream, 0.0)
+	await get_tree().process_frame
 
 
 func _process(delta: float):
@@ -1651,3 +1713,144 @@ func center_patreon_button_and_keep_alive():
 		patreon_btn.reparent(memory_box, true)
 		# null reference to prevent leak
 		patreon_btn = null
+
+
+# ---------------------------------------------------------------------------
+# dream state
+# ---------------------------------------------------------------------------
+
+func _kill_dream_tween() -> void:
+	if _dream_tween and _dream_tween.is_valid():
+		_dream_tween.kill()
+	_dream_tween = null
+
+
+# ramp the dream haze to a target intensity. duration <= 0.0 snaps instantly.
+func dream_set(intensity: float, duration: float = 1.0) -> void:
+	if not _dream_mat or not is_instance_valid(dream_haze):
+		return
+
+	intensity = clampf(intensity, 0.0, 1.0)
+	_kill_dream_tween()
+
+	if intensity > 0.0:
+		dream_haze.visible = true
+
+	if duration <= 0.0:
+		_dream_mat.set_shader_parameter("amount", intensity)
+		dream_haze.visible = intensity > 0.0
+		return
+
+	_dream_tween = create_tween()
+	_dream_tween.tween_property(_dream_mat, "shader_parameter/amount", intensity, duration)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	await _dream_tween.finished
+
+	# stop paying for the screen read once it is fully off.
+	if intensity <= 0.0 and is_instance_valid(dream_haze):
+		dream_haze.visible = false
+
+
+func dream_enter(intensity: float = 1.0, duration: float = 2.0) -> void:
+	await dream_set(intensity, duration)
+
+
+func dream_exit(duration: float = 1.5) -> void:
+	await dream_set(0.0, duration)
+
+
+# a swell that settles back to wherever the haze already was. awaited, so the line after it
+# waits the swell out.
+func dream_pulse(peak: float = 1.0, duration: float = 1.2) -> void:
+	if not _dream_mat or not is_instance_valid(dream_haze):
+		return
+
+	var raw = _dream_mat.get_shader_parameter("amount")
+	var base: float = float(raw) if raw != null else 0.0
+
+	_kill_dream_tween()
+	dream_haze.visible = true
+
+	_dream_tween = create_tween()
+	_dream_tween.tween_property(_dream_mat, "shader_parameter/amount",
+		clampf(peak, 0.0, 1.0), duration * 0.35)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	_dream_tween.tween_property(_dream_mat, "shader_parameter/amount", base, duration * 0.65)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	await _dream_tween.finished
+
+
+# ---------------------------------------------------------------------------
+# waking up
+# ---------------------------------------------------------------------------
+
+# abrupt cut to black, no fade. the eyelid overlay at openness 0.0 IS the blackout, so
+# wake_blink() takes over from it with no hand-off and no seam.
+func cut_to_black(hold: float = 0.8, residual_haze: float = 0.55) -> void:
+	hide_dialogue_ui()
+
+	# any active shake must die here: the eyelid rect is exactly screen-sized, so a shaking
+	# CanvasLayer would open a gap at the frame edge during the blink.
+	_is_shaking = false
+	_is_persistent_shake = false
+	_camera_offset = Vector2.ZERO
+	offset = Vector2.ZERO
+
+	if _eyelid_mat:
+		_eyelid_mat.set_shader_parameter("openness", 0.0)
+	if is_instance_valid(eyelid_overlay):
+		eyelid_overlay.visible = true
+
+	# the haze stays on low so wake_blink() can fade it out as vision focuses.
+	await dream_set(clampf(residual_haze, 0.0, 1.0), 0.0)
+
+	if hold > 0.0:
+		await get_tree().create_timer(hold).timeout
+
+
+# eyelid flutter open. expects the screen to already be black from cut_to_black(), and snaps it
+# shut first if it is not. awaited, so the next dialogue line waits for the eye to settle.
+func wake_blink(speed: float = 1.0, clear_haze: bool = true) -> void:
+	if not _eyelid_mat or not is_instance_valid(eyelid_overlay):
+		show_dialogue_ui()
+		return
+
+	speed = maxf(speed, 0.1)
+	hide_dialogue_ui()
+	eyelid_overlay.visible = true
+
+	var raw = _eyelid_mat.get_shader_parameter("openness")
+	if raw == null or float(raw) > 0.02:
+		_eyelid_mat.set_shader_parameter("openness", 0.0)
+
+	# vision focuses as the lid opens. kept shorter than the lid chain below so it always
+	# lands before the haze node is hidden.
+	if clear_haze and _dream_mat:
+		_kill_dream_tween()
+		_dream_tween = create_tween()
+		_dream_tween.tween_property(_dream_mat, "shader_parameter/amount", 0.0, 1.5 / speed)\
+			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+	var t := create_tween()
+	# first crack, then it falls shut again
+	t.tween_property(_eyelid_mat, "shader_parameter/openness", 0.16, 0.30 / speed)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	t.tween_interval(0.10 / speed)
+	t.tween_property(_eyelid_mat, "shader_parameter/openness", 0.02, 0.16 / speed)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	t.tween_interval(0.14 / speed)
+	# second, wider, still heavy
+	t.tween_property(_eyelid_mat, "shader_parameter/openness", 0.62, 0.34 / speed)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	t.tween_property(_eyelid_mat, "shader_parameter/openness", 0.40, 0.22 / speed)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	# settle open
+	t.tween_property(_eyelid_mat, "shader_parameter/openness", 1.0, 0.55 / speed)\
+		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	await t.finished
+
+	if is_instance_valid(eyelid_overlay):
+		eyelid_overlay.visible = false
+	if clear_haze and is_instance_valid(dream_haze):
+		dream_haze.visible = false
+	show_dialogue_ui()
