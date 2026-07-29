@@ -188,6 +188,8 @@ func launch(data: MemoryChapterData, overlay: CanvasLayer, drawer: Control) -> v
 	if GameManager:
 		GameManager.enter_chapter_state()
 
+	# TODO: reverse portal (chapter -> main) hooks in here.
+
 	# portal_exit started
 	if PORTAL_DEBUG:
 		print_rich("[color=magenta][PORTAL DEBUG] portal_exit called at %d ms[/color]" % Time.get_ticks_msec())

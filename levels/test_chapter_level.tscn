@@ -1,0 +1,88 @@
+[gd_scene load_steps=17 format=3 uid="uid://dswtestchaplvl"]
+
+[ext_resource type="Script" path="res://levels/TestChapterLevel.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://dldvj1j53uooh" path="res://Backgrounds/Levels/static_hospital_background.PNG" id="2_bg"]
+[ext_resource type="PackedScene" uid="uid://ba2cgdy2q1csl" path="res://characters/player.tscn" id="3_player"]
+[ext_resource type="Script" uid="uid://dljo5cmv24o5h" path="res://Non Interactables/camera_2d.gd" id="4_camera"]
+[ext_resource type="PackedScene" uid="uid://bptirrl2ojkpc" path="res://level_state_manager.tscn" id="5_lsm"]
+[ext_resource type="PackedScene" uid="uid://bigouorladqds" path="res://ui/VerbUI.tscn" id="6_verbui"]
+[ext_resource type="PackedScene" uid="uid://cud6uaak7lo18" path="res://ui/InventoryUI.tscn" id="7_invui"]
+[ext_resource type="Resource" uid="uid://bivfrghh084ym" path="res://interactions/actions/DefaultExamineResponse.tres" id="8_def_exam"]
+[ext_resource type="Resource" uid="uid://bom2aj2a6w76n" path="res://dialogue/generic_lines.dialogue" id="9_generic"]
+[ext_resource type="Script" uid="uid://8c6cnm8lo25p" path="res://interactions/actions/ShowCustomDialogueAction.gd" id="10_showdialogue"]
+[ext_resource type="Script" uid="uid://bmq0s1nqhqi4j" path="res://data/InteractionResponse.gd" id="11_response"]
+[ext_resource type="Script" uid="uid://dltqnu07oiff" path="res://interactions/action.gd" id="12_action"]
+[ext_resource type="Texture2D" uid="uid://tafacn8enoj8" path="res://Sprites/Hospital Room/washroom_sign.png" id="13_washroom_sign"]
+[ext_resource type="PackedScene" uid="uid://p2iroc5a0o8y" path="res://Interactables/Game World/Hospital Room/exit_door.tscn" id="14_exit_door"]
+
+[sub_resource type="Resource" id="Resource_wayback_action"]
+script = ExtResource("10_showdialogue")
+dialogue_resource = ExtResource("9_generic")
+dialogue_checkpoint = "test_level_no_return"
+metadata/_custom_type_script = "uid://8c6cnm8lo25p"
+
+[sub_resource type="Resource" id="Resource_wayback_response"]
+script = ExtResource("11_response")
+verb_id = "examine"
+actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_wayback_action")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="Resource" id="Resource_wayback_response_use"]
+script = ExtResource("11_response")
+verb_id = "use"
+actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_wayback_action")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[node name="TestChapterLevel" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+mouse_filter = 2
+script = ExtResource("1_script")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 3840.0
+offset_bottom = 2160.0
+scale = Vector2(0.5, 0.5)
+mouse_filter = 2
+texture = ExtResource("2_bg")
+
+[node name="LevelStateManager" parent="." instance=ExtResource("5_lsm")]
+level_name = "TestChapter"
+
+[node name="ExamineSignInteractable" parent="." instance=ExtResource("14_exit_door")]
+position = Vector2(1400, 480)
+scale = Vector2(0.4, 0.4)
+object_display_name = "Sign"
+object_id = "sign"
+interactions = Array[ExtResource("11_response")]([ExtResource("8_def_exam")])
+
+[node name="ObjectSprite" parent="ExamineSignInteractable" index="0"]
+texture = ExtResource("13_washroom_sign")
+
+[node name="ExitDoor" parent="." instance=ExtResource("14_exit_door")]
+position = Vector2(300, 480)
+scale = Vector2(0.4, 0.4)
+object_display_name = "Escape Portal"
+object_id = "test_level_no_return"
+interactions = Array[ExtResource("11_response")]([SubResource("Resource_wayback_response"), SubResource("Resource_wayback_response_use")])
+
+[node name="Player" parent="." instance=ExtResource("3_player")]
+position = Vector2(960, 750)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(960, 540)
+process_callback = 0
+position_smoothing_speed = 2.0
+script = ExtResource("4_camera")
+target_path = NodePath("../Player")
+
+[node name="VerbUI" parent="." instance=ExtResource("6_verbui")]
+unique_name_in_owner = true
+layer = 2
+
+[node name="InventoryUI" parent="." instance=ExtResource("7_invui")]
+unique_name_in_owner = true
+layer = 2
