@@ -1,4 +1,4 @@
-# testchapterlevel.gd — minimal generic level root for the chapter launch pipeline test.
+# testchapterlevel.gd — minimal generic level root for chapter launch test.
 extends Control
 
 @onready var level_state_manager: LevelStateManager = $LevelStateManager
