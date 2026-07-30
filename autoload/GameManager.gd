@@ -232,8 +232,14 @@ func _unhandled_input(event: InputEvent):
 			if is_transitioning:
 				return
 
+			# find player if missing/freed (e.g., after scene swap)
+			if not is_instance_valid(player_node):
+				player_node = get_tree().get_first_node_in_group("player")
+			if not is_instance_valid(player_node):
+				return
+
 			# player is frozen mid-action (e.g. flash animation): ignore world/floor clicks
-			if is_instance_valid(player_node) and player_node.get("_can_move") == false:
+			if player_node.get("_can_move") == false:
 				return
 
 			# ***** fix: register that the click landed in the game world! *****
@@ -1010,7 +1016,18 @@ func exit_to_world_state():
 	Events.interaction_state_changed.emit(current_interaction_state)
 
 func enter_chapter_state():
-	# TODO(design): developer needs to flesh out any additional chapter initialization/state setups
+	# chapter initialization and state setup completed
+	player_node = get_tree().get_first_node_in_group("player")
+	if not is_instance_valid(player_node):
+		push_warning("GameManager: enter_chapter_state() could not find player node in group 'player'.")
+
+	SceneDirector.current_game_scene = get_tree().current_scene
+	if not is_instance_valid(SceneDirector.current_game_scene):
+		SceneDirector.current_game_scene = get_tree().get_root().get_child(-1)
+
+	current_hint_manager = null
+	force_clear_all_hovered_interactables()
+
 	current_interaction_state = InteractionState.WORLD
 	
 	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
