@@ -217,6 +217,9 @@ func launch(data: MemoryChapterData, overlay: CanvasLayer, drawer: Control) -> v
 		get_tree().change_scene_to_packed(loaded_packed_scene)
 	await get_tree().process_frame
 
+	if SoundManager and SoundManager.has_method("clear_ambience_snapshot"):
+		SoundManager.clear_ambience_snapshot()
+
 	# immediately release the packed scene reference
 	loaded_packed_scene = null
 
@@ -287,6 +290,9 @@ func _abort_launch_revealing_world() -> void:
 	
 	if NotificationManager:
 		NotificationManager.add_notification("The memory slips away... (chapter failed to load)")
+	
+	if SoundManager and SoundManager.has_method("resume_ambience"):
+		SoundManager.resume_ambience(1.0)
 	
 	if GameManager:
 		GameManager.enter_chapter_state()

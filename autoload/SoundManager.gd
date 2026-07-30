@@ -66,6 +66,8 @@ var _looping_sfx_tweens: Dictionary = {}
 
 # active ambience players
 var _active_ambience_players: Array[AudioStreamPlayer] = []
+var _ambience_snapshot: Array[Dictionary] = []
+var _ambience_tweens: Dictionary = {}
 
 # last footstep tracking
 var _last_footstep_key: String = ""
@@ -175,14 +177,98 @@ func play_ambience(sound_name: String, volume_db: float = 0.0):
 	player.bus = "Ambience" 
 	player.play()
 	
+	player.set_meta("sound_name", sound_name)
+	player.set_meta("base_volume_db", volume_db)
+	
 	_active_ambience_players.append(player)
 
 func stop_all_ambience():
+	_ambience_snapshot.clear()
+	for tween in _ambience_tweens.values():
+		if tween and tween.is_valid():
+			tween.kill()
+	_ambience_tweens.clear()
+
 	for player in _active_ambience_players:
 		if is_instance_valid(player):
 			player.stop()
 			player.queue_free()
 	_active_ambience_players.clear()
+
+func fade_out_all_ambience(fade_duration: float = 1.0) -> void:
+	_ambience_snapshot.clear()
+	for player in _active_ambience_players:
+		if is_instance_valid(player) and player.playing:
+			var s_name = player.get_meta("sound_name", "")
+			var base_vol = player.get_meta("base_volume_db", 0.0)
+			if not s_name.is_empty():
+				_ambience_snapshot.append({
+					"sound_name": s_name,
+					"base_volume_db": base_vol
+				})
+
+	for tween in _ambience_tweens.values():
+		if tween and tween.is_valid():
+			tween.kill()
+	_ambience_tweens.clear()
+
+	if fade_duration <= 0.0:
+		stop_all_ambience()
+		return
+
+	var players_to_fade = _active_ambience_players.duplicate()
+	_active_ambience_players.clear()
+
+	for player in players_to_fade:
+		if is_instance_valid(player):
+			var tween = create_tween().bind_node(player)
+			_ambience_tweens[player] = tween
+			tween.tween_property(player, "volume_db", -80.0, fade_duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+			var p = player
+			tween.chain().tween_callback(func():
+				if is_instance_valid(p):
+					p.stop()
+					p.queue_free()
+				_ambience_tweens.erase(p)
+			)
+
+func resume_ambience(fade_duration: float = 1.0) -> void:
+	for tween in _ambience_tweens.values():
+		if tween and tween.is_valid():
+			tween.kill()
+	_ambience_tweens.clear()
+
+	for entry in _ambience_snapshot:
+		var sound_name = entry["sound_name"]
+		var base_vol = entry["base_volume_db"]
+
+		var already_playing = false
+		for player in _active_ambience_players:
+			if is_instance_valid(player) and player.get_meta("sound_name", "") == sound_name:
+				already_playing = true
+				break
+		if already_playing:
+			continue
+
+		play_ambience(sound_name, -80.0)
+		var player = _active_ambience_players[-1]
+		player.set_meta("sound_name", sound_name)
+		player.set_meta("base_volume_db", base_vol)
+
+		if fade_duration <= 0.0:
+			player.volume_db = base_vol
+		else:
+			var tween = create_tween().bind_node(player)
+			_ambience_tweens[player] = tween
+			tween.tween_property(player, "volume_db", base_vol, fade_duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+			var p = player
+			tween.chain().tween_callback(func():
+				_ambience_tweens.erase(p)
+			)
+	_ambience_snapshot.clear()
+
+func clear_ambience_snapshot() -> void:
+	_ambience_snapshot.clear()
 
 # helper function to let the
 func set_ambience_volume(vol: float):

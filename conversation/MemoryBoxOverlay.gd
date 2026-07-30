@@ -62,6 +62,8 @@ func _on_back_button_pressed():
 	if SoundManager: SoundManager.play_sfx("ui_click")
 	if GameManager:
 		GameManager.exit_to_world_state()
+	if SoundManager and SoundManager.has_method("resume_ambience"):
+		SoundManager.resume_ambience(1.0)
 
 	print("Back button pressed, closing overlay.")
 	DebugVRAM.snapshot("memory box closed")

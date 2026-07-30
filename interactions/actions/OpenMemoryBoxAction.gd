@@ -14,6 +14,9 @@ func execute(interactable_node: Interactable) -> Variant:
 		GameManager.persisting_verb_id = ""
 		GameManager.enter_conversation_state()
 
+	if SoundManager and SoundManager.has_method("fade_out_all_ambience"):
+		SoundManager.fade_out_all_ambience(1.0)
+
 	# ---------------------[2. iris close to black]
 	if GameManager and GameManager.transition_layer:
 		await GameManager.transition_layer.play_iris_close(1.0)
