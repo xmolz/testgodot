@@ -7,17 +7,32 @@
 [ext_resource type="Resource" uid="uid://dm37yqoe1bx4" path="res://characters/aida.tres" id="5_nitm1"]
 [ext_resource type="Resource" uid="uid://deutdb746jhqi" path="res://characters/sergey.tres" id="6_bf5dx"]
 [ext_resource type="Resource" uid="uid://btxj50xynfv6y" path="res://characters/mcbucket.tres" id="7_owce5"]
-[ext_resource type="Resource" path="res://characters/malcolm.tres" id="8_2nhb4"]
-[ext_resource type="Shader" path="res://ui/dream_haze.gdshader" id="9_dream_haze"]
-[ext_resource type="Shader" path="res://ui/eyelid_blink.gdshader" id="10_eyelid_blink"]
+[ext_resource type="Resource" uid="uid://bpbrpdt045rfx" path="res://characters/malcolm.tres" id="8_2nhb4"]
+[ext_resource type="Shader" uid="uid://6nbhjebfrh7f" path="res://ui/dream_haze.gdshader" id="9_dream_haze"]
+[ext_resource type="Shader" uid="uid://dbrkjgqfq3gie" path="res://ui/eyelid_blink.gdshader" id="10_eyelid_blink"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_dream_haze"]
 shader = ExtResource("9_dream_haze")
 shader_parameter/amount = 0.0
+shader_parameter/wobble_amp = 0.0030000001425
+shader_parameter/wobble_speed = 0.6
+shader_parameter/swim_scale = 3.0
+shader_parameter/breathe_amp = 0.014
+shader_parameter/bleed = 0.004
+shader_parameter/soft = 0.55
+shader_parameter/tint = Color(0.62, 0.72, 1, 1)
+shader_parameter/tint_mix = 0.3
+shader_parameter/desat = 0.35
+shader_parameter/brightness = 1.06
+shader_parameter/vignette = 0.45
+shader_parameter/grain = 0.05
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_eyelid_blink"]
 shader = ExtResource("10_eyelid_blink")
 shader_parameter/openness = 1.0
+shader_parameter/curve = 0.35
+shader_parameter/lash_softness = 0.022
+shader_parameter/lid_color = Color(0, 0, 0, 1)
 
 [node name="AdvancedConversationOverlay2" type="CanvasLayer" unique_id=543555441]
 layer = 75
