@@ -319,6 +319,8 @@ func change_game_state(new_state: GameState):
 			if is_instance_valid(pause_menu_ui): pause_menu_ui.menu_panel.hide()
 			var menu = SceneDirector.show_main_menu()
 			if is_instance_valid(menu):
+				if menu.has_signal("continue_requested") and not menu.continue_requested.is_connected(_on_main_menu_continue_requested):
+					menu.continue_requested.connect(_on_main_menu_continue_requested)
 				if not menu.new_game_requested.is_connected(_on_main_menu_new_game_requested):
 					menu.new_game_requested.connect(_on_main_menu_new_game_requested)
 				if not menu.quit_game_requested.is_connected(_on_main_menu_quit_requested):
@@ -1017,6 +1019,8 @@ func exit_to_world_state():
 
 func enter_chapter_state():
 	# chapter initialization and state setup completed
+	print_rich("[color=cyan]SaveManager Diagnostic: HUB SURVIVES? %s[/color]" % str(get_tree().root.has_node("Main") or is_instance_valid(SceneDirector.current_game_scene) and SceneDirector.current_game_scene.name == "Main"))
+	
 	player_node = get_tree().get_first_node_in_group("player")
 	if not is_instance_valid(player_node):
 		push_warning("GameManager: enter_chapter_state() could not find player node in group 'player'.")
@@ -1155,6 +1159,124 @@ func reset_run_state():
 	_current_character_conversation_overlay_instance = null
 
 func _on_main_menu_new_game_requested():
+	if SaveManager and SaveManager.has_save("autosave"):
+		var canvas = CanvasLayer.new()
+		canvas.layer = 150
+		
+		var overlay = ColorRect.new()
+		overlay.color = Color(0, 0, 0, 0.7)
+		overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
+		canvas.add_child(overlay)
+		
+		var center = CenterContainer.new()
+		center.set_anchors_preset(Control.PRESET_FULL_RECT)
+		overlay.add_child(center)
+		
+		var panel = PanelContainer.new()
+		var confirm_bg = StyleBoxFlat.new()
+		confirm_bg.bg_color = Color(0.1, 0.1, 0.1, 0.95)
+		confirm_bg.border_width_left = 3
+		confirm_bg.border_width_top = 3
+		confirm_bg.border_width_right = 3
+		confirm_bg.border_width_bottom = 3
+		confirm_bg.border_color = Color(0.2, 0.85, 1.0, 1.0)
+		confirm_bg.corner_radius_top_left = 10
+		confirm_bg.corner_radius_top_right = 10
+		confirm_bg.corner_radius_bottom_left = 10
+		confirm_bg.corner_radius_bottom_right = 10
+		panel.add_theme_stylebox_override("panel", confirm_bg)
+		center.add_child(panel)
+		
+		var margin = MarginContainer.new()
+		margin.add_theme_constant_override("margin_top", 30)
+		margin.add_theme_constant_override("margin_bottom", 30)
+		margin.add_theme_constant_override("margin_left", 30)
+		margin.add_theme_constant_override("margin_right", 30)
+		panel.add_child(margin)
+		
+		var vbox = VBoxContainer.new()
+		vbox.add_theme_constant_override("separation", 30)
+		margin.add_child(vbox)
+		
+		var label = Label.new()
+		label.text = "This will start a fresh run. Your autosave will be replaced once you make progress.\n\nContinue?"
+		label.add_theme_font_override("font", preload("res://Fonts/VarelaRound-Regular.ttf"))
+		label.add_theme_font_size_override("font_size", 44 if OS.has_feature("mobile") else 28)
+		label.add_theme_color_override("font_color", Color.WHITE)
+		label.autowrap_mode = TextServer.AUTOWRAP_WORD
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		if OS.has_feature("mobile"): label.custom_minimum_size = Vector2(600, 0)
+		else: label.custom_minimum_size = Vector2(500, 0)
+		vbox.add_child(label)
+		
+		var hbox = HBoxContainer.new()
+		hbox.alignment = BoxContainer.ALIGNMENT_CENTER
+		hbox.add_theme_constant_override("separation", 20)
+		vbox.add_child(hbox)
+		
+		var btn_style = StyleBoxFlat.new()
+		btn_style.bg_color = Color(0.15, 0.15, 0.15, 0.85)
+		btn_style.corner_radius_top_left = 6
+		btn_style.corner_radius_top_right = 6
+		btn_style.corner_radius_bottom_left = 6
+		btn_style.corner_radius_bottom_right = 6
+		btn_style.content_margin_top = 15
+		btn_style.content_margin_bottom = 15
+		btn_style.content_margin_left = 40
+		btn_style.content_margin_right = 40
+		btn_style.border_width_left = 3
+		btn_style.border_width_top = 3
+		btn_style.border_width_right = 3
+		btn_style.border_width_bottom = 3
+		btn_style.border_color = Color.WHITE
+		
+		var btn_hover = btn_style.duplicate()
+		btn_hover.bg_color = Color(0.1, 0.25, 0.3, 0.9)
+		btn_hover.border_color = Color(0.2, 0.85, 1.0, 1.0)
+		
+		if OS.has_feature("mobile"):
+			btn_style.content_margin_top = 25
+			btn_style.content_margin_bottom = 25
+			btn_hover.content_margin_top = 25
+			btn_hover.content_margin_bottom = 25
+			
+		var font = preload("res://Fonts/VarelaRound-Regular.ttf")
+		var fs = 44 if OS.has_feature("mobile") else 28
+		
+		var yes_btn = Button.new()
+		yes_btn.text = "YES"
+		yes_btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		yes_btn.add_theme_font_override("font", font)
+		yes_btn.add_theme_font_size_override("font_size", fs)
+		yes_btn.add_theme_stylebox_override("normal", btn_style)
+		yes_btn.add_theme_stylebox_override("hover", btn_hover)
+		yes_btn.add_theme_stylebox_override("focus", btn_hover)
+		yes_btn.add_theme_stylebox_override("pressed", btn_hover)
+		yes_btn.add_theme_color_override("font_color", Color(0.8, 0.8, 0.8, 1.0))
+		yes_btn.add_theme_color_override("font_hover_color", Color.WHITE)
+		yes_btn.add_theme_color_override("font_pressed_color", Color.WHITE)
+		hbox.add_child(yes_btn)
+		
+		var no_btn = yes_btn.duplicate()
+		no_btn.text = "NO"
+		hbox.add_child(no_btn)
+		
+		get_tree().root.add_child(canvas)
+		
+		no_btn.pressed.connect(func():
+			if SoundManager: SoundManager.play_sfx("ui_click")
+			canvas.queue_free()
+		)
+		
+		yes_btn.pressed.connect(func():
+			if SoundManager: SoundManager.play_sfx("ui_click")
+			canvas.queue_free()
+			_proceed_with_new_game()
+		)
+	else:
+		_proceed_with_new_game()
+
+func _proceed_with_new_game():
 	if is_instance_valid(transition_layer) and transition_layer.has_method("global_fade_to_black"):
 		await transition_layer.global_fade_to_black(0.5)
 
@@ -1164,6 +1286,10 @@ func _on_main_menu_new_game_requested():
 
 	if is_instance_valid(transition_layer) and transition_layer.has_method("global_fade_from_black"):
 		transition_layer.global_fade_from_black(0.5)
+
+func _on_main_menu_continue_requested():
+	if SaveManager:
+		await SaveManager.load_from_slot("autosave")
 
 func _on_difficulty_chosen(is_assisted: bool):
 	Settings.assisted_mode = is_assisted
@@ -1281,6 +1407,9 @@ func trigger_game_over(fade_duration: float = 1.5):
 	SceneDirector.show_game_over()
 
 func quit_to_main_menu_smooth():
+	if SaveManager and SaveManager.has_method("mark_dirty"):
+		SaveManager.mark_dirty("quit_to_main_menu")
+
 	if SoundManager:
 		SoundManager.stop_all_audio()
 	SceneDirector._cleanup_all_overlays()

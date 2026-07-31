@@ -10,6 +10,9 @@ func _ready():
 	Events.notification_requested.connect(add_notification)
 
 func add_notification(message: String):
+	if SaveManager and SaveManager.is_loading:
+		return
+
 	# play the sound effect as
 	SoundManager.play_sfx("notification_ping")
 

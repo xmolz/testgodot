@@ -47,6 +47,7 @@ ConversationEventManager="*res://autoload/ConversationEventManager.gd"
 FallbackManager="*res://autoload/FallbackManager.gd"
 NotificationManager="*res://autoload/NotificationManager.tscn"
 ChapterLaunchSequence="*res://autoload/ChapterLaunchSequence.gd"
+SaveManager="*res://autoload/save_manager.gd"
 
 [dialogue_manager]
 

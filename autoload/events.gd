@@ -11,6 +11,7 @@ signal interaction_state_changed(new_state: int)
 # /////////// inventory
 signal item_added(item_id: String)
 signal item_removed(item_id: String)
+signal room_changed
 
 # ------------- ui
 signal notification_requested(message: String)

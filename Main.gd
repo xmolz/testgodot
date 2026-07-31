@@ -20,6 +20,10 @@ extends Control
 func _ready():
 	_inject_progression_blockers()
 
+	if GameManager:
+		if is_instance_valid(level_state_manager):
+			Flags.register_level_state_manager(level_state_manager)
+
 	# we must wait for one frame. this is a crucial step.
 	await get_tree().process_frame
 
@@ -41,12 +45,9 @@ func _ready():
 		# connect to signal so we know when aida finishes talking
 		GameManager.character_conversation_ended.connect(_on_character_conversation_ended)
 
-		# register this level's state manager
-		if is_instance_valid(level_state_manager):
-			Flags.register_level_state_manager(level_state_manager)
 		if is_instance_valid(level_hint_manager):
 			GameManager.current_hint_manager = level_hint_manager
-		else:
+		elif not is_instance_valid(level_state_manager):
 			print_rich("[color=red]%s: LevelStateManager node not found...[/color]" % name)
 	else:
 		print_rich("[color=red]%s: GameManager not found.[/color]" % name)

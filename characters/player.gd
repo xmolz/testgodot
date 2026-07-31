@@ -191,6 +191,9 @@ func _stop_walking():
 	if GameManager and GameManager.has_method("player_has_finished_walk_command"):
 		GameManager.player_has_finished_walk_command()
 
+func stop_movement() -> void:
+	_stop_walking()
+
 func walk_to_point(destination_pos: Vector2):
 	if not _can_move: return
 

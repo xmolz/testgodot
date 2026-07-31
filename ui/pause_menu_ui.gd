@@ -62,6 +62,14 @@ func _ready():
 	yes_btn.pressed.connect(_on_confirm_yes)
 	no_btn.pressed.connect(_on_confirm_no)
 
+# returns the game state the world was in before the pause menu opened,
+# or the live state when the menu is closed. the save gate needs this
+# because the pause menu itself sets PAUSED + get_tree().paused.
+func get_effective_game_state() -> int:
+	if _pre_pause_game_state != null:
+		return _pre_pause_game_state
+	return GameManager.current_game_state
+
 func _process(_delta):
 	if is_instance_valid(menu_panel) and is_instance_valid(scan_cancel_panel):
 		scan_cancel_panel.visible = menu_panel.visible

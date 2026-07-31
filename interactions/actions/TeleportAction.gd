@@ -43,7 +43,10 @@ func execute(interactable_node: Interactable) -> bool:
 	# if we used the transition,
 	if is_instance_valid(transition_layer):
 		await transition_layer.transition_finished
-	
+
+	if Events and Events.has_signal("room_changed"):
+		Events.room_changed.emit()
+
 	# unlock player
 	player.set_can_move(true)
 	

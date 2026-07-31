@@ -6,22 +6,26 @@ enum ToiletState { NORMAL, HAS_PAPER, CLOGGED }
 @onready var interactable_component: Interactable = $InteractionArea 
 
 func _ready():
-	await get_tree().process_frame
-	if not GameManager: return
-	_restore_state()
-
-func _restore_state():
-	if Flags.get_level_flag("toilet_clogged"):
-		change_state(ToiletState.CLOGGED)
-	elif Flags.get_level_flag("toilet_has_paper"):
-		change_state(ToiletState.HAS_PAPER)
+	if is_instance_valid(Flags.current_level_state_manager):
+		if not Flags.current_level_state_manager.level_state_restored.is_connected(apply_level_state):
+			Flags.current_level_state_manager.level_state_restored.connect(apply_level_state)
+		if Flags.current_level_state_manager.has_restored:
+			apply_level_state()
 	else:
-		change_state(ToiletState.NORMAL)
+		apply_level_state()
 
-func change_state(new_state_int: int):
+func apply_level_state() -> void:
+	if Flags.get_level_flag("toilet_clogged"):
+		change_state(ToiletState.CLOGGED, false)
+	elif Flags.get_level_flag("toilet_has_paper"):
+		change_state(ToiletState.HAS_PAPER, false)
+	else:
+		change_state(ToiletState.NORMAL, false)
+
+func change_state(new_state_int: int, write_flags: bool = true):
 	var new_state = new_state_int as ToiletState
 	
-	if GameManager:
+	if GameManager and write_flags:
 		# ***************** updated logic: explicitly handle all flags
 		match new_state:
 			ToiletState.NORMAL:

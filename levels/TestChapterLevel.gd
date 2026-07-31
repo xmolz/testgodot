@@ -4,10 +4,10 @@ extends Control
 @onready var level_state_manager: LevelStateManager = $LevelStateManager
 
 func _ready():
-	await get_tree().process_frame
 	if GameManager:
 		if is_instance_valid(level_state_manager):
 			Flags.register_level_state_manager(level_state_manager)
+	await get_tree().process_frame
 
 func _exit_tree():
 	if GameManager and is_instance_valid(level_state_manager):

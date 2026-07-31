@@ -81,25 +81,31 @@ func _ready():
 		interactable_component.interactions.append(sleep_response)
 		interactable_component.interactions.append(give_tp_response)
 
-	# check state
-	await get_tree().process_frame
-	if not GameManager: return
-
-	if Flags.get_level_flag("mcbucket_cannathink_used"):
-		change_state(State.HIGH)
-	elif Flags.get_level_flag("mcbucket_invigirol_used"):
-		change_state(State.INVIGIROL)
-	elif Flags.get_level_flag("mcbucket_zanopram_used"):
-		change_state(State.SLEEPING)
+	if is_instance_valid(Flags.current_level_state_manager):
+		if not Flags.current_level_state_manager.level_state_restored.is_connected(apply_level_state):
+			Flags.current_level_state_manager.level_state_restored.connect(apply_level_state)
+		if Flags.current_level_state_manager.has_restored:
+			apply_level_state()
 	else:
-		change_state(State.IDLE)
+		# fallback for fresh run init without save data
+		apply_level_state()
 
-func change_state(new_state: State):
+func apply_level_state() -> void:
+	if Flags.get_level_flag("mcbucket_cannathink_used"):
+		change_state(State.HIGH, false)
+	elif Flags.get_level_flag("mcbucket_invigirol_used"):
+		change_state(State.INVIGIROL, false)
+	elif Flags.get_level_flag("mcbucket_zanopram_used"):
+		change_state(State.SLEEPING, false)
+	else:
+		change_state(State.IDLE, false)
+
+func change_state(new_state: State, write_flags: bool = true):
 	if not animation_player or not interactable_component:
 		push_warning("McBucket script is missing node references!")
 		return
 
-	if GameManager:
+	if GameManager and write_flags:
 		Flags.set_level_flag("mcbucket_cannathink_used", new_state == State.HIGH)
 		Flags.set_level_flag("mcbucket_invigirol_used", new_state == State.INVIGIROL)
 		Flags.set_level_flag("mcbucket_zanopram_used", new_state == State.SLEEPING)

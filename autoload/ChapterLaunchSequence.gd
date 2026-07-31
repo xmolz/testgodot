@@ -10,6 +10,9 @@ var _intro_conversation_finished: bool = false
 var _preloaded_dialogue_resource: DialogueResource = null
 var _preloaded_balloon_scene: PackedScene = null
 
+func is_launching() -> bool:
+	return _launching
+
 func launch(data: MemoryChapterData, overlay: CanvasLayer, drawer: Control) -> void:
 	if _launching:
 		return

@@ -3,10 +3,14 @@ extends Node
 class_name LevelStateManager
 
 signal level_flag_changed(flag_name: String, new_value: bool)
+signal level_state_restored
+
+@export var level_id: String = ""
 
 # all level flags stored in
 # just call set_level_flag("my_new_flag", true) from
 var _flags: Dictionary = {}
+var has_restored: bool = false
 
 # default flag values for this
 # note: flags in _defaults without
@@ -85,3 +89,18 @@ func set_level_flag(flag_name: String, value: bool):
 
 func get_level_flag(flag_name: String) -> bool:
 	return _flags.get(flag_name, false)
+
+func get_all_flags() -> Dictionary:
+	return _flags.duplicate()
+
+# writes a saved flag dict wholesale. bypasses set_level_flag()'s
+# unchanged-value early return on purpose: a saved `false` landing on a
+# default `false` still has to notify, because a listener's correct visual
+# for `false` is not necessarily what it hardcoded in _ready().
+func apply_saved_flags(saved: Dictionary) -> void:
+	for flag_name in saved:
+		var value: bool = bool(saved[flag_name])
+		_flags[flag_name] = value
+		level_flag_changed.emit(flag_name, value)
+	has_restored = true
+	level_state_restored.emit()
