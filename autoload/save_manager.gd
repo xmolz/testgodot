@@ -12,13 +12,13 @@ signal load_failed(reason: String)
 
 var is_loading: bool = false
 var _playtime_seconds: float = 0.0
-var _dirty: bool = false
-var _dirty_reason: String = ""
 var _last_known_hub_flags: Dictionary = {}
 var _active_dialogue_depth: int = 0
 
 var _pending_level_flags: Dictionary = {}
 var _pending_level_id: String = ""
+var _pending_npcs_state: Dictionary = {}
+var _level_state_ready_emitted: bool = false
 
 func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -27,30 +27,12 @@ func _ready():
 		DialogueManager.dialogue_started.connect(_on_dialogue_started)
 		DialogueManager.dialogue_ended.connect(_on_dialogue_ended)
 		
-	if Events:
-		Events.item_added.connect(_on_item_added)
-		Events.item_removed.connect(_on_item_removed)
-		Events.room_changed.connect(_on_room_changed)
-		
 	if Flags:
-		Flags.game_flag_changed.connect(_on_game_flag_changed)
 		Flags.level_state_manager_registered.connect(_on_level_state_manager_registered)
-
-func _notification(what: int) -> void:
-	if what == NOTIFICATION_WM_CLOSE_REQUEST:
-		if can_save_now(true):
-			save_to_slot("autosave")
-		# TODO(save-step-3): monotonic-only merge write when not safe
-		#   (clues + clue_*_found flags + finalized chapter records only)
 
 func _process(delta: float):
 	if GameManager and GameManager.current_game_state == GameManager.GameState.IN_GAME_PLAY:
 		_playtime_seconds += delta
-		
-	if _dirty and can_save_now():
-		save_to_slot("autosave")
-		_dirty = false
-		_dirty_reason = ""
 
 func _on_dialogue_started(_resource):
 	_active_dialogue_depth += 1
@@ -60,20 +42,8 @@ func _on_dialogue_ended(_resource):
 	if _active_dialogue_depth < 0:
 		_active_dialogue_depth = 0
 
-func _on_item_added(_item_id):
-	mark_dirty("item_added")
-
-func _on_item_removed(_item_id):
-	mark_dirty("item_removed")
-
-func _on_room_changed():
-	mark_dirty("room_changed")
-
-func _on_game_flag_changed(flag_name: String, _value: bool):
-	if flag_name.ends_with("_correct") or flag_name.begins_with("unlock_"):
-		mark_dirty("form_flag_changed")
-
 func _on_level_state_manager_registered(lsm: LevelStateManager):
+	_level_state_ready_emitted = false
 	if not is_instance_valid(lsm): return
 	
 	if lsm.level_id == HUB_LEVEL_ID:
@@ -81,13 +51,14 @@ func _on_level_state_manager_registered(lsm: LevelStateManager):
 		
 	if lsm.level_id == _pending_level_id and not _pending_level_id.is_empty():
 		lsm.apply_saved_flags(_pending_level_flags)
+		_apply_npcs(_pending_npcs_state)
 		_pending_level_flags.clear()
+		_pending_npcs_state.clear()
 		_pending_level_id = ""
 
-func mark_dirty(reason: String = "") -> void:
-	if is_loading: return
-	_dirty = true
-	_dirty_reason = reason
+	if Events and Events.has_signal("level_state_ready") and not _level_state_ready_emitted:
+		_level_state_ready_emitted = true
+		Events.level_state_ready.emit.call_deferred()
 
 func can_save_now(allow_pause_snapshot: bool = false) -> bool:
 	if not GameManager: return false
@@ -138,13 +109,23 @@ func _get_slot_path(slot: String) -> String:
 		return AUTOSAVE_PATH
 	return SAVE_DIR + slot + ".json"
 
+func get_most_recent_slot() -> String:
+	var most_recent_slot = ""
+	var max_timestamp = 0.0
+	
+	var slots = ["autosave", "slot_1", "slot_2", "slot_3"]
+	for slot in slots:
+		var meta = read_meta(slot)
+		if meta and meta.has("timestamp_unix"):
+			var ts = float(meta["timestamp_unix"])
+			if ts > max_timestamp:
+				max_timestamp = ts
+				most_recent_slot = slot
+	
+	return most_recent_slot
+
 func _write_json_atomic(path: String, payload: Dictionary) -> bool:
 	DirAccess.make_dir_recursive_absolute(SAVE_DIR)
-	
-	if path == AUTOSAVE_PATH and FileAccess.file_exists(AUTOSAVE_PATH):
-		var da = DirAccess.open(SAVE_DIR)
-		if da:
-			da.copy(AUTOSAVE_PATH.get_file(), AUTOSAVE_BACKUP_PATH.get_file())
 			
 	var tmp := path + ".tmp"
 	var f := FileAccess.open(tmp, FileAccess.WRITE)
@@ -203,7 +184,8 @@ func save_to_slot(slot: String) -> bool:
 		"clues": { "found": {} }, # TODO(save-step-N)
 		"chapters": { "records": {}, "in_progress": {} }, # TODO(save-step-N)
 		"form": { "locked_fields": {} }, # TODO(save-step-N)
-		"difficulty": { "assisted_mode": Settings.assisted_mode }
+		"difficulty": { "assisted_mode": Settings.assisted_mode },
+		"npcs": _collect_npcs()
 	}
 	
 	if is_instance_valid(GameManager.player_node):
@@ -245,7 +227,7 @@ func load_from_slot(slot: String) -> bool:
 	if version < SAVE_VERSION:
 		data = _migrate_save_data(data, version)
 		
-	var required_sections = ["meta", "location", "flags", "hub_level_flags", "inventory", "verbs", "dialogue", "conversation_events", "difficulty"]
+	var required_sections = ["meta", "location", "flags", "hub_level_flags", "inventory", "verbs", "dialogue", "conversation_events", "difficulty", "npcs"]
 	for sec in required_sections:
 		if not data.has(sec) or not (data[sec] is Dictionary):
 			NotificationManager.add_notification("Save file is corrupted (missing section).")
@@ -284,6 +266,7 @@ func load_from_slot(slot: String) -> bool:
 	
 	_pending_level_id = HUB_LEVEL_ID
 	_pending_level_flags = data["hub_level_flags"].duplicate()
+	_pending_npcs_state = data["npcs"].duplicate()
 	
 	await GameManager.change_game_state(GameManager.GameState.IN_GAME_PLAY)
 	
@@ -367,3 +350,49 @@ func _apply_conversation_events(data: Dictionary):
 	ConversationEventManager.has_heard_fresh_start_line = bool(data.get("has_heard_fresh_start_line", false))
 	ConversationEventManager.asked_sergey_duration = bool(data.get("asked_sergey_duration", false))
 	ConversationEventManager.asked_sergey_identity = bool(data.get("asked_sergey_identity", false))
+
+func _collect_npcs() -> Dictionary:
+	var npcs_state = {}
+	for npc in get_tree().get_nodes_in_group("saveable_npc"):
+		if not is_instance_valid(npc): continue
+		var state = {}
+		state["pos_x"] = npc.global_position.x
+		state["pos_y"] = npc.global_position.y
+		
+		var sprite = npc.get_node_or_null("Sprite")
+		if not sprite: sprite = npc.get_node_or_null("ObjectSprite")
+		if sprite: state["flip_h"] = sprite.flip_h
+		
+		var mover = npc.get_node_or_null("MovementController")
+		if mover and mover.has_method("get_movement_state"):
+			var mv_state = mover.get_movement_state()
+			state["waypoint_index"] = mv_state.get("waypoint_index", 0)
+			state["is_waiting"] = mv_state.get("is_waiting", false)
+			state["ping_pong_direction"] = mv_state.get("ping_pong_direction", 1)
+			state["movement_active"] = mv_state.get("movement_active", true)
+			
+		npcs_state[npc.name] = state
+	return npcs_state
+
+func _apply_npcs(dict: Dictionary):
+	for npc in get_tree().get_nodes_in_group("saveable_npc"):
+		if not is_instance_valid(npc) or not dict.has(npc.name): continue
+		var state = dict[npc.name]
+		
+		npc.global_position = Vector2(float(state.get("pos_x", npc.global_position.x)), float(state.get("pos_y", npc.global_position.y)))
+		
+		var sprite = npc.get_node_or_null("Sprite")
+		if not sprite: sprite = npc.get_node_or_null("ObjectSprite")
+		if sprite and state.has("flip_h"):
+			sprite.flip_h = bool(state["flip_h"])
+			
+		var mover = npc.get_node_or_null("MovementController")
+		if mover and mover.has_method("apply_movement_state"):
+			mover.apply_movement_state(state)
+
+		# Explicitly recalculate and set the projected flag for Aida so it agrees with her restored position.
+		if npc.name == "AIda":
+			var is_currently_in_main = npc.global_position.y < 1000.0 # ROOM_THRESHOLD_Y from aida.gd
+			npc.set("_was_in_main_room", is_currently_in_main)
+			if Flags.current_level_state_manager:
+				Flags.current_level_state_manager.set_level_flag("aida_in_main_room", is_currently_in_main)

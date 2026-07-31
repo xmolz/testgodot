@@ -11,6 +11,7 @@ extends CanvasLayer
 @onready var overlay = $Overlay
 @onready var bg_button = $Overlay/BackgroundButton
 @onready var resume_btn = $Overlay/CenterContainer/VBoxContainer/ResumeButton
+@onready var save_load_btn = $Overlay/CenterContainer/VBoxContainer/SaveLoadButton
 @onready var history_btn = $Overlay/CenterContainer/VBoxContainer/HistoryButton
 @onready var settings_btn = $Overlay/CenterContainer/VBoxContainer/SettingsButton
 @onready var controls_btn = $Overlay/CenterContainer/VBoxContainer/ControlsButton
@@ -53,6 +54,7 @@ func _ready():
 		bg_button.mouse_default_cursor_shape = Control.CURSOR_ARROW
 	$Overlay/CenterContainer/VBoxContainer.mouse_filter = Control.MOUSE_FILTER_STOP
 	resume_btn.pressed.connect(toggle_pause)
+	save_load_btn.pressed.connect(_on_save_load_pressed)
 	history_btn.pressed.connect(_on_history_pressed)
 	settings_btn.pressed.connect(_on_settings_pressed)
 	controls_btn.pressed.connect(_on_controls_pressed)
@@ -83,7 +85,7 @@ func _input(event):
 			return
 
 		if GameManager and (GameManager.current_game_state == GameManager.GameState.IN_GAME_PLAY or GameManager.current_game_state == GameManager.GameState.PAUSED or GameManager.current_game_state == GameManager.GameState.INTRO_CONVERSATION):
-			if get_tree().root.has_node("SettingsMenu") or get_tree().root.has_node("DialogueHistoryUI") or get_tree().root.has_node("CreditsMenu") or get_tree().root.has_node("ControlsMenu"):
+			if get_tree().root.has_node("SettingsMenu") or get_tree().root.has_node("DialogueHistoryUI") or get_tree().root.has_node("CreditsMenu") or get_tree().root.has_node("ControlsMenu") or get_tree().root.has_node("SaveSlotScreen"):
 				return
 
 			get_viewport().set_input_as_handled()
@@ -97,7 +99,7 @@ func _input(event):
 			return
 
 		if overlay.visible:
-			if get_tree().root.has_node("SettingsMenu") or get_tree().root.has_node("DialogueHistoryUI") or get_tree().root.has_node("CreditsMenu") or get_tree().root.has_node("ControlsMenu"):
+			if get_tree().root.has_node("SettingsMenu") or get_tree().root.has_node("DialogueHistoryUI") or get_tree().root.has_node("CreditsMenu") or get_tree().root.has_node("ControlsMenu") or get_tree().root.has_node("SaveSlotScreen"):
 				return
 
 			get_viewport().set_input_as_handled()
@@ -106,6 +108,14 @@ func _input(event):
 func _on_bg_button_pressed():
 	if Time.get_ticks_msec() - _overlay_open_time_ms < 300: return
 	toggle_pause()
+
+func _on_save_load_pressed():
+	if SoundManager: SoundManager.play_sfx("ui_click")
+	var slot_scene = load("res://ui/save_slot_screen.tscn")
+	if slot_scene:
+		var instance = slot_scene.instantiate()
+		instance.current_mode = instance.Mode.SAVE
+		get_tree().root.add_child(instance)
 
 func toggle_pause():
 	if SoundManager: SoundManager.play_sfx("ui_click")

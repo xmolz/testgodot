@@ -8,6 +8,7 @@ signal quit_game_requested
 
 @onready var button_block = $Content/ButtonBlock
 @onready var continue_btn = $Content/ButtonBlock/ContinueButton
+@onready var load_btn = $Content/ButtonBlock/LoadButton
 @onready var start_btn = $Content/ButtonBlock/StartButton
 @onready var settings_btn = $Content/ButtonBlock/SettingsButton
 @onready var credits_btn = $Content/ButtonBlock/CreditsButton
@@ -15,15 +16,19 @@ signal quit_game_requested
 
 func _ready():
 	if SaveManager:
-		continue_btn.visible = SaveManager.has_save("autosave")
+		var recent_slot = SaveManager.get_most_recent_slot()
+		continue_btn.visible = not recent_slot.is_empty()
+		load_btn.visible = not recent_slot.is_empty()
 	else:
 		continue_btn.visible = false
+		load_btn.visible = false
 
 	if OS.has_feature("mobile"):
 		button_block.add_theme_constant_override("separation", 40)
 
 		var mobile_font_size = 54
 		continue_btn.add_theme_font_size_override("font_size", mobile_font_size)
+		load_btn.add_theme_font_size_override("font_size", mobile_font_size)
 		start_btn.add_theme_font_size_override("font_size", mobile_font_size)
 		settings_btn.add_theme_font_size_override("font_size", mobile_font_size)
 		credits_btn.add_theme_font_size_override("font_size", mobile_font_size)
@@ -34,6 +39,14 @@ func _ready():
 func _on_continue_button_pressed():
 	if SoundManager: SoundManager.play_sfx("start_game")
 	continue_requested.emit()
+
+func _on_load_button_pressed():
+	if SoundManager: SoundManager.play_sfx("ui_click")
+	var slot_scene = load("res://ui/save_slot_screen.tscn")
+	if slot_scene:
+		var instance = slot_scene.instantiate()
+		instance.current_mode = instance.Mode.LOAD
+		get_tree().root.add_child(instance)
 
 func _on_new_game_button_pressed():
 	# verify the click is working in the output log

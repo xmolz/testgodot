@@ -184,7 +184,29 @@ func move_to_position_async(target_pos: Vector2, stop_distance: float = 5.0, tim
 		
 func set_target_waypoint_index(index: int):
 	if waypoints.is_empty(): return
-	
+
 	# clamp ensures we don't crash if you give a bad number
 	_current_waypoint_index = clamp(index, 0, waypoints.size() - 1)
 	# ------------------- print("waypointmovement: manually reset target to waypoint index %s" % _current_waypoint_index)
+
+func get_target_waypoint_index() -> int:
+	return _current_waypoint_index
+
+func get_movement_state() -> Dictionary:
+	return {
+		"waypoint_index": _current_waypoint_index,
+		"is_waiting": _is_waiting,
+		"ping_pong_direction": _ping_pong_direction,
+		"movement_active": is_physics_processing()
+	}
+
+func apply_movement_state(dict: Dictionary) -> void:
+	_current_waypoint_index = dict.get("waypoint_index", 0)
+	_is_waiting = dict.get("is_waiting", false)
+	_ping_pong_direction = dict.get("ping_pong_direction", 1)
+	var active = dict.get("movement_active", true)
+
+	if active:
+		resume_movement()
+	else:
+		pause_movement()

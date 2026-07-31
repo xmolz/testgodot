@@ -129,6 +129,19 @@ text = "CONTINUE"
 flat = true
 alignment = 2
 
+[node name="LoadButton" type="Button" parent="Content/ButtonBlock" unique_id=601111112]
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.93333334, 0.93333334, 0.93333334, 1)
+theme_override_colors/font_pressed_color = Color(0.2684, 0.4335066, 0.61, 1)
+theme_override_colors/font_hover_color = Color(0.5921569, 0.8627451, 0.92156863, 1)
+theme_override_fonts/font = ExtResource("3_ubpvv")
+theme_override_font_sizes/font_size = 36
+text = "LOAD GAME"
+flat = true
+alignment = 2
+
 [node name="StartButton" type="Button" parent="Content/ButtonBlock" unique_id=293315540]
 layout_mode = 2
 focus_mode = 0
@@ -183,6 +196,7 @@ flat = true
 alignment = 2
 
 [connection signal="pressed" from="Content/ButtonBlock/ContinueButton" to="." method="_on_continue_button_pressed"]
+[connection signal="pressed" from="Content/ButtonBlock/LoadButton" to="." method="_on_load_button_pressed"]
 [connection signal="pressed" from="Content/ButtonBlock/StartButton" to="." method="_on_start_button_pressed"]
 [connection signal="pressed" from="Content/ButtonBlock/StartButton" to="." method="_on_new_game_button_pressed"]
 [connection signal="pressed" from="Content/ButtonBlock/SettingsButton" to="." method="_on_settings_button_pressed"]

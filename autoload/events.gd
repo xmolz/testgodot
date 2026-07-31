@@ -7,6 +7,7 @@ extends Node
 # //////////////// game flow (values are gamemanager.gamestate / gamemanager.interactionstate ints)
 signal game_state_changed(new_state: int)
 signal interaction_state_changed(new_state: int)
+signal level_state_ready
 
 # /////////// inventory
 signal item_added(item_id: String)

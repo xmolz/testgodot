@@ -849,6 +849,7 @@ position = Vector2(4397, -47)
 [node name="AIda" parent="Aida_Path" unique_id=611238266 instance=ExtResource("8_vivmo")]
 position = Vector2(-8, 33)
 scale = Vector2(0.98, 0.98)
+groups = ["saveable_npc"]
 
 [node name="ObjectSprite" parent="Aida_Path/AIda" index="1" unique_id=940694777]
 material = SubResource("ShaderMaterial_wu3dr")
@@ -877,6 +878,7 @@ position = Vector2(-3413, 201)
 
 [node name="Sergei" parent="Sergei_Path" unique_id=600106462 instance=ExtResource("10_getpj")]
 position = Vector2(11404, -106)
+groups = ["saveable_npc"]
 
 [node name="InteractionArea" parent="Sergei_Path/Sergei" index="3" unique_id=81005604]
 script = ExtResource("16_2cqfq")
@@ -907,6 +909,7 @@ position = Vector2(770, 91)
 scale = Vector2(0.6, 0.6)
 
 [node name="McBucket" parent="McBucket_Path" unique_id=1931002188 instance=ExtResource("13_0odxb")]
+groups = ["saveable_npc"]
 
 [node name="InteractionArea" parent="McBucket_Path/McBucket" index="3" unique_id=709105578]
 material = null

@@ -117,6 +117,10 @@ theme_override_constants/separation = 20
 layout_mode = 2
 text = "Resume"
 
+[node name="SaveLoadButton" type="Button" parent="Overlay/CenterContainer/VBoxContainer" unique_id=987654321]
+layout_mode = 2
+text = "Save / Load"
+
 [node name="HistoryButton" type="Button" parent="Overlay/CenterContainer/VBoxContainer" unique_id=1428238257]
 layout_mode = 2
 text = "Dialogue Log"

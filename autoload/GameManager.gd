@@ -1407,9 +1407,6 @@ func trigger_game_over(fade_duration: float = 1.5):
 	SceneDirector.show_game_over()
 
 func quit_to_main_menu_smooth():
-	if SaveManager and SaveManager.has_method("mark_dirty"):
-		SaveManager.mark_dirty("quit_to_main_menu")
-
 	if SoundManager:
 		SoundManager.stop_all_audio()
 	SceneDirector._cleanup_all_overlays()
