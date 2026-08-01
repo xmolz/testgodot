@@ -1,0 +1,120 @@
+[gd_scene format=3 uid="uid://b8keb46hv7k0j"]
+
+[ext_resource type="Script" uid="uid://yj6dbv8nw75u" path="res://Dev/library_prototype.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://bptirrl2ojkpc" path="res://level_state_manager.tscn" id="2_lsm"]
+[ext_resource type="Texture2D" uid="uid://l75l77xlxosd" path="res://Dev/test_floor.png" id="3_floor"]
+[ext_resource type="PackedScene" uid="uid://ba2cgdy2q1csl" path="res://characters/player.tscn" id="4_player"]
+[ext_resource type="Script" uid="uid://dljo5cmv24o5h" path="res://Non Interactables/camera_2d.gd" id="5_camera"]
+[ext_resource type="Script" uid="uid://cwgcwktmorn74" path="res://Non Interactables/camera_region.gd" id="6_camregion"]
+[ext_resource type="PackedScene" uid="uid://bigouorladqds" path="res://ui/VerbUI.tscn" id="7_verb"]
+[ext_resource type="PackedScene" uid="uid://cud6uaak7lo18" path="res://ui/InventoryUI.tscn" id="8_inv"]
+[ext_resource type="Texture2D" uid="uid://cfkvy6v701sh1" path="res://icon.svg" id="9_avl1u"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
+size = Vector2(3838, 200)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall"]
+size = Vector2(200, 2000)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cam"]
+size = Vector2(3842, 1080)
+
+[node name="LibraryPrototype" type="Control" unique_id=457382585]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="LevelStateManager" parent="." unique_id=909817379 instance=ExtResource("2_lsm")]
+
+[node name="FloorSprite" type="Sprite2D" parent="." unique_id=1688358522]
+position = Vector2(0, 767)
+texture = ExtResource("3_floor")
+centered = false
+
+[node name="FloorBody" type="StaticBody2D" parent="." unique_id=479912929]
+position = Vector2(0, 35)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FloorBody" unique_id=1224452347]
+position = Vector2(1919, 917)
+shape = SubResource("RectangleShape2D_floor")
+
+[node name="LeftWall" type="StaticBody2D" parent="." unique_id=1837260390]
+position = Vector2(-100, 540)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftWall" unique_id=2053519763]
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="RightWall" type="StaticBody2D" parent="." unique_id=896872509]
+position = Vector2(5000, 540)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightWall" unique_id=1227904859]
+position = Vector2(-1102, 0)
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="Player" parent="." unique_id=1962670012 instance=ExtResource("4_player")]
+position = Vector2(400, 659)
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1262643661]
+position_smoothing_speed = 2.0
+script = ExtResource("5_camera")
+target_path = NodePath("../Player")
+
+[node name="CameraRegion" type="Area2D" parent="." unique_id=977666026]
+script = ExtResource("6_camregion")
+is_active_on_start = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraRegion" unique_id=479385069]
+position = Vector2(1921, 540)
+shape = SubResource("RectangleShape2D_cam")
+
+[node name="VerbUI" parent="." unique_id=1357519444 instance=ExtResource("7_verb")]
+
+[node name="InventoryUI" parent="." unique_id=121850900 instance=ExtResource("8_inv")]
+
+[node name="Icon" type="Sprite2D" parent="." unique_id=1146073523]
+z_index = -1
+position = Vector2(273, 457)
+scale = Vector2(3.7421873, 5.5546875)
+texture = ExtResource("9_avl1u")
+
+[node name="Icon2" type="Sprite2D" parent="." unique_id=1197253326]
+z_index = -1
+position = Vector2(1488, 457)
+scale = Vector2(3.7421873, 5.5546875)
+texture = ExtResource("9_avl1u")
+
+[node name="Icon3" type="Sprite2D" parent="." unique_id=1426765725]
+z_index = -1
+position = Vector2(2546.0002, 457)
+scale = Vector2(3.7421873, 5.5546875)
+texture = ExtResource("9_avl1u")
+
+[node name="Icon4" type="Sprite2D" parent="." unique_id=354101886]
+z_index = -1
+position = Vector2(3468.0002, 457)
+scale = Vector2(3.7421873, 5.5546875)
+texture = ExtResource("9_avl1u")
+
+[node name="SkyLayer" type="Parallax2D" parent="." unique_id=1195280395]
+z_index = -10
+scroll_scale = Vector2(0.1, 1)
+repeat_size = Vector2(1920, 0)
+
+[node name="SkyColor" type="ColorRect" parent="SkyLayer" unique_id=1157786732]
+offset_right = 1920.0
+offset_bottom = 1080.0
+color = Color(0.68235296, 0.83137256, 1, 1)
+
+[node name="WallLayer" type="Parallax2D" parent="." unique_id=106832619]
+z_index = -8
+scroll_scale = Vector2(0.3, 1)
+repeat_size = Vector2(1200, 0)
+
+[node name="WallPillar" type="ColorRect" parent="WallLayer" unique_id=245627500]
+offset_right = 800.0
+offset_bottom = 1080.0
+color = Color(0.9893634, 0.79697883, 0.640541, 1)

@@ -1,0 +1,1367 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+alyssa_exporter.gd
+alyssa_exporter.gd.uid
+alyssa_exporter.tscn
+At the door.png
+At the door.png.import
+damp_skin.gdshader
+damp_skin.gdshader.uid
+glass_water_drops.gdshader
+glass_water_drops.gdshader.uid
+library_prototype.gd
+library_prototype.gd.uid
+library_prototype.tscn
+MarketingMockup.gd
+MarketingMockup.gd.uid
+MarketingMockup.tscn
+Protag_idle_new_resized.PNG
+Protag_idle_new_resized.PNG.import
+sexy_scene_mockup.tscn
+shower_stream.gdshader
+shower_stream.gdshader.uid
+steam_fog.gdshader
+steam_fog.gdshader.uid
+test_floor.png
+test_floor.png.import
+water_drip.gdshader
+water_drip.gdshader.uid
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path="alyssa_exporter.gd">
+extends Node
+
+func _ready():
+	# create a subviewport with exact 1800x2400 dimension
+	var viewport = SubViewport.new()
+	viewport.size = Vector2(1800, 2400)
+	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	viewport.transparent_bg = false
+	add_child(viewport)
+
+	# add the background image
+	var tex_rect = TextureRect.new()
+	tex_rect.texture = load("res://Backgrounds/layla_marketing_image.png")
+	tex_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	tex_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	tex_rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	viewport.add_child(tex_rect)
+
+	# increase font size dynamically for
+	if GameManager:
+		Settings.dialogue_text_scale = 2.2
+
+	# instantiate the balloon inside the viewport
+	var dialogue_res = load("res://dialogue/alyssa_marketing.dialogue")
+	var balloon = preload("res://conversation/conversationballoon.tscn").instantiate()
+	viewport.add_child(balloon)
+	balloon.start(dialogue_res, "start")
+
+	# wait for typing to initialize
+	# (conversationballoon.gd modifies dialogue margins dynamically
+	await get_tree().create_timer(0.5).timeout
+
+	# customize the balloon layout for
+	var panel = balloon.get_node("%Balloon/Panel")
+	var diag = balloon.get_node("%Balloon/Dialogue")
+	var name_panel = balloon.get_node("%Balloon/NamePanel")
+	var quick_menu = balloon.get_node_or_null("%QuickMenu")
+	var portrait_container = balloon.get_node_or_null("%PortraitContainer")
+
+	# hide the bottom quick menu (menu, log, auto, hide)
+	if quick_menu:
+		quick_menu.hide()
+
+	# adjust the main box to have nice padding and be taller
+	if panel:
+		panel.anchor_left = 0.0
+		panel.anchor_right = 1.0
+		panel.anchor_top = 1.0
+		panel.anchor_bottom = 1.0
+		panel.offset_left = 80
+		panel.offset_right = -80
+		panel.offset_top = -450
+		panel.offset_bottom = -40
+
+	if diag:
+		diag.anchor_left = 0.0
+		diag.anchor_right = 1.0
+		diag.anchor_top = 1.0
+		diag.anchor_bottom = 1.0
+		diag.offset_left = 80
+		diag.offset_right = -80
+		diag.offset_top = -450
+		diag.offset_bottom = -40
+		# ensure internal text padding is
+		diag.add_theme_constant_override("margin_left", 380)
+		diag.add_theme_constant_override("margin_right", 60)
+		diag.add_theme_constant_override("margin_top", 40)
+
+	# align the name plate perfectly
+	if name_panel:
+		name_panel.anchor_left = 0.0
+		name_panel.anchor_right = 0.0
+		name_panel.anchor_top = 1.0
+		name_panel.anchor_bottom = 1.0
+		name_panel.offset_left = 80
+		name_panel.offset_right = 550
+		name_panel.offset_top = -450 - 90
+		name_panel.offset_bottom = -450 + 5
+
+	# fix portrait container scaling and layout
+	if portrait_container:
+		portrait_container.anchor_left = 0.0
+		portrait_container.anchor_right = 0.0
+		portrait_container.anchor_top = 1.0
+		portrait_container.anchor_bottom = 1.0
+		# make it a 300x300 box, centered in the 410px high panel
+		portrait_container.offset_left = 120
+		portrait_container.offset_top = -395
+		portrait_container.offset_right = 420
+		portrait_container.offset_bottom = -95
+
+	# skip typing
+	if is_instance_valid(balloon.dialogue_label):
+		balloon.dialogue_label.skip_typing()
+
+	# wait another moment to ensure
+	await get_tree().create_timer(0.5).timeout
+
+	# capture and save
+	var img = viewport.get_texture().get_image()
+	var export_path = "res://alyssa_marketing_post_final.png"
+	img.save_png(export_path)
+
+	print("\n===========================================")
+	print("SUCCESS! Image automatically exported to:")
+	print(ProjectSettings.globalize_path(export_path))
+	print("===========================================\n")
+
+	if GameManager:
+		Settings.dialogue_text_scale = 1.0
+
+	get_tree().quit()
+</file>
+
+<file path="alyssa_exporter.gd.uid">
+uid://d01wsh7aqnk36
+</file>
+
+<file path="alyssa_exporter.tscn">
+[gd_scene format=3 uid="uid://ek6h76xy564h"]
+
+[ext_resource type="Script" path="res://Dev/alyssa_exporter.gd" id="1_script"]
+
+[node name="AlyssaExporter" type="Node"]
+script = ExtResource("1_script")
+</file>
+
+<file path="At the door.png.import">
+[remap]
+
+importer="texture"
+type="CompressedTexture2D"
+uid="uid://bw23bv1ra4mk4"
+path="res://.godot/imported/At the door.png-b49fb426a6cbd9ce7628fdad992a6eca.ctex"
+metadata={
+"vram_texture": false
+}
+
+[deps]
+
+source_file="res://Dev/At the door.png"
+dest_files=["res://.godot/imported/At the door.png-b49fb426a6cbd9ce7628fdad992a6eca.ctex"]
+
+[params]
+
+compress/mode=0
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/uastc_level=0
+compress/rdo_quality_loss=0.0
+compress/hdr_compression=1
+compress/normal_map=0
+compress/channel_pack=0
+mipmaps/generate=false
+mipmaps/limit=-1
+roughness/mode=0
+roughness/src_normal=""
+process/channel_remap/red=0
+process/channel_remap/green=1
+process/channel_remap/blue=2
+process/channel_remap/alpha=3
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/normal_map_invert_y=false
+process/hdr_as_srgb=false
+process/hdr_clamp_exposure=false
+process/size_limit=0
+detect_3d/compress_to=1
+</file>
+
+<file path="damp_skin.gdshader">
+shader_type canvas_item;
+
+uniform float dampness : hint_range(0.0, 1.0) = 0.2; // 0 is dry, 1 is soaked
+uniform vec4 damp_tint : source_color = vec4(0.85, 0.9, 1.0, 1.0); // Slightly cool/blue tint
+
+void fragment() {
+    vec4 tex_color = texture(TEXTURE, UV);
+
+    // Darken the colors and apply a very subtle cool tint to simulate wet fabric/skin
+    vec3 wet_color = mix(tex_color.rgb, tex_color.rgb * damp_tint.rgb, dampness);
+    wet_color = mix(wet_color, wet_color * 0.7, dampness); // 0.7 is the max darkening factor
+
+    COLOR = vec4(wet_color, tex_color.a);
+}
+</file>
+
+<file path="damp_skin.gdshader.uid">
+uid://6etx4og6oo6i
+</file>
+
+<file path="glass_water_drops.gdshader">
+shader_type canvas_item;
+uniform sampler2D screen_texture : hint_screen_texture, filter_linear_mipmap;
+uniform float drop_speed : hint_range(0.1, 5.0) = 0.15;
+uniform float drop_density : hint_range(1.0, 100.0) = 8.0;
+uniform float distortion_strength : hint_range(0.0, 0.1) = 0.03;
+uniform vec4 highlight_color : source_color = vec4(1.0, 1.0, 1.0, 0.3);
+
+float random(vec2 uv) {
+    return fract(sin(dot(uv.xy, vec2(12.9898,78.233))) * 43758.5453123);
+}
+
+void fragment() {
+    vec2 uv = UV;
+    vec2 screen_size = vec2(textureSize(screen_texture, 0));
+    float aspect = screen_size.x / screen_size.y;
+    vec2 drop_uv = vec2(uv.x * aspect, uv.y);
+
+    float col = floor(drop_uv.x * drop_density);
+    float random_col = random(vec2(col, 0.0));
+    float t = TIME * drop_speed + random_col * 100.0;
+
+    float slide_step = floor(t) + smoothstep(0.05, 0.3, fract(t));
+    float speed_mult = mix(0.8, 1.2, random_col);
+    drop_uv.y -= slide_step * speed_mult / drop_density;
+
+    vec2 grid = fract(drop_uv * drop_density);
+    vec2 cell = floor(drop_uv * drop_density);
+
+    float cell_rand = random(cell);
+    float drop_chance = step(0.4, cell_rand);
+    vec2 gv = grid - vec2(0.5);
+
+    float drop_size = mix(0.15, 0.3, cell_rand);
+    float x_offset = mix(-0.2, 0.2, random(cell + vec2(1.0, 2.0)));
+    vec2 drop_pos = vec2(x_offset, 0.25);
+
+    vec2 delta = gv - drop_pos;
+    vec2 head_delta = delta;
+    head_delta.y *= 0.9;
+    float head = smoothstep(drop_size, drop_size * 0.5, length(head_delta));
+
+    float tail_taper = smoothstep(-0.5, drop_pos.y, gv.y);
+    float tail_width = drop_size * 0.5 * tail_taper;
+    float tail = smoothstep(tail_width, 0.0, abs(delta.x));
+
+    tail *= smoothstep(-0.5, -0.2, gv.y);
+    tail *= smoothstep(0.1, -0.1, delta.y);
+
+    float water = max(head, tail) * drop_chance;
+
+    vec2 static_uv = vec2(uv.x * aspect, uv.y);
+    vec2 static_grid = fract(static_uv * drop_density * 2.5) - 0.5;
+    vec2 static_cell = floor(static_uv * drop_density * 2.5);
+    float static_rand = random(static_cell);
+    float static_drop = smoothstep(0.2, 0.05, length(static_grid)) * step(0.7, static_rand);
+
+    water = clamp(water + static_drop * 0.5, 0.0, 1.0);
+
+    vec2 offset = vec2(0.0);
+    if (water > 0.0) {
+        vec2 normal = (gv - drop_pos) * 2.0;
+        offset = normal * water * distortion_strength;
+    }
+
+    vec4 screen_color = texture(screen_texture, SCREEN_UV + offset);
+
+    float highlight = smoothstep(drop_size * 0.8, drop_size * 0.4, length(head_delta - vec2(-0.02, -0.05))) * head;
+    highlight = clamp(highlight, 0.0, 1.0) * drop_chance;
+
+    vec3 final_color = screen_color.rgb;
+    final_color = mix(final_color, highlight_color.rgb, water * highlight_color.a * 0.5);
+    final_color = mix(final_color, vec3(1.0), highlight * 0.6);
+
+    COLOR = vec4(final_color, screen_color.a);
+}
+</file>
+
+<file path="glass_water_drops.gdshader.uid">
+uid://ndfeo37n6nww
+</file>
+
+<file path="library_prototype.gd">
+extends Control
+
+@onready var level_state_manager: LevelStateManager = $LevelStateManager
+
+func _ready():
+	await get_tree().process_frame
+	if GameManager:
+		if is_instance_valid(level_state_manager):
+			Flags.register_level_state_manager(level_state_manager)
+		
+		# Unlock basic verbs so the UI doesn't break
+		var all_verbs: Array[String] = ["examine", "talk_to", "pickup", "use", "give", "flash", "think"]
+		for v in all_verbs:
+			Verbs.unlock_verb(v)
+		Verbs.set_active_scene_verbs(all_verbs)
+
+func _exit_tree():
+	if GameManager and is_instance_valid(level_state_manager):
+		if Flags.current_level_state_manager == level_state_manager:
+			Flags.register_level_state_manager(null)
+			GameManager.current_hint_manager = null
+</file>
+
+<file path="library_prototype.gd.uid">
+uid://yj6dbv8nw75u
+</file>
+
+<file path="library_prototype.tscn">
+[gd_scene format=3 uid="uid://b8keb46hv7k0j"]
+
+[ext_resource type="Script" uid="uid://yj6dbv8nw75u" path="res://Dev/library_prototype.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://bptirrl2ojkpc" path="res://level_state_manager.tscn" id="2_lsm"]
+[ext_resource type="Texture2D" uid="uid://l75l77xlxosd" path="res://Dev/test_floor.png" id="3_floor"]
+[ext_resource type="PackedScene" uid="uid://ba2cgdy2q1csl" path="res://characters/player.tscn" id="4_player"]
+[ext_resource type="Script" uid="uid://dljo5cmv24o5h" path="res://Non Interactables/camera_2d.gd" id="5_camera"]
+[ext_resource type="Script" uid="uid://cwgcwktmorn74" path="res://Non Interactables/camera_region.gd" id="6_camregion"]
+[ext_resource type="PackedScene" uid="uid://bigouorladqds" path="res://ui/VerbUI.tscn" id="7_verb"]
+[ext_resource type="PackedScene" uid="uid://cud6uaak7lo18" path="res://ui/InventoryUI.tscn" id="8_inv"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
+size = Vector2(3838, 200)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall"]
+size = Vector2(200, 2000)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cam"]
+size = Vector2(3842, 1080)
+
+[node name="LibraryPrototype" type="Control" unique_id=457382585]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="LevelStateManager" parent="." unique_id=909817379 instance=ExtResource("2_lsm")]
+
+[node name="FloorSprite" type="Sprite2D" parent="." unique_id=1688358522]
+position = Vector2(0, 767)
+texture = ExtResource("3_floor")
+centered = false
+
+[node name="FloorBody" type="StaticBody2D" parent="." unique_id=479912929]
+position = Vector2(0, 35)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FloorBody" unique_id=1224452347]
+position = Vector2(1919, 917)
+shape = SubResource("RectangleShape2D_floor")
+
+[node name="LeftWall" type="StaticBody2D" parent="." unique_id=1837260390]
+position = Vector2(-100, 540)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftWall" unique_id=2053519763]
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="RightWall" type="StaticBody2D" parent="." unique_id=896872509]
+position = Vector2(5000, 540)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightWall" unique_id=1227904859]
+position = Vector2(-1102, 0)
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="Player" parent="." unique_id=1962670012 instance=ExtResource("4_player")]
+position = Vector2(400, 659)
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1262643661]
+position_smoothing_speed = 2.0
+script = ExtResource("5_camera")
+target_path = NodePath("../Player")
+
+[node name="CameraRegion" type="Area2D" parent="." unique_id=977666026]
+script = ExtResource("6_camregion")
+is_active_on_start = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraRegion" unique_id=479385069]
+position = Vector2(1921, 540)
+shape = SubResource("RectangleShape2D_cam")
+
+[node name="VerbUI" parent="." unique_id=1357519444 instance=ExtResource("7_verb")]
+
+[node name="InventoryUI" parent="." unique_id=121850900 instance=ExtResource("8_inv")]
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="." unique_id=1371145884]
+
+[node name="SkyLayer" type="Parallax2D" parent="ParallaxBackground" unique_id=801333159]
+z_index = -10
+scroll_scale = Vector2(0.1, 1)
+repeat_size = Vector2(1920, 0)
+
+[node name="ColorRect" type="ColorRect" parent="ParallaxBackground/SkyLayer" unique_id=2114583923]
+custom_minimum_size = Vector2(1920, 1080)
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0.68235296, 0.83137256, 1, 1)
+
+[node name="Parallax2D" type="Parallax2D" parent="ParallaxBackground" unique_id=936347100]
+z_index = -8
+scroll_scale = Vector2(0.3, 1)
+
+[node name="ColorRect" type="ColorRect" parent="ParallaxBackground/Parallax2D" unique_id=1350238754]
+offset_right = 800.0
+offset_bottom = 1080.0
+color = Color(0.9893634, 0.79697883, 0.640541, 1)
+
+[node name="ColorRect2" type="ColorRect" parent="ParallaxBackground/Parallax2D" unique_id=1717526839]
+offset_left = 1200.0
+offset_right = 2000.0
+offset_bottom = 1080.0
+color = Color(0.9893634, 0.79697883, 0.640541, 1)
+
+[node name="ColorRect3" type="ColorRect" parent="ParallaxBackground/Parallax2D" unique_id=1198435549]
+offset_left = 2400.0
+offset_right = 3200.0
+offset_bottom = 1080.0
+color = Color(0.9893634, 0.79697883, 0.640541, 1)
+</file>
+
+<file path="MarketingMockup.gd">
+extends Control
+
+@onready var level_state_manager = $LevelStateManager
+
+func _ready():
+	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+
+	if GameManager:
+		Flags.register_level_state_manager(level_state_manager)
+
+	await get_tree().process_frame
+	await get_tree().process_frame
+
+	if GameManager:
+		var all_verbs: Array[String] = ["examine", "talk_to", "pickup", "use", "give", "flash", "think"]
+		for v in all_verbs:
+			Verbs.unlock_verb(v)
+		Verbs.set_active_scene_verbs(all_verbs)
+
+		Inventory.add_item("hospital_toilet_paper")
+
+		level_state_manager.set_level_flag("insurance_button_unlocked", true)
+		level_state_manager.set_level_flag("dev_cta_completed", false)
+
+		# note: this mockup scene has
+		# and the journal/insurance button presses
+		var mock_insurance = get_node_or_null("%InsuranceFormButtonUI")
+		if is_instance_valid(mock_insurance): mock_insurance.show()
+
+		var mock_journal = get_node_or_null("%JournalButtonUI")
+		if is_instance_valid(mock_journal): mock_journal.show()
+
+		var mock_verb = get_node_or_null("%VerbUI_CanvasLayer")
+		if is_instance_valid(mock_verb): mock_verb.show()
+
+		var mock_inventory = get_node_or_null("%InventoryUI_CanvasLayer")
+		if is_instance_valid(mock_inventory): mock_inventory.show()
+
+		if is_instance_valid(GameManager.patreon_world_ui):
+			GameManager.patreon_world_ui.hide()
+
+		if is_instance_valid(GameManager.pause_menu_ui):
+			GameManager.pause_menu_ui.menu_panel.show()
+			GameManager.pause_menu_ui.set_cancel_mode(false)
+</file>
+
+<file path="MarketingMockup.gd.uid">
+uid://btofbgi8huj5o
+</file>
+
+<file path="MarketingMockup.tscn">
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://btofbgi8huj5o" path="res://Dev/MarketingMockup.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://screenshot_related/screenshot.png" id="2_image"]
+[ext_resource type="PackedScene" uid="uid://ba2cgdy2q1csl" path="res://characters/player.tscn" id="3_player"]
+[ext_resource type="Script" uid="uid://bs05cyo72v37l" path="res://LevelStateManager.gd" id="4_lsm"]
+[ext_resource type="PackedScene" uid="uid://bigouorladqds" path="res://ui/VerbUI.tscn" id="5_verb"]
+[ext_resource type="PackedScene" uid="uid://cud6uaak7lo18" path="res://ui/InventoryUI.tscn" id="6_inv"]
+[ext_resource type="PackedScene" uid="uid://cd01yo706pdq1" path="res://ui/journal_button_ui.tscn" id="7_journal"]
+[ext_resource type="PackedScene" uid="uid://cn3wt8p41equ0" path="res://ui/insurance_form_button_ui.tscn" id="8_insure"]
+
+[node name="MarketingMockup" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="BackgroundImage" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_image")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Player" parent="." instance=ExtResource("3_player")]
+position = Vector2(-1000, -1000)
+
+[node name="LevelStateManager" type="Node" parent="."]
+script = ExtResource("4_lsm")
+
+[node name="VerbUI_CanvasLayer" parent="." unique_name_in_owner = true instance=ExtResource("5_verb")]
+
+[node name="InventoryUI_CanvasLayer" parent="." unique_name_in_owner = true instance=ExtResource("6_inv")]
+
+[node name="JournalButtonUI" parent="." unique_name_in_owner = true instance=ExtResource("7_journal")]
+
+[node name="InsuranceFormButtonUI" parent="." unique_name_in_owner = true instance=ExtResource("8_insure")]
+</file>
+
+<file path="Protag_idle_new_resized.PNG.import">
+[remap]
+
+importer="texture"
+type="CompressedTexture2D"
+uid="uid://xnjixksc78h4"
+path="res://.godot/imported/Protag_idle_new_resized.PNG-35baa9419a82f105b56b48b740c55cdf.ctex"
+metadata={
+"vram_texture": false
+}
+
+[deps]
+
+source_file="res://Dev/Protag_idle_new_resized.PNG"
+dest_files=["res://.godot/imported/Protag_idle_new_resized.PNG-35baa9419a82f105b56b48b740c55cdf.ctex"]
+
+[params]
+
+compress/mode=4
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/uastc_level=0
+compress/rdo_quality_loss=1.0
+compress/hdr_compression=1
+compress/normal_map=0
+compress/channel_pack=0
+mipmaps/generate=false
+mipmaps/limit=-1
+roughness/mode=0
+roughness/src_normal=""
+process/channel_remap/red=0
+process/channel_remap/green=1
+process/channel_remap/blue=2
+process/channel_remap/alpha=3
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/normal_map_invert_y=false
+process/hdr_as_srgb=false
+process/hdr_clamp_exposure=false
+process/size_limit=0
+detect_3d/compress_to=1
+</file>
+
+<file path="sexy_scene_mockup.tscn">
+[gd_scene format=3 uid="uid://c8ew6m1cre37i"]
+
+[ext_resource type="Texture2D" uid="uid://pgh0fxgko7t2" path="res://Backgrounds/Levels/layla shower bg.png" id="1_l8jaq"]
+[ext_resource type="Texture2D" uid="uid://dhicjb67dx6fj" path="res://Sprites/characters/layla/layla_base.png" id="2_body"]
+[ext_resource type="Texture2D" uid="uid://bonhiqvu0mmkb" path="res://Sprites/dialogue sprites/layla_dialogue_sprite.png" id="3_lipip"]
+[ext_resource type="Texture2D" uid="uid://y2y1f3hkyh76" path="res://Sprites/dialogue sprites/protag_dialogue_sprite.png" id="4_playerpip"]
+[ext_resource type="Shader" uid="uid://d3ii3qgl4d2se" path="res://Dev/water_drip.gdshader" id="4_y88ty"]
+[ext_resource type="Theme" uid="uid://bbh4rjwcxnama" path="res://Themes/verb_and_inventory_theme.tres" id="5_theme"]
+[ext_resource type="FontFile" uid="uid://bd58xbyix7r6p" path="res://Fonts/VarelaRound-Regular.ttf" id="6_font"]
+[ext_resource type="Shader" uid="uid://6etx4og6oo6i" path="res://Dev/damp_skin.gdshader" id="8_damp"]
+[ext_resource type="Shader" uid="uid://bfgvlvhjk682t" path="res://Dev/steam_fog.gdshader" id="9_steam"]
+[ext_resource type="Shader" uid="uid://ndfeo37n6nww" path="res://Dev/glass_water_drops.gdshader" id="10_drops"]
+[ext_resource type="Shader" uid="uid://tiucesidxnk1" path="res://Dev/shower_stream.gdshader" id="10_trd8d"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_DampSkin"]
+shader = ExtResource("8_damp")
+shader_parameter/dampness = 0.25
+shader_parameter/damp_tint = Color(0.85, 0.9, 1, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_trd8d"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_52wk3"]
+noise = SubResource("FastNoiseLite_trd8d")
+seamless = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ld3cv"]
+shader = ExtResource("4_y88ty")
+shader_parameter/DropsNoise = SubResource("NoiseTexture2D_52wk3")
+shader_parameter/distortion_strength = 0.6250000296875
+shader_parameter/specular_intensity = 0.76400003629
+shader_parameter/speed_multiplier = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_Steam"]
+shader = ExtResource("9_steam")
+shader_parameter/steam_color = Color(0.9, 0.95, 1, 1)
+shader_parameter/fill_amount = 0.7410000351975
+shader_parameter/speed = 0.44400002109
+shader_parameter/scale = 2.17600005586
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_GlassDrops"]
+shader = ExtResource("10_drops")
+shader_parameter/drop_speed = 0.43800001754512
+shader_parameter/drop_density = 2.294000061465
+shader_parameter/distortion_strength = 0.0150000007125
+shader_parameter/highlight_color = Color(1, 1, 1, 0.101960786)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_PiP"]
+bg_color = Color(0.15, 0.15, 0.15, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(1, 0.51, 0.6, 1)
+corner_radius_top_left = 100
+corner_radius_top_right = 100
+corner_radius_bottom_right = 100
+corner_radius_bottom_left = 100
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Balloon"]
+content_margin_left = 20.0
+content_margin_top = 15.0
+content_margin_right = 20.0
+content_margin_bottom = 15.0
+bg_color = Color(1, 1, 1, 0.95)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.51, 0.6, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+shadow_color = Color(0, 0, 0, 0.15)
+shadow_size = 10
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_52wk3"]
+shader = ExtResource("10_trd8d")
+shader_parameter/stream_speed = 8.33900039284262
+shader_parameter/length_scale = 18.3600008246
+shader_parameter/stream_scale = 33.3450015363875
+shader_parameter/distortion_strength = 0.0010000000475
+shader_parameter/water_color = Color(0.8509804, 0.9490196, 1, 0)
+shader_parameter/droplet_density = 0.32900001236762
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_RightPanel"]
+bg_color = Color(0.1, 0.06, 0.07, 0.95)
+border_width_left = 4
+border_color = Color(1, 0.51, 0.6, 0.5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_MeterBg"]
+bg_color = Color(0.05, 0.03, 0.04, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.51, 0.6, 0.3)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_MeterFillArousal"]
+bg_color = Color(1, 0.51, 0.6, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+shadow_color = Color(1, 0.51, 0.6, 0.4)
+shadow_size = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_MeterFillClean"]
+bg_color = Color(0.2, 0.85, 1, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+shadow_color = Color(0.2, 0.85, 1, 0.4)
+shadow_size = 10
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_Focus"]
+
+[node name="SexySceneMockup" type="CanvasLayer" unique_id=1321271741]
+layer = 90
+
+[node name="Dimmer" type="ColorRect" parent="." unique_id=1369037939]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0, 0, 0, 0.85)
+
+[node name="MainSplit" type="HBoxContainer" parent="." unique_id=1334614173]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="LeftCanvas" type="Control" parent="MainSplit" unique_id=1986468702]
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 70.0
+
+[node name="Background" type="TextureRect" parent="MainSplit/LeftCanvas" unique_id=1913588634]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_l8jaq")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="CharacterBody" type="TextureRect" parent="MainSplit/LeftCanvas" unique_id=1898480588]
+material = SubResource("ShaderMaterial_DampSkin")
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -400.0
+offset_top = -1000.0
+offset_right = 400.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("2_body")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HandDrawnWaterOverlay" type="TextureRect" parent="MainSplit/LeftCanvas/CharacterBody" unique_id=1111478203]
+material = SubResource("ShaderMaterial_ld3cv")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_body")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="VolumetricSteam" type="ColorRect" parent="MainSplit/LeftCanvas" unique_id=219640221]
+material = SubResource("ShaderMaterial_Steam")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="CameraGlassDroplets" type="ColorRect" parent="MainSplit/LeftCanvas" unique_id=1174938736]
+material = SubResource("ShaderMaterial_GlassDrops")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="LIPiP_Panel" type="Panel" parent="MainSplit/LeftCanvas" unique_id=931782645]
+clip_children = 2
+layout_mode = 1
+offset_left = 40.0
+offset_top = 40.0
+offset_right = 220.0
+offset_bottom = 220.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_PiP")
+
+[node name="LIPiP_Image" type="TextureRect" parent="MainSplit/LeftCanvas/LIPiP_Panel" unique_id=1344094579]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 10.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_lipip")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LIDialogueBalloon" type="PanelContainer" parent="MainSplit/LeftCanvas" unique_id=144780960]
+layout_mode = 1
+offset_left = 240.0
+offset_top = 100.0
+offset_right = 640.0
+offset_bottom = 180.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_Balloon")
+
+[node name="Label" type="Label" parent="MainSplit/LeftCanvas/LIDialogueBalloon" unique_id=1725963963]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("6_font")
+theme_override_font_sizes/font_size = 28
+text = "Water is a bit cold... but it feels nice."
+autowrap_mode = 3
+
+[node name="PlayerPiP_Panel" type="Panel" parent="MainSplit/LeftCanvas" unique_id=189312503]
+clip_children = 2
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -220.0
+offset_top = -220.0
+offset_right = -40.0
+offset_bottom = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_PiP")
+
+[node name="PlayerPiP_Image" type="TextureRect" parent="MainSplit/LeftCanvas/PlayerPiP_Panel" unique_id=160374059]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 15.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_playerpip")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="PlayerDialogueBalloon" type="PanelContainer" parent="MainSplit/LeftCanvas" unique_id=1007465677]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -640.0
+offset_top = -180.0
+offset_right = -240.0
+offset_bottom = -100.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_Balloon")
+
+[node name="Label" type="Label" parent="MainSplit/LeftCanvas/PlayerDialogueBalloon" unique_id=1149324669]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("6_font")
+theme_override_font_sizes/font_size = 28
+text = "Let me get the soap..."
+horizontal_alignment = 2
+autowrap_mode = 3
+
+[node name="ShowerStream1" type="Line2D" parent="MainSplit/LeftCanvas" unique_id=1492776043]
+material = SubResource("ShaderMaterial_52wk3")
+position = Vector2(428, 140)
+points = PackedVector2Array(144, -124, 185, 965)
+width = 800.0
+texture_mode = 2
+
+[node name="RightSide" type="VBoxContainer" parent="MainSplit" unique_id=1700360058]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 30.0
+theme = ExtResource("5_theme")
+theme_override_constants/separation = 0
+
+[node name="ControlsPanel" type="PanelContainer" parent="MainSplit/RightSide" unique_id=926184420]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_RightPanel")
+
+[node name="Margin" type="MarginContainer" parent="MainSplit/RightSide/ControlsPanel" unique_id=185961694]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 25
+
+[node name="VBox" type="VBoxContainer" parent="MainSplit/RightSide/ControlsPanel/Margin" unique_id=1958041749]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="MetersHeader" type="Label" parent="MainSplit/RightSide/ControlsPanel/Margin/VBox" unique_id=1800632580]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.51, 0.6, 1)
+theme_override_font_sizes/font_size = 20
+text = "STATUS"
+horizontal_alignment = 1
+
+[node name="ArousalMeter" type="ProgressBar" parent="MainSplit/RightSide/ControlsPanel/Margin/VBox" unique_id=133796505]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_MeterBg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_MeterFillArousal")
+value = 45.0
+show_percentage = false
+
+[node name="CleanMeter" type="ProgressBar" parent="MainSplit/RightSide/ControlsPanel/Margin/VBox" unique_id=543510874]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_MeterBg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_MeterFillClean")
+value = 75.0
+show_percentage = false
+
+[node name="FinishButton" type="Button" parent="MainSplit/RightSide/ControlsPanel/Margin/VBox" unique_id=701411346]
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.8, 0.9, 1)
+theme_override_font_sizes/font_size = 20
+theme_override_styles/focus = SubResource("StyleBoxEmpty_Focus")
+disabled = true
+text = "FINISH UP"
+
+[node name="HSeparator1" type="HSeparator" parent="MainSplit/RightSide/ControlsPanel/Margin/VBox" unique_id=1824590359]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="VerbHeader" type="Label" parent="MainSplit/RightSide/ControlsPanel/Margin/VBox" unique_id=531407617]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.8, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "ACTIONS"
+horizontal_alignment = 1
+
+[node name="VerbGrid" type="GridContainer" parent="MainSplit/RightSide/ControlsPanel/Margin/VBox" unique_id=259556550]
+layout_mode = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 2
+
+[node name="TouchBtn" type="Button" parent="MainSplit/RightSide/ControlsPanel/Margin/VBox/VerbGrid" unique_id=388402523]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Touch"
+
+[node name="KissBtn" type="Button" parent="MainSplit/RightSide/ControlsPanel/Margin/VBox/VerbGrid" unique_id=229251329]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Kiss"
+
+[node name="TeaseBtn" type="Button" parent="MainSplit/RightSide/ControlsPanel/Margin/VBox/VerbGrid" unique_id=1328221160]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Tease"
+
+[node name="UseBtn" type="Button" parent="MainSplit/RightSide/ControlsPanel/Margin/VBox/VerbGrid" unique_id=613713485]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Use Item"
+
+[node name="HSeparator2" type="HSeparator" parent="MainSplit/RightSide/ControlsPanel/Margin/VBox" unique_id=1738547112]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="ItemsHeader" type="Label" parent="MainSplit/RightSide/ControlsPanel/Margin/VBox" unique_id=1768267827]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_font_sizes/font_size = 24
+text = "INVENTORY"
+horizontal_alignment = 1
+
+[node name="ItemsGrid" type="GridContainer" parent="MainSplit/RightSide/ControlsPanel/Margin/VBox" unique_id=1135482977]
+layout_mode = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 3
+
+[node name="Item1" type="Button" parent="MainSplit/RightSide/ControlsPanel/Margin/VBox/ItemsGrid" unique_id=662457845]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Soap"
+
+[node name="Item2" type="Button" parent="MainSplit/RightSide/ControlsPanel/Margin/VBox/ItemsGrid" unique_id=398363235]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+size_flags_horizontal = 3
+disabled = true
+text = "-"
+
+[node name="Item3" type="Button" parent="MainSplit/RightSide/ControlsPanel/Margin/VBox/ItemsGrid" unique_id=1550797179]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+size_flags_horizontal = 3
+disabled = true
+text = "-"
+
+[node name="Spacer" type="Control" parent="MainSplit/RightSide/ControlsPanel/Margin/VBox" unique_id=1981237605]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="BackButton" type="Button" parent="MainSplit/RightSide/ControlsPanel/Margin/VBox" unique_id=144638072]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+text = "Step Back"
+</file>
+
+<file path="shower_stream.gdshader">
+shader_type canvas_item;
+
+uniform sampler2D screen_texture : hint_screen_texture, filter_linear_mipmap;
+
+uniform float stream_speed : hint_range(0.1, 10.0) = 3.0;
+uniform float length_scale : hint_range(1.0, 50.0) = 15.0; // Stretches the noise along the line length
+uniform float stream_scale : hint_range(1.0, 50.0) = 15.0; // Scales the droplet noise
+uniform float distortion_strength : hint_range(0.0, 0.1) = 0.03;
+uniform vec4 water_color : source_color = vec4(0.85, 0.95, 1.0, 0.3);
+uniform float droplet_density : hint_range(0.1, 1.0) = 0.65;
+
+// Basic noise generator
+float random(vec2 uv) {
+    return fract(sin(dot(uv.xy, vec2(12.9898,78.233))) * 43758.5453123);
+}
+
+float noise(vec2 uv) {
+    vec2 i = floor(uv);
+    vec2 f = fract(uv);
+    f = f * f * (3.0 - 2.0 * f);
+    float a = random(i);
+    float b = random(i + vec2(1.0, 0.0));
+    float c = random(i + vec2(0.0, 1.0));
+    float d = random(i + vec2(1.0, 1.0));
+    return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
+}
+
+void fragment() {
+    // In a Line2D with STRETCH mode, UV.x is the length (0 to 1), UV.y is the width (0 to 1)
+    vec2 uv = UV;
+
+    // Scale UV.x so the noise doesn't stretch out weirdly on long lines
+    vec2 scaled_uv = vec2(uv.x * length_scale, uv.y);
+
+    // Create the scrolling motion along the X axis (down the line)
+    float time = TIME * stream_speed;
+
+    // Base UV for streaks (stretched heavily along the stream direction)
+    vec2 streak_uv = vec2(scaled_uv.x - time, scaled_uv.y * 2.0) * stream_scale;
+    streak_uv.x *= 0.15; // Stretch noise along the stream path
+
+    // Multi-layered noise for complex, broken-up water spray
+    float n1 = noise(streak_uv);
+    float n2 = noise(streak_uv * 2.0 - vec2(time * 1.5, 0.0));
+    float combined_noise = (n1 * 0.6 + n2 * 0.4);
+
+    // Cut off noise to create separate droplets/streaks based on density
+    float streaks = smoothstep(1.0 - droplet_density, 1.0, combined_noise);
+
+    // Fade out the edges of the line so it isn't a harsh rectangle
+    float edge_fade = smoothstep(0.0, 0.3, uv.y) * smoothstep(1.0, 0.7, uv.y);
+
+    // Fade out the very beginning and end of the line
+    float end_fade = smoothstep(0.0, 0.05, uv.x) * smoothstep(1.0, 0.9, uv.x);
+
+    float water = streaks * edge_fade * end_fade;
+
+    // Distort what is behind the water stream
+    vec2 offset = vec2(0.0);
+    if (water > 0.0) {
+        // Calculate a fake normal for refraction
+        offset = vec2(water * distortion_strength) * (uv.y - 0.5);
+    }
+
+    vec4 bg = texture(screen_texture, SCREEN_UV + offset);
+
+    // Mix in the water color and add specular highlights
+    vec3 final_color = mix(bg.rgb, water_color.rgb, water * water_color.a);
+    final_color += vec3(water * 0.6); // Bright highlight for the drops
+
+    // Soft anti-aliased alpha
+    float alpha = smoothstep(0.01, 0.1, water);
+
+    COLOR = vec4(final_color, alpha);
+}
+</file>
+
+<file path="shower_stream.gdshader.uid">
+uid://tiucesidxnk1
+</file>
+
+<file path="steam_fog.gdshader">
+shader_type canvas_item;
+
+uniform vec4 steam_color : source_color = vec4(0.9, 0.95, 1.0, 1.0);
+uniform float fill_amount : hint_range(0.0, 1.0) = 0.4; // 0 is clear, 1 is a sauna
+uniform float speed : hint_range(0.0, 2.0) = 0.3;
+uniform float scale : hint_range(1.0, 10.0) = 3.0;
+
+// Pseudo-random generator
+float rand(vec2 n) {
+    return fract(sin(dot(n, vec2(12.9898, 4.1414))) * 43758.5453);
+}
+
+// 2D Value Noise
+float noise(vec2 p){
+    vec2 ip = floor(p);
+    vec2 u = fract(p);
+    u = u*u*(3.0-2.0*u);
+    float res = mix(
+        mix(rand(ip),rand(ip+vec2(1.0,0.0)),u.x),
+        mix(rand(ip+vec2(0.0,1.0)),rand(ip+vec2(1.0,1.0)),u.x),u.y);
+    return res*res;
+}
+
+// Fractal Brownian Motion for cloud-like textures
+float fbm(vec2 x) {
+    float v = 0.0;
+    float a = 0.5;
+    vec2 shift = vec2(100.0);
+    mat2 rot = mat2(vec2(cos(0.5), sin(0.5)), vec2(-sin(0.5), cos(0.50)));
+    for (int i = 0; i < 4; ++i) {
+        v += a * noise(x);
+        x = rot * x * 2.0 + shift;
+        a *= 0.5;
+    }
+    return v;
+}
+
+void fragment() {
+    vec2 uv = UV * scale;
+    // Steam drifts up and slightly right
+    vec2 motion = vec2(TIME * speed * 0.2, -TIME * speed * 0.8);
+
+    // Layer the FBM to create rolling, ethereal clouds
+    float f = fbm(uv + motion);
+    float f2 = fbm(uv + vec2(f) + motion * 1.2);
+    float final_clouds = fbm(uv + vec2(f2) + motion * 1.5);
+
+    // Smooth out the clouds and apply the overall room fill_amount
+    float alpha = smoothstep(0.1, 0.9, final_clouds) * fill_amount;
+
+    COLOR = vec4(steam_color.rgb, alpha * steam_color.a);
+}
+</file>
+
+<file path="steam_fog.gdshader.uid">
+uid://bfgvlvhjk682t
+</file>
+
+<file path="test_floor.png.import">
+[remap]
+
+importer="texture"
+type="CompressedTexture2D"
+uid="uid://l75l77xlxosd"
+path="res://.godot/imported/test_floor.png-70c89f5596ddf7f989ff4f4fea28065b.ctex"
+metadata={
+"vram_texture": false
+}
+
+[deps]
+
+source_file="res://Dev/test_floor.png"
+dest_files=["res://.godot/imported/test_floor.png-70c89f5596ddf7f989ff4f4fea28065b.ctex"]
+
+[params]
+
+compress/mode=0
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/uastc_level=0
+compress/rdo_quality_loss=0.0
+compress/hdr_compression=1
+compress/normal_map=0
+compress/channel_pack=0
+mipmaps/generate=false
+mipmaps/limit=-1
+roughness/mode=0
+roughness/src_normal=""
+process/channel_remap/red=0
+process/channel_remap/green=1
+process/channel_remap/blue=2
+process/channel_remap/alpha=3
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/normal_map_invert_y=false
+process/hdr_as_srgb=false
+process/hdr_clamp_exposure=false
+process/size_limit=0
+detect_3d/compress_to=1
+</file>
+
+<file path="water_drip.gdshader">
+shader_type canvas_item;
+uniform sampler2D DropsNoise : repeat_enable;
+uniform float distortion_strength : hint_range(0.0, 5.0) = 0.5;
+uniform float specular_intensity : hint_range(0.0, 3.0) = 1.0;
+uniform float speed_multiplier : hint_range(0.1, 5.0) = 1.0;
+
+float hash21(vec2 p) {
+    uvec2 q = uvec2(ivec2(p)) * uvec2(1597334673U, 3812015801U);
+    uint n = (q.x ^ q.y) * 1597334673U;
+    return float(n) / float(0xffffffffU);
+}
+
+vec3 hash13(float p) {
+   vec3 p3 = fract(vec3(p) * vec3(.1031,.11369,.13787));
+   p3 += dot(p3, p3.yzx + 19.19);
+   return fract(vec3((p3.x + p3.y)*p3.z, (p3.x+p3.z)*p3.y, (p3.y+p3.z)*p3.x));
+}
+
+float rainDrops(vec2 st, float time, float size, vec2 scale) {
+    vec2 uv = st * size;
+    uv.x *= scale.x / scale.y;
+    vec2 gridUv = fract(uv) - .5;
+    vec2 id = floor(uv);
+    vec3 h = (hash13(id.x * 467.983 + id.y * 1294.387) - .5) * .8;
+    vec2 dropUv = gridUv - h.xy;
+    vec4 noise = texture(DropsNoise, id * .05);
+    float drop = smoothstep(.25, 0., length(dropUv)) *
+        max(0., 1. - fract(time * (noise.b + .1) * .2 + noise.g) * 2.);
+    return drop;
+}
+
+vec2 wigglyDrops(vec2 st, float time, float size, vec2 scale) {
+    vec2 wigglyDropAspect = vec2(2., 1.);
+    vec2 uv = st * size * wigglyDropAspect;
+    uv.x *= scale.x / scale.y;
+    uv.y += time * .23;
+    vec2 gridUv = fract(uv) - .5;
+    vec2 id = floor(uv);
+    float h = hash21(id);
+    time += h * 2. * PI;
+    float w = st.y * 10.;
+    float dx = (h - .5) * .8;
+    dx += (.3 - abs(dx)) * pow(sin(w), 2.) * sin(2. * w) *
+        pow(cos(w), 3.) * 1.05;
+    float dy = -sin(time + sin(time + sin(time) * .5)) * .45;
+    dy -= (gridUv.x - dx) * (gridUv.x - dx);
+    vec2 dropUv = (gridUv - vec2(dx, dy)) / wigglyDropAspect;
+    float drop = smoothstep(.06, .0, length(dropUv));
+    vec2 trailUv = (gridUv - vec2(dx, time * .23)) / wigglyDropAspect;
+    trailUv.y = (fract((trailUv.y) * 8.) - .5) / 8.;
+    float trailDrop = smoothstep(.03, .0, length(trailUv));
+    trailDrop *= smoothstep(-.05, .05, dropUv.y) * smoothstep(.4, dy, gridUv.y) *
+            (1.-step(.4, gridUv.y));
+    float fogTrail = smoothstep(-.05, .05, dropUv.y) * smoothstep(.4, dy, gridUv.y) *
+            smoothstep(.05, .01, abs(dropUv.x)) * (1.-step(.4, gridUv.y));
+    return vec2(drop + trailDrop, fogTrail);
+}
+
+vec2 getDrops(vec2 st, float time, vec2 scale) {
+    vec2 largeDrops = wigglyDrops(st, time * 2., 1.6, scale);
+    vec2 mediumDrops = wigglyDrops(st + 2.65, (time + 1296.675) * 1.4, 2.5, scale);
+    vec2 smallDrops = wigglyDrops(st - 1.67, time - 896.431, 3.6, scale);
+    vec2 drops;
+    drops.y = max(largeDrops.y, max(mediumDrops.y, smallDrops.y));
+    drops.x = smoothstep(.4, 2., largeDrops.x + mediumDrops.x + smallDrops.x);
+    return drops;
+}
+
+vec2 dropsUV(vec2 uv, float _time, vec2 scale) {
+    // Invert Y so drops fall DOWN the screen, matching Godot's Y-down coordinate system
+    vec2 st = vec2(uv.x, -uv.y);
+
+    // Let time run forwards natively so the droplet physics play correctly
+    float time = mod(_time, 7200.0);
+
+    vec2 drops = getDrops(st, time, scale);
+    vec2 dropsX = getDrops(st + vec2(0.001, 0.0), time, scale);
+
+    // Sample Y in the negative direction to match the inverted Y-axis
+    vec2 dropsY = getDrops(st + vec2(0.0, -0.001), time, scale);
+
+    vec3 normal = vec3(dropsX.x - drops.x, dropsY.x - drops.x, 0.0);
+    normal.z = sqrt(1.0 - normal.x * normal.x - normal.y * normal.y);
+    normal = normalize(normal);
+
+    return normal.xy;
+}
+
+void fragment() {
+    vec2 scale = vec2(1.0, TEXTURE_PIXEL_SIZE.x / TEXTURE_PIXEL_SIZE.y);
+    vec2 drop_normals = dropsUV(UV, TIME * speed_multiplier, scale);
+
+    vec2 offset = drop_normals * (distortion_strength * 0.1);
+    vec4 char_color = texture(TEXTURE, UV + offset);
+    float base_alpha = texture(TEXTURE, UV).a;
+    float shine = length(drop_normals) * specular_intensity;
+
+    vec3 final_color = char_color.rgb;
+    final_color += vec3(shine);
+    COLOR = vec4(final_color, char_color.a * base_alpha);
+}
+</file>
+
+<file path="water_drip.gdshader.uid">
+uid://d3ii3qgl4d2se
+</file>
+
+</files>
