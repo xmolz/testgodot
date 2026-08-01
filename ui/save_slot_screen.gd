@@ -175,13 +175,16 @@ func _execute_load(slot_id: String):
 	if GameManager.pause_menu_ui:
 		GameManager.pause_menu_ui.menu_panel.hide()
 		GameManager.pause_menu_ui.overlay.hide()
+		if GameManager.pause_menu_ui.has_method("reset_pause_snapshot"):
+			GameManager.pause_menu_ui.reset_pause_snapshot()
 		if GameManager.pause_menu_ui.get_tree().paused:
 			GameManager.pause_menu_ui.get_tree().paused = false
 	SaveManager.load_from_slot(slot_id)
 
 func _show_confirm_overlay(slot_id: String):
 	_confirm_canvas = CanvasLayer.new()
-	_confirm_canvas.layer = 150
+	# UI layering contract: 128 is reserved for the custom cursor. All other CanvasLayers must stay <= 125.
+	_confirm_canvas.layer = 125
 	
 	var overlay = ColorRect.new()
 	overlay.color = Color(0, 0, 0, 0.7)
@@ -268,7 +271,7 @@ func _show_confirm_overlay(slot_id: String):
 	no_btn.text = "NO"
 	hbox.add_child(no_btn)
 	
-	get_tree().root.add_child(_confirm_canvas)
+	add_child(_confirm_canvas)
 	
 	no_btn.pressed.connect(func():
 		if SoundManager: SoundManager.play_sfx("ui_click")

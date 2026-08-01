@@ -24,6 +24,36 @@ extends Cutscene
 @export_group("Settings")
 @export var fix_duration: float = 25.0 
 
+func _on_level_state_ready() -> void:
+	if not Flags.get_level_flag("aida_fixing_toilet"):
+		return
+	# a save captured this cutscene mid-run. fast-forward to its
+	# deterministic end state (mirrors steps 5-7 of _execution_steps).
+	print_rich("[color=magenta]ToiletClogCutscene: interrupted run detected on load — fast-forwarding to completion.[/color]")
+
+	Flags.set_level_flag("aida_fixing_toilet", false)
+
+	# unclog the toilet exactly like step 5 does
+	if toilet_interactable:
+		var toilet_root = toilet_interactable.get_parent()
+		if toilet_root and toilet_root.has_method("change_state"):
+			toilet_root.change_state(0)  # NORMAL; writes toilet flags false itself
+		else:
+			Flags.set_level_flag("toilet_clogged", false)
+			Flags.set_level_flag("toilet_has_paper", false)
+
+	# put aida back in the main room and hand her to her patrol (step 6-7)
+	if is_instance_valid(aida_npc):
+		aida_npc.global_position = main_room_return_pos.global_position
+		aida_npc.visible = true
+		aida_npc.set("_was_in_main_room", true)
+		Flags.set_level_flag("aida_in_main_room", true)
+		var aida_mover = aida_npc.get_node_or_null("MovementController")
+		if aida_mover:
+			if aida_mover.has_method("set_target_waypoint_index"):
+				aida_mover.set_target_waypoint_index(0)
+			aida_mover.resume_movement()
+
 func _execution_steps():
 	print_rich("[color=magenta][Time: %s] Cutscene START.[/color]" % Time.get_ticks_msec())
 	

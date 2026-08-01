@@ -5,6 +5,7 @@ var _rotation_angle: float = 0.0
 var _current_radius: float = 8.0
 
 func _ready():
+	# UI layering contract: 128 is reserved for the custom cursor. All other CanvasLayers must stay <= 125.
 	layer = 128
 	process_mode = Node.PROCESS_MODE_ALWAYS
 

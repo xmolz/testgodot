@@ -77,6 +77,15 @@ var _signals_connected_to_interactable: Interactable = null
 
 var current_hint_manager: LevelHintManager = null
 
+# number of Cutscene sequences currently executing (including their
+# background phase after early player-control release). saves are
+# blocked while > 0 because a mid-coroutine world state cannot be
+# serialized or resumed.
+var active_cutscene_count: int = 0
+
+func is_cutscene_sequence_running() -> bool:
+	return active_cutscene_count > 0
+
 # ***** verb management *****
 @export var all_verb_data_resources: Array[VerbData] = []
 
@@ -1110,6 +1119,7 @@ func open_insurance_form():
 # cached_* packedscenes, or is_transitioning (transitionlayer owns it).
 func reset_run_state():
 	# ***** interaction / input transients *****
+	active_cutscene_count = 0
 	_disconnect_interactable_request_signals()
 	hovered_interactables.clear()
 	hovered_interactable = null
@@ -1161,7 +1171,8 @@ func reset_run_state():
 func _on_main_menu_new_game_requested():
 	if SaveManager and SaveManager.has_save("autosave"):
 		var canvas = CanvasLayer.new()
-		canvas.layer = 150
+		# UI layering contract: 128 is reserved for the custom cursor. All other CanvasLayers must stay <= 125.
+		canvas.layer = 125
 		
 		var overlay = ColorRect.new()
 		overlay.color = Color(0, 0, 0, 0.7)

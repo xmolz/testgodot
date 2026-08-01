@@ -81,13 +81,12 @@ func _ready():
 		interactable_component.interactions.append(sleep_response)
 		interactable_component.interactions.append(give_tp_response)
 
+	# Single init path: SaveManager deferred-emits this once per level registration,
+	# for BOTH fresh runs and loads, after saved flags (if any) are already applied.
+	Events.level_state_ready.connect(apply_level_state)
+	# Late-spawn safety: if this node is instantiated after the level already
+	# initialized, the signal has already fired — apply current state directly.
 	if is_instance_valid(Flags.current_level_state_manager):
-		if not Flags.current_level_state_manager.level_state_restored.is_connected(apply_level_state):
-			Flags.current_level_state_manager.level_state_restored.connect(apply_level_state)
-		if Flags.current_level_state_manager.has_restored:
-			apply_level_state()
-	else:
-		# fallback for fresh run init without save data
 		apply_level_state()
 
 func apply_level_state() -> void:

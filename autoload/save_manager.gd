@@ -46,15 +46,15 @@ func _on_level_state_manager_registered(lsm: LevelStateManager):
 	_level_state_ready_emitted = false
 	if not is_instance_valid(lsm): return
 	
-	if lsm.level_id == HUB_LEVEL_ID:
-		_last_known_hub_flags = lsm.get_all_flags()
-		
 	if lsm.level_id == _pending_level_id and not _pending_level_id.is_empty():
 		lsm.apply_saved_flags(_pending_level_flags)
 		_apply_npcs(_pending_npcs_state)
 		_pending_level_flags.clear()
 		_pending_npcs_state.clear()
 		_pending_level_id = ""
+
+	if lsm.level_id == HUB_LEVEL_ID:
+		_last_known_hub_flags = lsm.get_all_flags()
 
 	if Events and Events.has_signal("level_state_ready") and not _level_state_ready_emitted:
 		_level_state_ready_emitted = true
@@ -76,6 +76,7 @@ func can_save_now(allow_pause_snapshot: bool = false) -> bool:
 	if not allow_pause_snapshot and get_tree().paused: return false
 	
 	if ChapterLaunchSequence and ChapterLaunchSequence.is_launching(): return false
+	if GameManager and GameManager.is_cutscene_sequence_running(): return false
 	if is_loading: return false
 	if not is_instance_valid(Flags.current_level_state_manager): return false
 	
@@ -271,8 +272,21 @@ func load_from_slot(slot: String) -> bool:
 	await GameManager.change_game_state(GameManager.GameState.IN_GAME_PLAY)
 	
 	# After scene loaded, wait for lsm to register and flags to be applied
+	var watchdog_frames = 600
 	while _pending_level_id != "":
 		await get_tree().process_frame
+		watchdog_frames -= 1
+		if watchdog_frames <= 0:
+			_pending_level_id = ""
+			_pending_level_flags.clear()
+			_pending_npcs_state.clear()
+			is_loading = false
+			if GameManager.transition_layer and GameManager.transition_layer.has_method("global_fade_from_black"):
+				GameManager.transition_layer.global_fade_from_black(0.5)
+			NotificationManager.add_notification("Failed to load save: level root never registered state manager.")
+			load_failed.emit("level never registered")
+			GameManager.change_game_state(GameManager.GameState.MAIN_MENU)
+			return false
 		
 	if is_instance_valid(GameManager.player_node):
 		if GameManager.player_node.has_method("set_can_move"):

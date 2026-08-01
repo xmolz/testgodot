@@ -37,12 +37,12 @@ func _ready():
 	if not ConversationEventManager.mcbucket_tv_reaction_requested.is_connected(_on_mcbucket_tv_reaction):
 		ConversationEventManager.mcbucket_tv_reaction_requested.connect(_on_mcbucket_tv_reaction)
 
+	# Single init path: SaveManager deferred-emits this once per level registration,
+	# for BOTH fresh runs and loads, after saved flags (if any) are already applied.
+	Events.level_state_ready.connect(apply_level_state)
+	# Late-spawn safety: if this node is instantiated after the level already
+	# initialized, the signal has already fired — apply current state directly.
 	if is_instance_valid(Flags.current_level_state_manager):
-		if not Flags.current_level_state_manager.level_state_restored.is_connected(apply_level_state):
-			Flags.current_level_state_manager.level_state_restored.connect(apply_level_state)
-		if Flags.current_level_state_manager.has_restored:
-			apply_level_state()
-	else:
 		apply_level_state()
 
 func apply_level_state() -> void:

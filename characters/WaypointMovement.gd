@@ -202,11 +202,11 @@ func get_movement_state() -> Dictionary:
 
 func apply_movement_state(dict: Dictionary) -> void:
 	_current_waypoint_index = dict.get("waypoint_index", 0)
-	_is_waiting = dict.get("is_waiting", false)
 	_ping_pong_direction = dict.get("ping_pong_direction", 1)
-	var active = dict.get("movement_active", true)
-
-	if active:
-		resume_movement()
-	else:
-		pause_movement()
+	_is_waiting = dict.get("is_waiting", false)
+	# a restored wait must re-arm its timer, or _physics_process stalls forever
+	if _is_waiting and is_instance_valid(_wait_timer):
+		_wait_timer.start()
+	# saved pauses were transient (interactions, cutscenes) and their owners
+	# do not survive a load — always hand the npc back to its patrol.
+	resume_movement()

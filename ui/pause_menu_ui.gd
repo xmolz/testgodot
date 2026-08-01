@@ -72,6 +72,9 @@ func get_effective_game_state() -> int:
 		return _pre_pause_game_state
 	return GameManager.current_game_state
 
+func reset_pause_snapshot():
+	_pre_pause_game_state = null
+
 func _process(_delta):
 	if is_instance_valid(menu_panel) and is_instance_valid(scan_cancel_panel):
 		scan_cancel_panel.visible = menu_panel.visible
@@ -261,7 +264,7 @@ func _apply_style():
 		btn_hover.content_margin_top = 25
 		btn_hover.content_margin_bottom = 25
 
-	var buttons = [resume_btn, history_btn, settings_btn, controls_btn, credits_btn, quit_btn, yes_btn, no_btn]
+	var buttons = [resume_btn, save_load_btn, history_btn, settings_btn, controls_btn, credits_btn, quit_btn, yes_btn, no_btn]
 	for btn in buttons:
 		btn.add_theme_font_override("font", custom_font)
 		btn.add_theme_font_size_override("font_size", mobile_font_size)
