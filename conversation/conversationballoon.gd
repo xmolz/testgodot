@@ -1115,6 +1115,16 @@ func _apply_dialogue_theme(theme_name: String) -> void:
 		panel.add_theme_stylebox_override("panel", _classic_panel_style)
 
 	_glass_rect.visible = is_modern
+	# white text over a see-through pane needs its own edge or a bright backdrop swallows it. the
+	# nameplate already does this (outline_size 4 in the scene); the body text never has.
+	if is_instance_valid(dialogue_label):
+		if is_modern:
+			dialogue_label.add_theme_constant_override("outline_size", 6)
+			dialogue_label.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.9))
+		else:
+			dialogue_label.remove_theme_constant_override("outline_size")
+			dialogue_label.remove_theme_color_override("font_outline_color")
+
 	if is_instance_valid(_glass_backbuffer):
 		_glass_backbuffer.copy_mode = BackBufferCopy.COPY_MODE_VIEWPORT if is_modern else BackBufferCopy.COPY_MODE_DISABLED
 	_update_glass_metrics()

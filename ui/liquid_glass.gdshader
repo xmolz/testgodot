@@ -1,41 +1,53 @@
 shader_type canvas_item;
 render_mode unshaded;
 
-// liquid glass pane for the dialogue box. reads the screen behind the balloon and re-renders it
-// through a rounded-rect "lens": the middle stays close to a straight copy so the art underneath
-// is still readable, and the bend and the highlight are concentrated in a band around the rim.
-// at distortion = 0.0 this is a flat tinted pane with a rim -- still glass, just no refraction.
+// liquid glass pane for the dialogue box, v2. reads the screen behind the balloon and re-renders
+// it as a piece of glass with thickness: magnified, frosted, bent at the rim, and scrimmed by
+// however bright the thing behind it happens to be.
+//
+// the knobs worth touching are grouped below. they all live here on purpose -- gdscript only ever
+// sets rect_size, viewport_px and distortion, so everything else can be tuned by editing this file
+// and relaunching, with no script changes.
 uniform sampler2D screen_tex : hint_screen_texture, filter_linear, repeat_disable;
 
 // pushed from conversationballoon.gd. BOTH are in viewport (1920x1080) pixels, not window pixels.
 uniform vec2 rect_size = vec2(1880.0, 208.0);
 uniform vec2 viewport_px = vec2(1920.0, 1080.0);
 
-// shape. the shader draws its own rounded rect, so this replaces the stylebox corner radius.
-uniform float corner_radius : hint_range(0.0, 80.0) = 18.0;
+uniform float corner_radius : hint_range(0.0, 80.0) = 22.0;
 
-// the settings slider drives this one.
+// ---- refraction. the settings slider drives `distortion`; the rest shape what it does. ----
 uniform float distortion : hint_range(0.0, 1.0) = 0.4;
-// how far in from the rim the lens bends. keep it well under half the panel's short side, or the
-// two bevels meet in the middle and the bend goes wobbly.
-uniform float edge_width : hint_range(2.0, 120.0) = 34.0;
-// how far the rim can shift the sample, in pixels, at distortion = 1.0.
-uniform float refraction_px : hint_range(0.0, 80.0) = 26.0;
+uniform float edge_width : hint_range(2.0, 120.0) = 44.0;
+uniform float refraction_px : hint_range(0.0, 80.0) = 30.0;
+uniform float chroma_px : hint_range(0.0, 12.0) = 4.0;
+// glass has thickness, so it magnifies. 1.0 = a flat filter, which is what v1 looked like.
+uniform float zoom : hint_range(1.0, 1.3) = 1.06;
 
-// legibility grade. this is what keeps white text readable over bright art.
-uniform float blur_amount : hint_range(0.0, 1.0) = 0.25;
-uniform float blur_px : hint_range(0.0, 12.0) = 3.0;
-uniform vec4 tint_color : source_color = vec4(0.02, 0.03, 0.06, 1.0);
-uniform float tint_amount : hint_range(0.0, 1.0) = 0.28;
-uniform float brightness : hint_range(0.5, 1.5) = 1.04;
-uniform float saturation : hint_range(0.0, 2.0) = 1.06;
+// ---- frost ----
+uniform float blur_amount : hint_range(0.0, 1.0) = 0.85;
+uniform float blur_px : hint_range(0.0, 24.0) = 7.0;
 
-// rim and inner shadow.
-uniform float rim_strength : hint_range(0.0, 2.0) = 0.85;
+// ---- adaptive scrim. this is the legibility fix: `need` rises with the backdrop's luminance, so
+// a white room gets pushed down to scrim_max and a night scene barely past scrim_min. ----
+uniform vec4 scrim_color : source_color = vec4(0.03, 0.05, 0.08, 1.0);
+uniform float scrim_min : hint_range(0.0, 1.0) = 0.22;
+uniform float scrim_max : hint_range(0.0, 1.0) = 0.66;
+uniform float scrim_lo : hint_range(0.0, 1.0) = 0.22;
+uniform float scrim_hi : hint_range(0.0, 1.0) = 0.78;
+uniform float saturation : hint_range(0.0, 2.0) = 1.10;
+
+// ---- boundary. the dark hairline is what gives the pane an edge on a bright background, where a
+// white rim on its own vanishes. the bright rim does the same job on a dark one. ----
+uniform vec4 outline_color : source_color = vec4(0.0, 0.0, 0.0, 1.0);
+uniform float outline_px : hint_range(0.0, 6.0) = 1.6;
+uniform float outline_strength : hint_range(0.0, 1.0) = 0.75;
 uniform vec4 rim_color : source_color = vec4(1.0, 1.0, 1.0, 1.0);
-uniform float rim_px : hint_range(0.5, 8.0) = 2.5;
-uniform float inner_shadow : hint_range(0.0, 1.0) = 0.35;
-uniform float inner_shadow_px : hint_range(1.0, 60.0) = 18.0;
+uniform float rim_px : hint_range(0.5, 8.0) = 2.2;
+uniform float rim_strength : hint_range(0.0, 2.0) = 0.75;
+uniform float inner_glow : hint_range(0.0, 0.5) = 0.10;
+uniform float inner_shadow : hint_range(0.0, 1.0) = 0.16;
+uniform float top_sheen : hint_range(0.0, 0.3) = 0.07;
 
 // signed distance to a rounded box, in panel pixels. negative inside.
 float sd_round_box(vec2 p, vec2 half_size, float r) {
@@ -64,41 +76,69 @@ void fragment() {
 		);
 		grad = grad / max(length(grad), 0.00001);
 
-		// 1 at the rim, 0 by edge_width inside. the power keeps the middle of the pane honest.
-		float inset = clamp(-d / max(edge_width, 1.0), 0.0, 1.0);
-		float bevel = pow(1.0 - inset, 2.2);
+		float edge_d = -d;
+		float bevel = pow(1.0 - clamp(edge_d / max(edge_width, 1.0), 0.0, 1.0), 2.2);
 
-		vec2 offset_px = grad * (bevel * distortion * refraction_px);
-		vec2 suv = SCREEN_UV + offset_px / viewport_px;
+		// sample a magnified copy of what is behind the pane, then bend it harder toward the rim.
+		vec2 center_suv = SCREEN_UV - p / viewport_px;
+		vec2 suv = center_suv + (p / max(zoom, 0.001)) / viewport_px;
+		suv += (grad * (bevel * distortion * refraction_px)) / viewport_px;
 
-		vec3 col = texture(screen_tex, suv).rgb;
+		vec3 sharp = texture(screen_tex, suv).rgb;
 
-		// 4 tap softening. explicit taps, not textureLod -- there are no backbuffer mipmaps to
-		// lean on under the compatibility renderer.
-		if (blur_amount > 0.0) {
-			vec2 o = vec2(blur_px) / viewport_px;
-			vec3 b = texture(screen_tex, suv + vec2( o.x,  o.y)).rgb;
-			b += texture(screen_tex, suv + vec2(-o.x,  o.y)).rgb;
-			b += texture(screen_tex, suv + vec2( o.x, -o.y)).rgb;
-			b += texture(screen_tex, suv + vec2(-o.x, -o.y)).rgb;
-			col = mix(col, b * 0.25, blur_amount);
+		// 13 tap frost, two hex rings. explicit taps, not textureLod -- there are no backbuffer
+		// mipmaps to lean on under the compatibility renderer.
+		vec2 ra = vec2(blur_px * 0.5) / viewport_px;
+		vec2 rb = vec2(blur_px) / viewport_px;
+		vec3 frost = sharp * 0.16;
+		frost += texture(screen_tex, suv + vec2( 1.000,  0.000) * ra).rgb * 0.08;
+		frost += texture(screen_tex, suv + vec2( 0.500,  0.866) * ra).rgb * 0.08;
+		frost += texture(screen_tex, suv + vec2(-0.500,  0.866) * ra).rgb * 0.08;
+		frost += texture(screen_tex, suv + vec2(-1.000,  0.000) * ra).rgb * 0.08;
+		frost += texture(screen_tex, suv + vec2(-0.500, -0.866) * ra).rgb * 0.08;
+		frost += texture(screen_tex, suv + vec2( 0.500, -0.866) * ra).rgb * 0.08;
+		frost += texture(screen_tex, suv + vec2( 0.866,  0.500) * rb).rgb * 0.06;
+		frost += texture(screen_tex, suv + vec2( 0.000,  1.000) * rb).rgb * 0.06;
+		frost += texture(screen_tex, suv + vec2(-0.866,  0.500) * rb).rgb * 0.06;
+		frost += texture(screen_tex, suv + vec2(-0.866, -0.500) * rb).rgb * 0.06;
+		frost += texture(screen_tex, suv + vec2( 0.000, -1.000) * rb).rgb * 0.06;
+		frost += texture(screen_tex, suv + vec2( 0.866, -0.500) * rb).rgb * 0.06;
+
+		vec3 col = mix(sharp, frost, blur_amount);
+
+		// chromatic split, rim only. weighted by bevel so the middle of the pane keeps its frost --
+		// unweighted, these two taps re-sharpen the whole panel and fringe it.
+		float cw = clamp(bevel * distortion, 0.0, 1.0);
+		if (chroma_px > 0.0 && cw > 0.0) {
+			vec2 ca = (grad * (bevel * distortion * chroma_px)) / viewport_px;
+			col.r = mix(col.r, texture(screen_tex, suv + ca).r, cw * 0.6);
+			col.b = mix(col.b, texture(screen_tex, suv - ca).b, cw * 0.6);
 		}
 
-		// grade.
-		col = mix(col, tint_color.rgb, tint_amount);
+		// adaptive scrim. a fixed tint is what made v1 unreadable in the hospital room.
 		float luma = dot(col, vec3(0.299, 0.587, 0.114));
-		col = mix(vec3(luma), col, saturation);
-		col *= brightness;
+		float need = smoothstep(scrim_lo, scrim_hi, luma);
+		col = mix(col, scrim_color.rgb, mix(scrim_min, scrim_max, need));
 
-		// inner shadow, so the pane reads as an object sitting on the art rather than a hole in it.
-		float shade = pow(1.0 - clamp(-d / inner_shadow_px, 0.0, 1.0), 2.0);
-		col *= 1.0 - shade * inner_shadow;
+		float l2 = dot(col, vec3(0.299, 0.587, 0.114));
+		col = mix(vec3(l2), col, saturation);
 
-		// specular rim, brightest where the edge faces the light.
-		float border = 1.0 - clamp(-d / rim_px, 0.0, 1.0);
+		// broad sheen across the top, soft glow just inside the rim, mild shadow deeper in.
+		col += vec3(pow(1.0 - clamp(UV.y / 0.35, 0.0, 1.0), 2.0) * top_sheen);
+		col += vec3(pow(1.0 - clamp(edge_d / 26.0, 0.0, 1.0), 3.0) * inner_glow);
+		col *= 1.0 - pow(1.0 - clamp(edge_d / 22.0, 0.0, 1.0), 2.0) * inner_shadow;
+
 		vec2 light_dir = normalize(vec2(-0.45, -1.0));
 		float facing = clamp(dot(grad, light_dir), 0.0, 1.0);
-		col += rim_color.rgb * (border * (0.30 + 0.70 * pow(facing, 1.5)) * rim_strength);
+
+		// dark hairline at the extreme edge.
+		float dark_line = 1.0 - smoothstep(outline_px - 0.75, outline_px + 0.75, edge_d);
+		col = mix(col, outline_color.rgb, dark_line * outline_strength);
+
+		// bright rim immediately inside it. together the two read on any backdrop.
+		float rim = smoothstep(outline_px - 0.75, outline_px + 0.75, edge_d)
+			* (1.0 - smoothstep(outline_px + rim_px - 0.75, outline_px + rim_px + 0.75, edge_d));
+		col += rim_color.rgb * (rim * (0.35 + 0.65 * facing) * rim_strength);
 
 		COLOR = vec4(col, mask);
 	}
