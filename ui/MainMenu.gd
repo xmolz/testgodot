@@ -46,6 +46,7 @@ func _on_load_button_pressed():
 	if slot_scene:
 		var instance = slot_scene.instantiate()
 		instance.current_mode = instance.Mode.LOAD
+		instance.allow_mode_switch = false
 		get_tree().root.add_child(instance)
 
 func _on_new_game_button_pressed():

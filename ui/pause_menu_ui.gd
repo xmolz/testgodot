@@ -122,6 +122,7 @@ func _on_save_load_pressed():
 	if slot_scene:
 		var instance = slot_scene.instantiate()
 		instance.current_mode = instance.Mode.SAVE
+		instance.allow_mode_switch = true
 		get_tree().root.add_child(instance)
 
 func toggle_pause():

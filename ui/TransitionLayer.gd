@@ -396,6 +396,7 @@ func play_portal_monologue(dialogue_title: String, preloaded_resource: DialogueR
 func show_loading_indicator() -> void:
 	if not is_instance_valid(_loading_label): return
 	_loading_shown_at_ms = Time.get_ticks_msec()
+	_loading_label.move_to_front()
 	_loading_label.modulate.a = 1.0
 	_loading_label.visible = true
 	if _loading_tween: _loading_tween.kill()

@@ -1302,7 +1302,9 @@ func _proceed_with_new_game():
 
 func _on_main_menu_continue_requested():
 	if SaveManager:
-		await SaveManager.load_from_slot("autosave")
+		var slot = SaveManager.get_most_recent_slot()
+		if slot.is_empty(): return
+		await SaveManager.load_from_slot(slot)
 
 func _on_difficulty_chosen(is_assisted: bool):
 	Settings.assisted_mode = is_assisted

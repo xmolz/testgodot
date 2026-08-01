@@ -252,11 +252,11 @@ func load_from_slot(slot: String) -> bool:
 
 	is_loading = true
 	
-	if GameManager.transition_layer and GameManager.transition_layer.has_method("global_fade_to_black"):
-		await GameManager.transition_layer.global_fade_to_black(0.5)
-		
 	if GameManager.transition_layer and GameManager.transition_layer.has_method("show_loading_indicator"):
 		GameManager.transition_layer.show_loading_indicator()
+		
+	if GameManager.transition_layer and GameManager.transition_layer.has_method("global_fade_to_black"):
+		await GameManager.transition_layer.global_fade_to_black(0.5)
 		
 	if SceneDirector and SceneDirector.has_method("teardown_game_scene"):
 		SceneDirector.teardown_game_scene()
