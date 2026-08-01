@@ -17,6 +17,7 @@ var zoom_controls_ui: CanvasLayer = null
 var _zoom_show_verb_panel: bool = true
 var _zoom_show_inventory: bool = true
 var _dialogue_active: bool = false
+var _explanation_keep_visible: Array = []
 
 
 func _ready() -> void:
@@ -40,6 +41,7 @@ func _ready() -> void:
 
 	if is_instance_valid(explanation_layer):
 		explanation_layer.explanation_finished.connect(GameManager.exit_explanation_state)
+		explanation_layer.explanation_finished.connect(_on_explanation_finished)
 
 	if is_instance_valid(insurance_form_button_ui):
 		insurance_form_button_ui.form_button_pressed.connect(GameManager.open_insurance_form)
@@ -79,8 +81,26 @@ func _apply_zoom_hud_visibility() -> void:
 		insurance_form_button_ui.visible = false
 
 
+func _apply_explanation_visibility() -> void:
+	if is_instance_valid(verb_ui):
+		verb_ui.visible = verb_ui in _explanation_keep_visible
+	if is_instance_valid(inventory_ui):
+		inventory_ui.visible = inventory_ui in _explanation_keep_visible
+	if is_instance_valid(journal_button_ui):
+		journal_button_ui.visible = journal_button_ui in _explanation_keep_visible
+	if is_instance_valid(zoom_controls_ui):
+		zoom_controls_ui.set_gameplay_ui_visible(zoom_controls_ui in _explanation_keep_visible)
+	if is_instance_valid(insurance_form_button_ui):
+		insurance_form_button_ui.visible = insurance_form_button_ui in _explanation_keep_visible
+
+
 func _refresh_hud() -> void:
 	if not GameManager: return
+	
+	if not _explanation_keep_visible.is_empty():
+		_apply_explanation_visibility()
+		return
+		
 	var state = GameManager.current_game_state
 	var interaction = GameManager.current_interaction_state
 
@@ -134,31 +154,24 @@ func notify_dialogue_force_cleared() -> void:
 
 
 func _on_explanation_started(data: ExplanationData, root_node_to_search: Node) -> void:
-	# moved verbatim from gamemanager.start_explanation(): hide
-	# for the nodes the explanationdata
-	var nodes_to_keep_visible: Array = []
+	_explanation_keep_visible.clear()
 	if "exceptions_to_hide" in data:
 		for node_path in data.exceptions_to_hide:
 			var node = root_node_to_search.get_node_or_null(node_path)
 			if is_instance_valid(node):
-				nodes_to_keep_visible.append(node)
-
-	if is_instance_valid(verb_ui) and not verb_ui in nodes_to_keep_visible:
-		verb_ui.hide()
-	if is_instance_valid(inventory_ui) and not inventory_ui in nodes_to_keep_visible:
-		inventory_ui.hide()
-	if is_instance_valid(journal_button_ui) and not journal_button_ui in nodes_to_keep_visible:
-		journal_button_ui.hide()
-	if is_instance_valid(zoom_controls_ui) and not zoom_controls_ui in nodes_to_keep_visible:
-		zoom_controls_ui.set_gameplay_ui_visible(false)
-	if is_instance_valid(insurance_form_button_ui):
-		if insurance_form_button_ui in nodes_to_keep_visible:
-			insurance_form_button_ui.show()
-		else:
-			insurance_form_button_ui.hide()
+				_explanation_keep_visible.append(node)
+			else:
+				push_warning("Explanation exception path failed to resolve: %s" % node_path)
+				
+	_refresh_hud()
 
 	if is_instance_valid(explanation_layer):
 		explanation_layer.show_explanation(data, root_node_to_search)
+
+
+func _on_explanation_finished() -> void:
+	_explanation_keep_visible.clear()
+	_refresh_hud()
 
 
 # ------------------ core visibility helper (moved from gamemanager, minus the global patreon

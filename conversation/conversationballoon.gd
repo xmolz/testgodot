@@ -1064,6 +1064,7 @@ func _setup_dialogue_theme() -> void:
 
 	_glass_mat = ShaderMaterial.new()
 	_glass_mat.shader = LIQUID_GLASS_SHADER
+	_glass_mat.set_shader_parameter("debug_fill", true)
 
 	_glass_rect = ColorRect.new()
 	_glass_rect.name = "GlassRect"

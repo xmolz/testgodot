@@ -10,6 +10,8 @@ render_mode unshaded;
 // and relaunching, with no script changes.
 uniform sampler2D screen_tex : hint_screen_texture, filter_linear, repeat_disable;
 
+uniform bool debug_fill = false;
+
 // pushed from conversationballoon.gd. BOTH are in viewport (1920x1080) pixels, not window pixels.
 uniform vec2 rect_size = vec2(1880.0, 208.0);
 uniform vec2 viewport_px = vec2(1920.0, 1080.0);
@@ -67,8 +69,11 @@ void fragment() {
 	if (mask <= 0.0) {
 		COLOR = vec4(0.0);
 	} else {
-		// outward normal, from the gradient of the distance field.
-		vec2 ex = vec2(1.0, 0.0);
+		if (debug_fill) {
+			COLOR = vec4(1.0, 0.0, 0.0, 0.6) * vec4(1.0,1.0,1.0,mask);
+		} else {
+			// outward normal, from the gradient of the distance field.
+			vec2 ex = vec2(1.0, 0.0);
 		vec2 ey = vec2(0.0, 1.0);
 		vec2 grad = vec2(
 			sd_round_box(p + ex, half_size, r) - sd_round_box(p - ex, half_size, r),
@@ -141,5 +146,6 @@ void fragment() {
 		col += rim_color.rgb * (rim * (0.35 + 0.65 * facing) * rim_strength);
 
 		COLOR = vec4(col, mask);
+		}
 	}
 }
