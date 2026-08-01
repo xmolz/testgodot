@@ -169,6 +169,14 @@ var is_ui_hidden: bool = false
 
 var _is_log_open: bool = false
 
+# ************************[dialogue box theme (classic / liquid glass)]
+const LIQUID_GLASS_SHADER := preload("res://ui/liquid_glass.gdshader")
+
+var _glass_rect: ColorRect = null
+var _glass_mat: ShaderMaterial = null
+var _glass_backbuffer: BackBufferCopy = null
+var _classic_panel_style: StyleBox = null
+
 # quick menu references
 @onready var quick_menu: HBoxContainer = %QuickMenu
 @onready var log_button: Button = %LogButton
@@ -355,6 +363,8 @@ func _ready() -> void:
 		if not Settings.text_scale_changed.is_connected(_update_text_scale):
 			Settings.text_scale_changed.connect(_update_text_scale)
 	_update_text_scale(Settings.dialogue_text_scale if GameManager else 1.0)
+
+	_setup_dialogue_theme()
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -1033,6 +1043,81 @@ func _update_text_scale(scale_mult: float) -> void:
 			var btn = responses_menu.get_child(i)
 			if btn is Button:
 				btn.add_theme_font_size_override("font_size", resp_size)
+
+func _setup_dialogue_theme() -> void:
+	var panel := $Balloon/Panel as Panel
+	if not is_instance_valid(panel):
+		return
+
+	# hold on to the classic stylebox so switching back is exact, not a re-creation of it.
+	_classic_panel_style = panel.get_theme_stylebox("panel")
+
+	# the screen copy has to happen at THIS canvas layer, right before the balloon draws. in 2D,
+	# godot only does the automatic backbuffer copy for the first shader that asks for the screen
+	# texture in the frame -- and the advanced conversation overlay's dream haze (layer 75) draws
+	# before us and asks first. without this node the glass would sample whatever the haze left.
+	_glass_backbuffer = BackBufferCopy.new()
+	_glass_backbuffer.name = "GlassBackBuffer"
+	_glass_backbuffer.copy_mode = BackBufferCopy.COPY_MODE_DISABLED
+	add_child(_glass_backbuffer)
+	move_child(_glass_backbuffer, 0)
+
+	_glass_mat = ShaderMaterial.new()
+	_glass_mat.shader = LIQUID_GLASS_SHADER
+
+	_glass_rect = ColorRect.new()
+	_glass_rect.name = "GlassRect"
+	_glass_rect.material = _glass_mat
+	_glass_rect.color = Color.WHITE
+	_glass_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_glass_rect.visible = false
+	# child of Panel on purpose: it inherits the panel's rect (including the mobile anchor nudge
+	# further up) and set_ui_hidden()'s panel.visible = false hides it for free.
+	panel.add_child(_glass_rect)
+	_glass_rect.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_glass_rect.resized.connect(_update_glass_metrics)
+	get_viewport().size_changed.connect(_update_glass_metrics)
+
+	if not Settings.dialogue_theme_changed.is_connected(_apply_dialogue_theme):
+		Settings.dialogue_theme_changed.connect(_apply_dialogue_theme)
+	if not Settings.glass_distortion_changed.is_connected(_apply_glass_distortion):
+		Settings.glass_distortion_changed.connect(_apply_glass_distortion)
+
+	_apply_glass_distortion(Settings.glass_distortion if GameManager else 0.4)
+	_apply_dialogue_theme(Settings.dialogue_theme if GameManager else "classic")
+	_update_glass_metrics.call_deferred()
+
+
+func _update_glass_metrics() -> void:
+	if not is_instance_valid(_glass_rect) or _glass_mat == null:
+		return
+	_glass_mat.set_shader_parameter("rect_size", _glass_rect.size)
+	_glass_mat.set_shader_parameter("viewport_px", get_viewport().get_visible_rect().size)
+
+
+func _apply_glass_distortion(value: float) -> void:
+	if _glass_mat == null:
+		return
+	_glass_mat.set_shader_parameter("distortion", clampf(value, 0.0, 1.0))
+
+
+func _apply_dialogue_theme(theme_name: String) -> void:
+	var panel := $Balloon/Panel as Panel
+	if not is_instance_valid(panel) or not is_instance_valid(_glass_rect):
+		return
+
+	var is_modern := theme_name == "modern"
+	if is_modern:
+		# the shader draws its own rounded rect, so the stylebox underneath has to get out of the
+		# way -- otherwise the glass would be refracting the classic black panel.
+		panel.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
+	elif _classic_panel_style != null:
+		panel.add_theme_stylebox_override("panel", _classic_panel_style)
+
+	_glass_rect.visible = is_modern
+	if is_instance_valid(_glass_backbuffer):
+		_glass_backbuffer.copy_mode = BackBufferCopy.COPY_MODE_VIEWPORT if is_modern else BackBufferCopy.COPY_MODE_DISABLED
+	_update_glass_metrics()
 
 func _process(delta: float) -> void:
 	if not _should_skip_now(): 

@@ -5,6 +5,8 @@ signal auto_forward_toggled(is_on: bool)
 signal skip_toggled(is_on: bool)
 signal fullscreen_toggled(is_on: bool)
 signal text_scale_changed(new_scale: float)
+signal dialogue_theme_changed(theme_name: String)
+signal glass_distortion_changed(value: float)
 
 const SETTINGS_FILE_PATH = "user://settings.cfg"
 
@@ -24,6 +26,17 @@ var is_auto_playing: bool = false:
 	set(val):
 		is_auto_playing = val
 		auto_forward_toggled.emit(val)
+
+# ///////////////////[dialogue box look]
+# "classic" = the original black panel. "modern" = the liquid glass pane.
+var dialogue_theme: String = "classic":
+	set(val):
+		dialogue_theme = "modern" if val == "modern" else "classic"
+		dialogue_theme_changed.emit(dialogue_theme)
+var glass_distortion: float = 0.4:
+	set(val):
+		glass_distortion = clampf(val, 0.0, 1.0)
+		glass_distortion_changed.emit(glass_distortion)
 
 # ////////////////(gameplay)
 var assisted_mode: bool = false
@@ -74,6 +87,8 @@ func save_settings():
 	cfg.set_value("dialogue", "text_scale", dialogue_text_scale)
 	cfg.set_value("dialogue", "auto_forward", is_auto_playing)
 	cfg.set_value("dialogue", "auto_delay", auto_time_delay)
+	cfg.set_value("dialogue", "box_theme", dialogue_theme)
+	cfg.set_value("dialogue", "glass_distortion", glass_distortion)
 	cfg.set_value("gameplay", "assisted_mode", assisted_mode)
 	cfg.set_value("display", "fullscreen", fullscreen)
 	var err = cfg.save(SETTINGS_FILE_PATH)
@@ -98,6 +113,8 @@ func load_settings():
 		
 	is_auto_playing = bool(cfg.get_value("dialogue", "auto_forward", is_auto_playing))
 	auto_time_delay = clampf(float(cfg.get_value("dialogue", "auto_delay", auto_time_delay)), 0.125, 1.75)
+	dialogue_theme = str(cfg.get_value("dialogue", "box_theme", dialogue_theme))
+	glass_distortion = clampf(float(cfg.get_value("dialogue", "glass_distortion", glass_distortion)), 0.0, 1.0)
 	assisted_mode = bool(cfg.get_value("gameplay", "assisted_mode", assisted_mode))
 	fullscreen = bool(cfg.get_value("display", "fullscreen", fullscreen))
 	apply_window_mode()

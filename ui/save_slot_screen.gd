@@ -80,7 +80,7 @@ func _ready():
 	main_container.add_child(title_label)
 	
 	# tab buttons setup
-	tab_buttons_container.add_theme_constant_override("separation", 20)
+	tab_buttons_container.add_theme_constant_override("separation", 28)
 	tab_buttons_container.alignment = BoxContainer.ALIGNMENT_CENTER
 	main_container.add_child(tab_buttons_container)
 	
@@ -167,8 +167,11 @@ func _style_tab_button(btn: Button, is_active: bool):
 	style.corner_radius_bottom_left = 6
 	style.corner_radius_bottom_right = 6
 	style.anti_aliasing = false
-	style.content_margin_top = 15 if OS.has_feature("mobile") else 10
-	style.content_margin_bottom = 15 if OS.has_feature("mobile") else 10
+	style.content_margin_top = 18 if OS.has_feature("mobile") else 12
+	style.content_margin_bottom = 18 if OS.has_feature("mobile") else 12
+	# the stylebox never set horizontal padding, so SAVE/LOAD sat flush against the pill edges.
+	style.content_margin_left = 48 if OS.has_feature("mobile") else 32
+	style.content_margin_right = 48 if OS.has_feature("mobile") else 32
 
 	var tab_size = int(30 * (1.5 if OS.has_feature("mobile") else 1.0))
 	btn.add_theme_font_override("font", custom_font)
