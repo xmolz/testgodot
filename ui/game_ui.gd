@@ -26,6 +26,10 @@ func _ready() -> void:
 	Events.explanation_started.connect(_on_explanation_started)
 	Events.gameplay_ui_visibility_requested.connect(_set_gameplay_ui_visible)
 	Events.zoom_hud_config_requested.connect(_on_zoom_hud_config_requested)
+	
+	# single init path (see step 1.6): re-derive the hud once saved level
+	# flags have been applied. fires on fresh runs too; recompute is idempotent.
+	Events.level_state_ready.connect(_refresh_hud)
 
 	zoom_controls_ui = ZOOM_CONTROLS_UI_SCENE.instantiate()
 	add_child(zoom_controls_ui)

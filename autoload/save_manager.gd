@@ -255,6 +255,9 @@ func load_from_slot(slot: String) -> bool:
 	if GameManager.transition_layer and GameManager.transition_layer.has_method("global_fade_to_black"):
 		await GameManager.transition_layer.global_fade_to_black(0.5)
 		
+	if GameManager.transition_layer and GameManager.transition_layer.has_method("show_loading_indicator"):
+		GameManager.transition_layer.show_loading_indicator()
+		
 	if SceneDirector and SceneDirector.has_method("teardown_game_scene"):
 		SceneDirector.teardown_game_scene()
 		
@@ -284,6 +287,8 @@ func load_from_slot(slot: String) -> bool:
 			_pending_level_flags.clear()
 			_pending_npcs_state.clear()
 			is_loading = false
+			if GameManager.transition_layer and GameManager.transition_layer.has_method("hide_loading_indicator"):
+				await GameManager.transition_layer.hide_loading_indicator()
 			if GameManager.transition_layer and GameManager.transition_layer.has_method("global_fade_from_black"):
 				GameManager.transition_layer.global_fade_from_black(0.5)
 			NotificationManager.add_notification("Failed to load save: level root never registered state manager.")
@@ -308,6 +313,9 @@ func load_from_slot(slot: String) -> bool:
 	GameManager.refresh_hint_system()
 	
 	is_loading = false
+	if GameManager.transition_layer and GameManager.transition_layer.has_method("hide_loading_indicator"):
+		await GameManager.transition_layer.hide_loading_indicator()
+		
 	if GameManager.transition_layer and GameManager.transition_layer.has_method("global_fade_from_black"):
 		GameManager.transition_layer.global_fade_from_black(0.5)
 		

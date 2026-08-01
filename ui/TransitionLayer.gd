@@ -36,6 +36,10 @@ var _idle_flow: float = 0.0
 var _debug_phase_tag: String = ""
 var _active_balloon: Node = null
 
+var _loading_label: Label = null
+var _loading_tween: Tween = null
+var _loading_shown_at_ms: int = 0
+
 @onready var left_shutter = get_node_or_null("LeftShutter")
 @onready var right_shutter = get_node_or_null("RightShutter")
 @onready var iris_rect = get_node_or_null("IrisColorRect")
@@ -46,6 +50,18 @@ func _ready():
 	# so it must never pause with the rest of the world.
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	open_instant()
+
+	_loading_label = Label.new()
+	_loading_label.text = "Loading..."
+	_loading_label.add_theme_font_override("font", preload("res://Fonts/VarelaRound-Regular.ttf"))
+	_loading_label.add_theme_font_size_override("font_size", 36 if not OS.has_feature("mobile") else 48)
+	_loading_label.add_theme_color_override("font_color", Color(0.85, 0.85, 0.85))
+	_loading_label.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
+	_loading_label.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	_loading_label.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	_loading_label.position.y -= 80
+	_loading_label.visible = false
+	add_child(_loading_label)
 
 func _process(delta: float) -> void:
 	if _portal_active and is_instance_valid(_portal_rect) and _portal_mat:
@@ -376,3 +392,23 @@ func play_portal_monologue(dialogue_title: String, preloaded_resource: DialogueR
 
 	if is_instance_valid(balloon):
 		balloon.queue_free()
+
+func show_loading_indicator() -> void:
+	if not is_instance_valid(_loading_label): return
+	_loading_shown_at_ms = Time.get_ticks_msec()
+	_loading_label.modulate.a = 1.0
+	_loading_label.visible = true
+	if _loading_tween: _loading_tween.kill()
+	_loading_tween = create_tween().set_loops()
+	_loading_tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	_loading_tween.tween_property(_loading_label, "modulate:a", 0.35, 0.7).set_trans(Tween.TRANS_SINE)
+	_loading_tween.tween_property(_loading_label, "modulate:a", 1.0, 0.7).set_trans(Tween.TRANS_SINE)
+
+func hide_loading_indicator() -> void:
+	if not is_instance_valid(_loading_label): return
+	# anti-flicker: keep the label up for a beat on very fast loads
+	var elapsed = Time.get_ticks_msec() - _loading_shown_at_ms
+	if elapsed < 400:
+		await get_tree().create_timer((400 - elapsed) / 1000.0).timeout
+	if _loading_tween: _loading_tween.kill()
+	_loading_label.visible = false
