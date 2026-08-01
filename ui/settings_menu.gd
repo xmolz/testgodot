@@ -337,6 +337,11 @@ func _style_toggle_button(btn: Button, is_on: bool):
 	_apply_button_styles(btn, style, style, style, style)
 
 
+func _on_close_pressed():
+	if SoundManager: SoundManager.play_sfx("ui_click")
+	queue_free()
+
+
 func _exit_tree():
 	if GameManager:
 		Settings.save_settings()
