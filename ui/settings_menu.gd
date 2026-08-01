@@ -54,20 +54,13 @@ extends CanvasLayer
 
 @onready var close_button = %CloseButton
 
-# *****************[dialogue box theme (built in code, appended to the dialogue tab)]
-var dialogue_theme_toggle: Button
-var glass_distort_label: Label
-var glass_distort_slider: HSlider
-var glass_distort_minus: Button
-var glass_distort_plus: Button
-
 var custom_font = preload("res://Fonts/VarelaRound-Regular.ttf")
 var _open_time_ms: int = 0
+
 
 func _ready():
 	_open_time_ms = Time.get_ticks_msec()
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	_build_dialogue_theme_controls()
 	_apply_ui_polish()
 	if OS.has_feature("mobile"):
 		fullscreen_hbox.visible = false
@@ -98,9 +91,6 @@ func _ready():
 		_update_auto_forward_visuals(Settings.is_auto_playing)
 		_update_assisted_toggle_visuals(Settings.assisted_mode)
 		_update_fullscreen_toggle_visuals(Settings.fullscreen)
-		
-		glass_distort_slider.value = round(Settings.glass_distortion * 10.0)
-		_update_dialogue_theme_visuals()
 
 	_update_labels()
 
@@ -119,7 +109,6 @@ func _ready():
 	_connect_increment_buttons(text_scale_minus, text_scale_plus, text_scale_slider)
 	_connect_increment_buttons(text_speed_minus, text_speed_plus, text_speed_slider)
 	_connect_increment_buttons(auto_delay_minus, auto_delay_plus, auto_delay_slider)
-	_connect_increment_buttons(glass_distort_minus, glass_distort_plus, glass_distort_slider)
 
 	# connect sliders & toggles
 	master_slider.value_changed.connect(_on_master_changed)
@@ -128,10 +117,8 @@ func _ready():
 	text_speed_slider.value_changed.connect(_on_text_speed_changed)
 	auto_delay_slider.value_changed.connect(_on_auto_delay_changed)
 	text_scale_slider.value_changed.connect(_on_text_scale_changed)
-	glass_distort_slider.value_changed.connect(_on_glass_distort_changed)
 	instant_text_toggle.pressed.connect(_on_instant_text_pressed)
 	auto_forward_toggle.pressed.connect(_on_auto_forward_pressed)
-	dialogue_theme_toggle.pressed.connect(_on_dialogue_theme_pressed)
 	assisted_mode_toggle.pressed.connect(_on_assisted_mode_pressed)
 	fullscreen_toggle.pressed.connect(_on_fullscreen_pressed)
 	Settings.fullscreen_toggled.connect(_update_fullscreen_toggle_visuals)
@@ -145,6 +132,7 @@ func _ready():
 				_on_close_pressed()
 		)
 
+
 func _input(event):
 	if event is InputEventKey and event.keycode == KEY_ESCAPE and event.is_pressed() and not event.is_echo():
 		get_viewport().set_input_as_handled()
@@ -153,6 +141,7 @@ func _input(event):
 	elif not OS.has_feature("mobile") and event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.is_pressed():
 		get_viewport().set_input_as_handled()
 		_on_close_pressed()
+
 
 func _connect_increment_buttons(btn_minus: Button, btn_plus: Button, slider: HSlider):
 	btn_minus.pressed.connect(func():
@@ -163,6 +152,7 @@ func _connect_increment_buttons(btn_minus: Button, btn_plus: Button, slider: HSl
 		if SoundManager: SoundManager.play_sfx("ui_click")
 		slider.value += slider.step
 	)
+
 
 func _switch_tab(tab_index: int, play_sound: bool = true):
 	if play_sound and SoundManager: SoundManager.play_sfx("ui_click")
@@ -177,6 +167,7 @@ func _switch_tab(tab_index: int, play_sound: bool = true):
 	_style_tab_button(tab_dialogue_btn, tab_index == 1)
 	_style_tab_button(tab_gameplay_btn, tab_index == 2)
 
+
 func _apply_button_styles(btn: Button, normal_sb: StyleBox, hover_sb: StyleBox, pressed_sb: StyleBox, disabled_sb: StyleBox) -> void:
 	btn.add_theme_stylebox_override("normal", normal_sb)
 	btn.add_theme_stylebox_override("hover", normal_sb if OS.has_feature("mobile") else hover_sb)
@@ -185,6 +176,7 @@ func _apply_button_styles(btn: Button, normal_sb: StyleBox, hover_sb: StyleBox, 
 	btn.add_theme_stylebox_override("disabled", disabled_sb)
 	btn.focus_mode = Control.FOCUS_NONE
 	btn.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+
 
 func _style_tab_button(btn: Button, is_active: bool):
 	var style = StyleBoxFlat.new()
@@ -210,6 +202,7 @@ func _style_tab_button(btn: Button, is_active: bool):
 
 	_apply_button_styles(btn, style, style, style, style)
 
+
 func _update_labels():
 	master_label.text = "Master Volume: " + str(int(master_slider.value))
 	music_label.text = "Music Volume: " + str(int(music_slider.value))
@@ -217,26 +210,29 @@ func _update_labels():
 	text_speed_label.text = "Text Speed: " + str(int(text_speed_slider.value))
 	auto_delay_label.text = "Auto Wait Time: " + str(int(auto_delay_slider.value))
 	text_scale_label.text = "Text Size: " + str(int(text_scale_slider.value))
-	if is_instance_valid(glass_distort_label):
-		glass_distort_label.text = "Glass Distortion: " + str(int(glass_distort_slider.value))
+
 
 func _on_master_changed(value: float):
 	_update_labels()
 	if GameManager: Settings.set_bus_volume("Master", value / 7.0)
 
+
 func _on_music_changed(value: float):
 	_update_labels()
 	if GameManager: Settings.set_bus_volume("Music", value / 7.0)
 
+
 func _on_sfx_changed(value: float):
 	_update_labels()
 	if GameManager: Settings.set_bus_volume("SFX", value / 7.0)
+
 
 func _on_instant_text_pressed():
 	if SoundManager: SoundManager.play_sfx("ui_click")
 	if GameManager:
 		Settings.instant_text = not Settings.instant_text
 		_update_instant_text_visuals(Settings.instant_text)
+
 
 func _update_instant_text_visuals(is_on: bool):
 	_style_toggle_button(instant_text_toggle, is_on)
@@ -250,17 +246,20 @@ func _update_instant_text_visuals(is_on: bool):
 	text_speed_minus.disabled = is_on
 	text_speed_plus.disabled = is_on
 
+
 func _on_text_speed_changed(value: float):
 	_update_labels()
 	if GameManager:
 		var new_speed = remap(value, 0.0, 10.0, 0.05, 0.005)
 		Settings.text_speed = new_speed
 
+
 func _on_auto_forward_pressed():
 	if SoundManager: SoundManager.play_sfx("ui_click")
 	if GameManager:
 		Settings.is_auto_playing = not Settings.is_auto_playing
 		_update_auto_forward_visuals(Settings.is_auto_playing)
+
 
 func _update_auto_forward_visuals(is_on: bool):
 	_style_toggle_button(auto_forward_toggle, is_on)
@@ -274,11 +273,13 @@ func _update_auto_forward_visuals(is_on: bool):
 	auto_delay_minus.disabled = not is_on
 	auto_delay_plus.disabled = not is_on
 
+
 func _on_auto_delay_changed(value: float):
 	_update_labels()
 	if GameManager:
 		var new_delay = remap(value, 1.0, 10.0, 0.125, 1.75)
 		Settings.auto_time_delay = new_delay
+
 
 func _on_text_scale_changed(value: float):
 	_update_labels()
@@ -291,6 +292,7 @@ func _on_text_scale_changed(value: float):
 		else:
 			Settings.dialogue_text_scale = 0.5 + (value * 0.1)
 
+
 func _on_assisted_mode_pressed():
 	if SoundManager: SoundManager.play_sfx("ui_click")
 	if GameManager:
@@ -298,6 +300,7 @@ func _on_assisted_mode_pressed():
 		_update_assisted_toggle_visuals(Settings.assisted_mode)
 		if GameManager.has_method("refresh_hint_system"):
 			GameManager.refresh_hint_system()
+
 
 func _update_assisted_toggle_visuals(is_on: bool):
 	_style_toggle_button(assisted_mode_toggle, is_on)
@@ -310,6 +313,7 @@ func _on_fullscreen_pressed():
 
 func _update_fullscreen_toggle_visuals(is_on: bool):
 	_style_toggle_button(fullscreen_toggle, is_on)
+
 
 func _style_toggle_button(btn: Button, is_on: bool):
 	var style = StyleBoxFlat.new()
@@ -332,103 +336,11 @@ func _style_toggle_button(btn: Button, is_on: bool):
 
 	_apply_button_styles(btn, style, style, style, style)
 
-func _on_close_pressed():
-	if SoundManager: SoundManager.play_sfx("ui_click")
-	queue_free()
 
 func _exit_tree():
 	if GameManager:
 		Settings.save_settings()
 
-func _build_dialogue_theme_controls():
-	# classic vs modern row
-	var theme_hbox = HBoxContainer.new()
-	theme_hbox.name = "DialogueThemeHBox"
-
-	var theme_text = Label.new()
-	theme_text.name = "DialogueThemeText"
-	theme_text.text = "Dialogue Box"
-	theme_hbox.add_child(theme_text)
-
-	var theme_spacer = Control.new()
-	theme_spacer.name = "Spacer"
-	theme_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	theme_hbox.add_child(theme_spacer)
-
-	dialogue_theme_toggle = Button.new()
-	dialogue_theme_toggle.name = "DialogueThemeToggle"
-	dialogue_theme_toggle.text = "CLASSIC"
-	dialogue_theme_toggle.custom_minimum_size = Vector2(180, 40)
-	dialogue_theme_toggle.focus_mode = Control.FOCUS_NONE
-	dialogue_theme_toggle.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	theme_hbox.add_child(dialogue_theme_toggle)
-
-	tab_dialogue_content.add_child(theme_hbox)
-
-	# distortion row. name ends in "Label" so the polish pass tints it cyan like the other headings.
-	glass_distort_label = Label.new()
-	glass_distort_label.name = "GlassDistortLabel"
-	glass_distort_label.text = "Glass Distortion: 4"
-	tab_dialogue_content.add_child(glass_distort_label)
-
-	var distort_hbox = HBoxContainer.new()
-	distort_hbox.name = "GlassDistortHBox"
-	distort_hbox.add_theme_constant_override("separation", 15)
-
-	glass_distort_minus = Button.new()
-	glass_distort_minus.name = "GlassDistortMinus"
-	glass_distort_minus.text = "-"
-	glass_distort_minus.custom_minimum_size = Vector2(40, 40)
-	glass_distort_minus.focus_mode = Control.FOCUS_NONE
-	glass_distort_minus.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	distort_hbox.add_child(glass_distort_minus)
-
-	glass_distort_slider = HSlider.new()
-	glass_distort_slider.name = "GlassDistortSlider"
-	glass_distort_slider.min_value = 0.0
-	glass_distort_slider.max_value = 10.0
-	glass_distort_slider.step = 1.0
-	glass_distort_slider.tick_count = 11
-	glass_distort_slider.ticks_on_borders = true
-	glass_distort_slider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	glass_distort_slider.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	distort_hbox.add_child(glass_distort_slider)
-
-	glass_distort_plus = Button.new()
-	glass_distort_plus.name = "GlassDistortPlus"
-	glass_distort_plus.text = "+"
-	glass_distort_plus.custom_minimum_size = Vector2(40, 40)
-	glass_distort_plus.focus_mode = Control.FOCUS_NONE
-	glass_distort_plus.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	distort_hbox.add_child(glass_distort_plus)
-
-	tab_dialogue_content.add_child(distort_hbox)
-
-func _on_dialogue_theme_pressed():
-	if SoundManager: SoundManager.play_sfx("ui_click")
-	if GameManager:
-		Settings.dialogue_theme = "classic" if Settings.dialogue_theme == "modern" else "modern"
-		_update_dialogue_theme_visuals()
-
-func _update_dialogue_theme_visuals():
-	var is_modern = (Settings.dialogue_theme == "modern") if GameManager else false
-	_style_toggle_button(dialogue_theme_toggle, is_modern)
-	# _style_toggle_button writes ON/OFF; this one wants the mode name instead.
-	dialogue_theme_toggle.text = "MODERN" if is_modern else "CLASSIC"
-
-	glass_distort_slider.editable = is_modern
-	var alpha = 1.0 if is_modern else 0.4
-	glass_distort_label.modulate.a = alpha
-	glass_distort_slider.modulate.a = alpha
-	glass_distort_minus.modulate.a = alpha
-	glass_distort_plus.modulate.a = alpha
-	glass_distort_minus.disabled = not is_modern
-	glass_distort_plus.disabled = not is_modern
-
-func _on_glass_distort_changed(value: float):
-	_update_labels()
-	if GameManager:
-		Settings.glass_distortion = value / 10.0
 
 func _apply_ui_polish():
 	# **************************[fonts and main text sizing]
@@ -471,7 +383,7 @@ func _apply_ui_polish():
 	var inc_dec_buttons = [
 		master_minus, master_plus, music_minus, music_plus, sfx_minus, sfx_plus,
 		text_scale_minus, text_scale_plus, text_speed_minus, text_speed_plus,
-		auto_delay_minus, auto_delay_plus, glass_distort_minus, glass_distort_plus
+		auto_delay_minus, auto_delay_plus
 	]
 
 	# apply fonts
@@ -519,7 +431,7 @@ func _apply_ui_polish():
 	grabber_img.fill(Color(0.2, 0.85, 1.0, 1.0))
 	var grabber_tex = ImageTexture.create_from_image(grabber_img)
 
-	var sliders = [master_slider, music_slider, sfx_slider, text_speed_slider, auto_delay_slider, text_scale_slider, glass_distort_slider]
+	var sliders = [master_slider, music_slider, sfx_slider, text_speed_slider, auto_delay_slider, text_scale_slider]
 	for s in sliders:
 		s.scrollable = false
 		s.add_theme_stylebox_override("slider", slider_bg)
@@ -599,4 +511,3 @@ func _apply_ui_polish():
 		for s in sliders:
 			s.custom_minimum_size.y = 90
 		close_button.custom_minimum_size.y = 110
-		dialogue_theme_toggle.custom_minimum_size = Vector2(300, 90)
