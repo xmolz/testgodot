@@ -42,6 +42,9 @@ func _on_dialogue_ended(_resource):
 	if _active_dialogue_depth < 0:
 		_active_dialogue_depth = 0
 
+func reset_transient_state() -> void:
+	_active_dialogue_depth = 0
+
 func _on_level_state_manager_registered(lsm: LevelStateManager):
 	_level_state_ready_emitted = false
 	if not is_instance_valid(lsm): return

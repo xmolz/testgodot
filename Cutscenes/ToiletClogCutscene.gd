@@ -114,6 +114,10 @@ func _execution_steps():
 	print_rich("[color=magenta][Time: %s] Releasing Player Control.[/color]" % Time.get_ticks_msec())
 	GameManager.change_game_state(GameManager.GameState.IN_GAME_PLAY)
 	
+	# player has control again; saves made from here on are resolved by
+	# _on_level_state_ready's fast-forward, so the gate can open early.
+	release_save_gate()
+	
 	# --------------------(background logic)
 	
 	# ---------------- step 3: walk to toilet

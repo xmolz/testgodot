@@ -84,15 +84,24 @@ func show_game_over() -> Node:
 	get_tree().root.add_child(game_over_instance)
 	return game_over_instance
 
-func clear_active_dialogue_balloons(node: Node = null):
+func clear_active_dialogue_balloons(node: Node = null) -> int:
 	if node == null:
 		node = get_tree().root
 
+	var freed_count = 0
 	for child in node.get_children():
 		if "Balloon" in child.name or "conversationballoon" in child.name.to_lower():
 			child.queue_free()
+			freed_count += 1
 		else:
-			clear_active_dialogue_balloons(child)
+			freed_count += clear_active_dialogue_balloons(child)
+
+	if node == get_tree().root and freed_count > 0:
+		if SaveManager:
+			SaveManager.reset_transient_state()
+		get_tree().call_group("game_ui_nodes", "notify_dialogue_force_cleared")
+
+	return freed_count
 
 func _cleanup_all_overlays(node: Node = null):
 	if node == null:

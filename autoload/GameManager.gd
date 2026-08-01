@@ -1120,6 +1120,8 @@ func open_insurance_form():
 func reset_run_state():
 	# ***** interaction / input transients *****
 	active_cutscene_count = 0
+	if SaveManager:
+		SaveManager.reset_transient_state()
 	_disconnect_interactable_request_signals()
 	hovered_interactables.clear()
 	hovered_interactable = null

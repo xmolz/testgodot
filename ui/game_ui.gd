@@ -20,6 +20,7 @@ var _dialogue_active: bool = false
 
 
 func _ready() -> void:
+	add_to_group("game_ui_nodes")
 	Events.game_state_changed.connect(_on_game_state_changed)
 	Events.interaction_state_changed.connect(_on_interaction_state_changed)
 	Events.explanation_started.connect(_on_explanation_started)
@@ -50,18 +51,15 @@ func _ready() -> void:
 # emitting game_state_changed, so we missed
 # direct scene run (f6 on
 func _sync_initial_visibility() -> void:
-	if not GameManager:
-		return
-	if GameManager.current_game_state == GameManager.GameState.CUTSCENE:
-		_set_gameplay_ui_visible(false)
-		return
-	_set_gameplay_ui_visible(GameManager.current_interaction_state == GameManager.InteractionState.WORLD)
+	_zoom_show_verb_panel = true
+	_zoom_show_inventory = true
+	_refresh_hud()
 
 
 func _on_zoom_hud_config_requested(show_verb_panel: bool, show_inventory: bool) -> void:
 	_zoom_show_verb_panel = show_verb_panel
 	_zoom_show_inventory = show_inventory
-	_apply_zoom_hud_visibility()
+	_refresh_hud()
 
 
 # what the hud should look
@@ -77,63 +75,58 @@ func _apply_zoom_hud_visibility() -> void:
 		insurance_form_button_ui.visible = false
 
 
-# ///////////////// event handlers
+func _refresh_hud() -> void:
+	if not GameManager: return
+	var state = GameManager.current_game_state
+	var interaction = GameManager.current_interaction_state
 
-func _on_game_state_changed(new_state: int) -> void:
-	match new_state:
-		GameManager.GameState.IN_GAME_PLAY:
-			# mirrors the old "restoration phase"
-			_set_gameplay_ui_visible(GameManager.current_interaction_state == GameManager.InteractionState.WORLD)
-		GameManager.GameState.CUTSCENE:
-			_set_gameplay_ui_visible(false)
-		_:
-			# paused, explanation, etc. deliberately leave
-			# exactly like the old gamemanager code did.
-			pass
+	if state == GameManager.GameState.CUTSCENE or _dialogue_active:
+		_set_gameplay_ui_visible(false)
+		return
 
-
-func _on_interaction_state_changed(new_state: int) -> void:
-	match new_state:
+	match interaction:
+		GameManager.InteractionState.ZOOM_VIEW:
+			if is_instance_valid(verb_ui): verb_ui.layer = 3
+			if is_instance_valid(inventory_ui): inventory_ui.layer = 3
+			_apply_zoom_hud_visibility()
 		GameManager.InteractionState.CONVERSATION:
 			_set_gameplay_ui_visible(false)
-		GameManager.InteractionState.ZOOM_VIEW:
-			# the zoom overlay sits on
-			if is_instance_valid(verb_ui):
-				verb_ui.layer = 3
-			if is_instance_valid(inventory_ui):
-				inventory_ui.layer = 3
-			_zoom_show_verb_panel = true
-			_zoom_show_inventory = true
-			_apply_zoom_hud_visibility()
 		GameManager.InteractionState.WORLD:
-			_zoom_show_verb_panel = true
-			_zoom_show_inventory = true
 			if is_instance_valid(verb_ui):
 				verb_ui.layer = 1
 				verb_ui.set_panel_visible(true)
-			if is_instance_valid(inventory_ui):
-				inventory_ui.layer = 1
-			_set_gameplay_ui_visible(true)
+			if is_instance_valid(inventory_ui): inventory_ui.layer = 1
+			_set_gameplay_ui_visible(state == GameManager.GameState.IN_GAME_PLAY)
+		_:
+			pass
+
+
+# ///////////////// event handlers
+
+func _on_game_state_changed(new_state: int) -> void:
+	_refresh_hud()
+
+
+func _on_interaction_state_changed(new_state: int) -> void:
+	if new_state == GameManager.InteractionState.ZOOM_VIEW or new_state == GameManager.InteractionState.WORLD:
+		_zoom_show_verb_panel = true
+		_zoom_show_inventory = true
+	_refresh_hud()
 
 
 func _on_dialogue_started(_resource: Resource) -> void:
 	_dialogue_active = true
-	# hide the hud whenever any
-	# character conversations, insurance-form balloons —
-	_set_gameplay_ui_visible(false)
+	_refresh_hud()
 
 
 func _on_dialogue_ended(_resource: Resource) -> void:
 	_dialogue_active = false
-	if GameManager.current_game_state != GameManager.GameState.IN_GAME_PLAY:
-		return
-	match GameManager.current_interaction_state:
-		GameManager.InteractionState.CONVERSATION:
-			pass
-		GameManager.InteractionState.ZOOM_VIEW:
-			_apply_zoom_hud_visibility()
-		_:
-			_set_gameplay_ui_visible(true)
+	_refresh_hud()
+
+
+func notify_dialogue_force_cleared() -> void:
+	_dialogue_active = false
+	_refresh_hud()
 
 
 func _on_explanation_started(data: ExplanationData, root_node_to_search: Node) -> void:
@@ -168,8 +161,7 @@ func _on_explanation_started(data: ExplanationData, root_node_to_search: Node) -
 # ////////////[button, which stays with gamemanager)]
 
 func _set_gameplay_ui_visible(show: bool) -> void:
-	if show and _dialogue_active:
-		show = false
+	print_rich("[color=gray]GameUI: hud visible=%s (state=%s interaction=%s dialogue=%s)[/color]" % [show, GameManager.current_game_state, GameManager.current_interaction_state, _dialogue_active])
 	if is_instance_valid(verb_ui):
 		verb_ui.visible = show
 	if is_instance_valid(inventory_ui):

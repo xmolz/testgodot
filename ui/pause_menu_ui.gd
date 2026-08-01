@@ -91,6 +91,10 @@ func _input(event):
 			if get_tree().root.has_node("SettingsMenu") or get_tree().root.has_node("DialogueHistoryUI") or get_tree().root.has_node("CreditsMenu") or get_tree().root.has_node("ControlsMenu") or get_tree().root.has_node("SaveSlotScreen"):
 				return
 
+			# Gate opening on WORLD interaction state
+			if not overlay.visible and GameManager.current_interaction_state != GameManager.InteractionState.WORLD:
+				return
+
 			get_viewport().set_input_as_handled()
 			toggle_pause()
 
