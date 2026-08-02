@@ -1,27 +1,31 @@
-# cg_pan_test.gd — dev-only harness for the vertical CG pan (low framing -> face).
-# one tall image, scrolled. no camera: this is a position tween on the image itself, which is how
-# VN engines do it.
+# cg_pan_test.gd — dev-only harness for CG camera moves (low framing -> face).
+# no camera node: this is a position tween on the image itself, which is how VN engines do it.
 #
-# framing is expressed in SOURCE pixels — the y of the top edge of the visible 16:9 window — so the
-# inspector numbers line up 1:1 with the ruler printed on pan_test_target_2560x3840.png.
+# framing is the TOP-LEFT CORNER of the visible window, in source pixels, plus a zoom. on a tall CG
+# you only move y. on a 16:9 CG you zoom in past 1.0 first, which is what creates the travel, and
+# then you move in both axes.
 #
 # does NOT reuse AdvancedConversationOverlay's CGLayer: that one is KEEP_ASPECT_COVERED, which crops
 # centred with no way to offset the crop.
 extends Control
 
 const DIALOGUE_PATH := "res://Dev/cg_pan_test.dialogue"
+const NUDGE := 20.0
+const NUDGE_FINE := 5.0
 
-@export_file("*.png") var image_path: String = "res://Dev/pan_test_target_2560x3840.png"
+@export_file("*.png") var image_path: String = "res://Dev/cg_pan_ref_3840x2160.png"
 
-# top edge of the visible window, in source px. 0 = top of the image.
-@export var start_src_y: float = 2400.0
+# top-left of the visible window, in source px
+@export var start_src_x: float = 750.0
+@export var start_src_y: float = 840.0
+@export var end_src_x: float = 1920.0
 @export var end_src_y: float = 0.0
 
-@export_range(0.2, 12.0, 0.1) var duration: float = 3.0
+# on a 16:9 source this is what creates the travel in the first place. 1.0 = whole frame, no move.
+@export_range(1.0, 4.0, 0.01) var start_zoom: float = 2.0
+@export_range(1.0, 4.0, 0.01) var end_zoom: float = 2.0
 
-# subtle push-in across the move. 1.0 = off. ~1.05 reads as a camera rather than a slide.
-@export_range(1.0, 1.5, 0.01) var start_zoom: float = 1.0
-@export_range(1.0, 1.5, 0.01) var end_zoom: float = 1.0
+@export_range(0.2, 12.0, 0.1) var duration: float = 1.4
 
 @export_enum("Sine InOut", "Cubic InOut", "Linear") var easing: int = 0
 
@@ -33,6 +37,7 @@ var _readout: Label
 var _tex: Texture2D = null
 var _balloon: Node = null
 var _pan_tween: Tween = null
+var _cur_src_x: float = 0.0
 var _cur_src_y: float = 0.0
 var _cur_zoom: float = 1.0
 
@@ -84,8 +89,8 @@ func _load_image() -> void:
 		push_warning("cg pan test: could not load %s" % image_path)
 		return
 	_cg.texture = _tex
-	print("cg pan test: %s  source %dx%d  fit %.3f  max_src_y %.0f" % [
-		image_path, int(_tex.get_size().x), int(_tex.get_size().y), _fit_scale(), _max_src_y_at(1.0)
+	print("cg pan test: %s  source %dx%d  fit %.3f" % [
+		image_path, int(_tex.get_size().x), int(_tex.get_size().y), _fit_scale()
 	])
 
 
@@ -112,45 +117,54 @@ func _fit_scale() -> float:
 	return get_viewport_rect().size.x / float(_tex.get_size().x)
 
 
-func _max_src_y_at(zoom: float) -> float:
+func _eff(zoom: float) -> float:
+	return _fit_scale() * zoom
+
+
+func _max_src(zoom: float) -> Vector2:
 	if _tex == null:
-		return 0.0
-	var eff: float = _fit_scale() * zoom
-	if eff <= 0.0:
-		return 0.0
-	return max(0.0, _tex.get_size().y - get_viewport_rect().size.y / eff)
+		return Vector2.ZERO
+	var e: float = _eff(zoom)
+	if e <= 0.0:
+		return Vector2.ZERO
+	return Vector2(
+		max(0.0, _tex.get_size().x - get_viewport_rect().size.x / e),
+		max(0.0, _tex.get_size().y - get_viewport_rect().size.y / e)
+	)
 
 
-func _apply_frame(src_y: float, zoom: float) -> void:
+func _apply_frame(src_x: float, src_y: float, zoom: float) -> void:
 	if _tex == null or not is_instance_valid(_cg):
 		return
-	var eff: float = _fit_scale() * zoom
-	var disp: Vector2 = _tex.get_size() * eff
-	var clamped: float = clampf(src_y, 0.0, _max_src_y_at(zoom))
-	_cg.size = disp
-	_cg.position = Vector2((get_viewport_rect().size.x - disp.x) * 0.5, -clamped * eff)
-	_cur_src_y = clamped
+	var e: float = _eff(zoom)
+	var limit: Vector2 = _max_src(zoom)
+	var cx: float = clampf(src_x, 0.0, limit.x)
+	var cy: float = clampf(src_y, 0.0, limit.y)
+	_cg.size = _tex.get_size() * e
+	_cg.position = Vector2(-cx * e, -cy * e)
+	_cur_src_x = cx
+	_cur_src_y = cy
 	_cur_zoom = zoom
 	_refresh_readout()
 
 
 # ****************************[mutations called from the dialogue file]
 func pan() -> void:
-	_play(start_src_y, end_src_y, start_zoom, end_zoom)
+	_play(Vector3(start_src_x, start_src_y, start_zoom), Vector3(end_src_x, end_src_y, end_zoom))
 
 
 func pan_reverse() -> void:
-	_play(end_src_y, start_src_y, end_zoom, start_zoom)
+	_play(Vector3(end_src_x, end_src_y, end_zoom), Vector3(start_src_x, start_src_y, start_zoom))
 
 
 func snap_to_start() -> void:
 	_kill_pan()
-	_apply_frame(start_src_y, start_zoom)
+	_apply_frame(start_src_x, start_src_y, start_zoom)
 
 
 func snap_to_end() -> void:
 	_kill_pan()
-	_apply_frame(end_src_y, end_zoom)
+	_apply_frame(end_src_x, end_src_y, end_zoom)
 
 
 func _kill_pan() -> void:
@@ -159,53 +173,81 @@ func _kill_pan() -> void:
 	_pan_tween = null
 
 
-func _play(a_y: float, b_y: float, a_z: float, b_z: float) -> void:
+# frames are packed as Vector3(src_x, src_y, zoom)
+func _play(a: Vector3, b: Vector3) -> void:
 	_kill_pan()
-	_apply_frame(a_y, a_z)
+	_apply_frame(a.x, a.y, a.z)
 	_pan_tween = create_tween()
 	match easing:
 		1:
-			_pan_tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+			_pan_tween.set_trans(Tween.TRANS_SUBIC if "TRANS_SUBIC" in Tween else Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
 		2:
 			_pan_tween.set_trans(Tween.TRANS_LINEAR)
 		_:
 			_pan_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	_pan_tween.tween_method(
-		func(t: float) -> void: _apply_frame(lerpf(a_y, b_y, t), lerpf(a_z, b_z, t)),
+		func(t: float) -> void:
+			var f: Vector3 = a.lerp(b, t)
+			_apply_frame(f.x, f.y, f.z),
 		0.0,
 		1.0,
 		duration
 	)
 
 
+# ****************************[live framing tool]
+func _nudge(dx: float, dy: float) -> void:
+	_kill_pan()
+	_apply_frame(_cur_src_x + dx, _cur_src_y + dy, _cur_zoom)
+
+
+func _zoom_by(dz: float) -> void:
+	_kill_pan()
+	_apply_frame(_cur_src_x, _cur_src_y, clampf(_cur_zoom + dz, 1.0, 4.0))
+
+
+func _store_start() -> void:
+	start_src_x = _cur_src_x
+	start_src_y = _cur_src_y
+	start_zoom = _cur_zoom
+	print("cg pan test: START  src_x %.0f  src_y %.0f  zoom %.2f" % [start_src_x, start_src_y, start_zoom])
+	_refresh_readout()
+
+
+func _store_end() -> void:
+	end_src_x = _cur_src_x
+	end_src_y = _cur_src_y
+	end_zoom = _cur_zoom
+	print("cg pan test: END    src_x %.0f  src_y %.0f  zoom %.2f" % [end_src_x, end_src_y, end_zoom])
+	_refresh_readout()
+
+
 # ****************************[readout]
 func _refresh_readout() -> void:
 	if not is_instance_valid(_readout):
 		return
-	var lines: PackedStringArray = PackedStringArray()
 	if _tex == null:
 		_readout.text = "cg pan test: NO IMAGE\n%s" % image_path
 		return
 
-	var eff: float = _fit_scale() * _cur_zoom
-	var window_h_src: float = get_viewport_rect().size.y / eff
-	var crisp: String = "under native, crisp" if eff <= 1.0 else "OVER NATIVE - softening"
+	var e: float = _eff(_cur_zoom)
+	var limit: Vector2 = _max_src(_cur_zoom)
+	var win: Vector2 = get_viewport_rect().size / e
+	var crisp: String = "under native, crisp" if e <= 1.0 else "OVER NATIVE - softening"
 
+	var lines: PackedStringArray = PackedStringArray()
 	lines.append("CG PAN TEST   source %dx%d" % [int(_tex.get_size().x), int(_tex.get_size().y)])
-	lines.append("sampling  fit %.3f  x zoom %.2f  = %.3f   (%s)" % [_fit_scale(), _cur_zoom, eff, crisp])
-	lines.append("window    src y %d .. %d   (height %d src px)" % [
-		int(round(_cur_src_y)), int(round(_cur_src_y + window_h_src)), int(round(window_h_src))
+	lines.append("sampling  fit %.3f x zoom %.2f = %.3f   (%s)" % [_fit_scale(), _cur_zoom, e, crisp])
+	lines.append("window    %d x %d src px   at %d , %d   (max %d , %d)" % [
+		int(round(win.x)), int(round(win.y)),
+		int(round(_cur_src_x)), int(round(_cur_src_y)),
+		int(round(limit.x)), int(round(limit.y))
 	])
-	lines.append("framings  start %d  ->  end %d   max %d" % [
-		int(start_src_y), int(end_src_y), int(round(_max_src_y_at(_cur_zoom)))
-	])
-	lines.append("move      %.1fs   %s   zoom %.2f -> %.2f" % [
-		duration,
-		["Sine InOut", "Cubic InOut", "Linear"][clampi(easing, 0, 2)],
-		start_zoom,
-		end_zoom
-	])
-	lines.append("P play   O reverse   1 start frame   2 end frame   [ / ] duration   R restart")
+	lines.append("START     %d , %d  zoom %.2f" % [int(start_src_x), int(start_src_y), start_zoom])
+	lines.append("END       %d , %d  zoom %.2f" % [int(end_src_x), int(end_src_y), end_zoom])
+	lines.append("move      %.2fs   %s" % [duration, ["Sine InOut", "Cubic InOut", "Linear"][clampi(easing, 0, 2)]])
+	lines.append("arrows move (shift = fine)   , / . zoom   S set start   E set end")
+	lines.append("P play   O reverse   1 start   2 end   [ / ] duration   R restart")
 	_readout.text = "\n".join(lines)
 
 
@@ -215,10 +257,27 @@ func _input(event: InputEvent) -> void:
 	if not (event is InputEventKey):
 		return
 	var k := event as InputEventKey
-	if not k.pressed or k.echo:
+	if not k.pressed:
 		return
+	var step: float = NUDGE_FINE if k.shift_pressed else NUDGE
 
 	match k.keycode:
+		KEY_LEFT:
+			_nudge(-step, 0.0)
+		KEY_RIGHT:
+			_nudge(step, 0.0)
+		KEY_UP:
+			_nudge(0.0, -step)
+		KEY_DOWN:
+			_nudge(0.0, step)
+		KEY_COMMA:
+			_zoom_by(-0.05)
+		KEY_PERIOD:
+			_zoom_by(0.05)
+		KEY_S:
+			_store_start()
+		KEY_E:
+			_store_end()
 		KEY_P:
 			pan()
 		KEY_O:
@@ -228,10 +287,10 @@ func _input(event: InputEvent) -> void:
 		KEY_2, KEY_KP_2:
 			snap_to_end()
 		KEY_BRACKETLEFT:
-			duration = max(duration - 0.25, 0.2)
+			duration = max(duration - 0.1, 0.2)
 			_refresh_readout()
 		KEY_BRACKETRIGHT:
-			duration = min(duration + 0.25, 12.0)
+			duration = min(duration + 0.1, 12.0)
 			_refresh_readout()
 		KEY_R:
 			snap_to_start()
