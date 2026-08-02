@@ -35,6 +35,16 @@ const NUDGE_FINE := 5.0
 
 @export var show_minimap: bool = true
 
+# beat 3: pull back off the face to show the whole image. at zoom 1.0 the window is the entire
+# 16:9 source, so the centre clamps to the middle on its own and cx/cy below are ignored.
+@export var reveal_cx: float = 1920.0
+@export var reveal_cy: float = 1080.0
+@export_range(1.0, 4.0, 0.01) var reveal_zoom: float = 1.0
+@export_range(0.2, 12.0, 0.1) var reveal_duration: float = 1.0
+
+# only used by play_all / the A key: the beat between the pan landing and the pull-back starting
+@export_range(0.0, 6.0, 0.1) var hold_time: float = 0.8
+
 var _cg: TextureRect
 var _readout: Label
 var _minimap: Control
@@ -170,12 +180,28 @@ func _apply_frame(cx: float, cy: float, zoom: float) -> void:
 
 
 # ****************************[mutations called from the dialogue file]
+func _frame_start() -> Vector3:
+	return Vector3(start_cx, start_cy, start_zoom)
+
+
+func _frame_end() -> Vector3:
+	return Vector3(end_cx, end_cy, end_zoom)
+
+
+func _frame_reveal() -> Vector3:
+	return Vector3(reveal_cx, reveal_cy, reveal_zoom)
+
+
 func pan() -> void:
-	_play(Vector3(start_cx, start_cy, start_zoom), Vector3(end_cx, end_cy, end_zoom))
+	_play(_frame_start(), _frame_end(), duration)
 
 
 func pan_reverse() -> void:
-	_play(Vector3(end_cx, end_cy, end_zoom), Vector3(start_cx, start_cy, start_zoom))
+	_play(_frame_end(), _frame_start(), duration)
+
+
+func reveal() -> void:
+	_play(_frame_end(), _frame_reveal(), reveal_duration)
 
 
 func snap_to_start() -> void:
@@ -188,32 +214,56 @@ func snap_to_end() -> void:
 	_apply_frame(end_cx, end_cy, end_zoom)
 
 
+func snap_to_reveal() -> void:
+	_kill_pan()
+	_apply_frame(reveal_cx, reveal_cy, reveal_zoom)
+
+
 func _kill_pan() -> void:
 	if _pan_tween and _pan_tween.is_valid():
 		_pan_tween.kill()
 	_pan_tween = null
 
 
-# frames are packed as Vector3(centre_x, centre_y, zoom)
-func _play(a: Vector3, b: Vector3) -> void:
-	_kill_pan()
-	_apply_frame(a.x, a.y, a.z)
-	_pan_tween = create_tween()
+func _apply_easing(t: Tween) -> void:
 	match easing:
 		1:
-			_pan_tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+			t.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
 		2:
-			_pan_tween.set_trans(Tween.TRANS_LINEAR)
+			t.set_trans(Tween.TRANS_LINEAR)
 		_:
-			_pan_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	_pan_tween.tween_method(
-		func(t: float) -> void:
-			var f: Vector3 = a.lerp(b, t)
+			t.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+
+func _leg(t: Tween, a: Vector3, b: Vector3, secs: float) -> void:
+	t.tween_method(
+		func(x: float) -> void:
+			var f: Vector3 = a.lerp(b, x)
 			_apply_frame(f.x, f.y, f.z),
 		0.0,
 		1.0,
-		duration
+		secs
 	)
+
+
+# frames are packed as Vector3(centre_x, centre_y, zoom)
+func _play(a: Vector3, b: Vector3, secs: float) -> void:
+	_kill_pan()
+	_apply_frame(a.x, a.y, a.z)
+	_pan_tween = create_tween()
+	_apply_easing(_pan_tween)
+	_leg(_pan_tween, a, b, secs)
+
+
+# all three beats back to back, so the whole thing can be judged as one move
+func play_all() -> void:
+	_kill_pan()
+	_apply_frame(start_cx, start_cy, start_zoom)
+	_pan_tween = create_tween()
+	_apply_easing(_pan_tween)
+	_leg(_pan_tween, _frame_start(), _frame_end(), duration)
+	_pan_tween.tween_interval(hold_time)
+	_leg(_pan_tween, _frame_end(), _frame_reveal(), reveal_duration)
 
 
 # ****************************[live framing tool]
@@ -240,6 +290,14 @@ func _store_end() -> void:
 	end_cy = _cur_cy
 	end_zoom = _cur_zoom
 	print("cg pan test: END    cx %.0f  cy %.0f  zoom %.2f" % [end_cx, end_cy, end_zoom])
+	_refresh_readout()
+
+
+func _store_reveal() -> void:
+	reveal_cx = _cur_cx
+	reveal_cy = _cur_cy
+	reveal_zoom = _cur_zoom
+	print("cg pan test: REVEAL cx %.0f  cy %.0f  zoom %.2f" % [reveal_cx, reveal_cy, reveal_zoom])
 	_refresh_readout()
 
 
@@ -290,9 +348,12 @@ func _refresh_readout() -> void:
 	])
 	lines.append("START     %d , %d  zoom %.2f" % [int(start_cx), int(start_cy), start_zoom])
 	lines.append("END       %d , %d  zoom %.2f" % [int(end_cx), int(end_cy), end_zoom])
-	lines.append("move      %.2fs   %s" % [duration, ["Sine InOut", "Cubic InOut", "Linear"][clampi(easing, 0, 2)]])
-	lines.append("arrows move (shift = fine)   , / . zoom   S set start   E set end   M minimap")
-	lines.append("P play   O reverse   1 start   2 end   [ / ] duration   R restart")
+	lines.append("REVEAL    %d , %d  zoom %.2f" % [int(reveal_cx), int(reveal_cy), reveal_zoom])
+	lines.append("move      pan %.2fs   hold %.2fs   reveal %.2fs   %s" % [
+		duration, hold_time, reveal_duration, ["Sine InOut", "Cubic InOut", "Linear"][clampi(easing, 0, 2)]
+	])
+	lines.append("arrows move (shift = fine)   , / . zoom   S start   E end   V reveal   M minimap")
+	lines.append("P pan   Z reveal   A all three   O reverse   1 / 2 / 3 snap   [ / ] duration   R restart")
 	_readout.text = "\n".join(lines)
 
 
@@ -324,6 +385,12 @@ func _input(event: InputEvent) -> void:
 			_store_start()
 		KEY_E:
 			_store_end()
+		KEY_V:
+			_store_reveal()
+		KEY_Z:
+			reveal()
+		KEY_A:
+			play_all()
 		KEY_M:
 			if is_instance_valid(_minimap):
 				_minimap.visible = not _minimap.visible
@@ -335,6 +402,8 @@ func _input(event: InputEvent) -> void:
 			snap_to_start()
 		KEY_2, KEY_KP_2:
 			snap_to_end()
+		KEY_3, KEY_KP_3:
+			snap_to_reveal()
 		KEY_BRACKETLEFT:
 			duration = max(duration - 0.1, 0.2)
 			_refresh_readout()

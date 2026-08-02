@@ -10,4 +10,8 @@ do pan()
 
 Woman: My eyes are up here.
 Player: Noted.
+
+do reveal()
+
+Woman: Now get up.
 => END
