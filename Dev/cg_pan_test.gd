@@ -13,7 +13,13 @@ const DIALOGUE_PATH := "res://Dev/cg_pan_test.dialogue"
 const NUDGE := 20.0
 const NUDGE_FINE := 5.0
 
-@export_file("*.png") var image_path: String = "res://Dev/cg_pan_ref_3840x2160.png"
+# pick the variation here, then F6. the paths below are editable if the files ever move.
+@export_enum("Version 1", "Version 2") var image_version: int = 0
+@export_file("*.png") var image_v1: String = "res://Dev/version1.png"
+@export_file("*.png") var image_v2: String = "res://Dev/version2.png"
+
+# resolved from image_version in _load_image(). not exported.
+var image_path: String = ""
 
 # CENTRE of the visible window, in source px
 @export var start_cx: float = 2048.0
@@ -104,7 +110,12 @@ func _build_ui() -> void:
 	add_child(_minimap)
 
 
+func _path_for(version: int) -> String:
+	return image_v2 if version == 1 else image_v1
+
+
 func _load_image() -> void:
+	image_path = _path_for(image_version)
 	if not ResourceLoader.exists(image_path):
 		push_warning("cg pan test: missing image %s" % image_path)
 		return
