@@ -1,8 +1,8 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://blpabcegfvpn8"]
 
-[ext_resource type="Script" path="res://Dev/cg_pan_test.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://ddsam5swd35dm" path="res://Dev/cg_pan_test.gd" id="1_script"]
 
-[node name="CgPanTest" type="Control"]
+[node name="CgPanTest" type="Control" unique_id=1086572328]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
