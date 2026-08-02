@@ -1,0 +1,17 @@
+# res://Dev/dream_launch.dialogue
+# Monologue over the portal swirl. Speaker-less on purpose: conversationballoon.gd hides the
+# nameplate entirely when dialogue_line.character is empty.
+
+~ swirl
+You're here now.
+Swirling.
+Floating.
+Going back to who you once were.
+What will your first memory reveal to you?
+Whose face will you see first?
+Will it be the face of someone you loved?
+Or the face of someone you hated?
+Hate...
+Now, that's a strong emotion.
+Let's start at the beginning.
+=> END

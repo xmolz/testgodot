@@ -59,7 +59,8 @@ var image_path: String = ""
 @export_file("*.png", "*.jpg") var portal_texture_path: String = "res://1080test1.jpg"
 @export var portal_start_rect: Rect2 = Rect2(700, 300, 520, 300)
 @export_range(0.4, 4.0, 0.1) var portal_duration: float = 1.0
-@export var launch_dialogue_title: String = "university_2"
+@export_file("*.dialogue") var launch_dialogue_path: String = "res://Dev/dream_launch.dialogue"
+@export var launch_dialogue_title: String = "swirl"
 
 # beat 2, the dream
 @export_file("*.tscn") var dream_overlay_path: String = "res://Dev/dream_intro_overlay.tscn"
@@ -247,6 +248,17 @@ func _start_dream_dialogue() -> void:
 	# bypassed it so we could pass two game states, so wire it by hand.
 	if is_instance_valid(_overlay):
 		_overlay.current_balloon = _balloon
+
+
+# the overlay's persistent shake self-cancels in its got_dialogue handler, which begin_conversation()
+# wires up. we bypassed that to pass two game states, so the shake runs until something stops it.
+# this is that something. called from the dialogue.
+func shake_stop() -> void:
+	if not is_instance_valid(_overlay):
+		return
+	_overlay._is_shaking = false
+	_overlay._is_persistent_shake = false
+	_overlay.offset = _overlay._camera_offset
 
 
 func _teardown_sequence() -> void:
