@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dc02amkq4wi0x" path="res://Dev/sprite_conversation_test.gd" id="1_script"]
 
-[node name="SpriteConversationTest" type="Control"]
+[node name="SpriteConversationTest" type="Control" unique_id=317699537]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -12,4 +12,4 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_script")
 global_scale = 0.5
-left_actor = "Layla"
+left_actor = "Troy"

@@ -47,7 +47,7 @@ var fit_mode: bool = false
 var _base_scale: float = 0.5
 
 # whoever parks on the left for the whole run. must match an actor_id in PROFILES.
-@export var left_actor: String = "Layla"
+@export var left_actor: String = "Troy"
 
 var _textures: Dictionary = {}      # actor_id -> Texture2D
 var _char_scales: Dictionary = {}   # actor_id -> profile.default_scale
