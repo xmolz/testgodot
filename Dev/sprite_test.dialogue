@@ -1,30 +1,36 @@
 ~ start
 
-Troy: Alright. Send them in. One at a time.
+Julian: Right. Everyone through the door on the right. One at a time.
+
+do enter_right("Protag")
+Protag: Do I have to do this?
+Julian: You're the protagonist. You especially have to do this.
+do leave_right("Protag")
+do wait(0.45)
 
 do enter_right("Alyssa")
 Alyssa: Am I the right size?
-Troy: Ask the man holding the ruler. That's not me.
+Julian: You're asking the wrong man. I only work here.
 do leave_right("Alyssa")
 do wait(0.45)
 
 do enter_right("Layla")
 Layla: This had better be a flattering angle.
-Troy: It's the only angle you have.
+Julian: It's the only angle you have.
 do leave_right("Layla")
 do wait(0.45)
 
 do enter_right("Professor")
 Professor: I have office hours in ten minutes.
-Troy: This will take nine.
+Julian: This will take nine.
 do leave_right("Professor")
 do wait(0.45)
 
-do enter_right("Julian")
-Julian: So this is the famous test scene.
-Troy: This is the famous test scene.
-do leave_right("Julian")
+do enter_right("Troy")
+Troy: You called?
+Julian: Stand there. Look expensive.
+do leave_right("Troy")
 do wait(0.45)
 
-Troy: That's everyone. Press R to run it again.
+Julian: That's all five. Press R to run it again.
 => END
