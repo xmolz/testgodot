@@ -49,10 +49,26 @@ var _base_scale: float = 0.5
 # whoever parks on the left for the whole run. must match an actor_id in PROFILES.
 @export var left_actor: String = "Julian"
 
+# mirror everyone who enters from the right so they face the anchor. turn this off if the source
+# art already faces left.
+@export var flip_right_slot: bool = true
+
+# per-character multipliers, stacked on top of global_scale. 1.0 = no change.
+@export_range(0.05, 2.0, 0.01) var layla_scale: float = 1.0:
+	set(value):
+		layla_scale = value
+		_reapply_all()
+
+@export_range(0.05, 2.0, 0.01) var protag_scale: float = 1.0:
+	set(value):
+		protag_scale = value
+		_reapply_all()
+
 var _textures: Dictionary = {}      # actor_id -> Texture2D
 var _char_scales: Dictionary = {}   # actor_id -> profile.default_scale
 var _actors: Dictionary = {}        # actor_id -> TextureRect (on stage right now)
 var _slots: Dictionary = {}         # actor_id -> slot x
+var _flipped: Dictionary = {}       # actor_id -> bool
 
 var _stage: Control
 var _backdrop: ColorRect
@@ -127,6 +143,7 @@ func _start_run() -> void:
 			r.queue_free()
 	_actors.clear()
 	_slots.clear()
+	_flipped.clear()
 
 	# left_actor is permanent furniture on the left
 	var p := _spawn(left_actor, LEFT_X)
@@ -155,7 +172,7 @@ func _start_run() -> void:
 func enter_right(actor_id: String) -> void:
 	if _actors.has(actor_id):
 		return
-	var r := _spawn(actor_id, RIGHT_X)
+	var r := _spawn(actor_id, RIGHT_X, flip_right_slot)
 	if r == null:
 		return
 	var target_x: float = r.position.x
@@ -173,6 +190,7 @@ func leave_right(actor_id: String) -> void:
 	var r: TextureRect = _actors[actor_id]
 	_actors.erase(actor_id)
 	_slots.erase(actor_id)
+	_flipped.erase(actor_id)
 	if not is_instance_valid(r):
 		_refresh_readout()
 		return
@@ -184,7 +202,7 @@ func leave_right(actor_id: String) -> void:
 
 
 # ****************************[sprite plumbing]
-func _spawn(actor_id: String, slot_x: float) -> TextureRect:
+func _spawn(actor_id: String, slot_x: float, flipped: bool = false) -> TextureRect:
 	if not _textures.has(actor_id):
 		push_warning("sprite test: no texture loaded for %s" % actor_id)
 		return null
@@ -198,6 +216,7 @@ func _spawn(actor_id: String, slot_x: float) -> TextureRect:
 	_stage.add_child(r)
 	_actors[actor_id] = r
 	_slots[actor_id] = slot_x
+	_flipped[actor_id] = flipped
 	_apply_transform(actor_id)
 	return r
 
@@ -206,12 +225,21 @@ func _scale_for(actor_id: String) -> float:
 	if not _textures.has(actor_id):
 		return global_scale
 	var tex: Texture2D = _textures[actor_id]
-	var s: float = global_scale * float(_char_scales.get(actor_id, 1.0))
+	var s: float = global_scale * float(_char_scales.get(actor_id, 1.0)) * _actor_multiplier(actor_id)
 	if fit_mode:
 		# production behaviour: normalise every sprite to the viewport height first
 		var screen_h: float = float(get_viewport_rect().size.y)
 		s *= screen_h / float(tex.get_size().y)
 	return s
+
+func _actor_multiplier(actor_id: String) -> float:
+	match actor_id:
+		"Layla":
+			return layla_scale
+		"Protag":
+			return protag_scale
+		_:
+			return 1.0
 
 
 func _apply_transform(actor_id: String) -> void:
@@ -221,7 +249,9 @@ func _apply_transform(actor_id: String) -> void:
 	if not is_instance_valid(r):
 		return
 	var s: float = _scale_for(actor_id)
-	r.scale = Vector2(s, s)
+	# negative x mirrors about the bottom-center pivot, so the slot position is unaffected
+	var sx: float = -s if bool(_flipped.get(actor_id, false)) else s
+	r.scale = Vector2(sx, s)
 	var slot_x: float = float(_slots.get(actor_id, LEFT_X))
 	r.position = Vector2(slot_x, BASELINE_Y) - r.pivot_offset
 
@@ -245,6 +275,7 @@ func _refresh_readout() -> void:
 		int(screen_h)
 	])
 	lines.append("- / =  scale    0  reset    F  mode    B  backdrop    R  restart")
+	lines.append("per-actor: Layla x%.2f   Protag x%.2f   (inspector only)" % [layla_scale, protag_scale])
 	lines.append("")
 	for actor_id in PROFILES.keys():
 		if not _textures.has(actor_id):
@@ -254,11 +285,12 @@ func _refresh_readout() -> void:
 		var s: float = _scale_for(actor_id)
 		var drawn_h: float = tex.get_size().y * s
 		var mark: String = "*" if _actors.has(actor_id) else " "
-		lines.append("%s %s  native %dx%d   drawn h %d px   %d%% of screen" % [
+		lines.append("%s %s  native %dx%d   x%.2f   drawn h %d px   %d%% of screen" % [
 			mark,
 			actor_id,
 			int(tex.get_size().x),
 			int(tex.get_size().y),
+			_actor_multiplier(actor_id),
 			int(round(drawn_h)),
 			int(round(drawn_h / screen_h * 100.0))
 		])

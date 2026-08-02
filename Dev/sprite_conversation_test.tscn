@@ -11,5 +11,4 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_script")
-global_scale = 0.5
-left_actor = "Julian"
+global_scale = 0.55
