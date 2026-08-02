@@ -180,7 +180,7 @@ func _play(a: Vector3, b: Vector3) -> void:
 	_pan_tween = create_tween()
 	match easing:
 		1:
-			_pan_tween.set_trans(Tween.TRANS_SUBIC if "TRANS_SUBIC" in Tween else Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+			_pan_tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
 		2:
 			_pan_tween.set_trans(Tween.TRANS_LINEAR)
 		_:
