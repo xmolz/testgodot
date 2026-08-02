@@ -51,6 +51,26 @@ var image_path: String = ""
 # only used by play_all / the A key: the beat between the pan landing and the pull-back starting
 @export_range(0.0, 6.0, 0.1) var hold_time: float = 0.8
 
+# ****************************[full sequence]
+# false = the plain framing tool: CG only, cg_pan_test.dialogue, no portal and no dream.
+@export var play_full_sequence: bool = true
+
+# beat 1, the memory-box portal swirl. this is the real shipping TransitionLayer, not a copy.
+@export_file("*.png", "*.jpg") var portal_texture_path: String = "res://1080test1.jpg"
+@export var portal_start_rect: Rect2 = Rect2(700, 300, 520, 300)
+@export_range(0.4, 4.0, 0.1) var portal_duration: float = 1.0
+@export var launch_dialogue_title: String = "university_2"
+
+# beat 2, the dream
+@export_file("*.tscn") var dream_overlay_path: String = "res://Dev/dream_intro_overlay.tscn"
+@export_file("*.dialogue") var dream_dialogue_path: String = "res://Dev/dream_intro.dialogue"
+
+# readout and minimap. switch off before screen recording, or press H.
+@export var show_hud: bool = true
+
+var _overlay: Node = null
+var _running: bool = false
+
 var _cg: TextureRect
 var _readout: Label
 var _minimap: Control
@@ -69,7 +89,11 @@ func _ready() -> void:
 	_build_ui()
 	_load_image()
 	snap_to_start()
-	if show_dialogue:
+	if play_full_sequence:
+		if is_instance_valid(_cg):
+			_cg.visible = false
+		play_sequence()
+	elif show_dialogue:
 		_start_dialogue()
 
 
@@ -105,9 +129,16 @@ func _build_ui() -> void:
 	_minimap = Control.new()
 	_minimap.name = "Minimap"
 	_minimap.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_minimap.visible = show_minimap
 	_minimap.draw.connect(_draw_minimap)
 	add_child(_minimap)
+	_apply_hud_visibility()
+
+
+func _apply_hud_visibility() -> void:
+	if is_instance_valid(_readout):
+		_readout.visible = show_hud
+	if is_instance_valid(_minimap):
+		_minimap.visible = show_hud and show_minimap
 
 
 func _path_for(version: int) -> String:
@@ -145,6 +176,101 @@ func _start_dialogue() -> void:
 		"start",
 		[self]
 	)
+
+
+# ****************************[full sequence director]
+# beat 1 portal swirl -> beat 2 dream -> beat 3 wake onto the CG.
+# beats 1 and 2 run the real shipping systems; only beat 3 belongs to this harness.
+func play_sequence() -> void:
+	if _running:
+		return
+	_running = true
+	_teardown_sequence()
+	if is_instance_valid(_cg):
+		_cg.visible = false
+
+	var tl = null
+	if GameManager:
+		tl = GameManager.transition_layer
+
+	if is_instance_valid(tl):
+		var portal_tex: Texture2D = null
+		if ResourceLoader.exists(portal_texture_path):
+			portal_tex = load(portal_texture_path)
+		await tl.portal_enter(portal_tex, portal_start_rect, portal_duration)
+		await tl.play_portal_monologue(launch_dialogue_title)
+	else:
+		push_warning("cg pan test: no GameManager.transition_layer, skipping the swirl")
+
+	# stage the dream while the portal flash is still opaque, same as the real launch pipeline
+	_spawn_overlay()
+	if is_instance_valid(_overlay):
+		await _overlay.prestage_visuals()
+
+	if is_instance_valid(tl):
+		await tl.portal_exit()
+
+	_start_dream_dialogue()
+	_running = false
+
+
+func _spawn_overlay() -> void:
+	if not ResourceLoader.exists(dream_overlay_path):
+		push_warning("cg pan test: missing overlay %s" % dream_overlay_path)
+		return
+	var packed: PackedScene = load(dream_overlay_path)
+	if packed == null:
+		return
+	_overlay = packed.instantiate()
+	add_child(_overlay)
+
+
+func _start_dream_dialogue() -> void:
+	if not ResourceLoader.exists(dream_dialogue_path):
+		push_warning("cg pan test: missing dialogue %s" % dream_dialogue_path)
+		return
+	var dlg = load(dream_dialogue_path)
+	if dlg == null:
+		return
+	var states: Array = [self]
+	if is_instance_valid(_overlay):
+		_overlay.dialogue_resource = dlg
+		states = [_overlay, self]
+	_balloon = DialogueManager.show_dialogue_balloon_scene(
+		preload("res://conversation/conversationballoon.tscn"),
+		dlg,
+		"start",
+		states
+	)
+	# the overlay's hide_dialogue_ui() and show_dialogue_ui() drive the blackout and the wake, and
+	# both no-op unless it holds the balloon reference. begin_conversation() normally sets this; we
+	# bypassed it so we could pass two game states, so wire it by hand.
+	if is_instance_valid(_overlay):
+		_overlay.current_balloon = _balloon
+
+
+func _teardown_sequence() -> void:
+	_kill_pan()
+	if is_instance_valid(_balloon):
+		_balloon.queue_free()
+	_balloon = null
+	if is_instance_valid(_overlay):
+		_overlay.queue_free()
+	_overlay = null
+
+
+# called from the dialogue, under the blackout. hides every opaque layer inside the overlay so its
+# eyelid opens onto THIS harness's CG, which sits on layer 0 beneath the overlay's layer 75.
+# DreamHaze and EyelidOverlay are deliberately left alone: wake_blink() drives both.
+func stage_wake_cg() -> void:
+	if is_instance_valid(_overlay):
+		for n in ["SolidBackground", "BackgroundLayer", "CGLayer", "MentalImageLayer", "DarkenBackdrop"]:
+			var node = _overlay.get_node_or_null(n)
+			if node:
+				node.visible = false
+	snap_to_start()
+	if is_instance_valid(_cg):
+		_cg.visible = true
 
 
 # ****************************[framing maths]
@@ -364,7 +490,8 @@ func _refresh_readout() -> void:
 		duration, hold_time, reveal_duration, ["Sine InOut", "Cubic InOut", "Linear"][clampi(easing, 0, 2)]
 	])
 	lines.append("arrows move (shift = fine)   , / . zoom   S start   E end   V reveal   M minimap")
-	lines.append("P pan   Z reveal   A all three   O reverse   1 / 2 / 3 snap   [ / ] duration   R restart")
+	lines.append("P pan   Z reveal   A all three   O reverse   1 / 2 / 3 snap   [ / ] duration")
+	lines.append("R replay sequence   K skip to CG   H hide this")
 	_readout.text = "\n".join(lines)
 
 
@@ -422,9 +549,21 @@ func _input(event: InputEvent) -> void:
 			duration = min(duration + 0.1, 12.0)
 			_refresh_readout()
 		KEY_R:
+			if play_full_sequence:
+				play_sequence()
+			else:
+				snap_to_start()
+				if show_dialogue:
+					_start_dialogue()
+		KEY_K:
+			_teardown_sequence()
+			_running = false
 			snap_to_start()
-			if show_dialogue:
-				_start_dialogue()
+			if is_instance_valid(_cg):
+				_cg.visible = true
+		KEY_H:
+			show_hud = not show_hud
+			_apply_hud_visibility()
 		_:
 			return
 	get_viewport().set_input_as_handled()
