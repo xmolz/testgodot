@@ -21,8 +21,8 @@ const PROFILES := {
 }
 
 # stage geometry, 1920x1080 design viewport. bottom-center anchored.
-const LEFT_X := 520.0
-const RIGHT_X := 1400.0
+const SIDE_LEFT := -1
+const SIDE_RIGHT := 1
 const BASELINE_Y := 1080.0
 const OFFSCREEN_PUSH := 900.0
 const SLIDE_TIME := 0.35
@@ -53,6 +53,13 @@ var _base_scale: float = 0.5
 # art already faces left.
 @export var flip_right_slot: bool = true
 
+# how far each actor stands from the centre of the screen, in px. the gap between the pair is twice
+# this. 440 was the old hardcoded spacing, 484 is that +10%. nudge live with [ and ].
+@export_range(150.0, 900.0, 2.0) var slot_offset_x: float = 484.0:
+	set(value):
+		slot_offset_x = value
+		_reapply_all()
+
 # per-character multipliers, stacked on top of global_scale. 1.0 = no change.
 @export_range(0.05, 2.0, 0.01) var layla_scale: float = 1.0:
 	set(value):
@@ -67,7 +74,7 @@ var _base_scale: float = 0.5
 var _textures: Dictionary = {}      # actor_id -> Texture2D
 var _char_scales: Dictionary = {}   # actor_id -> profile.default_scale
 var _actors: Dictionary = {}        # actor_id -> TextureRect (on stage right now)
-var _slots: Dictionary = {}         # actor_id -> slot x
+var _slots: Dictionary = {}         # actor_id -> SIDE_LEFT / SIDE_RIGHT
 var _flipped: Dictionary = {}       # actor_id -> bool
 
 var _stage: Control
@@ -146,7 +153,7 @@ func _start_run() -> void:
 	_flipped.clear()
 
 	# left_actor is permanent furniture on the left
-	var p := _spawn(left_actor, LEFT_X)
+	var p := _spawn(left_actor, SIDE_LEFT)
 	if p:
 		p.modulate.a = 1.0
 
@@ -172,7 +179,7 @@ func _start_run() -> void:
 func enter_right(actor_id: String) -> void:
 	if _actors.has(actor_id):
 		return
-	var r := _spawn(actor_id, RIGHT_X, flip_right_slot)
+	var r := _spawn(actor_id, SIDE_RIGHT, flip_right_slot)
 	if r == null:
 		return
 	var target_x: float = r.position.x
@@ -202,7 +209,7 @@ func leave_right(actor_id: String) -> void:
 
 
 # ****************************[sprite plumbing]
-func _spawn(actor_id: String, slot_x: float, flipped: bool = false) -> TextureRect:
+func _spawn(actor_id: String, side: int, flipped: bool = false) -> TextureRect:
 	if not _textures.has(actor_id):
 		push_warning("sprite test: no texture loaded for %s" % actor_id)
 		return null
@@ -215,7 +222,7 @@ func _spawn(actor_id: String, slot_x: float, flipped: bool = false) -> TextureRe
 	r.pivot_offset = Vector2(tex.get_size().x * 0.5, tex.get_size().y)
 	_stage.add_child(r)
 	_actors[actor_id] = r
-	_slots[actor_id] = slot_x
+	_slots[actor_id] = side
 	_flipped[actor_id] = flipped
 	_apply_transform(actor_id)
 	return r
@@ -242,6 +249,10 @@ func _actor_multiplier(actor_id: String) -> float:
 			return 1.0
 
 
+func _slot_x(side: int) -> float:
+	return get_viewport_rect().size.x * 0.5 + float(side) * slot_offset_x
+
+
 func _apply_transform(actor_id: String) -> void:
 	if not _actors.has(actor_id):
 		return
@@ -252,7 +263,7 @@ func _apply_transform(actor_id: String) -> void:
 	# negative x mirrors about the bottom-center pivot, so the slot position is unaffected
 	var sx: float = -s if bool(_flipped.get(actor_id, false)) else s
 	r.scale = Vector2(sx, s)
-	var slot_x: float = float(_slots.get(actor_id, LEFT_X))
+	var slot_x: float = _slot_x(int(_slots.get(actor_id, SIDE_LEFT)))
 	r.position = Vector2(slot_x, BASELINE_Y) - r.pivot_offset
 
 
@@ -274,7 +285,8 @@ func _refresh_readout() -> void:
 		int(get_viewport_rect().size.x),
 		int(screen_h)
 	])
-	lines.append("- / =  scale    0  reset    F  mode    B  backdrop    R  restart")
+	lines.append("- / =  scale    [ / ]  gap    0  reset    F  mode    B  backdrop    R  restart")
+	lines.append("slot offset %d px from centre   gap between pair %d px" % [int(slot_offset_x), int(slot_offset_x * 2.0)])
 	lines.append("per-actor: Layla x%.2f   Protag x%.2f   (inspector only)" % [layla_scale, protag_scale])
 	lines.append("")
 	for actor_id in PROFILES.keys():
@@ -316,6 +328,10 @@ func _input(event: InputEvent) -> void:
 		KEY_0, KEY_KP_0:
 			global_scale = _base_scale
 			_reapply_all()
+		KEY_BRACKETLEFT:
+			slot_offset_x = max(slot_offset_x - 10.0, 150.0)
+		KEY_BRACKETRIGHT:
+			slot_offset_x = min(slot_offset_x + 10.0, 900.0)
 		KEY_F:
 			fit_mode = not fit_mode
 			_reapply_all()
