@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://bfl7f4nng8ru4"]
+
+[ext_resource type="Script" uid="uid://dc02amkq4wi0x" path="res://Dev/sprite_conversation_test.gd" id="1_script"]
+
+[node name="SpriteConversationTest" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_script")
+global_scale = 0.5
+left_actor = "Layla"

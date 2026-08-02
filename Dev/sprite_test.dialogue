@@ -1,0 +1,30 @@
+~ start
+
+Layla: Fine. Send them in. One at a time.
+
+do enter_right("Alyssa")
+Alyssa: Am I the right size?
+Layla: You're taller than me. I'm choosing to ignore that.
+do leave_right("Alyssa")
+do wait(0.45)
+
+do enter_right("Troy")
+Troy: You called?
+Layla: Stand there. Look expensive.
+do leave_right("Troy")
+do wait(0.45)
+
+do enter_right("Professor")
+Professor: I have office hours in ten minutes.
+Layla: This will take nine.
+do leave_right("Professor")
+do wait(0.45)
+
+do enter_right("Julian")
+Julian: So this is the famous test scene.
+Layla: This is the famous test scene.
+do leave_right("Julian")
+do wait(0.45)
+
+Layla: That's everyone. Press R to run it again.
+=> END
