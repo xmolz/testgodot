@@ -1,0 +1,13 @@
+~ start
+
+do snap_to_start()
+
+Player: ...huh?
+Player: Boobs?
+Woman: Huh? Boobs?
+
+do pan()
+
+Woman: My eyes are up here.
+Player: Noted.
+=> END
