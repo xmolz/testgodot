@@ -12,5 +12,6 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_script")
 global_scale = 0.55
+slot_offset_x = 608.0
 layla_scale = 0.8500000000000001
 protag_scale = 0.8500000000000001
