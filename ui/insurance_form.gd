@@ -27,6 +27,15 @@ const CONVERSATION_BALLOON_SCENE = preload("res://conversation/conversationballo
 
 func _ready():
 	hide()
+
+	# kill the OS text-editing context menu on every input field. right-clicking a LineEdit
+	# pops the built-in cut/copy/paste/emoji menu, which breaks the diegetic form. shortcut
+	# keys (ctrl+v etc.) and middle-click paste go with it.
+	for le in [first_name_edit, middle_name_edit, last_name_edit, dob_edit, phone_number_edit, account_number_edit]:
+		if is_instance_valid(le):
+			le.context_menu_enabled = false
+			le.shortcut_keys_enabled = false
+			le.middle_mouse_paste_enabled = false
 	# connect every single button to its own function.
 	first_name_button.pressed.connect(_on_first_name_submit)
 	middle_name_button.pressed.connect(_on_middle_name_submit)
