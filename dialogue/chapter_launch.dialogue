@@ -1,7 +1,25 @@
 # res://dialogue/chapter_launch.dialogue
-# Launch monologues shown over the portal swirl, one title per chapter.
+# Launch monologues shown over the portal swirl, one title per chapter, plus the return
+# monologue played on the way back to the hub.
+# Speaker-less on purpose: conversationballoon.gd hides the nameplate entirely when
+# dialogue_line.character is empty.
 
 ~ university_2
-Player: (The night air already smells like fried garlic and bad decisions.)
-Player: (If the supervisor catches me, I'm dead. Worth it.)
+You're here now.
+Swirling.
+Floating.
+Going back to who you once were.
+What will your first memory reveal to you?
+Whose face will you see first?
+Will it be the face of someone you loved?
+Or the face of someone you hated?
+Hate...
+Now, that's a strong emotion.
+Let's start at the beginning.
+=> END
+
+~ return_to_hub
+The memory folds shut.
+It keeps what it keeps.
+Back to the white room.
 => END

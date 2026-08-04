@@ -48,3 +48,8 @@ enum ChapterType { STORY, SPICY }
 # played over the level right after the portal, before control is handed to the
 # player. loaded on demand. empty = straight into the level.
 @export_file("*.tscn") var intro_overlay_path: String = ""
+
+# optional pannable wake-CG layer scene (a WakeCGLayer), spawned under the intro overlay so
+# the overlay's eyelid can blink open onto it. only used by the in-place (empty scene path)
+# launch for now. empty = no wake CG.
+@export_file("*.tscn") var wake_cg_scene_path: String = ""

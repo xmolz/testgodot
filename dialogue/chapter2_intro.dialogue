@@ -1,0 +1,53 @@
+# res://dialogue/chapter2_intro.dialogue
+# chapter 2 opening: the dream at the door, then the wake onto the pannable CG.
+# game states are [the intro overlay, the wake CG layer]. shake / shake_stop / cut_to_black /
+# hide_visual_layers / wake_blink resolve on the overlay; stage_wake_cg / pan / reveal resolve
+# on the wake layer.
+# opening lines are speaker-less on purpose: the balloon hides the nameplate when the
+# character is empty.
+
+~ start
+Standing at the door.
+A tall shadow.
+His back turned against you.
+What was his name again?
+Name...
+What was yours?
+Maybe he'll call it out.
+Maybe you should ask him where he's headed.
+- Where are you going? => voice
+
+~ voice
+???: Huh?
+???: Fiona.
+???: You're not supposed to be up right now.
+???: Go, sleep.
+???: You need to sleep, Fiona.
+
+# finite long shake + explicit stop. a persistent shake(-1) would be auto-cancelled by the
+# overlay's got_dialogue handler one line in, now that the balloon goes through
+# begin_conversation(). the 60s timer is never reached.
+do shake(60.0, 3.0)
+???: Sleep, Fiona.
+???: Sleep, Fiona.
+???: Sleep, Fiona.
+do shake_stop()
+
+???: Wake up.
+
+# the hand-off happens UNDER the black: the overlay's opaque layers go dark and the wake CG
+# is staged on layer 70 beneath the overlay's 75, so the eyelid opens straight onto it.
+do cut_to_black(0.9)
+do hide_visual_layers()
+do stage_wake_cg()
+do wake_blink(1.0)
+
+Boobs: Fiona! You spent the last night working, didn't you?
+Fiona: Huh!? Boobs?
+Layla: Boobs?
+
+do pan()
+Layla: What are you talking about?
+
+do reveal()
+=> END

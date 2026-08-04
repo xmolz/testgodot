@@ -34,6 +34,11 @@ var _scan_tween: Tween
 
 var current_balloon: Node = null
 
+# extra game states appended after self when begin_conversation() spawns the balloon. the
+# launch pipeline uses this to expose the wake CG layer's mutations to the dialogue. must be
+# set BEFORE begin_conversation() runs.
+var extra_game_states: Array = []
+
 # ****************************[shake variables]
 var _is_shaking: bool = false
 var _shake_timer: float = 0.0
@@ -164,7 +169,7 @@ func begin_conversation() -> void:
 		preload("res://conversation/conversationballoon.tscn"),
 		dialogue_resource,
 		start_dialogue_id,
-		[self]
+		[self] + extra_game_states
 	)
 
 	if not DialogueManager.dialogue_ended.is_connected(_on_dialogue_ended):
@@ -1112,6 +1117,17 @@ func shake(duration: float = 0.4, strength: float = 10.0):
 		_shake_timer = duration
 
 
+# hard stop for a running shake, callable from dialogue. finite shakes (positive duration)
+# are not auto-cancelled by _on_got_dialogue, so a long finite shake + shake_stop() is how a
+# shake spans multiple lines.
+func shake_stop() -> void:
+	_is_shaking = false
+	_is_persistent_shake = false
+	_ignore_next_got_dialogue_signal = false
+	_shake_timer = 0.0
+	offset = _camera_offset
+
+
 func _on_got_dialogue(line: DialogueLine):
 	if _ignore_next_got_dialogue_signal:
 		_ignore_next_got_dialogue_signal = false
@@ -1783,6 +1799,16 @@ func dream_pulse(peak: float = 1.0, duration: float = 1.2) -> void:
 # ---------------------------------------------------------------------------
 # waking up
 # ---------------------------------------------------------------------------
+
+# hides every opaque layer so the eyelid can blink open onto whatever sits on a lower canvas
+# layer (the wake CG at 70, under this overlay's 75). DreamHaze and EyelidOverlay are
+# deliberately left alone: wake_blink() drives both. callable from dialogue.
+func hide_visual_layers() -> void:
+	for n in ["SolidBackground", "BackgroundLayer", "CGLayer", "MentalImageLayer", "DarkenBackdrop"]:
+		var node = get_node_or_null(n)
+		if node:
+			node.visible = false
+
 
 # abrupt cut to black, no fade. the eyelid overlay at openness 0.0 IS the blackout, so
 # wake_blink() takes over from it with no hand-off and no seam.

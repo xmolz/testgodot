@@ -1,0 +1,14 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" uid="uid://kfct0osfvolx" path="res://conversation/AdvancedConversationOverlay.tscn" id="1_aco"]
+[ext_resource type="Resource" path="res://dialogue/chapter2_intro.dialogue" id="2_diag"]
+
+[node name="Chapter2IntroOverlay" instance=ExtResource("1_aco")]
+dialogue_resource = ExtResource("2_diag")
+autostart = false
+prestage_background = ""
+prestage_cg = "at_the_door"
+prestage_dream = 1.0
+cg_aliases = {
+"at_the_door": "res://Backgrounds/CG/at_the_door.png"
+}

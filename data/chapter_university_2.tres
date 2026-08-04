@@ -12,5 +12,6 @@ chapter_description = "Sneak out to the local market after midnight for a late-n
 content_tags = Array[String](["Placeholder Tag", "Another Tag"])
 is_optional = true
 launch_dialogue_title = "university_2"
-intro_overlay_path = "res://conversation/test_chapter_intro_overlay.tscn"
+intro_overlay_path = "res://conversation/chapter2_intro_overlay.tscn"
+wake_cg_scene_path = "res://conversation/wake_cg_layer.tscn"
 metadata/_custom_type_script = "uid://bfrll5vc6bmcg"
