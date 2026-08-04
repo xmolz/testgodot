@@ -1042,6 +1042,12 @@ func enter_chapter_state():
 	force_clear_all_hovered_interactables()
 
 	current_interaction_state = InteractionState.WORLD
+
+	# the memory box enters chapters from CONVERSATION state, which hid the pause menu
+	# button (and with it the magnifier icon). the launch never changes game state, so
+	# nothing re-shows them — restore them the way exit_to_world_state() does.
+	_set_patreon_visible(true)
+	if is_instance_valid(pause_menu_ui): pause_menu_ui.menu_panel.show()
 	
 	if is_instance_valid(player_node) and player_node.has_method("set_can_move"):
 		player_node.set_can_move(true)

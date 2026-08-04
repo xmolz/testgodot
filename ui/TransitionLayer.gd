@@ -26,7 +26,7 @@ const IDLE_SWIRL_BOOST: float = 0.30   # extra vortex pull at full churn (0..1)
 const IDLE_RAMP_TIME: float = 0.6
 const IDLE_FLOW_SPEED: float = 0.07  # uv radius per second of outward wash at full churn
 const IDLE_FLOW_MAX: float = 0.45    # cap on total wash. raise for a harder drain.
-const PORTAL_SPIKE_THRESHOLD_MS := 40.0
+const PORTAL_SPIKE_THRESHOLD_MS := 50.0
 
 var _idle_strength: float = 0.0
 var _idle_target: float = 0.0
@@ -75,8 +75,9 @@ func _process(delta: float) -> void:
 		_portal_mat.set_shader_parameter("idle_strength", _idle_strength)
 		_portal_mat.set_shader_parameter("idle_swirl_boost", IDLE_SWIRL_BOOST * _idle_strength)
 		
-		# Task D Frame-spike watcher
-		if ChapterLaunchSequence.PORTAL_DEBUG and not _debug_phase_tag.is_empty() and delta > 0.025:
+		# Task D Frame-spike watcher. uses the threshold const now: the old 25ms literal
+		# printed every single frame of a 30fps session and drowned the log.
+		if ChapterLaunchSequence.PORTAL_DEBUG and not _debug_phase_tag.is_empty() and delta * 1000.0 > PORTAL_SPIKE_THRESHOLD_MS:
 			print_rich("[color=red][PORTAL SPIKE] %s: %.1f ms[/color]" % [_debug_phase_tag, delta * 1000.0])
 
 func open_instant():
