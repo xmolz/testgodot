@@ -247,7 +247,8 @@ func _refresh_slots():
 
 func _create_slot_button(slot_id: String, can_save: bool) -> Button:
 	var btn = Button.new()
-	btn.custom_minimum_size = Vector2(0, 100)
+	var thumb_size = Vector2(240, 135) if OS.has_feature("mobile") else Vector2(160, 90)
+	btn.custom_minimum_size = Vector2(0, thumb_size.y + 20.0)
 	btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	
 	# style of buttons matching the rethemed specification
@@ -282,6 +283,26 @@ func _create_slot_button(slot_id: String, can_save: bool) -> Button:
 	margin.add_theme_constant_override("margin_right", 20)
 	margin.add_child(hbox)
 	btn.add_child(margin)
+
+	# slot thumbnail: the world frame captured when the pause menu opened. a user:// png is
+	# not an imported resource, so it goes through Image.load_from_file, not load().
+	var shot_path = SaveManager.get_slot_screenshot_path(slot_id)
+	if FileAccess.file_exists(shot_path):
+		var shot_img = Image.load_from_file(shot_path)
+		if shot_img:
+			var thumb = TextureRect.new()
+			thumb.texture = ImageTexture.create_from_image(shot_img)
+			thumb.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			thumb.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			thumb.custom_minimum_size = thumb_size
+			thumb.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+			hbox.add_child(thumb)
+	else:
+		var thumb_placeholder = ColorRect.new()
+		thumb_placeholder.color = Color(0.08, 0.08, 0.08, 1.0)
+		thumb_placeholder.custom_minimum_size = thumb_size
+		thumb_placeholder.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		hbox.add_child(thumb_placeholder)
 	
 	var name_lbl = Label.new()
 	name_lbl.text = "Autosave" if slot_id == "autosave" else "Slot " + slot_id.replace("slot_", "")

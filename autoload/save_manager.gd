@@ -1,6 +1,6 @@
 extends Node
 
-const SAVE_VERSION := 1
+const SAVE_VERSION := 2
 const SAVE_DIR := "user://Lewgend/If I Remember Correctly/"
 const AUTOSAVE_PATH := "user://Lewgend/If I Remember Correctly/autosave.json"
 const AUTOSAVE_BACKUP_PATH := "user://Lewgend/If I Remember Correctly/autosave.json.bak"
@@ -11,6 +11,14 @@ signal load_completed(slot: String)
 signal load_failed(reason: String)
 
 var is_loading: bool = false
+
+# thumbnail size written next to each slot json. 16:9, small enough that four slots on the
+# load screen cost nothing.
+const SCREENSHOT_THUMB_SIZE := Vector2i(480, 270)
+
+# the downscaled world frame captured when the pause menu opened. written to disk by
+# save_to_slot(); refreshed on every pause open.
+var pending_screenshot: Image = null
 var _playtime_seconds: float = 0.0
 var _last_known_hub_flags: Dictionary = {}
 var _active_dialogue_depth: int = 0
@@ -19,6 +27,16 @@ var _pending_level_flags: Dictionary = {}
 var _pending_level_id: String = ""
 var _pending_npcs_state: Dictionary = {}
 var _level_state_ready_emitted: bool = false
+
+# hub state stashed by the chapter launch pipeline right before the hub scene is freed,
+# and restored when the hub is re-instanced on the way back. level flags and npc positions
+# live in scene nodes, not autoloads, so a hub round trip would otherwise reset them.
+var _stashed_hub_flags: Dictionary = {}
+var _stashed_hub_npcs: Dictionary = {}
+var has_stashed_hub_state: bool = false
+var _stashed_player_pos: Vector2 = Vector2.ZERO
+var _stashed_player_flip: bool = false
+var _has_stashed_player: bool = false
 
 func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -63,6 +81,50 @@ func _on_level_state_manager_registered(lsm: LevelStateManager):
 		_level_state_ready_emitted = true
 		Events.level_state_ready.emit.call_deferred()
 
+# called by ChapterLaunchSequence right before the hub is freed for a chapter.
+func stash_hub_state() -> void:
+	var lsm = Flags.current_level_state_manager
+	if is_instance_valid(lsm) and lsm.level_id == HUB_LEVEL_ID:
+		_stashed_hub_flags = lsm.get_all_flags().duplicate()
+		_last_known_hub_flags = _stashed_hub_flags.duplicate()
+		_stashed_hub_npcs = _collect_npcs()
+		has_stashed_hub_state = true
+
+	# also remember where the player was standing — right next to the memory box, since
+	# they just used it — so the return trip does not dump them at the default spawn.
+	if GameManager and is_instance_valid(GameManager.player_node):
+		_stashed_player_pos = GameManager.player_node.global_position
+		_stashed_player_flip = false
+		if is_instance_valid(GameManager.player_node.sprite_2d):
+			_stashed_player_flip = GameManager.player_node.sprite_2d.flip_h
+		_has_stashed_player = true
+
+# called by ChapterLaunchSequence right before the hub scene re-instances on the way back.
+# the restore itself rides the existing _pending_* pipe: when the hub's LevelStateManager
+# registers, _on_level_state_manager_registered applies flags and npc state.
+func queue_hub_state_restore() -> void:
+	if not has_stashed_hub_state:
+		return
+	_pending_level_id = HUB_LEVEL_ID
+	_pending_level_flags = _stashed_hub_flags.duplicate()
+	_pending_npcs_state = _stashed_hub_npcs.duplicate()
+	has_stashed_hub_state = false
+
+# called by the return pipeline after the hub is re-instanced and the player node
+# re-found. mirrors the load_from_slot() player restore, camera snap included.
+func apply_stashed_player_position() -> void:
+	if not _has_stashed_player:
+		return
+	_has_stashed_player = false
+	if not (GameManager and is_instance_valid(GameManager.player_node)):
+		return
+	GameManager.player_node.global_position = _stashed_player_pos
+	if is_instance_valid(GameManager.player_node.sprite_2d):
+		GameManager.player_node.sprite_2d.flip_h = _stashed_player_flip
+	var camera = get_viewport().get_camera_2d()
+	if is_instance_valid(camera) and camera.has_method("snap_to_target"):
+		camera.snap_to_target()
+
 func can_save_now(allow_pause_snapshot: bool = false) -> bool:
 	if not GameManager: return false
 	
@@ -82,7 +144,7 @@ func can_save_now(allow_pause_snapshot: bool = false) -> bool:
 	if GameManager and GameManager.is_cutscene_sequence_running(): return false
 	if is_loading: return false
 	if not is_instance_valid(Flags.current_level_state_manager): return false
-	
+
 	return true
 
 func has_save(slot: String) -> bool:
@@ -105,8 +167,42 @@ func delete_slot(slot: String) -> bool:
 		var da = DirAccess.open(SAVE_DIR)
 		if da:
 			da.remove(path.get_file())
+			var shot = get_slot_screenshot_path(slot)
+			if da.file_exists(shot.get_file()):
+				da.remove(shot.get_file())
 			return true
 	return false
+
+# ---- Save slot screenshots ----
+
+# grabs the last presented frame and keeps a small thumbnail in memory. must be called
+# BEFORE any menu ui draws — the pause menu calls it as it opens — so the thumbnail shows
+# the game world and not the pause overlay.
+func capture_world_screenshot() -> void:
+	var vp = get_viewport()
+	if vp == null: return
+	var tex = vp.get_texture()
+	if tex == null: return
+	var img: Image = tex.get_image()
+	if img == null: return
+	img.resize(SCREENSHOT_THUMB_SIZE.x, SCREENSHOT_THUMB_SIZE.y, Image.INTERPOLATE_BILINEAR)
+	pending_screenshot = img
+
+func get_slot_screenshot_path(slot: String) -> String:
+	return _get_slot_path(slot).get_basename() + ".png"
+
+# writes the pending thumbnail next to the slot json. if there is no pending screenshot,
+# removes any stale one so a slot never shows a thumbnail from an older save.
+func _write_slot_screenshot(slot: String) -> void:
+	var shot_path = get_slot_screenshot_path(slot)
+	if pending_screenshot != null:
+		var err = pending_screenshot.save_png(shot_path)
+		if err != OK:
+			push_warning("SaveManager: could not write screenshot %s (err %d)" % [shot_path, err])
+	elif FileAccess.file_exists(shot_path):
+		var da = DirAccess.open(SAVE_DIR)
+		if da:
+			da.remove(shot_path.get_file())
 
 func _get_slot_path(slot: String) -> String:
 	if slot == "autosave":
@@ -158,6 +254,22 @@ func _read_json(path: String):
 	return JSON.parse_string(content)
 
 func save_to_slot(slot: String) -> bool:
+	var lsm = Flags.current_level_state_manager
+	var in_hub: bool = is_instance_valid(lsm) and lsm.level_id == HUB_LEVEL_ID
+
+	var location_label = "Hospital Room"
+	var scene_path_for_save = "res://main.tscn"
+	var chapter_id = ""
+	if not in_hub:
+		location_label = "Memory"
+		if ChapterLaunchSequence and not ChapterLaunchSequence.active_chapter_name.is_empty():
+			location_label = "Memory: " + ChapterLaunchSequence.active_chapter_name
+		var cs = get_tree().current_scene
+		if is_instance_valid(cs) and not cs.scene_file_path.is_empty():
+			scene_path_for_save = cs.scene_file_path
+		if is_instance_valid(lsm):
+			chapter_id = lsm.level_id
+
 	var payload = {
 		"version": SAVE_VERSION,
 		"meta": {
@@ -167,20 +279,20 @@ func save_to_slot(slot: String) -> bool:
 			"clues_total_known": 0, # TODO(save-step-N)
 			"form_fields_locked": 0, # TODO(save-step-N)
 			"playtime_seconds": _playtime_seconds,
-			"location_label": "Hospital Room" if Flags.current_level_state_manager.level_id == HUB_LEVEL_ID else "Unknown"
+			"location_label": location_label
 		},
 		"location": {
-			"is_in_hub": true, # Step 1 is always hub
-			"current_scene_path": "res://main.tscn", # Step 1 is always hub
-			"chapter_id_if_memory": "",
+			"is_in_hub": in_hub,
+			"current_scene_path": scene_path_for_save,
+			"chapter_id_if_memory": chapter_id,
 			"is_replay": false,
 			"player_x": 0.0,
 			"player_y": 0.0,
 			"player_flip_h": false
 		},
 		"flags": { "game_flags": _collect_flags() },
-		"hub_level_flags": Flags.current_level_state_manager.get_all_flags() if Flags.current_level_state_manager.level_id == HUB_LEVEL_ID else _last_known_hub_flags,
-		"memory_level_flags": {}, # TODO(save-step-N)
+		"hub_level_flags": lsm.get_all_flags() if in_hub else _last_known_hub_flags,
+		"memory_level_flags": lsm.get_all_flags() if (not in_hub and is_instance_valid(lsm)) else {},
 		"inventory": { "item_ids": _collect_inventory() },
 		"verbs": { "unlocked_verb_ids": _collect_verbs() },
 		"dialogue": { "visited_responses": _collect_dialogue_history() },
@@ -189,7 +301,14 @@ func save_to_slot(slot: String) -> bool:
 		"chapters": { "records": {}, "in_progress": {} }, # TODO(save-step-N)
 		"form": { "locked_fields": {} }, # TODO(save-step-N)
 		"difficulty": { "assisted_mode": Settings.assisted_mode },
-		"npcs": _collect_npcs()
+		"npcs": _collect_npcs(),
+		"hub_stash": {
+			"npcs": _stashed_hub_npcs,
+			"player_x": _stashed_player_pos.x,
+			"player_y": _stashed_player_pos.y,
+			"player_flip_h": _stashed_player_flip,
+			"has_player": _has_stashed_player
+		}
 	}
 	
 	if is_instance_valid(GameManager.player_node):
@@ -201,6 +320,7 @@ func save_to_slot(slot: String) -> bool:
 	var path = _get_slot_path(slot)
 	var success = _write_json_atomic(path, payload)
 	if success:
+		_write_slot_screenshot(slot)
 		save_completed.emit(slot)
 	return success
 
@@ -239,10 +359,7 @@ func load_from_slot(slot: String) -> bool:
 			return false
 			
 	var loc_data = data["location"]
-	if not loc_data.get("is_in_hub", false):
-		NotificationManager.add_notification("Cannot load memory saves from main menu yet.")
-		load_failed.emit("not in hub")
-		return false
+	var is_hub_save: bool = bool(loc_data.get("is_in_hub", true))
 		
 	var scene_path = loc_data.get("current_scene_path", "")
 	if scene_path.is_empty() or not ResourceLoader.exists(scene_path):
@@ -271,11 +388,54 @@ func load_from_slot(slot: String) -> bool:
 	Settings.assisted_mode = bool(data["difficulty"].get("assisted_mode", false))
 	_playtime_seconds = float(data["meta"].get("playtime_seconds", 0.0))
 	
-	_pending_level_id = HUB_LEVEL_ID
-	_pending_level_flags = data["hub_level_flags"].duplicate()
-	_pending_npcs_state = data["npcs"].duplicate()
-	
-	await GameManager.change_game_state(GameManager.GameState.IN_GAME_PLAY)
+	if is_hub_save:
+		_pending_level_id = HUB_LEVEL_ID
+		_pending_level_flags = data["hub_level_flags"].duplicate()
+		_pending_npcs_state = data["npcs"].duplicate()
+		
+		await GameManager.change_game_state(GameManager.GameState.IN_GAME_PLAY)
+	else:
+		# memory save: land straight in the chapter scene. no portal, no intro sequence —
+		# the developer chose "resume exactly where I was".
+		_pending_level_id = String(loc_data.get("chapter_id_if_memory", ""))
+		_pending_level_flags = data.get("memory_level_flags", {}).duplicate()
+		_pending_npcs_state = data["npcs"].duplicate()
+
+		# re-arm the hub stash from the save, so the Return trip after this load restores
+		# the hub exactly as it was left when the chapter was launched.
+		var hub_stash = data.get("hub_stash", {})
+		_stashed_hub_flags = data["hub_level_flags"].duplicate()
+		_last_known_hub_flags = _stashed_hub_flags.duplicate()
+		_stashed_hub_npcs = hub_stash.get("npcs", {}).duplicate()
+		has_stashed_hub_state = true
+		_stashed_player_pos = Vector2(float(hub_stash.get("player_x", 0.0)), float(hub_stash.get("player_y", 0.0)))
+		_stashed_player_flip = bool(hub_stash.get("player_flip_h", false))
+		_has_stashed_player = bool(hub_stash.get("has_player", false))
+
+		var chapter_packed: PackedScene = load(scene_path)
+		if chapter_packed == null:
+			is_loading = false
+			if GameManager.transition_layer and GameManager.transition_layer.has_method("hide_loading_indicator"):
+				await GameManager.transition_layer.hide_loading_indicator()
+			if GameManager.transition_layer and GameManager.transition_layer.has_method("global_fade_from_black"):
+				GameManager.transition_layer.global_fade_from_black(0.5)
+			NotificationManager.add_notification("Failed to load save: chapter scene could not be loaded.")
+			load_failed.emit("chapter scene load failed")
+			GameManager.change_game_state(GameManager.GameState.MAIN_MENU)
+			return false
+
+		get_tree().change_scene_to_packed(chapter_packed)
+		await get_tree().process_frame
+		await get_tree().process_frame
+
+		# point SceneDirector at the chapter BEFORE the state change, so ensure_game_scene()
+		# does not also build the hub underneath it.
+		SceneDirector.current_game_scene = get_tree().current_scene
+
+		await GameManager.change_game_state(GameManager.GameState.IN_GAME_PLAY)
+
+		if GameManager:
+			GameManager.enter_chapter_state()
 	
 	# After scene loaded, wait for lsm to register and flags to be applied
 	var watchdog_frames = 600
@@ -323,7 +483,14 @@ func load_from_slot(slot: String) -> bool:
 	return true
 
 func _migrate_save_data(data: Dictionary, from_version: int) -> Dictionary:
-	# empty migration chain for future version upgrades
+	# v1 -> v2: every v1 save is a hub save by definition (is_in_hub was hardcoded true).
+	# add the sections v2 reads; their content only matters for memory saves.
+	if from_version < 2:
+		if not data.has("hub_stash") or not (data["hub_stash"] is Dictionary):
+			data["hub_stash"] = {}
+		if not data.has("memory_level_flags") or not (data["memory_level_flags"] is Dictionary):
+			data["memory_level_flags"] = {}
+		data["version"] = 2
 	return data
 
 # ---- Private Data Collection & Application Helpers ----

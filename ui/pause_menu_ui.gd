@@ -137,6 +137,11 @@ func toggle_pause():
 			GameManager.change_game_state(_pre_pause_game_state)
 			_pre_pause_game_state = null
 	else:
+		# grab the last presented frame BEFORE any menu ui draws, so a save made from this
+		# pause session gets a thumbnail of the game world, not of the pause overlay.
+		if SaveManager and SaveManager.has_method("capture_world_screenshot"):
+			SaveManager.capture_world_screenshot()
+
 		_was_paused_before_menu = get_tree().paused
 		if GameManager:
 			_pre_pause_game_state = GameManager.current_game_state
