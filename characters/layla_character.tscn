@@ -1,0 +1,61 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://characters/layla_character.gd" id="1_script"]
+[ext_resource type="Script" path="res://characters/companion_follow.gd" id="2_follow"]
+[ext_resource type="Script" path="res://interactions/interactable.gd" id="3_interactable"]
+[ext_resource type="Script" path="res://data/InteractionResponse.gd" id="4_response"]
+[ext_resource type="Script" path="res://interactions/action.gd" id="5_action"]
+[ext_resource type="Script" path="res://interactions/actions/StartConversationAction.gd" id="6_startconv"]
+[ext_resource type="Resource" path="res://interactions/actions/DefaultExamineResponse.tres" id="7_examine"]
+[ext_resource type="Material" path="res://interactions/actions/interactable_outline.tres" id="8_outline"]
+
+[sub_resource type="Gradient" id="Gradient_layla"]
+colors = PackedColorArray(0.85, 0.45, 0.75, 1, 0.85, 0.45, 0.75, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_layla"]
+gradient = SubResource("Gradient_layla")
+width = 120
+height = 300
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_layla"]
+size = Vector2(120, 300)
+
+[sub_resource type="Resource" id="Resource_layla_talk_action"]
+script = ExtResource("6_startconv")
+metadata/_custom_type_script = "uid://h83nrnu1277x"
+
+[sub_resource type="Resource" id="Resource_layla_talk_response"]
+script = ExtResource("4_response")
+verb_id = "talk_to"
+actions_to_perform = Array[ExtResource("5_action")]([SubResource("Resource_layla_talk_action")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[node name="LaylaCharacter" type="CharacterBody2D" groups=["saveable_npc"]]
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("1_script")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+material = ExtResource("8_outline")
+position = Vector2(0, -150)
+texture = SubResource("GradientTexture2D_layla")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -150)
+shape = SubResource("RectangleShape2D_layla")
+
+[node name="CompanionFollow" type="Node" parent="."]
+script = ExtResource("2_follow")
+auto_attach_to_player = true
+
+[node name="InteractionArea" type="Area2D" parent="."]
+script = ExtResource("3_interactable")
+object_display_name = "Layla"
+object_id = "layla"
+category = 1
+interactions = Array[ExtResource("4_response")]([ExtResource("7_examine"), SubResource("Resource_layla_talk_response")])
+character_conversation_scene_path = "res://conversation/layla_advanced_overlay.tscn"
+
+[node name="InteractionClickShape" type="CollisionShape2D" parent="InteractionArea"]
+position = Vector2(0, -150)
+shape = SubResource("RectangleShape2D_layla")

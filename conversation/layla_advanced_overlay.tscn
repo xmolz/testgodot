@@ -1,0 +1,7 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" uid="uid://kfct0osfvolx" path="res://conversation/AdvancedConversationOverlay.tscn" id="1_aco"]
+[ext_resource type="Resource" path="res://dialogue/layla_chapter_1.dialogue" id="2_diag"]
+
+[node name="LaylaAdvancedOverlay" instance=ExtResource("1_aco")]
+dialogue_resource = ExtResource("2_diag")

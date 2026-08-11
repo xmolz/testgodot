@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://i4i2iaxghy5f"
+path="res://.godot/imported/layla_chapter_1.dialogue-8c28461437d9b934e33b170d7703f0e0.tres"
+
+[deps]
+
+source_file="res://dialogue/layla_chapter_1.dialogue"
+dest_files=["res://.godot/imported/layla_chapter_1.dialogue-8c28461437d9b934e33b170d7703f0e0.tres"]
+
+[params]
+
+defaults=true

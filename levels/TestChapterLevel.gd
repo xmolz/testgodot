@@ -2,6 +2,11 @@
 extends Control
 
 @onready var level_state_manager: LevelStateManager = $LevelStateManager
+@onready var verb_ui: CanvasLayer = $VerbUI
+@onready var inventory_ui: CanvasLayer = $InventoryUI
+
+var _return_layer: CanvasLayer = null
+var _dialogue_active: bool = false
 
 func _ready():
 	if GameManager:
@@ -15,6 +20,7 @@ func _ready():
 	return_layer.name = "ReturnLayer"
 	return_layer.layer = 5
 	add_child(return_layer)
+	_return_layer = return_layer
 
 	var return_btn := Button.new()
 	return_btn.name = "ReturnButton"
@@ -59,7 +65,43 @@ func _ready():
 	if zoom_ui_packed:
 		add_child(zoom_ui_packed.instantiate())
 
+	# ****************[hud gating]
+	# no game_ui in chapters, so nothing hides the scene hud while the intro conversation
+	# runs over the level after the wake CG fades. gate it on interaction state instead:
+	# hidden through the launch (state stays CONVERSATION from the memory box), shown when
+	# enter_chapter_state() emits WORLD. same pattern the zoom controls already use.
+	Events.interaction_state_changed.connect(_on_interaction_state_changed)
+	# chapters have no game_ui.gd. object-examine balloons never leave the WORLD
+	# interaction state, so state gating alone leaves the hud visible under the balloon.
+	# mirror game_ui.gd's pattern: any balloon hides the hud, dialogue_ended restores it.
+	if DialogueManager:
+		DialogueManager.dialogue_started.connect(_on_dialogue_started)
+		DialogueManager.dialogue_ended.connect(_on_dialogue_ended)
+	_refresh_hud()
+
 	await get_tree().process_frame
+
+func _on_interaction_state_changed(_new_state: int) -> void:
+	_refresh_hud()
+
+func _on_dialogue_started(_resource: Resource) -> void:
+	_dialogue_active = true
+	_refresh_hud()
+
+func _on_dialogue_ended(_resource: Resource) -> void:
+	_dialogue_active = false
+	_refresh_hud()
+
+func _refresh_hud() -> void:
+	_apply_hud_visibility(GameManager.current_interaction_state == GameManager.InteractionState.WORLD and not _dialogue_active)
+
+func _apply_hud_visibility(shown: bool) -> void:
+	if is_instance_valid(verb_ui):
+		verb_ui.visible = shown
+	if is_instance_valid(inventory_ui):
+		inventory_ui.visible = shown
+	if is_instance_valid(_return_layer):
+		_return_layer.visible = shown
 
 func _exit_tree():
 	if GameManager and is_instance_valid(level_state_manager):

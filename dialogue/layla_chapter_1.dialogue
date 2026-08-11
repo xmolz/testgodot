@@ -1,0 +1,194 @@
+~ start
+# talk_to entry point for world-Layla (layla_advanced_overlay launches here).
+# the chapter 2 intro cutscene does NOT come through here — chapter2_intro.dialogue
+# imports this file and jumps straight to post_wake_intro with actors already staged.
+if Flags.get_level_flag("layla_post_wake_intro_seen") == true:
+	=> companion_hub
+
+# safety net: talked to before the intro somehow ran. stage the pair the way the
+# cutscene hand-off would have, then play the intro.
+do actor_enter("Fiona", "base", "left")
+do actor_enter("Layla", "base", "right")
+do actor_flip("Layla", true)
+=> post_wake_intro
+
+~ post_wake_intro
+# [post opening cutscene convo with us]
+# reached from chapter2_intro.dialogue with Fiona (left) and Layla (right, flipped)
+# already on stage over the dimmed live level.
+Layla: Fionaaaa! You fell asleep while working again!
+do actor_change("Layla", "angry_1")
+Layla: How many times do I need to tell you that you need to rest properly!
+Layla: In your own bed! In your own home!
+do actor_change("Layla", "base")
+Player: I know, I know.
+Player: I just really got into it. Going home would've broken that flow.
+Player: Also, what's this thing over me?
+Layla: It's my jacket. I kept it over you to keep you warm as you slept.
+Player: Oh.
+Layla: Wait, lemme take it off you. I'll put it in my car later.
+Player: Thanks, Layla.
+Player: What time is it? Has the professor come in yet?
+Layla: It's 7:30 right now. The professor doesn't come in until 10, usually.
+do actor_change("Layla", "pout")
+Layla: And um... Fiona. Would you still help me with what I asked you yesterday?
+Layla: You know, the genomic sequencing thing?
+Layla: The professor asked me to show him the results first thing after he arrived.
+Layla: If I don't do that, I'm doomed!
+do actor_change("Layla", "base")
+Player: Sure. I can do that. Shouldn't take me more than ten minutes.
+Player: You know that you could easily do it yourself though, right?
+Player: Objectively, you're smarter than the average undergrad Research Assistant.
+Player: If I can do it in 10 minutes, you should know it's possible for you to do in under an hour.
+# layla is shy. TODO: swap for a proper shy expression when the art lands.
+do actor_change("Layla", "pout")
+Layla: Umm... I'm glad you think that.
+# layla is extra shy
+Layla: I would still like to have you do it for me once, if you don't mind...
+Layla: I learn faster when you teach me.
+Player: No worries. Let's get to the lab ASAP. I need to go home and shower after this.
+do actor_change("Layla", "victory")
+Layla: Yaaaaay! Thanks Fiona! I owe you one.
+do actor_change("Layla", "base")
+Player: Let's go.
+do Flags.set_level_flag("layla_post_wake_intro_seen", true)
+=> END
+
+~ companion_hub
+# in-world talk_to hub over the dimmed live level. both sprites are staged, mirroring
+# the real-world arrangement: layla_character.gd sets layla_player_on_left when the
+# interaction fires. facing convention matches the intro: left = unflipped, right = flipped.
+if Flags.get_level_flag("layla_player_on_left") == true:
+	do actor_enter("Fiona", "base", "left")
+	do actor_enter("Layla", "base", "right")
+	do actor_flip("Layla", true)
+else:
+	do actor_enter("Layla", "base", "left")
+	do actor_enter("Fiona", "base", "right")
+	do actor_flip("Fiona", true)
+Layla is following you with glistening eyes.
+Her scent reminds you of lavenders drenched in dew.
+You sense that she cares about you.
+~ hub_return
+do actor_change("Layla", "base")
+What do you want to say to her?
+
+- Ask her about work
+	do Flags.set_level_flag("layla_asked_about_work", true)
+	Player: You know, I'm happy to help you with this, but I have to ask...
+	Player: Why didn't you do it sooner?
+	Player: It makes sense to finish off difficult tasks way before deadlines.
+	Player: As your mentor, I need to point this out.
+	Player: We need to move fast if we want to secure funding.
+	You notice her shoulders slump after hearing that remark.
+	do actor_change("Layla", "pout")
+	Layla: I know... I'm sorry.
+	Layla: It's just... I was afraid of messing it up.
+	Layla: The equipment is limited, and expensive.
+	Layla: If I got it wrong, it would've come out of the lab's pocket.
+	Layla: I didn't wanna disappoint the professor.
+	Layla: Or... you.
+	She looks away, but her mind's eye looks toward you.
+	What do you wanna say to her?
+
+	- Comfort her
+		do Flags.set_level_flag("layla_work_comforted", true)
+		Player: That's... alright.
+		Player: I would only say that you need to believe in yourself more.
+		Player: You're better at this than you realize.
+		# TODO: shy expression when the art lands.
+		do actor_focus("Layla", 1.6, 0.3)
+		Layla: ....!
+		Her face turns a bright red.
+		Layla: Thank you, Fiona.
+		Layla: I guess I needed to hear that.
+		do actor_unfocus_all(0.4)
+		Layla will remember this.
+		do actor_change("Layla", "victory")
+		Layla: Still, I promise I'll be more punctual!
+		Layla: Can't disappoint my prodigal mentor, after all!
+		Player: Yeah, yeah.
+		Player: Anyway...
+		=> hub_return
+
+	- Reprimand her
+		do Flags.set_level_flag("layla_work_reprimanded", true)
+		Player: I get that, but you still should be more responsible.
+		Player: The lab can cushion buying new equipment ruined by a junior assistant.
+		Player: It won't be able to do that if we don't secure the next round of funding, though.
+		Player: And that will happen. If we continue to move slow.
+		do actor_change("Layla", "pout")
+		Layla looks really dejected after hearing you say that.
+		Layla: I'm sorry.
+		Layla: I promise I'll be better.
+		Player: Right.
+		Player: Anyway...
+		=> hub_return
+
+- Ask her about her life
+	do Flags.set_level_flag("layla_asked_about_life", true)
+	Player: So... apart from work, what've you been up to lately?
+	Layla: Whaaaaaa?
+	Layla: You're asking me about something other than work!?
+	Layla: Are you okay? Do you have a high temperature?
+	Layla: Come here, lemme touch your forehead.
+	Player: I'm okay, actually.
+	Player: Guess I just... realized I hadn't asked you that in a minute.
+	Layla will remember that.
+	Layla: Oh... okay.
+	Layla: Lemme see. Well...
+	do actor_change("Layla", "victory")
+	Layla: Oh, I watched this movie recently! Devil Wears Grada 2.
+	Layla: Its prequel was my favorite movie of ALL TIME!!!
+	do actor_change("Layla", "base")
+	Player: Oh. I see. How'd you like this one then?
+	Layla: It was....
+	Layla: Okay? I guess.
+	Layla: I mean, it had its moments, but it lacked something its genius prequel had, you know?
+	Layla: I also feel it had too many product placements?
+	do actor_change("Layla", "pout")
+	Layla: Got a bit tiring seeing a cola can company be advertised for the third time...
+	do actor_change("Layla", "victory")
+	Layla: But ohmygod. The fashion in it!
+	Layla: That remained top notch.
+	do actor_change("Layla", "base")
+	Layla: Okay, maybe it was just a lil' bit worse than the last one, if I'm being honest.
+	Layla: But that was already such a high bar!
+	All of a sudden, she seems more animated.
+	Player: I didn't realize you liked fashion that much.
+	Layla: That's because you never asked!
+	Layla: ... Or maybe I didn't let it show.
+	Layla: I dress pretty basic for someone who's into fashion this much.
+
+	- Ask her why she does that
+		do actor_change("Layla", "pout")
+		Layla: Well, my parents are immigrants...
+		Layla: Let's say they raised me in their own way.
+		Layla: I was taught not to attract too much attention to myself.
+		Layla: Whenever I've tried dressing up, it's led to a lot of mixed feelings, you know?
+		Player: I see.
+		Player: I'm sorry about that. I hope you can find your confidence someday.
+		Player: For me, clothes are just a matter of convenience.
+		Player: If I could, I'd roam around naked everywhere.
+		Player: Unfortunately, that would land me in jail.
+		# layla face zoomin - shy. TODO: shy expression when the art lands.
+		do actor_focus("Layla", 1.6, 0.3)
+		Layla: ...
+		Player: Layla, you alright?
+		Layla: No!
+		Layla: I mean - Yes! No no.
+		Player: Huh?
+		Layla: Oh well, I think it's getting quite hot in here, hehe? What do you think about the weather? And what are your thoughts about the economic and political state of the world?
+		do actor_unfocus_all(0.4)
+		Player: Riiiight.
+		Player: Anyway...
+		=> hub_return
+
+	- Move on
+		Player: I see.
+		Player: That's... interesting.
+		Player: Anyway...
+		=> hub_return
+
+- Never mind [Leave]
+	=> END

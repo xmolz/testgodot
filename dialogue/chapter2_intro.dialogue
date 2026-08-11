@@ -6,6 +6,8 @@
 # opening lines are speaker-less on purpose: the balloon hides the nameplate when the
 # character is empty.
 
+import "res://dialogue/layla_chapter_1.dialogue" as layla_ch1
+
 ~ start
 Standing at the door.
 A tall shadow.
@@ -50,4 +52,23 @@ do pan()
 Layla: What are you talking about?
 
 do reveal()
-=> END
+Layla: Hey. Earth to Fiona.
+
+# the reveal tween may still be running under that line: let it land, then fade the wake
+# CG out onto the level. wait_for_pan and fade_out resolve on the wake layer through
+# extra_game_states, same as stage_wake_cg / pan / reveal above. from here the LEVEL is
+# the backdrop — no background or CG goes up, and the darken backdrop is still hidden
+# from hide_visual_layers earlier.
+do wait_for_pan()
+do fade_out(0.7)
+
+# dim the live level so the sprites read on top of it. the overlay's dialogue-ended
+# fade already tweens this back to 0, so nothing needs to clear it before END.
+do set_backdrop_darkness(0.5, 0.4)
+do actor_enter("Fiona", "base", "left")
+do actor_enter("Layla", "base", "right")
+do actor_flip("Layla", true)
+# the real post-wake conversation lives in layla_chapter_1.dialogue so the same lines
+# back the in-world talk_to verb. jump into it; it sets layla_post_wake_intro_seen and
+# ends the dialogue itself.
+=> layla_ch1/post_wake_intro
