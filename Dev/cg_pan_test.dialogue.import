@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://dqwxs5jo1sm60"
+path="res://.godot/imported/cg_pan_test.dialogue-25111c5dd0325b041f4183131aa32dc0.tres"
+
+[deps]
+
+source_file="res://Dev/cg_pan_test.dialogue"
+dest_files=["res://.godot/imported/cg_pan_test.dialogue-25111c5dd0325b041f4183131aa32dc0.tres"]
+
+[params]
+
+defaults=true

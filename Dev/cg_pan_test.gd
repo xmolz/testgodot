@@ -199,7 +199,7 @@ func play_sequence() -> void:
 		if ResourceLoader.exists(portal_texture_path):
 			portal_tex = load(portal_texture_path)
 		await tl.portal_enter(portal_tex, portal_start_rect, portal_duration)
-		await tl.play_portal_monologue(launch_dialogue_title)
+		await _play_swirl_monologue(tl)
 	else:
 		push_warning("cg pan test: no GameManager.transition_layer, skipping the swirl")
 
@@ -213,6 +213,51 @@ func play_sequence() -> void:
 
 	_start_dream_dialogue()
 	_running = false
+
+
+# spawn the swirl monologue directly instead of going through TransitionLayer.play_portal_monologue().
+# that function degrades to a silent 0.8s hold whenever its titles.has() guard fails, which hides
+# exactly the kind of failure we are chasing. here every failure is loud.
+func _play_swirl_monologue(tl) -> void:
+	if not ResourceLoader.exists(launch_dialogue_path):
+		push_error("cg pan test: swirl dialogue not found at %s" % launch_dialogue_path)
+		await get_tree().create_timer(0.8).timeout
+		return
+
+	var dlg: DialogueResource = load(launch_dialogue_path)
+	if dlg == null:
+		push_error("cg pan test: swirl dialogue failed to load: %s" % launch_dialogue_path)
+		await get_tree().create_timer(0.8).timeout
+		return
+
+	print("cg pan test: swirl resource loaded, titles = %s" % [dlg.titles.keys()])
+
+	if not dlg.titles.has(launch_dialogue_title):
+		push_error("cg pan test: title '%s' is not in %s. available titles: %s" % [
+			launch_dialogue_title, launch_dialogue_path, dlg.titles.keys()
+		])
+		await get_tree().create_timer(0.8).timeout
+		return
+
+	var balloon = DialogueManager.show_dialogue_balloon_scene(
+		preload("res://conversation/conversationballoon.tscn"),
+		dlg,
+		launch_dialogue_title
+	)
+
+	# the portal runs on the TransitionLayer, so the balloon has to sit there too and must keep
+	# processing regardless of tree pause state. this mirrors play_portal_monologue().
+	if is_instance_valid(balloon) and is_instance_valid(tl):
+		if balloon.get_parent():
+			balloon.reparent(tl)
+		else:
+			tl.add_child(balloon)
+		balloon.process_mode = Node.PROCESS_MODE_ALWAYS
+
+	await DialogueManager.dialogue_ended
+
+	if is_instance_valid(balloon):
+		balloon.queue_free()
 
 
 func _spawn_overlay() -> void:

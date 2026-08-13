@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://ciohxexpc3cof"
+path="res://.godot/imported/dream_intro.dialogue-5ed7835611e25c93380e8b8b229eddcf.tres"
+
+[deps]
+
+source_file="res://Dev/dream_intro.dialogue"
+dest_files=["res://.godot/imported/dream_intro.dialogue-5ed7835611e25c93380e8b8b229eddcf.tres"]
+
+[params]
+
+defaults=true

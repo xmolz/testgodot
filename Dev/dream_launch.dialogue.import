@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://dpvmxse2brkop"
+path="res://.godot/imported/dream_launch.dialogue-401fc79963b722da64954d20070afefd.tres"
+
+[deps]
+
+source_file="res://Dev/dream_launch.dialogue"
+dest_files=["res://.godot/imported/dream_launch.dialogue-401fc79963b722da64954d20070afefd.tres"]
+
+[params]
+
+defaults=true

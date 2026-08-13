@@ -12,6 +12,13 @@
 [ext_resource type="Script" uid="uid://bmq0s1nqhqi4j" path="res://data/InteractionResponse.gd" id="11_response"]
 [ext_resource type="Script" uid="uid://dltqnu07oiff" path="res://interactions/action.gd" id="12_action"]
 [ext_resource type="PackedScene" uid="uid://p2iroc5a0o8y" path="res://Interactables/Game World/Hospital Room/exit_door.tscn" id="14_exit_door"]
+[ext_resource type="PackedScene" path="res://characters/layla_character.tscn" id="15_layla"]
+[ext_resource type="PackedScene" path="res://Interactables/Game World/room_exit_sign.tscn" id="16_exitsign"]
+[ext_resource type="PackedScene" uid="uid://btku3hrvme7k6" path="res://Non Interactables/static_bathroom_background.tscn" id="17_bathbg"]
+[ext_resource type="Script" uid="uid://dm3vji871klli" path="res://interactions/actions/TeleportAction.gd" id="18_teleport"]
+[ext_resource type="Script" uid="uid://cwgcwktmorn74" path="res://Non Interactables/camera_region.gd" id="19_camregion"]
+[ext_resource type="PackedScene" uid="uid://d2d8nx3loto6b" path="res://Non Interactables/room_light_spill.tscn" id="20_lightspill"]
+[ext_resource type="PackedScene" path="res://Interactables/Game World/University/elevator.tscn" id="21_elevator"]
 
 [sub_resource type="Resource" id="Resource_wayback_action"]
 script = ExtResource("10_showdialogue")
@@ -32,7 +39,52 @@ actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_wayb
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e4ea3"]
-size = Vector2(2242, 142)
+size = Vector2(3980, 142)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall"]
+size = Vector2(80, 1400)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bathroom_floor"]
+size = Vector2(2400, 76)
+
+[sub_resource type="Resource" id="Resource_tp_bathroom"]
+script = ExtResource("18_teleport")
+target_marker_name = "BathroomSpawnPoint"
+metadata/_custom_type_script = "uid://dm3vji871klli"
+
+[sub_resource type="Resource" id="Resource_use_tp_bathroom"]
+script = ExtResource("11_response")
+verb_id = "walk_to"
+actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_tp_bathroom")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="Resource" id="Resource_tp_hallway"]
+script = ExtResource("18_teleport")
+target_marker_name = "HallwaySpawnPoint"
+metadata/_custom_type_script = "uid://dm3vji871klli"
+
+[sub_resource type="Resource" id="Resource_use_tp_hallway"]
+script = ExtResource("11_response")
+verb_id = "walk_to"
+actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_tp_hallway")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cam_strip"]
+size = Vector2(3840, 1080)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cam_bathroom"]
+size = Vector2(1922, 1080)
+
+[sub_resource type="Resource" id="Resource_tp_labcorridor"]
+script = ExtResource("18_teleport")
+target_marker_name = "LabCorridorSpawnPoint"
+metadata/_custom_type_script = "uid://dm3vji871klli"
+
+[sub_resource type="Resource" id="Resource_use_tp_labcorridor"]
+script = ExtResource("11_response")
+verb_id = "walk_to"
+actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_tp_labcorridor")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
 [node name="TestChapterLevel" type="Control" unique_id=1494838151]
 layout_mode = 3
@@ -42,6 +94,15 @@ offset_bottom = 1080.0
 mouse_filter = 2
 script = ExtResource("1_script")
 
+[node name="Backdrop" type="ColorRect" parent="." unique_id=2007045632]
+layout_mode = 0
+offset_left = -2000.0
+offset_top = -800.0
+offset_right = 9200.0
+offset_bottom = 3600.0
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
 [node name="Background" type="TextureRect" parent="." unique_id=1635717622]
 layout_mode = 0
 offset_right = 3840.0
@@ -49,6 +110,39 @@ offset_bottom = 2160.0
 scale = Vector2(0.5, 0.5)
 mouse_filter = 2
 texture = ExtResource("2_bg")
+
+[node name="Background2" type="TextureRect" parent="." unique_id=1592947127]
+layout_mode = 0
+offset_left = 1920.0
+offset_right = 5760.0
+offset_bottom = 2160.0
+scale = Vector2(0.5, 0.5)
+mouse_filter = 2
+texture = ExtResource("2_bg")
+
+[node name="LabCorridorBg1" type="TextureRect" parent="." unique_id=1415826744]
+layout_mode = 0
+offset_left = 4800.0
+offset_right = 8640.0
+offset_bottom = 2160.0
+scale = Vector2(0.5, 0.5)
+mouse_filter = 2
+texture = ExtResource("2_bg")
+
+[node name="LabCorridorBg2" type="TextureRect" parent="." unique_id=1876605637]
+layout_mode = 0
+offset_left = 6720.0
+offset_right = 10560.0
+offset_bottom = 2160.0
+scale = Vector2(0.5, 0.5)
+mouse_filter = 2
+texture = ExtResource("2_bg")
+
+[node name="BathroomBackground" parent="." unique_id=796244909 instance=ExtResource("17_bathbg")]
+position = Vector2(200, 1500)
+
+[node name="HubElevator" parent="." unique_id=218428406 instance=ExtResource("21_elevator")]
+position = Vector2(1015, 2053)
 
 [node name="LevelStateManager" parent="." unique_id=1948342172 instance=ExtResource("5_lsm")]
 level_id = "chapter_test"
@@ -65,6 +159,9 @@ scale = Vector2(0.4, 0.4)
 object_display_name = "Escape Portal"
 object_id = "test_level_no_return"
 interactions = Array[ExtResource("11_response")]([SubResource("Resource_wayback_response"), SubResource("Resource_wayback_response_use")])
+
+[node name="Layla" parent="." unique_id=1983909141 instance=ExtResource("15_layla")]
+position = Vector2(1250, 550)
 
 [node name="Player" parent="." unique_id=1000725987 instance=ExtResource("3_player")]
 position = Vector2(907, 550)
@@ -87,5 +184,119 @@ layer = 2
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=108077512]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=298668331]
-position = Vector2(984, 846)
+position = Vector2(1920, 846)
 shape = SubResource("RectangleShape2D_e4ea3")
+
+[node name="LeftWall" type="StaticBody2D" parent="." unique_id=1270229109]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftWall" unique_id=703314785]
+position = Vector2(-60, 300)
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="RightWall" type="StaticBody2D" parent="." unique_id=317478749]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightWall" unique_id=989978182]
+position = Vector2(3900, 300)
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="BathroomFloor" type="StaticBody2D" parent="." unique_id=1112424788]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BathroomFloor" unique_id=391979387]
+position = Vector2(1290, 2350)
+shape = SubResource("RectangleShape2D_bathroom_floor")
+
+[node name="BathroomLeftWall" type="StaticBody2D" parent="." unique_id=1118468322]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BathroomLeftWall" unique_id=1766484731]
+position = Vector2(155, 2017)
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="BathroomRightWall" type="StaticBody2D" parent="." unique_id=516634559]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BathroomRightWall" unique_id=480630231]
+position = Vector2(2162, 1992)
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="BathroomSpawnPoint" type="Marker2D" parent="." unique_id=2039755475]
+position = Vector2(1149, 2092)
+
+[node name="HallwaySpawnPoint" type="Marker2D" parent="." unique_id=1856822715]
+position = Vector2(3550, 700)
+
+[node name="ExitToBathroom" parent="." unique_id=837312589 instance=ExtResource("16_exitsign")]
+position = Vector2(3600, 201)
+object_display_name = "University Hall"
+object_id = "exit_to_bathroom"
+interactions = Array[ExtResource("11_response")]([SubResource("Resource_use_tp_bathroom")])
+
+[node name="ExitToHallway" parent="." unique_id=1807240061 instance=ExtResource("16_exitsign")]
+position = Vector2(350, 1755)
+arrow_direction = -1
+object_display_name = "Library"
+object_id = "exit_to_hallway"
+interactions = Array[ExtResource("11_response")]([SubResource("Resource_use_tp_hallway")])
+
+[node name="MainStripCameraRegion" type="Area2D" parent="." unique_id=935456836]
+script = ExtResource("19_camregion")
+is_active_on_start = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MainStripCameraRegion" unique_id=1499602763]
+position = Vector2(1920, 540)
+shape = SubResource("RectangleShape2D_cam_strip")
+
+[node name="BathroomCameraRegion" type="Area2D" parent="." unique_id=728663826]
+script = ExtResource("19_camregion")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BathroomCameraRegion" unique_id=1601203401]
+position = Vector2(1161, 2040)
+shape = SubResource("RectangleShape2D_cam_bathroom")
+
+[node name="LabCorridorFloor" type="StaticBody2D" parent="." unique_id=125227047]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LabCorridorFloor" unique_id=1372963526]
+position = Vector2(6720, 846)
+shape = SubResource("RectangleShape2D_e4ea3")
+
+[node name="LabCorridorLeftWall" type="StaticBody2D" parent="." unique_id=605344397]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LabCorridorLeftWall" unique_id=194926497]
+position = Vector2(4740, 300)
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="LabCorridorRightWall" type="StaticBody2D" parent="." unique_id=46786504]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LabCorridorRightWall" unique_id=1547847352]
+position = Vector2(8700, 300)
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="LabCorridorSpawnPoint" type="Marker2D" parent="." unique_id=170156906]
+position = Vector2(5000, 700)
+
+[node name="ExitToLabCorridor" parent="." unique_id=180152002 instance=ExtResource("16_exitsign")]
+position = Vector2(1950, 1755)
+object_display_name = "Lab Corridor"
+object_id = "exit_to_lab_corridor"
+interactions = Array[ExtResource("11_response")]([SubResource("Resource_use_tp_labcorridor")])
+
+[node name="ExitToHub" parent="." unique_id=1322631895 instance=ExtResource("16_exitsign")]
+position = Vector2(4950, 201)
+arrow_direction = -1
+object_display_name = "University Hall"
+object_id = "exit_corridor_to_hub"
+interactions = Array[ExtResource("11_response")]([SubResource("Resource_use_tp_bathroom")])
+
+[node name="LabCorridorCameraRegion" type="Area2D" parent="." unique_id=1159138566]
+script = ExtResource("19_camregion")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LabCorridorCameraRegion" unique_id=1157151278]
+position = Vector2(6720, 540)
+shape = SubResource("RectangleShape2D_cam_strip")
+
+[node name="HubLightSpillLeft" parent="." unique_id=1756740394 instance=ExtResource("20_lightspill")]
+position = Vector2(200, 2040)
+peak_alpha = 0.116
+
+[node name="HubLightSpillRight" parent="." unique_id=1727680977 instance=ExtResource("20_lightspill")]
+position = Vector2(2122, 2040)
+from_left = false
+peak_alpha = 0.2

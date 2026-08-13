@@ -103,6 +103,14 @@ func fade_out(duration: float = 0.7) -> void:
 	await t.finished
 
 
+# true once fade_out() has landed. lets the launch pipeline skip its own hold + fade when
+# the dialogue already did the hand-off itself (chapter 2 does).
+func is_faded_out() -> bool:
+	if not is_instance_valid(_root):
+		return true
+	return _root.modulate.a <= 0.01
+
+
 # ****************************[framing maths] (same model as the dev harness)
 func _fit_scale() -> float:
 	if _tex == null:

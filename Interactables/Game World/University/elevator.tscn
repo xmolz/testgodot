@@ -1,0 +1,43 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://interactions/interactable.gd" id="1_interactable"]
+[ext_resource type="Material" uid="uid://dww3d0txyl18g" path="res://interactions/actions/interactable_outline.tres" id="2_outline"]
+[ext_resource type="Script" uid="uid://bmq0s1nqhqi4j" path="res://data/InteractionResponse.gd" id="3_response"]
+[ext_resource type="Script" uid="uid://dltqnu07oiff" path="res://interactions/action.gd" id="4_action_base"]
+[ext_resource type="Script" path="res://interactions/actions/OpenElevatorPanelAction.gd" id="5_open_action"]
+
+[sub_resource type="Gradient" id="Gradient_elev"]
+colors = PackedColorArray(0.6, 0.62, 0.66, 1, 0.6, 0.62, 0.66, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_elev"]
+gradient = SubResource("Gradient_elev")
+width = 220
+height = 340
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_elev"]
+size = Vector2(220, 340)
+
+[sub_resource type="Resource" id="Resource_open_panel"]
+script = ExtResource("5_open_action")
+
+[sub_resource type="Resource" id="Resource_use_open"]
+script = ExtResource("3_response")
+verb_id = "use"
+actions_to_perform = Array[ExtResource("4_action_base")]([SubResource("Resource_open_panel")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[node name="Elevator" type="Area2D"]
+script = ExtResource("1_interactable")
+object_display_name = "Elevator"
+object_id = "hub_elevator"
+interactions = Array[ExtResource("3_response")]([SubResource("Resource_use_open")])
+
+[node name="ObjectSprite" type="Sprite2D" parent="."]
+material = ExtResource("2_outline")
+texture = SubResource("GradientTexture2D_elev")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_elev")
+
+[node name="WalkToPoint" type="Marker2D" parent="."]
+position = Vector2(0, 100)

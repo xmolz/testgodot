@@ -167,3 +167,11 @@ Player: (He has kind eyes, but I sense a certain sadness in him.)
 Player: (Layla. Junior Research Assistant, self-appointed guardian of my sleep schedule.)
 Player: (Smarter than she gives herself credit for.)
 => END
+
+~ elevator_floor_restricted
+Player: (I don't think I should go there right now.)
+=> END
+
+~ elevator_floor_current
+Player: (I am already on this floor.)
+=> END

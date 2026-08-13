@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://dvk6o4fssks0f"
+path="res://.godot/imported/sprite_test.dialogue-fdc27786dd90646db802ba088674630b.tres"
+
+[deps]
+
+source_file="res://Dev/sprite_test.dialogue"
+dest_files=["res://.godot/imported/sprite_test.dialogue-fdc27786dd90646db802ba088674630b.tres"]
+
+[params]
+
+defaults=true

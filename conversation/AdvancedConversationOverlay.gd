@@ -679,6 +679,12 @@ func actor_unfocus_all(duration: float = 0.2):
 
 func set_backdrop_darkness(alpha: float = 0.6, duration: float = 0.5):
 	if not is_instance_valid(darken_backdrop): return
+	# hide_visual_layers() may have hidden the node earlier in the same conversation
+	# (the chapter 2 wake does). re-show it from zero so it fades in instead of popping
+	# at whatever alpha it was saved with.
+	if alpha > 0.0 and not darken_backdrop.visible:
+		darken_backdrop.color.a = 0.0
+		darken_backdrop.visible = true
 	var tween = create_tween()
 	tween.tween_property(darken_backdrop, "color:a", alpha, duration)
 

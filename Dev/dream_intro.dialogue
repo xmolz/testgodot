@@ -2,17 +2,31 @@
 # Beat 2 (the dream) and beat 3 (waking onto the CG).
 # game states are [dream overlay, cg_pan_test director]. shake / cut_to_black / wake_blink resolve
 # on the overlay; shake_stop / stage_wake_cg / pan / reveal resolve on the director.
+# the opening lines are speaker-less on purpose: the balloon hides the nameplate when the character
+# is empty.
 
 ~ start
+Standing at the door.
+A tall shadow.
+His back turned against you.
+What was his name again?
+Name...
+What was yours?
+Maybe he'll call it out.
+Maybe you should ask him where he's headed.
+- Where are you going? => voice
+
+~ voice
 ???: Huh?
-???: You're not supposed to be here right now.
-???: Go to sleep, Fiona...
+???: Fiona.
+???: You're not supposed to be up right now.
+???: Go, sleep.
+???: You need to sleep, Fiona.
 
 do shake(-1, 3.0)
-???: Fiona...
-???: Fiona...
-???: Fiona...
-???: Wake up, Fiona.
+???: Sleep, Fiona.
+???: Sleep, Fiona.
+???: Sleep, Fiona.
 do shake_stop()
 
 ???: Wake up.

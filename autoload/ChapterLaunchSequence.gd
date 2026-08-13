@@ -363,14 +363,19 @@ func launch(data: MemoryChapterData, overlay: CanvasLayer, drawer: Control) -> v
 		if PORTAL_DEBUG:
 			print_rich("[color=magenta][PORTAL DEBUG] intro conversation finished at %d ms[/color]" % Time.get_ticks_msec())
 
-	# the wake CG outlives the conversation: let the reveal land, then fade it out onto the
-	# level underneath.
+	# the wake CG outlives the conversation UNLESS the dialogue already faded it out itself
+	# (chapter 2 does: the sprite scene plays over the level). if it is still up, let the
+	# reveal land and fade it here; if it is already invisible, just free it. the layer is
+	# kept alive through the sprite scene on purpose — its full-rect MOUSE_FILTER_STOP
+	# backdrop swallows stray clicks to the level underneath.
 	if is_instance_valid(wake_layer):
 		if wake_layer.has_method("wait_for_pan"):
 			await wake_layer.wait_for_pan()
-		await get_tree().create_timer(0.5).timeout
-		if wake_layer.has_method("fade_out"):
-			await wake_layer.fade_out(0.7)
+		var wake_already_faded: bool = wake_layer.has_method("is_faded_out") and wake_layer.is_faded_out()
+		if not wake_already_faded:
+			await get_tree().create_timer(0.5).timeout
+			if wake_layer.has_method("fade_out"):
+				await wake_layer.fade_out(0.7)
 		wake_layer.queue_free()
 		DebugVRAM.snapshot("launch: wake cg freed")
 

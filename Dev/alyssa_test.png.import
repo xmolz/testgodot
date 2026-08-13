@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bw23bv1ra4mk4"
-path="res://.godot/imported/At the door.png-b49fb426a6cbd9ce7628fdad992a6eca.ctex"
+uid="uid://w6rum56kh1tw"
+path="res://.godot/imported/alyssa_test.png-8c3304fcd73042d89bab6d547ce36065.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Dev/At the door.png"
-dest_files=["res://.godot/imported/At the door.png-b49fb426a6cbd9ce7628fdad992a6eca.ctex"]
+source_file="res://Dev/alyssa_test.png"
+dest_files=["res://.godot/imported/alyssa_test.png-8c3304fcd73042d89bab6d547ce36065.ctex"]
 
 [params]
 
