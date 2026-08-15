@@ -587,6 +587,17 @@ func _update_top_hovered_object():
 
 	hovered_interactable = _pick_top_interactable(hovered_interactables)
 
+	# exit-zone cursor follows the RESOLVED top hover: if a character or prop is
+	# standing inside an exit zone and wins the hover pick above, the arrow yields
+	# back to the normal cursor. Only exit signs expose an "arrow_direction"
+	# property, so Object.get() returns null for everything else.
+	if is_instance_valid(custom_cursor_instance):
+		var exit_dir = hovered_interactable.get("arrow_direction")
+		if exit_dir != null:
+			custom_cursor_instance.set_exit_mode(exit_dir)
+		else:
+			custom_cursor_instance.clear_exit_mode()
+
 	update_sentence_line_ui()
 
 	# ***** qol fix: cursor state for incomplete give *****
@@ -642,7 +653,7 @@ func update_sentence_line_ui():
 
 	elif hovered_interactable and hovered_interactable.interaction_location == Interactable.InteractionLocation.WORLD:
 		var obj_colored = "[color=#33d9ff]%s[/color]" % hovered_interactable.object_display_name
-		line_text = "Walk to " + obj_colored
+		line_text = hovered_interactable.hover_prefix + " " + obj_colored
 
 	sentence_line_updated.emit(line_text)
 

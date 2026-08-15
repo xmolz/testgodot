@@ -21,6 +21,7 @@ enum ApproachSide { ANY, LEFT_SIDE, RIGHT_SIDE }
 # ------------------------(export variable for the location context)
 @export var interaction_location: InteractionLocation = InteractionLocation.WORLD
 @export var approach_side: ApproachSide = ApproachSide.ANY
+@export var hover_prefix: String = "Walk to"
 
 
 # ******************(the system is now the only system)
