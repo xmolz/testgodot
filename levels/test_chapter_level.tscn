@@ -19,6 +19,8 @@
 [ext_resource type="Script" uid="uid://cwgcwktmorn74" path="res://Non Interactables/camera_region.gd" id="19_camregion"]
 [ext_resource type="PackedScene" uid="uid://d2d8nx3loto6b" path="res://Non Interactables/room_light_spill.tscn" id="20_lightspill"]
 [ext_resource type="PackedScene" path="res://Interactables/Game World/University/elevator.tscn" id="21_elevator"]
+[ext_resource type="PackedScene" path="res://Interactables/Game World/University/lab_door.tscn" id="22_labdoor"]
+[ext_resource type="PackedScene" path="res://Interactables/Game World/University/lab_keypad.tscn" id="23_labkeypad"]
 
 [sub_resource type="Resource" id="Resource_wayback_action"]
 script = ExtResource("10_showdialogue")
@@ -86,6 +88,72 @@ verb_id = "walk_to"
 actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_tp_labcorridor")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
+[sub_resource type="Resource" id="Resource_tp_3f_lib"]
+script = ExtResource("18_teleport")
+target_marker_name = "Floor3LibrarySpawnPoint"
+metadata/_custom_type_script = "uid://dm3vji871klli"
+
+[sub_resource type="Resource" id="Resource_use_tp_3f_lib"]
+script = ExtResource("11_response")
+verb_id = "walk_to"
+actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_tp_3f_lib")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="Resource" id="Resource_tp_3f_corr"]
+script = ExtResource("18_teleport")
+target_marker_name = "Floor3CorridorSpawnPoint"
+metadata/_custom_type_script = "uid://dm3vji871klli"
+
+[sub_resource type="Resource" id="Resource_use_tp_3f_corr"]
+script = ExtResource("11_response")
+verb_id = "walk_to"
+actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_tp_3f_corr")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="Resource" id="Resource_tp_3f_hub"]
+script = ExtResource("18_teleport")
+target_marker_name = "Floor3HubSpawnPoint"
+metadata/_custom_type_script = "uid://dm3vji871klli"
+
+[sub_resource type="Resource" id="Resource_use_tp_3f_hub"]
+script = ExtResource("11_response")
+verb_id = "walk_to"
+actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_tp_3f_hub")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="Resource" id="Resource_tp_4f_lib"]
+script = ExtResource("18_teleport")
+target_marker_name = "Floor4LibrarySpawnPoint"
+metadata/_custom_type_script = "uid://dm3vji871klli"
+
+[sub_resource type="Resource" id="Resource_use_tp_4f_lib"]
+script = ExtResource("11_response")
+verb_id = "walk_to"
+actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_tp_4f_lib")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="Resource" id="Resource_tp_4f_corr"]
+script = ExtResource("18_teleport")
+target_marker_name = "Floor4CorridorSpawnPoint"
+metadata/_custom_type_script = "uid://dm3vji871klli"
+
+[sub_resource type="Resource" id="Resource_use_tp_4f_corr"]
+script = ExtResource("11_response")
+verb_id = "walk_to"
+actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_tp_4f_corr")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="Resource" id="Resource_tp_4f_hub"]
+script = ExtResource("18_teleport")
+target_marker_name = "Floor4HubSpawnPoint"
+metadata/_custom_type_script = "uid://dm3vji871klli"
+
+[sub_resource type="Resource" id="Resource_use_tp_4f_hub"]
+script = ExtResource("11_response")
+verb_id = "walk_to"
+actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_tp_4f_hub")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
 [node name="TestChapterLevel" type="Control" unique_id=1494838151]
 layout_mode = 3
 anchors_preset = 0
@@ -99,7 +167,7 @@ layout_mode = 0
 offset_left = -2000.0
 offset_top = -800.0
 offset_right = 9200.0
-offset_bottom = 3600.0
+offset_bottom = 6000.0
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
 
@@ -141,8 +209,109 @@ texture = ExtResource("2_bg")
 [node name="BathroomBackground" parent="." unique_id=796244909 instance=ExtResource("17_bathbg")]
 position = Vector2(200, 1500)
 
+[node name="Floor3Background" parent="." instance=ExtResource("17_bathbg")]
+position = Vector2(3200, 1500)
+
+[node name="Floor4Background" parent="." instance=ExtResource("17_bathbg")]
+position = Vector2(6200, 1500)
+
+[node name="Floor3LibBg1" type="TextureRect" parent="."]
+layout_mode = 0
+offset_top = 3000.0
+offset_right = 3840.0
+offset_bottom = 5160.0
+scale = Vector2(0.5, 0.5)
+mouse_filter = 2
+texture = ExtResource("2_bg")
+
+[node name="Floor3LibBg2" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 1920.0
+offset_top = 3000.0
+offset_right = 5760.0
+offset_bottom = 5160.0
+scale = Vector2(0.5, 0.5)
+mouse_filter = 2
+texture = ExtResource("2_bg")
+
+[node name="Floor3CorrBg1" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 4800.0
+offset_top = 3000.0
+offset_right = 8640.0
+offset_bottom = 5160.0
+scale = Vector2(0.5, 0.5)
+mouse_filter = 2
+texture = ExtResource("2_bg")
+
+[node name="Floor3CorrBg2" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 6720.0
+offset_top = 3000.0
+offset_right = 10560.0
+offset_bottom = 5160.0
+scale = Vector2(0.5, 0.5)
+mouse_filter = 2
+texture = ExtResource("2_bg")
+
+[node name="Floor4LibBg1" type="TextureRect" parent="."]
+layout_mode = 0
+offset_top = 4500.0
+offset_right = 3840.0
+offset_bottom = 6660.0
+scale = Vector2(0.5, 0.5)
+mouse_filter = 2
+texture = ExtResource("2_bg")
+
+[node name="Floor4LibBg2" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 1920.0
+offset_top = 4500.0
+offset_right = 5760.0
+offset_bottom = 6660.0
+scale = Vector2(0.5, 0.5)
+mouse_filter = 2
+texture = ExtResource("2_bg")
+
+[node name="Floor4CorrBg1" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 4800.0
+offset_top = 4500.0
+offset_right = 8640.0
+offset_bottom = 6660.0
+scale = Vector2(0.5, 0.5)
+mouse_filter = 2
+texture = ExtResource("2_bg")
+
+[node name="Floor4CorrBg2" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 6720.0
+offset_top = 4500.0
+offset_right = 10560.0
+offset_bottom = 6660.0
+scale = Vector2(0.5, 0.5)
+mouse_filter = 2
+texture = ExtResource("2_bg")
+
 [node name="HubElevator" parent="." unique_id=218428406 instance=ExtResource("21_elevator")]
 position = Vector2(1015, 2053)
+metadata/floor_id = "2F"
+
+[node name="LabDoor" parent="." instance=ExtResource("22_labdoor")]
+position = Vector2(5600, 545)
+
+[node name="LabKeypad" parent="." instance=ExtResource("23_labkeypad")]
+position = Vector2(5840, 590)
+
+[node name="Elevator3F" parent="." instance=ExtResource("21_elevator")]
+position = Vector2(4015, 2053)
+object_id = "elevator_3f"
+metadata/floor_id = "3F"
+
+[node name="Elevator4F" parent="." instance=ExtResource("21_elevator")]
+position = Vector2(7015, 2053)
+object_id = "elevator_4f"
+metadata/floor_id = "4F"
 
 [node name="LevelStateManager" parent="." unique_id=1948342172 instance=ExtResource("5_lsm")]
 level_id = "chapter_test"
@@ -300,3 +469,232 @@ peak_alpha = 0.116
 position = Vector2(2122, 2040)
 from_left = false
 peak_alpha = 0.2
+
+[node name="Elevator2FSpawnPoint" type="Marker2D" parent="."]
+position = Vector2(1015, 2153)
+
+[node name="Floor3FloorBody" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor3FloorBody"]
+position = Vector2(4290, 2350)
+shape = SubResource("RectangleShape2D_bathroom_floor")
+
+[node name="Floor3LeftWall" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor3LeftWall"]
+position = Vector2(3155, 2017)
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="Floor3RightWall" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor3RightWall"]
+position = Vector2(5162, 1992)
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="Elevator3FSpawnPoint" type="Marker2D" parent="."]
+position = Vector2(4015, 2153)
+
+[node name="Floor3CameraRegion" type="Area2D" parent="."]
+script = ExtResource("19_camregion")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor3CameraRegion"]
+position = Vector2(4161, 2040)
+shape = SubResource("RectangleShape2D_cam_bathroom")
+
+[node name="Floor4FloorBody" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor4FloorBody"]
+position = Vector2(7290, 2350)
+shape = SubResource("RectangleShape2D_bathroom_floor")
+
+[node name="Floor4LeftWall" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor4LeftWall"]
+position = Vector2(6155, 2017)
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="Floor4RightWall" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor4RightWall"]
+position = Vector2(8162, 1992)
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="Elevator4FSpawnPoint" type="Marker2D" parent="."]
+position = Vector2(7015, 2153)
+
+[node name="Floor4CameraRegion" type="Area2D" parent="."]
+script = ExtResource("19_camregion")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor4CameraRegion"]
+position = Vector2(7161, 2040)
+shape = SubResource("RectangleShape2D_cam_bathroom")
+
+[node name="Floor3LibFloorBody" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor3LibFloorBody"]
+position = Vector2(1920, 3846)
+shape = SubResource("RectangleShape2D_e4ea3")
+
+[node name="Floor3LibLeftWall" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor3LibLeftWall"]
+position = Vector2(-60, 3300)
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="Floor3LibRightWall" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor3LibRightWall"]
+position = Vector2(3900, 3300)
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="Floor3LibrarySpawnPoint" type="Marker2D" parent="."]
+position = Vector2(3550, 3700)
+
+[node name="Floor3LibCameraRegion" type="Area2D" parent="."]
+script = ExtResource("19_camregion")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor3LibCameraRegion"]
+position = Vector2(1920, 3540)
+shape = SubResource("RectangleShape2D_cam_strip")
+
+[node name="Floor3CorrFloorBody" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor3CorrFloorBody"]
+position = Vector2(6720, 3846)
+shape = SubResource("RectangleShape2D_e4ea3")
+
+[node name="Floor3CorrLeftWall" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor3CorrLeftWall"]
+position = Vector2(4740, 3300)
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="Floor3CorrRightWall" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor3CorrRightWall"]
+position = Vector2(8700, 3300)
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="Floor3CorridorSpawnPoint" type="Marker2D" parent="."]
+position = Vector2(5000, 3700)
+
+[node name="Floor3CorrCameraRegion" type="Area2D" parent="."]
+script = ExtResource("19_camregion")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor3CorrCameraRegion"]
+position = Vector2(6720, 3540)
+shape = SubResource("RectangleShape2D_cam_strip")
+
+[node name="Floor3HubSpawnPoint" type="Marker2D" parent="."]
+position = Vector2(4149, 2092)
+
+[node name="Floor4LibFloorBody" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor4LibFloorBody"]
+position = Vector2(1920, 5346)
+shape = SubResource("RectangleShape2D_e4ea3")
+
+[node name="Floor4LibLeftWall" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor4LibLeftWall"]
+position = Vector2(-60, 4800)
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="Floor4LibRightWall" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor4LibRightWall"]
+position = Vector2(3900, 4800)
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="Floor4LibrarySpawnPoint" type="Marker2D" parent="."]
+position = Vector2(3550, 5200)
+
+[node name="Floor4LibCameraRegion" type="Area2D" parent="."]
+script = ExtResource("19_camregion")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor4LibCameraRegion"]
+position = Vector2(1920, 5040)
+shape = SubResource("RectangleShape2D_cam_strip")
+
+[node name="Floor4CorrFloorBody" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor4CorrFloorBody"]
+position = Vector2(6720, 5346)
+shape = SubResource("RectangleShape2D_e4ea3")
+
+[node name="Floor4CorrLeftWall" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor4CorrLeftWall"]
+position = Vector2(4740, 4800)
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="Floor4CorrRightWall" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor4CorrRightWall"]
+position = Vector2(8700, 4800)
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="Floor4CorridorSpawnPoint" type="Marker2D" parent="."]
+position = Vector2(5000, 5200)
+
+[node name="Floor4CorrCameraRegion" type="Area2D" parent="."]
+script = ExtResource("19_camregion")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor4CorrCameraRegion"]
+position = Vector2(6720, 5040)
+shape = SubResource("RectangleShape2D_cam_strip")
+
+[node name="Floor4HubSpawnPoint" type="Marker2D" parent="."]
+position = Vector2(7149, 2092)
+
+[node name="Exit3FToClassrooms" parent="." instance=ExtResource("16_exitsign")]
+position = Vector2(3350, 1755)
+arrow_direction = -1
+object_display_name = "Classrooms"
+object_id = "exit_3f_to_classrooms"
+interactions = Array[ExtResource("11_response")]([SubResource("Resource_use_tp_3f_lib")])
+
+[node name="Exit3FToGradCommons" parent="." instance=ExtResource("16_exitsign")]
+position = Vector2(4950, 1755)
+object_display_name = "Grad Commons"
+object_id = "exit_3f_to_gradcommons"
+interactions = Array[ExtResource("11_response")]([SubResource("Resource_use_tp_3f_corr")])
+
+[node name="Exit3FClassroomsToHub" parent="." instance=ExtResource("16_exitsign")]
+position = Vector2(3600, 3201)
+object_display_name = "3F Hall"
+object_id = "exit_3f_classrooms_to_hub"
+interactions = Array[ExtResource("11_response")]([SubResource("Resource_use_tp_3f_hub")])
+
+[node name="Exit3FGradCommonsToHub" parent="." instance=ExtResource("16_exitsign")]
+position = Vector2(4950, 3201)
+arrow_direction = -1
+object_display_name = "3F Hall"
+object_id = "exit_3f_gradcommons_to_hub"
+interactions = Array[ExtResource("11_response")]([SubResource("Resource_use_tp_3f_hub")])
+
+[node name="Exit4FToOffices" parent="." instance=ExtResource("16_exitsign")]
+position = Vector2(6350, 1755)
+arrow_direction = -1
+object_display_name = "Faculty Offices"
+object_id = "exit_4f_to_offices"
+interactions = Array[ExtResource("11_response")]([SubResource("Resource_use_tp_4f_lib")])
+
+[node name="Exit4FToWing" parent="." instance=ExtResource("16_exitsign")]
+position = Vector2(7950, 1755)
+object_display_name = "Faculty Wing"
+object_id = "exit_4f_to_wing"
+interactions = Array[ExtResource("11_response")]([SubResource("Resource_use_tp_4f_corr")])
+
+[node name="Exit4FOfficesToHub" parent="." instance=ExtResource("16_exitsign")]
+position = Vector2(3600, 4701)
+object_display_name = "4F Hall"
+object_id = "exit_4f_offices_to_hub"
+interactions = Array[ExtResource("11_response")]([SubResource("Resource_use_tp_4f_hub")])
+
+[node name="Exit4FWingToHub" parent="." instance=ExtResource("16_exitsign")]
+position = Vector2(4950, 4701)
+arrow_direction = -1
+object_display_name = "4F Hall"
+object_id = "exit_4f_wing_to_hub"
+interactions = Array[ExtResource("11_response")]([SubResource("Resource_use_tp_4f_hub")])

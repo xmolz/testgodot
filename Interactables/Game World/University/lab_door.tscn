@@ -1,0 +1,30 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://interactions/interactable.gd" id="1_interactable"]
+[ext_resource type="Material" uid="uid://dww3d0txyl18g" path="res://interactions/actions/interactable_outline.tres" id="2_outline"]
+
+[sub_resource type="Gradient" id="Gradient_labdoor"]
+colors = PackedColorArray(0.42, 0.45, 0.5, 1, 0.42, 0.45, 0.5, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_labdoor"]
+gradient = SubResource("Gradient_labdoor")
+width = 300
+height = 460
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_labdoor"]
+size = Vector2(300, 460)
+
+[node name="LabDoor" type="Area2D"]
+script = ExtResource("1_interactable")
+object_display_name = "Lab Door"
+object_id = "lab_door"
+
+[node name="ObjectSprite" type="Sprite2D" parent="."]
+material = ExtResource("2_outline")
+texture = SubResource("GradientTexture2D_labdoor")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_labdoor")
+
+[node name="WalkToPoint" type="Marker2D" parent="."]
+position = Vector2(0, 200)

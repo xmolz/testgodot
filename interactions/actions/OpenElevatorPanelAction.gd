@@ -29,6 +29,11 @@ func execute(interactable_node: Interactable) -> Variant:
 	await tree.create_timer(0.12).timeout
 
 	var instance := packed_scene.instantiate()
+	# Per-instance floor identity: each elevator node in the level overrides
+	# metadata/floor_id ("2F"/"3F"/"4F"). Default preserves old behavior for
+	# any elevator without the metadata. Set BEFORE add_child so the panel's
+	# _ready sees it.
+	instance.current_floor_id = str(interactable_node.get_meta("floor_id", "2F"))
 	tree.root.add_child(instance)
 	tree.paused = true
 

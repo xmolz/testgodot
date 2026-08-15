@@ -62,10 +62,29 @@ func _ready():
 	disabled_bubble_style.bg_color = Color(0.15, 0.15, 0.15, 0.9)
 	disabled_bubble_style.border_color = Color(0.4, 0.4, 0.4, 0.8)
 
+const BUBBLE_CURSOR_OFFSET := Vector2(15, 15)
+const BUBBLE_EDGE_MARGIN := 4.0
+
 func _process(_delta: float) -> void:
 	if OS.has_feature("mobile"): return
 	if action_bubble_label.visible:
-		action_bubble_label.global_position = get_viewport().get_mouse_position() + Vector2(15, 15)
+		action_bubble_label.global_position = _compute_bubble_position()
+
+func _compute_bubble_position() -> Vector2:
+	var mouse_pos: Vector2 = get_viewport().get_mouse_position()
+	var bubble_size: Vector2 = action_bubble_label.size
+	var view_size: Vector2 = get_viewport().get_visible_rect().size
+	var pos: Vector2 = mouse_pos + BUBBLE_CURSOR_OFFSET
+	# Flip to the LEFT of the cursor if the bubble would clip the right screen edge.
+	if pos.x + bubble_size.x + BUBBLE_EDGE_MARGIN > view_size.x:
+		pos.x = mouse_pos.x - BUBBLE_CURSOR_OFFSET.x - bubble_size.x
+	# Flip ABOVE the cursor if the bubble would clip the bottom screen edge.
+	if pos.y + bubble_size.y + BUBBLE_EDGE_MARGIN > view_size.y:
+		pos.y = mouse_pos.y - BUBBLE_CURSOR_OFFSET.y - bubble_size.y
+	# Final clamp: never off-screen, even in corners or with very long sentences.
+	pos.x = clampf(pos.x, BUBBLE_EDGE_MARGIN, maxf(BUBBLE_EDGE_MARGIN, view_size.x - bubble_size.x - BUBBLE_EDGE_MARGIN))
+	pos.y = clampf(pos.y, BUBBLE_EDGE_MARGIN, maxf(BUBBLE_EDGE_MARGIN, view_size.y - bubble_size.y - BUBBLE_EDGE_MARGIN))
+	return pos
 
 
 func set_panel_visible(panel_visible: bool) -> void:

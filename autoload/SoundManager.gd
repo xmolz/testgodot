@@ -17,6 +17,7 @@ var sfx_library: Dictionary = {
 	"door_close": preload("res://Sfx/Game World/scifi door close.mp3"),
 	"door_open": preload("res://Sfx/Game World/scifi door open.mp3"),
 	"hospital_toilet_flush": preload("res://Sfx/Game World/hospital_toilet_flush.mp3"),
+	"elevator_hum": preload("res://Sfx/Game World/elevator_hum.wav"),
 	
 	# footsteps
 	"step_1": preload("res://Sfx/Player/squeak_01.wav"), 
@@ -43,6 +44,10 @@ const UNPAUSABLE_SFX: Array[String] = [
 	"form_correct_input",
 	"form_incorrect_input",
 ]
+
+# ------------[muffled sfx bus (runtime-created in _ready)]
+const MUFFLED_BUS_NAME := "Muffled SFX"
+const MUFFLED_CUTOFF_HZ := 800.0
 
 # ------------------[music library]
 var music_library: Dictionary = {
@@ -108,6 +113,19 @@ func _ready():
 			var quiet_idx = AudioServer.get_bus_index(quiet_bus_name)
 			if quiet_idx != -1:
 				AudioServer.set_bus_volume_db(quiet_idx, AudioServer.get_bus_volume_db(quiet_idx) + 3.0)
+
+	# ----------[muffled sfx bus]
+	# Runtime-created so no bus-layout resource edit is needed. Low-pass
+	# filtered for "heard through machinery/walls" sounds (first user: the
+	# elevator journey hum). Sends into SFX so it inherits SFX volume.
+	if AudioServer.get_bus_index(MUFFLED_BUS_NAME) == -1:
+		AudioServer.add_bus()
+		var muffled_idx := AudioServer.bus_count - 1
+		AudioServer.set_bus_name(muffled_idx, MUFFLED_BUS_NAME)
+		AudioServer.set_bus_send(muffled_idx, "SFX")
+		var lowpass := AudioEffectLowPassFilter.new()
+		lowpass.cutoff_hz = MUFFLED_CUTOFF_HZ
+		AudioServer.add_bus_effect(muffled_idx, lowpass)
 
 	# capture the ambience bus index
 	_ambience_bus_index = AudioServer.get_bus_index("Ambience")

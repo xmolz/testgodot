@@ -1,0 +1,62 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ui/keypad_panel.gd" id="1_script"]
+
+[node name="KeypadPanel" type="CanvasLayer"]
+process_mode = 3
+layer = 50
+script = ExtResource("1_script")
+
+[node name="Dim" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.35)
+
+[node name="Center" type="CenterContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="DeviceStack" type="VBoxContainer" parent="Center"]
+theme_override_constants/separation = 14
+mouse_filter = 2
+
+[node name="Bezel" type="PanelContainer" parent="Center/DeviceStack"]
+
+[node name="Body" type="PanelContainer" parent="Center/DeviceStack/Bezel"]
+
+[node name="Margin" type="MarginContainer" parent="Center/DeviceStack/Bezel/Body"]
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 30
+
+[node name="VBox" type="VBoxContainer" parent="Center/DeviceStack/Bezel/Body/Margin"]
+theme_override_constants/separation = 18
+
+[node name="EngravedLabel" type="Label" parent="Center/DeviceStack/Bezel/Body/Margin/VBox"]
+text = "LAB ACCESS"
+horizontal_alignment = 1
+
+[node name="Screen" type="PanelContainer" parent="Center/DeviceStack/Bezel/Body/Margin/VBox"]
+custom_minimum_size = Vector2(0, 96)
+
+[node name="ScreenRow" type="HBoxContainer" parent="Center/DeviceStack/Bezel/Body/Margin/VBox/Screen"]
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="ButtonGrid" type="GridContainer" parent="Center/DeviceStack/Bezel/Body/Margin/VBox"]
+columns = 3
+theme_override_constants/h_separation = 14
+theme_override_constants/v_separation = 14
+
+[node name="BackButton" type="Button" parent="Center/DeviceStack"]
+custom_minimum_size = Vector2(200, 64)
+size_flags_horizontal = 4
+text = "Back"

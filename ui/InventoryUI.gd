@@ -109,9 +109,28 @@ func _ready():
 	_update_pagination_buttons_state()
 
 
+const HOVER_LABEL_CURSOR_OFFSET := Vector2(20, -30)
+const HOVER_LABEL_EDGE_MARGIN := 4.0
+
 func _process(_delta: float) -> void:
 	if item_name_hover_label and item_name_hover_label.visible:
-		item_name_hover_label.global_position = get_viewport().get_mouse_position() + Vector2(20, -30)
+		item_name_hover_label.global_position = _compute_hover_label_position()
+
+func _compute_hover_label_position() -> Vector2:
+	var mouse_pos: Vector2 = get_viewport().get_mouse_position()
+	var label_size: Vector2 = item_name_hover_label.size
+	var view_size: Vector2 = get_viewport().get_visible_rect().size
+	var pos: Vector2 = mouse_pos + HOVER_LABEL_CURSOR_OFFSET
+	# Flip to the LEFT of the cursor if the label would clip the right screen edge.
+	if pos.x + label_size.x + HOVER_LABEL_EDGE_MARGIN > view_size.x:
+		pos.x = mouse_pos.x - 20.0 - label_size.x
+	# Flip BELOW the cursor if the label would clip the top screen edge.
+	if pos.y < HOVER_LABEL_EDGE_MARGIN:
+		pos.y = mouse_pos.y + 30.0
+	# Final clamp: never off-screen.
+	pos.x = clampf(pos.x, HOVER_LABEL_EDGE_MARGIN, maxf(HOVER_LABEL_EDGE_MARGIN, view_size.x - label_size.x - HOVER_LABEL_EDGE_MARGIN))
+	pos.y = clampf(pos.y, HOVER_LABEL_EDGE_MARGIN, maxf(HOVER_LABEL_EDGE_MARGIN, view_size.y - label_size.y - HOVER_LABEL_EDGE_MARGIN))
+	return pos
 
 
 func _on_game_manager_inventory_updated(full_inventory_data: Array[ItemData]):

@@ -93,7 +93,7 @@ func open_instant():
 		iris_rect.visible = false
 
 # ***************(1. sci-fi door transition (used for teleporting))
-func play_transition_sequence():
+func play_transition_sequence(hold_seconds: float = 1.2):
 	if not left_shutter or not right_shutter: return
 
 	_set_gm_transitioning(true)
@@ -111,8 +111,10 @@ func play_transition_sequence():
 	
 	emit_signal("transition_halfway")
 	
-	# 2 second delay while screen is black (1 second longer)
-	await get_tree().create_timer(1.2).timeout
+	# Black-hold is caller-tunable: exit-sign teleports keep the 1.2s
+	# default; the elevator passes a longer value so the ride reads as
+	# actual travel (see elevator_panel.gd ELEVATOR_HOLD_SECONDS).
+	await get_tree().create_timer(hold_seconds).timeout
 	
 	SoundManager.play_sfx("door_open")
 	

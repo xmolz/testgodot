@@ -7,6 +7,12 @@ const EXAMINABLES_DIALOGUE_PATH := "res://dialogue/examinables.dialogue"
 const CHECKPOINT_RESTRICTED := "elevator_floor_restricted"
 const CHECKPOINT_CURRENT := "elevator_floor_current"
 
+## Black-hold duration for elevator rides. Exit-sign door teleports keep the
+## transition layer's 1.2s default; the elevator holds longer so the ride
+## reads as actual travel. Tuned so the 4s hum ends as the doors finish
+## opening (0.5 close + 3.5 hold + 0.5 open = 4.5s; hum starts at t=0.5).
+const ELEVATOR_HOLD_SECONDS := 3.5
+
 ## Floor directory (US numbering: street level = 1F). Edit freely.
 ## behavior values: restricted (Fiona declines) or transition (shutter door
 ## transition plays; no teleport yet). The floor whose id equals
@@ -14,9 +20,9 @@ const CHECKPOINT_CURRENT := "elevator_floor_current"
 const FLOORS: Array[Dictionary] = [
 	{"id": "R", "label": "R     Rooftop", "behavior": "restricted"},
 	{"id": "5F", "label": "5F    Gym, Leisure Room", "behavior": "restricted"},
-	{"id": "4F", "label": "4F    Faculty Offices", "behavior": "transition"},
-	{"id": "3F", "label": "3F    Classrooms, Grad Commons", "behavior": "transition"},
-	{"id": "2F", "label": "2F    Library, Science Labs", "behavior": "restricted"},
+	{"id": "4F", "label": "4F    Faculty Offices", "behavior": "transition", "spawn_marker": "Elevator4FSpawnPoint"},
+	{"id": "3F", "label": "3F    Classrooms, Grad Commons", "behavior": "transition", "spawn_marker": "Elevator3FSpawnPoint"},
+	{"id": "2F", "label": "2F    Library, Science Labs", "behavior": "transition", "spawn_marker": "Elevator2FSpawnPoint"},
 	{"id": "1F", "label": "1F    Cafeteria, Auditorium", "behavior": "restricted"},
 	{"id": "B", "label": "B     Parking", "behavior": "restricted"},
 ]
@@ -172,7 +178,7 @@ func _on_floor_pressed(floor_id: String) -> void:
 	if floor_id == current_floor_id:
 		_close_with_line(CHECKPOINT_CURRENT)
 	elif _behavior_for(floor_id) == "transition":
-		_close_with_transition()
+		_close_with_transition(floor_id)
 	else:
 		_close_with_line(CHECKPOINT_RESTRICTED)
 
@@ -188,17 +194,69 @@ func _close_with_line(checkpoint: String) -> void:
 	panel_closed.emit()
 	queue_free()
 
-func _close_with_transition() -> void:
+func _spawn_marker_for(floor_id: String) -> String:
+	for floor_data in FLOORS:
+		if floor_data["id"] == floor_id:
+			return str(floor_data.get("spawn_marker", ""))
+	return ""
+
+func _close_with_transition(floor_id: String) -> void:
 	_is_resolving = true
 	get_tree().paused = false
 	_dim.visible = false
 	_center.visible = false
-	if GameManager and is_instance_valid(GameManager.transition_layer) and GameManager.transition_layer.has_method("play_transition_sequence"):
-		await GameManager.transition_layer.play_transition_sequence()
+
+	var player = GameManager.player_node if GameManager else null
+	if is_instance_valid(player) and player.has_method("set_can_move"):
+		player.set_can_move(false)
+
+	# Resolve the destination marker BEFORE the doors close so a bad marker
+	# name degrades to "doors cycle, no travel" instead of a mid-black hang.
+	var target_node: Node2D = null
+	var marker_name := _spawn_marker_for(floor_id)
+	if marker_name != "" and SceneDirector and is_instance_valid(SceneDirector.current_game_scene):
+		target_node = SceneDirector.current_game_scene.find_child(marker_name, true, false)
+	if not target_node:
+		push_warning("ElevatorPanel: spawn marker '%s' not found; doors will cycle without travel." % marker_name)
+
+	# Mirrors TeleportAction.gd: fire the sequence, teleport during blackout.
+	var transition_layer = GameManager.transition_layer if GameManager else null
+	var has_transition: bool = is_instance_valid(transition_layer) and transition_layer.has_method("play_transition_sequence")
+	if has_transition:
+		transition_layer.play_transition_sequence(ELEVATOR_HOLD_SECONDS)
+		await transition_layer.transition_halfway
+		# Journey sound: starts the moment the screen is fully black (the
+		# travel beat), between the transition's door_close and door_open.
+		# Routed through the low-pass Muffled SFX bus so the motor reads as
+		# coming from the shaft, not the UI. Timing: 0.5s close + 3.5s hold
+		# + 0.5s open = 4.5s; the 4s hum starts at full black (t=0.5s) and
+		# ends exactly as the doors finish opening.
+		if SoundManager:
+			SoundManager.play_sfx("elevator_hum", 1.0, 0.0, SoundManager.MUFFLED_BUS_NAME)
 	else:
-		push_warning("ElevatorPanel: transition_layer unavailable; skipped door transition.")
+		push_warning("ElevatorPanel: transition_layer unavailable; teleporting without door transition.")
+
+	if is_instance_valid(player) and target_node:
+		if GameManager.has_method("player_has_finished_walk_command"):
+			GameManager.player_has_finished_walk_command()
+		if player.has_method("stop_movement"):
+			player.stop_movement()
+		player.global_position = target_node.global_position
+		var camera := get_viewport().get_camera_2d()
+		if camera and camera.has_method("snap_to_target"):
+			camera.snap_to_target()
+
+	if has_transition:
+		await transition_layer.transition_finished
+
+	if Events and Events.has_signal("room_changed"):
+		Events.room_changed.emit()
+
 	if GameManager:
 		GameManager.exit_to_world_state()
+	if is_instance_valid(player) and player.has_method("set_can_move"):
+		player.set_can_move(true)
+
 	panel_closed.emit()
 	queue_free()
 
