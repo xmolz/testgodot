@@ -87,3 +87,8 @@ Player: (I don't need that much toilet paper.)
 ~ test_level_no_return
 Player: (I can't leave the memory yet. I need to figure things out first.)
 => END
+
+~ classrooms_blocked
+Layla: Fiona... I don't think going there would be helpful.
+Player: (She's right. It's way too early for classes to start. No reason to go there.)
+=> END
