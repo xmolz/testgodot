@@ -2,9 +2,9 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://jachh64sm2s"
-path.bptc="res://.godot/imported/red_carpet_tile.png-5f92dfccac5534afe69ae63cd0deb079.bptc.ctex"
-path.astc="res://.godot/imported/red_carpet_tile.png-5f92dfccac5534afe69ae63cd0deb079.astc.ctex"
+uid="uid://ieot6qqljjaj"
+path.bptc="res://.godot/imported/lib_window_frame.png-1ea8156351c1c2246bdd7e991c5ed81c.bptc.ctex"
+path.astc="res://.godot/imported/lib_window_frame.png-1ea8156351c1c2246bdd7e991c5ed81c.astc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
@@ -12,8 +12,8 @@ metadata={
 
 [deps]
 
-source_file="res://Backgrounds/Kit/red_carpet_tile.png"
-dest_files=["res://.godot/imported/red_carpet_tile.png-5f92dfccac5534afe69ae63cd0deb079.bptc.ctex", "res://.godot/imported/red_carpet_tile.png-5f92dfccac5534afe69ae63cd0deb079.astc.ctex"]
+source_file="res://Backgrounds/Kit/lib_window_frame.png"
+dest_files=["res://.godot/imported/lib_window_frame.png-1ea8156351c1c2246bdd7e991c5ed81c.bptc.ctex", "res://.godot/imported/lib_window_frame.png-1ea8156351c1c2246bdd7e991c5ed81c.astc.ctex"]
 
 [params]
 
