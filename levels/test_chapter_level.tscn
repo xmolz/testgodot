@@ -19,15 +19,17 @@
 [ext_resource type="PackedScene" path="res://Interactables/Game World/University/elevator.tscn" id="21_elevator"]
 [ext_resource type="PackedScene" path="res://Interactables/Game World/University/lab_door.tscn" id="22_labdoor"]
 [ext_resource type="PackedScene" path="res://Interactables/Game World/University/lab_keypad.tscn" id="23_labkeypad"]
-[ext_resource type="Texture2D" uid="uid://cnaqc1x078r33" path="res://Backgrounds/Kit/wood_floor_tile.png" id="24_kitwood"]
-[ext_resource type="Texture2D" uid="uid://c4euljf2ffcsq" path="res://Backgrounds/Kit/terrazzo_tile_1.png" id="25_kitterrazzo"]
-[ext_resource type="Texture2D" uid="uid://datsiegwuxfmm" path="res://Backgrounds/Kit/carpet_tile_1.png" id="26_kitcarpet"]
-[ext_resource type="Texture2D" uid="uid://cv0x6cr28tbwv" path="res://Backgrounds/Kit/terrazzo_tile_2.png" id="27_kitterrazzo2"]
-[ext_resource type="Texture2D" uid="uid://ob3nmc0psg65" path="res://Backgrounds/Kit/ChatGPT Image Aug 23, 2026, 11_50_29 PM.png" id="28_bqcsd"]
-[ext_resource type="Texture2D" uid="uid://c3dn12fujwf2x" path="res://Backgrounds/Kit/terrazzo_tile_3.png" id="28_kitterrazzo3"]
-[ext_resource type="Texture2D" uid="uid://jachh64sm2s" path="res://Backgrounds/Kit/red_carpet_tile.png" id="29_kitredcarpet"]
-[ext_resource type="Texture2D" uid="uid://b2p5si1vqy4m6" path="res://Backgrounds/Kit/green_carpet_tile.png" id="30_kitgreencarpet"]
-[ext_resource type="Texture2D" uid="uid://ieot6qqljjaj" path="res://Backgrounds/Kit/lib_window_frame.png" id="31_kitlibwindow"]
+[ext_resource type="Texture2D" uid="uid://cnaqc1x078r33" path="res://Backgrounds/Kit/Tiles/wood_floor_tile.png" id="24_kitwood"]
+[ext_resource type="Texture2D" uid="uid://c4euljf2ffcsq" path="res://Backgrounds/Kit/Tiles/terrazzo_tile_1.png" id="25_kitterrazzo"]
+[ext_resource type="Texture2D" uid="uid://datsiegwuxfmm" path="res://Backgrounds/Kit/Tiles/carpet_tile_1.png" id="26_kitcarpet"]
+[ext_resource type="Texture2D" uid="uid://cv0x6cr28tbwv" path="res://Backgrounds/Kit/Tiles/terrazzo_tile_2.png" id="27_kitterrazzo2"]
+[ext_resource type="Texture2D" uid="uid://c3dn12fujwf2x" path="res://Backgrounds/Kit/Tiles/terrazzo_tile_3.png" id="28_kitterrazzo3"]
+[ext_resource type="Texture2D" uid="uid://jachh64sm2s" path="res://Backgrounds/Kit/Tiles/red_carpet_tile.png" id="29_kitredcarpet"]
+[ext_resource type="Texture2D" uid="uid://b2p5si1vqy4m6" path="res://Backgrounds/Kit/Tiles/green_carpet_tile.png" id="30_kitgreencarpet"]
+[ext_resource type="Texture2D" uid="uid://ieot6qqljjaj" path="res://Backgrounds/Kit/Library/lib_window_frame.png" id="31_kitlibwindow"]
+[ext_resource type="PackedScene" path="res://Interactables/Game World/University/library_bookshelf.tscn" id="32_libbookshelf"]
+[ext_resource type="Texture2D" path="res://Backgrounds/Kit/Library/library_table_chair.png" id="33_kittableset"]
+[ext_resource type="PackedScene" path="res://Interactables/Game World/University/library_bookshelf_3.tscn" id="34_libbookshelf3"]
 
 [sub_resource type="Gradient" id="Gradient_kit_lib_wall"]
 offsets = PackedFloat32Array(0, 0.09, 0.16, 0.5, 0.88, 1)
@@ -278,6 +280,17 @@ height = 128
 fill_from = Vector2(0, 1)
 fill_to = Vector2(0, 0)
 
+[sub_resource type="Gradient" id="Gradient_lib_table_shadow"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0, 0.6)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_lib_table_shadow"]
+gradient = SubResource("Gradient_lib_table_shadow")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0, 0)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e4ea3"]
 size = Vector2(3980, 142)
 
@@ -519,6 +532,50 @@ offset_right = 2380.0
 offset_bottom = 1030.0
 mouse_filter = 2
 texture = SubResource("GradientTexture2D_lib_win_pool_down")
+
+[node name="LibShelfContactShadow" type="TextureRect" parent="."]
+modulate = Color(1, 1, 1, 0.9)
+layout_mode = 0
+offset_left = 150.5
+offset_top = 690.0
+offset_right = 1263.5
+offset_bottom = 714.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_lib_floor_shadow_down")
+
+[node name="LibShelfRightContactShadow" type="TextureRect" parent="."]
+modulate = Color(1, 1, 1, 0.9)
+layout_mode = 0
+offset_left = 2500.75
+offset_top = 690.0
+offset_right = 3335.75
+offset_bottom = 714.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_lib_floor_shadow_down")
+
+[node name="LibTableShadow" type="TextureRect" parent="."]
+modulate = Color(0.164706, 0.12549, 0.2, 0.6)
+layout_mode = 0
+offset_left = 1425.0
+offset_top = 790.0
+offset_right = 2425.0
+offset_bottom = 1110.0
+rotation = 0.06
+pivot_offset = Vector2(500, 160)
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_lib_table_shadow")
+
+[node name="LibTableShadow2" type="TextureRect" parent="."]
+modulate = Color(0.164706, 0.12549, 0.2, 0.6)
+layout_mode = 0
+offset_left = 2784.0
+offset_top = 790.0
+offset_right = 3784.0
+offset_bottom = 1110.0
+rotation = 0.06
+pivot_offset = Vector2(500, 160)
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_lib_table_shadow")
 
 [node name="LabCorridorBg1" type="TextureRect" parent="." unique_id=1415826744]
 layout_mode = 0
@@ -884,6 +941,14 @@ position = Vector2(5600, 545)
 [node name="LabKeypad" parent="." unique_id=1096163925 instance=ExtResource("23_labkeypad")]
 position = Vector2(5840, 590)
 
+[node name="LibraryBookshelf" parent="." instance=ExtResource("32_libbookshelf")]
+position = Vector2(707, 419.25)
+object_id = "library_bookshelf_left"
+
+[node name="LibraryBookshelfRight" parent="." instance=ExtResource("34_libbookshelf3")]
+position = Vector2(2918.25, 419.25)
+object_id = "library_bookshelf_right"
+
 [node name="Elevator3F" parent="." unique_id=1442835935 instance=ExtResource("21_elevator")]
 position = Vector2(4015, 2053)
 object_id = "elevator_3f"
@@ -902,6 +967,26 @@ position = Vector2(1250, 550)
 
 [node name="Player" parent="." unique_id=1000725987 instance=ExtResource("3_player")]
 position = Vector2(907, 550)
+
+[node name="LibTableSet" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 1521.0
+offset_top = 574.0
+offset_right = 3108.0
+offset_bottom = 1565.0
+scale = Vector2(0.5, 0.5)
+mouse_filter = 2
+texture = ExtResource("33_kittableset")
+
+[node name="LibTableSet2" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 2880.0
+offset_top = 574.0
+offset_right = 4467.0
+offset_bottom = 1565.0
+scale = Vector2(0.5, 0.5)
+mouse_filter = 2
+texture = ExtResource("33_kittableset")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=183641233]
 position = Vector2(960, 540)
@@ -1232,8 +1317,3 @@ arrow_direction = -1
 object_display_name = "4F Hall"
 object_id = "exit_4f_wing_to_hub"
 interactions = Array[ExtResource("11_response")]([SubResource("Resource_use_tp_4f_hub")])
-
-[node name="ChatGptImageAug23,2026,115029Pm" type="Sprite2D" parent="." unique_id=415309126]
-position = Vector2(715, 797)
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("28_bqcsd")
