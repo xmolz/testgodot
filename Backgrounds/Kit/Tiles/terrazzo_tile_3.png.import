@@ -3,8 +3,8 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c3dn12fujwf2x"
-path.bptc="res://.godot/imported/terrazzo_tile_3.png-a05b8375dbbcb4bb5fb05d07bd53cb95.bptc.ctex"
-path.astc="res://.godot/imported/terrazzo_tile_3.png-a05b8375dbbcb4bb5fb05d07bd53cb95.astc.ctex"
+path.bptc="res://.godot/imported/terrazzo_tile_3.png-a3474a88c3814958f27e1c6c0b062c82.bptc.ctex"
+path.astc="res://.godot/imported/terrazzo_tile_3.png-a3474a88c3814958f27e1c6c0b062c82.astc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
@@ -12,8 +12,8 @@ metadata={
 
 [deps]
 
-source_file="res://Backgrounds/Kit/terrazzo_tile_3.png"
-dest_files=["res://.godot/imported/terrazzo_tile_3.png-a05b8375dbbcb4bb5fb05d07bd53cb95.bptc.ctex", "res://.godot/imported/terrazzo_tile_3.png-a05b8375dbbcb4bb5fb05d07bd53cb95.astc.ctex"]
+source_file="res://Backgrounds/Kit/Tiles/terrazzo_tile_3.png"
+dest_files=["res://.godot/imported/terrazzo_tile_3.png-a3474a88c3814958f27e1c6c0b062c82.bptc.ctex", "res://.godot/imported/terrazzo_tile_3.png-a3474a88c3814958f27e1c6c0b062c82.astc.ctex"]
 
 [params]
 

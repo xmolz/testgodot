@@ -3,8 +3,8 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://ieot6qqljjaj"
-path.bptc="res://.godot/imported/lib_window_frame.png-1ea8156351c1c2246bdd7e991c5ed81c.bptc.ctex"
-path.astc="res://.godot/imported/lib_window_frame.png-1ea8156351c1c2246bdd7e991c5ed81c.astc.ctex"
+path.bptc="res://.godot/imported/lib_window_frame.png-c0a51e0483829cb6ac7aaf9bd7c523b8.bptc.ctex"
+path.astc="res://.godot/imported/lib_window_frame.png-c0a51e0483829cb6ac7aaf9bd7c523b8.astc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
@@ -12,8 +12,8 @@ metadata={
 
 [deps]
 
-source_file="res://Backgrounds/Kit/lib_window_frame.png"
-dest_files=["res://.godot/imported/lib_window_frame.png-1ea8156351c1c2246bdd7e991c5ed81c.bptc.ctex", "res://.godot/imported/lib_window_frame.png-1ea8156351c1c2246bdd7e991c5ed81c.astc.ctex"]
+source_file="res://Backgrounds/Kit/Library/lib_window_frame.png"
+dest_files=["res://.godot/imported/lib_window_frame.png-c0a51e0483829cb6ac7aaf9bd7c523b8.bptc.ctex", "res://.godot/imported/lib_window_frame.png-c0a51e0483829cb6ac7aaf9bd7c523b8.astc.ctex"]
 
 [params]
 

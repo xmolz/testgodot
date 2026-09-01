@@ -1,0 +1,111 @@
+[gd_scene format=3 uid="uid://c8voss_portrait_univ_01"]
+
+[ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactions/interactable.gd" id="1_interactable"]
+[ext_resource type="Shader" uid="uid://bi5b0454i0065" path="res://interactions/actions/interactable_outline.gdshader" id="2_outlineshader"]
+[ext_resource type="Texture2D" uid="uid://cqe0voss_port_01" path="res://Backgrounds/Kit/2F Elevator Hub/voss_portrait.png" id="3_portrait_tex"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_portrait_outline"]
+resource_local_to_scene = true
+shader = ExtResource("2_outlineshader")
+shader_parameter/enable_outline = false
+shader_parameter/outline_color = Color(0.2, 0.85, 1, 1)
+shader_parameter/outline_width = 8.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_outer_frame"]
+bg_color = Color(0.12, 0.13, 0.16, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.32, 0.28, 0.22, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_color = Color(0, 0, 0, 0.45)
+shadow_size = 12
+shadow_offset = Vector2(0, 6)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_inner_mat"]
+bg_color = Color(0.06, 0.07, 0.08, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.18, 0.16, 0.14, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_portrait"]
+size = Vector2(306, 284)
+
+[node name="VossPortrait" type="Area2D"]
+script = ExtResource("1_interactable")
+object_display_name = "Dedication Portrait"
+object_id = "voss_portrait"
+
+[node name="WallShadow" type="Panel" parent="."]
+offset_left = -155.0
+offset_top = -144.0
+offset_right = 155.0
+offset_bottom = 144.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_outer_frame")
+
+[node name="InnerMatting" type="Panel" parent="WallShadow"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = -6.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_inner_mat")
+
+[node name="ObjectSprite" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_portrait_outline")
+scale = Vector2(0.252, 0.252)
+texture = ExtResource("3_portrait_tex")
+
+[node name="HoverGlow" type="Node2D" parent="."]
+visible = false
+
+[node name="GlowTop" type="ColorRect" parent="HoverGlow"]
+offset_left = -157.0
+offset_top = -146.0
+offset_right = 157.0
+offset_bottom = -138.0
+mouse_filter = 2
+color = Color(0.2, 0.85, 1, 1)
+
+[node name="GlowBottom" type="ColorRect" parent="HoverGlow"]
+offset_left = -157.0
+offset_top = 138.0
+offset_right = 157.0
+offset_bottom = 146.0
+mouse_filter = 2
+color = Color(0.2, 0.85, 1, 1)
+
+[node name="GlowLeft" type="ColorRect" parent="HoverGlow"]
+offset_left = -157.0
+offset_top = -146.0
+offset_right = -149.0
+offset_bottom = 146.0
+mouse_filter = 2
+color = Color(0.2, 0.85, 1, 1)
+
+[node name="GlowRight" type="ColorRect" parent="HoverGlow"]
+offset_left = 149.0
+offset_top = -146.0
+offset_right = 157.0
+offset_bottom = 146.0
+mouse_filter = 2
+color = Color(0.2, 0.85, 1, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_portrait")
+
+[node name="WalkToPoint" type="Marker2D" parent="."]
+position = Vector2(0, 180)

@@ -3,8 +3,8 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b2p5si1vqy4m6"
-path.bptc="res://.godot/imported/green_carpet_tile.png-6970a3241badd1b54807e1d5844ab252.bptc.ctex"
-path.astc="res://.godot/imported/green_carpet_tile.png-6970a3241badd1b54807e1d5844ab252.astc.ctex"
+path.bptc="res://.godot/imported/green_carpet_tile.png-3e0f2d2e36bc34cb41f0eb7fd7194074.bptc.ctex"
+path.astc="res://.godot/imported/green_carpet_tile.png-3e0f2d2e36bc34cb41f0eb7fd7194074.astc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
@@ -12,8 +12,8 @@ metadata={
 
 [deps]
 
-source_file="res://Backgrounds/Kit/green_carpet_tile.png"
-dest_files=["res://.godot/imported/green_carpet_tile.png-6970a3241badd1b54807e1d5844ab252.bptc.ctex", "res://.godot/imported/green_carpet_tile.png-6970a3241badd1b54807e1d5844ab252.astc.ctex"]
+source_file="res://Backgrounds/Kit/Tiles/green_carpet_tile.png"
+dest_files=["res://.godot/imported/green_carpet_tile.png-3e0f2d2e36bc34cb41f0eb7fd7194074.bptc.ctex", "res://.godot/imported/green_carpet_tile.png-3e0f2d2e36bc34cb41f0eb7fd7194074.astc.ctex"]
 
 [params]
 

@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1_cp")
 actor_id = "Fiona"
-default_scale = 0.75
+default_scale = 1.0
 expressions = {
-"base": "res://Dev/protag_test.png"
+"base": "res://Dev/fiona_test_sprite.png"
 }

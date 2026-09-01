@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://3j3ukbisa7mk"]
 
 [ext_resource type="Script" uid="uid://bft3laco7nsu5" path="res://levels/TestChapterLevel.gd" id="1_script"]
-[ext_resource type="Texture2D" uid="uid://dldvj1j53uooh" path="res://Backgrounds/Levels/static_hospital_background.PNG" id="2_bg"]
 [ext_resource type="PackedScene" uid="uid://ba2cgdy2q1csl" path="res://characters/player.tscn" id="3_player"]
 [ext_resource type="Script" uid="uid://dljo5cmv24o5h" path="res://Non Interactables/camera_2d.gd" id="4_camera"]
 [ext_resource type="PackedScene" uid="uid://bptirrl2ojkpc" path="res://level_state_manager.tscn" id="5_lsm"]
@@ -28,8 +27,10 @@
 [ext_resource type="Texture2D" uid="uid://b2p5si1vqy4m6" path="res://Backgrounds/Kit/Tiles/green_carpet_tile.png" id="30_kitgreencarpet"]
 [ext_resource type="Texture2D" uid="uid://ieot6qqljjaj" path="res://Backgrounds/Kit/Library/lib_window_frame.png" id="31_kitlibwindow"]
 [ext_resource type="PackedScene" path="res://Interactables/Game World/University/library_bookshelf.tscn" id="32_libbookshelf"]
-[ext_resource type="Texture2D" path="res://Backgrounds/Kit/Library/library_table_chair.png" id="33_kittableset"]
+[ext_resource type="Texture2D" uid="uid://bqvgugyeme1wo" path="res://Backgrounds/Kit/Library/library_table_chair.png" id="33_kittableset"]
 [ext_resource type="PackedScene" path="res://Interactables/Game World/University/library_bookshelf_3.tscn" id="34_libbookshelf3"]
+[ext_resource type="PackedScene" path="res://Interactables/Game World/University/voss_portrait.tscn" id="35_vossportrait"]
+[ext_resource type="Texture2D" uid="uid://hm8s280sxuhj" path="res://Backgrounds/Kit/Tiles/blue_square_tile.png" id="36_kitbluesquare"]
 
 [sub_resource type="Gradient" id="Gradient_kit_lib_wall"]
 offsets = PackedFloat32Array(0, 0.09, 0.16, 0.5, 0.88, 1)
@@ -94,6 +95,51 @@ colors = PackedColorArray(1, 0.9, 0.72, 0.32, 1, 0.9, 0.72, 0.14, 1, 0.9, 0.72, 
 gradient = SubResource("Gradient_lib_win_pool")
 height = 128
 fill_to = Vector2(0, 1)
+
+[sub_resource type="Gradient" id="Gradient_lib_table_shadow"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0, 0.6)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_lib_table_shadow"]
+gradient = SubResource("Gradient_lib_table_shadow")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0, 0)
+
+[sub_resource type="Gradient" id="Gradient_kit_lab_wall"]
+offsets = PackedFloat32Array(0, 0.09, 0.16, 0.5, 0.88, 1)
+colors = PackedColorArray(0.55, 0.6, 0.66, 1, 0.93, 0.96, 0.98, 1, 0.88, 0.92, 0.95, 1, 0.8, 0.85, 0.89, 1, 0.68, 0.74, 0.79, 1, 0.55, 0.62, 0.68, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_kit_lab_wall"]
+gradient = SubResource("Gradient_kit_lab_wall")
+height = 256
+fill_to = Vector2(0, 1)
+
+[sub_resource type="Gradient" id="Gradient_kit_lab_shadow"]
+offsets = PackedFloat32Array(0, 0.5, 1)
+colors = PackedColorArray(0.22, 0.26, 0.36, 0.42, 0.22, 0.26, 0.36, 0.18, 0.22, 0.26, 0.36, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_lab_shadow_up"]
+gradient = SubResource("Gradient_kit_lab_shadow")
+height = 128
+fill_from = Vector2(0, 1)
+fill_to = Vector2(0, 0)
+
+[sub_resource type="Gradient" id="Gradient_kit_lab_floor_shadow"]
+offsets = PackedFloat32Array(0, 0.5, 1)
+colors = PackedColorArray(0.15, 0.2, 0.28, 0.52, 0.15, 0.2, 0.28, 0.22, 0.15, 0.2, 0.28, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_lab_floor_shadow_down"]
+gradient = SubResource("Gradient_kit_lab_floor_shadow")
+height = 128
+fill_to = Vector2(0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_lab_floor_shadow_up"]
+gradient = SubResource("Gradient_kit_lab_floor_shadow")
+height = 128
+fill_from = Vector2(0, 1)
+fill_to = Vector2(0, 0)
 
 [sub_resource type="Gradient" id="Gradient_kit_hall_wall"]
 offsets = PackedFloat32Array(0, 0.09, 0.16, 0.5, 0.88, 1)
@@ -280,17 +326,6 @@ height = 128
 fill_from = Vector2(0, 1)
 fill_to = Vector2(0, 0)
 
-[sub_resource type="Gradient" id="Gradient_lib_table_shadow"]
-interpolation_mode = 2
-offsets = PackedFloat32Array(0, 0.6)
-colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_lib_table_shadow"]
-gradient = SubResource("Gradient_lib_table_shadow")
-fill = 1
-fill_from = Vector2(0.5, 0.5)
-fill_to = Vector2(0, 0)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e4ea3"]
 size = Vector2(3980, 142)
 
@@ -328,6 +363,9 @@ size = Vector2(3840, 1080)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cam_bathroom"]
 size = Vector2(1922, 1080)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lab_floor"]
+size = Vector2(4980, 142)
+
 [sub_resource type="Resource" id="Resource_tp_labcorridor"]
 script = ExtResource("18_teleport")
 target_marker_name = "LabCorridorSpawnPoint"
@@ -338,6 +376,9 @@ script = ExtResource("11_response")
 verb_id = "walk_to"
 actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_tp_labcorridor")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cam_lab"]
+size = Vector2(4800, 1080)
 
 [sub_resource type="Resource" id="Resource_classrooms_blocked_action"]
 script = ExtResource("10_showdialogue")
@@ -533,7 +574,7 @@ offset_bottom = 1030.0
 mouse_filter = 2
 texture = SubResource("GradientTexture2D_lib_win_pool_down")
 
-[node name="LibShelfContactShadow" type="TextureRect" parent="."]
+[node name="LibShelfContactShadow" type="TextureRect" parent="." unique_id=886773073]
 modulate = Color(1, 1, 1, 0.9)
 layout_mode = 0
 offset_left = 150.5
@@ -543,7 +584,7 @@ offset_bottom = 714.0
 mouse_filter = 2
 texture = SubResource("GradientTexture2D_lib_floor_shadow_down")
 
-[node name="LibShelfRightContactShadow" type="TextureRect" parent="."]
+[node name="LibShelfRightContactShadow" type="TextureRect" parent="." unique_id=507806360]
 modulate = Color(1, 1, 1, 0.9)
 layout_mode = 0
 offset_left = 2500.75
@@ -553,7 +594,7 @@ offset_bottom = 714.0
 mouse_filter = 2
 texture = SubResource("GradientTexture2D_lib_floor_shadow_down")
 
-[node name="LibTableShadow" type="TextureRect" parent="."]
+[node name="LibTableShadow" type="TextureRect" parent="." unique_id=771181096]
 modulate = Color(0.164706, 0.12549, 0.2, 0.6)
 layout_mode = 0
 offset_left = 1425.0
@@ -565,7 +606,7 @@ pivot_offset = Vector2(500, 160)
 mouse_filter = 2
 texture = SubResource("GradientTexture2D_lib_table_shadow")
 
-[node name="LibTableShadow2" type="TextureRect" parent="."]
+[node name="LibTableShadow2" type="TextureRect" parent="." unique_id=1982059624]
 modulate = Color(0.164706, 0.12549, 0.2, 0.6)
 layout_mode = 0
 offset_left = 2784.0
@@ -577,23 +618,65 @@ pivot_offset = Vector2(500, 160)
 mouse_filter = 2
 texture = SubResource("GradientTexture2D_lib_table_shadow")
 
-[node name="LabCorridorBg1" type="TextureRect" parent="." unique_id=1415826744]
+[node name="LabKitWall" type="TextureRect" parent="." unique_id=1374309673]
 layout_mode = 0
 offset_left = 4800.0
-offset_right = 8640.0
-offset_bottom = 2160.0
-scale = Vector2(0.5, 0.5)
+offset_right = 9600.0
+offset_bottom = 670.0
 mouse_filter = 2
-texture = ExtResource("2_bg")
+texture = SubResource("GradientTexture2D_kit_lab_wall")
 
-[node name="LabCorridorBg2" type="TextureRect" parent="." unique_id=1876605637]
+[node name="LabKitFloor" type="TextureRect" parent="." unique_id=2131681838]
+texture_repeat = 2
 layout_mode = 0
-offset_left = 6720.0
-offset_right = 10560.0
-offset_bottom = 2160.0
-scale = Vector2(0.5, 0.5)
+offset_left = 4800.0
+offset_top = 670.0
+offset_right = 16800.0
+offset_bottom = 1695.0
+scale = Vector2(0.4, 0.4)
 mouse_filter = 2
-texture = ExtResource("2_bg")
+texture = ExtResource("36_kitbluesquare")
+stretch_mode = 1
+
+[node name="LabKitBaseboard" type="ColorRect" parent="." unique_id=94853361]
+layout_mode = 0
+offset_left = 4800.0
+offset_top = 656.0
+offset_right = 9600.0
+offset_bottom = 672.0
+mouse_filter = 2
+color = Color(0.22, 0.26, 0.32, 1)
+
+[node name="LabKitWallSeamShadow" type="TextureRect" parent="." unique_id=1796884905]
+layout_mode = 0
+offset_left = 4800.0
+offset_top = 520.0
+offset_right = 9600.0
+offset_bottom = 656.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_lab_shadow_up")
+
+[node name="LabKitFloorSeamShadow" type="TextureRect" parent="." unique_id=515133525]
+layout_mode = 0
+offset_left = 4800.0
+offset_top = 672.0
+offset_right = 9600.0
+offset_bottom = 784.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_lab_floor_shadow_down")
+
+[node name="LabKitBottomShadow" type="TextureRect" parent="." unique_id=504234585]
+layout_mode = 0
+offset_left = 4800.0
+offset_top = 920.0
+offset_right = 9600.0
+offset_bottom = 1080.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_lab_floor_shadow_up")
+
+[node name="LabKitLightSpillLeft" parent="." unique_id=221416157 instance=ExtResource("20_lightspill")]
+position = Vector2(4800, 540)
+peak_alpha = 0.5
 
 [node name="HubKitWall" type="TextureRect" parent="." unique_id=1162469883]
 layout_mode = 0
@@ -935,17 +1018,20 @@ texture = SubResource("GradientTexture2D_faculty_green_floor_shadow_up")
 position = Vector2(1015, 2053)
 metadata/floor_id = "2F"
 
+[node name="VossPortrait" parent="." unique_id=1741258544 instance=ExtResource("35_vossportrait")]
+position = Vector2(1520, 1830)
+
 [node name="LabDoor" parent="." unique_id=990158649 instance=ExtResource("22_labdoor")]
 position = Vector2(5600, 545)
 
 [node name="LabKeypad" parent="." unique_id=1096163925 instance=ExtResource("23_labkeypad")]
 position = Vector2(5840, 590)
 
-[node name="LibraryBookshelf" parent="." instance=ExtResource("32_libbookshelf")]
+[node name="LibraryBookshelf" parent="." unique_id=378586800 instance=ExtResource("32_libbookshelf")]
 position = Vector2(707, 419.25)
 object_id = "library_bookshelf_left"
 
-[node name="LibraryBookshelfRight" parent="." instance=ExtResource("34_libbookshelf3")]
+[node name="LibraryBookshelfRight" parent="." unique_id=842132449 instance=ExtResource("34_libbookshelf3")]
 position = Vector2(2918.25, 419.25)
 object_id = "library_bookshelf_right"
 
@@ -968,7 +1054,7 @@ position = Vector2(1250, 550)
 [node name="Player" parent="." unique_id=1000725987 instance=ExtResource("3_player")]
 position = Vector2(907, 550)
 
-[node name="LibTableSet" type="TextureRect" parent="."]
+[node name="LibTableSet" type="TextureRect" parent="." unique_id=511418702]
 layout_mode = 0
 offset_left = 1521.0
 offset_top = 574.0
@@ -978,7 +1064,7 @@ scale = Vector2(0.5, 0.5)
 mouse_filter = 2
 texture = ExtResource("33_kittableset")
 
-[node name="LibTableSet2" type="TextureRect" parent="."]
+[node name="LibTableSet2" type="TextureRect" parent="." unique_id=1764580329]
 layout_mode = 0
 offset_left = 2880.0
 offset_top = 574.0
@@ -1076,8 +1162,8 @@ shape = SubResource("RectangleShape2D_cam_bathroom")
 [node name="LabCorridorFloor" type="StaticBody2D" parent="." unique_id=125227047]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LabCorridorFloor" unique_id=1372963526]
-position = Vector2(6720, 846)
-shape = SubResource("RectangleShape2D_e4ea3")
+position = Vector2(7200, 846)
+shape = SubResource("RectangleShape2D_lab_floor")
 
 [node name="LabCorridorLeftWall" type="StaticBody2D" parent="." unique_id=605344397]
 
@@ -1088,7 +1174,7 @@ shape = SubResource("RectangleShape2D_wall")
 [node name="LabCorridorRightWall" type="StaticBody2D" parent="." unique_id=46786504]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LabCorridorRightWall" unique_id=1547847352]
-position = Vector2(8700, 300)
+position = Vector2(9660, 300)
 shape = SubResource("RectangleShape2D_wall")
 
 [node name="LabCorridorSpawnPoint" type="Marker2D" parent="." unique_id=170156906]
@@ -1111,17 +1197,17 @@ interactions = Array[ExtResource("11_response")]([SubResource("Resource_use_tp_b
 script = ExtResource("19_camregion")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LabCorridorCameraRegion" unique_id=1157151278]
-position = Vector2(6720, 540)
-shape = SubResource("RectangleShape2D_cam_strip")
+position = Vector2(7200, 540)
+shape = SubResource("RectangleShape2D_cam_lab")
 
 [node name="HubLightSpillLeft" parent="." unique_id=1756740394 instance=ExtResource("20_lightspill")]
 position = Vector2(200, 2040)
-peak_alpha = 0.116
+peak_alpha = 0.5
 
 [node name="HubLightSpillRight" parent="." unique_id=1727680977 instance=ExtResource("20_lightspill")]
 position = Vector2(2122, 2040)
 from_left = false
-peak_alpha = 0.2
+peak_alpha = 0.5
 
 [node name="Elevator2FSpawnPoint" type="Marker2D" parent="." unique_id=1005057453]
 position = Vector2(1015, 2153)
