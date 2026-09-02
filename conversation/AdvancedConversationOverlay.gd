@@ -275,7 +275,7 @@ func actor_enter(actor_id: String, emotion: String, slot_name: String):
 	rect.scale = Vector2(final_scale, final_scale)
 
 	# set bottom-center pivot
-	rect.pivot_offset = Vector2(tex_size.x / 2.0, tex_size.y)
+	rect.pivot_offset = Vector2(tex_size.x * profile.canvas_anchor_x, tex_size.y)
 
 	actor_stage.add_child(rect)
 	active_actors[actor_id] = rect
@@ -379,7 +379,7 @@ func actor_walk_in(actor_id: String, emotion: String, slot_name: String, scale_m
 	var final_scale = base_scale * profile.default_scale * scale_modifier
 
 	rect.scale = Vector2(final_scale, final_scale)
-	rect.pivot_offset = Vector2(tex_size.x / 2.0, tex_size.y)
+	rect.pivot_offset = Vector2(tex_size.x * profile.canvas_anchor_x, tex_size.y)
 
 	actor_stage.add_child(rect)
 	active_actors[actor_id] = rect
@@ -497,7 +497,7 @@ func actor_dash_in(actor_id: String, emotion: String, slot_name: String, scale_m
 	var final_scale = base_scale * profile.default_scale * scale_modifier
 
 	rect.scale = Vector2(final_scale, final_scale)
-	rect.pivot_offset = Vector2(tex_size.x / 2.0, tex_size.y)
+	rect.pivot_offset = Vector2(tex_size.x * profile.canvas_anchor_x, tex_size.y)
 
 	actor_stage.add_child(rect)
 	active_actors[actor_id] = rect
@@ -541,7 +541,7 @@ func actor_peek_in(actor_id: String, emotion: String, side: String = "right"):
 	var final_scale = base_scale * profile.default_scale
 
 	rect.scale = Vector2(final_scale, final_scale)
-	rect.pivot_offset = Vector2(tex_size.x / 2.0, tex_size.y)
+	rect.pivot_offset = Vector2(tex_size.x * profile.canvas_anchor_x, tex_size.y)
 	actor_stage.add_child(rect)
 	active_actors[actor_id] = rect
 
@@ -588,7 +588,7 @@ func show_dialogue_ui():
 
 var _original_actor_transforms = {}
 
-func actor_focus(actor_id: String, zoom_modifier: float = 2.0, duration: float = 0.01, face_x_ratio: float = 0.5):
+func actor_focus(actor_id: String, zoom_modifier: float = 2.0, duration: float = 0.01, face_x_ratio: float = -1.0):
 	if not active_actors.has(actor_id): return
 
 	if _original_actor_transforms.is_empty():
@@ -608,7 +608,9 @@ func actor_focus(actor_id: String, zoom_modifier: float = 2.0, duration: float =
 	var target_scale = Vector2(target_scale_mag, target_scale_mag)
 	if rect.scale.x < 0: target_scale.x = -target_scale.x
 
-	var local_face = Vector2(tex_size.x * face_x_ratio, tex_size.y * 0.2)
+	# -1.0 = "use the profile's measured anchor". an explicit ratio from a dialogue still wins.
+	var fx: float = face_x_ratio if face_x_ratio >= 0.0 else profile.canvas_anchor_x
+	var local_face = Vector2(tex_size.x * fx, tex_size.y * profile.face_y_ratio)
 	var screen_focus_point = Vector2(screen_size.x * 0.5, screen_size.y * 0.35)
 	var target_pos = screen_focus_point - rect.pivot_offset - (local_face - rect.pivot_offset) * target_scale
 
@@ -803,7 +805,7 @@ func actor_show(actor_id: String, emotion: String, slot_name: String):
 	var final_scale = base_scale * profile.default_scale
 
 	rect.scale = Vector2(final_scale, final_scale)
-	rect.pivot_offset = Vector2(tex_size.x / 2.0, tex_size.y)
+	rect.pivot_offset = Vector2(tex_size.x * profile.canvas_anchor_x, tex_size.y)
 
 	actor_stage.add_child(rect)
 	active_actors[actor_id] = rect

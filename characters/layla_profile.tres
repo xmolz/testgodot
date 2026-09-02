@@ -6,6 +6,8 @@
 script = ExtResource("6_ckiok")
 actor_id = "Layla"
 default_scale = 1.0
+canvas_anchor_x = 0.4927
+face_y_ratio = 0.36
 expressions = {
 "angry_1": "res://Sprites/characters/layla/layla_angry_1.png",
 "angry_2": "res://Sprites/characters/layla/layla_angry_2.png",

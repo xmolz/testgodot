@@ -31,6 +31,7 @@
 [ext_resource type="PackedScene" path="res://Interactables/Game World/University/library_bookshelf_3.tscn" id="34_libbookshelf3"]
 [ext_resource type="PackedScene" path="res://Interactables/Game World/University/voss_portrait.tscn" id="35_vossportrait"]
 [ext_resource type="Texture2D" uid="uid://hm8s280sxuhj" path="res://Backgrounds/Kit/Tiles/blue_square_tile.png" id="36_kitbluesquare"]
+[ext_resource type="PackedScene" path="res://Interactables/Game World/University/faculty_door.tscn" id="37_facultydoor"]
 
 [sub_resource type="Gradient" id="Gradient_kit_lib_wall"]
 offsets = PackedFloat32Array(0, 0.09, 0.16, 0.5, 0.88, 1)
@@ -1035,6 +1036,9 @@ object_id = "library_bookshelf_left"
 position = Vector2(2918.25, 419.25)
 object_id = "library_bookshelf_right"
 
+[node name="FacultyDoorTemplate" parent="." instance=ExtResource("37_facultydoor")]
+position = Vector2(1400, 4922)
+
 [node name="Elevator3F" parent="." unique_id=1442835935 instance=ExtResource("21_elevator")]
 position = Vector2(4015, 2053)
 object_id = "elevator_3f"
@@ -1319,6 +1323,9 @@ shape = SubResource("RectangleShape2D_wall")
 
 [node name="Floor4LibrarySpawnPoint" type="Marker2D" parent="." unique_id=553432375]
 position = Vector2(3550, 5200)
+
+[node name="FacultyDoorSpawnPoint" type="Marker2D" parent="."]
+position = Vector2(1400, 5200)
 
 [node name="Floor4LibCameraRegion" type="Area2D" parent="." unique_id=1588191957]
 script = ExtResource("19_camregion")

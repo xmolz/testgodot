@@ -1,0 +1,55 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://interactions/interactable.gd" id="1_interactable"]
+[ext_resource type="Material" uid="uid://dww3d0txyl18g" path="res://interactions/actions/interactable_outline.tres" id="2_outline"]
+[ext_resource type="Script" path="res://interactions/actions/SwingDoorTeleportAction.gd" id="3_useaction"]
+[ext_resource type="Script" path="res://data/InteractionResponse.gd" id="11_response"]
+[ext_resource type="Script" path="res://interactions/action.gd" id="12_action"]
+
+[sub_resource type="Gradient" id="Gradient_facdoor"]
+colors = PackedColorArray(0.29, 0.196, 0.149, 1, 0.29, 0.196, 0.149, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_facdoor"]
+gradient = SubResource("Gradient_facdoor")
+width = 260
+height = 500
+
+[sub_resource type="Gradient" id="Gradient_facdoor_void"]
+colors = PackedColorArray(0.07, 0.06, 0.08, 1, 0.07, 0.06, 0.08, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_facdoor_void"]
+gradient = SubResource("Gradient_facdoor_void")
+width = 260
+height = 500
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_facdoor"]
+size = Vector2(260, 500)
+
+[sub_resource type="Resource" id="Resource_facdoor_use_action"]
+script = ExtResource("3_useaction")
+target_marker_name = "FacultyDoorSpawnPoint"
+
+[sub_resource type="Resource" id="Resource_facdoor_use"]
+script = ExtResource("11_response")
+verb_id = "use"
+actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_facdoor_use_action")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[node name="FacultyDoor" type="Area2D"]
+script = ExtResource("1_interactable")
+object_display_name = "Office Door"
+object_id = "faculty_door_template"
+interactions = Array[ExtResource("11_response")]([SubResource("Resource_facdoor_use")])
+
+[node name="DoorwayVoid" type="Sprite2D" parent="."]
+texture = SubResource("GradientTexture2D_facdoor_void")
+
+[node name="ObjectSprite" type="Sprite2D" parent="."]
+material = ExtResource("2_outline")
+texture = SubResource("GradientTexture2D_facdoor")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_facdoor")
+
+[node name="WalkToPoint" type="Marker2D" parent="."]
+position = Vector2(0, 270)
