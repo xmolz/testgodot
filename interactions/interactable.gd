@@ -22,6 +22,9 @@ enum ApproachSide { ANY, LEFT_SIDE, RIGHT_SIDE }
 @export var interaction_location: InteractionLocation = InteractionLocation.WORLD
 @export var approach_side: ApproachSide = ApproachSide.ANY
 @export var hover_prefix: String = "Walk to"
+# navigation zones set this: the sentence line reads "<hover_prefix> <name>" no
+# matter which verb (or item) is selected, because they route every verb to walk_to.
+@export var hover_ignores_verb: bool = false
 
 
 # ******************(the system is now the only system)
@@ -54,6 +57,12 @@ func _ready():
 	mouse_exited.connect(_on_mouse_exited)
 	input_event.connect(_on_input_event)
 	self_destruct_requested.connect(queue_free)
+
+	# conversations read which side the player approached from. recorded here for every
+	# CHARACTER so a new talkable NPC needs no script of its own (layla_character.gd
+	# keeps its older layla_player_on_left flag alongside this one).
+	if category == ObjectCategory.CHARACTER:
+		interaction_started.connect(_record_player_side)
 
 	# save the material and remove it to save gpu power
 	var sprite = _find_object_sprite()
@@ -245,6 +254,10 @@ func does_verb_require_walk(verb_id_to_check: String, item_data_used: ItemData =
 	# default safety net: if we
 	return true
 
+
+func _record_player_side() -> void:
+	if GameManager and is_instance_valid(GameManager.player_node):
+		Flags.set_level_flag("conversation_player_on_left", GameManager.player_node.global_position.x < global_position.x)
 
 func notify_interaction_pending():
 	interaction_pending.emit()

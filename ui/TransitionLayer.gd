@@ -40,6 +40,18 @@ var _loading_label: Label = null
 var _loading_tween: Tween = null
 var _loading_shown_at_ms: int = 0
 
+# ----------- slide wipe (doorless same-floor exits). one black panel with soft
+# edges sweeps across in the direction of travel; the teleport lands while its
+# opaque core covers the screen. cover accelerates, reveal decelerates, so the
+# two halves read as a single pass.
+const WIPE_COVER_TIME: float = 0.22
+const WIPE_HOLD: float = 0.05
+const WIPE_REVEAL_TIME: float = 0.28
+const WIPE_SOFT_EDGE: float = 0.12   # fraction of the panel width that is feathered, each side
+const WIPE_SFX: String = "room_swish"  # registered later by the developer; guarded
+
+var _wipe_panel: TextureRect = null
+
 @onready var left_shutter = get_node_or_null("LeftShutter")
 @onready var right_shutter = get_node_or_null("RightShutter")
 @onready var iris_rect = get_node_or_null("IrisColorRect")
@@ -62,6 +74,24 @@ func _ready():
 	_loading_label.position.y -= 80
 	_loading_label.visible = false
 	add_child(_loading_label)
+
+	# slide-wipe panel: built here so TransitionLayer.tscn needs no edit.
+	var wipe_gradient := Gradient.new()
+	wipe_gradient.offsets = PackedFloat32Array([0.0, WIPE_SOFT_EDGE, 1.0 - WIPE_SOFT_EDGE, 1.0])
+	wipe_gradient.colors = PackedColorArray([Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 1), Color(0, 0, 0, 0)])
+	var wipe_texture := GradientTexture2D.new()
+	wipe_texture.gradient = wipe_gradient
+	wipe_texture.width = 256
+	wipe_texture.height = 4
+	_wipe_panel = TextureRect.new()
+	_wipe_panel.name = "SlideWipePanel"
+	_wipe_panel.texture = wipe_texture
+	_wipe_panel.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_wipe_panel.stretch_mode = TextureRect.STRETCH_SCALE
+	_wipe_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_wipe_panel.process_mode = Node.PROCESS_MODE_ALWAYS
+	_wipe_panel.visible = false
+	add_child(_wipe_panel)
 
 func _process(delta: float) -> void:
 	if _portal_active and is_instance_valid(_portal_rect) and _portal_mat:
@@ -128,6 +158,54 @@ func play_transition_sequence(hold_seconds: float = 1.2):
 	_set_gm_transitioning(false)
 	emit_signal("transition_finished")
 
+
+# ***************(1b. slide wipe (doorless same-floor exits; direction +1 right, -1 left))
+# same signal contract as play_transition_sequence: transition_halfway when the
+# screen is fully covered (teleport here), transition_finished after the reveal.
+func play_slide_wipe(direction: int = 1, cover_time: float = WIPE_COVER_TIME, reveal_time: float = WIPE_REVEAL_TIME):
+	if not is_instance_valid(_wipe_panel):
+		# no panel: keep the caller's contract alive with the shutters.
+		play_transition_sequence(0.1)
+		return
+
+	_set_gm_transitioning(true)
+
+	var vp_size: Vector2 = get_viewport().get_visible_rect().size
+	var dir: float = -1.0 if direction < 0 else 1.0
+	# opaque core must span the whole viewport when centred: w * (1 - 2e) = vp.x
+	var panel_w: float = vp_size.x / (1.0 - 2.0 * WIPE_SOFT_EDGE)
+	var start_x: float = -panel_w if dir > 0.0 else vp_size.x
+	var end_x: float = vp_size.x if dir > 0.0 else -panel_w
+	var cover_x: float = (vp_size.x - panel_w) * 0.5
+
+	_wipe_panel.size = Vector2(panel_w, vp_size.y)
+	_wipe_panel.position = Vector2(start_x, 0.0)
+	_wipe_panel.visible = true
+	_wipe_panel.move_to_front()
+
+	_sfx_if_registered(WIPE_SFX)
+
+	var cover = create_tween()
+	cover.tween_property(_wipe_panel, "position:x", cover_x, cover_time).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	await cover.finished
+
+	emit_signal("transition_halfway")
+
+	# one frame for the teleport + camera snap to land, then a beat under black
+	await get_tree().process_frame
+	await get_tree().create_timer(WIPE_HOLD).timeout
+
+	var reveal = create_tween()
+	reveal.tween_property(_wipe_panel, "position:x", end_x, reveal_time).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	await reveal.finished
+
+	_wipe_panel.visible = false
+	_set_gm_transitioning(false)
+	emit_signal("transition_finished")
+
+func _sfx_if_registered(sound_name: String) -> void:
+	if is_instance_valid(SoundManager) and SoundManager.sfx_library.has(sound_name):
+		SoundManager.play_sfx(sound_name)
 
 # ************[2. iris "eye" transitions (used for loading states)]
 func play_iris_close(duration: float = 1.0):

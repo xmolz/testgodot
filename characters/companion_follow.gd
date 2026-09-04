@@ -13,6 +13,8 @@ signal detached
 
 # level-facing switch: find the "player" group node on ready and follow it.
 @export var auto_attach_to_player: bool = false
+# actor id the conversation overlay stages in the back row while this follower is attached.
+@export var companion_actor_id: String = "Layla"
 
 # stop once within this x-gap of the target...
 @export var follow_gap: float = 170.0
@@ -44,6 +46,7 @@ func _ready() -> void:
 	# follower has x-only pathing and rooms are separated by walls, so she comes along
 	# by snapping instead of pathing into a wall and getting stranded.
 	Events.room_changed.connect(_on_room_changed)
+	add_to_group("companion_followers")
 	if auto_attach_to_player:
 		_try_auto_attach()
 

@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://g3q4h4ckiegu"
+path="res://.godot/imported/guard_lab.dialogue-94bff47acd6d5793866709e832f7b344.tres"
+
+[deps]
+
+source_file="res://dialogue/guard_lab.dialogue"
+dest_files=["res://.godot/imported/guard_lab.dialogue-94bff47acd6d5793866709e832f7b344.tres"]
+
+[params]
+
+defaults=true

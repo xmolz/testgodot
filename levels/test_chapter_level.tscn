@@ -32,6 +32,8 @@
 [ext_resource type="PackedScene" path="res://Interactables/Game World/University/voss_portrait.tscn" id="35_vossportrait"]
 [ext_resource type="Texture2D" uid="uid://hm8s280sxuhj" path="res://Backgrounds/Kit/Tiles/blue_square_tile.png" id="36_kitbluesquare"]
 [ext_resource type="PackedScene" path="res://Interactables/Game World/University/faculty_door.tscn" id="37_facultydoor"]
+[ext_resource type="Script" path="res://interactions/actions/SlideWipeTeleportAction.gd" id="38_slidewipe"]
+[ext_resource type="PackedScene" path="res://characters/guard_character.tscn" id="39_guard"]
 
 [sub_resource type="Gradient" id="Gradient_kit_lib_wall"]
 offsets = PackedFloat32Array(0, 0.09, 0.16, 0.5, 0.88, 1)
@@ -337,9 +339,8 @@ size = Vector2(80, 1400)
 size = Vector2(2400, 76)
 
 [sub_resource type="Resource" id="Resource_tp_bathroom"]
-script = ExtResource("18_teleport")
+script = ExtResource("38_slidewipe")
 target_marker_name = "BathroomSpawnPoint"
-metadata/_custom_type_script = "uid://dm3vji871klli"
 
 [sub_resource type="Resource" id="Resource_use_tp_bathroom"]
 script = ExtResource("11_response")
@@ -348,9 +349,8 @@ actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_tp_b
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
 [sub_resource type="Resource" id="Resource_tp_hallway"]
-script = ExtResource("18_teleport")
+script = ExtResource("38_slidewipe")
 target_marker_name = "HallwaySpawnPoint"
-metadata/_custom_type_script = "uid://dm3vji871klli"
 
 [sub_resource type="Resource" id="Resource_use_tp_hallway"]
 script = ExtResource("11_response")
@@ -368,9 +368,8 @@ size = Vector2(1922, 1080)
 size = Vector2(4980, 142)
 
 [sub_resource type="Resource" id="Resource_tp_labcorridor"]
-script = ExtResource("18_teleport")
+script = ExtResource("38_slidewipe")
 target_marker_name = "LabCorridorSpawnPoint"
-metadata/_custom_type_script = "uid://dm3vji871klli"
 
 [sub_resource type="Resource" id="Resource_use_tp_labcorridor"]
 script = ExtResource("11_response")
@@ -394,9 +393,8 @@ actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_clas
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
 [sub_resource type="Resource" id="Resource_tp_3f_corr"]
-script = ExtResource("18_teleport")
+script = ExtResource("38_slidewipe")
 target_marker_name = "Floor3CorridorSpawnPoint"
-metadata/_custom_type_script = "uid://dm3vji871klli"
 
 [sub_resource type="Resource" id="Resource_use_tp_3f_corr"]
 script = ExtResource("11_response")
@@ -405,9 +403,8 @@ actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_tp_3
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
 [sub_resource type="Resource" id="Resource_tp_3f_hub"]
-script = ExtResource("18_teleport")
+script = ExtResource("38_slidewipe")
 target_marker_name = "Floor3HubSpawnPoint"
-metadata/_custom_type_script = "uid://dm3vji871klli"
 
 [sub_resource type="Resource" id="Resource_use_tp_3f_hub"]
 script = ExtResource("11_response")
@@ -416,9 +413,8 @@ actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_tp_3
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
 [sub_resource type="Resource" id="Resource_tp_4f_lib"]
-script = ExtResource("18_teleport")
+script = ExtResource("38_slidewipe")
 target_marker_name = "Floor4LibrarySpawnPoint"
-metadata/_custom_type_script = "uid://dm3vji871klli"
 
 [sub_resource type="Resource" id="Resource_use_tp_4f_lib"]
 script = ExtResource("11_response")
@@ -427,9 +423,8 @@ actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_tp_4
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
 [sub_resource type="Resource" id="Resource_tp_4f_corr"]
-script = ExtResource("18_teleport")
+script = ExtResource("38_slidewipe")
 target_marker_name = "Floor4CorridorSpawnPoint"
-metadata/_custom_type_script = "uid://dm3vji871klli"
 
 [sub_resource type="Resource" id="Resource_use_tp_4f_corr"]
 script = ExtResource("11_response")
@@ -438,9 +433,8 @@ actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_tp_4
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
 [sub_resource type="Resource" id="Resource_tp_4f_hub"]
-script = ExtResource("18_teleport")
+script = ExtResource("38_slidewipe")
 target_marker_name = "Floor4HubSpawnPoint"
-metadata/_custom_type_script = "uid://dm3vji871klli"
 
 [sub_resource type="Resource" id="Resource_use_tp_4f_hub"]
 script = ExtResource("11_response")
@@ -1028,6 +1022,9 @@ position = Vector2(5600, 545)
 [node name="LabKeypad" parent="." unique_id=1096163925 instance=ExtResource("23_labkeypad")]
 position = Vector2(5840, 590)
 
+[node name="LabGuard" parent="." instance=ExtResource("39_guard")]
+position = Vector2(5380, 775)
+
 [node name="LibraryBookshelf" parent="." unique_id=378586800 instance=ExtResource("32_libbookshelf")]
 position = Vector2(707, 419.25)
 object_id = "library_bookshelf_left"
@@ -1036,8 +1033,8 @@ object_id = "library_bookshelf_left"
 position = Vector2(2918.25, 419.25)
 object_id = "library_bookshelf_right"
 
-[node name="FacultyDoorTemplate" parent="." instance=ExtResource("37_facultydoor")]
-position = Vector2(1400, 4922)
+[node name="FacultyDoorTemplate" parent="." unique_id=224867791 instance=ExtResource("37_facultydoor")]
+position = Vector2(1400, 4926)
 
 [node name="Elevator3F" parent="." unique_id=1442835935 instance=ExtResource("21_elevator")]
 position = Vector2(4015, 2053)
@@ -1324,7 +1321,7 @@ shape = SubResource("RectangleShape2D_wall")
 [node name="Floor4LibrarySpawnPoint" type="Marker2D" parent="." unique_id=553432375]
 position = Vector2(3550, 5200)
 
-[node name="FacultyDoorSpawnPoint" type="Marker2D" parent="."]
+[node name="FacultyDoorSpawnPoint" type="Marker2D" parent="." unique_id=508995474]
 position = Vector2(1400, 5200)
 
 [node name="Floor4LibCameraRegion" type="Area2D" parent="." unique_id=1588191957]

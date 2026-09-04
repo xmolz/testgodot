@@ -79,6 +79,21 @@ var _discard_when_loaded: Dictionary = {}
 var _has_emitted_ready: bool = false
 const LOOKAHEAD_DEPTH: int = 20
 
+# ----------- party staging: protagonist + following companion share one side.
+# the companion stands in a back row (outward, behind, smaller, dimmer) and steps
+# forward while she is the one speaking. numbers are first guesses — tune by feel.
+const PROTAGONIST_ACTOR_ID: String = "Fiona"
+const PARTY_BACK_ROW_SCALE: float = 0.86
+const PARTY_FRONT_STEP_SCALE: float = 0.94
+const PARTY_BACK_ROW_DIM := Color(0.8, 0.8, 0.8, 1.0)
+const PARTY_BACK_ROW_OFFSET: float = 230.0   # px outward of the protagonist's slot
+const PARTY_STANCE_TIME: float = 0.2
+const PARTY_STAGED_FLAG: String = "party_companion_staged"   # level flag dialogues can branch on
+
+var _party_companion_id: String = ""
+var _party_companion_front: bool = false
+var _party_stance_tween: Tween = null
+
 
 func _ready():
 	if is_instance_valid(darken_backdrop):
@@ -577,6 +592,111 @@ func actor_enter_from_peek(actor_id: String, target_slot_name: String, duration:
 	var tween = create_tween().set_parallel(true)
 	tween.tween_property(rect, "position", target_pos, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 	tween.tween_property(rect, "rotation_degrees", 0.0, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+
+# ---------------------------------------------------------------------------
+# party staging. one dialogue line replaces the per-side if/else: reads the
+# conversation_player_on_left flag (interactable.gd sets it for every CHARACTER on
+# interaction_started), stages the protagonist and the NPC on opposite sides with the
+# stage's facing convention (sprites face right; whoever stands on the right is
+# flipped), then — if a companion is currently following — puts her in the back row
+# on our side. sets PARTY_STAGED_FLAG so the dialogue can branch on her presence.
+func stage_party(npc_id: String, npc_emotion: String = "base", with_companion: bool = true):
+	var on_left: bool = Flags.get_level_flag("conversation_player_on_left") == true
+	var our_slot: String = "left" if on_left else "right"
+	var npc_slot: String = "right" if on_left else "left"
+
+	await actor_enter(PROTAGONIST_ACTOR_ID, "base", our_slot)
+	await actor_enter(npc_id, npc_emotion, npc_slot)
+	if on_left:
+		actor_flip(npc_id, true)
+	else:
+		actor_flip(PROTAGONIST_ACTOR_ID, true)
+
+	_party_companion_id = ""
+	_party_companion_front = false
+	var staged: bool = false
+	var companion_id: String = _following_companion_actor_id() if with_companion else ""
+	if not companion_id.is_empty() and get_profile(companion_id) != null:
+		await actor_enter(companion_id, "base", our_slot)
+		if active_actors.has(companion_id):
+			var rect: TextureRect = active_actors[companion_id]
+			if not on_left:
+				actor_flip(companion_id, true)
+			# back row. x only: actor_enter's own slide-up tween owns position:y, and the
+			# pivot is bottom-anchored so scaling keeps her feet on the stage line.
+			rect.position.x += -PARTY_BACK_ROW_OFFSET if on_left else PARTY_BACK_ROW_OFFSET
+			rect.scale = _party_scale_for(companion_id, PARTY_BACK_ROW_SCALE, rect.scale.x < 0.0)
+			rect.modulate.r = PARTY_BACK_ROW_DIM.r
+			rect.modulate.g = PARTY_BACK_ROW_DIM.g
+			rect.modulate.b = PARTY_BACK_ROW_DIM.b
+			actor_stage.move_child(rect, 0)
+			_party_companion_id = companion_id
+			staged = true
+	Flags.set_level_flag(PARTY_STAGED_FLAG, staged)
+
+
+# dialogue override for the automatic speaker stance: do actor_stance("Layla", "front").
+func actor_stance(actor_id: String, stance: String = "front"):
+	if actor_id != _party_companion_id:
+		return
+	_set_companion_front(stance.to_lower() == "front")
+
+
+func _apply_speaker_stance(speaker: String) -> void:
+	if _party_companion_id.is_empty():
+		return
+	var speaker_name: String = speaker.strip_edges()
+	if speaker_name.is_empty():
+		return   # narration: leave the stance alone
+	_set_companion_front(speaker_name == _party_companion_id)
+
+
+func _set_companion_front(front: bool) -> void:
+	if _party_companion_id.is_empty() or not active_actors.has(_party_companion_id):
+		return
+	if front == _party_companion_front:
+		return
+	if not _original_actor_transforms.is_empty():
+		return   # a close-up (actor_focus) owns every transform until unfocus
+	_party_companion_front = front
+
+	var rect: TextureRect = active_actors[_party_companion_id]
+	var factor: float = PARTY_FRONT_STEP_SCALE if front else PARTY_BACK_ROW_SCALE
+	var target_scale: Vector2 = _party_scale_for(_party_companion_id, factor, rect.scale.x < 0.0)
+	var target_tint: Color = Color.WHITE if front else PARTY_BACK_ROW_DIM
+	actor_stage.move_child(rect, -1 if front else 0)
+
+	if _party_stance_tween and _party_stance_tween.is_valid():
+		_party_stance_tween.kill()
+	_party_stance_tween = create_tween().set_parallel(true)
+	_party_stance_tween.tween_property(rect, "scale", target_scale, PARTY_STANCE_TIME).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	# rgb only — actor_enter's fade-in may still own modulate:a
+	_party_stance_tween.tween_property(rect, "modulate:r", target_tint.r, PARTY_STANCE_TIME).set_trans(Tween.TRANS_SINE)
+	_party_stance_tween.tween_property(rect, "modulate:g", target_tint.g, PARTY_STANCE_TIME).set_trans(Tween.TRANS_SINE)
+	_party_stance_tween.tween_property(rect, "modulate:b", target_tint.b, PARTY_STANCE_TIME).set_trans(Tween.TRANS_SINE)
+
+
+func _party_scale_for(actor_id: String, factor: float, flipped: bool) -> Vector2:
+	var rect: TextureRect = active_actors[actor_id]
+	var profile = get_profile(actor_id)
+	var default_scale: float = profile.default_scale if profile else 1.0
+	var base: float = float(get_viewport().get_visible_rect().size.y) / float(rect.texture.get_size().y) * default_scale * factor
+	return Vector2(-base if flipped else base, base)
+
+
+# the follower that is attached right now, if any. CompanionFollow joins the
+# companion_followers group and carries companion_actor_id (default "Layla").
+func _following_companion_actor_id() -> String:
+	var tree := get_tree()
+	if tree == null:
+		return ""
+	for follower in tree.get_nodes_in_group("companion_followers"):
+		if follower.has_method("is_attached") and follower.is_attached():
+			var id = follower.get("companion_actor_id")
+			if id is String and not id.is_empty():
+				return id
+	return ""
+
 
 func hide_dialogue_ui():
 	if current_balloon and current_balloon.has_method("set_ui_hidden"):
@@ -1146,6 +1266,7 @@ func _on_got_dialogue(line: DialogueLine):
 		offset = Vector2.ZERO
 
 	_update_predictive_cache(line)
+	_apply_speaker_stance(line.character)
 
 
 # *************************[predictive preloader subsystem]

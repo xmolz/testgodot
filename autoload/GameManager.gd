@@ -620,7 +620,12 @@ func update_sentence_line_ui():
 	var line_text = ""
 	var bubble_text = ""
 
-	if current_verb_id != "":
+	# exits are navigation, not objects: "Go to <Room>" regardless of the selected
+	# verb or item (room_exit_sign routes every verb to walk_to anyway).
+	if hovered_interactable and hovered_interactable.interaction_location == Interactable.InteractionLocation.WORLD and hovered_interactable.hover_ignores_verb:
+		var exit_colored = "[color=#33d9ff]%s[/color]" % hovered_interactable.object_display_name
+		line_text = hovered_interactable.hover_prefix + " " + exit_colored
+	elif current_verb_id != "":
 		var verb_data = Verbs.get_verb_data_by_id(current_verb_id)
 		var verb_text = verb_data.display_text if verb_data else current_verb_id
 

@@ -4,7 +4,7 @@
 # arrow sprite stays as the tap affordance. It IS an interactable (hover outline,
 # display name, verbs, walk-to all inherited), so navigation is wired per instance
 # the same way as the hub bathroom door: an InteractionResponse on "use" carrying
-# a TeleportAction to a spawn marker. The cursor arrow itself is driven by
+# a SlideWipeTeleportAction to a spawn marker. The cursor arrow itself is driven by
 # GameManager's resolved hover (see _update_top_hovered_object), NOT by this node,
 # so anything standing inside the zone that wins the hover takes the cursor back.
 extends Interactable
@@ -24,6 +24,7 @@ const ZONE_OUTWARD_SHIFT := 120.0
 
 func _ready():
 	hover_prefix = "Go to"
+	hover_ignores_verb = true
 	super._ready()
 
 	# the RectangleShape2D resource is shared by every sign instance — duplicate

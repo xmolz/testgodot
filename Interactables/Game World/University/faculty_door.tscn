@@ -1,29 +1,11 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://hq61qnbtv16s"]
 
-[ext_resource type="Script" path="res://interactions/interactable.gd" id="1_interactable"]
+[ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactions/interactable.gd" id="1_interactable"]
 [ext_resource type="Material" uid="uid://dww3d0txyl18g" path="res://interactions/actions/interactable_outline.tres" id="2_outline"]
-[ext_resource type="Script" path="res://interactions/actions/SwingDoorTeleportAction.gd" id="3_useaction"]
-[ext_resource type="Script" path="res://data/InteractionResponse.gd" id="11_response"]
-[ext_resource type="Script" path="res://interactions/action.gd" id="12_action"]
-
-[sub_resource type="Gradient" id="Gradient_facdoor"]
-colors = PackedColorArray(0.29, 0.196, 0.149, 1, 0.29, 0.196, 0.149, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_facdoor"]
-gradient = SubResource("Gradient_facdoor")
-width = 260
-height = 500
-
-[sub_resource type="Gradient" id="Gradient_facdoor_void"]
-colors = PackedColorArray(0.07, 0.06, 0.08, 1, 0.07, 0.06, 0.08, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_facdoor_void"]
-gradient = SubResource("Gradient_facdoor_void")
-width = 260
-height = 500
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_facdoor"]
-size = Vector2(260, 500)
+[ext_resource type="Script" uid="uid://umrq1fdhx3cm" path="res://interactions/actions/SwingDoorTeleportAction.gd" id="3_useaction"]
+[ext_resource type="Texture2D" uid="uid://ddn5gaouqkvcd" path="res://Backgrounds/Kit/Faculty Offices/university_wooden_door_1.png" id="4_doortex"]
+[ext_resource type="Script" uid="uid://bmq0s1nqhqi4j" path="res://data/InteractionResponse.gd" id="11_response"]
+[ext_resource type="Script" uid="uid://dltqnu07oiff" path="res://interactions/action.gd" id="12_action"]
 
 [sub_resource type="Resource" id="Resource_facdoor_use_action"]
 script = ExtResource("3_useaction")
@@ -35,21 +17,121 @@ verb_id = "use"
 actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_facdoor_use_action")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
-[node name="FacultyDoor" type="Area2D"]
+[sub_resource type="Gradient" id="Gradient_facdoor_shadow"]
+colors = PackedColorArray(0.09, 0.05, 0.03, 1, 0.09, 0.05, 0.03, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_facdoor_shadow_wall_l"]
+gradient = SubResource("Gradient_facdoor_shadow")
+width = 6
+height = 486
+fill_from = Vector2(1, 0)
+fill_to = Vector2(0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_facdoor_shadow_wall_r"]
+gradient = SubResource("Gradient_facdoor_shadow")
+width = 14
+height = 486
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_facdoor_shadow_floor"]
+gradient = SubResource("Gradient_facdoor_shadow")
+width = 292
+height = 10
+fill_to = Vector2(0, 1)
+
+[sub_resource type="Gradient" id="Gradient_facdoor_void"]
+colors = PackedColorArray(0.07, 0.06, 0.08, 1, 0.07, 0.06, 0.08, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_facdoor_void"]
+gradient = SubResource("Gradient_facdoor_void")
+width = 227
+height = 477
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_facdoor_leaf"]
+atlas = ExtResource("4_doortex")
+region = Rect2(70, 60, 717, 1506)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_facdoor"]
+size = Vector2(270, 498)
+
+[node name="FacultyDoor" type="Area2D" unique_id=1468886562]
 script = ExtResource("1_interactable")
 object_display_name = "Office Door"
 object_id = "faculty_door_template"
 interactions = Array[ExtResource("11_response")]([SubResource("Resource_facdoor_use")])
 
-[node name="DoorwayVoid" type="Sprite2D" parent="."]
+[node name="Shadows" type="Node2D" parent="." unique_id=1579684202]
+
+[node name="WallShadowLeft" type="Sprite2D" parent="Shadows" unique_id=2051072599]
+modulate = Color(1, 1, 1, 0.16)
+position = Vector2(-139.5, -236)
+texture = SubResource("GradientTexture2D_facdoor_shadow_wall_l")
+centered = false
+
+[node name="WallShadowRight" type="Sprite2D" parent="Shadows" unique_id=84415699]
+modulate = Color(1, 1, 1, 0.28)
+position = Vector2(132.2, -236)
+texture = SubResource("GradientTexture2D_facdoor_shadow_wall_r")
+centered = false
+
+[node name="FloorShadow" type="Sprite2D" parent="Shadows" unique_id=1942724457]
+modulate = Color(1, 1, 1, 0.35)
+position = Vector2(-141, 249)
+texture = SubResource("GradientTexture2D_facdoor_shadow_floor")
+centered = false
+
+[node name="DoorFrame" type="Sprite2D" parent="." unique_id=254470231]
+position = Vector2(0, 1.5)
+scale = Vector2(0.316857, 0.316857)
+texture = ExtResource("4_doortex")
+
+[node name="DoorwayVoid" type="Sprite2D" parent="." unique_id=889545369]
+position = Vector2(0, 9.1)
 texture = SubResource("GradientTexture2D_facdoor_void")
 
-[node name="ObjectSprite" type="Sprite2D" parent="."]
+[node name="ObjectSprite" type="Sprite2D" parent="." unique_id=1824906199]
 material = ExtResource("2_outline")
-texture = SubResource("GradientTexture2D_facdoor")
+position = Vector2(0, 9.1)
+scale = Vector2(0.316857, 0.316857)
+texture = SubResource("AtlasTexture_facdoor_leaf")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="HoverGlow" type="Node2D" parent="." unique_id=1861498448]
+visible = false
+
+[node name="GlowTop" type="ColorRect" parent="HoverGlow" unique_id=1396657951]
+offset_left = -139.0
+offset_top = -251.0
+offset_right = 139.0
+offset_bottom = -243.0
+mouse_filter = 2
+color = Color(0.2, 0.85, 1, 1)
+
+[node name="GlowBottom" type="ColorRect" parent="HoverGlow" unique_id=740126164]
+offset_left = -139.0
+offset_top = 246.0
+offset_right = 139.0
+offset_bottom = 254.0
+mouse_filter = 2
+color = Color(0.2, 0.85, 1, 1)
+
+[node name="GlowLeft" type="ColorRect" parent="HoverGlow" unique_id=336689953]
+offset_left = -139.0
+offset_top = -251.0
+offset_right = -131.0
+offset_bottom = 254.0
+mouse_filter = 2
+color = Color(0.2, 0.85, 1, 1)
+
+[node name="GlowRight" type="ColorRect" parent="HoverGlow" unique_id=568659996]
+offset_left = 131.0
+offset_top = -251.0
+offset_right = 139.0
+offset_bottom = 254.0
+mouse_filter = 2
+color = Color(0.2, 0.85, 1, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1764934588]
+position = Vector2(0, 1.5)
 shape = SubResource("RectangleShape2D_facdoor")
 
-[node name="WalkToPoint" type="Marker2D" parent="."]
+[node name="WalkToPoint" type="Marker2D" parent="." unique_id=707476475]
 position = Vector2(0, 270)

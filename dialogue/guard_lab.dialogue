@@ -1,0 +1,15 @@
+~ start
+# talk_to entry for the lab-corridor guard (guard_advanced_overlay launches here).
+# stage_party reads conversation_player_on_left — set by interactable.gd the moment the
+# interaction fires — and stages Fiona, the following companion (back row) and the guard
+# with the right flips. one line instead of the old per-side if/else.
+do stage_party("Lewgend", "explaining_1")
+Lewgend: Lab's closed. Clearance holders only past this point.
+Player: We work here.
+if Flags.get_level_flag("party_companion_staged") == true:
+	Layla: Technically we're grad students. It's complicated.
+	Lewgend: Then it's simple for me.
+do actor_change("Lewgend", "hand_on_chest")
+Lewgend: No card, no lab. Nothing personal.
+Player: Noted.
+=> END

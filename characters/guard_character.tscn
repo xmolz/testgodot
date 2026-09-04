@@ -1,0 +1,48 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://interactions/interactable.gd" id="1_interactable"]
+[ext_resource type="Script" path="res://data/InteractionResponse.gd" id="2_response"]
+[ext_resource type="Script" path="res://interactions/action.gd" id="3_action"]
+[ext_resource type="Script" path="res://interactions/actions/StartConversationAction.gd" id="4_startconv"]
+[ext_resource type="Resource" path="res://interactions/actions/DefaultExamineResponse.tres" id="5_examine"]
+[ext_resource type="Material" path="res://interactions/actions/interactable_outline.tres" id="6_outline"]
+
+[sub_resource type="Gradient" id="Gradient_guard"]
+colors = PackedColorArray(0.18, 0.22, 0.32, 1, 0.18, 0.22, 0.32, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_guard"]
+gradient = SubResource("Gradient_guard")
+width = 130
+height = 310
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_guard"]
+size = Vector2(130, 310)
+
+[sub_resource type="Resource" id="Resource_guard_talk_action"]
+script = ExtResource("4_startconv")
+metadata/_custom_type_script = "uid://h83nrnu1277x"
+
+[sub_resource type="Resource" id="Resource_guard_talk_response"]
+script = ExtResource("2_response")
+verb_id = "talk_to"
+actions_to_perform = Array[ExtResource("3_action")]([SubResource("Resource_guard_talk_action")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[node name="GuardCharacter" type="Node2D"]
+
+[node name="Sprite" type="Sprite2D" parent="."]
+material = ExtResource("6_outline")
+position = Vector2(0, -155)
+texture = SubResource("GradientTexture2D_guard")
+
+[node name="InteractionArea" type="Area2D" parent="."]
+script = ExtResource("1_interactable")
+object_display_name = "Security Guard"
+object_id = "lab_guard"
+category = 1
+interactions = Array[ExtResource("2_response")]([ExtResource("5_examine"), SubResource("Resource_guard_talk_response")])
+character_conversation_scene_path = "res://conversation/guard_advanced_overlay.tscn"
+
+[node name="ClickShape" type="CollisionShape2D" parent="InteractionArea"]
+position = Vector2(0, -155)
+shape = SubResource("RectangleShape2D_guard")
