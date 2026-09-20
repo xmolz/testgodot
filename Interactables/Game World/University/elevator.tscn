@@ -1,21 +1,12 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://interactions/interactable.gd" id="1_interactable"]
+[ext_resource type="Script" path="res://Interactables/Game World/University/elevator.gd" id="1_script"]
 [ext_resource type="Material" uid="uid://dww3d0txyl18g" path="res://interactions/actions/interactable_outline.tres" id="2_outline"]
 [ext_resource type="Script" uid="uid://bmq0s1nqhqi4j" path="res://data/InteractionResponse.gd" id="3_response"]
 [ext_resource type="Script" uid="uid://dltqnu07oiff" path="res://interactions/action.gd" id="4_action_base"]
-[ext_resource type="Script" path="res://interactions/actions/OpenElevatorPanelAction.gd" id="5_open_action"]
-
-[sub_resource type="Gradient" id="Gradient_elev"]
-colors = PackedColorArray(0.6, 0.62, 0.66, 1, 0.6, 0.62, 0.66, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_elev"]
-gradient = SubResource("Gradient_elev")
-width = 220
-height = 340
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_elev"]
-size = Vector2(220, 340)
+[ext_resource type="Script" uid="uid://cr6euv55iuja0" path="res://interactions/actions/OpenElevatorPanelAction.gd" id="5_open_action"]
+[ext_resource type="Texture2D" uid="uid://db1winxtkvdst" path="res://Backgrounds/Kit/2F Elevator Hub/elevator_door.png" id="6_elev_art"]
+[ext_resource type="Texture2D" path="res://Backgrounds/Kit/2F Elevator Hub/elevator_buttons.png" id="7_buttons_art"]
 
 [sub_resource type="Resource" id="Resource_open_panel"]
 script = ExtResource("5_open_action")
@@ -26,18 +17,80 @@ verb_id = "use"
 actions_to_perform = Array[ExtResource("4_action_base")]([SubResource("Resource_open_panel")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
-[node name="Elevator" type="Area2D"]
-script = ExtResource("1_interactable")
+[sub_resource type="Gradient" id="Gradient_elev_shadow"]
+colors = PackedColorArray(0.08, 0.07, 0.12, 1, 0.08, 0.07, 0.12, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_elev_shadow_wall_l"]
+gradient = SubResource("Gradient_elev_shadow")
+width = 6
+height = 486
+fill_from = Vector2(1, 0)
+fill_to = Vector2(0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_elev_shadow_wall_r"]
+gradient = SubResource("Gradient_elev_shadow")
+width = 14
+height = 486
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_elev_shadow_floor"]
+gradient = SubResource("Gradient_elev_shadow")
+width = 296
+height = 10
+fill_to = Vector2(0, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_elev"]
+size = Vector2(274, 500)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_elev_buttons"]
+size = Vector2(50, 76)
+
+[node name="Elevator" type="Area2D" unique_id=364690885]
+script = ExtResource("1_script")
 object_display_name = "Elevator"
 object_id = "hub_elevator"
 interactions = Array[ExtResource("3_response")]([SubResource("Resource_use_open")])
 
-[node name="ObjectSprite" type="Sprite2D" parent="."]
-material = ExtResource("2_outline")
-texture = SubResource("GradientTexture2D_elev")
+[node name="Shadows" type="Node2D" parent="." unique_id=682798270]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="WallShadowLeft" type="Sprite2D" parent="Shadows" unique_id=203011237]
+modulate = Color(1, 1, 1, 0.16)
+position = Vector2(-134.5, -265.5)
+texture = SubResource("GradientTexture2D_elev_shadow_wall_l")
+centered = false
+
+[node name="WallShadowRight" type="Sprite2D" parent="Shadows" unique_id=527196428]
+modulate = Color(1, 1, 1, 0.28)
+position = Vector2(128.2, -265.5)
+texture = SubResource("GradientTexture2D_elev_shadow_wall_r")
+centered = false
+
+[node name="FloorShadow" type="Sprite2D" parent="Shadows" unique_id=828579163]
+modulate = Color(1, 1, 1, 0.35)
+position = Vector2(-127.00001, 217.5)
+scale = Vector2(0.8614864, 1)
+texture = SubResource("GradientTexture2D_elev_shadow_floor")
+centered = false
+
+[node name="ObjectSprite" type="Sprite2D" parent="." unique_id=982657202]
+material = ExtResource("2_outline")
+position = Vector2(0, -28)
+scale = Vector2(0.40323, 0.40323)
+texture = ExtResource("6_elev_art")
+
+[node name="ButtonSprite" type="Sprite2D" parent="." unique_id=2083391985]
+material = ExtResource("2_outline")
+position = Vector2(177, -28)
+scale = Vector2(0.18, 0.18)
+texture = ExtResource("7_buttons_art")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=962722579]
+visible = false
+position = Vector2(0, -28)
 shape = SubResource("RectangleShape2D_elev")
 
-[node name="WalkToPoint" type="Marker2D" parent="."]
+[node name="CollisionShape2D_Buttons" type="CollisionShape2D" parent="." unique_id=2081512499]
+position = Vector2(177, -28)
+shape = SubResource("RectangleShape2D_elev_buttons")
+
+[node name="WalkToPoint" type="Marker2D" parent="." unique_id=1564794077]
 position = Vector2(0, 100)

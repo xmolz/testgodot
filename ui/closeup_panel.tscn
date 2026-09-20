@@ -1,0 +1,40 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ui/closeup_panel.gd" id="1_script"]
+
+[node name="CloseupPanel" type="CanvasLayer"]
+process_mode = 3
+layer = 50
+script = ExtResource("1_script")
+
+[node name="Dim" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.55)
+
+[node name="Center" type="CenterContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Stack" type="VBoxContainer" parent="Center"]
+layout_mode = 2
+theme_override_constants/separation = 16
+mouse_filter = 2
+alignment = 1
+
+[node name="ContentSlot" type="MarginContainer" parent="Center/Stack"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="BackButton" type="Button" parent="Center/Stack"]
+custom_minimum_size = Vector2(200, 60)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Back"

@@ -3,6 +3,10 @@
 [ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactions/interactable.gd" id="1_interactable"]
 [ext_resource type="Shader" uid="uid://bi5b0454i0065" path="res://interactions/actions/interactable_outline.gdshader" id="2_outlineshader"]
 [ext_resource type="Texture2D" uid="uid://cqe0voss_port_01" path="res://Backgrounds/Kit/2F Elevator Hub/voss_portrait.png" id="3_portrait_tex"]
+[ext_resource type="Script" uid="uid://bmq0s1nqhqi4j" path="res://data/InteractionResponse.gd" id="4_response"]
+[ext_resource type="Script" uid="uid://dltqnu07oiff" path="res://interactions/action.gd" id="5_action"]
+[ext_resource type="Script" path="res://interactions/actions/OpenCloseupAction.gd" id="6_closeup_action"]
+[ext_resource type="PackedScene" path="res://Interactables/Game World/University/voss_portrait_closeup.tscn" id="7_closeup_scene"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_portrait_outline"]
 resource_local_to_scene = true
@@ -34,6 +38,22 @@ border_width_right = 2
 border_width_bottom = 2
 border_color = Color(0.18, 0.16, 0.14, 1)
 
+[sub_resource type="Resource" id="Resource_portrait_zoom"]
+script = ExtResource("6_closeup_action")
+content_scene = ExtResource("7_closeup_scene")
+
+[sub_resource type="Resource" id="Resource_portrait_examine"]
+script = ExtResource("4_response")
+verb_id = "examine"
+actions_to_perform = Array[ExtResource("5_action")]([SubResource("Resource_portrait_zoom")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="Resource" id="Resource_portrait_use"]
+script = ExtResource("4_response")
+verb_id = "use"
+actions_to_perform = Array[ExtResource("5_action")]([SubResource("Resource_portrait_zoom")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_portrait"]
 size = Vector2(306, 284)
 
@@ -41,6 +61,7 @@ size = Vector2(306, 284)
 script = ExtResource("1_interactable")
 object_display_name = "Dedication Portrait"
 object_id = "voss_portrait"
+interactions = Array[ExtResource("4_response")]([SubResource("Resource_portrait_examine"), SubResource("Resource_portrait_use")])
 
 [node name="WallShadow" type="Panel" parent="."]
 offset_left = -155.0

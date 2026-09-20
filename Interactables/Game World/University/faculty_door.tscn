@@ -75,7 +75,8 @@ centered = false
 
 [node name="FloorShadow" type="Sprite2D" parent="Shadows" unique_id=1942724457]
 modulate = Color(1, 1, 1, 0.35)
-position = Vector2(-141, 249)
+position = Vector2(-132, 247)
+scale = Vector2(0.89726025, 1)
 texture = SubResource("GradientTexture2D_facdoor_shadow_floor")
 centered = false
 

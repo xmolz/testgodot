@@ -8,17 +8,10 @@
 [ext_resource type="Script" path="res://interactions/actions/StartConversationAction.gd" id="6_startconv"]
 [ext_resource type="Resource" path="res://interactions/actions/DefaultExamineResponse.tres" id="7_examine"]
 [ext_resource type="Material" path="res://interactions/actions/interactable_outline.tres" id="8_outline"]
-
-[sub_resource type="Gradient" id="Gradient_layla"]
-colors = PackedColorArray(0.85, 0.45, 0.75, 1, 0.85, 0.45, 0.75, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_layla"]
-gradient = SubResource("Gradient_layla")
-width = 120
-height = 300
+[ext_resource type="Texture2D" path="res://Dev/layla_test_gameworld_sprite.png" id="9_layla_art"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_layla"]
-size = Vector2(120, 300)
+size = Vector2(194, 506)
 
 [sub_resource type="Resource" id="Resource_layla_talk_action"]
 script = ExtResource("6_startconv")
@@ -37,11 +30,12 @@ script = ExtResource("1_script")
 
 [node name="Sprite" type="Sprite2D" parent="."]
 material = ExtResource("8_outline")
-position = Vector2(0, -150)
-texture = SubResource("GradientTexture2D_layla")
+position = Vector2(0, -251.5)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("9_layla_art")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -150)
+position = Vector2(-6, -253)
 shape = SubResource("RectangleShape2D_layla")
 
 [node name="CompanionFollow" type="Node" parent="."]
@@ -57,5 +51,5 @@ interactions = Array[ExtResource("4_response")]([ExtResource("7_examine"), SubRe
 character_conversation_scene_path = "res://conversation/layla_advanced_overlay.tscn"
 
 [node name="InteractionClickShape" type="CollisionShape2D" parent="InteractionArea"]
-position = Vector2(0, -150)
+position = Vector2(-6, -253)
 shape = SubResource("RectangleShape2D_layla")

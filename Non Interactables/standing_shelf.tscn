@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://blqvbjifoqsly"]
+
+[ext_resource type="Texture2D" uid="uid://dew6snn3kdhae" path="res://Backgrounds/Kit/Grad Commons/standing_shelf.png" id="1_shelf_art"]
+
+[sub_resource type="Gradient" id="Gradient_shelf_shadow"]
+offsets = PackedFloat32Array(0, 0.5, 1)
+colors = PackedColorArray(0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_shelf_shadow_wall_l"]
+gradient = SubResource("Gradient_shelf_shadow")
+width = 6
+height = 540
+fill_from = Vector2(1, 0)
+fill_to = Vector2(0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_shelf_shadow_wall_r"]
+gradient = SubResource("Gradient_shelf_shadow")
+width = 14
+height = 540
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_shelf_contact_shadow"]
+gradient = SubResource("Gradient_shelf_shadow")
+width = 340
+height = 90
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[node name="StandingShelf" type="Node2D" unique_id=1384506154]
+
+[node name="Shadows" type="Node2D" parent="." unique_id=1846200345]
+
+[node name="WallShadowLeft" type="Sprite2D" parent="Shadows" unique_id=597613311]
+modulate = Color(1, 1, 1, 0.16)
+position = Vector2(-142.5, -520)
+scale = Vector2(1, 0.962963)
+texture = SubResource("GradientTexture2D_shelf_shadow_wall_l")
+centered = false
+
+[node name="WallShadowRight" type="Sprite2D" parent="Shadows" unique_id=1700298068]
+modulate = Color(1, 1, 1, 0.28)
+position = Vector2(136.5, -517)
+scale = Vector2(1, 0.9574074)
+texture = SubResource("GradientTexture2D_shelf_shadow_wall_r")
+centered = false
+
+[node name="ContactShadow" type="Sprite2D" parent="Shadows" unique_id=1483880919]
+modulate = Color(1, 1, 1, 0.85)
+texture = SubResource("GradientTexture2D_shelf_contact_shadow")
+
+[node name="ObjectSprite" type="Sprite2D" parent="." unique_id=822741208]
+position = Vector2(0, -270)
+scale = Vector2(0.46552, 0.46552)
+texture = ExtResource("1_shelf_art")

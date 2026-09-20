@@ -1,0 +1,116 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://interactions/interactable.gd" id="1_interactable"]
+[ext_resource type="Material" uid="uid://dww3d0txyl18g" path="res://interactions/actions/interactable_outline.tres" id="2_outline"]
+[ext_resource type="Texture2D" path="res://Backgrounds/Kit/Lab Corridoor/greene_portrait.png" id="3_tex"]
+[ext_resource type="FontFile" path="res://Fonts/VarelaRound-Regular.ttf" id="4_font"]
+[ext_resource type="Script" uid="uid://bmq0s1nqhqi4j" path="res://data/InteractionResponse.gd" id="5_response"]
+[ext_resource type="Script" uid="uid://dltqnu07oiff" path="res://interactions/action.gd" id="6_action"]
+[ext_resource type="Script" path="res://interactions/actions/OpenCloseupAction.gd" id="7_closeup_action"]
+[ext_resource type="PackedScene" path="res://Interactables/Game World/University/greene_portrait_closeup.tscn" id="8_closeup_scene"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_crop"]
+atlas = ExtResource("3_tex")
+region = Rect2(0, 0, 1200, 1800)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_outer_frame"]
+bg_color = Color(0.12, 0.13, 0.16, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.32, 0.28, 0.22, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_color = Color(0, 0, 0, 0.45)
+shadow_size = 10
+shadow_offset = Vector2(0, 6)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_inner_mat"]
+bg_color = Color(0.06, 0.07, 0.08, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.18, 0.16, 0.14, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_text_panel"]
+bg_color = Color(0.78, 0.85, 0.83, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_portrait"]
+size = Vector2(310, 288)
+
+[sub_resource type="Resource" id="Resource_portrait_closeup"]
+script = ExtResource("7_closeup_action")
+content_scene = ExtResource("8_closeup_scene")
+
+[sub_resource type="Resource" id="Resource_portrait_examine"]
+script = ExtResource("5_response")
+verb_id = "examine"
+actions_to_perform = Array[ExtResource("6_action")]([SubResource("Resource_portrait_closeup")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="Resource" id="Resource_portrait_use"]
+script = ExtResource("5_response")
+verb_id = "use"
+actions_to_perform = Array[ExtResource("6_action")]([SubResource("Resource_portrait_closeup")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[node name="GreenePortrait" type="Area2D"]
+script = ExtResource("1_interactable")
+object_display_name = "Portrait"
+object_id = "greene_portrait"
+interactions = Array[ExtResource("5_response")]([SubResource("Resource_portrait_examine"), SubResource("Resource_portrait_use")])
+
+[node name="Frame" type="Panel" parent="."]
+offset_left = -155.0
+offset_top = -144.0
+offset_right = 155.0
+offset_bottom = 144.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_outer_frame")
+
+[node name="Mat" type="Panel" parent="."]
+offset_left = -149.0
+offset_top = -138.0
+offset_right = 149.0
+offset_bottom = 138.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_inner_mat")
+
+[node name="ObjectSprite" type="Sprite2D" parent="."]
+material = ExtResource("2_outline")
+position = Vector2(-56, 0)
+scale = Vector2(0.15111, 0.15111)
+texture = SubResource("AtlasTexture_crop")
+
+[node name="TextPanel" type="Panel" parent="."]
+offset_left = 35.0
+offset_top = -136.0
+offset_right = 147.0
+offset_bottom = 136.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_text_panel")
+
+[node name="NameLabel" type="Label" parent="TextPanel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 14.0
+offset_bottom = 30.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.1, 0.1, 0.12, 1)
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 11
+text = "Dr. Alan Greene"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_portrait")
+
+[node name="WalkToPoint" type="Marker2D" parent="."]
+position = Vector2(0, 180)

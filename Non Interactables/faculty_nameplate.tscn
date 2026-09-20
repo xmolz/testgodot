@@ -1,0 +1,74 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Non Interactables/faculty_nameplate.gd" id="1_script"]
+[ext_resource type="FontFile" path="res://Fonts/VarelaRound-Regular.ttf" id="2_font"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rim"]
+bg_color = Color(0.36, 0.39, 0.44, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.16, 0.18, 0.21, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_color = Color(0.1, 0.1, 0.12, 0.28)
+shadow_size = 5
+shadow_offset = Vector2(2, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_face"]
+bg_color = Color(0.74, 0.77, 0.81, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.88, 0.9, 0.93, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[node name="FacultyNameplate" type="Node2D"]
+script = ExtResource("1_script")
+
+[node name="Plate" type="Panel" parent="."]
+offset_left = -110.0
+offset_top = -26.0
+offset_right = 110.0
+offset_bottom = 26.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_rim")
+
+[node name="Face" type="Panel" parent="Plate"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_face")
+
+[node name="Label" type="Label" parent="Plate/Face"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.13, 0.15, 0.19, 1)
+theme_override_colors/font_shadow_color = Color(1, 1, 1, 0.35)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 1
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 24
+text = "Dr. Song"
+horizontal_alignment = 1
+vertical_alignment = 1

@@ -1,0 +1,56 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://dgi247xxwu7j3" path="res://conversation/object_zoom_overlay.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://Backgrounds/Kit/Lab Corridoor/locker_interior.png" id="2_interior"]
+
+[node name="FionaLockerZoom" type="CanvasLayer"]
+process_mode = 3
+layer = 2
+script = ExtResource("1_script")
+background_texture = ExtResource("2_interior")
+default_verb_id = "pickup"
+show_verb_panel = false
+show_inventory = false
+allowed_verb_ids = Array[String](["pickup"])
+
+[node name="RootContainer" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="BackgroundRect" type="ColorRect" parent="RootContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="ZoomBackground" type="TextureRect" parent="RootContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+texture = ExtResource("2_interior")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="InteractableContainer" type="Node2D" parent="RootContainer"]
+
+[node name="CloseButton" type="Button" parent="RootContainer"]
+layout_mode = 0
+offset_left = 22.0
+offset_top = 26.0
+offset_right = 130.0
+offset_bottom = 83.0
+text = "Back"

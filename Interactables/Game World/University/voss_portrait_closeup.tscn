@@ -1,0 +1,51 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" uid="uid://cqe0voss_port_01" path="res://Backgrounds/Kit/2F Elevator Hub/voss_portrait.png" id="1_tex"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_frame"]
+content_margin_left = 22.0
+content_margin_top = 22.0
+content_margin_right = 22.0
+content_margin_bottom = 22.0
+bg_color = Color(0.12, 0.13, 0.16, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.32, 0.28, 0.22, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+shadow_color = Color(0, 0, 0, 0.5)
+shadow_size = 28
+shadow_offset = Vector2(0, 12)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mat"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.06, 0.07, 0.08, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.18, 0.16, 0.14, 1)
+
+[node name="VossPortraitCloseup" type="PanelContainer"]
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_frame")
+
+[node name="Matting" type="PanelContainer" parent="."]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_mat")
+
+[node name="Image" type="TextureRect" parent="Matting"]
+custom_minimum_size = Vector2(819, 760)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("1_tex")
+expand_mode = 1
+stretch_mode = 5

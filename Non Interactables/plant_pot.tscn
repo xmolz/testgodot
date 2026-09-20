@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://bgqned16xdtnl"]
+
+[ext_resource type="Texture2D" uid="uid://b5in7o4nqogc1" path="res://Backgrounds/Kit/Faculty Offices/university_plant.png" id="1_plant_art"]
+
+[sub_resource type="Gradient" id="Gradient_pot_shadow"]
+colors = PackedColorArray(0.05, 0.07, 0.11, 1, 0.05, 0.07, 0.11, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_pot_contact_shadow"]
+gradient = SubResource("Gradient_pot_shadow")
+width = 160
+height = 50
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[node name="PlantPot" type="Node2D" unique_id=1179190848]
+
+[node name="Shadows" type="Node2D" parent="." unique_id=857054308]
+
+[node name="ContactShadow" type="Sprite2D" parent="Shadows" unique_id=625310554]
+modulate = Color(1, 1, 1, 0.5)
+texture = SubResource("GradientTexture2D_pot_contact_shadow")
+
+[node name="ObjectSprite" type="Sprite2D" parent="." unique_id=1050596341]
+position = Vector2(0, -95)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_plant_art")

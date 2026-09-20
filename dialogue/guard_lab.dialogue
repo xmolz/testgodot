@@ -1,15 +1,58 @@
 ~ start
-# talk_to entry for the lab-corridor guard (guard_advanced_overlay launches here).
-# stage_party reads conversation_player_on_left — set by interactable.gd the moment the
-# interaction fires — and stages Fiona, the following companion (back row) and the guard
-# with the right flips. one line instead of the old per-side if/else.
-do stage_party("Lewgend", "explaining_1")
-Lewgend: Lab's closed. Clearance holders only past this point.
-Player: We work here.
+do stage_party("Jayce", "base")
+if Flags.get_level_flag("jayce_introduced") == true:
+	Jayce: Back again, sweetheart?
+else
+	A man in a grey work jacket leans against the wall, arms folded, watching the corridor.
+	He's looking at you and Layla the way someone looks at a vending machine while deciding what to get.
+=> hub
+
+~ hub
+What do you want to say to him?
+- Who are you? [if Flags.get_level_flag("jayce_introduced") != true]
+	=> who_are_you
+- We need to get into the lab.
+	=> lab_access
+- Nothing. Never mind.
+	=> leave
+
+~ who_are_you
+Player: Hey. Do you mind telling us who you are?
+You notice him straightening up. He wasn't expecting to be spoken to first.
+???: Me? Course not, sweetheart.
+???: Jayce. Maintenance.
+do Flags.set_level_flag("jayce_introduced", true)
+Jayce: And what do I owe the pleasure?
+Player: I'm Fiona, and this is Layla. We work here, in the genomics lab.
+Player: First time I've seen you around.
+Jayce: Wouldn't have. I only do nights.
+Jayce: You lot don't turn up till ten most days.
+Player: Fair enough.
+Player: I usually take my late nights in the library instead of the lab. Unless I absolutely need to be here.
+if Flags.get_level_flag("party_companion_staged") == true:
+	Layla: Which you shouldn't be doing at all!
+	Layla: Nights are for rest and recovery!
+	Player: Yeah, yeah. I know.
+	He watches the two of you for a beat longer than the exchange warrants.
+	Jayce: Close, you two, aren't you.
+	Layla: ...Sorry?
+	Jayce: Nothing, sweetheart. Just nice to see.
+	Jayce: Most people who come through here can't stand each other.
+	Player: (Right.)
+Jayce: Anyway. I'll let you get back to it.
+Jayce: You know where to find me.
+Player: Sure.
+=> hub
+
+~ lab_access
+Player: We need to get into the lab.
 if Flags.get_level_flag("party_companion_staged") == true:
 	Layla: Technically we're grad students. It's complicated.
-	Lewgend: Then it's simple for me.
-do actor_change("Lewgend", "hand_on_chest")
-Lewgend: No card, no lab. Nothing personal.
+	Jayce: Then it's simple for me.
+Jayce: No card, no lab. Nothing personal.
 Player: Noted.
+=> hub
+
+~ leave
+Jayce: Suit yourself.
 => END

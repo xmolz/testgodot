@@ -1,0 +1,30 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://interactions/interactable.gd" id="1_interactable"]
+[ext_resource type="Material" path="res://interactions/actions/interactable_outline.tres" id="2_outline"]
+
+[sub_resource type="Gradient" id="Gradient_profportrait"]
+colors = PackedColorArray(0.45, 0.36, 0.28, 1, 0.45, 0.36, 0.28, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_profportrait"]
+gradient = SubResource("Gradient_profportrait")
+width = 310
+height = 288
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_profportrait"]
+size = Vector2(310, 288)
+
+[node name="ProfessorPortrait" type="Area2D"]
+script = ExtResource("1_interactable")
+object_display_name = "Portrait"
+object_id = "professor_portrait"
+
+[node name="ObjectSprite" type="Sprite2D" parent="."]
+material = ExtResource("2_outline")
+texture = SubResource("GradientTexture2D_profportrait")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_profportrait")
+
+[node name="WalkToPoint" type="Marker2D" parent="."]
+position = Vector2(0, 445)

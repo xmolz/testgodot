@@ -12,12 +12,11 @@
 [ext_resource type="Script" uid="uid://dltqnu07oiff" path="res://interactions/action.gd" id="12_action"]
 [ext_resource type="PackedScene" path="res://characters/layla_character.tscn" id="15_layla"]
 [ext_resource type="PackedScene" path="res://Interactables/Game World/room_exit_sign.tscn" id="16_exitsign"]
-[ext_resource type="Script" uid="uid://dm3vji871klli" path="res://interactions/actions/TeleportAction.gd" id="18_teleport"]
 [ext_resource type="Script" uid="uid://cwgcwktmorn74" path="res://Non Interactables/camera_region.gd" id="19_camregion"]
 [ext_resource type="PackedScene" uid="uid://d2d8nx3loto6b" path="res://Non Interactables/room_light_spill.tscn" id="20_lightspill"]
 [ext_resource type="PackedScene" path="res://Interactables/Game World/University/elevator.tscn" id="21_elevator"]
-[ext_resource type="PackedScene" path="res://Interactables/Game World/University/lab_door.tscn" id="22_labdoor"]
-[ext_resource type="PackedScene" path="res://Interactables/Game World/University/lab_keypad.tscn" id="23_labkeypad"]
+[ext_resource type="PackedScene" uid="uid://bd2t4ndrgcubq" path="res://Interactables/Game World/University/lab_door.tscn" id="22_labdoor"]
+[ext_resource type="PackedScene" uid="uid://ca7ogy0ljpu56" path="res://Interactables/Game World/University/lab_keypad.tscn" id="23_labkeypad"]
 [ext_resource type="Texture2D" uid="uid://cnaqc1x078r33" path="res://Backgrounds/Kit/Tiles/wood_floor_tile.png" id="24_kitwood"]
 [ext_resource type="Texture2D" uid="uid://c4euljf2ffcsq" path="res://Backgrounds/Kit/Tiles/terrazzo_tile_1.png" id="25_kitterrazzo"]
 [ext_resource type="Texture2D" uid="uid://datsiegwuxfmm" path="res://Backgrounds/Kit/Tiles/carpet_tile_1.png" id="26_kitcarpet"]
@@ -31,9 +30,26 @@
 [ext_resource type="PackedScene" path="res://Interactables/Game World/University/library_bookshelf_3.tscn" id="34_libbookshelf3"]
 [ext_resource type="PackedScene" path="res://Interactables/Game World/University/voss_portrait.tscn" id="35_vossportrait"]
 [ext_resource type="Texture2D" uid="uid://hm8s280sxuhj" path="res://Backgrounds/Kit/Tiles/blue_square_tile.png" id="36_kitbluesquare"]
-[ext_resource type="PackedScene" path="res://Interactables/Game World/University/faculty_door.tscn" id="37_facultydoor"]
-[ext_resource type="Script" path="res://interactions/actions/SlideWipeTeleportAction.gd" id="38_slidewipe"]
+[ext_resource type="PackedScene" uid="uid://hq61qnbtv16s" path="res://Interactables/Game World/University/faculty_door.tscn" id="37_facultydoor"]
+[ext_resource type="Script" uid="uid://c2dr7xqkw6807" path="res://interactions/actions/SlideWipeTeleportAction.gd" id="38_slidewipe"]
 [ext_resource type="PackedScene" path="res://characters/guard_character.tscn" id="39_guard"]
+[ext_resource type="Texture2D" uid="uid://blafp1o0joa83" path="res://Backgrounds/Kit/Faculty Offices/faculty_window_panel.png" id="40_facwindow"]
+[ext_resource type="PackedScene" path="res://Non Interactables/faculty_nameplate.tscn" id="41_nameplate"]
+[ext_resource type="Texture2D" uid="uid://bieosdrbw6hm7" path="res://Backgrounds/Kit/Grad Commons/grad_common_blinds.png" id="42_gradblinds"]
+[ext_resource type="Script" uid="uid://umrq1fdhx3cm" path="res://interactions/actions/SwingDoorTeleportAction.gd" id="43_swingdoor"]
+[ext_resource type="PackedScene" path="res://Interactables/Game World/University/workstation.tscn" id="44_workstation"]
+[ext_resource type="PackedScene" uid="uid://blqvbjifoqsly" path="res://Non Interactables/standing_shelf.tscn" id="45_gradshelf"]
+[ext_resource type="Script" uid="uid://bmmibrx8idml8" path="res://Cutscenes/JulianIntroCutscene.gd" id="46_julian_cutscene"]
+[ext_resource type="PackedScene" path="res://Interactables/Game World/University/vending_machine.tscn" id="47_vending"]
+[ext_resource type="PackedScene" uid="uid://blsnuk51nt3by" path="res://Interactables/Game World/University/locker.tscn" id="49_locker"]
+[ext_resource type="PackedScene" path="res://characters/julian_character.tscn" id="50_julian"]
+[ext_resource type="PackedScene" uid="uid://bgqned16xdtnl" path="res://Non Interactables/plant_pot.tscn" id="51_plantpot"]
+[ext_resource type="PackedScene" path="res://Non Interactables/wall_painting.tscn" id="52_painting"]
+[ext_resource type="PackedScene" path="res://Non Interactables/wayfinding_sign.tscn" id="53_waysign"]
+[ext_resource type="Script" uid="uid://dosqfqbexlf5k" path="res://interactions/actions/OpenZoomViewAction.gd" id="54_zoomaction"]
+[ext_resource type="PackedScene" path="res://conversation/FionaLockerZoom.tscn" id="55_fionalockerzoom"]
+[ext_resource type="PackedScene" path="res://Interactables/Game World/University/greene_portrait.tscn" id="56_greeneportrait"]
+[ext_resource type="PackedScene" path="res://Interactables/Game World/University/ember_portrait.tscn" id="57_emberportrait"]
 
 [sub_resource type="Gradient" id="Gradient_kit_lib_wall"]
 offsets = PackedFloat32Array(0, 0.09, 0.16, 0.5, 0.88, 1)
@@ -259,6 +275,11 @@ fill_to = Vector2(0, 1)
 offsets = PackedFloat32Array(0, 0.5, 1)
 colors = PackedColorArray(0.3, 0.32, 0.52, 0.42, 0.3, 0.32, 0.52, 0.18, 0.3, 0.32, 0.52, 0)
 
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_grad_shadow_down"]
+gradient = SubResource("Gradient_kit_grad_shadow")
+height = 128
+fill_to = Vector2(0, 1)
+
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_grad_shadow_up"]
 gradient = SubResource("Gradient_kit_grad_shadow")
 height = 128
@@ -292,6 +313,11 @@ fill_to = Vector2(0, 1)
 [sub_resource type="Gradient" id="Gradient_kit_faculty_shadow"]
 offsets = PackedFloat32Array(0, 0.5, 1)
 colors = PackedColorArray(0.24, 0.22, 0.2, 0.42, 0.24, 0.22, 0.2, 0.18, 0.24, 0.22, 0.2, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_faculty_shadow_down"]
+gradient = SubResource("Gradient_kit_faculty_shadow")
+height = 128
+fill_to = Vector2(0, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_faculty_shadow_up"]
 gradient = SubResource("Gradient_kit_faculty_shadow")
@@ -329,6 +355,67 @@ height = 128
 fill_from = Vector2(0, 1)
 fill_to = Vector2(0, 0)
 
+[sub_resource type="Resource" id="Resource_supply_door_tp"]
+script = ExtResource("43_swingdoor")
+target_marker_name = "SupplyRoomSpawnPoint"
+
+[sub_resource type="Resource" id="Resource_supply_door_use"]
+script = ExtResource("11_response")
+verb_id = "use"
+actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_supply_door_tp")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="Resource" id="Resource_supply_exit_tp"]
+script = ExtResource("43_swingdoor")
+target_marker_name = "SupplyDoorCorridorSpawnPoint"
+
+[sub_resource type="Resource" id="Resource_supply_exit_use"]
+script = ExtResource("11_response")
+verb_id = "use"
+actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_supply_exit_tp")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="Gradient" id="Gradient_locker_shadow"]
+offsets = PackedFloat32Array(0, 0.5, 1)
+colors = PackedColorArray(0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_locker_shadow_l"]
+gradient = SubResource("Gradient_locker_shadow")
+width = 6
+height = 580
+fill_from = Vector2(1, 0)
+fill_to = Vector2(0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_locker_shadow_r"]
+gradient = SubResource("Gradient_locker_shadow")
+width = 14
+height = 580
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_locker_shadow_floor"]
+gradient = SubResource("Gradient_locker_shadow")
+width = 520
+height = 60
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="Resource" id="Resource_fiona_locker_zoom"]
+script = ExtResource("54_zoomaction")
+
+[sub_resource type="Resource" id="Resource_fiona_locker_use"]
+script = ExtResource("11_response")
+verb_id = "use"
+actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_fiona_locker_zoom")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_locker_single_shadow_floor"]
+gradient = SubResource("Gradient_locker_shadow")
+width = 180
+height = 50
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e4ea3"]
 size = Vector2(3980, 142)
 
@@ -338,14 +425,14 @@ size = Vector2(80, 1400)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bathroom_floor"]
 size = Vector2(2400, 76)
 
-[sub_resource type="Resource" id="Resource_tp_bathroom"]
+[sub_resource type="Resource" id="Resource_tp_hub2f_left"]
 script = ExtResource("38_slidewipe")
-target_marker_name = "BathroomSpawnPoint"
+target_marker_name = "Hub2FSpawnLeft"
 
-[sub_resource type="Resource" id="Resource_use_tp_bathroom"]
+[sub_resource type="Resource" id="Resource_use_tp_hub2f_left"]
 script = ExtResource("11_response")
 verb_id = "walk_to"
-actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_tp_bathroom")])
+actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_tp_hub2f_left")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
 [sub_resource type="Resource" id="Resource_tp_hallway"]
@@ -377,8 +464,21 @@ verb_id = "walk_to"
 actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_tp_labcorridor")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
+[sub_resource type="Resource" id="Resource_tp_hub2f_right"]
+script = ExtResource("38_slidewipe")
+target_marker_name = "Hub2FSpawnRight"
+
+[sub_resource type="Resource" id="Resource_use_tp_hub2f_right"]
+script = ExtResource("11_response")
+verb_id = "walk_to"
+actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_tp_hub2f_right")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cam_lab"]
 size = Vector2(4800, 1080)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_supply_floor"]
+size = Vector2(2100, 142)
 
 [sub_resource type="Resource" id="Resource_classrooms_blocked_action"]
 script = ExtResource("10_showdialogue")
@@ -402,14 +502,14 @@ verb_id = "walk_to"
 actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_tp_3f_corr")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
-[sub_resource type="Resource" id="Resource_tp_3f_hub"]
+[sub_resource type="Resource" id="Resource_tp_hub3f_right"]
 script = ExtResource("38_slidewipe")
-target_marker_name = "Floor3HubSpawnPoint"
+target_marker_name = "Hub3FSpawnRight"
 
-[sub_resource type="Resource" id="Resource_use_tp_3f_hub"]
+[sub_resource type="Resource" id="Resource_use_tp_hub3f_right"]
 script = ExtResource("11_response")
 verb_id = "walk_to"
-actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_tp_3f_hub")])
+actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_tp_hub3f_right")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
 [sub_resource type="Resource" id="Resource_tp_4f_lib"]
@@ -432,14 +532,24 @@ verb_id = "walk_to"
 actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_tp_4f_corr")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
-[sub_resource type="Resource" id="Resource_tp_4f_hub"]
+[sub_resource type="Resource" id="Resource_tp_hub4f_left"]
 script = ExtResource("38_slidewipe")
-target_marker_name = "Floor4HubSpawnPoint"
+target_marker_name = "Hub4FSpawnLeft"
 
-[sub_resource type="Resource" id="Resource_use_tp_4f_hub"]
+[sub_resource type="Resource" id="Resource_use_tp_hub4f_left"]
 script = ExtResource("11_response")
 verb_id = "walk_to"
-actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_tp_4f_hub")])
+actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_tp_hub4f_left")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[sub_resource type="Resource" id="Resource_tp_hub4f_right"]
+script = ExtResource("38_slidewipe")
+target_marker_name = "Hub4FSpawnRight"
+
+[sub_resource type="Resource" id="Resource_use_tp_hub4f_right"]
+script = ExtResource("11_response")
+verb_id = "walk_to"
+actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_tp_hub4f_right")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
 [node name="TestChapterLevel" type="Control" unique_id=1494838151]
@@ -673,6 +783,62 @@ texture = SubResource("GradientTexture2D_lab_floor_shadow_up")
 position = Vector2(4800, 540)
 peak_alpha = 0.5
 
+[node name="SupplyKitWall" type="TextureRect" parent="." unique_id=1578632155]
+layout_mode = 0
+offset_left = 10560.0
+offset_right = 12480.0
+offset_bottom = 670.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_kit_lab_wall")
+
+[node name="SupplyKitFloor" type="TextureRect" parent="." unique_id=1152077879]
+texture_repeat = 2
+layout_mode = 0
+offset_left = 10560.0
+offset_top = 670.0
+offset_right = 15360.0
+offset_bottom = 1695.0
+scale = Vector2(0.4, 0.4)
+mouse_filter = 2
+texture = ExtResource("36_kitbluesquare")
+stretch_mode = 1
+
+[node name="SupplyKitBaseboard" type="ColorRect" parent="." unique_id=782755825]
+layout_mode = 0
+offset_left = 10560.0
+offset_top = 656.0
+offset_right = 12480.0
+offset_bottom = 672.0
+mouse_filter = 2
+color = Color(0.22, 0.26, 0.32, 1)
+
+[node name="SupplyKitWallSeamShadow" type="TextureRect" parent="." unique_id=1208399990]
+layout_mode = 0
+offset_left = 10560.0
+offset_top = 520.0
+offset_right = 12480.0
+offset_bottom = 656.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_lab_shadow_up")
+
+[node name="SupplyKitFloorSeamShadow" type="TextureRect" parent="." unique_id=2094988452]
+layout_mode = 0
+offset_left = 10560.0
+offset_top = 672.0
+offset_right = 12480.0
+offset_bottom = 784.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_lab_floor_shadow_down")
+
+[node name="SupplyKitBottomShadow" type="TextureRect" parent="." unique_id=634302748]
+layout_mode = 0
+offset_left = 10560.0
+offset_top = 920.0
+offset_right = 12480.0
+offset_bottom = 1080.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_lab_floor_shadow_up")
+
 [node name="HubKitWall" type="TextureRect" parent="." unique_id=1162469883]
 layout_mode = 0
 offset_left = 200.0
@@ -853,6 +1019,35 @@ offset_bottom = 3670.0
 mouse_filter = 2
 texture = SubResource("GradientTexture2D_kit_grad_wall")
 
+[node name="GradWinHalo" type="TextureRect" parent="." unique_id=591115053]
+modulate = Color(1, 1, 1, 0.45)
+layout_mode = 0
+offset_left = 6092.0
+offset_top = 3020.0
+offset_right = 7348.0
+offset_bottom = 3656.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_lib_win_halo")
+
+[node name="GradWinBlinds" type="TextureRect" parent="." unique_id=373409100]
+layout_mode = 0
+offset_left = 6244.0
+offset_top = 3105.0
+offset_right = 7204.0
+offset_bottom = 3766.0
+scale = Vector2(0.99056, 0.71716)
+mouse_filter = 2
+texture = ExtResource("42_gradblinds")
+
+[node name="GradWinSillShadow" type="TextureRect" parent="." unique_id=675220600]
+layout_mode = 0
+offset_left = 6248.0
+offset_top = 3572.0
+offset_right = 7192.0
+offset_bottom = 3592.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_grad_shadow_down")
+
 [node name="GradKitFloor" type="TextureRect" parent="." unique_id=344167555]
 texture_repeat = 2
 layout_mode = 0
@@ -901,6 +1096,29 @@ offset_bottom = 4080.0
 mouse_filter = 2
 texture = SubResource("GradientTexture2D_grad_floor_shadow_up")
 
+[node name="GradShelf" parent="." unique_id=1365502650 instance=ExtResource("45_gradshelf")]
+position = Vector2(8100, 3714)
+
+[node name="GradWinPoolLeft" type="TextureRect" parent="." unique_id=1886198698]
+modulate = Color(1, 1, 1, 0.35)
+layout_mode = 0
+offset_left = 6260.0
+offset_top = 3672.0
+offset_right = 6712.0
+offset_bottom = 4030.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_lib_win_pool_down")
+
+[node name="GradWinPoolRight" type="TextureRect" parent="." unique_id=2125701544]
+modulate = Color(1, 1, 1, 0.35)
+layout_mode = 0
+offset_left = 6728.0
+offset_top = 3672.0
+offset_right = 7180.0
+offset_bottom = 4030.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_lib_win_pool_down")
+
 [node name="Floor4LibKitWall" type="TextureRect" parent="." unique_id=1169030907]
 layout_mode = 0
 offset_top = 4500.0
@@ -908,6 +1126,43 @@ offset_right = 3840.0
 offset_bottom = 5170.0
 mouse_filter = 2
 texture = SubResource("GradientTexture2D_kit_faculty_wall")
+
+[node name="FacOffWinHalo" type="TextureRect" parent="." unique_id=1102499726]
+layout_mode = 0
+offset_left = 1292.0
+offset_top = 4520.0
+offset_right = 2548.0
+offset_bottom = 5156.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_lib_win_halo")
+
+[node name="FacOffWinSky" type="TextureRect" parent="." unique_id=209989788]
+layout_mode = 0
+offset_left = 1448.0
+offset_top = 4608.0
+offset_right = 2392.0
+offset_bottom = 5072.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_lib_win_sky")
+
+[node name="FacOffWinFrame" type="TextureRect" parent="." unique_id=1148247422]
+layout_mode = 0
+offset_left = 1409.0
+offset_top = 4588.0
+offset_right = 3446.0
+offset_bottom = 5626.0
+scale = Vector2(0.5, 0.5)
+mouse_filter = 2
+texture = ExtResource("40_facwindow")
+
+[node name="FacOffWinSillShadow" type="TextureRect" parent="." unique_id=2133452751]
+layout_mode = 0
+offset_left = 1409.0
+offset_top = 5107.0
+offset_right = 2428.0
+offset_bottom = 5127.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_faculty_shadow_down")
 
 [node name="Floor4LibKitFloor" type="TextureRect" parent="." unique_id=842131477]
 texture_repeat = 2
@@ -952,6 +1207,24 @@ offset_bottom = 5580.0
 mouse_filter = 2
 texture = SubResource("GradientTexture2D_faculty_red_floor_shadow_up")
 
+[node name="FacOffWinPoolLeft" type="TextureRect" parent="." unique_id=304953856]
+layout_mode = 0
+offset_left = 1460.0
+offset_top = 5172.0
+offset_right = 1912.0
+offset_bottom = 5530.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_lib_win_pool_down")
+
+[node name="FacOffWinPoolRight" type="TextureRect" parent="." unique_id=205702595]
+layout_mode = 0
+offset_left = 1928.0
+offset_top = 5172.0
+offset_right = 2380.0
+offset_bottom = 5530.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_lib_win_pool_down")
+
 [node name="Floor4CorrKitWall" type="TextureRect" parent="." unique_id=1811937867]
 layout_mode = 0
 offset_left = 4800.0
@@ -960,6 +1233,43 @@ offset_right = 8640.0
 offset_bottom = 5170.0
 mouse_filter = 2
 texture = SubResource("GradientTexture2D_kit_faculty_wall")
+
+[node name="FacWingWinHalo" type="TextureRect" parent="." unique_id=1777350169]
+layout_mode = 0
+offset_left = 6092.0
+offset_top = 4520.0
+offset_right = 7348.0
+offset_bottom = 5156.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_lib_win_halo")
+
+[node name="FacWingWinSky" type="TextureRect" parent="." unique_id=99407349]
+layout_mode = 0
+offset_left = 6248.0
+offset_top = 4608.0
+offset_right = 7192.0
+offset_bottom = 5072.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_lib_win_sky")
+
+[node name="FacWingWinFrame" type="TextureRect" parent="." unique_id=1044121651]
+layout_mode = 0
+offset_left = 6209.0
+offset_top = 4588.0
+offset_right = 8246.0
+offset_bottom = 5626.0
+scale = Vector2(0.5, 0.5)
+mouse_filter = 2
+texture = ExtResource("40_facwindow")
+
+[node name="FacWingWinSillShadow" type="TextureRect" parent="." unique_id=2011313677]
+layout_mode = 0
+offset_left = 6209.0
+offset_top = 5107.0
+offset_right = 7228.0
+offset_bottom = 5127.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_faculty_shadow_down")
 
 [node name="Floor4CorrKitFloor" type="TextureRect" parent="." unique_id=547247137]
 texture_repeat = 2
@@ -1009,21 +1319,135 @@ offset_bottom = 5580.0
 mouse_filter = 2
 texture = SubResource("GradientTexture2D_faculty_green_floor_shadow_up")
 
+[node name="FacWingWinPoolLeft" type="TextureRect" parent="." unique_id=780104736]
+layout_mode = 0
+offset_left = 6260.0
+offset_top = 5172.0
+offset_right = 6712.0
+offset_bottom = 5530.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_lib_win_pool_down")
+
+[node name="FacWingWinPoolRight" type="TextureRect" parent="." unique_id=1927894530]
+layout_mode = 0
+offset_left = 6728.0
+offset_top = 5172.0
+offset_right = 7180.0
+offset_bottom = 5530.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_lib_win_pool_down")
+
 [node name="HubElevator" parent="." unique_id=218428406 instance=ExtResource("21_elevator")]
-position = Vector2(1015, 2053)
+position = Vector2(1160, 1953)
 metadata/floor_id = "2F"
 
 [node name="VossPortrait" parent="." unique_id=1741258544 instance=ExtResource("35_vossportrait")]
-position = Vector2(1520, 1830)
+position = Vector2(792, 1830)
 
 [node name="LabDoor" parent="." unique_id=990158649 instance=ExtResource("22_labdoor")]
-position = Vector2(5600, 545)
+position = Vector2(5671, 446)
 
 [node name="LabKeypad" parent="." unique_id=1096163925 instance=ExtResource("23_labkeypad")]
-position = Vector2(5840, 590)
+position = Vector2(5840, 451)
 
-[node name="LabGuard" parent="." instance=ExtResource("39_guard")]
-position = Vector2(5380, 775)
+[node name="LabGuard" parent="." unique_id=339138940 instance=ExtResource("39_guard")]
+position = Vector2(6523, 692)
+
+[node name="SupplyRoomDoor" parent="." unique_id=1994429665 instance=ExtResource("37_facultydoor")]
+position = Vector2(9100, 424)
+object_display_name = "Supply Room"
+object_id = "supply_room_door"
+interactions = Array[ExtResource("11_response")]([SubResource("Resource_supply_door_use")])
+
+[node name="SupplyRoomNameplate" parent="." unique_id=1445711017 instance=ExtResource("41_nameplate")]
+position = Vector2(9100, 134)
+plate_text = "Supply Room"
+
+[node name="SupplyRoomExitDoor" parent="." unique_id=876388395 instance=ExtResource("37_facultydoor")]
+position = Vector2(12200, 424)
+object_display_name = "Corridor Door"
+object_id = "supply_room_exit_door"
+interactions = Array[ExtResource("11_response")]([SubResource("Resource_supply_exit_use")])
+
+[node name="GenomicsLabNameplate" parent="." unique_id=2057911038 instance=ExtResource("41_nameplate")]
+position = Vector2(5671, 133)
+plate_text = "Genomics Lab"
+
+[node name="BiochemLabDoor" parent="." unique_id=468345455 instance=ExtResource("22_labdoor")]
+position = Vector2(6950, 446)
+object_display_name = "Biochem Lab"
+object_id = "biochem_lab_door"
+
+[node name="BiochemLabNameplate" parent="." unique_id=1672310974 instance=ExtResource("41_nameplate")]
+position = Vector2(6950, 133)
+plate_text = "Biochem Lab"
+
+[node name="GreenePortrait" parent="." unique_id=463693325 instance=ExtResource("56_greeneportrait")]
+position = Vector2(6106, 330)
+
+[node name="EmberPortrait" parent="." unique_id=86743444 instance=ExtResource("57_emberportrait")]
+position = Vector2(7457, 330)
+
+[node name="LockerRowShadowLeft" type="Sprite2D" parent="." unique_id=1520253580]
+modulate = Color(1, 1, 1, 0.16)
+position = Vector2(8233, 116)
+scale = Vector2(1, 0.9896552)
+texture = SubResource("GradientTexture2D_locker_shadow_l")
+centered = false
+
+[node name="LockerRowShadowRight" type="Sprite2D" parent="." unique_id=1026881199]
+modulate = Color(1, 1, 1, 0.28)
+position = Vector2(8686, 116)
+scale = Vector2(1, 0.9896552)
+texture = SubResource("GradientTexture2D_locker_shadow_r")
+centered = false
+
+[node name="LockerRowShadowFloor" type="Sprite2D" parent="." unique_id=1751629760]
+position = Vector2(8460.5, 685)
+scale = Vector2(1.0903851, 0.9333325)
+texture = SubResource("GradientTexture2D_locker_shadow_floor")
+
+[node name="FionaLocker" parent="." unique_id=323438803 instance=ExtResource("49_locker")]
+position = Vector2(8295, 690)
+object_display_name = "Fiona's Locker"
+object_id = "locker_fiona"
+interactions = Array[ExtResource("11_response")]([SubResource("Resource_fiona_locker_use")])
+object_zoom_overlay_scene = ExtResource("55_fionalockerzoom")
+
+[node name="JulianLocker" parent="." unique_id=282017803 instance=ExtResource("49_locker")]
+position = Vector2(8406, 690)
+object_display_name = "Julian's Locker"
+object_id = "locker_julian"
+
+[node name="LaylaLocker" parent="." unique_id=1386939792 instance=ExtResource("49_locker")]
+position = Vector2(8518, 690)
+object_display_name = "Layla's Locker"
+object_id = "locker_layla"
+
+[node name="SpareLocker" parent="." unique_id=320511310 instance=ExtResource("49_locker")]
+position = Vector2(8629, 690)
+object_id = "locker_spare"
+
+[node name="JanitorLockerShadowLeft" type="Sprite2D" parent="." unique_id=580461426]
+modulate = Color(1, 1, 1, 0.16)
+position = Vector2(10834, 110)
+texture = SubResource("GradientTexture2D_locker_shadow_l")
+centered = false
+
+[node name="JanitorLockerShadowRight" type="Sprite2D" parent="." unique_id=843863238]
+modulate = Color(1, 1, 1, 0.28)
+position = Vector2(10957, 110)
+texture = SubResource("GradientTexture2D_locker_shadow_r")
+centered = false
+
+[node name="JanitorLockerShadowFloor" type="Sprite2D" parent="." unique_id=1617224300]
+position = Vector2(10900, 690)
+texture = SubResource("GradientTexture2D_locker_single_shadow_floor")
+
+[node name="JanitorLocker" parent="." unique_id=191474791 instance=ExtResource("49_locker")]
+position = Vector2(10900, 690)
+object_display_name = "Janitor's Locker"
+object_id = "locker_janitor"
 
 [node name="LibraryBookshelf" parent="." unique_id=378586800 instance=ExtResource("32_libbookshelf")]
 position = Vector2(707, 419.25)
@@ -1034,15 +1458,157 @@ position = Vector2(2918.25, 419.25)
 object_id = "library_bookshelf_right"
 
 [node name="FacultyDoorTemplate" parent="." unique_id=224867791 instance=ExtResource("37_facultydoor")]
-position = Vector2(1400, 4926)
+position = Vector2(2973, 4926)
+
+[node name="DrSongNameplate" parent="." unique_id=906827584 instance=ExtResource("41_nameplate")]
+position = Vector2(2973, 4634)
+
+[node name="FionaWorkstation" parent="." unique_id=883993605 instance=ExtResource("44_workstation")]
+position = Vector2(5350, 3699)
+object_display_name = "Fiona's Workstation"
+object_id = "workstation_fiona"
+
+[node name="JulianWorkstation" parent="." unique_id=866686723 instance=ExtResource("44_workstation")]
+position = Vector2(7650, 3699)
+object_display_name = "Julian's Workstation"
+object_id = "workstation_julian"
+
+[node name="SpareWorkstation" parent="." unique_id=633347604 instance=ExtResource("44_workstation")]
+position = Vector2(5900, 3699)
+object_display_name = "Empty Workstation"
+object_id = "workstation_spare"
+
+[node name="Hub3FVendingMachine" parent="." unique_id=1960629441 instance=ExtResource("47_vending")]
+position = Vector2(4550, 2190)
+
+[node name="DufloDoor" parent="." unique_id=1271658701 instance=ExtResource("37_facultydoor")]
+position = Vector2(350, 4926)
+object_display_name = "Dr. Duflo's Office"
+object_id = "duflo_office_door"
+interactions = Array[ExtResource("11_response")]([])
+
+[node name="DufloNameplate" parent="." unique_id=1642479599 instance=ExtResource("41_nameplate")]
+position = Vector2(350, 4634)
+plate_text = "Dr. Duflo"
+
+[node name="KingDoor" parent="." unique_id=1749313912 instance=ExtResource("37_facultydoor")]
+position = Vector2(900, 4926)
+object_display_name = "Dr. King's Office"
+object_id = "king_office_door"
+interactions = Array[ExtResource("11_response")]([])
+
+[node name="KingNameplate" parent="." unique_id=1381670612 instance=ExtResource("41_nameplate")]
+position = Vector2(900, 4634)
+plate_text = "Dr. King"
+
+[node name="OfficesPainting" parent="." unique_id=573967697 instance=ExtResource("52_painting")]
+position = Vector2(1220, 4830)
+
+[node name="OfficesPotLeft" parent="." unique_id=731159436 instance=ExtResource("51_plantpot")]
+position = Vector2(625, 5188)
+
+[node name="OfficesPotRight" parent="." unique_id=457460969 instance=ExtResource("51_plantpot")]
+position = Vector2(3300, 5188)
+
+[node name="GreeneDoor" parent="." unique_id=1142155763 instance=ExtResource("37_facultydoor")]
+position = Vector2(5400, 4926)
+object_display_name = "Dr. Greene's Office"
+object_id = "greene_office_door"
+interactions = Array[ExtResource("11_response")]([])
+
+[node name="GreeneNameplate" parent="." unique_id=932293952 instance=ExtResource("41_nameplate")]
+position = Vector2(5400, 4634)
+plate_text = "Dr. Greene"
+
+[node name="GreyDoor" parent="." unique_id=1781329894 instance=ExtResource("37_facultydoor")]
+position = Vector2(5850, 4926)
+object_display_name = "Dr. Grey's Office"
+object_id = "grey_office_door"
+interactions = Array[ExtResource("11_response")]([])
+
+[node name="GreyNameplate" parent="." unique_id=1769994462 instance=ExtResource("41_nameplate")]
+position = Vector2(5850, 4634)
+plate_text = "Dr. Grey"
+
+[node name="EmberDoor" parent="." unique_id=653535265 instance=ExtResource("37_facultydoor")]
+position = Vector2(7550, 4926)
+object_display_name = "Dr. Ember's Office"
+object_id = "ember_office_door"
+interactions = Array[ExtResource("11_response")]([])
+
+[node name="EmberNameplate" parent="." unique_id=1056726446 instance=ExtResource("41_nameplate")]
+position = Vector2(7550, 4634)
+plate_text = "Dr. Ember"
+
+[node name="WingPainting" parent="." unique_id=944955686 instance=ExtResource("52_painting")]
+position = Vector2(8050, 4830)
+
+[node name="WingPotLeft" parent="." unique_id=1557262560 instance=ExtResource("51_plantpot")]
+position = Vector2(5150, 5188)
+
+[node name="WingPotRight" parent="." unique_id=462766904 instance=ExtResource("51_plantpot")]
+position = Vector2(7320, 5188)
+
+[node name="JulianCharacter" parent="." unique_id=79298766 instance=ExtResource("50_julian")]
+position = Vector2(7310, 3775)
+
+[node name="LibrarySignRight" parent="." unique_id=735402489 instance=ExtResource("53_waysign")]
+position = Vector2(3620, 178)
+sign_text = "2F Lobby"
+
+[node name="Lobby2FSignLeft" parent="." unique_id=2146268874 instance=ExtResource("53_waysign")]
+position = Vector2(420, 1678)
+sign_text = "Library"
+arrow_direction = -1
+
+[node name="Lobby2FSignRight" parent="." unique_id=883752989 instance=ExtResource("53_waysign")]
+position = Vector2(1900, 1678)
+sign_text = "Science Labs"
+
+[node name="LabCorridorSignLeft" parent="." unique_id=268590084 instance=ExtResource("53_waysign")]
+position = Vector2(5020, 178)
+sign_text = "2F Lobby"
+arrow_direction = -1
+
+[node name="Lobby3FSignLeft" parent="." unique_id=1920295470 instance=ExtResource("53_waysign")]
+position = Vector2(3420, 1678)
+sign_text = "Classrooms"
+arrow_direction = -1
+
+[node name="Lobby3FSignRight" parent="." unique_id=430718100 instance=ExtResource("53_waysign")]
+position = Vector2(4900, 1678)
+sign_text = "Grad Commons"
+
+[node name="GradCommonsSignLeft" parent="." unique_id=2126801003 instance=ExtResource("53_waysign")]
+position = Vector2(5020, 3178)
+sign_text = "3F Lobby"
+arrow_direction = -1
+
+[node name="Lobby4FSignLeft" parent="." unique_id=1290629308 instance=ExtResource("53_waysign")]
+position = Vector2(6420, 1678)
+sign_text = "Humanities Faculty"
+arrow_direction = -1
+
+[node name="Lobby4FSignRight" parent="." unique_id=1948398388 instance=ExtResource("53_waysign")]
+position = Vector2(7900, 1678)
+sign_text = "Science Faculty"
+
+[node name="FacultyOfficesSignRight" parent="." unique_id=1443106072 instance=ExtResource("53_waysign")]
+position = Vector2(3620, 4678)
+sign_text = "4F Lobby"
+
+[node name="FacultyWingSignLeft" parent="." unique_id=1496000886 instance=ExtResource("53_waysign")]
+position = Vector2(5020, 4678)
+sign_text = "4F Lobby"
+arrow_direction = -1
 
 [node name="Elevator3F" parent="." unique_id=1442835935 instance=ExtResource("21_elevator")]
-position = Vector2(4015, 2053)
+position = Vector2(4160, 1955)
 object_id = "elevator_3f"
 metadata/floor_id = "3F"
 
 [node name="Elevator4F" parent="." unique_id=1453040577 instance=ExtResource("21_elevator")]
-position = Vector2(7015, 2053)
+position = Vector2(7160, 1955)
 object_id = "elevator_4f"
 metadata/floor_id = "4F"
 
@@ -1134,9 +1700,9 @@ position = Vector2(3550, 700)
 
 [node name="ExitToBathroom" parent="." unique_id=837312589 instance=ExtResource("16_exitsign")]
 position = Vector2(3600, 201)
-object_display_name = "University Hall"
+object_display_name = "2F Lobby"
 object_id = "exit_to_bathroom"
-interactions = Array[ExtResource("11_response")]([SubResource("Resource_use_tp_bathroom")])
+interactions = Array[ExtResource("11_response")]([SubResource("Resource_use_tp_hub2f_left")])
 
 [node name="ExitToHallway" parent="." unique_id=1807240061 instance=ExtResource("16_exitsign")]
 position = Vector2(350, 1755)
@@ -1190,9 +1756,9 @@ interactions = Array[ExtResource("11_response")]([SubResource("Resource_use_tp_l
 [node name="ExitToHub" parent="." unique_id=1322631895 instance=ExtResource("16_exitsign")]
 position = Vector2(4950, 201)
 arrow_direction = -1
-object_display_name = "University Hall"
+object_display_name = "2F Lobby"
 object_id = "exit_corridor_to_hub"
-interactions = Array[ExtResource("11_response")]([SubResource("Resource_use_tp_bathroom")])
+interactions = Array[ExtResource("11_response")]([SubResource("Resource_use_tp_hub2f_right")])
 
 [node name="LabCorridorCameraRegion" type="Area2D" parent="." unique_id=1159138566]
 script = ExtResource("19_camregion")
@@ -1200,6 +1766,37 @@ script = ExtResource("19_camregion")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LabCorridorCameraRegion" unique_id=1157151278]
 position = Vector2(7200, 540)
 shape = SubResource("RectangleShape2D_cam_lab")
+
+[node name="SupplyRoomFloor" type="StaticBody2D" parent="." unique_id=689779311]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SupplyRoomFloor" unique_id=1321641378]
+position = Vector2(11520, 846)
+shape = SubResource("RectangleShape2D_supply_floor")
+
+[node name="SupplyRoomLeftWall" type="StaticBody2D" parent="." unique_id=841104163]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SupplyRoomLeftWall" unique_id=46887529]
+position = Vector2(10500, 300)
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="SupplyRoomRightWall" type="StaticBody2D" parent="." unique_id=223714601]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SupplyRoomRightWall" unique_id=1635143200]
+position = Vector2(12540, 300)
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="SupplyRoomSpawnPoint" type="Marker2D" parent="." unique_id=432815619]
+position = Vector2(12200, 700)
+
+[node name="SupplyDoorCorridorSpawnPoint" type="Marker2D" parent="." unique_id=381604859]
+position = Vector2(9100, 700)
+
+[node name="SupplyRoomCameraRegion" type="Area2D" parent="." unique_id=237473203]
+script = ExtResource("19_camregion")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SupplyRoomCameraRegion" unique_id=556241041]
+position = Vector2(11520, 540)
+shape = SubResource("RectangleShape2D_cam_bathroom")
 
 [node name="HubLightSpillLeft" parent="." unique_id=1756740394 instance=ExtResource("20_lightspill")]
 position = Vector2(200, 2040)
@@ -1210,8 +1807,23 @@ position = Vector2(2122, 2040)
 from_left = false
 peak_alpha = 0.5
 
+[node name="Hub2FSpawnLeft" type="Marker2D" parent="." unique_id=1093993689]
+position = Vector2(500, 2092)
+
+[node name="Hub2FSpawnRight" type="Marker2D" parent="." unique_id=733891462]
+position = Vector2(1800, 2092)
+
+[node name="Hub3FSpawnRight" type="Marker2D" parent="." unique_id=27272964]
+position = Vector2(4800, 2092)
+
+[node name="Hub4FSpawnLeft" type="Marker2D" parent="." unique_id=905217658]
+position = Vector2(6620, 2092)
+
+[node name="Hub4FSpawnRight" type="Marker2D" parent="." unique_id=1620879056]
+position = Vector2(7800, 2092)
+
 [node name="Elevator2FSpawnPoint" type="Marker2D" parent="." unique_id=1005057453]
-position = Vector2(1015, 2153)
+position = Vector2(1160, 2153)
 
 [node name="Floor3FloorBody" type="StaticBody2D" parent="." unique_id=458461549]
 
@@ -1232,7 +1844,7 @@ position = Vector2(5162, 1992)
 shape = SubResource("RectangleShape2D_wall")
 
 [node name="Elevator3FSpawnPoint" type="Marker2D" parent="." unique_id=1302768595]
-position = Vector2(4015, 2153)
+position = Vector2(4160, 2153)
 
 [node name="Floor3CameraRegion" type="Area2D" parent="." unique_id=406989046]
 script = ExtResource("19_camregion")
@@ -1260,7 +1872,7 @@ position = Vector2(8162, 1992)
 shape = SubResource("RectangleShape2D_wall")
 
 [node name="Elevator4FSpawnPoint" type="Marker2D" parent="." unique_id=876130934]
-position = Vector2(7015, 2153)
+position = Vector2(7160, 2153)
 
 [node name="Floor4CameraRegion" type="Area2D" parent="." unique_id=656838898]
 script = ExtResource("19_camregion")
@@ -1378,32 +1990,37 @@ interactions = Array[ExtResource("11_response")]([SubResource("Resource_use_tp_3
 [node name="Exit3FGradCommonsToHub" parent="." unique_id=545915430 instance=ExtResource("16_exitsign")]
 position = Vector2(4950, 3201)
 arrow_direction = -1
-object_display_name = "3F Hall"
+object_display_name = "3F Lobby"
 object_id = "exit_3f_gradcommons_to_hub"
-interactions = Array[ExtResource("11_response")]([SubResource("Resource_use_tp_3f_hub")])
+interactions = Array[ExtResource("11_response")]([SubResource("Resource_use_tp_hub3f_right")])
 
 [node name="Exit4FToOffices" parent="." unique_id=295598782 instance=ExtResource("16_exitsign")]
 position = Vector2(6350, 1755)
 arrow_direction = -1
-object_display_name = "Faculty Offices"
+object_display_name = "Humanities Faculty"
 object_id = "exit_4f_to_offices"
 interactions = Array[ExtResource("11_response")]([SubResource("Resource_use_tp_4f_lib")])
 
 [node name="Exit4FToWing" parent="." unique_id=2062198809 instance=ExtResource("16_exitsign")]
 position = Vector2(7950, 1755)
-object_display_name = "Faculty Wing"
+object_display_name = "Science Faculty"
 object_id = "exit_4f_to_wing"
 interactions = Array[ExtResource("11_response")]([SubResource("Resource_use_tp_4f_corr")])
 
 [node name="Exit4FOfficesToHub" parent="." unique_id=112941071 instance=ExtResource("16_exitsign")]
 position = Vector2(3600, 4701)
-object_display_name = "4F Hall"
+object_display_name = "4F Lobby"
 object_id = "exit_4f_offices_to_hub"
-interactions = Array[ExtResource("11_response")]([SubResource("Resource_use_tp_4f_hub")])
+interactions = Array[ExtResource("11_response")]([SubResource("Resource_use_tp_hub4f_left")])
 
 [node name="Exit4FWingToHub" parent="." unique_id=359339235 instance=ExtResource("16_exitsign")]
 position = Vector2(4950, 4701)
 arrow_direction = -1
-object_display_name = "4F Hall"
+object_display_name = "4F Lobby"
 object_id = "exit_4f_wing_to_hub"
-interactions = Array[ExtResource("11_response")]([SubResource("Resource_use_tp_4f_hub")])
+interactions = Array[ExtResource("11_response")]([SubResource("Resource_use_tp_hub4f_right")])
+
+[node name="Cutscenes" type="Node" parent="." unique_id=1629411223]
+
+[node name="JulianIntroCutscene" type="Node" parent="Cutscenes" unique_id=2011313146]
+script = ExtResource("46_julian_cutscene")

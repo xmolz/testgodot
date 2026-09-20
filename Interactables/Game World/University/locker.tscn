@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://blsnuk51nt3by"]
+
+[ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactions/interactable.gd" id="1_interactable"]
+[ext_resource type="Material" uid="uid://dww3d0txyl18g" path="res://interactions/actions/interactable_outline.tres" id="2_outline"]
+[ext_resource type="Texture2D" uid="uid://vdwyiuwirh3j" path="res://Backgrounds/Kit/Lab Corridoor/locker_exterior.png" id="3_locker_art"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_locker"]
+size = Vector2(120, 580)
+
+[node name="Locker" type="Area2D" unique_id=2146324801]
+script = ExtResource("1_interactable")
+object_display_name = "Locker"
+object_id = "locker"
+
+[node name="ObjectSprite" type="Sprite2D" parent="." unique_id=992783755]
+material = ExtResource("2_outline")
+position = Vector2(0, -290)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("3_locker_art")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1517899075]
+position = Vector2(0, -290)
+shape = SubResource("RectangleShape2D_locker")
+
+[node name="WalkToPoint" type="Marker2D" parent="." unique_id=501883500]
+position = Vector2(0, 85)

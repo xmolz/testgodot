@@ -1,0 +1,33 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://interactions/interactable.gd" id="1_interactable"]
+[ext_resource type="Material" path="res://interactions/actions/interactable_outline.tres" id="2_outline"]
+
+[sub_resource type="Gradient" id="Gradient_julian"]
+colors = PackedColorArray(0.22, 0.27, 0.42, 1, 0.22, 0.27, 0.42, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_julian"]
+gradient = SubResource("Gradient_julian")
+width = 200
+height = 540
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_julian"]
+size = Vector2(200, 540)
+
+[node name="JulianCharacter" type="Node2D"]
+
+[node name="Sprite" type="Sprite2D" parent="."]
+material = ExtResource("2_outline")
+position = Vector2(0, -270)
+texture = SubResource("GradientTexture2D_julian")
+
+[node name="InteractionArea" type="Area2D" parent="."]
+script = ExtResource("1_interactable")
+object_display_name = "Julian"
+object_id = "julian"
+
+[node name="ClickShape" type="CollisionShape2D" parent="InteractionArea"]
+position = Vector2(0, -270)
+shape = SubResource("RectangleShape2D_julian")
+
+[node name="WalkToPoint" type="Marker2D" parent="InteractionArea"]

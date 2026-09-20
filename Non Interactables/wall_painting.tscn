@@ -1,0 +1,14 @@
+[gd_scene format=3]
+
+[sub_resource type="Gradient" id="Gradient_painting"]
+colors = PackedColorArray(0.5, 0.42, 0.5, 1, 0.5, 0.42, 0.5, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_painting"]
+gradient = SubResource("Gradient_painting")
+width = 360
+height = 260
+
+[node name="WallPainting" type="Node2D"]
+
+[node name="ObjectSprite" type="Sprite2D" parent="."]
+texture = SubResource("GradientTexture2D_painting")
