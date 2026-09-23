@@ -2,6 +2,14 @@
 Player: (That doesn't seem to work.)
 => END
 
+~ lab_door
+if Flags.get_level_flag("lab_keypad_interacted") == true:
+	Player: (Locked. The keypad's the only way in, and the code's changed.)
+else
+	Player: (I can't open this without entering the password on the keypad.)
+	Player: (Luckily I know it. 07041776. Declaration of Independence.)
+=> END
+
 
 ~ exit_door
 You place your hand on the hand sensor in an attempt to exit.

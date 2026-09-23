@@ -1,0 +1,53 @@
+~ start
+if Flags.get_level_flag("lab_keypad_interacted") == true:
+	=> retry
+do stage_party("", "base")
+do prop_enter("Keypad", "res://ui/keypad_prop.tscn", "opposite", 470.0, 0.9)
+Player: (The keypad lock to the lab.)
+Player: (Easy enough. I've got this.)
+Player: Easiest date for an American to remember, baby.
+do prop_call("Keypad", "type_code", "07041776")
+She hits OK.
+do prop_call("Keypad", "deny")
+The screen flashes red with a flat, ugly buzz. The door doesn't move.
+do party_huddle()
+do Flags.set_level_flag("lab_keypad_interacted", true)
+Player: Umm. Layla...
+Player: Did we have a password change recently?
+Player: I could've sworn it was the usual yesterday afternoon.
+do actor_effect("Layla", "jump")
+Layla: [wave amp=50.0 freq=5.0 connected=1][speed=0.25]WHAAAAT?![/speed][/wave]
+Layla: No way! Who could've changed it?
+Layla: Why did this have to happen today of all days?!
+do actor_effect("Layla", "tremble")
+Layla: I'm screwed. I'm so screwed!
+do actor_effect("Layla", "slump")
+Layla: There goes my letter of recommendation! [wave amp=50.0 freq=5.0 connected=1][speed=0.25]Noooooo![/speed][/wave]
+She seems really shaken by this.
+Player: I need you to calm down.
+Player: There's still time before the professor comes in.
+Player: We can figure out a way to get in.
+Player: Maybe we should talk to that janitor.
+if Flags.get_level_flag("jayce_introduced") == true:
+	do actor_effect("Layla", "shock")
+	Layla: But he's [wave amp=50.0 freq=5.0 connected=1][speed=0.25]CREEEEEPY![/speed][/wave]
+	Player: I suppose. But he's our only lead.
+	Player: Besides, don't janitors have access to every room in this wing?
+	Player: You know, for cleaning and everything?
+	Layla: Fine. I guess it's the only thing we can do.
+	Player: Yep. Let's go.
+else
+	Player: He probably has access to every room in this wing.
+	Layla: Fine. Let's do that.
+=> END
+
+~ retry
+do stage_party("", "base")
+do prop_enter("Keypad", "res://ui/keypad_prop.tscn", "opposite", 470.0, 0.9)
+if Flags.get_level_flag("jayce_date_hint_given") == true:
+	Player: (Dates. Greene's dates.)
+	Player: (Find one worth trying.)
+else
+	Player: (No point. The code's been changed.)
+	Player: (We need another way in. The janitor.)
+=> END

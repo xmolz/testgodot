@@ -1,0 +1,32 @@
+~ start
+do stage_party("Julian", "base")
+Julian: Yes?
+=> hub
+
+~ hub
+What do you want to say to him?
+- What were you talking about on the phone? 
+	=> phone_talk
+- Nothing. Never mind. [Leave]
+	=> leave
+
+~ phone_talk
+Player: Saw you talking pretty intensely over the phone.
+Player: Didn't seem like a pleasant conversation.
+Julian: It wasn't.
+Julian: It also doesn't concern you.
+Julian: No wonder you all are scrambling over in the Genomics department.
+Julian: No one there wants to work anymore.
+if Flags.get_level_flag("party_companion_staged") == true:
+	Layla: Well, we're at work right now!
+	Julian: Are you? I thought you were just visiting.
+	Layla: Umm... yes, I am doing that..
+	Layla: But also...
+	Julian: I'd love to know more, but I'm very busy right now.
+	# then I want this to go to: Anything else you want to waste my time with ? Andd we go back to the hub.
+Player: Right. Carry on, then.
+=> hub
+
+~ leave
+Julian: Mm.
+=> END

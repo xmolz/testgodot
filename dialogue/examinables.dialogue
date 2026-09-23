@@ -39,6 +39,47 @@ Player: (A medicine container. 11 months from expiry.)
 Player: (Label provides no description.)
 => END
 
+~ bobby_pins
+Player: (Bobby pins. I lose about three a day.)
+Player: (Springy steel, bent flat. Good for hair. Good for a few other things.)
+=> END
+
+~ dumbphone_charger
+Player: (My phone charger. The brick's older than half the undergrads in this building.)
+Player: (Still works. That's more than I can say for the phone's battery.)
+=> END
+
+~ books_and_coat
+Player: (My lab coat, folded on top of this term's reading.)
+Player: (Advanced Genomics — Greene. Inferential Statistics — Berger. And Robben's creativity book, which I've opened exactly once.)
+=> END
+
+~ fiona_trophy
+# TEMPLATE — placeholder lines; developer will paste the final text
+Player: (My trophy.)
+Player: (Still here. Still a little dusty.)
+=> END
+
+~ lab_door
+Player: (Genomics Lab. Our workplace.)
+Player: (I need to get in and help Layla with her sequencing.)
+if Flags.get_level_flag("lab_keypad_interacted") == true:
+	Player: (The code's been changed. 07041776 is dead.)
+	if Flags.get_level_flag("jayce_date_hint_given") == true:
+		Player: (Greene likes dates. Find the right one.)
+else
+	Player: (Should use the keypad to enter. The password is 07041776.)
+	Player: (That's what Professor Greene set it as. Declaration of Independence. Easy to remember.)
+=> END
+
+~ lab_keypad
+Player: (The keypad that'll let us into the lab.)
+if Flags.get_level_flag("lab_keypad_interacted") == true:
+	Player: (Eight digits. Not the ones I know anymore.)
+else
+	Player: (The password's 07041776. I should use it and get in ASAP.)
+=> END
+
 
 ~ mcbucket
 

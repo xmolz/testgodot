@@ -9,6 +9,12 @@ var _return_layer: CanvasLayer = null
 var _dialogue_active: bool = false
 var _zoom_controls_ui: Node = null
 
+# dev: `think` is unlocked only by difficulty select (new game) or a save load, so a
+# direct run of this scene (F6) never has it. mirror Main.gd's force_assisted_mode
+# unlock so hints are testable without a full run. no effect on a real launch —
+# the verb is already unlocked there and the guard skips the call.
+@export var dev_unlock_think_on_direct_run: bool = true
+
 func _ready():
 	if GameManager:
 		if is_instance_valid(level_state_manager):
@@ -83,6 +89,11 @@ func _ready():
 	_refresh_hud()
 
 	await get_tree().process_frame
+
+	if dev_unlock_think_on_direct_run and GameManager and Verbs:
+		if not "think" in Verbs.unlocked_verb_ids:
+			Verbs.unlock_verb("think")
+			print_rich("[color=yellow]TestChapterLevel: dev unlock of 'think' (direct run).[/color]")
 
 func _on_interaction_state_changed(_new_state: int) -> void:
 	_refresh_hud()

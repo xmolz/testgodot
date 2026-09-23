@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://dpb5llv205si3"
+path="res://.godot/imported/keypad_lab.dialogue-68913afc933e52231c4c271c8e993cbb.tres"
+
+[deps]
+
+source_file="res://dialogue/keypad_lab.dialogue"
+dest_files=["res://.godot/imported/keypad_lab.dialogue-68913afc933e52231c4c271c8e993cbb.tres"]
+
+[params]
+
+defaults=true

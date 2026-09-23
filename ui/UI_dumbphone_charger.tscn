@@ -1,0 +1,25 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Backgrounds/Kit/Lab Corridoor/dumbphone_charger.png" id="1_tex"]
+[ext_resource type="Script" path="res://ui_interactable.gd" id="2_button_script"]
+[ext_resource type="Script" path="res://interactions/interactable.gd" id="3_interactable"]
+[ext_resource type="Script" path="res://data/InteractionResponse.gd" id="4_response"]
+[ext_resource type="Resource" path="res://interactions/actions/DefaultExamineResponse.tres" id="5_examine"]
+[ext_resource type="Material" path="res://interactions/actions/interactable_outline.tres" id="6_outline"]
+
+[node name="TextureButton" type="TextureButton"]
+self_modulate = Color(1, 1, 1, 0)
+texture_normal = ExtResource("1_tex")
+script = ExtResource("2_button_script")
+
+[node name="Interactable" type="Area2D" parent="."]
+script = ExtResource("3_interactable")
+object_display_name = "Phone Charger"
+object_id = "dumbphone_charger"
+interaction_location = 1
+interactions = Array[ExtResource("4_response")]([ExtResource("5_examine")])
+
+[node name="ObjectSprite" type="Sprite2D" parent="Interactable"]
+material = ExtResource("6_outline")
+texture = ExtResource("1_tex")
+centered = false

@@ -1,8 +1,12 @@
-[gd_scene format=3 uid="uid://f22xakftby1o"]
+[gd_scene format=3]
 
-[ext_resource type="Script" uid="uid://c5icrojt0wi8d" path="res://Non Interactables/portrait_plaque.gd" id="1_script"]
-[ext_resource type="Texture2D" uid="uid://dd8fhmwm47alr" path="res://Backgrounds/Kit/Lab Corridoor/ember_portrait.png" id="2_tex"]
-[ext_resource type="FontFile" uid="uid://bd58xbyix7r6p" path="res://Fonts/VarelaRound-Regular.ttf" id="3_font"]
+[ext_resource type="Script" path="res://Non Interactables/portrait_plaque.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://Backgrounds/Kit/Lab Corridoor/ember_portrait.png" id="2_tex"]
+[ext_resource type="FontFile" path="res://Fonts/VarelaRound-Regular.ttf" id="3_font"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_crop"]
+atlas = ExtResource("2_tex")
+region = Rect2(0, 0, 1200, 1800)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_frame"]
 content_margin_left = 22.0
@@ -35,18 +39,14 @@ border_width_right = 3
 border_width_bottom = 3
 border_color = Color(0.18, 0.16, 0.14, 1)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_crop"]
-atlas = ExtResource("2_tex")
-region = Rect2(0, 0, 1200, 1800)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6wu01"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_text_panel"]
 content_margin_left = 18.0
 content_margin_top = 22.0
 content_margin_right = 18.0
 content_margin_bottom = 18.0
 bg_color = Color(0.87, 0.82, 0.74, 1)
 
-[node name="EmberPortraitCloseup" type="PanelContainer" unique_id=1418867835]
+[node name="EmberPortraitCloseup" type="PanelContainer"]
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_frame")
 script = ExtResource("1_script")
@@ -54,22 +54,22 @@ professor_name = "Dr. Miriam Ember"
 subtitle = "Ph.D., Biochemistry"
 lab_line = "Head, Biochemistry Laboratory · Greendale University"
 born_line = "Born 03/14/1968 · Portland, Oregon"
-body_text = "Twenty-two years at Greendale. Secured the department's largest external grant to date and built the biochemistry program into the university's most cited."
-quote_text = "\"Results are the only argument I have time for.\""
+body_text = "Twenty-two years at Greendale. Highly regarded by her colleagues for her unquenchable thirst for scientific progress. Secured the largest grants ever awarded to any department at Greendale University."
+quote_text = "\"Move fast. Break things. Fix things. Repeat.\""
 dedication = "Portrait commissioned by the Biochemistry Graduate Association, 2019"
 panel_tint = Color(0.87, 0.82, 0.74, 1)
 
-[node name="Matting" type="PanelContainer" parent="." unique_id=1931879042]
+[node name="Matting" type="PanelContainer" parent="."]
 layout_mode = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_mat")
 
-[node name="Row" type="HBoxContainer" parent="Matting" unique_id=723178109]
+[node name="Row" type="HBoxContainer" parent="Matting"]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 0
 
-[node name="Image" type="TextureRect" parent="Matting/Row" unique_id=17491150]
+[node name="Image" type="TextureRect" parent="Matting/Row"]
 custom_minimum_size = Vector2(507, 760)
 layout_mode = 2
 mouse_filter = 2
@@ -77,19 +77,19 @@ texture = SubResource("AtlasTexture_crop")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="TextPanel" type="PanelContainer" parent="Matting/Row" unique_id=1109445246]
+[node name="TextPanel" type="PanelContainer" parent="Matting/Row"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(312, 760)
 layout_mode = 2
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_6wu01")
+theme_override_styles/panel = SubResource("StyleBoxFlat_text_panel")
 
-[node name="Column" type="VBoxContainer" parent="Matting/Row/TextPanel" unique_id=1915432183]
+[node name="Column" type="VBoxContainer" parent="Matting/Row/TextPanel"]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 10
 
-[node name="NameLabel" type="Label" parent="Matting/Row/TextPanel/Column" unique_id=383710223]
+[node name="NameLabel" type="Label" parent="Matting/Row/TextPanel/Column"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.1, 0.1, 0.12, 1)
@@ -99,7 +99,7 @@ text = "Dr. Miriam Ember"
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="SubtitleLabel" type="Label" parent="Matting/Row/TextPanel/Column" unique_id=1591913975]
+[node name="SubtitleLabel" type="Label" parent="Matting/Row/TextPanel/Column"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.25, 0.25, 0.28, 1)
@@ -109,7 +109,7 @@ text = "Ph.D., Biochemistry"
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="LabLabel" type="Label" parent="Matting/Row/TextPanel/Column" unique_id=1233460762]
+[node name="LabLabel" type="Label" parent="Matting/Row/TextPanel/Column"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.25, 0.25, 0.28, 1)
@@ -119,7 +119,7 @@ text = "Head, Biochemistry Laboratory · Greendale University"
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="BornLabel" type="Label" parent="Matting/Row/TextPanel/Column" unique_id=2073430820]
+[node name="BornLabel" type="Label" parent="Matting/Row/TextPanel/Column"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.1, 0.1, 0.12, 1)
@@ -129,18 +129,17 @@ text = "Born 03/14/1968 · Portland, Oregon"
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="BodyLabel" type="Label" parent="Matting/Row/TextPanel/Column" unique_id=2077908976]
+[node name="BodyLabel" type="Label" parent="Matting/Row/TextPanel/Column"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.16, 0.16, 0.18, 1)
 theme_override_fonts/font = ExtResource("3_font")
 theme_override_font_sizes/font_size = 17
-text = "Twenty-two years at Greendale. Highly regarded by her colleagues for her unquenchable thirst for scientific progress. Secured the largest grants ever awarded to any department at Greendale University.
-"
+text = "Twenty-two years at Greendale. Highly regarded by her colleagues for her unquenchable thirst for scientific progress. Secured the largest grants ever awarded to any department at Greendale University."
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="QuoteLabel" type="Label" parent="Matting/Row/TextPanel/Column" unique_id=1218967362]
+[node name="QuoteLabel" type="Label" parent="Matting/Row/TextPanel/Column"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.16, 0.16, 0.18, 1)
@@ -150,7 +149,7 @@ text = "\"Move fast. Break things. Fix things. Repeat.\""
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="DedicationLabel" type="Label" parent="Matting/Row/TextPanel/Column" unique_id=926198373]
+[node name="DedicationLabel" type="Label" parent="Matting/Row/TextPanel/Column"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.32, 0.32, 0.35, 1)

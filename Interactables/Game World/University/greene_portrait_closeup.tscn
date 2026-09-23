@@ -1,8 +1,12 @@
-[gd_scene format=3 uid="uid://bxwx0hjkyfoc3"]
+[gd_scene format=3]
 
-[ext_resource type="Script" uid="uid://c5icrojt0wi8d" path="res://Non Interactables/portrait_plaque.gd" id="1_script"]
-[ext_resource type="Texture2D" uid="uid://bg2vr5awrhmb4" path="res://Backgrounds/Kit/Lab Corridoor/greene_portrait.png" id="2_tex"]
-[ext_resource type="FontFile" uid="uid://bd58xbyix7r6p" path="res://Fonts/VarelaRound-Regular.ttf" id="3_font"]
+[ext_resource type="Script" path="res://Non Interactables/portrait_plaque.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://Backgrounds/Kit/Lab Corridoor/greene_portrait.png" id="2_tex"]
+[ext_resource type="FontFile" path="res://Fonts/VarelaRound-Regular.ttf" id="3_font"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_crop"]
+atlas = ExtResource("2_tex")
+region = Rect2(0, 0, 1200, 1800)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_frame"]
 content_margin_left = 22.0
@@ -35,18 +39,14 @@ border_width_right = 3
 border_width_bottom = 3
 border_color = Color(0.18, 0.16, 0.14, 1)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_crop"]
-atlas = ExtResource("2_tex")
-region = Rect2(0, 0, 1200, 1800)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5347m"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_text_panel"]
 content_margin_left = 18.0
 content_margin_top = 22.0
 content_margin_right = 18.0
 content_margin_bottom = 18.0
 bg_color = Color(0.78, 0.85, 0.83, 1)
 
-[node name="GreenePortraitCloseup" type="PanelContainer" unique_id=1936203599]
+[node name="GreenePortraitCloseup" type="PanelContainer"]
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_frame")
 script = ExtResource("1_script")
@@ -54,22 +54,22 @@ professor_name = "Dr. Alan Greene"
 subtitle = "Ph.D., Molecular Genetics"
 lab_line = "Head, Genomics Laboratory · Greendale University"
 born_line = "Born 09/03/1962 · Sacramento, California"
-body_text = "Joined Greendale in 2004. Known to his students as the reason the genomics lab keeps its lights on past midnight, and for never once letting a first-year present alone."
-quote_text = "\"Ask the question you're afraid is stupid. That's the one that matters.\""
+body_text = "Joined Greendale in 2004. Known for inspiring his students and everyone who’s had the chance to work alongside him. The most cited professor in his field of genomics, and a brilliant teacher."
+quote_text = "\"No such thing as a stupid question!\""
 dedication = "Portrait commissioned by the Genomics Graduate Association, 2021"
 panel_tint = Color(0.78, 0.85, 0.83, 1)
 
-[node name="Matting" type="PanelContainer" parent="." unique_id=1225267873]
+[node name="Matting" type="PanelContainer" parent="."]
 layout_mode = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_mat")
 
-[node name="Row" type="HBoxContainer" parent="Matting" unique_id=100473773]
+[node name="Row" type="HBoxContainer" parent="Matting"]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 0
 
-[node name="Image" type="TextureRect" parent="Matting/Row" unique_id=1187543616]
+[node name="Image" type="TextureRect" parent="Matting/Row"]
 custom_minimum_size = Vector2(507, 760)
 layout_mode = 2
 mouse_filter = 2
@@ -77,19 +77,19 @@ texture = SubResource("AtlasTexture_crop")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="TextPanel" type="PanelContainer" parent="Matting/Row" unique_id=136869309]
+[node name="TextPanel" type="PanelContainer" parent="Matting/Row"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(312, 760)
 layout_mode = 2
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_5347m")
+theme_override_styles/panel = SubResource("StyleBoxFlat_text_panel")
 
-[node name="Column" type="VBoxContainer" parent="Matting/Row/TextPanel" unique_id=847850227]
+[node name="Column" type="VBoxContainer" parent="Matting/Row/TextPanel"]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 10
 
-[node name="NameLabel" type="Label" parent="Matting/Row/TextPanel/Column" unique_id=1826919363]
+[node name="NameLabel" type="Label" parent="Matting/Row/TextPanel/Column"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.1, 0.1, 0.12, 1)
@@ -99,7 +99,7 @@ text = "Dr. Alan Greene"
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="SubtitleLabel" type="Label" parent="Matting/Row/TextPanel/Column" unique_id=885719469]
+[node name="SubtitleLabel" type="Label" parent="Matting/Row/TextPanel/Column"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.25, 0.25, 0.28, 1)
@@ -109,38 +109,37 @@ text = "Ph.D., Molecular Genetics"
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="LabLabel" type="Label" parent="Matting/Row/TextPanel/Column" unique_id=1293562992]
+[node name="LabLabel" type="Label" parent="Matting/Row/TextPanel/Column"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.25, 0.25, 0.28, 1)
 theme_override_fonts/font = ExtResource("3_font")
 theme_override_font_sizes/font_size = 18
-text = "Head, Genomics Laboratory Greendale University"
+text = "Head, Genomics Laboratory · Greendale University"
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="BornLabel" type="Label" parent="Matting/Row/TextPanel/Column" unique_id=85321961]
+[node name="BornLabel" type="Label" parent="Matting/Row/TextPanel/Column"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.1, 0.1, 0.12, 1)
 theme_override_fonts/font = ExtResource("3_font")
 theme_override_font_sizes/font_size = 24
-text = "Born 09/03/1962  Sacramento, California"
+text = "Born 09/03/1962 · Sacramento, California"
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="BodyLabel" type="Label" parent="Matting/Row/TextPanel/Column" unique_id=273386887]
+[node name="BodyLabel" type="Label" parent="Matting/Row/TextPanel/Column"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.16, 0.16, 0.18, 1)
 theme_override_fonts/font = ExtResource("3_font")
 theme_override_font_sizes/font_size = 17
-text = "Joined Greendale in 2004. Known for inspiring his students and everyone who’s had the chance to work alongside him. The most cited professor in his field of genomics, and a brilliant teacher.
-"
+text = "Joined Greendale in 2004. Known for inspiring his students and everyone who’s had the chance to work alongside him. The most cited professor in his field of genomics, and a brilliant teacher."
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="QuoteLabel" type="Label" parent="Matting/Row/TextPanel/Column" unique_id=504604421]
+[node name="QuoteLabel" type="Label" parent="Matting/Row/TextPanel/Column"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.16, 0.16, 0.18, 1)
@@ -150,7 +149,7 @@ text = "\"No such thing as a stupid question!\""
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="DedicationLabel" type="Label" parent="Matting/Row/TextPanel/Column" unique_id=1998132142]
+[node name="DedicationLabel" type="Label" parent="Matting/Row/TextPanel/Column"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.32, 0.32, 0.35, 1)

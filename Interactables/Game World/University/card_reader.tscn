@@ -1,0 +1,68 @@
+[gd_scene format=3 uid="uid://dald08o165f7g"]
+
+[ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactions/interactable.gd" id="1_interactable"]
+[ext_resource type="Material" uid="uid://dww3d0txyl18g" path="res://interactions/actions/interactable_outline.tres" id="2_outline"]
+[ext_resource type="Texture2D" uid="uid://jt3o0kxiu0qv" path="res://Backgrounds/Kit/Lab Corridoor/card_based_lock.png" id="3_reader_art"]
+
+[sub_resource type="Gradient" id="Gradient_reader_shadow"]
+colors = PackedColorArray(0.05, 0.07, 0.11, 1, 0.05, 0.07, 0.11, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_reader_shadow_wall_l"]
+gradient = SubResource("Gradient_reader_shadow")
+width = 3
+height = 72
+fill_from = Vector2(1, 0)
+fill_to = Vector2(0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_reader_shadow_wall_r"]
+gradient = SubResource("Gradient_reader_shadow")
+width = 6
+height = 72
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_reader_shadow_bottom"]
+gradient = SubResource("Gradient_reader_shadow")
+width = 47
+height = 6
+fill_to = Vector2(0, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_reader"]
+size = Vector2(51, 76)
+
+[node name="CardReader" type="Area2D" unique_id=2025452796]
+script = ExtResource("1_interactable")
+object_display_name = "Card Reader"
+object_id = "biochem_card_reader"
+
+[node name="Shadows" type="Node2D" parent="." unique_id=1820969872]
+
+[node name="WallShadowLeft" type="Sprite2D" parent="Shadows" unique_id=1854485563]
+modulate = Color(1, 1, 1, 0.16)
+position = Vector2(-24.5, -32)
+scale = Vector2(1, 0.9444444)
+texture = SubResource("GradientTexture2D_reader_shadow_wall_l")
+centered = false
+
+[node name="WallShadowRight" type="Sprite2D" parent="Shadows" unique_id=1598912390]
+modulate = Color(1, 1, 1, 0.28)
+position = Vector2(22.5, -33)
+scale = Vector2(1, 0.9305555)
+texture = SubResource("GradientTexture2D_reader_shadow_wall_r")
+centered = false
+
+[node name="WallShadowBottom" type="Sprite2D" parent="Shadows" unique_id=1280860088]
+modulate = Color(1, 1, 1, 0.35)
+position = Vector2(-22, 34)
+scale = Vector2(0.9361702, 1)
+texture = SubResource("GradientTexture2D_reader_shadow_bottom")
+centered = false
+
+[node name="ObjectSprite" type="Sprite2D" parent="." unique_id=849411908]
+material = ExtResource("2_outline")
+scale = Vector2(0.17143, 0.17143)
+texture = ExtResource("3_reader_art")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1181086921]
+shape = SubResource("RectangleShape2D_reader")
+
+[node name="WalkToPoint" type="Marker2D" parent="." unique_id=1665999919]
+position = Vector2(0, 175)

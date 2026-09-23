@@ -13,8 +13,8 @@ extends CanvasLayer
 ##   the player leans in on, not an interface.
 ## The LCD shows MAX_DIGITS fixed slots so the player knows the code
 ## length up front; the next empty slot doubles as the blinking cursor.
-## No code validation yet: digits fill the slots, C clears, OK blinks the
-## screen as a placeholder acknowledgment.
+## OK validates against `correct_code`: match → lab_door_unlocked flag, green
+## screen, close; mismatch → red flashes and the slots clear. Empty code = locked.
 
 signal panel_closed
 
@@ -45,6 +45,14 @@ var _entered := ""
 var _is_resolving := false
 var _slots: Array[Label] = []
 var _cursor_tween: Tween
+var _screen_style: StyleBoxFlat
+
+## The code that opens the lab. Empty = nothing is accepted (every attempt is
+## denied). Set it on the KeypadPanel root in the Inspector once the clue
+## chain's date is final. Eight digits, MMDDYYYY, like the old 07041776.
+@export var correct_code: String = ""
+const UNLOCK_FLAG := "lab_door_unlocked"
+const DENY_FLASHES := 4
 
 @onready var _dim: ColorRect = $Dim
 @onready var _center: CenterContainer = $Center
@@ -123,6 +131,7 @@ func _style_device() -> void:
 	screen_style.content_margin_right = 18.0
 	screen_style.content_margin_top = 10.0
 	screen_style.content_margin_bottom = 10.0
+	_screen_style = screen_style
 	_screen.add_theme_stylebox_override("panel", screen_style)
 
 func _build_slots(font_size: int) -> void:
@@ -226,14 +235,61 @@ func _on_key_pressed(key_label: String) -> void:
 		"C":
 			_entered = ""
 		"OK":
-			# Placeholder acknowledgment only - code validation is a later
-			# phase (and the natural hook for Layla's balloon commentary,
-			# which can play over this panel since the tree is not paused).
-			_flash_screen()
+			_submit()
+			return
 		_:
 			if _entered.length() < MAX_DIGITS:
 				_entered += key_label
 	_refresh_screen()
+
+func _submit() -> void:
+	if _entered.is_empty():
+		_flash_screen()
+		return
+	if not correct_code.is_empty() and _entered == correct_code:
+		await _flash_granted()
+		Flags.set_level_flag(UNLOCK_FLAG, true)
+		_is_resolving = false
+		_close()
+		return
+	await _flash_denied()
+	_entered = ""
+	_refresh_screen()
+
+
+func _flash_denied() -> void:
+	# same language as the conversation prop's deny(): red LCD, four flashes, wipe
+	_is_resolving = true
+	if _cursor_tween:
+		_cursor_tween.kill()
+	var red := Color(1.0, 0.35, 0.3, 1.0)
+	for slot in _slots:
+		slot.modulate.a = 1.0
+		slot.add_theme_color_override("font_color", red)
+	_screen_style.bg_color = Color(0.25, 0.04, 0.04, 1.0)
+	for i in DENY_FLASHES:
+		_screen_row.modulate.a = 0.25
+		await get_tree().create_timer(0.08).timeout
+		_screen_row.modulate.a = 1.0
+		await get_tree().create_timer(0.1).timeout
+	await get_tree().create_timer(0.3).timeout
+	_screen_style.bg_color = COLOR_SCREEN_BG
+	for slot in _slots:
+		slot.add_theme_color_override("font_color", COLOR_SCREEN_TEXT)
+	_is_resolving = false
+
+
+func _flash_granted() -> void:
+	_is_resolving = true
+	if _cursor_tween:
+		_cursor_tween.kill()
+	for slot in _slots:
+		slot.modulate.a = 1.0
+	_screen_style.bg_color = Color(0.05, 0.24, 0.09, 1.0)
+	if SoundManager:
+		SoundManager.play_sfx("form_correct_input")
+	await get_tree().create_timer(0.65).timeout
+
 
 func _flash_screen() -> void:
 	var tween := create_tween()

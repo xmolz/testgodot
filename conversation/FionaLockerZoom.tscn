@@ -1,19 +1,24 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://b21x8quenr8wi"]
 
-[ext_resource type="Script" uid="uid://dgi247xxwu7j3" path="res://conversation/object_zoom_overlay.gd" id="1_script"]
-[ext_resource type="Texture2D" path="res://Backgrounds/Kit/Lab Corridoor/locker_interior.png" id="2_interior"]
+[ext_resource type="Script" uid="uid://ywd2xssacpic" path="res://conversation/LockerZoom.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://cvlf5gu6r55qg" path="res://Backgrounds/Kit/Lab Corridoor/locker_interior.png" id="2_interior"]
+[ext_resource type="PackedScene" path="res://ui/UI_bobby_pins.tscn" id="3_bobbypins"]
+[ext_resource type="PackedScene" path="res://ui/UI_dumbphone_charger.tscn" id="4_charger"]
+[ext_resource type="PackedScene" path="res://ui/UI_books_and_coat.tscn" id="5_bookscoat"]
+[ext_resource type="PackedScene" path="res://ui/UI_locker_photo.tscn" id="6_photo"]
+[ext_resource type="PackedScene" path="res://ui/UI_fiona_trophy.tscn" id="7_trophy"]
 
-[node name="FionaLockerZoom" type="CanvasLayer"]
+[node name="FionaLockerZoom" type="CanvasLayer" unique_id=238081641]
 process_mode = 3
 layer = 2
 script = ExtResource("1_script")
 background_texture = ExtResource("2_interior")
-default_verb_id = "pickup"
+default_verb_id = "examine"
 show_verb_panel = false
 show_inventory = false
-allowed_verb_ids = Array[String](["pickup"])
+allowed_verb_ids = Array[String](["examine"])
 
-[node name="RootContainer" type="Control" parent="."]
+[node name="RootContainer" type="Control" parent="." unique_id=1039874153]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -22,7 +27,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="BackgroundRect" type="ColorRect" parent="RootContainer"]
+[node name="BackgroundRect" type="ColorRect" parent="RootContainer" unique_id=599922271]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -31,7 +36,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="ZoomBackground" type="TextureRect" parent="RootContainer"]
+[node name="ZoomBackground" type="TextureRect" parent="RootContainer" unique_id=82798660]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -45,9 +50,44 @@ texture = ExtResource("2_interior")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="InteractableContainer" type="Node2D" parent="RootContainer"]
+[node name="InteractableContainer" type="Node2D" parent="RootContainer" unique_id=1188121155]
 
-[node name="CloseButton" type="Button" parent="RootContainer"]
+[node name="BobbyPins" parent="RootContainer/InteractableContainer" unique_id=1987959203 instance=ExtResource("3_bobbypins")]
+offset_left = 1194.0
+offset_top = 981.9999
+offset_right = 1514.0
+offset_bottom = 1202.0
+rotation = 0.22219421
+scale = Vector2(0.4, 0.4)
+
+[node name="PhoneCharger" parent="RootContainer/InteractableContainer" unique_id=219552793 instance=ExtResource("4_charger")]
+offset_left = 1454.0
+offset_top = 953.0
+offset_right = 1759.0
+offset_bottom = 1061.0
+
+[node name="BooksAndCoat" parent="RootContainer/InteractableContainer" unique_id=560989189 instance=ExtResource("5_bookscoat")]
+offset_left = 177.0
+offset_top = 667.0
+offset_right = 897.0
+offset_bottom = 1107.0
+scale = Vector2(0.8, 0.8)
+
+[node name="LockerPhoto" parent="RootContainer/InteractableContainer" unique_id=1466599188 instance=ExtResource("6_photo")]
+offset_left = 1493.0
+offset_top = 390.0
+offset_right = 1893.0
+offset_bottom = 910.0
+scale = Vector2(0.5, 0.5)
+
+[node name="Trophy" parent="RootContainer/InteractableContainer" unique_id=1105623746 instance=ExtResource("7_trophy")]
+offset_left = 876.0
+offset_top = 792.0
+offset_right = 1156.0
+offset_bottom = 1312.0
+scale = Vector2(0.5, 0.5)
+
+[node name="CloseButton" type="Button" parent="RootContainer" unique_id=146799463]
 layout_mode = 0
 offset_left = 22.0
 offset_top = 26.0

@@ -47,9 +47,10 @@
 [ext_resource type="PackedScene" path="res://Non Interactables/wall_painting.tscn" id="52_painting"]
 [ext_resource type="PackedScene" path="res://Non Interactables/wayfinding_sign.tscn" id="53_waysign"]
 [ext_resource type="Script" uid="uid://dosqfqbexlf5k" path="res://interactions/actions/OpenZoomViewAction.gd" id="54_zoomaction"]
-[ext_resource type="PackedScene" path="res://conversation/FionaLockerZoom.tscn" id="55_fionalockerzoom"]
+[ext_resource type="PackedScene" uid="uid://b21x8quenr8wi" path="res://conversation/FionaLockerZoom.tscn" id="55_fionalockerzoom"]
 [ext_resource type="PackedScene" path="res://Interactables/Game World/University/greene_portrait.tscn" id="56_greeneportrait"]
 [ext_resource type="PackedScene" path="res://Interactables/Game World/University/ember_portrait.tscn" id="57_emberportrait"]
+[ext_resource type="PackedScene" uid="uid://dald08o165f7g" path="res://Interactables/Game World/University/card_reader.tscn" id="58_cardreader"]
 
 [sub_resource type="Gradient" id="Gradient_kit_lib_wall"]
 offsets = PackedFloat32Array(0, 0.09, 0.16, 0.5, 0.88, 1)
@@ -1099,6 +1100,9 @@ texture = SubResource("GradientTexture2D_grad_floor_shadow_up")
 [node name="GradShelf" parent="." unique_id=1365502650 instance=ExtResource("45_gradshelf")]
 position = Vector2(8100, 3714)
 
+[node name="GradShelf2" parent="." unique_id=309225412 instance=ExtResource("45_gradshelf")]
+position = Vector2(8380, 3714)
+
 [node name="GradWinPoolLeft" type="TextureRect" parent="." unique_id=1886198698]
 modulate = Color(1, 1, 1, 0.35)
 layout_mode = 0
@@ -1382,6 +1386,9 @@ object_id = "biochem_lab_door"
 position = Vector2(6950, 133)
 plate_text = "Biochem Lab"
 
+[node name="BiochemCardReader" parent="." unique_id=825893028 instance=ExtResource("58_cardreader")]
+position = Vector2(7119, 450)
+
 [node name="GreenePortrait" parent="." unique_id=463693325 instance=ExtResource("56_greeneportrait")]
 position = Vector2(6106, 330)
 
@@ -1463,6 +1470,9 @@ position = Vector2(2973, 4926)
 [node name="DrSongNameplate" parent="." unique_id=906827584 instance=ExtResource("41_nameplate")]
 position = Vector2(2973, 4634)
 
+[node name="SongCardReader" parent="." unique_id=2028946723 instance=ExtResource("58_cardreader")]
+position = Vector2(2804, 4931)
+
 [node name="FionaWorkstation" parent="." unique_id=883993605 instance=ExtResource("44_workstation")]
 position = Vector2(5350, 3699)
 object_display_name = "Fiona's Workstation"
@@ -1491,6 +1501,9 @@ interactions = Array[ExtResource("11_response")]([])
 position = Vector2(350, 4634)
 plate_text = "Dr. Duflo"
 
+[node name="DufloCardReader" parent="." unique_id=1013372629 instance=ExtResource("58_cardreader")]
+position = Vector2(181, 4931)
+
 [node name="KingDoor" parent="." unique_id=1749313912 instance=ExtResource("37_facultydoor")]
 position = Vector2(900, 4926)
 object_display_name = "Dr. King's Office"
@@ -1500,6 +1513,9 @@ interactions = Array[ExtResource("11_response")]([])
 [node name="KingNameplate" parent="." unique_id=1381670612 instance=ExtResource("41_nameplate")]
 position = Vector2(900, 4634)
 plate_text = "Dr. King"
+
+[node name="KingCardReader" parent="." unique_id=274805784 instance=ExtResource("58_cardreader")]
+position = Vector2(731, 4931)
 
 [node name="OfficesPainting" parent="." unique_id=573967697 instance=ExtResource("52_painting")]
 position = Vector2(1220, 4830)
@@ -1520,6 +1536,9 @@ interactions = Array[ExtResource("11_response")]([])
 position = Vector2(5400, 4634)
 plate_text = "Dr. Greene"
 
+[node name="GreeneKeypad" parent="." unique_id=428337472 instance=ExtResource("23_labkeypad")]
+position = Vector2(5569, 4931)
+
 [node name="GreyDoor" parent="." unique_id=1781329894 instance=ExtResource("37_facultydoor")]
 position = Vector2(5850, 4926)
 object_display_name = "Dr. Grey's Office"
@@ -1530,6 +1549,9 @@ interactions = Array[ExtResource("11_response")]([])
 position = Vector2(5850, 4634)
 plate_text = "Dr. Grey"
 
+[node name="GreyCardReader" parent="." unique_id=1568008844 instance=ExtResource("58_cardreader")]
+position = Vector2(6019, 4931)
+
 [node name="EmberDoor" parent="." unique_id=653535265 instance=ExtResource("37_facultydoor")]
 position = Vector2(7550, 4926)
 object_display_name = "Dr. Ember's Office"
@@ -1539,6 +1561,9 @@ interactions = Array[ExtResource("11_response")]([])
 [node name="EmberNameplate" parent="." unique_id=1056726446 instance=ExtResource("41_nameplate")]
 position = Vector2(7550, 4634)
 plate_text = "Dr. Ember"
+
+[node name="EmberCardReader" parent="." unique_id=46984101 instance=ExtResource("58_cardreader")]
+position = Vector2(7719, 4931)
 
 [node name="WingPainting" parent="." unique_id=944955686 instance=ExtResource("52_painting")]
 position = Vector2(8050, 4830)

@@ -1,0 +1,48 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ui/keypad_prop.gd" id="1_script"]
+
+[node name="KeypadProp" type="PanelContainer"]
+mouse_filter = 2
+script = ExtResource("1_script")
+
+[node name="Body" type="PanelContainer" parent="."]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Margin" type="MarginContainer" parent="Body"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 30
+
+[node name="VBox" type="VBoxContainer" parent="Body/Margin"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 18
+
+[node name="EngravedLabel" type="Label" parent="Body/Margin/VBox"]
+layout_mode = 2
+mouse_filter = 2
+text = "LAB ACCESS"
+horizontal_alignment = 1
+
+[node name="Screen" type="PanelContainer" parent="Body/Margin/VBox"]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="ScreenRow" type="HBoxContainer" parent="Body/Margin/VBox/Screen"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="ButtonGrid" type="GridContainer" parent="Body/Margin/VBox"]
+layout_mode = 2
+mouse_filter = 2
+columns = 3
+theme_override_constants/h_separation = 14
+theme_override_constants/v_separation = 14

@@ -367,6 +367,27 @@ func actor_effect(actor_id: String, effect_name: String) -> void:
 		tween.tween_property(rect, "position:x", original_x - 10.0, 0.025)
 		tween.tween_property(rect, "position:x", original_x, 0.025)
 		tween.tween_property(rect, "scale", base_s, 0.05)
+	elif effect_name == "jump":
+		# a hop: feet leave the stage line and land with a small bounce
+		var y0: float = rect.position.y
+		var t = create_tween()
+		t.tween_property(rect, "position:y", y0 - 70.0, 0.13).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		t.tween_property(rect, "position:y", y0, 0.22).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
+	elif effect_name == "tremble":
+		# fast small side-to-side shiver, ends exactly where it started
+		var x0: float = rect.position.x
+		var t = create_tween()
+		for i in 10:
+			t.tween_property(rect, "position:x", x0 + (5.0 if i % 2 == 0 else -5.0), 0.035)
+		t.tween_property(rect, "position:x", x0, 0.035)
+	elif effect_name == "slump":
+		# shoulders drop: squash a little on y (bottom pivot keeps the feet planted), then recover
+		var s0: Vector2 = rect.scale
+		var t = create_tween()
+		t.tween_property(rect, "scale", Vector2(s0.x, s0.y * 0.955), 0.25).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		t.tween_property(rect, "scale", s0, 0.7).set_delay(0.45).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	else:
+		push_warning("actor_effect: unknown effect '%s'." % effect_name)
 
 
 func actor_walk_in(actor_id: String, emotion: String, slot_name: String, scale_modifier: float = 1.0):
@@ -606,10 +627,12 @@ func stage_party(npc_id: String, npc_emotion: String = "base", with_companion: b
 	var npc_slot: String = "right" if on_left else "left"
 
 	await actor_enter(PROTAGONIST_ACTOR_ID, "base", our_slot)
-	await actor_enter(npc_id, npc_emotion, npc_slot)
-	if on_left:
-		actor_flip(npc_id, true)
-	else:
+	# empty npc_id: stage the party alone (a prop takes the other side — see prop_enter)
+	if not npc_id.is_empty():
+		await actor_enter(npc_id, npc_emotion, npc_slot)
+		if on_left:
+			actor_flip(npc_id, true)
+	if not on_left:
 		actor_flip(PROTAGONIST_ACTOR_ID, true)
 
 	_party_companion_id = ""
@@ -658,6 +681,8 @@ func _set_companion_front(front: bool) -> void:
 		return
 	if not _original_actor_transforms.is_empty():
 		return   # a close-up (actor_focus) owns every transform until unfocus
+	if _huddle_active:
+		return   # party_huddle owns the companion's transform until party_unhuddle
 	_party_companion_front = front
 
 	var rect: TextureRect = active_actors[_party_companion_id]
@@ -696,6 +721,187 @@ func _following_companion_actor_id() -> String:
 			if id is String and not id.is_empty():
 				return id
 	return ""
+
+
+# ---------------------------------------------------------------------------
+# props: scene instances staged beside the actors (a keypad, a note, a phone).
+# they live on the ActorStage — above DarkenBackdrop/BackgroundLayer, under the
+# balloon — NOT in CinematicContainer, which sits under the backdrop and is meant
+# for full-screen cinematics. slot "opposite" = the side the party is not on.
+var _props: Dictionary = {}
+
+func prop_enter(prop_name: String, tscn_path: String, slot_name: String = "opposite", y_center: float = 470.0, prop_scale: float = 1.0):
+	var scene: PackedScene = load(tscn_path)
+	if scene == null:
+		push_warning("prop_enter: could not load " + tscn_path)
+		return
+	var inst: Control = scene.instantiate() as Control
+	if inst == null:
+		push_warning("prop_enter: root of " + tscn_path + " is not a Control")
+		return
+	if _props.has(prop_name):
+		prop_leave(prop_name)
+	actor_stage.add_child(inst)
+	_props[prop_name] = inst
+	await get_tree().process_frame   # containers need a frame to report size
+
+	var resolved_slot: String = slot_name
+	if slot_name == "opposite":
+		var on_left: bool = Flags.get_level_flag("conversation_player_on_left") == true
+		resolved_slot = "right" if on_left else "left"
+	var marker: Marker2D = actor_stage.get_node_or_null("Slot" + resolved_slot.capitalize())
+	var cx: float = marker.position.x if marker else actor_stage.get_node("SlotCenter").position.x
+
+	inst.scale = Vector2(prop_scale, prop_scale)
+	var half: Vector2 = inst.size * prop_scale * 0.5
+	var target := Vector2(cx - half.x, y_center - half.y)
+	inst.position = target + Vector2(0.0, 200.0)
+	inst.modulate.a = 0.0
+	var tween = create_tween().set_parallel(true)
+	tween.tween_property(inst, "position:y", target.y, 0.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.tween_property(inst, "modulate:a", 1.0, 0.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+
+
+# do prop_call("Keypad", "type_code", "07041776") — awaits coroutines so the next
+# line waits for the animation.
+func prop_call(prop_name: String, method: String, arg = null):
+	var inst = _props.get(prop_name)
+	if not is_instance_valid(inst):
+		push_warning("prop_call: no prop '%s'." % prop_name)
+		return
+	if not inst.has_method(method):
+		push_warning("prop_call: '%s' has no method '%s'." % [prop_name, method])
+		return
+	if arg == null:
+		await inst.call(method)
+	else:
+		await inst.call(method, arg)
+
+
+func prop_leave(prop_name: String) -> void:
+	var inst = _props.get(prop_name)
+	_props.erase(prop_name)
+	if not is_instance_valid(inst):
+		return
+	var tween = create_tween().set_parallel(true)
+	tween.tween_property(inst, "position:y", inst.position.y + 200.0, 0.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	tween.tween_property(inst, "modulate:a", 0.0, 0.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	tween.chain().tween_callback(inst.queue_free)
+
+
+# ---------------------------------------------------------------------------
+# huddle: the party talks amongst itself. protagonist steps to centre and turns to
+# her companion; the companion leaves the back row for the party's slot, full size,
+# facing her; every other actor and every prop slides half out through its own
+# screen edge — still visible, so the third party is not forgotten.
+# party_unhuddle() restores every transform and z-order it touched.
+#   do party_huddle()        # after the keypad fails / when Layla whispers
+#   do party_unhuddle()      # as Jayce butts back in
+const HUDDLE_TIME: float = 0.45
+const HUDDLE_SIDELINE_FRACTION: float = 0.75  # share of the third party's width that leaves the screen
+const HUDDLE_PROTAG_SHIFT: float = 200.0      # protagonist stands this far off centre, toward the third party
+const HUDDLE_COMPANION_OUTWARD: float = 70.0  # companion stands this far outside the party's slot
+
+var _huddle_active: bool = false
+var _huddle_saved: Dictionary = {}   # CanvasItem -> {"pos", "scale", "mod", "index"}
+
+
+func _huddle_remember(node: CanvasItem) -> void:
+	_huddle_saved[node] = {
+		"pos": node.position,
+		"scale": node.scale,
+		"mod": node.modulate,
+		"index": node.get_index(),
+	}
+
+
+func party_huddle(duration: float = HUDDLE_TIME):
+	if _huddle_active:
+		return
+	if not _original_actor_transforms.is_empty():
+		return   # actor_focus owns the stage; unfocus first
+	if not active_actors.has(PROTAGONIST_ACTOR_ID):
+		return
+	_huddle_active = true
+	_huddle_saved.clear()
+	if _party_stance_tween and _party_stance_tween.is_valid():
+		_party_stance_tween.kill()
+
+	var on_left: bool = Flags.get_level_flag("conversation_player_on_left") == true
+	var party_marker: Marker2D = actor_stage.get_node("SlotLeft" if on_left else "SlotRight")
+	var center_marker: Marker2D = actor_stage.get_node("SlotCenter")
+	var center_x: float = center_marker.position.x
+	var tween = create_tween().set_parallel(true)
+
+	# protagonist: centre, facing the companion's side (sprites face right)
+	var fiona: TextureRect = active_actors[PROTAGONIST_ACTOR_ID]
+	_huddle_remember(fiona)
+	var fiona_anchor := Vector2(center_x + (HUDDLE_PROTAG_SHIFT if on_left else -HUDDLE_PROTAG_SHIFT), center_marker.position.y)
+	var fiona_target: Vector2 = fiona_anchor - fiona.pivot_offset
+	var fiona_scale := Vector2(-absf(fiona.scale.x) if on_left else absf(fiona.scale.x), fiona.scale.y)
+	tween.tween_property(fiona, "position", fiona_target, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.tween_property(fiona, "scale", fiona_scale, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	actor_stage.move_child(fiona, -1)
+
+	# companion: out of the back row into the party's slot, full size, facing the protagonist
+	if not _party_companion_id.is_empty() and active_actors.has(_party_companion_id):
+		var comp: TextureRect = active_actors[_party_companion_id]
+		_huddle_remember(comp)
+		# companion: out of the back row into the party's slot, full size, facing the protagonist
+		var comp_anchor := party_marker.position + Vector2(-HUDDLE_COMPANION_OUTWARD if on_left else HUDDLE_COMPANION_OUTWARD, 0.0)
+		var comp_target: Vector2 = comp_anchor - comp.pivot_offset
+		var comp_scale: Vector2 = _party_scale_for(_party_companion_id, 1.0, not on_left)
+		var comp_tint := Color(1.0, 1.0, 1.0, comp.modulate.a)
+		tween.tween_property(comp, "position", comp_target, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		tween.tween_property(comp, "scale", comp_scale, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		tween.tween_property(comp, "modulate", comp_tint, duration).set_trans(Tween.TRANS_SINE)
+		actor_stage.move_child(comp, -1)
+		_party_companion_front = true
+
+	# everyone else: half off-screen through the edge they are nearest to
+	for id in active_actors:
+		if id == PROTAGONIST_ACTOR_ID or id == _party_companion_id:
+			continue
+		var r: TextureRect = active_actors[id]
+		_huddle_remember(r)
+		var width: float = r.texture.get_size().x * absf(r.scale.x)
+		var anchor_x: float = r.position.x + r.pivot_offset.x
+		var dir: float = -1.0 if anchor_x < center_x else 1.0
+		tween.tween_property(r, "position:x", r.position.x + dir * width * HUDDLE_SIDELINE_FRACTION, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	for prop_name in _props:
+		var p = _props[prop_name]
+		if not is_instance_valid(p):
+			continue
+		_huddle_remember(p)
+		var p_width: float = p.size.x * absf(p.scale.x)
+		var p_anchor_x: float = p.position.x + p_width * 0.5
+		var p_dir: float = -1.0 if p_anchor_x < center_x else 1.0
+		tween.tween_property(p, "position:x", p.position.x + p_dir * p_width * HUDDLE_SIDELINE_FRACTION, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+
+
+func party_unhuddle(duration: float = HUDDLE_TIME):
+	if not _huddle_active:
+		return
+	_huddle_active = false
+	var tween = create_tween().set_parallel(true)
+	# restore transforms
+	for node in _huddle_saved:
+		if not is_instance_valid(node):
+			continue
+		var saved: Dictionary = _huddle_saved[node]
+		tween.tween_property(node, "position", saved["pos"], duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		tween.tween_property(node, "scale", saved["scale"], duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		tween.tween_property(node, "modulate", saved["mod"], duration).set_trans(Tween.TRANS_SINE)
+	# restore z-order: lowest saved index first
+	var ordered: Array = []
+	for node in _huddle_saved:
+		if is_instance_valid(node):
+			ordered.append(node)
+	ordered.sort_custom(func(a, b): return _huddle_saved[a]["index"] < _huddle_saved[b]["index"])
+	for node in ordered:
+		actor_stage.move_child(node, clampi(_huddle_saved[node]["index"], 0, actor_stage.get_child_count() - 1))
+	_huddle_saved.clear()
+	_party_companion_front = false
 
 
 func hide_dialogue_ui():

@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://dltqnu07oiff" path="res://interactions/action.gd" id="5_action"]
 [ext_resource type="Script" path="res://interactions/actions/OpenCloseupAction.gd" id="6_closeup_action"]
 [ext_resource type="PackedScene" path="res://Interactables/Game World/University/voss_portrait_closeup.tscn" id="7_closeup_scene"]
+[ext_resource type="FontFile" path="res://Fonts/VarelaRound-Regular.ttf" id="8_font"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_portrait_outline"]
 resource_local_to_scene = true
@@ -14,6 +15,10 @@ shader = ExtResource("2_outlineshader")
 shader_parameter/enable_outline = false
 shader_parameter/outline_color = Color(0.2, 0.85, 1, 1)
 shader_parameter/outline_width = 8.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_voss_world_photo"]
+atlas = ExtResource("3_portrait_tex")
+region = Rect2(0, 0, 720, 1080)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_outer_frame"]
 bg_color = Color(0.12, 0.13, 0.16, 1)
@@ -37,6 +42,9 @@ border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
 border_color = Color(0.18, 0.16, 0.14, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_text_panel"]
+bg_color = Color(0.7, 0.72, 0.73, 1)
 
 [sub_resource type="Resource" id="Resource_portrait_zoom"]
 script = ExtResource("6_closeup_action")
@@ -87,8 +95,32 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_inner_mat")
 
 [node name="ObjectSprite" type="Sprite2D" parent="."]
 material = SubResource("ShaderMaterial_portrait_outline")
-scale = Vector2(0.252, 0.252)
-texture = ExtResource("3_portrait_tex")
+position = Vector2(-56, 0)
+scale = Vector2(0.25185, 0.25185)
+texture = SubResource("AtlasTexture_voss_world_photo")
+
+[node name="TextPanel" type="Panel" parent="."]
+offset_left = 35.0
+offset_top = -136.0
+offset_right = 147.0
+offset_bottom = 136.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_text_panel")
+
+[node name="NameLabel" type="Label" parent="TextPanel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 14.0
+offset_bottom = 30.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.1, 0.1, 0.12, 1)
+theme_override_fonts/font = ExtResource("8_font")
+theme_override_font_sizes/font_size = 11
+text = "Leon Voss"
+horizontal_alignment = 1
+autowrap_mode = 3
 
 [node name="HoverGlow" type="Node2D" parent="."]
 visible = false

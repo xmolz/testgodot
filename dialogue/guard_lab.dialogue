@@ -4,23 +4,23 @@ if Flags.get_level_flag("jayce_introduced") == true:
 	Jayce: Back again, sweetheart?
 else
 	A man in a grey work jacket leans against the wall, arms folded, watching the corridor.
-	He's looking at you and Layla the way someone looks at a vending machine while deciding what to get.
+	He's looking at you and Layla like a hyena looking at an unattended picnic.
 => hub
 
 ~ hub
 What do you want to say to him?
-- Who are you? [if Flags.get_level_flag("jayce_introduced") != true]
+- Who are you?
 	=> who_are_you
-- We need to get into the lab.
+- We can't enter the lab. [Proceed] [if Flags.get_level_flag("lab_keypad_interacted") == true and Flags.get_level_flag("jayce_introduced") == true]
 	=> lab_access
-- Nothing. Never mind.
+- Nothing. Never mind. [Leave]
 	=> leave
 
 ~ who_are_you
 Player: Hey. Do you mind telling us who you are?
 You notice him straightening up. He wasn't expecting to be spoken to first.
-???: Me? Course not, sweetheart.
-???: Jayce. Maintenance.
+Jayce: Me? Course not, sweetheart.
+Jayce: Name's Jayce. Work is Maintenance.
 do Flags.set_level_flag("jayce_introduced", true)
 Jayce: And what do I owe the pleasure?
 Player: I'm Fiona, and this is Layla. We work here, in the genomics lab.
@@ -34,24 +34,149 @@ if Flags.get_level_flag("party_companion_staged") == true:
 	Layla: Nights are for rest and recovery!
 	Player: Yeah, yeah. I know.
 	He watches the two of you for a beat longer than the exchange warrants.
-	Jayce: Close, you two, aren't you.
+	Jayce: Aww, what a bunch of lovebirds y'all are.
+	Jayce: How 'bout a sleepover, huh? Bet you girls do those all the time.
+	Jayce: Bet it smells nice in there in the sheets with you two.
 	Layla: ...Sorry?
-	Jayce: Nothing, sweetheart. Just nice to see.
-	Jayce: Most people who come through here can't stand each other.
-	Player: (Right.)
+	Jayce: Oh, don't mind it, sweetheart.
+	Jayce: It's just that looking at how much you care for each other has gotten me a lil' bit...
+	Jayce: Excited.
+	#Fiona turns to Layla
+	do party_huddle()
+	Layla: Fiona! This man is hella creepy! Let's get away from him!
+	Player: Don't worry. People like him can be made useful.
+	Layla: What do you mean?
+	Player: Don't know yet. But you'll see soon.
+	Layla: Hmm. If you say so, Fiona.
+	do party_unhuddle()
+	Jayce: What are you two hot things whisperin' about?
+	Player: Nothing you need to worry about.
 Jayce: Anyway. I'll let you get back to it.
 Jayce: You know where to find me.
 Player: Sure.
 => hub
 
 ~ lab_access
-Player: We need to get into the lab.
+if Flags.get_level_flag("jayce_date_hint_given") == true:
+	=> lab_access_again
+Player: Hey. As maintenance, you must have access to all the rooms in this wing, right?
+Jayce: Sure do.
+Jayce: Why? Wanna break into some place you're not supposed to be, sugar?
+Player: Not really. We want to get into our own lab. But the password seems to have been changed.
+Jayce: Huh? Has it? It was the same yesterday.
+Jayce: Good ol' freedom day. Seen ya professor punch it in a hundred times.
+Jayce: Can't help ya with that door itself, mind. My card don't do a thing for keypad rooms.
+Player: That's what we tried, but it doesn't seem to work now.
+Player: And we've got urgent work that needs to be done in there.
+Jayce: Well, too damn bad, sweetie. Looks like it can't be helped.
+Jayce: The keypad enforces a password change once every year.
+Jayce: Suppose it was yesterday it asked for one, and ya professor obliged.
 if Flags.get_level_flag("party_companion_staged") == true:
-	Layla: Technically we're grad students. It's complicated.
-	Jayce: Then it's simple for me.
-Jayce: No card, no lab. Nothing personal.
-Player: Noted.
-=> hub
+	do actor_effect("Layla", "jump")
+	Layla: No way!
+	do actor_effect("Layla", "tremble")
+	Layla: Fiona! What should we do now?
+	Layla: Should I let go of my goals?
+	Layla: Do I belong in the streets?
+	Player: No.
+	Player: I mean, I don't know. But probably not?
+Player: There's gotta be something we can do still.
+Player: So hey, Jayce. Jayce it was, right?
+Player: Jayce, can you tell us anything about the previous passwords?
+Player: You know, before this one?
+Player: Maybe there's a pattern here we can uncover.
+Jayce: Well, babe, I been here three years.
+Jayce: And while I don't remember no old passwords digit by digit...
+Jayce: I do remember all of 'em been some kind of a date.
+Jayce: Easier for your professor to remember, I reckon.
+if Flags.get_level_flag("party_companion_staged") == true:
+	Layla: That's true.
+	Layla: I once asked him why he refused to change to a card-based lock like the other rooms in this wing.
+	Layla: He was afraid he'd just end up losing his cards. He's clumsy that way.
+	Player: Right. And he is good at remembering stuff.
+	Layla: Very good.
+Player: Regardless, if all his passwords have been dates...
+Player: It's very likely the new one is too.
+if Flags.get_level_flag("party_companion_staged") == true:
+	Layla: But what could it be, Fiona?
+Player: Not sure. We'll have to look around. There might be clues here.
+Jayce: Love the go-getter attitude. It's hot on ya, blondie.
+Jayce: Tell ol' Jayce one thing, though. Why not just call ya professor and ask him for it?
+do Flags.set_level_flag("jayce_date_hint_given", true)
+if Flags.get_level_flag("party_companion_staged") == true:
+	do actor_effect("Layla", "slump")
+	Layla: Well, we could do that...
+	do actor_effect("Layla", "tremble")
+	Layla: But I'd rather not.
+	Layla: I don't even want him thinking for a second I got the sequencing done today.
+	Layla: According to him, it was done days ago!
+	Jayce: I'll sequence you if you lemme, girl.
+	do actor_effect("Layla", "shock")
+	Layla: OH. MY. GOD. Shut up!
+	Player: It's alright. Never mind, Jayce. We'll look around and see what we can do.
+	Jayce: Sure thing. All the best, blondie and brownie.
+	do party_huddle()
+	Layla: So, I hate him.
+	Player: I know, but let's keep it cool with him.
+	Player: Never know if he could turn out helpful.
+	do actor_effect("Layla", "slump")
+	Layla: Ugh. Okay, Fiona. I'll try.
+	Layla: But only because you insist!
+	Player: Thanks, Layla.
+	Player: Anyway. We should look for clues. Stuff around the block. Anything that pertains to Professor Greene.
+	Player: And can lead us to a date.
+	Layla: Alright, let's do this!
+	Player: I'm letting you know this, though. It's probably a long shot.
+	Player: He may not have even set a date as the passcode.
+	Player: I would rate our chances of success at approximately...
+	Player: Nine and a half percent!
+	do actor_effect("Layla", "jump")
+	Layla: NINE AND A HALF!
+	Layla: So precise! I bet you used some complicated formula in your mind to come to that number!
+	Player: Yeah.
+	Player: (I pulled that outta my ass. She takes everything I say at face value.)
+	Layla: Regardless, I'll take those chances.
+	Layla: It's all that I can do right now!
+	Layla: Put my trust in my prodigious mentor!
+	Player: Yeah, yeah.
+	Player: Anyway, let's go.
+	do party_unhuddle()
+	=> END
+else
+	Player: He doesn't need to know we're locked out. I'd rather find it myself.
+	Jayce: Suit yourself, blondie.
+	Player: Let's see what I can find around here.
+	=> END
+
+~ lab_access_again
+Jayce: Still locked out, huh, blondie?
+Player: Working on it.
+=> jayce_return_hub
+
+~ jayce_return_hub
+What do you want to ask him?
+- Ask him about his life.
+	=> jayce_life
+- Ask him where you should look.
+	=> jayce_where_to_look
+- That's all. [Leave]
+	=> leave
+
+~ jayce_life
+# TEMPLATE — developer fills in.
+Player: So, Jayce. How long have you been mopping these halls?
+Jayce: Long enough to know which doors stick, sugar.
+Jayce: Nights suit me. Quiet. Nobody watchin' the watcher.
+Player: Comforting.
+=> jayce_return_hub
+
+~ jayce_where_to_look
+# TEMPLATE — developer fills in.
+Player: If you were us, where would you start looking?
+Jayce: Man likes dates. Dates get written down.
+Jayce: Plaques. Papers. Whatever he hangs on his walls.
+Player: Right.
+=> jayce_return_hub
 
 ~ leave
 Jayce: Suit yourself.
