@@ -27,6 +27,11 @@ func _on_room_changed() -> void:
 	if Flags.get_level_flag(FLAG_SEEN):
 		_armed = false
 		return
+	if _test_run_allows("skip_julian_intro"):
+		_armed = false
+		Flags.set_level_flag(FLAG_SEEN, true)
+		print_rich("[color=orange]JulianIntroCutscene: skipped (TEST RUN).[/color]")
+		return
 	var player = GameManager.player_node
 	if not is_instance_valid(player):
 		return
@@ -34,6 +39,14 @@ func _on_room_changed() -> void:
 		return
 	_armed = false
 	start_cutscene()
+
+
+# dev: the chapter level's Test Run switches (TestChapterLevel.test_run_allows).
+func _test_run_allows(option: String) -> bool:
+	var level: Node = SceneDirector.current_game_scene if SceneDirector else null
+	if not is_instance_valid(level) and is_inside_tree():
+		level = get_tree().current_scene
+	return is_instance_valid(level) and level.has_method("test_run_allows") and level.test_run_allows(option)
 
 
 func _execution_steps() -> void:

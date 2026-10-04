@@ -1,6 +1,207 @@
+import "res://dialogue/layla_gifts.dialogue" as layla_gifts
+import "res://dialogue/library_books.dialogue" as library_books
+
 ~ start
 Player: (That doesn't seem to work.)
 => END
+
+~ greene_office_keypad
+Player: (I have no clue what the password to this is.)
+Player: (Besides, I don't think I need to break into his office...)
+Player: (...yet.)
+=> END
+
+~ supply_lockers
+Player: (It seems to be locked.)
+Player: (Although, even a child could pick a lock this old.)
+Player: (If they had the right tool.)
+=> END
+
+~ supply_room_socket
+# TEMPLATE — developer may rewrite.
+Player: (I don't have anything to plug in.)
+=> END
+
+~ vending_machine
+What do you want to get from the vending machine?
+- Cheddar cheese balls – $1.75 [if Inventory.has_item("vending_cheese_balls") == false]
+	if Inventory.get_count("cash") >= 175:
+		do Inventory.remove_amount("cash", 175)
+		do Inventory.add_item("vending_cheese_balls")
+		=> vending_bought
+	=> vending_cant_pay
+- Pink-pack protein bar – $3.25 [if Inventory.has_item("vending_protein_bar") == false]
+	if Inventory.get_count("cash") >= 325:
+		do Inventory.remove_amount("cash", 325)
+		do Inventory.add_item("vending_protein_bar")
+		=> vending_bought
+	=> vending_cant_pay
+- Boba tea – $3.75 [if Inventory.has_item("vending_boba_tea") == false]
+	if Inventory.get_count("cash") >= 375:
+		do Inventory.remove_amount("cash", 375)
+		do Inventory.add_item("vending_boba_tea")
+		=> vending_bought
+	=> vending_cant_pay
+- Diet cola – $2.25 [if Inventory.has_item("vending_diet_cola") == false]
+	if Inventory.get_count("cash") >= 225:
+		do Inventory.remove_amount("cash", 225)
+		do Inventory.add_item("vending_diet_cola")
+		=> vending_bought
+	=> vending_cant_pay
+- Nothing. Never mind. [Leave]
+	=> END
+
+~ vending_cant_pay
+if Flags.get_level_flag("vending_card_declined") == false:
+	You swipe your card through the card reader.
+	Vending Machine Screen: CARD READER OUT OF SERVICE. PLEASE USE CASH.
+	do Flags.set_level_flag("vending_card_declined", true)
+	if Inventory.get_count("cash") > 0:
+		Player: (Oh, shoot. And I don't have enough cash on me for that.)
+	else
+		Player: (Oh, shoot. I'm not carrying any cash on me right now.)
+elif Inventory.get_count("cash") > 0:
+	Player: (I don't have enough cash for that.)
+else
+	Player: (The card reader's out of service. I'll need cash.)
+=> END
+
+~ vending_bought
+You feed the cash into the machine.
+It whirs, and your pick drops into the tray.
+=> END
+
+~ workstation_fiona
+=> fiona_desk_hub
+
+~ fiona_desk_hub
+What do you want to do at your desk?
+- Look at the CPU
+	=> fiona_desk_cpu
+- Look at the monitor
+	=> fiona_desk_monitor
+- Look at the corkboard
+	=> fiona_desk_corkboard
+- Open the drawer
+	=> fiona_desk_drawer
+- Nothing. Never mind. [Leave]
+	=> END
+
+~ fiona_desk_cpu
+# TEMPLATE — developer fills in.
+Player: (My computer. It sounds like a jet engine whenever I run anything serious.)
+=> fiona_desk_hub
+
+~ fiona_desk_monitor
+# TEMPLATE — developer fills in.
+Player: (There's a sticky note on the bezel. "SAVE YOUR WORK." In my handwriting.)
+Player: (I know myself too well.)
+=> fiona_desk_hub
+
+~ fiona_desk_corkboard
+# TEMPLATE — developer fills in.
+Player: (Conference flyers, a lab safety notice, and a to-do list I stopped updating months ago.)
+=> fiona_desk_hub
+
+~ fiona_desk_drawer
+You open the drawer.
+There isn't much here, but some of it might be useful.
+=> fiona_drawer_hub
+
+~ fiona_drawer_hub
+What do you want to look at?
+- Look at the notes
+	=> fiona_drawer_notes
+- Look at the book
+	=> fiona_drawer_book
+- Take the loose change [if Flags.get_level_flag("fiona_desk_coins_taken") == false]
+	=> fiona_drawer_coins
+- Take the steel bobby pins [if Flags.get_level_flag("fiona_desk_steel_pins_taken") == false]
+	=> fiona_drawer_pins
+- Close the drawer [Back]
+	=> fiona_desk_hub
+
+~ fiona_drawer_notes
+# TEMPLATE — developer fills in.
+Player: (Old lecture notes. My handwriting was neater back then.)
+=> fiona_drawer_hub
+
+~ fiona_drawer_book
+# TEMPLATE — developer fills in.
+Player: (A paperback I started last spring. The bookmark hasn't moved since.)
+=> fiona_drawer_hub
+
+~ fiona_drawer_coins
+# TEMPLATE — developer fills in.
+Player: (Seventy-five cents. Three quarters, to be exact.)
+do Flags.set_level_flag("fiona_desk_coins_taken", true)
+do Inventory.add_item("cash", 75)
+=> fiona_drawer_hub
+
+~ fiona_drawer_pins
+# TEMPLATE — developer fills in.
+Player: (Steel bobby pins. Much sturdier than the usual kind.)
+do Flags.set_level_flag("fiona_desk_steel_pins_taken", true)
+do Inventory.add_item("steel_bobby_pins")
+=> fiona_drawer_hub
+
+~ layla_item_vending_cheese_balls
+do Inventory.remove_item("vending_cheese_balls")
+=> layla_gifts/liked
+
+~ layla_item_vending_protein_bar
+do Inventory.remove_item("vending_protein_bar")
+=> layla_gifts/loved
+
+~ layla_item_vending_boba_tea
+do Inventory.remove_item("vending_boba_tea")
+=> layla_gifts/liked
+
+~ layla_item_vending_diet_cola
+do Inventory.remove_item("vending_diet_cola")
+=> layla_gifts/liked
+
+~ vending_machine_item_cash
+=> vending_machine
+
+~ workstation_spare
+=> spare_desk_hub
+
+~ spare_desk_hub
+What do you want to do at this desk?
+- Look at the CPU
+	=> spare_desk_cpu
+- Look at the monitor
+	=> spare_desk_monitor
+- Open the drawer
+	=> spare_desk_drawer
+- Nothing. Never mind. [Leave]
+	=> END
+
+~ spare_desk_cpu
+# TEMPLATE — developer fills in.
+Player: (A standard-issue computer. Someone at least left it plugged in.)
+=> spare_desk_hub
+
+~ spare_desk_monitor
+# TEMPLATE — developer fills in.
+Player: (The screen's dark. Nobody's logged in here in a while.)
+=> spare_desk_hub
+
+~ spare_desk_drawer
+You open the drawer.
+It's empty.
+=> spare_desk_hub
+
+~ workstation_julian
+Player: (I can't snoop around in this while he's around.)
+=> END
+
+~ library_bookshelf_left
+=> library_books/left_stand
+
+~ library_bookshelf_right
+=> library_books/right_stand
 
 ~ lab_door
 if Flags.get_level_flag("lab_keypad_interacted") == true:

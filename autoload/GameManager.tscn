@@ -15,8 +15,16 @@
 [ext_resource type="Resource" uid="uid://lr7bq8edhdbr" path="res://data/invigirol.tres" id="13_lhkyk"]
 [ext_resource type="Resource" uid="uid://c2o4m1lmeyqpn" path="res://data/hospital_toilet_paper.tres" id="15_3ky0o"]
 [ext_resource type="Resource" uid="uid://d3wyrwv44q3fh" path="res://data/techpass.tres" id="16_techpass"]
+[ext_resource type="Resource" path="res://data/bobby_pins.tres" id="17_bobbypins"]
+[ext_resource type="Resource" path="res://data/dumbphone_charger.tres" id="18_charger"]
+[ext_resource type="Resource" path="res://data/cash.tres" id="19_cash"]
+[ext_resource type="Resource" path="res://data/steel_bobby_pins.tres" id="20_steelpins"]
+[ext_resource type="Resource" path="res://data/vending_cheese_balls.tres" id="21_cheeseballs"]
+[ext_resource type="Resource" path="res://data/vending_protein_bar.tres" id="22_proteinbar"]
+[ext_resource type="Resource" path="res://data/vending_boba_tea.tres" id="23_bobatea"]
+[ext_resource type="Resource" path="res://data/vending_diet_cola.tres" id="24_dietcola"]
 
 [node name="GameManager" type="Node" unique_id=666986880]
 script = ExtResource("1_108xg")
 all_verb_data_resources = Array[ExtResource("2_dxunw")]([ExtResource("3_pdxvr"), ExtResource("4_iyray"), ExtResource("7_0145d"), ExtResource("8_0q1rh"), ExtResource("9_l3fct"), ExtResource("10_jjrwh"), ExtResource("10_ow34n")])
-all_item_data_resources = Array[ExtResource("8_0145d")]([ExtResource("11_5me18"), ExtResource("12_dm6qn"), ExtResource("13_lhkyk"), ExtResource("15_3ky0o"), ExtResource("16_techpass")])
+all_item_data_resources = Array[ExtResource("8_0145d")]([ExtResource("11_5me18"), ExtResource("12_dm6qn"), ExtResource("13_lhkyk"), ExtResource("15_3ky0o"), ExtResource("16_techpass"), ExtResource("17_bobbypins"), ExtResource("18_charger"), ExtResource("19_cash"), ExtResource("20_steelpins"), ExtResource("21_cheeseballs"), ExtResource("22_proteinbar"), ExtResource("23_bobatea"), ExtResource("24_dietcola")])

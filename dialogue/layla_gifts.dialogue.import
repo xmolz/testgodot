@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://c81qvt4xha706"
+path="res://.godot/imported/layla_gifts.dialogue-979b867f32a1295d9a27b0cbae70cba0.tres"
+
+[deps]
+
+source_file="res://dialogue/layla_gifts.dialogue"
+dest_files=["res://.godot/imported/layla_gifts.dialogue-979b867f32a1295d9a27b0cbae70cba0.tres"]
+
+[params]
+
+defaults=true

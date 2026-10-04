@@ -199,7 +199,7 @@ func _on_game_manager_sentence_line_updated(full_sentence: String):
 	if full_sentence == "":
 		action_bubble_label.visible = false
 	else:
-		action_bubble_label.text = full_sentence
+		_set_bubble_sentence(full_sentence)
 		action_bubble_label.reset_size()
 		action_bubble_label.visible = true
 
@@ -209,6 +209,35 @@ func _on_game_manager_sentence_line_updated(full_sentence: String):
 		else:
 			action_bubble_label.add_theme_stylebox_override("normal", normal_bubble_style)
 			action_bubble_label.remove_theme_color_override("default_color")
+
+# sentences from two-button zoom items carry {LMB}/{RMB} tokens; those become inline
+# mouse glyphs. every other sentence is set as plain bbcode, exactly as before.
+const MouseButtonIcon := preload("res://ui/mouse_button_icon.gd")
+const MOUSE_ICON_HEIGHT := 34
+
+func _set_bubble_sentence(full_sentence: String) -> void:
+	if not ("{LMB}" in full_sentence or "{RMB}" in full_sentence):
+		action_bubble_label.text = full_sentence
+		return
+	action_bubble_label.text = ""
+	action_bubble_label.clear()
+	var rest: String = full_sentence
+	while rest != "":
+		var lmb: int = rest.find("{LMB}")
+		var rmb: int = rest.find("{RMB}")
+		var next: int = -1
+		if lmb != -1 and (rmb == -1 or lmb < rmb):
+			next = lmb
+		elif rmb != -1:
+			next = rmb
+		if next == -1:
+			action_bubble_label.append_text(rest)
+			break
+		if next > 0:
+			action_bubble_label.append_text(rest.substr(0, next))
+		var side: int = MouseButtonIcon.LEFT if next == lmb else MouseButtonIcon.RIGHT
+		action_bubble_label.add_image(MouseButtonIcon.get_icon(side, MOUSE_ICON_HEIGHT), 0, MOUSE_ICON_HEIGHT)
+		rest = rest.substr(next + 5)
 
 func _on_interaction_complete():
 	action_bubble_label.visible = false

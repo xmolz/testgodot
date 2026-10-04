@@ -54,6 +54,25 @@ var _screen_style: StyleBoxFlat
 const UNLOCK_FLAG := "lab_door_unlocked"
 const DENY_FLASHES := 4
 
+## wrong codes that mean something: the birthdates on the Greene, Ember and Voss portraits.
+## the first time one is entered, Fiona (and Layla, if she's following) react over the
+## open keypad (dialogue/keypad_attempts.dialogue). MMDDYYYY and DDMMYYYY both count,
+## since players read dates both ways. repeats of the same date just get the red flash.
+const REACTION_DIALOGUE_PATH := "res://dialogue/keypad_attempts.dialogue"
+const REACTION_BALLOON_PATH := "res://conversation/conversationballoon.tscn"
+const KNOWN_CODES := {
+	"09031962": "greene_birthday", "03091962": "greene_birthday",
+	"03141968": "ember_birthday", "14031968": "ember_birthday",
+	# voss: his date is painted into voss_portrait.png ("b. 06/28/1971") — update here if the art changes
+	"06281971": "voss_birthday", "28061971": "voss_birthday",
+}
+const REACTION_FLAGS := {
+	"greene_birthday": "keypad_tried_greene_birthday",
+	"ember_birthday": "keypad_tried_ember_birthday",
+	"voss_birthday": "keypad_tried_voss_birthday",
+}
+const COMPANION_PRESENT_FLAG := "keypad_companion_present"
+
 @onready var _dim: ColorRect = $Dim
 @onready var _center: CenterContainer = $Center
 @onready var _bezel: PanelContainer = $Center/DeviceStack/Bezel
@@ -253,8 +272,36 @@ func _submit() -> void:
 		_close()
 		return
 	await _flash_denied()
+	var tried: String = _entered
 	_entered = ""
 	_refresh_screen()
+	await _play_attempt_reaction(tried)
+
+
+func _play_attempt_reaction(code: String) -> void:
+	var title: String = KNOWN_CODES.get(code, "")
+	if title.is_empty():
+		return
+	var flag: String = REACTION_FLAGS[title]
+	if Flags.get_level_flag(flag):
+		return   # already reacted to this date
+	Flags.set_level_flag(flag, true)
+	Flags.set_level_flag(COMPANION_PRESENT_FLAG, _companion_following())
+	var resource = load(REACTION_DIALOGUE_PATH)
+	if resource == null or not DialogueManager:
+		return
+	_is_resolving = true   # keys and Back stay inert while they talk
+	DialogueManager.show_dialogue_balloon_scene(REACTION_BALLOON_PATH, resource, title)
+	await DialogueManager.dialogue_ended
+	_is_resolving = false
+
+
+# true when a companion (Layla) is following the player right now.
+func _companion_following() -> bool:
+	for follower in get_tree().get_nodes_in_group("companion_followers"):
+		if follower.has_method("is_attached") and follower.is_attached():
+			return true
+	return false
 
 
 func _flash_denied() -> void:

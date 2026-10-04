@@ -7,7 +7,7 @@ Player: (The keypad lock to the lab.)
 Player: (Easy enough. I've got this.)
 Player: Easiest date for an American to remember, baby.
 do prop_call("Keypad", "type_code", "07041776")
-She hits OK.
+You hit OK.
 do prop_call("Keypad", "deny")
 The screen flashes red with a flat, ugly buzz. The door doesn't move.
 do party_huddle()

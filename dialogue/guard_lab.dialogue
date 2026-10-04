@@ -1,6 +1,8 @@
 ~ start
 do stage_party("Jayce", "base")
-if Flags.get_level_flag("jayce_introduced") == true:
+if Flags.get_level_flag("jayce_date_hint_given") == true:
+	=> lab_access_again
+elif Flags.get_level_flag("jayce_introduced") == true:
 	Jayce: Back again, sweetheart?
 else
 	A man in a grey work jacket leans against the wall, arms folded, watching the corridor.
@@ -163,19 +165,43 @@ What do you want to ask him?
 	=> leave
 
 ~ jayce_life
-# TEMPLATE — developer fills in.
 Player: So, Jayce. How long have you been mopping these halls?
 Jayce: Long enough to know which doors stick, sugar.
-Jayce: Nights suit me. Quiet. Nobody watchin' the watcher.
-Player: Comforting.
+Jayce: Nights mostly. Quiet.
+Jayce: Nobody there to watch the watcher.
+Player: Hmm. That's... comforting.
+if Flags.get_level_flag("party_companion_staged") == true:
+	Behind you, Layla winces.
 => jayce_return_hub
 
 ~ jayce_where_to_look
-# TEMPLATE — developer fills in.
+do Flags.set_level_flag("jayce_pointed_to_biochem", true)
 Player: If you were us, where would you start looking?
-Jayce: Man likes dates. Dates get written down.
-Jayce: Plaques. Papers. Whatever he hangs on his walls.
-Player: Right.
+Jayce: Dunno, sugar. But since ya can't call the man himself...
+Jayce: Ain't there any other of y'all lil science nerds working in your lab who could help ya?
+Player: Not really. It's just us who work in this lab.
+Player: Well, apart from the professor himself, obviously.
+if Flags.get_level_flag("party_companion_staged") == true:
+	do party_huddle()
+	Layla: Fiona, what about someone from the Biochem lab?
+	Layla: I imagine the departments cross-collaborate a lot, don't they?
+	Layla: Surely someone from there must know something, right?
+	Player: Well, there's one guy from that department who's entered our lab multiple times to talk to Professor Greene.
+	Player: He doesn't usually come around at this hour.
+	Player: And anyway, he visits us infrequently.
+	Player: Not a high chance he was in here yesterday evening.
+	Layla: Oh. I see.
+	Player: Regardless, if he is around, I suppose we could ask him about it.
+	Player: Even though I'd rather not.
+	Layla: You'll see.
+	do party_unhuddle()
+	Jayce: Well, glad I could help you ladies with that.
+else
+	# TEMPLATE — solo path (no Layla); developer may rewrite.
+	Player: (Someone from Biochem, maybe. There's one guy who's come by our lab to see Greene a few times.)
+	Player: (If he's around, I could ask him. Even though I'd rather not.)
+	Jayce: Well, glad I could help ya with that, blondie.
+Player: Right. Thanks.
 => jayce_return_hub
 
 ~ leave

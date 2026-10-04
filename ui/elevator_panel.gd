@@ -6,6 +6,11 @@ const BALLOON_SCENE_PATH := "res://conversation/conversationballoon.tscn"
 const EXAMINABLES_DIALOGUE_PATH := "res://dialogue/examinables.dialogue"
 const CHECKPOINT_RESTRICTED := "elevator_floor_restricted"
 const CHECKPOINT_CURRENT := "elevator_floor_current"
+const CHECKPOINT_DEADLINE := "elevator_floor_deadline"
+
+## Until this level flag is true, every floor except the current one plays the
+## deadline line instead of travelling. "" disables the lock (normal travel).
+const TRAVEL_UNLOCK_FLAG := "jayce_date_hint_given"
 
 ## Black-hold duration for elevator rides. Exit-sign door teleports keep the
 ## transition layer's 1.2s default; the elevator holds longer so the ride
@@ -34,6 +39,9 @@ const COLOR_ACCENT_SOFT := Color(0.2, 0.85, 1.0, 0.35)
 const COLOR_PANEL_BG := Color(0.055, 0.075, 0.105, 0.97)
 const COLOR_ROW_BG := Color(0.15, 0.15, 0.15, 0.9)
 const COLOR_ROW_HOVER_BG := Color(0.1, 0.25, 0.3, 0.95)
+const COLOR_TEXT_DIM := Color(0.5, 0.5, 0.5, 1.0)
+const COLOR_ROW_DIM_BG := Color(0.09, 0.09, 0.09, 0.9)
+const COLOR_NOTICE := Color(0.75, 0.75, 0.75, 1.0)
 
 const GUTTER_WIDTH := 64.0
 const ARROW_BASE_X := 12.0
@@ -44,6 +52,12 @@ const ARROW_BOUNCE_TIME := 0.45
 @export var title_text: String = "What floor do you want to go to?"
 
 var _is_resolving := false
+
+# inline notice for greyed floors (the panel stays open)
+const NOTICE_TEXT := "This floor is not currently accessible."
+const NOTICE_HOLD_SECONDS := 2.0
+var _notice: Label = null
+var _notice_tween: Tween = null
 
 @onready var _dim: ColorRect = $Dim
 @onready var _center: CenterContainer = $Center
@@ -68,6 +82,16 @@ func _ready() -> void:
 	_setup_button(_close_button, row_size, false)
 	_close_button.pressed.connect(_close)
 
+	_notice = Label.new()
+	_notice.text = NOTICE_TEXT
+	_notice.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_notice.add_theme_font_size_override("font_size", row_size - 6)
+	_notice.add_theme_color_override("font_color", COLOR_NOTICE)
+	_notice.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_notice.modulate.a = 0.0
+	_close_button.get_parent().add_child(_notice)
+	_close_button.get_parent().move_child(_notice, _close_button.get_index())
+
 	_dim.gui_input.connect(_on_dim_gui_input)
 
 	for floor_data in FLOORS:
@@ -86,7 +110,8 @@ func _ready() -> void:
 		button.text = floor_data["label"]
 		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		_setup_button(button, row_size, is_current)
+		var is_greyed: bool = floor_data.get("behavior", "restricted") != "transition" and not is_current
+		_setup_button(button, row_size, is_current, is_greyed)
 		button.pressed.connect(_on_floor_pressed.bind(floor_data["id"]))
 		row.add_child(button)
 
@@ -140,7 +165,7 @@ func _make_row_style(bg: Color, border: Color, border_width: int) -> StyleBoxFla
 	style.content_margin_bottom = 10.0
 	return style
 
-func _setup_button(button: Button, font_size: int, is_current: bool) -> void:
+func _setup_button(button: Button, font_size: int, is_current: bool, is_greyed: bool = false) -> void:
 	button.focus_mode = Control.FOCUS_NONE
 	button.add_theme_font_size_override("font_size", font_size)
 
@@ -153,6 +178,13 @@ func _setup_button(button: Button, font_size: int, is_current: bool) -> void:
 	button.add_theme_color_override("font_color", COLOR_ACCENT if is_current else COLOR_TEXT)
 	button.add_theme_color_override("font_hover_color", COLOR_ACCENT_BRIGHT)
 	button.add_theme_color_override("font_pressed_color", COLOR_ACCENT_BRIGHT)
+	if is_greyed:
+		button.add_theme_stylebox_override("normal", _make_row_style(COLOR_ROW_DIM_BG, Color(1.0, 1.0, 1.0, 0.0), 0))
+		button.add_theme_stylebox_override("hover", _make_row_style(COLOR_ROW_DIM_BG.lightened(0.06), Color(1.0, 1.0, 1.0, 0.12), 2))
+		button.add_theme_stylebox_override("pressed", _make_row_style(COLOR_ROW_DIM_BG.lightened(0.1), Color(1.0, 1.0, 1.0, 0.18), 2))
+		button.add_theme_color_override("font_color", COLOR_TEXT_DIM)
+		button.add_theme_color_override("font_hover_color", COLOR_TEXT_DIM.lightened(0.2))
+		button.add_theme_color_override("font_pressed_color", COLOR_TEXT_DIM.lightened(0.2))
 
 func _play_open_animation() -> void:
 	_dim.modulate.a = 0.0
@@ -172,15 +204,42 @@ func _behavior_for(floor_id: String) -> String:
 			return floor_data.get("behavior", "restricted")
 	return "restricted"
 
+# dev: the chapter level's Test Run switches (TestChapterLevel.test_run_allows).
+# levels without them (the main scene) always answer false.
+func _test_run_allows(option: String) -> bool:
+	var level: Node = SceneDirector.current_game_scene if SceneDirector else null
+	if not is_instance_valid(level) and is_inside_tree():
+		level = get_tree().current_scene
+	return is_instance_valid(level) and level.has_method("test_run_allows") and level.test_run_allows(option)
+
+func _travel_locked() -> bool:
+	if _test_run_allows("free_elevator"):
+		return false
+	if TRAVEL_UNLOCK_FLAG == "":
+		return false
+	return not Flags.get_level_flag(TRAVEL_UNLOCK_FLAG)
+
 func _on_floor_pressed(floor_id: String) -> void:
 	if _is_resolving:
 		return
 	if floor_id == current_floor_id:
 		_close_with_line(CHECKPOINT_CURRENT)
-	elif _behavior_for(floor_id) == "transition":
-		_close_with_transition(floor_id)
+	elif _behavior_for(floor_id) != "transition":
+		_show_inaccessible_notice()
+	elif _travel_locked():
+		_close_with_line(CHECKPOINT_DEADLINE)
 	else:
-		_close_with_line(CHECKPOINT_RESTRICTED)
+		_close_with_transition(floor_id)
+
+func _show_inaccessible_notice() -> void:
+	if not is_instance_valid(_notice):
+		return
+	if _notice_tween and _notice_tween.is_valid():
+		_notice_tween.kill()
+	_notice.modulate.a = 1.0
+	_notice_tween = create_tween()
+	_notice_tween.tween_interval(NOTICE_HOLD_SECONDS)
+	_notice_tween.tween_property(_notice, "modulate:a", 0.0, 0.3)
 
 func _close_with_line(checkpoint: String) -> void:
 	_is_resolving = true

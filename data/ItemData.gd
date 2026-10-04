@@ -24,6 +24,9 @@ class_name ItemData
 # (not highly relevant if is_stackable is usually false).
 @export var max_stack_size: int = 1
 
+# stackable only: the count is money in cents, shown as $X.XX on the inventory badge.
+@export var count_is_cents: bool = false
+
 # (optional) a list of verb_ids
 # this is more for filtering
 # logic is usually defined on

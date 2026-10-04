@@ -3,6 +3,8 @@ class_name AddItemAction
 extends Action
 
 @export var item_id_to_add: String = ""
+# stackable items only: how many to add (cash uses cents, e.g. 300 = $3.00).
+@export var amount: int = 1
 
 # optional: if set, this dialogue
 # (non-stackable) item is already in
@@ -31,7 +33,7 @@ func execute(interactable_node: Interactable) -> Variant:
 		# either way: skip the add,
 		return true
 
-	Inventory.add_item(item_id_to_add)
+	Inventory.add_item(item_id_to_add, amount)
 	print_rich("[color=cyan]AddItemAction: Requested to add item '%s' to inventory.[/color]" % item_id_to_add)
 
 	# ----------------[automatically set the state flag so the item doesn't respawn]

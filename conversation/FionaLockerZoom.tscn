@@ -7,13 +7,13 @@
 [ext_resource type="PackedScene" path="res://ui/UI_books_and_coat.tscn" id="5_bookscoat"]
 [ext_resource type="PackedScene" path="res://ui/UI_locker_photo.tscn" id="6_photo"]
 [ext_resource type="PackedScene" path="res://ui/UI_fiona_trophy.tscn" id="7_trophy"]
+[ext_resource type="PackedScene" path="res://ui/UI_locker_cash.tscn" id="8_cash"]
 
 [node name="FionaLockerZoom" type="CanvasLayer" unique_id=238081641]
 process_mode = 3
 layer = 2
 script = ExtResource("1_script")
 background_texture = ExtResource("2_interior")
-default_verb_id = "examine"
 show_verb_panel = false
 show_inventory = false
 allowed_verb_ids = Array[String](["examine"])
@@ -53,10 +53,10 @@ stretch_mode = 6
 [node name="InteractableContainer" type="Node2D" parent="RootContainer" unique_id=1188121155]
 
 [node name="BobbyPins" parent="RootContainer/InteractableContainer" unique_id=1987959203 instance=ExtResource("3_bobbypins")]
-offset_left = 1194.0
-offset_top = 981.9999
-offset_right = 1514.0
-offset_bottom = 1202.0
+offset_left = 1286.0
+offset_top = 982.00006
+offset_right = 1606.0
+offset_bottom = 1202.0002
 rotation = 0.22219421
 scale = Vector2(0.4, 0.4)
 
@@ -65,6 +65,13 @@ offset_left = 1454.0
 offset_top = 953.0
 offset_right = 1759.0
 offset_bottom = 1061.0
+
+[node name="Cash" parent="RootContainer/InteractableContainer" unique_id=1980792017 instance=ExtResource("8_cash")]
+offset_left = 330.99997
+offset_top = 967.99994
+offset_right = 835.0
+offset_bottom = 1141.0
+scale = Vector2(0.55, 0.55)
 
 [node name="BooksAndCoat" parent="RootContainer/InteractableContainer" unique_id=560989189 instance=ExtResource("5_bookscoat")]
 offset_left = 177.0
@@ -81,9 +88,9 @@ offset_bottom = 910.0
 scale = Vector2(0.5, 0.5)
 
 [node name="Trophy" parent="RootContainer/InteractableContainer" unique_id=1105623746 instance=ExtResource("7_trophy")]
-offset_left = 876.0
+offset_left = 910.0
 offset_top = 792.0
-offset_right = 1156.0
+offset_right = 1190.0
 offset_bottom = 1312.0
 scale = Vector2(0.5, 0.5)
 

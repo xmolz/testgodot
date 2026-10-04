@@ -8,12 +8,32 @@ extends Control
 var _return_layer: CanvasLayer = null
 var _dialogue_active: bool = false
 var _zoom_controls_ui: Node = null
+# zoom hud config, sent by ObjectZoomOverlay (see _apply_zoom_hud). reset outside zooms.
+var _zoom_show_verb_panel: bool = false
+var _zoom_show_inventory: bool = false
+const HUD_LAYER := 2
+const ZOOM_HUD_LAYER := 3
 
 # dev: `think` is unlocked only by difficulty select (new game) or a save load, so a
 # direct run of this scene (F6) never has it. mirror Main.gd's force_assisted_mode
 # unlock so hints are testable without a full run. no effect on a real launch —
 # the verb is already unlocked there and the guard skips the call.
 @export var dev_unlock_think_on_direct_run: bool = true
+
+# when true, dialogue response options in this level are a centred column (several actors
+# on stage). the main scene has no such property, so its balloons keep the left column.
+@export var center_dialogue_responses: bool = true
+## verbs hidden from the action panel in this level (other scenes keep their full set).
+@export var disabled_verb_ids: Array[String] = ["flash"]
+
+@export_group("Test Run")
+## master switch for dev testing. nothing in this group applies unless this is ticked.
+## leave it off for real playthroughs; a red TEST RUN tag shows while it's on.
+@export var test_run: bool = false
+## elevator: 2F/3F/4F travel is free, ignoring the deadline lock (TRAVEL_UNLOCK_FLAG).
+@export var test_run_free_elevator: bool = true
+## julian: his intro CG doesn't play on first entry to the grad commons (marked as seen).
+@export var test_run_skip_julian_intro: bool = true
 
 func _ready():
 	if GameManager:
@@ -28,6 +48,17 @@ func _ready():
 	return_layer.layer = 5
 	add_child(return_layer)
 	_return_layer = return_layer
+
+	if test_run:
+		var test_tag := Label.new()
+		test_tag.name = "TestRunTag"
+		test_tag.text = "TEST RUN"
+		test_tag.position = Vector2(380, 40)
+		test_tag.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		test_tag.add_theme_color_override("font_color", Color(1.0, 0.35, 0.3, 1.0))
+		test_tag.add_theme_font_size_override("font_size", 28)
+		return_layer.add_child(test_tag)
+		print_rich("[color=orange]TestChapterLevel: TEST RUN is on — test overrides active.[/color]")
 
 	var return_btn := Button.new()
 	return_btn.name = "ReturnButton"
@@ -80,6 +111,7 @@ func _ready():
 	# enter_chapter_state() emits WORLD. same pattern the zoom controls already use.
 	Events.interaction_state_changed.connect(_on_interaction_state_changed)
 	Events.game_state_changed.connect(_on_game_state_changed)
+	Events.zoom_hud_config_requested.connect(_on_zoom_hud_config_requested)
 	# chapters have no game_ui.gd. object-examine balloons never leave the WORLD
 	# interaction state, so state gating alone leaves the hud visible under the balloon.
 	# mirror game_ui.gd's pattern: any balloon hides the hud, dialogue_ended restores it.
@@ -94,11 +126,13 @@ func _ready():
 		if not "think" in Verbs.unlocked_verb_ids:
 			Verbs.unlock_verb("think")
 			print_rich("[color=yellow]TestChapterLevel: dev unlock of 'think' (direct run).[/color]")
+	_apply_disabled_verbs()
 
 func _on_interaction_state_changed(_new_state: int) -> void:
 	_refresh_hud()
 
 func _on_game_state_changed(_new_state: int) -> void:
+	_apply_disabled_verbs()
 	_refresh_hud()
 
 func _on_dialogue_started(_resource: Resource) -> void:
@@ -111,10 +145,24 @@ func _on_dialogue_ended(_resource: Resource) -> void:
 
 func _refresh_hud() -> void:
 	var in_play: bool = GameManager.current_game_state == GameManager.GameState.IN_GAME_PLAY
-	var in_world: bool = GameManager.current_interaction_state == GameManager.InteractionState.WORLD
+	var state = GameManager.current_interaction_state
+	var in_world: bool = state == GameManager.InteractionState.WORLD
+	var in_zoom: bool = state == GameManager.InteractionState.ZOOM_VIEW
+	if in_play and in_zoom and not _dialogue_active:
+		_apply_zoom_hud()
+		return
+	if not in_zoom:
+		_zoom_show_verb_panel = false
+		_zoom_show_inventory = false
 	_apply_hud_visibility(in_play and in_world and not _dialogue_active)
 
 func _apply_hud_visibility(shown: bool) -> void:
+	if is_instance_valid(verb_ui):
+		verb_ui.layer = HUD_LAYER
+		if verb_ui.has_method("set_panel_visible"):
+			verb_ui.set_panel_visible(true)
+	if is_instance_valid(inventory_ui):
+		inventory_ui.layer = HUD_LAYER
 	if is_instance_valid(verb_ui):
 		verb_ui.visible = shown
 	if is_instance_valid(inventory_ui):
@@ -124,7 +172,55 @@ func _apply_hud_visibility(shown: bool) -> void:
 	if is_instance_valid(_return_layer):
 		_return_layer.visible = shown
 
+# zooms (ObjectZoomOverlay, layer 2): keep the verb layer, and with it the action
+# bubble, visible above the zoom, honouring the zoom's own panel/inventory config.
+# mirrors game_ui.gd's zoom handling in the main scene.
+func _apply_zoom_hud() -> void:
+	if is_instance_valid(verb_ui):
+		verb_ui.layer = ZOOM_HUD_LAYER
+		verb_ui.visible = true
+		if verb_ui.has_method("set_panel_visible"):
+			verb_ui.set_panel_visible(_zoom_show_verb_panel)
+	if is_instance_valid(inventory_ui):
+		inventory_ui.layer = ZOOM_HUD_LAYER
+		inventory_ui.visible = _zoom_show_inventory
+	if is_instance_valid(_zoom_controls_ui) and _zoom_controls_ui.has_method("set_gameplay_ui_visible"):
+		_zoom_controls_ui.set_gameplay_ui_visible(false)
+	if is_instance_valid(_return_layer):
+		_return_layer.visible = false
+
+func _on_zoom_hud_config_requested(show_verb_panel: bool, show_inventory: bool) -> void:
+	_zoom_show_verb_panel = show_verb_panel
+	_zoom_show_inventory = show_inventory
+	_refresh_hud()
+
+# test run: true only when the master switch AND the named option (test_run_<option>)
+# are both on. other scripts reach this through the current level root.
+func test_run_allows(option: String) -> bool:
+	if not test_run:
+		return false
+	return get("test_run_" + option) == true
+
+
+# hides this level's disabled_verb_ids from the action panel. idempotent: it only
+# calls into Verbs when a disabled verb is actually still active.
+func _apply_disabled_verbs() -> void:
+	if disabled_verb_ids.is_empty() or not Verbs:
+		return
+	var active: Array[String] = Verbs.active_scene_verb_ids.duplicate() if not Verbs.active_scene_verb_ids.is_empty() else Verbs.unlocked_verb_ids.duplicate()
+	var changed: bool = Verbs.active_scene_verb_ids.is_empty()
+	for verb_id in disabled_verb_ids:
+		if verb_id in active:
+			active.erase(verb_id)
+			changed = true
+	if changed:
+		Verbs.set_active_scene_verbs(active)
+
+
 func _exit_tree():
+	# give other scenes their full verb set back
+	if Verbs and not disabled_verb_ids.is_empty():
+		Verbs.set_active_scene_verbs(Verbs.unlocked_verb_ids)
 	if GameManager and is_instance_valid(level_state_manager):
 		if Flags.current_level_state_manager == level_state_manager:
 			Flags.register_level_state_manager(null)

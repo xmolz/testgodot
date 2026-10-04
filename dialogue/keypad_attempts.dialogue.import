@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://cqepd16ibl3qg"
+path="res://.godot/imported/keypad_attempts.dialogue-e0503d3ef5a1ffc7ebee7603d4cc6612.tres"
+
+[deps]
+
+source_file="res://dialogue/keypad_attempts.dialogue"
+dest_files=["res://.godot/imported/keypad_attempts.dialogue-e0503d3ef5a1ffc7ebee7603d4cc6612.tres"]
+
+[params]
+
+defaults=true

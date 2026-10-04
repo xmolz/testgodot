@@ -804,6 +804,7 @@ const HUDDLE_COMPANION_OUTWARD: float = 70.0  # companion stands this far outsid
 
 var _huddle_active: bool = false
 var _huddle_saved: Dictionary = {}   # CanvasItem -> {"pos", "scale", "mod", "index"}
+var _huddle_settle_msec: int = 0   # when the running huddle slide ends (party_dismiss waits for it)
 
 
 func _huddle_remember(node: CanvasItem) -> void:
@@ -823,6 +824,7 @@ func party_huddle(duration: float = HUDDLE_TIME):
 	if not active_actors.has(PROTAGONIST_ACTOR_ID):
 		return
 	_huddle_active = true
+	_huddle_settle_msec = Time.get_ticks_msec() + int(duration * 1000.0)
 	_huddle_saved.clear()
 	if _party_stance_tween and _party_stance_tween.is_valid():
 		_party_stance_tween.kill()
@@ -902,6 +904,65 @@ func party_unhuddle(duration: float = HUDDLE_TIME):
 		actor_stage.move_child(node, clampi(_huddle_saved[node]["index"], 0, actor_stage.get_child_count() - 1))
 	_huddle_saved.clear()
 	_party_companion_front = false
+
+
+# ---------------------------------------------------------------------------
+# dismiss: the third party leaves for good. every actor except the protagonist and
+# the companion walks off through the screen edge they're nearest to and is freed;
+# props leave too. the party ends up in the huddle layout (it huddles first if it
+# isn't already), so the rest of the conversation is just the two of them. there's
+# no way back — end the conversation afterwards. awaited by the dialogue, so the
+# next line waits until the exit has played.
+#   do party_dismiss()       # julian walks off; fiona and layla talk alone
+const DISMISS_TIME: float = 0.6
+
+func party_dismiss(duration: float = DISMISS_TIME):
+	if not _huddle_active:
+		party_huddle()
+	# let a huddle that is still sliding the third party sideways finish first
+	var delay: float = maxf(0.0, float(_huddle_settle_msec - Time.get_ticks_msec()) / 1000.0)
+	var center_x: float = actor_stage.get_node("SlotCenter").position.x
+	var leaving: Array = []
+	for id in active_actors:
+		if id != PROTAGONIST_ACTOR_ID and id != _party_companion_id:
+			leaving.append(id)
+	var last_tween: Tween = null
+	for id in leaving:
+		var r: TextureRect = active_actors[id]
+		active_actors.erase(id)
+		_huddle_saved.erase(r)
+		var width: float = r.texture.get_size().x * absf(r.scale.x)
+		var anchor_x: float = r.position.x + r.pivot_offset.x
+		var dir: float = -1.0 if anchor_x < center_x else 1.0
+		var t := create_tween().set_parallel(true)
+		t.tween_property(r, "position:x", r.position.x + dir * (width + 300.0), duration).set_delay(delay).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+		t.tween_property(r, "modulate:a", 0.0, duration).set_delay(delay).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+		t.chain().tween_callback(r.queue_free)
+		last_tween = t
+	# spread out to a normal two-shot, like the chapter-2 wake scene: the companion takes
+	# the party's slot, the protagonist steps into the far slot the third party just left.
+	# no companion: the protagonist moves to the centre. plays alongside the exit.
+	var on_left: bool = Flags.get_level_flag("conversation_player_on_left") == true
+	var party_marker: Marker2D = actor_stage.get_node("SlotLeft" if on_left else "SlotRight")
+	var far_marker: Marker2D = actor_stage.get_node("SlotRight" if on_left else "SlotLeft")
+	var has_companion: bool = not _party_companion_id.is_empty() and active_actors.has(_party_companion_id)
+	var spread: Tween = null
+	if active_actors.has(PROTAGONIST_ACTOR_ID):
+		spread = create_tween().set_parallel(true)
+		var fiona: TextureRect = active_actors[PROTAGONIST_ACTOR_ID]
+		var fiona_marker: Marker2D = far_marker if has_companion else actor_stage.get_node("SlotCenter")
+		spread.tween_property(fiona, "position", fiona_marker.position - fiona.pivot_offset, duration).set_delay(delay).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+		if has_companion:
+			var comp: TextureRect = active_actors[_party_companion_id]
+			spread.tween_property(comp, "position", party_marker.position - comp.pivot_offset, duration).set_delay(delay).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	# the huddle's saved transforms no longer apply
+	_huddle_saved.clear()
+	for prop_name in _props.keys():
+		prop_leave(prop_name)
+	if spread:
+		await spread.finished
+	elif last_tween:
+		await last_tween.finished
 
 
 func hide_dialogue_ui():

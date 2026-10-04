@@ -293,7 +293,7 @@ func save_to_slot(slot: String) -> bool:
 		"flags": { "game_flags": _collect_flags() },
 		"hub_level_flags": lsm.get_all_flags() if in_hub else _last_known_hub_flags,
 		"memory_level_flags": lsm.get_all_flags() if (not in_hub and is_instance_valid(lsm)) else {},
-		"inventory": { "item_ids": _collect_inventory() },
+		"inventory": { "item_ids": _collect_inventory(), "counts": Inventory.get_counts() },
 		"verbs": { "unlocked_verb_ids": _collect_verbs() },
 		"dialogue": { "visited_responses": _collect_dialogue_history() },
 		"conversation_events": _collect_conversation_events(),
@@ -382,6 +382,8 @@ func load_from_slot(slot: String) -> bool:
 	
 	_apply_flags(data["flags"]["game_flags"])
 	_apply_inventory(data["inventory"]["item_ids"])
+	if data["inventory"].has("counts"):
+		Inventory.set_counts(data["inventory"]["counts"])
 	_apply_verbs(data["verbs"]["unlocked_verb_ids"])
 	_apply_dialogue_history(data["dialogue"]["visited_responses"])
 	_apply_conversation_events(data["conversation_events"])

@@ -1,0 +1,102 @@
+[gd_scene format=3 uid="uid://c2xnkuii7j43a"]
+
+[ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactions/interactable.gd" id="1_interactable"]
+[ext_resource type="Texture2D" uid="uid://0ko7codfq2ir" path="res://Backgrounds/Kit/Lab Corridoor/wall_socket.png" id="2_tex"]
+[ext_resource type="Script" uid="uid://bmq0s1nqhqi4j" path="res://data/InteractionResponse.gd" id="3_response"]
+
+[sub_resource type="Gradient" id="Gradient_socket_shadow"]
+offsets = PackedFloat32Array(0, 0.5, 1)
+colors = PackedColorArray(0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_socket_shadow_l"]
+gradient = SubResource("Gradient_socket_shadow")
+width = 4
+height = 72
+fill_from = Vector2(1, 0)
+fill_to = Vector2(0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_socket_shadow_r"]
+gradient = SubResource("Gradient_socket_shadow")
+width = 8
+height = 72
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_socket_shadow_b"]
+gradient = SubResource("Gradient_socket_shadow")
+width = 48
+height = 8
+fill_to = Vector2(0, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_socket"]
+size = Vector2(56, 80)
+
+[node name="WallSocket" type="Area2D" unique_id=1409687352]
+script = ExtResource("1_interactable")
+object_display_name = "Wall Socket"
+object_id = "supply_room_socket"
+interactions = Array[ExtResource("3_response")]([])
+
+[node name="ShadowLeft" type="Sprite2D" parent="." unique_id=2002453556]
+modulate = Color(1, 1, 1, 0.16)
+position = Vector2(-24, -31)
+scale = Vector2(0.5, 0.8611111)
+texture = SubResource("GradientTexture2D_socket_shadow_l")
+centered = false
+
+[node name="ShadowRight" type="Sprite2D" parent="." unique_id=949503045]
+modulate = Color(1, 1, 1, 0.28)
+position = Vector2(22, -32)
+scale = Vector2(0.625, 0.8888889)
+texture = SubResource("GradientTexture2D_socket_shadow_r")
+centered = false
+
+[node name="ShadowBottom" type="Sprite2D" parent="." unique_id=352243160]
+modulate = Color(1, 1, 1, 0.28)
+position = Vector2(-22, 33)
+scale = Vector2(0.8958334, 0.375)
+texture = SubResource("GradientTexture2D_socket_shadow_b")
+centered = false
+
+[node name="ObjectSprite" type="Sprite2D" parent="." unique_id=1034567563]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_tex")
+
+[node name="HoverGlow" type="Node2D" parent="." unique_id=1957516454]
+visible = false
+
+[node name="GlowTop" type="ColorRect" parent="HoverGlow" unique_id=1221699568]
+offset_left = -27.0
+offset_top = -39.0
+offset_right = 27.0
+offset_bottom = -35.0
+mouse_filter = 2
+color = Color(0.2, 0.85, 1, 1)
+
+[node name="GlowBottom" type="ColorRect" parent="HoverGlow" unique_id=349466357]
+offset_left = -27.0
+offset_top = 35.0
+offset_right = 27.0
+offset_bottom = 39.0
+mouse_filter = 2
+color = Color(0.2, 0.85, 1, 1)
+
+[node name="GlowLeft" type="ColorRect" parent="HoverGlow" unique_id=933962198]
+offset_left = -27.0
+offset_top = -39.0
+offset_right = -23.0
+offset_bottom = 39.0
+mouse_filter = 2
+color = Color(0.2, 0.85, 1, 1)
+
+[node name="GlowRight" type="ColorRect" parent="HoverGlow" unique_id=394462945]
+offset_left = 23.0
+offset_top = -39.0
+offset_right = 27.0
+offset_bottom = 39.0
+mouse_filter = 2
+color = Color(0.2, 0.85, 1, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=421170315]
+shape = SubResource("RectangleShape2D_socket")
+
+[node name="WalkToPoint" type="Marker2D" parent="." unique_id=1449595468]
+position = Vector2(0, 380)

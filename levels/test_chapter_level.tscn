@@ -44,13 +44,22 @@
 [ext_resource type="PackedScene" uid="uid://blsnuk51nt3by" path="res://Interactables/Game World/University/locker.tscn" id="49_locker"]
 [ext_resource type="PackedScene" path="res://characters/julian_character.tscn" id="50_julian"]
 [ext_resource type="PackedScene" uid="uid://bgqned16xdtnl" path="res://Non Interactables/plant_pot.tscn" id="51_plantpot"]
-[ext_resource type="PackedScene" path="res://Non Interactables/wall_painting.tscn" id="52_painting"]
 [ext_resource type="PackedScene" path="res://Non Interactables/wayfinding_sign.tscn" id="53_waysign"]
 [ext_resource type="Script" uid="uid://dosqfqbexlf5k" path="res://interactions/actions/OpenZoomViewAction.gd" id="54_zoomaction"]
 [ext_resource type="PackedScene" uid="uid://b21x8quenr8wi" path="res://conversation/FionaLockerZoom.tscn" id="55_fionalockerzoom"]
 [ext_resource type="PackedScene" path="res://Interactables/Game World/University/greene_portrait.tscn" id="56_greeneportrait"]
 [ext_resource type="PackedScene" path="res://Interactables/Game World/University/ember_portrait.tscn" id="57_emberportrait"]
 [ext_resource type="PackedScene" uid="uid://dald08o165f7g" path="res://Interactables/Game World/University/card_reader.tscn" id="58_cardreader"]
+[ext_resource type="PackedScene" path="res://Interactables/Game World/University/science_painting.tscn" id="59_sciencepainting"]
+[ext_resource type="PackedScene" path="res://Interactables/Game World/University/humanities_painting.tscn" id="60_humanitiespainting"]
+[ext_resource type="PackedScene" path="res://Interactables/Game World/University/locker_bank.tscn" id="61_lockerbank"]
+[ext_resource type="Texture2D" uid="uid://b1adwwmlwydr6" path="res://Backgrounds/Kit/Lab Corridoor/supply_room_table.png" id="62_supplytable"]
+[ext_resource type="PackedScene" uid="uid://c2xnkuii7j43a" path="res://Interactables/Game World/University/wall_socket.tscn" id="63_wallsocket"]
+[ext_resource type="Texture2D" uid="uid://dv776g46yfdpg" path="res://Backgrounds/Kit/Library/books_1.png" id="64_books1"]
+[ext_resource type="Texture2D" uid="uid://dgx52mlk0cul4" path="res://Backgrounds/Kit/Library/books_2.png" id="65_books2"]
+[ext_resource type="Texture2D" uid="uid://dip8tvtn5ln3x" path="res://Backgrounds/Kit/Library/books_3.png" id="66_books3"]
+[ext_resource type="Texture2D" uid="uid://dfi87aumh0ndd" path="res://Backgrounds/Kit/Library/books_4.png" id="67_books4"]
+[ext_resource type="PackedScene" path="res://Dev/anton_test_character.tscn" id="68_antontest"]
 
 [sub_resource type="Gradient" id="Gradient_kit_lib_wall"]
 offsets = PackedFloat32Array(0, 0.09, 0.16, 0.5, 0.88, 1)
@@ -409,14 +418,6 @@ verb_id = "use"
 actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_fiona_locker_zoom")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_locker_single_shadow_floor"]
-gradient = SubResource("Gradient_locker_shadow")
-width = 180
-height = 50
-fill = 1
-fill_from = Vector2(0.5, 0.5)
-fill_to = Vector2(1, 0.5)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e4ea3"]
 size = Vector2(3980, 142)
 
@@ -480,6 +481,12 @@ size = Vector2(4800, 1080)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_supply_floor"]
 size = Vector2(2100, 142)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_grad_floor"]
+size = Vector2(4940, 142)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_grad_cam"]
+size = Vector2(4800, 1080)
 
 [sub_resource type="Resource" id="Resource_classrooms_blocked_action"]
 script = ExtResource("10_showdialogue")
@@ -560,6 +567,7 @@ offset_right = 1920.0
 offset_bottom = 1080.0
 mouse_filter = 2
 script = ExtResource("1_script")
+test_run = true
 
 [node name="Backdrop" type="ColorRect" parent="." unique_id=2007045632]
 layout_mode = 0
@@ -1015,7 +1023,7 @@ texture = SubResource("GradientTexture2D_floor4_floor_shadow_up")
 layout_mode = 0
 offset_left = 4800.0
 offset_top = 3000.0
-offset_right = 8640.0
+offset_right = 9600.0
 offset_bottom = 3670.0
 mouse_filter = 2
 texture = SubResource("GradientTexture2D_kit_grad_wall")
@@ -1054,7 +1062,7 @@ texture_repeat = 2
 layout_mode = 0
 offset_left = 4800.0
 offset_top = 3670.0
-offset_right = 14400.0
+offset_right = 16800.0
 offset_bottom = 4695.0
 scale = Vector2(0.4, 0.4)
 mouse_filter = 2
@@ -1065,7 +1073,7 @@ stretch_mode = 1
 layout_mode = 0
 offset_left = 4800.0
 offset_top = 3656.0
-offset_right = 8640.0
+offset_right = 9600.0
 offset_bottom = 3672.0
 mouse_filter = 2
 color = Color(0.2, 0.36, 0.65, 1)
@@ -1074,7 +1082,7 @@ color = Color(0.2, 0.36, 0.65, 1)
 layout_mode = 0
 offset_left = 4800.0
 offset_top = 3520.0
-offset_right = 8640.0
+offset_right = 9600.0
 offset_bottom = 3656.0
 mouse_filter = 2
 texture = SubResource("GradientTexture2D_grad_shadow_up")
@@ -1083,7 +1091,7 @@ texture = SubResource("GradientTexture2D_grad_shadow_up")
 layout_mode = 0
 offset_left = 4800.0
 offset_top = 3672.0
-offset_right = 8640.0
+offset_right = 9600.0
 offset_bottom = 3784.0
 mouse_filter = 2
 texture = SubResource("GradientTexture2D_grad_floor_shadow_down")
@@ -1092,7 +1100,7 @@ texture = SubResource("GradientTexture2D_grad_floor_shadow_down")
 layout_mode = 0
 offset_left = 4800.0
 offset_top = 3920.0
-offset_right = 8640.0
+offset_right = 9600.0
 offset_bottom = 4080.0
 mouse_filter = 2
 texture = SubResource("GradientTexture2D_grad_floor_shadow_up")
@@ -1100,8 +1108,72 @@ texture = SubResource("GradientTexture2D_grad_floor_shadow_up")
 [node name="GradShelf" parent="." unique_id=1365502650 instance=ExtResource("45_gradshelf")]
 position = Vector2(8100, 3714)
 
+[node name="Books1a" type="Sprite2D" parent="GradShelf/ObjectSprite" parent_id_path=PackedInt32Array(1365502650, 822741208) index="0" unique_id=2136074399]
+position = Vector2(-264, -449)
+texture = ExtResource("64_books1")
+centered = false
+
+[node name="Books1b" type="Sprite2D" parent="GradShelf/ObjectSprite" parent_id_path=PackedInt32Array(1365502650, 822741208) index="1" unique_id=557927893]
+position = Vector2(42, -449)
+texture = ExtResource("67_books4")
+centered = false
+
+[node name="Books2a" type="Sprite2D" parent="GradShelf/ObjectSprite" parent_id_path=PackedInt32Array(1365502650, 822741208) index="2" unique_id=447887325]
+position = Vector2(-264, -91)
+texture = ExtResource("66_books3")
+centered = false
+
+[node name="Books2b" type="Sprite2D" parent="GradShelf/ObjectSprite" parent_id_path=PackedInt32Array(1365502650, 822741208) index="3" unique_id=465403449]
+position = Vector2(-94, -91)
+texture = ExtResource("67_books4")
+centered = false
+flip_h = true
+
+[node name="Books3a" type="Sprite2D" parent="GradShelf/ObjectSprite" parent_id_path=PackedInt32Array(1365502650, 822741208) index="4" unique_id=1315774418]
+position = Vector2(-264, 226)
+texture = ExtResource("65_books2")
+centered = false
+
+[node name="Books3b" type="Sprite2D" parent="GradShelf/ObjectSprite" parent_id_path=PackedInt32Array(1365502650, 822741208) index="5" unique_id=595688760]
+position = Vector2(-14, 226)
+texture = ExtResource("66_books3")
+centered = false
+
 [node name="GradShelf2" parent="." unique_id=309225412 instance=ExtResource("45_gradshelf")]
 position = Vector2(8380, 3714)
+
+[node name="Books1a" type="Sprite2D" parent="GradShelf2/ObjectSprite" parent_id_path=PackedInt32Array(309225412, 822741208) index="0" unique_id=618218887]
+position = Vector2(-264, -449)
+texture = ExtResource("65_books2")
+centered = false
+flip_h = true
+
+[node name="Books1b" type="Sprite2D" parent="GradShelf2/ObjectSprite" parent_id_path=PackedInt32Array(309225412, 822741208) index="1" unique_id=350669041]
+position = Vector2(-14, -449)
+texture = ExtResource("67_books4")
+centered = false
+
+[node name="Books2a" type="Sprite2D" parent="GradShelf2/ObjectSprite" parent_id_path=PackedInt32Array(309225412, 822741208) index="2" unique_id=415440166]
+position = Vector2(-264, -91)
+texture = ExtResource("66_books3")
+centered = false
+flip_h = true
+
+[node name="Books2b" type="Sprite2D" parent="GradShelf2/ObjectSprite" parent_id_path=PackedInt32Array(309225412, 822741208) index="3" unique_id=963306931]
+position = Vector2(-94, -91)
+texture = ExtResource("65_books2")
+centered = false
+flip_h = true
+
+[node name="Books3a" type="Sprite2D" parent="GradShelf2/ObjectSprite" parent_id_path=PackedInt32Array(309225412, 822741208) index="4" unique_id=2023744712]
+position = Vector2(-264, 226)
+texture = ExtResource("64_books1")
+centered = false
+
+[node name="Books3b" type="Sprite2D" parent="GradShelf2/ObjectSprite" parent_id_path=PackedInt32Array(309225412, 822741208) index="5" unique_id=1473095797]
+position = Vector2(42, 226)
+texture = ExtResource("67_books4")
+centered = false
 
 [node name="GradWinPoolLeft" type="TextureRect" parent="." unique_id=1886198698]
 modulate = Color(1, 1, 1, 0.35)
@@ -1435,26 +1507,45 @@ object_id = "locker_layla"
 position = Vector2(8629, 690)
 object_id = "locker_spare"
 
-[node name="JanitorLockerShadowLeft" type="Sprite2D" parent="." unique_id=580461426]
+[node name="SupplyLockerShadowLeft" type="Sprite2D" parent="." unique_id=1510852891]
 modulate = Color(1, 1, 1, 0.16)
-position = Vector2(10834, 110)
+position = Vector2(10671, 116)
+scale = Vector2(1, 0.9896552)
 texture = SubResource("GradientTexture2D_locker_shadow_l")
 centered = false
 
-[node name="JanitorLockerShadowRight" type="Sprite2D" parent="." unique_id=843863238]
+[node name="SupplyLockerShadowRight" type="Sprite2D" parent="." unique_id=2027099110]
 modulate = Color(1, 1, 1, 0.28)
-position = Vector2(10957, 110)
+position = Vector2(11124, 116)
+scale = Vector2(1, 0.9896552)
 texture = SubResource("GradientTexture2D_locker_shadow_r")
 centered = false
 
-[node name="JanitorLockerShadowFloor" type="Sprite2D" parent="." unique_id=1617224300]
-position = Vector2(10900, 690)
-texture = SubResource("GradientTexture2D_locker_single_shadow_floor")
+[node name="SupplyLockerShadowFloor" type="Sprite2D" parent="." unique_id=1193535380]
+position = Vector2(10898.5, 685)
+scale = Vector2(1.0903851, 0.9333325)
+texture = SubResource("GradientTexture2D_locker_shadow_floor")
 
-[node name="JanitorLocker" parent="." unique_id=191474791 instance=ExtResource("49_locker")]
+[node name="SupplyLockerBank" parent="." unique_id=1060647655 instance=ExtResource("61_lockerbank")]
 position = Vector2(10900, 690)
-object_display_name = "Janitor's Locker"
-object_id = "locker_janitor"
+
+[node name="SupplyTableShadow" type="Sprite2D" parent="." unique_id=1001268700]
+modulate = Color(1, 1, 1, 0.75)
+position = Vector2(11650, 699)
+scale = Vector2(1.3836, 0.9333325)
+texture = SubResource("GradientTexture2D_locker_shadow_floor")
+
+[node name="SupplyTable" type="Sprite2D" parent="." unique_id=723524169]
+position = Vector2(11362, 424.80002)
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("62_supplytable")
+centered = false
+
+[node name="SupplyRoomSocket" parent="." unique_id=1824297421 instance=ExtResource("63_wallsocket")]
+position = Vector2(11820, 395)
+
+[node name="DevAntonTest" parent="." unique_id=61616972 instance=ExtResource("68_antontest")]
+position = Vector2(1400, 690)
 
 [node name="LibraryBookshelf" parent="." unique_id=378586800 instance=ExtResource("32_libbookshelf")]
 position = Vector2(707, 419.25)
@@ -1474,19 +1565,22 @@ position = Vector2(2973, 4634)
 position = Vector2(2804, 4931)
 
 [node name="FionaWorkstation" parent="." unique_id=883993605 instance=ExtResource("44_workstation")]
-position = Vector2(5350, 3699)
+position = Vector2(8850, 3699)
 object_display_name = "Fiona's Workstation"
 object_id = "workstation_fiona"
+examine_without_walking = true
 
 [node name="JulianWorkstation" parent="." unique_id=866686723 instance=ExtResource("44_workstation")]
 position = Vector2(7650, 3699)
 object_display_name = "Julian's Workstation"
 object_id = "workstation_julian"
+examine_without_walking = true
 
 [node name="SpareWorkstation" parent="." unique_id=633347604 instance=ExtResource("44_workstation")]
 position = Vector2(5900, 3699)
 object_display_name = "Empty Workstation"
 object_id = "workstation_spare"
+examine_without_walking = true
 
 [node name="Hub3FVendingMachine" parent="." unique_id=1960629441 instance=ExtResource("47_vending")]
 position = Vector2(4550, 2190)
@@ -1517,7 +1611,7 @@ plate_text = "Dr. King"
 [node name="KingCardReader" parent="." unique_id=274805784 instance=ExtResource("58_cardreader")]
 position = Vector2(731, 4931)
 
-[node name="OfficesPainting" parent="." unique_id=573967697 instance=ExtResource("52_painting")]
+[node name="OfficesPainting" parent="." unique_id=573967697 instance=ExtResource("60_humanitiespainting")]
 position = Vector2(1220, 4830)
 
 [node name="OfficesPotLeft" parent="." unique_id=731159436 instance=ExtResource("51_plantpot")]
@@ -1526,17 +1620,17 @@ position = Vector2(625, 5188)
 [node name="OfficesPotRight" parent="." unique_id=457460969 instance=ExtResource("51_plantpot")]
 position = Vector2(3300, 5188)
 
-[node name="GreeneDoor" parent="." unique_id=1142155763 instance=ExtResource("37_facultydoor")]
+[node name="EmberDoor" parent="." unique_id=653535265 instance=ExtResource("37_facultydoor")]
 position = Vector2(5400, 4926)
-object_display_name = "Dr. Greene's Office"
-object_id = "greene_office_door"
+object_display_name = "Dr. Ember's Office"
+object_id = "ember_office_door"
 interactions = Array[ExtResource("11_response")]([])
 
-[node name="GreeneNameplate" parent="." unique_id=932293952 instance=ExtResource("41_nameplate")]
+[node name="EmberNameplate" parent="." unique_id=1056726446 instance=ExtResource("41_nameplate")]
 position = Vector2(5400, 4634)
-plate_text = "Dr. Greene"
+plate_text = "Dr. Ember"
 
-[node name="GreeneKeypad" parent="." unique_id=428337472 instance=ExtResource("23_labkeypad")]
+[node name="EmberCardReader" parent="." unique_id=46984101 instance=ExtResource("58_cardreader")]
 position = Vector2(5569, 4931)
 
 [node name="GreyDoor" parent="." unique_id=1781329894 instance=ExtResource("37_facultydoor")]
@@ -1552,20 +1646,22 @@ plate_text = "Dr. Grey"
 [node name="GreyCardReader" parent="." unique_id=1568008844 instance=ExtResource("58_cardreader")]
 position = Vector2(6019, 4931)
 
-[node name="EmberDoor" parent="." unique_id=653535265 instance=ExtResource("37_facultydoor")]
+[node name="GreeneDoor" parent="." unique_id=1142155763 instance=ExtResource("37_facultydoor")]
 position = Vector2(7550, 4926)
-object_display_name = "Dr. Ember's Office"
-object_id = "ember_office_door"
+object_display_name = "Dr. Greene's Office"
+object_id = "greene_office_door"
 interactions = Array[ExtResource("11_response")]([])
 
-[node name="EmberNameplate" parent="." unique_id=1056726446 instance=ExtResource("41_nameplate")]
+[node name="GreeneNameplate" parent="." unique_id=932293952 instance=ExtResource("41_nameplate")]
 position = Vector2(7550, 4634)
-plate_text = "Dr. Ember"
+plate_text = "Dr. Greene"
 
-[node name="EmberCardReader" parent="." unique_id=46984101 instance=ExtResource("58_cardreader")]
+[node name="GreeneKeypad" parent="." unique_id=428337472 instance=ExtResource("23_labkeypad")]
 position = Vector2(7719, 4931)
+object_id = "greene_office_keypad"
+interactions = Array[ExtResource("11_response")]([])
 
-[node name="WingPainting" parent="." unique_id=944955686 instance=ExtResource("52_painting")]
+[node name="WingPainting" parent="." unique_id=944955686 instance=ExtResource("59_sciencepainting")]
 position = Vector2(8050, 4830)
 
 [node name="WingPotLeft" parent="." unique_id=1557262560 instance=ExtResource("51_plantpot")]
@@ -1641,7 +1737,7 @@ metadata/floor_id = "4F"
 level_id = "chapter_test"
 
 [node name="Layla" parent="." unique_id=1983909141 instance=ExtResource("15_layla")]
-position = Vector2(1250, 550)
+position = Vector2(1241, 778)
 
 [node name="Player" parent="." unique_id=1000725987 instance=ExtResource("3_player")]
 position = Vector2(907, 550)
@@ -1820,7 +1916,7 @@ position = Vector2(9100, 700)
 script = ExtResource("19_camregion")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SupplyRoomCameraRegion" unique_id=556241041]
-position = Vector2(11520, 540)
+position = Vector2(11520, 542)
 shape = SubResource("RectangleShape2D_cam_bathroom")
 
 [node name="HubLightSpillLeft" parent="." unique_id=1756740394 instance=ExtResource("20_lightspill")]
@@ -1909,8 +2005,8 @@ shape = SubResource("RectangleShape2D_cam_bathroom")
 [node name="Floor3CorrFloorBody" type="StaticBody2D" parent="." unique_id=1572151439]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor3CorrFloorBody" unique_id=1744726195]
-position = Vector2(6720, 3846)
-shape = SubResource("RectangleShape2D_e4ea3")
+position = Vector2(7200, 3846)
+shape = SubResource("RectangleShape2D_grad_floor")
 
 [node name="Floor3CorrLeftWall" type="StaticBody2D" parent="." unique_id=1119560459]
 
@@ -1921,7 +2017,7 @@ shape = SubResource("RectangleShape2D_wall")
 [node name="Floor3CorrRightWall" type="StaticBody2D" parent="." unique_id=974111959]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor3CorrRightWall" unique_id=869927011]
-position = Vector2(8700, 3300)
+position = Vector2(9660, 3300)
 shape = SubResource("RectangleShape2D_wall")
 
 [node name="Floor3CorridorSpawnPoint" type="Marker2D" parent="." unique_id=1706614923]
@@ -1931,8 +2027,8 @@ position = Vector2(5000, 3700)
 script = ExtResource("19_camregion")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor3CorrCameraRegion" unique_id=683415465]
-position = Vector2(6720, 3540)
-shape = SubResource("RectangleShape2D_cam_strip")
+position = Vector2(7200, 3540)
+shape = SubResource("RectangleShape2D_grad_cam")
 
 [node name="Floor3HubSpawnPoint" type="Marker2D" parent="." unique_id=1213826773]
 position = Vector2(4149, 2092)
@@ -2049,3 +2145,6 @@ interactions = Array[ExtResource("11_response")]([SubResource("Resource_use_tp_h
 
 [node name="JulianIntroCutscene" type="Node" parent="Cutscenes" unique_id=2011313146]
 script = ExtResource("46_julian_cutscene")
+
+[editable path="GradShelf"]
+[editable path="GradShelf2"]

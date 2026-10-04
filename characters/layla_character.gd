@@ -1,12 +1,13 @@
-# laylacharacter.gd — template in-world companion. placeholder rectangle for now; real
-# art later replaces the Sprite texture and adds an AnimationPlayer without touching the
-# follow logic, which lives entirely in the CompanionFollow child.
+# laylacharacter.gd — in-world companion. the Sprite texture is driven by the
+# AnimationPlayer ("idle" / "walk"); the follow logic lives entirely in the
+# CompanionFollow child.
 # presentation only lives here: the body's velocity is owned by CompanionFollow.
 extends CharacterBody2D
 
 @onready var sprite: Sprite2D = $Sprite
 @onready var follow: CompanionFollow = $CompanionFollow
 @onready var interaction_area: Interactable = $InteractionArea if has_node("InteractionArea") else null
+@onready var anim: AnimationPlayer = $AnimationPlayer if has_node("AnimationPlayer") else null
 
 func _ready() -> void:
 	# record which side the player is standing on the moment an interaction fires.
@@ -25,12 +26,26 @@ func _process(_delta: float) -> void:
 	if not is_instance_valid(sprite):
 		return
 
-	# face where we walk; face the target while standing still. invisible on a solid
-	# rectangle, but it exercises the flip plumbing the save system records (flip_h on
-	# the node named "Sprite"), and real art inherits it for free.
+	_update_animation(absf(velocity.x) > 10.0)
+
+	# face where we walk; face the target while standing still. the save system
+	# records flip_h on the node named "Sprite", so keep that node's name.
 	if absf(velocity.x) > 10.0:
 		sprite.flip_h = velocity.x < 0.0
 	elif is_instance_valid(follow):
 		var t: Node2D = follow.get_target()
 		if t:
 			sprite.flip_h = t.global_position.x < global_position.x
+
+# walk while moving, idle otherwise. the walk cycle scales with the follow speed so
+# her feet keep pace when she jogs to catch up.
+func _update_animation(walking: bool) -> void:
+	if not is_instance_valid(anim):
+		return
+	var wanted: String = "walk" if walking else "idle"
+	if anim.current_animation != wanted:
+		anim.play(wanted)
+	if walking and is_instance_valid(follow) and follow.speed > 0.0:
+		anim.speed_scale = absf(velocity.x) / follow.speed
+	else:
+		anim.speed_scale = 1.0

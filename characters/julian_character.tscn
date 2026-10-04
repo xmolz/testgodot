@@ -41,6 +41,7 @@ object_id = "julian"
 category = 1
 interactions = Array[ExtResource("3_response")]([ExtResource("6_examine"), SubResource("Resource_julian_talk_response")])
 character_conversation_scene_path = "res://conversation/julian_advanced_overlay.tscn"
+examine_without_walking = true
 
 [node name="ClickShape" type="CollisionShape2D" parent="InteractionArea"]
 position = Vector2(0, -270)

@@ -1,0 +1,75 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://interactions/interactable.gd" id="1_interactable"]
+[ext_resource type="Texture2D" path="res://Backgrounds/Kit/Lab Corridoor/locker_exterior.png" id="3_locker_art"]
+[ext_resource type="Script" path="res://data/InteractionResponse.gd" id="4_response"]
+[ext_resource type="PackedScene" path="res://conversation/SupplyLockerZoom.tscn" id="7_zoom_scene"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bank"]
+size = Vector2(454, 580)
+
+[node name="LockerBank" type="Area2D"]
+script = ExtResource("1_interactable")
+object_display_name = "Supply Room Lockers"
+object_id = "supply_lockers"
+interactions = Array[ExtResource("4_response")]([])
+object_zoom_overlay_scene = ExtResource("7_zoom_scene")
+
+[node name="ObjectSprite" type="Sprite2D" parent="."]
+position = Vector2(-166.5, -290)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("3_locker_art")
+
+[node name="Locker2" type="Sprite2D" parent="ObjectSprite"]
+position = Vector2(222, 0)
+texture = ExtResource("3_locker_art")
+
+[node name="Locker3" type="Sprite2D" parent="ObjectSprite"]
+position = Vector2(444, 0)
+texture = ExtResource("3_locker_art")
+
+[node name="Locker4" type="Sprite2D" parent="ObjectSprite"]
+position = Vector2(666, 0)
+texture = ExtResource("3_locker_art")
+
+[node name="HoverGlow" type="Node2D" parent="."]
+visible = false
+
+[node name="GlowTop" type="ColorRect" parent="HoverGlow"]
+offset_left = -231.0
+offset_top = -584.0
+offset_right = 231.0
+offset_bottom = -576.0
+mouse_filter = 2
+color = Color(0.2, 0.85, 1, 1)
+
+[node name="GlowBottom" type="ColorRect" parent="HoverGlow"]
+offset_left = -231.0
+offset_top = -4.0
+offset_right = 231.0
+offset_bottom = 4.0
+mouse_filter = 2
+color = Color(0.2, 0.85, 1, 1)
+
+[node name="GlowLeft" type="ColorRect" parent="HoverGlow"]
+offset_left = -231.0
+offset_top = -584.0
+offset_right = -223.0
+offset_bottom = 4.0
+mouse_filter = 2
+color = Color(0.2, 0.85, 1, 1)
+
+[node name="GlowRight" type="ColorRect" parent="HoverGlow"]
+offset_left = 223.0
+offset_top = -584.0
+offset_right = 231.0
+offset_bottom = 4.0
+mouse_filter = 2
+color = Color(0.2, 0.85, 1, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -290)
+shape = SubResource("RectangleShape2D_bank")
+
+[node name="WalkToPoint" type="Marker2D" parent="."]
+position = Vector2(0, 85)

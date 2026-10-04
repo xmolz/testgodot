@@ -5,8 +5,10 @@ Julian: Yes?
 
 ~ hub
 What do you want to say to him?
-- What were you talking about on the phone? 
+- What were you talking about on the phone?
 	=> phone_talk
+- Ask him about the keypad password. [if Flags.get_level_flag("lab_keypad_interacted") == true and Flags.get_level_flag("jayce_date_hint_given") == true]
+	=> keypad_password
 - Nothing. Never mind. [Leave]
 	=> leave
 
@@ -20,12 +22,123 @@ Julian: No one there wants to work anymore.
 if Flags.get_level_flag("party_companion_staged") == true:
 	Layla: Well, we're at work right now!
 	Julian: Are you? I thought you were just visiting.
-	Layla: Umm... yes, I am doing that..
+	Layla: Umm... yes, I am doing that...
 	Layla: But also...
 	Julian: I'd love to know more, but I'm very busy right now.
 	# then I want this to go to: Anything else you want to waste my time with ? Andd we go back to the hub.
 Player: Right. Carry on, then.
 => hub
+
+~ keypad_password
+if Flags.get_level_flag("julian_password_asked") == true:
+	=> keypad_password_again
+Player: Listen. Seems like someone changed our lab's password yesterday.
+Player: Any chance you know the updated one?
+Julian: Not really. I barely visit your lab anyway.
+Julian: The last one I remember using was the date of independence.
+Player: Yeah. Unfortunately, that isn't working anymore.
+Julian: Too bad. Why don't you call your professor and ask him?
+if Flags.get_level_flag("party_companion_staged") == true:
+	Layla: Well, we... can't do that.
+Player: Yeah. It's complicated.
+Julian: Well, too bad, I guess.
+Julian: Anyway, I need to get back to work. So, will there be anything else?
+if Flags.get_level_flag("party_companion_staged") == true:
+	Layla: Actually... the janitor told us that all his previous passwords have been dates.
+	Layla: Would you, by any chance, be aware of any such dates that the professor would've been fond of?
+else
+	# TEMPLATE — solo path (no Layla); developer may rewrite.
+	Player: Actually... the janitor said all his previous passwords have been dates.
+	Player: Any idea what dates the professor might be fond of?
+Julian: Hmmm. I'm not su-
+Julian: Wait.
+Julian: Come to think of it, he did mention some important event in genomics to me about a week ago, when I went to see him for counsel.
+Julian: Something about... Crick, Watson, and some other guy.
+Julian: How one or both of them are wrongly credited with discovering DNA.
+Julian: When in actuality, it was discovered almost a century earlier, by a guy whose name I can't recall.
+Julian: He seemed rather fond of that fact. I remember he rattled off some dates too.
+Julian: Well. That's all I can say. I don't remember what those dates were.
+do Flags.set_level_flag("julian_password_asked", true)
+if Flags.get_level_flag("party_companion_staged") == true:
+	Layla: Oh my god! This is great!
+	do party_huddle()
+	Layla: Fiona, it's highly likely that one of those dates is the key to the lab!
+	Layla: All we need to do is find out what those dates were!
+	Layla: Lemme just quickly google this.
+	She whips out her phone.
+	Layla: Oh no! My battery's run out.
+	Layla: Fiona, could we use your phone to...
+	She stops mid-sentence, remembering your phone situation.
+	Player: Well, I guess you already know the answer to that question.
+	Layla: Yeah. I remember you use a dumb phone with no internet.
+	Player: It's great for focus.
+	Layla: Sure...
+	Layla stares at the floor.
+	do party_unhuddle()
+else
+	# TEMPLATE — solo path (no Layla); developer may rewrite.
+	Player: (One of those dates could be the code. I need to look them up.)
+	Player: (Not that my phone can get on the internet.)
+Player: Anyway, do you think you could search for those dates quickly on your phone?
+Julian: ...
+Julian: Perhaps. First, tell me. Why can't you really ask your professor?
+- It's none of your business
+	do Flags.set_level_flag("julian_refused_help", true)
+	Player: That's none of your business.
+	Julian: Sure thing.
+	Julian: Then my phone is none of yours.
+	Julian: Good luck finding your dates.
+	Player: Yeah, well. Whatever.
+	=> post_confrontation_discussion
+- Tell him the truth
+	do Flags.set_level_flag("julian_nearly_told_truth", true)
+	Player: Fine. Layla has some sequencing—
+	if Flags.get_level_flag("party_companion_staged") == true:
+		Layla: Fiona...!
+	Julian: ...
+	Player: Hmm. Sorry, I forgot. We can't tell you.
+	Julian: Right. Never mind, in that case.
+	Julian: Well, I'm afraid my kindness and my time run out here.
+	Julian: All the best with... whatever it is you're trying to do.
+	Player: Yeah, well. Whatever.
+	=> post_confrontation_discussion
+
+~ keypad_password_again
+# TEMPLATE — developer fills in. replaces the full scene once Julian has shared his lead.
+Player: About those dates...
+Julian: I've told you everything I remember. The rest is your problem.
+=> hub
+
+~ post_confrontation_discussion
+# julian walks off for good; from here it's fiona and layla alone (huddle layout).
+Julian turns back to his work without another word.
+do party_dismiss()
+if Flags.get_level_flag("party_companion_staged") == true:
+	if Flags.get_level_flag("julian_nearly_told_truth") == true:
+		# TEMPLATE — Fiona nearly told Julian about the sequencing.
+		Layla: Fiona! You almost told him!
+		Player: I know. It slipped out. My bad.
+		Layla: He's the last person who should know I haven't finished the sequencing...
+		Layla: Or maybe, second last. I don't know...
+		Player: Relax. He didn't get anything out of us.
+	else
+		# TEMPLATE — Fiona shut Julian down.
+		Layla: Well... that went great.
+		Player: He was never going to help. Not for free.
+	# TEMPLATE — both routes: the next lead.
+	Layla: So what now? My phone's dead, and yours...
+	Player: Can't get on the internet. Yes.
+	Player: Hmmm. I'm not sure.
+	Player: All I know is that we need to find out that date one way or another.
+	Player: The date DNA was discovered.
+	Layla: Got it. Let's do what we can!
+	Player: Yep.
+else
+	# TEMPLATE — solo path (no Layla).
+	Player: (Well, that was a waste of time.)
+	Player: (The library has computers. I can look it up there.)
+do Flags.set_level_flag("dna_dates_lookup_pending", true)
+=> END
 
 ~ leave
 Julian: Mm.

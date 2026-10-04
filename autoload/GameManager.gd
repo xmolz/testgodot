@@ -625,6 +625,10 @@ func update_sentence_line_ui():
 	if hovered_interactable and hovered_interactable.interaction_location == Interactable.InteractionLocation.WORLD and hovered_interactable.hover_ignores_verb:
 		var exit_colored = "[color=#33d9ff]%s[/color]" % hovered_interactable.object_display_name
 		line_text = hovered_interactable.hover_prefix + " " + exit_colored
+	elif hovered_interactable and hovered_interactable.interaction_location == Interactable.InteractionLocation.UI_OVERLAY and not OS.has_feature("mobile") and hovered_interactable.get_parent() and hovered_interactable.get_parent().has_method("build_mouse_hint_sentence"):
+		# two-button zoom items (ui/zoom_two_verb_item.gd): both mouse actions, not the sticky verb
+		var hint_obj_colored = "[color=#33d9ff]%s[/color]" % hovered_interactable.object_display_name
+		line_text = hovered_interactable.get_parent().build_mouse_hint_sentence(hint_obj_colored)
 	elif current_verb_id != "":
 		var verb_data = Verbs.get_verb_data_by_id(current_verb_id)
 		var verb_text = verb_data.display_text if verb_data else current_verb_id
@@ -679,6 +683,22 @@ func process_interaction_click(interactable_node: Interactable):
 		_resolve_pending_click.call_deferred()
 	if not _pending_click_candidates.has(interactable_node):
 		_pending_click_candidates.append(interactable_node)
+
+# two-button zoom items (ui/zoom_two_verb_item.gd) name their verb per click
+# instead of using the selected/sticky verb. nothing else calls this.
+func process_interaction_click_with_verb(interactable_node: Interactable, verb_id: String) -> void:
+	if is_transitioning: return
+	if not is_instance_valid(interactable_node): return
+	_initiate_interaction_flow(interactable_node, verb_id, null)
+
+# true while a companion (Layla) is following the player. dialogue can ask directly:
+#   if GameManager.is_companion_following():
+func is_companion_following() -> bool:
+	for follower in get_tree().get_nodes_in_group("companion_followers"):
+		if follower.has_method("is_attached") and follower.is_attached():
+			return true
+	return false
+
 
 func _resolve_pending_click():
 	var candidates: Array[Interactable] = []

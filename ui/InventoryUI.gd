@@ -11,6 +11,7 @@ extends CanvasLayer
 const ITEMS_PER_PAGE: int = 6
 const EQUIPPED_INDICATOR_NODE_NAME: String = "EquippedIndicator"
 const ITEM_ICON_NODE_NAME: String = "ItemIcon"
+const STACK_COUNT_NODE_NAME: String = "StackCount"
 
 # //////////////////[state variables]
 var all_inventory_slots: Array[Button] = []
@@ -79,6 +80,19 @@ func _ready():
 		icon_rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_MINSIZE, 2)
 		icon_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		slot_button.add_child(icon_rect)
+
+		# stack count badge, top-right (stackable items only)
+		var count_label := Label.new()
+		count_label.name = STACK_COUNT_NODE_NAME
+		count_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		count_label.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT, Control.PRESET_MODE_MINSIZE, 4)
+		count_label.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+		count_label.add_theme_font_size_override("font_size", 16)
+		count_label.add_theme_color_override("font_outline_color", Color(0, 0, 0, 1))
+		count_label.add_theme_constant_override("outline_size", 4)
+		count_label.visible = false
+		slot_button.add_child(count_label)
 
 		all_inventory_slots.append(slot_button)
 		inventory_grid_container.add_child(slot_button)
@@ -188,6 +202,7 @@ func _render_current_page():
 
 			slot_button.disabled = false
 			slot_button.set_meta("item_data", item_data)
+			_set_stack_label(slot_button, item_data)
 
 			if icon_rect:
 				icon_rect.texture = item_data.icon
@@ -214,12 +229,28 @@ func _render_current_page():
 			var equipped_label: Label = slot_button.get_node_or_null(EQUIPPED_INDICATOR_NODE_NAME)
 			if equipped_label: equipped_label.visible = false
 			slot_button.text = "-"
+			_set_stack_label(slot_button, null)
 
 	# after rendering all slots, update
 	if GameManager:
 		_update_slot_selected_visual_state(GameManager.current_selected_item_data)
 	else:
 		_update_slot_selected_visual_state(null) 
+
+
+func _set_stack_label(slot_button: Button, item_data: ItemData) -> void:
+	var count_label: Label = slot_button.get_node_or_null(STACK_COUNT_NODE_NAME)
+	if not count_label:
+		return
+	if item_data == null or not item_data.is_stackable:
+		count_label.visible = false
+		return
+	var count: int = Inventory.get_count(item_data.item_id)
+	if item_data.count_is_cents:
+		count_label.text = "$%d.%02d" % [int(count / 100.0), count % 100]
+	else:
+		count_label.text = str(count)
+	count_label.visible = true
 
 
 func _on_inventory_slot_pressed(item_data_pressed: ItemData):

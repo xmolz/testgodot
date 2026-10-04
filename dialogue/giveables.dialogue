@@ -1,3 +1,6 @@
+import "res://dialogue/layla_gifts.dialogue" as layla_gifts
+import "res://dialogue/unusables.dialogue" as unusables
+
 ~ start
 Player: (I don't think they want that.)
 => END
@@ -62,3 +65,22 @@ Player: (I think she might confiscate this from me if I show it to her...)
 ~ mcbucket_item_techpass
 Player: (Why would I want him to have that?)
 => END
+
+~ layla_item_vending_cheese_balls
+do Inventory.remove_item("vending_cheese_balls")
+=> layla_gifts/liked
+
+~ layla_item_vending_protein_bar
+do Inventory.remove_item("vending_protein_bar")
+=> layla_gifts/loved
+
+~ layla_item_vending_boba_tea
+do Inventory.remove_item("vending_boba_tea")
+=> layla_gifts/liked
+
+~ layla_item_vending_diet_cola
+do Inventory.remove_item("vending_diet_cola")
+=> layla_gifts/liked
+
+~ vending_machine_item_cash
+=> unusables/vending_machine

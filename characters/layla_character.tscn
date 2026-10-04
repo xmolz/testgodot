@@ -8,7 +8,26 @@
 [ext_resource type="Script" path="res://interactions/actions/StartConversationAction.gd" id="6_startconv"]
 [ext_resource type="Resource" path="res://interactions/actions/DefaultExamineResponse.tres" id="7_examine"]
 [ext_resource type="Material" path="res://interactions/actions/interactable_outline.tres" id="8_outline"]
-[ext_resource type="Texture2D" path="res://Dev/layla_test_gameworld_sprite.png" id="9_layla_art"]
+[ext_resource type="Texture2D" path="res://Animations/layla/layla_walk/layla_walk_0001.png" id="10_walk1"]
+[ext_resource type="Texture2D" path="res://Animations/layla/layla_walk/layla_walk_0002.png" id="11_walk2"]
+[ext_resource type="Texture2D" path="res://Animations/layla/layla_walk/layla_walk_0003.png" id="12_walk3"]
+[ext_resource type="Texture2D" path="res://Animations/layla/layla_walk/layla_walk_0004.png" id="13_walk4"]
+[ext_resource type="Texture2D" path="res://Animations/layla/layla_walk/layla_walk_0005.png" id="14_walk5"]
+[ext_resource type="Texture2D" path="res://Animations/layla/layla_walk/layla_walk_0006.png" id="15_walk6"]
+[ext_resource type="Texture2D" path="res://Animations/layla/layla_walk/layla_walk_0007.png" id="16_walk7"]
+[ext_resource type="Texture2D" path="res://Animations/layla/layla_walk/layla_walk_0008.png" id="17_walk8"]
+[ext_resource type="Texture2D" path="res://Animations/layla/layla_idle/layla_idle_0001.png" id="18_idle1"]
+[ext_resource type="Texture2D" path="res://Animations/layla/layla_idle/layla_idle_0002.png" id="19_idle2"]
+[ext_resource type="Texture2D" path="res://Animations/layla/layla_idle/layla_idle_0003.png" id="20_idle3"]
+[ext_resource type="Texture2D" path="res://Animations/layla/layla_idle/layla_idle_0004.png" id="21_idle4"]
+[ext_resource type="Texture2D" path="res://Animations/layla/layla_idle/layla_idle_0005.png" id="22_idle5"]
+[ext_resource type="Texture2D" path="res://Animations/layla/layla_idle/layla_idle_0006.png" id="23_idle6"]
+[ext_resource type="Texture2D" path="res://Animations/layla/layla_idle/layla_idle_0007.png" id="24_idle7"]
+[ext_resource type="Texture2D" path="res://Animations/layla/layla_idle/layla_idle_0008.png" id="25_idle8"]
+[ext_resource type="Texture2D" path="res://Animations/layla/layla_idle/layla_idle_0009.png" id="26_idle9"]
+[ext_resource type="Texture2D" path="res://Animations/layla/layla_idle/layla_idle_0013.png" id="27_idle13"]
+[ext_resource type="Texture2D" path="res://Animations/layla/layla_idle/layla_idle_0014.png" id="28_idle14"]
+[ext_resource type="Texture2D" path="res://characters/character_floor_shadow.tres" id="29_shadow"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_layla"]
 size = Vector2(194, 506)
@@ -23,16 +42,82 @@ verb_id = "talk_to"
 actions_to_perform = Array[ExtResource("5_action")]([SubResource("Resource_layla_talk_action")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
+[sub_resource type="Animation" id="Animation_layla_reset"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("18_idle1")]
+}
+
+[sub_resource type="Animation" id="Animation_layla_idle"]
+resource_name = "idle"
+length = 2.0
+loop_mode = 1
+step = 0.0833
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0833, 0.1667, 0.25, 0.3333, 0.4167, 0.5, 0.5833, 0.6667, 0.75, 0.8333, 0.9167, 1, 1.0833, 1.1667, 1.25, 1.3333, 1.4167, 1.5, 1.5833, 1.6667, 1.75, 1.8333, 1.9167),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("18_idle1"), ExtResource("19_idle2"), ExtResource("20_idle3"), ExtResource("21_idle4"), ExtResource("22_idle5"), ExtResource("23_idle6"), ExtResource("24_idle7"), ExtResource("25_idle8"), ExtResource("26_idle9"), ExtResource("23_idle6"), ExtResource("22_idle5"), ExtResource("21_idle4"), ExtResource("27_idle13"), ExtResource("28_idle14"), ExtResource("27_idle13"), ExtResource("20_idle3"), ExtResource("21_idle4"), ExtResource("22_idle5"), ExtResource("23_idle6"), ExtResource("24_idle7"), ExtResource("25_idle8"), ExtResource("23_idle6"), ExtResource("20_idle3"), ExtResource("18_idle1")]
+}
+
+[sub_resource type="Animation" id="Animation_layla_walk"]
+resource_name = "walk"
+length = 0.6667
+loop_mode = 1
+step = 0.0833
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0833, 0.1667, 0.25, 0.3333, 0.4167, 0.5, 0.5833),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("10_walk1"), ExtResource("11_walk2"), ExtResource("12_walk3"), ExtResource("13_walk4"), ExtResource("14_walk5"), ExtResource("15_walk6"), ExtResource("16_walk7"), ExtResource("17_walk8")]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_layla"]
+_data = {
+&"RESET": SubResource("Animation_layla_reset"),
+&"idle": SubResource("Animation_layla_idle"),
+&"walk": SubResource("Animation_layla_walk")
+}
+
 [node name="LaylaCharacter" type="CharacterBody2D" groups=["saveable_npc"]]
 collision_layer = 0
 collision_mask = 1
 script = ExtResource("1_script")
 
+[node name="FloorShadow" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 1, 0.85)
+texture = ExtResource("29_shadow")
+
 [node name="Sprite" type="Sprite2D" parent="."]
 material = ExtResource("8_outline")
-position = Vector2(0, -251.5)
+position = Vector2(0, -270)
 scale = Vector2(0.5, 0.5)
-texture = ExtResource("9_layla_art")
+texture = ExtResource("18_idle1")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries/ = SubResource("AnimationLibrary_layla")
+autoplay = &"idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-6, -253)

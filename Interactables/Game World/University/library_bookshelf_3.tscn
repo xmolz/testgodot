@@ -3,6 +3,10 @@
 [ext_resource type="Script" path="res://interactions/interactable.gd" id="1_interactable"]
 [ext_resource type="Shader" uid="uid://bi5b0454i0065" path="res://interactions/actions/interactable_outline.gdshader" id="2_outlineshader"]
 [ext_resource type="Texture2D" path="res://Backgrounds/Kit/Library/library_book_shelf.png" id="3_shelftex"]
+[ext_resource type="Texture2D" path="res://Backgrounds/Kit/Library/books_1.png" id="4_books1"]
+[ext_resource type="Texture2D" path="res://Backgrounds/Kit/Library/books_2.png" id="5_books2"]
+[ext_resource type="Texture2D" path="res://Backgrounds/Kit/Library/books_3.png" id="6_books3"]
+[ext_resource type="Texture2D" path="res://Backgrounds/Kit/Library/books_4.png" id="7_books4"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_shelf_outline"]
 resource_local_to_scene = true
@@ -43,6 +47,128 @@ texture = ExtResource("3_shelftex")
 centered = false
 region_enabled = true
 region_rect = Rect2(2, 0, 558, 1083)
+
+[node name="Books1a" type="Sprite2D" parent="ObjectSprite"]
+position = Vector2(44, 46)
+texture = ExtResource("6_books3")
+flip_h = true
+centered = false
+
+[node name="Books1b" type="Sprite2D" parent="ObjectSprite"]
+position = Vector2(244, 46)
+texture = ExtResource("5_books2")
+flip_h = true
+centered = false
+
+[node name="Books2a" type="Sprite2D" parent="ObjectSprite"]
+position = Vector2(44, 295)
+texture = ExtResource("6_books3")
+centered = false
+
+[node name="Books2b" type="Sprite2D" parent="ObjectSprite"]
+position = Vector2(306, 295)
+texture = ExtResource("7_books4")
+flip_h = true
+centered = false
+
+[node name="Books3a" type="Sprite2D" parent="ObjectSprite"]
+position = Vector2(44, 542)
+texture = ExtResource("4_books1")
+centered = false
+
+[node name="Books4a" type="Sprite2D" parent="ObjectSprite"]
+position = Vector2(44, 787)
+texture = ExtResource("4_books1")
+centered = false
+
+[node name="Books4b" type="Sprite2D" parent="ObjectSprite"]
+position = Vector2(350, 787)
+texture = ExtResource("7_books4")
+centered = false
+
+[node name="Books1a" type="Sprite2D" parent="ObjectSprite/ShelfB"]
+position = Vector2(44, 46)
+texture = ExtResource("4_books1")
+centered = false
+
+[node name="Books1b" type="Sprite2D" parent="ObjectSprite/ShelfB"]
+position = Vector2(350, 46)
+texture = ExtResource("7_books4")
+centered = false
+
+[node name="Books2a" type="Sprite2D" parent="ObjectSprite/ShelfB"]
+position = Vector2(44, 295)
+texture = ExtResource("4_books1")
+centered = false
+
+[node name="Books2b" type="Sprite2D" parent="ObjectSprite/ShelfB"]
+position = Vector2(350, 295)
+texture = ExtResource("7_books4")
+centered = false
+
+[node name="Books3a" type="Sprite2D" parent="ObjectSprite/ShelfB"]
+position = Vector2(44, 542)
+texture = ExtResource("5_books2")
+flip_h = true
+centered = false
+
+[node name="Books3b" type="Sprite2D" parent="ObjectSprite/ShelfB"]
+position = Vector2(344, 542)
+texture = ExtResource("7_books4")
+centered = false
+
+[node name="Books4a" type="Sprite2D" parent="ObjectSprite/ShelfB"]
+position = Vector2(44, 787)
+texture = ExtResource("5_books2")
+centered = false
+
+[node name="Books4b" type="Sprite2D" parent="ObjectSprite/ShelfB"]
+position = Vector2(294, 787)
+texture = ExtResource("6_books3")
+centered = false
+
+[node name="Books1a" type="Sprite2D" parent="ObjectSprite/ShelfC"]
+position = Vector2(44, 46)
+texture = ExtResource("5_books2")
+flip_h = true
+centered = false
+
+[node name="Books1b" type="Sprite2D" parent="ObjectSprite/ShelfC"]
+position = Vector2(344, 46)
+texture = ExtResource("7_books4")
+centered = false
+
+[node name="Books2a" type="Sprite2D" parent="ObjectSprite/ShelfC"]
+position = Vector2(44, 295)
+texture = ExtResource("5_books2")
+centered = false
+
+[node name="Books2b" type="Sprite2D" parent="ObjectSprite/ShelfC"]
+position = Vector2(294, 295)
+texture = ExtResource("6_books3")
+centered = false
+
+[node name="Books3a" type="Sprite2D" parent="ObjectSprite/ShelfC"]
+position = Vector2(44, 542)
+texture = ExtResource("6_books3")
+flip_h = true
+centered = false
+
+[node name="Books3b" type="Sprite2D" parent="ObjectSprite/ShelfC"]
+position = Vector2(244, 542)
+texture = ExtResource("5_books2")
+flip_h = true
+centered = false
+
+[node name="Books4a" type="Sprite2D" parent="ObjectSprite/ShelfC"]
+position = Vector2(44, 787)
+texture = ExtResource("4_books1")
+centered = false
+
+[node name="Books4b" type="Sprite2D" parent="ObjectSprite/ShelfC"]
+position = Vector2(350, 787)
+texture = ExtResource("7_books4")
+centered = false
 
 [node name="HoverGlow" type="Node2D" parent="."]
 visible = false

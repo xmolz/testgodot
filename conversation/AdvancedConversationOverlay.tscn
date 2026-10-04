@@ -11,6 +11,7 @@
 [ext_resource type="Resource" path="res://characters/fiona_profile.tres" id="9_fiona"]
 [ext_resource type="Resource" path="res://characters/jayce_profile.tres" id="10_jayce"]
 [ext_resource type="Resource" path="res://characters/julian_profile.tres" id="11_julian"]
+[ext_resource type="Resource" path="res://Dev/anton_test_profile.tres" id="12_antontest"]
 [ext_resource type="Shader" uid="uid://6nbhjebfrh7f" path="res://ui/dream_haze.gdshader" id="9_dream_haze"]
 [ext_resource type="Shader" uid="uid://dbrkjgqfq3gie" path="res://ui/eyelid_blink.gdshader" id="10_eyelid_blink"]
 
@@ -40,7 +41,7 @@ shader_parameter/lid_color = Color(0, 0, 0, 1)
 [node name="AdvancedConversationOverlay2" type="CanvasLayer" unique_id=543555441]
 layer = 75
 script = ExtResource("1_script")
-character_roster = Array[ExtResource("2_txusg")]([ExtResource("3_2snxj"), ExtResource("4_2snxj"), ExtResource("5_nitm1"), ExtResource("6_bf5dx"), ExtResource("7_owce5"), ExtResource("8_2nhb4"), ExtResource("9_fiona"), ExtResource("10_jayce"), ExtResource("11_julian")])
+character_roster = Array[ExtResource("2_txusg")]([ExtResource("3_2snxj"), ExtResource("4_2snxj"), ExtResource("5_nitm1"), ExtResource("6_bf5dx"), ExtResource("7_owce5"), ExtResource("8_2nhb4"), ExtResource("9_fiona"), ExtResource("10_jayce"), ExtResource("11_julian"), ExtResource("12_antontest")])
 
 [node name="SolidBackground" type="ColorRect" parent="." unique_id=1136607802]
 anchors_preset = 15

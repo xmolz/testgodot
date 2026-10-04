@@ -1,0 +1,21 @@
+# layla_gifts.dialogue — Layla receiving a vending-machine snack from Fiona.
+# reached from the use/give fallback titles ~ layla_item_<item_id> in
+# unusables.dialogue and giveables.dialogue (which import this file).
+
+~ liked
+Layla: Oh! That's for me?
+Layla: Thank you, Fiona!
+Player: Sure.
+Player: (Something tells me that while she liked it, she probably didn't LOVE it.)
+Player: (Did I... want her to love it?)
+do Flags.set_level_flag("layla_gift_given", true)
+=> END
+
+~ loved
+Layla: Oh my god! That's my favorite!!
+Layla: Thank you, Fee!
+Player: Sure thing.
+Player: (She called me Fee...)
+do Flags.set_level_flag("layla_gift_given", true)
+do Flags.set_level_flag("layla_gift_loved", true)
+=> END

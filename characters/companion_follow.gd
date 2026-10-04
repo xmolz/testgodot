@@ -32,9 +32,14 @@ signal detached
 # same constant the player uses.
 @export var gravity: float = 800.0
 
+# how far below her placed position to look for the floor when settling her.
+@export var floor_snap_distance: float = 2000.0
+
 var _body: CharacterBody2D = null
 var _target: Node2D = null
 var _moving: bool = false
+# set on spawn and after every room snap; consumed on the next physics frame.
+var _snap_to_floor_pending: bool = true
 
 func _ready() -> void:
 	_body = get_parent() as CharacterBody2D
@@ -70,6 +75,9 @@ func _on_room_changed() -> void:
 	_body.global_position = _target.global_position + Vector2(side * follow_gap, 0.0)
 	_body.velocity = Vector2.ZERO
 	_moving = false
+	# the target's origin is mid-body, so this places her in the air. settle her on the
+	# floor on the next physics frame instead of letting gravity drop her.
+	_snap_to_floor_pending = true
 
 func attach(target: Node2D) -> void:
 	# a follower must be crossable. the floor and the player share collision layer 1,
@@ -113,6 +121,11 @@ func _physics_process(delta: float) -> void:
 	if _body == null:
 		return
 
+	# wait for auto-attach first, so the player is already excluded from the floor test.
+	if _snap_to_floor_pending and (is_attached() or not auto_attach_to_player):
+		_snap_to_floor_pending = false
+		_snap_to_floor()
+
 	var vx := 0.0
 	if is_instance_valid(_target) and _can_follow_now():
 		var dx: float = _target.global_position.x - _body.global_position.x
@@ -136,3 +149,13 @@ func _physics_process(delta: float) -> void:
 	if not _body.is_on_floor():
 		_body.velocity.y += gravity * delta
 	_body.move_and_slide()
+
+# put her straight onto whatever is below on this body's collision mask (the floor),
+# in one step, and clear interpolation so the move doesn't render as a slide or fall.
+func _snap_to_floor() -> void:
+	var hit: KinematicCollision2D = _body.move_and_collide(Vector2(0.0, floor_snap_distance), true)
+	if hit:
+		_body.global_position += hit.get_travel()
+	_body.velocity = Vector2.ZERO
+	_body.reset_physics_interpolation()
+

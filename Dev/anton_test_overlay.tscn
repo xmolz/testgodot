@@ -1,0 +1,7 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://conversation/AdvancedConversationOverlay.tscn" id="1_aco"]
+[ext_resource type="Resource" path="res://Dev/anton_test.dialogue" id="2_diag"]
+
+[node name="AntonTestOverlay" instance=ExtResource("1_aco")]
+dialogue_resource = ExtResource("2_diag")

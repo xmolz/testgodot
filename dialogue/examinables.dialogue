@@ -40,8 +40,8 @@ Player: (Label provides no description.)
 => END
 
 ~ bobby_pins
-Player: (Bobby pins. I lose about three a day.)
-Player: (Springy steel, bent flat. Good for hair. Good for a few other things.)
+Player: (Bobby pins. I forgot how often I used to wear these.)
+Player: (They're pretty rusty, though. Not sure how much use they'd be.)
 => END
 
 ~ dumbphone_charger
@@ -58,6 +58,65 @@ Player: (Advanced Genomics — Greene. Inferential Statistics — Berger. And Ro
 # TEMPLATE — placeholder lines; developer will paste the final text
 Player: (My trophy.)
 Player: (Still here. Still a little dusty.)
+=> END
+
+~ greene_office_door
+Player: (Professor Greene's office door.)
+Player: (Much like his lab, he's gone with a keypad lock here too.)
+=> END
+
+~ greene_office_keypad
+Player: (I have no clue what the password to this is.)
+Player: (Besides, I don't think I need to break into his office...)
+Player: (...yet.)
+=> END
+
+~ supply_lockers
+# TEMPLATE — developer may rewrite.
+Player: (A row of spare lockers. Nobody seems to have claimed them.)
+=> END
+
+~ supply_room_socket
+# TEMPLATE — developer may rewrite.
+Player: (A wall socket. Looks like it still works.)
+=> END
+
+~ vending_machine
+Player: (A vending machine. The only one in this block.)
+if GameManager.is_companion_following():
+	Layla notices you looking toward it.
+	Layla: Oh! I love the Pink-pack protein bars they have in here!
+	Layla: They're chewy and also... crunchy?
+	Player: Oh. That's nice.
+	Player: (Should I get it for her?)
+=> END
+
+~ workstation_fiona
+Player: (My mostly unused workstation.)
+Player: (Wonder if there's anything useful in the drawer.)
+=> END
+
+~ workstation_spare
+Player: (An unassigned workstation.)
+Player: (Wonder if there's anything in the drawer.)
+=> END
+
+~ workstation_julian
+Player: (Julian's workstation.)
+Player: (His corkboard is pinned with dozens of notes.)
+=> END
+
+~ locker_cash
+# TEMPLATE — developer may rewrite.
+Player: (Three dollars. My emergency cash. I forgot I even had this.)
+=> END
+
+~ library_bookshelf_left
+Player: (Shelves of science books, sorted by subject. Worth a closer look.)
+=> END
+
+~ library_bookshelf_right
+Player: (Literature, philosophy, art... and the university's own history.)
 => END
 
 ~ lab_door
@@ -213,6 +272,10 @@ Player: (Smarter than she gives herself credit for.)
 Player: (I don't think I should go there right now.)
 => END
 
+~ elevator_floor_deadline
+Player: (Layla's got a deadline. I think we should head to the lab and not loiter around the wing.)
+=> END
+
 ~ elevator_floor_current
-Player: (I am already on this floor.)
+You are already on this floor.
 => END

@@ -32,17 +32,7 @@
 [ext_resource type="Texture2D" uid="uid://bwuycx643b54v" path="res://Animations/Protag/Walk New Resized/6.png" id="43_fddr8"]
 [ext_resource type="Texture2D" uid="uid://c5wsc3pdyy1ss" path="res://Animations/Protag/Walk New Resized/7.png" id="44_oybyf"]
 [ext_resource type="Texture2D" uid="uid://d0bp2ppyax4kv" path="res://Animations/Protag/Walk New Resized/8.png" id="45_ajfva"]
-
-[sub_resource type="Gradient" id="Gradient_hiqhm"]
-interpolation_mode = 2
-offsets = PackedFloat32Array(0, 0.6041096)
-colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_hiqhm"]
-gradient = SubResource("Gradient_hiqhm")
-fill = 1
-fill_from = Vector2(0.50427353, 0.5)
-fill_to = Vector2(0.008547009, 0.014957265)
+[ext_resource type="Texture2D" uid="uid://d3mm0lq1rhfo7" path="res://characters/character_floor_shadow.tres" id="46_floor_shadow"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_keght"]
 size = Vector2(180, 494)
@@ -142,10 +132,9 @@ _data = {
 script = ExtResource("1_6ubl7")
 
 [node name="FloorShadow" type="Sprite2D" parent="." unique_id=1127582037]
-modulate = Color(0.16470589, 0.1254902, 0.2, 0.7058824)
-position = Vector2(1, 235)
-scale = Vector2(5.5, 1.7708337)
-texture = SubResource("GradientTexture2D_hiqhm")
+modulate = Color(1, 1, 1, 0.85)
+position = Vector2(18, 229)
+texture = ExtResource("46_floor_shadow")
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=653451135]
 position = Vector2(8.19647, -8.59983)

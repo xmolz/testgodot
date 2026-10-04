@@ -38,6 +38,12 @@ var _current_line_was_seen: bool = false
 # ****************************[cached objects (avoid per-line allocations)]
 var _bbcode_regex: RegEx
 var _blank_spacer_icon: ImageTexture
+# set in _ready from the current level root's center_dialogue_responses (opt-in per level).
+var _center_responses: bool = false
+# centred-mode layout (only used when _center_responses is true)
+const RESPONSE_ICON_GUTTER := 44.0 # icon_max_width (32) + h_separation (12), both set in apply_dialogue_line
+const RESPONSE_GAP_ABOVE_TEXTBOX := 24.0
+const RESPONSE_ROW_GAP_CENTRED := 13
 var _cached_name_styles: Dictionary = {}
 
 # *************************[character background color lookup table (for the nameplate)]
@@ -318,6 +324,30 @@ func _ready() -> void:
 	if is_instance_valid(responses_container) and is_instance_valid(responses_menu_vbox):
 		responses_container.anchor_right = 0.95
 		responses_menu_vbox.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+		# ************************[level opt-in: centred response column]
+		_center_responses = _level_wants_centered_responses()
+		if _center_responses:
+			responses_container.anchor_left = 1.0 - responses_container.anchor_right
+			responses_container.offset_left = 0.0
+			responses_container.offset_right = 0.0
+			responses_menu_vbox.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+			# anchor the column's bottom just above the text box (tracks the mobile raise too)
+			var textbox_panel: Control = $Balloon/Panel
+			if is_instance_valid(textbox_panel):
+				responses_container.anchor_bottom = textbox_panel.anchor_top
+				responses_container.offset_bottom = textbox_panel.offset_top - RESPONSE_GAP_ABOVE_TEXTBOX
+			# a little more air between rows (mobile keeps its own larger gap)
+			if not OS.has_feature("mobile"):
+				responses_menu_vbox.add_theme_constant_override("separation", RESPONSE_ROW_GAP_CENTRED)
+			# centred text, balanced by a right-hand margin equal to the icon gutter
+			if template_btn:
+				template_btn.alignment = HORIZONTAL_ALIGNMENT_CENTER
+				for style_name in ["normal", "hover", "pressed"]:
+					var sb: StyleBox = template_btn.get_theme_stylebox(style_name)
+					if sb is StyleBoxFlat:
+						var centred_sb := sb.duplicate() as StyleBoxFlat
+						centred_sb.content_margin_right = centred_sb.content_margin_left + RESPONSE_ICON_GUTTER
+						template_btn.add_theme_stylebox_override(style_name, centred_sb)
 
 	# **************************[pre-compile regex and create reusable spacer icon]
 	_bbcode_regex = RegEx.new()
@@ -356,6 +386,16 @@ func _ready() -> void:
 			Settings.text_scale_changed.connect(_update_text_scale)
 	_update_text_scale(Settings.dialogue_text_scale if GameManager else 1.0)
 
+
+func _level_wants_centered_responses() -> bool:
+	var level: Node = null
+	if SceneDirector and is_instance_valid(SceneDirector.current_game_scene):
+		level = SceneDirector.current_game_scene
+	elif is_inside_tree():
+		level = get_tree().current_scene
+	if not is_instance_valid(level):
+		return false
+	return level.get("center_dialogue_responses") == true
 
 func _unhandled_input(event: InputEvent) -> void:
 	# *******************[arrow keys summon the highlight when no option is focused]
@@ -597,7 +637,7 @@ func apply_dialogue_line() -> void:
 			hover_color = Color(0.8, 0.8, 0.8, 1.0)
 
 		# ******************[icon and alignment refactor]
-		button.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+		button.size_flags_horizontal = Control.SIZE_FILL if _center_responses else Control.SIZE_SHRINK_BEGIN
 
 		if assigned_icon == null:
 			assigned_icon = _blank_spacer_icon

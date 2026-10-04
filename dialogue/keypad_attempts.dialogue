@@ -1,0 +1,74 @@
+# keypad_attempts.dialogue — reactions when a portrait date is tried on the lab keypad.
+# played over the open keypad by ui/keypad_panel.gd, the first time each date is entered.
+# the panel sets keypad_companion_present just before (true when Layla is following).
+
+~ greene_birthday
+if Flags.get_level_flag("keypad_companion_present") == true:
+	Layla: So it isn't his birthdate...
+	Player: Seems like it.
+	Player: Well, I suppose it would've been too easy if it were that.
+	Layla: Let's look around more.
+	Player: Yep.
+else
+	# TEMPLATE — solo path (no Layla); developer may rewrite.
+	Player: (So it isn't his birthdate.)
+	Player: (I suppose it would've been too easy if it were.)
+=> after_portrait_date
+
+~ ember_birthday
+if Flags.get_level_flag("keypad_companion_present") == true:
+	if Flags.get_level_flag("keypad_tried_greene_birthday") == true:
+		Player: Well, so it isn't Dr. Ember's birthdate either.
+	else
+		Player: Well, so it isn't Dr. Ember's birthdate.
+	Layla: Right. That one was a long shot anyway.
+	Player: Yeah, I don't think there's anything like that between them.
+	Layla: You think so?
+	Layla: I think Dr. Ember might have a thing for him...
+	Player: Even though she's always at his throat?
+	Layla: Yeah! That's precisely why I think so!
+	Layla: They'll be like a classic enemies-to-lovers trope!
+	Layla: And it'll be glorious.
+	Player: Hmm.
+	Player: Interesting.
+else
+	# TEMPLATE — solo path (no Layla); developer may rewrite.
+	Player: (Not Dr. Ember's birthdate, then.)
+	Player: (That one was a long shot anyway.)
+=> after_portrait_date
+
+~ after_portrait_date
+if Flags.get_level_flag("keypad_tried_greene_birthday") == true and Flags.get_level_flag("keypad_tried_ember_birthday") == true:
+	=> both_portraits_tried
+=> END
+
+~ both_portraits_tried
+if Flags.get_level_flag("keypad_companion_present") == true:
+	Player: So, we've tried both the dates from the portraits in here.
+	Player: Looks like we need to try something else.
+	if Flags.get_level_flag("julian_password_asked") == true and Flags.get_level_flag("dna_dates_found") == false:
+		Layla: We should probably look into that date thing Julian mentioned.
+		Player: Right, that's a better lead.
+	elif Flags.get_level_flag("jayce_pointed_to_biochem") == true:
+		Layla: We should probably look around the wing for more clues.
+		Player: Right, there's gotta be something more substantial here.
+else
+	# TEMPLATE — solo path (no Layla); developer may rewrite.
+	Player: (That's both the dates from the portraits in here.)
+	Player: (Looks like I need to try something else.)
+	if Flags.get_level_flag("julian_password_asked") == true and Flags.get_level_flag("dna_dates_found") == false:
+		Player: (That date thing Julian mentioned is a better lead.)
+	elif Flags.get_level_flag("jayce_pointed_to_biochem") == true:
+		Player: (There's gotta be something more substantial around the wing.)
+=> END
+
+~ voss_birthday
+if Flags.get_level_flag("keypad_companion_present") == true:
+	Layla: Oh. So it wasn't Leon Voss's birthday.
+	Player: Seems like it.
+	Player: (I'm glad it isn't.)
+else
+	# TEMPLATE — solo path (no Layla); developer may rewrite.
+	Player: (Not Leon Voss's birthday, then.)
+	Player: (Good.)
+=> END

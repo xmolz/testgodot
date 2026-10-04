@@ -1,0 +1,122 @@
+# library_books.dialogue — browsing the two library bookshelf stands.
+# reached from Use on the shelves (unusables.dialogue imports this file).
+# each row of a stand is one topic; each book opens one page via BookReader (data/library_books.gd).
+# reading the heredity book sets dna_dates_found (the keypad follow-up stops pointing at Julian's lead).
+
+~ left_stand
+What do you want to look through?
+- Scientific History
+	=> left_history
+- Genetics and Molecular Biology
+	=> left_genetics
+- Chemistry
+	=> left_chemistry
+- Statistics and Mathematics
+	=> left_stats
+- Nothing. Never mind. [Leave]
+	=> END
+
+~ left_history
+Which book?
+- Threads of Inheritance: A History of Heredity
+	do BookReader.open("history_of_heredity")
+	do Flags.set_level_flag("dna_dates_found", true)
+	=> left_history
+- Twisted Ladders: The Race for DNA
+	do BookReader.open("race_for_the_helix")
+	=> left_history
+- Back to the shelves [Back]
+	=> left_stand
+
+~ left_genetics
+Which book?
+- On the Origin of Species (Darwin)
+	do BookReader.open("darwin_origin")
+	=> left_genetics
+- The Bench Guide to Sequencing
+	do BookReader.open("sequencing_handbook")
+	=> left_genetics
+- Safety Guidelines for Overworked Grad Students
+	do BookReader.open("grad_safety_guidelines")
+	=> left_genetics
+- Back to the shelves [Back]
+	=> left_stand
+
+~ left_chemistry
+Which book?
+- Nothing Is Lost
+	do BookReader.open("conservation_of_mass")
+	=> left_chemistry
+- Laboratory Safety, 9th Edition
+	do BookReader.open("lab_safety")
+	=> left_chemistry
+- Back to the shelves [Back]
+	=> left_stand
+
+~ left_stats
+Which book?
+- The Trouble with P-Values
+	do BookReader.open("p_values")
+	=> left_stats
+- Numbers for Nervous Biologists
+	do BookReader.open("numbers_for_biologists")
+	=> left_stats
+- Back to the shelves [Back]
+	=> left_stand
+
+~ right_stand
+What do you want to look through?
+- Literature and Classics
+	=> right_literature
+- Philosophy
+	=> right_philosophy
+- Art and Architecture
+	=> right_art
+- University History
+	=> right_history
+- Nothing. Never mind. [Leave]
+	=> END
+
+~ right_literature
+Which book?
+- The Odyssey (Homer)
+	do BookReader.open("homer_odyssey")
+	=> right_literature
+- Frankenstein (Mary Shelley)
+	do BookReader.open("shelley_frankenstein")
+	=> right_literature
+- Back to the shelves [Back]
+	=> right_stand
+
+~ right_philosophy
+Which book?
+- The Republic (Plato)
+	do BookReader.open("plato_republic")
+	=> right_philosophy
+- Utilitarianism (J. S. Mill)
+	do BookReader.open("mill_utilitarianism")
+	=> right_philosophy
+- Back to the shelves [Back]
+	=> right_stand
+
+~ right_art
+Which book?
+- Rembrandt and the Light
+	do BookReader.open("rembrandt_light")
+	=> right_art
+- Brick and Glass: The Buildings of Greendale
+	do BookReader.open("campus_buildings")
+	=> right_art
+- Back to the shelves [Back]
+	=> right_stand
+
+~ right_history
+Which book?
+- A History of Greendale University
+	do BookReader.open("greendale_history")
+	=> right_history
+- Greendale Yearbook
+	do BookReader.open("yearbook")
+	=> right_history
+- Back to the shelves [Back]
+	=> right_stand

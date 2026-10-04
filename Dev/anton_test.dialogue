@@ -1,0 +1,64 @@
+~ start
+# DEV TEST: toggle conversation sprites beside the party. Delete with the rest of the test (2.151).
+do stage_party("Anton", "pg1")
+=> menu
+
+~ menu
+Which sprite?
+- Anton sprites
+	=> anton_menu
+- Jayce sprites
+	=> jayce_menu
+- Fiona and Layla, for scale
+	Player: (Test) Fiona, for scale.
+	if Flags.get_level_flag("party_companion_staged") == true:
+		Layla: (Test) And Layla.
+	=> menu
+- Done [Leave]
+	=> END
+
+~ anton_menu
+Which Anton sprite?
+- pg_1
+	do actor_change("Anton", "pg1")
+	Anton: (Test) Anton: pg_1.
+	=> anton_menu
+- pg_2
+	do actor_change("Anton", "pg2")
+	Anton: (Test) Anton: pg_2.
+	=> anton_menu
+- pg_3
+	do actor_change("Anton", "pg3")
+	Anton: (Test) Anton: pg_3.
+	=> anton_menu
+- pg_4
+	do actor_change("Anton", "pg4")
+	Anton: (Test) Anton: pg_4.
+	=> anton_menu
+- BIG HEAD
+	do actor_change("Anton", "anton_bighead")
+	Anton: (Test) Anton: BIG HEAD.
+	=> anton_menu
+- WIDE
+	do actor_change("Anton", "anton_wide")
+	Anton: (Test) Anton: WIDE.
+	=> anton_menu
+- Back [Back]
+	=> menu
+
+~ jayce_menu
+Which Jayce sprite?
+- Current sprite
+	do actor_change("Anton", "jayce_current")
+	Anton: (Test) Jayce: current.
+	=> jayce_menu
+- BIG HEAD
+	do actor_change("Anton", "jayce_bighead")
+	Anton: (Test) Jayce: BIG HEAD.
+	=> jayce_menu
+- WIDE
+	do actor_change("Anton", "jayce_wide")
+	Anton: (Test) Jayce: WIDE.
+	=> jayce_menu
+- Back [Back]
+	=> menu

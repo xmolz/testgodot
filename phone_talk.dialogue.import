@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://xiisb8svk7v8"
+path="res://.godot/imported/phone_talk.dialogue-cfb2922632db971cc31da4ec2966309a.tres"
+
+[deps]
+
+source_file="res://phone_talk.dialogue"
+dest_files=["res://.godot/imported/phone_talk.dialogue-cfb2922632db971cc31da4ec2966309a.tres"]
+
+[params]
+
+defaults=true

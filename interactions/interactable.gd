@@ -26,6 +26,10 @@ enum ApproachSide { ANY, LEFT_SIDE, RIGHT_SIDE }
 # matter which verb (or item) is selected, because they route every verb to walk_to.
 @export var hover_ignores_verb: bool = false
 
+# examine plays where the player stands instead of walking over first
+# (used for every object in the grad commons). other verbs are unaffected.
+@export var examine_without_walking: bool = false
+
 
 # ******************(the system is now the only system)
 @export var interactions: Array[InteractionResponse] = [preload("res://interactions/actions/DefaultExamineResponse.tres")]
@@ -216,6 +220,8 @@ func does_verb_require_walk(verb_id_to_check: String, item_data_used: ItemData =
 	# "walk to" always requires walking.
 	if verb_id_to_check == "walk_to":
 		return true
+	if examine_without_walking and verb_id_to_check == "examine":
+		return false
 
 	# determine the item id we are checking against
 	var item_id_checking = ""

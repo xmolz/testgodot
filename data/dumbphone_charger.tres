@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://dhsxf5is307k5"]
+
+[ext_resource type="Texture2D" uid="uid://dbr6g7mnha4ch" path="res://Backgrounds/Kit/Lab Corridoor/dumbphone_charger.png" id="1_icon"]
+[ext_resource type="Script" uid="uid://by8o1t3tdwrep" path="res://data/ItemData.gd" id="2_script"]
+
+[resource]
+script = ExtResource("2_script")
+item_id = "dumbphone_charger"
+display_name = "Dumbphone Charger"
+icon = ExtResource("1_icon")
