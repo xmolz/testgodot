@@ -1,0 +1,59 @@
+# car_ride_home.dialogue: Fiona drives Layla's car back to Fiona's apartment after the university.
+#
+# hooks provided by the car scene (Dev/car_ride_test.gd, later the real car scene):
+#   do car_darkness() / do car_reveal(1.5)    black screen / fade the car in
+#   do car_bump(1.0)                          a bump; 0.5 small, 1.5 big
+#   do car_speed(0.0, 1.5)                    ease to a stop over 1.5 s (a red light); car_speed(1.0) = cruising
+#   do car_think_begin() / do car_think_end() Fiona drifts into thought (slow push-in + the dream as a
+#                                             faint mental image) / snaps out of it
+# planned later, not available yet: expression changes and face close-ups over the car art.
+
+~ start
+do car_darkness()
+Without much ado, you and Layla go to the parking lot and get in her car.
+Before long, you're out of the parking lot and onto the freeway.
+On your way. Back to your place.
+do car_reveal(1.5)
+Layla's car smells exactly how you expected it to.
+Like flowers.
+Even the teddy bear on the dashboard is so Layla.
+Player: (Heh. Guess this really is her car.)
+do car_think_begin()
+Not long after, your mind begins to wander.
+Didn't you... see something?
+Right before Layla came to wake you up.
+You did. You did indeed.
+It was a dream.
+A dream with HIM in it.
+The person you dread the most.
+Who treated you and her so wrong.
+Especially her.
+Speaking of her... you wonder what she must be doing right now.
+It's been a week sin-
+do car_think_end(0.8)
+Layla: Ummm... Fiona?
+Layla interrupts your thoughts. Her voice is soft and careful. Her brows knit together.
+Layla: Are you... okay?
+Layla: I don't know. I just felt like I should ask you that.
+Player: Oh yes, of course.
+Player: Sorry, I got too in the zone while driving I guess.
+Layla: That;s alright.
+The two of you stay mostly silent.
+This is a template line.
+Player: This is a template line.
+Layla: This is a template line.
+do car_bump(1.0)
+Layla: This is a template line.
+Player: This is a template line.
+- This is a template choice.
+	Player: This is a template line.
+	Layla: This is a template line.
+- This is another template choice.
+	Layla: This is a template line.
+	Player: This is a template line.
+do car_speed(0.0, 1.5)
+This is a template line. The car rolls to a stop at a red light.
+Layla: This is a template line.
+do car_speed(1.0, 2.0)
+Player: This is a template line.
+=> END

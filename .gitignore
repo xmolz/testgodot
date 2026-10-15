@@ -46,3 +46,5 @@ Thumbs.db
 repomix-output.xml
 quit_bug_files.xml
 godotpcktool.exe
+
+repomix*.xml

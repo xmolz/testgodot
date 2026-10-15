@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="MemoryGroupData" format=3]
+
+[ext_resource type="Script" path="res://data/MemoryChapterData.gd" id="1_chapter_script"]
+[ext_resource type="Script" path="res://data/MemoryGroupData.gd" id="2_group_script"]
+[ext_resource type="Resource" path="res://data/chapter_apartment_1.tres" id="3_chapter1"]
+
+[resource]
+script = ExtResource("2_group_script")
+group_name = "Fiona's Apartment"
+group_thumbnail_path = "res://1080test1.jpg"
+category = 1
+chapters = Array[ExtResource("1_chapter_script")]([ExtResource("3_chapter1")])

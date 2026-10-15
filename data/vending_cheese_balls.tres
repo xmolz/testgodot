@@ -1,10 +1,11 @@
-[gd_resource type="Resource" script_class="ItemData" format=3]
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://bmofbugi7ce1m"]
 
-[ext_resource type="Texture2D" path="res://icon.svg" id="1_icon"]
-[ext_resource type="Script" path="res://data/ItemData.gd" id="2_script"]
+[ext_resource type="Texture2D" uid="uid://cfkvy6v701sh1" path="res://icon.svg" id="1_icon"]
+[ext_resource type="Script" uid="uid://by8o1t3tdwrep" path="res://data/ItemData.gd" id="2_script"]
 
 [resource]
 script = ExtResource("2_script")
 item_id = "vending_cheese_balls"
 display_name = "Cheddar Cheese Balls"
 icon = ExtResource("1_icon")
+is_stackable = true

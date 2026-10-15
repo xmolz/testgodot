@@ -234,6 +234,13 @@ func walk_to_and_interact(interactable_walk_to_point_pos: Vector2, interactable_
 
 	# ////////////[custom offset logic]
 	var current_offset = INTERACTION_OFFSET_X
+	# characters can ask for conversation room (keep_distance on their Interactable):
+	# the conversation overlay no longer hides the world, so nose-to-nose shows.
+	var keep_distance: float = 0.0
+	if is_instance_valid(interactable_node) and "keep_distance" in interactable_node:
+		keep_distance = float(interactable_node.keep_distance)
+	if keep_distance > 0.0:
+		current_offset = keep_distance
 	if verb_id == "flash":
 		current_offset = 270.0
 	#
@@ -253,6 +260,10 @@ func walk_to_and_interact(interactable_walk_to_point_pos: Vector2, interactable_
 		else:
 			_actual_walk_destination.x = target_x + current_offset
 	#
+
+	# already within keep_distance: talk from here instead of stepping in (or back).
+	if keep_distance > 0.0 and absf(global_position.x - target_x) <= current_offset:
+		_actual_walk_destination.x = global_position.x
 
 	_actual_walk_destination.y = global_position.y
 

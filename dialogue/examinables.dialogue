@@ -61,14 +61,41 @@ Player: (Still here. Still a little dusty.)
 => END
 
 ~ greene_office_door
-Player: (Professor Greene's office door.)
-Player: (Much like his lab, he's gone with a keypad lock here too.)
+Player: (That's the door to Professor Greene's office. He's Layla's and my supervisor.)
 => END
 
-~ greene_office_keypad
-Player: (I have no clue what the password to this is.)
-Player: (Besides, I don't think I need to break into his office...)
-Player: (...yet.)
+~ duflo_office_door
+Player: (That's the door to Dr. Duflo's office.)
+=> END
+
+~ king_office_door
+Player: (That's the door to Dr. King's office.)
+=> END
+
+~ song_office_door
+Player: (That's the door to Dr. Song's office.)
+=> END
+
+~ ember_office_door
+Player: (That's the door to Dr. Ember's office.)
+=> END
+
+~ grey_office_door
+Player: (That's the door to Dr. Grey's office.)
+=> END
+
+~ biochem_lab_door
+Player: (That's the door to the Biochem lab.)
+=> END
+
+~ greene_office_card_reader
+~ song_card_reader
+~ duflo_card_reader
+~ king_card_reader
+~ ember_card_reader
+~ grey_card_reader
+~ biochem_card_reader
+Player: (A keycard reader. It'll open the door next to it if I use the right card.)
 => END
 
 ~ supply_lockers
@@ -82,8 +109,8 @@ Player: (A wall socket. Looks like it still works.)
 => END
 
 ~ vending_machine
-Player: (A vending machine. The only one in this block.)
-if GameManager.is_companion_following():
+Player: (A vending machine. The only one in this building.)
+if GameManager.is_companion_following() and Flags.get_game_counter("layla_closeness") >= 0:
 	Layla notices you looking toward it.
 	Layla: Oh! I love the Pink-pack protein bars they have in here!
 	Layla: They're chewy and also... crunchy?
@@ -273,7 +300,7 @@ Player: (I don't think I should go there right now.)
 => END
 
 ~ elevator_floor_deadline
-Player: (Layla's got a deadline. I think we should head to the lab and not loiter around the wing.)
+Player: (Layla's got a deadline. I think we should head to the lab and not loiter around the building.)
 => END
 
 ~ elevator_floor_current

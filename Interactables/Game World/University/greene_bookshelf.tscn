@@ -1,0 +1,161 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://interactions/interactable.gd" id="1_interactable"]
+[ext_resource type="Shader" path="res://interactions/actions/interactable_outline.gdshader" id="2_outlineshader"]
+[ext_resource type="Texture2D" path="res://Backgrounds/Kit/Library/library_book_shelf.png" id="3_shelftex"]
+[ext_resource type="Texture2D" path="res://Backgrounds/Kit/Library/books_1.png" id="4_books1"]
+[ext_resource type="Texture2D" path="res://Backgrounds/Kit/Library/books_2.png" id="5_books2"]
+[ext_resource type="Texture2D" path="res://Backgrounds/Kit/Library/books_3.png" id="6_books3"]
+[ext_resource type="Texture2D" path="res://Backgrounds/Kit/Library/books_4.png" id="7_books4"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_shelf_outline"]
+resource_local_to_scene = true
+shader = ExtResource("2_outlineshader")
+shader_parameter/enable_outline = true
+shader_parameter/outline_color = Color(0.2, 0.85, 1, 1)
+shader_parameter/outline_width = 20.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_greene_shelf"]
+size = Vector2(557, 541.5)
+
+[node name="GreeneBookshelf" type="Area2D"]
+script = ExtResource("1_interactable")
+object_display_name = "Bookshelf"
+object_id = "greene_bookshelf"
+
+[node name="ObjectSprite" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_shelf_outline")
+position = Vector2(-278.5, -270.75)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("3_shelftex")
+centered = false
+region_enabled = true
+region_rect = Rect2(2, 0, 558, 1083)
+
+[node name="ShelfB" type="Sprite2D" parent="ObjectSprite"]
+use_parent_material = true
+position = Vector2(556, 0)
+texture = ExtResource("3_shelftex")
+centered = false
+region_enabled = true
+region_rect = Rect2(2, 0, 558, 1083)
+
+[node name="Books1a" type="Sprite2D" parent="ObjectSprite"]
+position = Vector2(44, 46)
+texture = ExtResource("6_books3")
+flip_h = true
+centered = false
+
+[node name="Books1b" type="Sprite2D" parent="ObjectSprite"]
+position = Vector2(244, 46)
+texture = ExtResource("5_books2")
+flip_h = true
+centered = false
+
+[node name="Books2a" type="Sprite2D" parent="ObjectSprite"]
+position = Vector2(44, 295)
+texture = ExtResource("6_books3")
+centered = false
+
+[node name="Books2b" type="Sprite2D" parent="ObjectSprite"]
+position = Vector2(306, 295)
+texture = ExtResource("7_books4")
+flip_h = true
+centered = false
+
+[node name="Books3a" type="Sprite2D" parent="ObjectSprite"]
+position = Vector2(44, 542)
+texture = ExtResource("4_books1")
+centered = false
+
+[node name="Books4a" type="Sprite2D" parent="ObjectSprite"]
+position = Vector2(44, 787)
+texture = ExtResource("4_books1")
+centered = false
+
+[node name="Books4b" type="Sprite2D" parent="ObjectSprite"]
+position = Vector2(350, 787)
+texture = ExtResource("7_books4")
+centered = false
+
+[node name="Books1a" type="Sprite2D" parent="ObjectSprite/ShelfB"]
+position = Vector2(44, 46)
+texture = ExtResource("4_books1")
+centered = false
+
+[node name="Books1b" type="Sprite2D" parent="ObjectSprite/ShelfB"]
+position = Vector2(350, 46)
+texture = ExtResource("7_books4")
+centered = false
+
+[node name="Books2a" type="Sprite2D" parent="ObjectSprite/ShelfB"]
+position = Vector2(44, 295)
+texture = ExtResource("4_books1")
+centered = false
+
+[node name="Books2b" type="Sprite2D" parent="ObjectSprite/ShelfB"]
+position = Vector2(350, 295)
+texture = ExtResource("7_books4")
+centered = false
+
+[node name="Books3a" type="Sprite2D" parent="ObjectSprite/ShelfB"]
+position = Vector2(44, 542)
+texture = ExtResource("5_books2")
+flip_h = true
+centered = false
+
+[node name="Books3b" type="Sprite2D" parent="ObjectSprite/ShelfB"]
+position = Vector2(344, 542)
+texture = ExtResource("7_books4")
+centered = false
+
+[node name="Books4a" type="Sprite2D" parent="ObjectSprite/ShelfB"]
+position = Vector2(44, 787)
+texture = ExtResource("5_books2")
+centered = false
+
+[node name="Books4b" type="Sprite2D" parent="ObjectSprite/ShelfB"]
+position = Vector2(294, 787)
+texture = ExtResource("6_books3")
+centered = false
+
+[node name="HoverGlow" type="Node2D" parent="."]
+visible = false
+
+[node name="GlowTop" type="ColorRect" parent="HoverGlow"]
+offset_left = -282.5
+offset_top = -274.75
+offset_right = 282.5
+offset_bottom = -266.75
+mouse_filter = 2
+color = Color(0.2, 0.85, 1, 1)
+
+[node name="GlowBottom" type="ColorRect" parent="HoverGlow"]
+offset_left = -282.5
+offset_top = 266.75
+offset_right = 282.5
+offset_bottom = 274.75
+mouse_filter = 2
+color = Color(0.2, 0.85, 1, 1)
+
+[node name="GlowLeft" type="ColorRect" parent="HoverGlow"]
+offset_left = -282.5
+offset_top = -274.75
+offset_right = -274.5
+offset_bottom = 274.75
+mouse_filter = 2
+color = Color(0.2, 0.85, 1, 1)
+
+[node name="GlowRight" type="ColorRect" parent="HoverGlow"]
+offset_left = 274.5
+offset_top = -274.75
+offset_right = 282.5
+offset_bottom = 274.75
+mouse_filter = 2
+color = Color(0.2, 0.85, 1, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_greene_shelf")
+
+[node name="WalkToPoint" type="Marker2D" parent="."]
+position = Vector2(0, 280.75)

@@ -14,13 +14,31 @@ enum InteractionLocation { WORLD, UI_OVERLAY }
 
 enum ApproachSide { ANY, LEFT_SIDE, RIGHT_SIDE }
 
-@export var object_display_name: String = "Object"
+@export var object_display_name: String = "Object":
+	get:
+		if not introduced_flag_id.is_empty() and not introduced_display_name.is_empty() and Flags.get_level_flag(introduced_flag_id):
+			return introduced_display_name
+		return object_display_name
+## optional second name: once the level flag introduced_flag_id is true (e.g. a
+## character has told the player their name), hover text and history show
+## introduced_display_name instead. leave both empty to always use object_display_name.
+@export var introduced_flag_id: String = ""
+@export var introduced_display_name: String = ""
+
 @export var object_id: String = ""
+## step 2.203: interactables that overlap in a row (e.g. lockers) share a group name here;
+## while one is hovered it is drawn above the others in that group so its whole outline shows.
+@export var hover_front_group: StringName = &""
+var _hover_rest_index: int = -1
 @export var state_flag_id: String = ""
 @export var category: ObjectCategory = ObjectCategory.OBJECT
 # ------------------------(export variable for the location context)
 @export var interaction_location: InteractionLocation = InteractionLocation.WORLD
 @export var approach_side: ApproachSide = ApproachSide.ANY
+## stop this far (horizontally) from the walk-to point for any verb instead of walking up
+## close, and don't walk at all if the player is already within it. for characters, so
+## conversations have room. 0 = the usual close approach.
+@export var keep_distance: float = 0.0
 @export var hover_prefix: String = "Walk to"
 # navigation zones set this: the sentence line reads "<hover_prefix> <name>" no
 # matter which verb (or item) is selected, because they route every verb to walk_to.
@@ -99,6 +117,7 @@ func _on_mouse_entered():
 			return
 
 	_is_mouse_over = true
+	_bring_to_front_of_group()
 	if GameManager: GameManager.set_hovered_object(self)
 
 	if not OS.has_feature("mobile"):
@@ -112,6 +131,7 @@ func _on_mouse_entered():
 
 func _on_mouse_exited():
 	_is_mouse_over = false
+	_restore_group_order()
 	if GameManager: GameManager.clear_hovered_object(self)
 	if not OS.has_feature("mobile"):
 		if has_node("HoverGlow"): get_node("HoverGlow").visible = false
@@ -284,3 +304,28 @@ func _find_object_sprite() -> Sprite2D:
 			return p.get_node("Sprite") as Sprite2D
 			
 	return null
+
+
+# step 2.203: hover ordering for hover_front_group (see the export above).
+func _bring_to_front_of_group():
+	if hover_front_group == &"" or _hover_rest_index >= 0:
+		return
+	var p := get_parent()
+	if p == null:
+		return
+	_hover_rest_index = get_index()
+	var top := _hover_rest_index
+	for s in p.get_children():
+		if s is Interactable and s.hover_front_group == hover_front_group:
+			top = maxi(top, s.get_index())
+	if top != _hover_rest_index:
+		p.move_child(self, top)
+
+
+func _restore_group_order():
+	if _hover_rest_index < 0:
+		return
+	var p := get_parent()
+	if p and _hover_rest_index < p.get_child_count():
+		p.move_child(self, _hover_rest_index)
+	_hover_rest_index = -1

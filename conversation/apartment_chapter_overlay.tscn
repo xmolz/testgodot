@@ -1,0 +1,24 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://conversation/AdvancedConversationOverlay.tscn" id="1_aco"]
+[ext_resource type="Resource" path="res://dialogue/apartment_chapter.dialogue" id="2_diag"]
+
+[node name="ApartmentChapterOverlay" instance=ExtResource("1_aco")]
+dialogue_resource = ExtResource("2_diag")
+autostart = false
+prestage_background = ""
+prestage_cg = "fiona_from_the_back"
+background_aliases = {
+"apt_front_door": "res://1080test1.jpg",
+"apt_living_room": "res://1080test1.jpg",
+"apt_sofa_night": "res://1080test1.jpg"
+}
+cg_aliases = {
+"fiona_closeup_1": "res://Backgrounds/CG/fiona_apartment_closeup_1.png",
+"fiona_closeup_2": "res://Backgrounds/CG/fiona_apartment_closeup_2.png",
+"fiona_from_the_back": "res://Backgrounds/CG/fiona_from_the_back.png",
+"fiona_on_the_floor": "res://Backgrounds/CG/fiona_on_the_floor_cg.png"
+}
+scene_cg_aliases = {
+"phone_floor": "res://conversation/apartment/apartment_phone_shot.tscn"
+}

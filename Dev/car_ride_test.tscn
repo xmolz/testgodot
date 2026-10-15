@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://bnf841xr5kjj5"]
+
+[ext_resource type="Script" uid="uid://brkt5x8b03eb6" path="res://Dev/car_ride_test.gd" id="1_car"]
+[ext_resource type="Texture2D" uid="uid://bowgo2tk08vvx" path="res://Backgrounds/Car/wispy_sky.png" id="2_4wtye"]
+
+[node name="CarRideTest" type="Control" unique_id=142163784]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_car")
+car_image_path = "uid://brusbtgslju77"
+far_texture = ExtResource("2_4wtye")

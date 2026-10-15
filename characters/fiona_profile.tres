@@ -7,7 +7,7 @@ script = ExtResource("1_cp")
 actor_id = "Fiona"
 default_scale = 1.0
 canvas_anchor_x = 0.3741
-face_y_ratio = 0.1904
+face_y_ratio = 0.36
 expressions = {
 "base": "res://Dev/fiona_test_sprite.png"
 }

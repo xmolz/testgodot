@@ -1,0 +1,107 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Backgrounds/Kit/Faculty Offices/Greene Office/greene_office_portrait.png" id="1_tex"]
+[ext_resource type="FontFile" path="res://Fonts/VarelaRound-Regular.ttf" id="2_font"]
+[ext_resource type="FontVariation" path="res://Fonts/varela_round_italic.tres" id="3_italic"]
+[ext_resource type="Script" path="res://interactions/view_reaction.gd" id="4_reaction"]
+[ext_resource type="Resource" path="res://dialogue/greene_office.dialogue" id="5_dialogue"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_frame"]
+content_margin_left = 22.0
+content_margin_top = 22.0
+content_margin_right = 22.0
+content_margin_bottom = 22.0
+bg_color = Color(0.12, 0.13, 0.16, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.32, 0.28, 0.22, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+shadow_color = Color(0, 0, 0, 0.5)
+shadow_size = 28
+shadow_offset = Vector2(0, 12)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mat"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.06, 0.07, 0.08, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.18, 0.16, 0.14, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_plaque"]
+content_margin_left = 18.0
+content_margin_top = 10.0
+content_margin_right = 18.0
+content_margin_bottom = 12.0
+bg_color = Color(0.72, 0.6, 0.36, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45, 0.36, 0.2, 1)
+
+[node name="LaMarrPhotoCloseup" type="PanelContainer"]
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_frame")
+
+[node name="Matting" type="PanelContainer" parent="."]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_mat")
+
+[node name="Column" type="VBoxContainer" parent="Matting"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="Image" type="TextureRect" parent="Matting/Column"]
+custom_minimum_size = Vector2(580, 680)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("1_tex")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Plaque" type="PanelContainer" parent="Matting/Column"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_plaque")
+
+[node name="Lines" type="VBoxContainer" parent="Matting/Column/Plaque"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="TitleLabel" type="Label" parent="Matting/Column/Plaque/Lines"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.22, 0.15, 0.08, 1)
+theme_override_fonts/font = ExtResource("3_italic")
+theme_override_font_sizes/font_size = 22
+text = "The Girl Who Was Too Beautiful for Hollywood"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="NameLabel" type="Label" parent="Matting/Column/Plaque/Lines"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.22, 0.15, 0.08, 1)
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 34
+text = "Barbara La Marr"
+horizontal_alignment = 1
+
+[node name="Reaction" type="Node" parent="."]
+script = ExtResource("4_reaction")
+seen_flag = "greene_la_marr_photo_seen"
+other_seen_flag = "greene_lockscreen_seen"
+reaction_done_flag = "greene_la_marr_link_noticed"
+dialogue_resource = ExtResource("5_dialogue")
+dialogue_title = "photo_after_lockscreen"

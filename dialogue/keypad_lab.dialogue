@@ -32,12 +32,12 @@ if Flags.get_level_flag("jayce_introduced") == true:
 	do actor_effect("Layla", "shock")
 	Layla: But he's [wave amp=50.0 freq=5.0 connected=1][speed=0.25]CREEEEEPY![/speed][/wave]
 	Player: I suppose. But he's our only lead.
-	Player: Besides, don't janitors have access to every room in this wing?
+	Player: Besides, don't janitors have access to every room in this building?
 	Player: You know, for cleaning and everything?
 	Layla: Fine. I guess it's the only thing we can do.
 	Player: Yep. Let's go.
 else
-	Player: He probably has access to every room in this wing.
+	Player: He probably has access to every room in this building.
 	Layla: Fine. Let's do that.
 => END
 

@@ -1,0 +1,14 @@
+# res://dialogue/greene_office.dialogue
+# added by Claude (step 2.197): lines for Dr. Greene's office.
+
+~ photo_after_lockscreen
+Player: (Oh, isn't this the same lady as on his lock screen?)
+Player: (Seems so... He must be really fond of this old-time actress.)
+Player: (Huh. Didn't know he had this side to him...)
+=> END
+
+~ lockscreen_after_photo
+Player: (Oh, isn't this the same lady as in the framed photo?)
+Player: (Seems so... He must be really fond of this old-time actress.)
+Player: (Huh. Didn't know he had this side to him...)
+=> END

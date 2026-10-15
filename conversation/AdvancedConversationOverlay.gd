@@ -9,6 +9,11 @@ signal first_visuals_ready
 @export var character_roster: Array[CharacterProfile] = []
 @export var background_aliases: Dictionary = {}
 @export var cg_aliases: Dictionary = {}
+## step 2.186: scene CGs. alias -> .tscn path. show_scene_cg() instances the scene just above
+## the CG layer; dialogue drives it with scene_cg_call().
+@export var scene_cg_aliases: Dictionary = {}
+## the scene CG currently on screen (null when none).
+var scene_cg: Node = null
 @export var mental_image_shader: ShaderMaterial
 
 # when false, _ready() will NOT spawn the balloon. the owner must call begin_conversation()
@@ -207,6 +212,7 @@ func prestage_visuals() -> void:
 
 
 func _process(delta: float):
+	_update_actor_skirts()
 	if _scan_active:
 		_scan_time += delta
 		# wavy style movement
@@ -248,6 +254,8 @@ func _on_dialogue_ended(resource: DialogueResource):
 		tween.tween_property(cg_layer, "modulate:a", 0.0, 0.4).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 	if is_instance_valid(mental_image_layer):
 		tween.tween_property(mental_image_layer, "modulate:a", 0.0, 0.4).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	if is_instance_valid(scene_cg):
+		tween.tween_property(scene_cg, "modulate:a", 0.0, 0.4).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 
 	# ensure the node deletes itself and clears texture cache
 	tween.chain().tween_callback(self._destroy_and_clear_cache)
@@ -384,8 +392,49 @@ func actor_effect(actor_id: String, effect_name: String) -> void:
 		# shoulders drop: squash a little on y (bottom pivot keeps the feet planted), then recover
 		var s0: Vector2 = rect.scale
 		var t = create_tween()
-		t.tween_property(rect, "scale", Vector2(s0.x, s0.y * 0.955), 0.25).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-		t.tween_property(rect, "scale", s0, 0.7).set_delay(0.45).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+		# step 2.218: y only, so a turn/flip during the squash is not undone
+		t.tween_property(rect, "scale:y", s0.y * 0.955, 0.25).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		t.tween_property(rect, "scale:y", s0.y, 0.7).set_delay(0.45).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	elif effect_name == "bounce":
+		# step 2.216: excited double hop
+		var yb: float = rect.position.y
+		var tb = create_tween()
+		tb.tween_property(rect, "position:y", yb - 45.0, 0.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		tb.tween_property(rect, "position:y", yb, 0.12).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+		tb.tween_property(rect, "position:y", yb - 28.0, 0.09).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		tb.tween_property(rect, "position:y", yb, 0.18).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
+	elif effect_name == "lean_in":
+		# step 2.216: tilt from the feet toward the way she faces, and hold. undo with "upright".
+		var facing: float = 1.0 if rect.scale.x >= 0.0 else -1.0
+		_actor_tilt(rect, deg_to_rad(LEAN_IN_DEGREES) * facing, 0.3)
+	elif effect_name == "upright":
+		_actor_tilt(rect, 0.0, 0.3)
+	elif effect_name == "shy":
+		# step 2.218: re-reads the flip sign every frame, so a turn/flip mid-shrink sticks
+		var shy_base := Vector2(absf(rect.scale.x), rect.scale.y)
+		var apply_shy := func(f: float) -> void:
+			if is_instance_valid(rect):
+				var sx: float = -1.0 if rect.scale.x < 0.0 else 1.0
+				rect.scale = Vector2(sx * shy_base.x * f, shy_base.y * f)
+		var ts = create_tween()
+		ts.tween_method(apply_shy, 1.0, 0.97, 0.22).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		ts.tween_method(apply_shy, 0.97, 1.0, 0.8).set_delay(0.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	elif effect_name == "nod":
+		# step 2.216: two small dips on y
+		var s_nod: Vector2 = rect.scale
+		var tn = create_tween()
+		for i in 2:
+			tn.tween_property(rect, "scale:y", s_nod.y * 0.982, 0.11).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+			tn.tween_property(rect, "scale:y", s_nod.y, 0.14).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	elif effect_name == "turn_away" or effect_name == "turn_back":
+		# step 2.218: face away from / back toward the middle of the stage. absolute, not a toggle,
+		# so repeating it is harmless and it works from either side. sprites face right at scale.x > 0.
+		var center_marker = actor_stage.get_node_or_null("SlotCenter")
+		var center_x: float = center_marker.position.x if center_marker else 960.0
+		var anchor_x: float = rect.position.x + rect.pivot_offset.x
+		var toward: float = -1.0 if anchor_x > center_x else 1.0
+		var want: float = toward if effect_name == "turn_back" else -toward
+		rect.scale = Vector2(absf(rect.scale.x) * want, rect.scale.y)
 	else:
 		push_warning("actor_effect: unknown effect '%s'." % effect_name)
 
@@ -506,6 +555,96 @@ func actor_flip(actor_id: String, is_flipped: bool = true):
 		rect.scale = Vector2(-abs(current_scale.x), current_scale.y)
 	else:
 		rect.scale = Vector2(abs(current_scale.x), current_scale.y)
+
+
+# ---------------------------------------------------------------------------
+# step 2.216: closing the distance. actor_approach slides an actor on x until her anchor
+# (feet) is `gap` px from the target's, staying on her own side, and draws her in front.
+# the first approach remembers where she stood; actor_step_back returns her there.
+# e.g. do actor_approach("Layla", "Fiona", 340.0, 0.5) ... do actor_step_back("Layla", 0.8)
+const LEAN_IN_DEGREES: float = 3.5
+var _approach_home: Dictionary = {}    # actor_id -> position before the first approach
+var _approach_tweens: Dictionary = {}  # actor_id -> Tween
+var _tilt_tweens: Dictionary = {}      # instance id -> Tween
+
+
+func actor_approach(actor_id: String, target_id: String, gap: float = 300.0, duration: float = 0.45) -> void:
+	if not active_actors.has(actor_id) or not active_actors.has(target_id):
+		push_warning("actor_approach: '%s' or '%s' is not on stage." % [actor_id, target_id])
+		return
+	var rect: TextureRect = active_actors[actor_id]
+	var other: TextureRect = active_actors[target_id]
+	if not _approach_home.has(actor_id):
+		_approach_home[actor_id] = rect.position
+	var my_x: float = rect.position.x + rect.pivot_offset.x
+	var other_x: float = other.position.x + other.pivot_offset.x
+	var side: float = 1.0 if my_x >= other_x else -1.0
+	var target_x: float = other_x + side * gap - rect.pivot_offset.x
+	actor_stage.move_child(rect, -1)
+	_slide_actor_x(actor_id, rect, target_x, duration)
+
+
+func actor_step_back(actor_id: String, duration: float = 0.5) -> void:
+	if not active_actors.has(actor_id) or not _approach_home.has(actor_id):
+		return
+	var rect: TextureRect = active_actors[actor_id]
+	var home: Vector2 = _approach_home[actor_id]
+	_approach_home.erase(actor_id)
+	_slide_actor_x(actor_id, rect, home.x, duration)
+
+
+func _slide_actor_x(actor_id: String, rect: TextureRect, target_x: float, duration: float) -> void:
+	if _approach_tweens.has(actor_id) and _approach_tweens[actor_id] is Tween and _approach_tweens[actor_id].is_valid():
+		_approach_tweens[actor_id].kill()
+	var t = create_tween()
+	t.tween_property(rect, "position:x", target_x, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	_approach_tweens[actor_id] = t
+
+
+func _actor_tilt(rect: TextureRect, target_rotation: float, duration: float) -> void:
+	var key: int = rect.get_instance_id()
+	if _tilt_tweens.has(key) and _tilt_tweens[key] is Tween and _tilt_tweens[key].is_valid():
+		_tilt_tweens[key].kill()
+	var t = create_tween()
+	t.tween_property(rect, "rotation", target_rotation, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	_tilt_tweens[key] = t
+
+
+# step 2.237: a "skirt" under each actor. it repeats the sprite's bottom rows straight down, off-screen,
+# so hops, leans and shocks never reveal where the art ends. it is a child of the actor's rect, so it
+# moves, tilts, flips, scales, fades and dims with it; it rebuilds only when the texture changes.
+const SKIRT_NAME := "_BottomSkirt"
+const SKIRT_HEIGHT_RATIO := 0.35
+const SKIRT_SAMPLE_ROWS := 2
+
+
+func _update_actor_skirts() -> void:
+	for id in active_actors:
+		var rect = active_actors[id]
+		if not is_instance_valid(rect) or not (rect is TextureRect) or rect.texture == null:
+			continue
+		var skirt: TextureRect = rect.get_node_or_null(SKIRT_NAME)
+		if skirt == null:
+			skirt = TextureRect.new()
+			skirt.name = SKIRT_NAME
+			skirt.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			skirt.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			skirt.stretch_mode = TextureRect.STRETCH_SCALE
+			skirt.use_parent_material = true
+			rect.add_child(skirt)
+		var tex: Texture2D = rect.texture
+		if skirt.get_meta("source_texture", null) != tex:
+			var w: int = tex.get_width()
+			var h: int = tex.get_height()
+			var strip := AtlasTexture.new()
+			strip.atlas = tex
+			strip.region = Rect2(0, maxi(0, h - SKIRT_SAMPLE_ROWS), w, mini(SKIRT_SAMPLE_ROWS, h))
+			skirt.texture = strip
+			skirt.set_meta("source_texture", tex)
+		# local coordinates: the actor rect is drawn at its texture's native size
+		var native: Vector2 = tex.get_size()
+		skirt.position = Vector2(0.0, native.y - 1.0)
+		skirt.size = Vector2(native.x, native.y * SKIRT_HEIGHT_RATIO)
 
 
 func actor_dash_in(actor_id: String, emotion: String, slot_name: String, scale_modifier: float = 1.0):
@@ -975,7 +1114,9 @@ func show_dialogue_ui():
 
 var _original_actor_transforms = {}
 
-func actor_focus(actor_id: String, zoom_modifier: float = 2.0, duration: float = 0.01, face_x_ratio: float = -1.0):
+# screen_x_ratio / screen_y_ratio (step 2.212): where on screen the face lands; 0.5, 0.35 is
+# the classic centred close-up. do actor_focus("Layla", 1.6, 0.45, -1.0, 0.3) puts her face at 30%.
+func actor_focus(actor_id: String, zoom_modifier: float = 2.0, duration: float = 0.01, face_x_ratio: float = -1.0, screen_x_ratio: float = 0.5, screen_y_ratio: float = 0.35):
 	if not active_actors.has(actor_id): return
 
 	if _original_actor_transforms.is_empty():
@@ -998,7 +1139,7 @@ func actor_focus(actor_id: String, zoom_modifier: float = 2.0, duration: float =
 	# -1.0 = "use the profile's measured anchor". an explicit ratio from a dialogue still wins.
 	var fx: float = face_x_ratio if face_x_ratio >= 0.0 else profile.canvas_anchor_x
 	var local_face = Vector2(tex_size.x * fx, tex_size.y * profile.face_y_ratio)
-	var screen_focus_point = Vector2(screen_size.x * 0.5, screen_size.y * 0.35)
+	var screen_focus_point = Vector2(screen_size.x * screen_x_ratio, screen_size.y * screen_y_ratio)
 	var target_pos = screen_focus_point - rect.pivot_offset - (local_face - rect.pivot_offset) * target_scale
 
 	var tween = create_tween().set_parallel(true)
@@ -1332,6 +1473,66 @@ func hide_cg(transition: String = "fade", duration: float = 0.5):
 	else:
 		cg_layer.modulate.a = 0.0
 		cg_layer.texture = null
+
+
+# ****************************[scene CGs] (step 2.186)
+# a scene CG is a whole scene shown where a still CG would be (for example
+# conversation/apartment/apartment_phone_shot.tscn). it sits just above CGLayer, so the
+# balloon and the overlay's own fades still draw over it. one at a time: showing another
+# replaces the current one. hide it before showing a still CG, which would sit under it.
+# dialogue:
+#   do show_scene_cg("phone_floor", "fade", 0.6)
+#   do scene_cg_call("select_contact", [1])
+#   do scene_cg_call("focus_pamphlet")
+#   do hide_scene_cg("fade", 0.5)
+func show_scene_cg(scene_name: String, transition: String = "fade", duration: float = 0.5) -> void:
+	var path: String = scene_cg_aliases.get(scene_name, scene_name)
+	if not ResourceLoader.exists(path):
+		push_warning("show_scene_cg: no scene CG alias or path: " + scene_name)
+		return
+	var packed := load(path) as PackedScene
+	if packed == null:
+		push_warning("show_scene_cg: not a scene: " + path)
+		return
+	var old := scene_cg
+	var node := packed.instantiate()
+	if node is Control:
+		node.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		node.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(node)
+	move_child(node, (old.get_index() if is_instance_valid(old) else cg_layer.get_index()) + 1)
+	scene_cg = node
+	if transition == "fade" and duration > 0.0 and node is CanvasItem:
+		node.modulate.a = 0.0
+		var tween := create_tween()
+		tween.tween_property(node, "modulate:a", 1.0, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		await tween.finished
+	if is_instance_valid(old):
+		old.queue_free()
+
+
+func hide_scene_cg(transition: String = "fade", duration: float = 0.5) -> void:
+	var node := scene_cg
+	scene_cg = null
+	if not is_instance_valid(node):
+		return
+	if transition == "fade" and duration > 0.0 and node is CanvasItem:
+		var tween := create_tween()
+		tween.tween_property(node, "modulate:a", 0.0, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+		await tween.finished
+	if is_instance_valid(node):
+		node.queue_free()
+
+
+## call a method on the current scene CG and wait for it if it takes time (moves, zooms).
+func scene_cg_call(method: String, args: Array = []) -> Variant:
+	if not is_instance_valid(scene_cg):
+		push_warning("scene_cg_call: no scene CG is showing (" + method + ")")
+		return null
+	if not scene_cg.has_method(method):
+		push_warning("scene_cg_call: scene CG has no method " + method)
+		return null
+	return await scene_cg.callv(method, args)
 
 
 func start_tech_scan():

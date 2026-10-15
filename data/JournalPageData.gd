@@ -9,3 +9,7 @@ class_name JournalPageData
 
 # leave blank to always show.
 @export var required_flag: String = ""
+
+# step 2.200: optional plain-text page, shown when page_texture is empty (a placeholder
+# until a painted page exists).
+@export_multiline var page_text: String = ""

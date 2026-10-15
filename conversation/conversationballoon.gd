@@ -12,6 +12,16 @@ extends CanvasLayer
 @export var proceed_icon: Texture2D
 @export var back_icon: Texture2D
 @export var leave_icon: Texture2D
+## step 2.219: shown on [once] responses. left empty, it loads res://Icons/once.png.
+@export var once_icon: Texture2D
+
+# step 2.220: the quiet top banner for choice hints ([matters] and the first-time [once] hint)
+const HintBanner = preload("res://conversation/hint_banner.gd")
+const ONCE_HINT_TEXT := "Options with this icon can only be picked once."
+const MATTERS_HINT_TEXT := "This choice may matter later."
+var _hint_banner: Control
+var _menu_has_once := false
+var _menu_has_matters := false
 
 # the dialogue resource
 var resource: DialogueResource
@@ -38,6 +48,8 @@ var _current_line_was_seen: bool = false
 # ****************************[cached objects (avoid per-line allocations)]
 var _bbcode_regex: RegEx
 var _blank_spacer_icon: ImageTexture
+# step 2.225: [state=...] on a response becomes part of its "seen" key
+var _state_tag_regex: RegEx = RegEx.create_from_string("\\[state=([^\\]]*)\\]")
 # set in _ready from the current level root's center_dialogue_responses (opt-in per level).
 var _center_responses: bool = false
 # centred-mode layout (only used when _center_responses is true)
@@ -356,6 +368,14 @@ func _ready() -> void:
 	var blank_img = Image.create_empty(32, 32, false, Image.FORMAT_RGBA8)
 	_blank_spacer_icon = ImageTexture.create_from_image(blank_img)
 
+	# step 2.219: the view-once icon, without needing a scene edit
+	if once_icon == null and ResourceLoader.exists("res://Icons/once.png"):
+		once_icon = load("res://Icons/once.png")
+
+	# step 2.220: choice-hint banner, drawn above the balloon
+	_hint_banner = HintBanner.new()
+	add_child(_hint_banner)
+
 	# preloaded icons are used directly,
 	# ******************[faux bold/italic fonts (varela round ships regular only)]
 	var base_font: Font = dialogue_label.get_theme_font("normal_font")
@@ -587,6 +607,10 @@ func apply_dialogue_line() -> void:
 	responses_menu.hide()
 	responses_menu.modulate.a = 1.0
 	responses_menu.responses = dialogue_line.responses
+	# step 2.220: which hint this menu needs is worked out while the buttons are styled below
+	_menu_has_once = false
+	_menu_has_matters = false
+	_hide_choice_hint()
 
 	# ****************************[formatting logic for responses]
 	for i in range(responses_menu.get_child_count()):
@@ -603,9 +627,10 @@ func apply_dialogue_line() -> void:
 		var response_obj = button.get_meta("response")
 		var original_text = response_obj.text
 		var display_text = original_text
+		display_text = _state_tag_regex.sub(display_text, "", true).strip_edges()
 
 		# check if line visited
-		var unique_choice_id = resource.resource_path + "::" + response_obj.id
+		var unique_choice_id = _choice_visit_key(response_obj)
 		var is_visited = false
 		if DialogueHistory:
 			is_visited = DialogueHistory.visited_responses.has(unique_choice_id)
@@ -615,6 +640,12 @@ func apply_dialogue_line() -> void:
 		var hover_color = Color.WHITE
 		var lower_text = display_text.to_lower()
 		var assigned_icon: Texture2D = null
+
+		# step 2.220: [matters] can sit alongside any other tag, so it is stripped before the chain below
+		if "[matters]" in lower_text:
+			display_text = display_text.replacen("[matters]", "").strip_edges()
+			lower_text = display_text.to_lower()
+			_menu_has_matters = true
 
 		# parse tags and style
 		if "[proceed]" in lower_text:
@@ -632,6 +663,22 @@ func apply_dialogue_line() -> void:
 			assigned_icon = leave_icon
 			resting_color = Color(0.6, 0.6, 0.6, 1.0)
 			hover_color = Color(0.8, 0.8, 0.8, 1.0)
+		elif "[unavailable]" in lower_text:
+			# step 2.210: an option the player can't afford right now: dimmed but still clickable
+			display_text = display_text.replacen("[unavailable]", "").strip_edges()
+			resting_color = Color(0.42, 0.42, 0.42, 1.0)
+			hover_color = Color(0.55, 0.55, 0.55, 1.0)
+		elif "[repeatable]" in lower_text:
+			# step 2.211: an option meant to be picked again and again (e.g. buying a snack) never greys as "visited"
+			display_text = display_text.replacen("[repeatable]", "").strip_edges()
+		elif "[once]" in lower_text:
+			# step 2.219: a one-time moment. marked with the view-once icon; the dialogue hides it after
+			# with [if <flag> == false]. white text so the icon's gradient shows untinted.
+			display_text = display_text.replacen("[once]", "").strip_edges()
+			assigned_icon = once_icon
+			resting_color = Color.WHITE
+			hover_color = Color.WHITE
+			_menu_has_once = true
 		elif is_visited:
 			resting_color = Color(0.6, 0.6, 0.6, 1.0)
 			hover_color = Color(0.8, 0.8, 0.8, 1.0)
@@ -703,6 +750,7 @@ func apply_dialogue_line() -> void:
 		_is_responses_clickable = false
 		responses_menu.modulate.a = 0.0
 		responses_menu.show()
+		_show_choice_hint()
 
 		var fade_tween = create_tween()
 		fade_tween.tween_property(responses_menu, "modulate:a", 1.0, 0.4).set_trans(Tween.TRANS_SINE)
@@ -803,7 +851,7 @@ func _on_responses_menu_response_selected(response: DialogueResponse) -> void:
 	#
 
 	# record visited response using a truly unique id
-	var unique_choice_id = resource.resource_path + "::" + response.id
+	var unique_choice_id = _choice_visit_key(response)
 	if DialogueHistory:
 		DialogueHistory.visited_responses[unique_choice_id] = true
 
@@ -825,6 +873,11 @@ func _on_responses_menu_response_selected(response: DialogueResponse) -> void:
 
 		DialogueHistory.add_choice("Player", player_name, all_options, chosen_idx)
 
+	# step 2.220: the first [once] pick retires the once hint for good; any pick swipes the banner away
+	if Flags and "[once]" in response.text.to_lower():
+		Flags.set_game_flag("once_choice_hint_seen", true)
+	_hide_choice_hint()
+
 	if SoundManager: SoundManager.play_sfx("ui_click")
 	next(response.next_id)
 
@@ -833,6 +886,33 @@ func _on_dialogue_label_spoke(letter: String, letter_index: int, speed: float) -
 	# if soundmanager: soundmanager.play_dialogue_blip()
 
 #endregion
+
+
+# step 2.220: one banner per response menu. [matters] wins over the once hint.
+func _show_choice_hint() -> void:
+	if not is_instance_valid(_hint_banner):
+		return
+	if _menu_has_matters:
+		_hint_banner.show_hint(MATTERS_HINT_TEXT, null)
+	elif _menu_has_once and Flags and not Flags.get_game_flag("once_choice_hint_seen"):
+		_hint_banner.show_hint(ONCE_HINT_TEXT, once_icon)
+	else:
+		_hint_banner.hide_hint()
+
+
+func _hide_choice_hint() -> void:
+	if is_instance_valid(_hint_banner):
+		_hint_banner.hide_hint()
+
+
+# step 2.225: a response's "seen" key. a [state=...] tag (usually filled in with {{ }}) is added to it,
+# so a topic whose content changes with the story shows unread again until it's picked.
+func _choice_visit_key(response: DialogueResponse) -> String:
+	var key: String = resource.resource_path + "::" + response.id
+	var m: RegExMatch = _state_tag_regex.search(response.text)
+	if m:
+		key += "::" + m.get_string(1)
+	return key
 
 
 #region Quick Menu (VN Style)
@@ -861,6 +941,8 @@ func set_ui_hidden(hide: bool) -> void:
 	dialogue_container.visible = is_visible
 	$Balloon/Responses.visible = is_visible
 	quick_menu.visible = is_visible
+	if is_instance_valid(_hint_banner):
+		_hint_banner.set_suppressed(hide)
 
 	# conditional character restore
 	if is_visible and dialogue_line != null:
@@ -924,7 +1006,8 @@ func _start_auto_advance_timer():
 		return
 
 	# calculate character wait time
-	var wait_time = Settings.auto_time_delay + (dialogue_line.text.length() * 0.025)
+	# step 2.215: count visible characters only, not BBCode tags
+	var wait_time = Settings.auto_time_delay + (dialogue_label.get_parsed_text().length() * 0.025)
 	auto_advance_timer.start(wait_time)
 
 func _on_auto_advance_timeout():

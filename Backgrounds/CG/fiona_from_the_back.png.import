@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ja2v674wh22"
-path="res://.godot/imported/chapter2_wake.png-74331c4a3e161980b8c2bbcd5e60af6b.ctex"
+uid="uid://cxye0r3qrbqnw"
+path="res://.godot/imported/fiona_from_the_back.png-ee2a43eb6230c24bd3a3aef23d53dc06.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Backgrounds/CG/chapter2_wake.png"
-dest_files=["res://.godot/imported/chapter2_wake.png-74331c4a3e161980b8c2bbcd5e60af6b.ctex"]
+source_file="res://Backgrounds/CG/fiona_from_the_back.png"
+dest_files=["res://.godot/imported/fiona_from_the_back.png-ee2a43eb6230c24bd3a3aef23d53dc06.ctex"]
 
 [params]
 

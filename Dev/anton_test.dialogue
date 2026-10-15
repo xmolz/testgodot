@@ -19,6 +19,10 @@ Which sprite?
 
 ~ anton_menu
 Which Anton sprite?
+- Revised
+	do actor_change("Anton", "anton_revised")
+	Anton: (Test) Anton: revised.
+	=> anton_menu
 - pg_1
 	do actor_change("Anton", "pg1")
 	Anton: (Test) Anton: pg_1.
@@ -48,6 +52,10 @@ Which Anton sprite?
 
 ~ jayce_menu
 Which Jayce sprite?
+- Revised
+	do actor_change("Anton", "jayce_revised")
+	Anton: (Test) Jayce: revised.
+	=> jayce_menu
 - Current sprite
 	do actor_change("Anton", "jayce_current")
 	Anton: (Test) Jayce: current.

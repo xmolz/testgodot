@@ -49,7 +49,10 @@ if Flags.get_level_flag("party_companion_staged") == true:
 	Player: Don't worry. People like him can be made useful.
 	Layla: What do you mean?
 	Player: Don't know yet. But you'll see soon.
-	Layla: Hmm. If you say so, Fiona.
+	if Flags.get_game_counter("layla_closeness") < 0:
+		Layla: ...If you say so.
+	else
+		Layla: Hmm. If you say so, Fiona.
 	do party_unhuddle()
 	Jayce: What are you two hot things whisperin' about?
 	Player: Nothing you need to worry about.
@@ -61,27 +64,31 @@ Player: Sure.
 ~ lab_access
 if Flags.get_level_flag("jayce_date_hint_given") == true:
 	=> lab_access_again
-Player: Hey. As maintenance, you must have access to all the rooms in this wing, right?
-Jayce: Sure do.
+Player: Hey. As maintenance, you must have access to all the rooms in this building, right?
+Jayce: Sure do. Got my keycard right here.
+He whips a keycard out of his front pocket.
+Jayce: Can get into any darn room with this thing.
+Jayce: Well... most of 'em. Keypad rooms, not so much.
 Jayce: Why? Wanna break into some place you're not supposed to be, sugar?
 Player: Not really. We want to get into our own lab. But the password seems to have been changed.
 Jayce: Huh? Has it? It was the same yesterday.
 Jayce: Good ol' freedom day. Seen ya professor punch it in a hundred times.
-Jayce: Can't help ya with that door itself, mind. My card don't do a thing for keypad rooms.
 Player: That's what we tried, but it doesn't seem to work now.
 Player: And we've got urgent work that needs to be done in there.
 Jayce: Well, too damn bad, sweetie. Looks like it can't be helped.
 Jayce: The keypad enforces a password change once every year.
 Jayce: Suppose it was yesterday it asked for one, and ya professor obliged.
+Jayce: And my card don't do nothin' for it.
 if Flags.get_level_flag("party_companion_staged") == true:
 	do actor_effect("Layla", "jump")
 	Layla: No way!
 	do actor_effect("Layla", "tremble")
 	Layla: Fiona! What should we do now?
-	Layla: Should I let go of my goals?
-	Layla: Do I belong in the streets?
-	Player: No.
-	Player: I mean, I don't know. But probably not?
+	if Flags.get_game_counter("layla_closeness") >= 0:
+		Layla: Should I let go of my goals?
+		Layla: Do I belong in the streets?
+		Player: No.
+		Player: I mean, I don't know. But probably not?
 Player: There's gotta be something we can do still.
 Player: So hey, Jayce. Jayce it was, right?
 Player: Jayce, can you tell us anything about the previous passwords?
@@ -93,12 +100,11 @@ Jayce: I do remember all of 'em been some kind of a date.
 Jayce: Easier for your professor to remember, I reckon.
 if Flags.get_level_flag("party_companion_staged") == true:
 	Layla: That's true.
-	Layla: I once asked him why he refused to change to a card-based lock like the other rooms in this wing.
-	Layla: He was afraid he'd just end up losing his cards. He's clumsy that way.
-	Player: Right. And he is good at remembering stuff.
-	Layla: Very good.
-Player: Regardless, if all his passwords have been dates...
-Player: It's very likely the new one is too.
+	Layla: I've noticed the professor randomly drops dates into conversation.
+	Layla: He's definitely a nerd that way.
+Player: I see...
+Player: If... if all his previous passwords have been dates...
+Player: It IS likely the new one is too.
 if Flags.get_level_flag("party_companion_staged") == true:
 	Layla: But what could it be, Fiona?
 Player: Not sure. We'll have to look around. There might be clues here.
@@ -122,32 +128,38 @@ if Flags.get_level_flag("party_companion_staged") == true:
 	Player: I know, but let's keep it cool with him.
 	Player: Never know if he could turn out helpful.
 	do actor_effect("Layla", "slump")
-	Layla: Ugh. Okay, Fiona. I'll try.
-	Layla: But only because you insist!
+	if Flags.get_game_counter("layla_closeness") < 0:
+		Layla: Fine.
+	else
+		Layla: Ugh. Okay, Fiona. I'll try.
+		Layla: But only because you insist!
 	Player: Thanks, Layla.
-	Player: Anyway. We should look for clues. Stuff around the block. Anything that pertains to Professor Greene.
+	Player: Anyway. We should look for clues. Stuff around the building. Anything that pertains to Professor Greene.
 	Player: And can lead us to a date.
 	Layla: Alright, let's do this!
 	Player: I'm letting you know this, though. It's probably a long shot.
 	Player: He may not have even set a date as the passcode.
-	Player: I would rate our chances of success at approximately...
-	Player: Nine and a half percent!
-	do actor_effect("Layla", "jump")
-	Layla: NINE AND A HALF!
-	Layla: So precise! I bet you used some complicated formula in your mind to come to that number!
-	Player: Yeah.
-	Player: (I pulled that outta my ass. She takes everything I say at face value.)
-	Layla: Regardless, I'll take those chances.
-	Layla: It's all that I can do right now!
-	Layla: Put my trust in my prodigious mentor!
-	Player: Yeah, yeah.
+	if Flags.get_game_counter("layla_closeness") >= 0:
+		Player: I would rate our chances of success at approximately...
+		Player: Nine and a half percent!
+		do actor_effect("Layla", "jump")
+		Layla: NINE AND A HALF!
+		Layla: So precise! I bet you used some complicated formula in your mind to come to that number!
+		Player: Yeah.
+		Player: (I pulled that outta my ass. She takes everything I say at face value.)
+		Layla: Regardless, I'll take those chances.
+		Layla: It's all that I can do right now!
+		Layla: Put my trust in my prodigious mentor!
+		Player: Yeah, yeah.
+	else
+		Layla: Then we'd better start.
 	Player: Anyway, let's go.
 	do party_unhuddle()
 	=> END
+
 else
-	Player: He doesn't need to know we're locked out. I'd rather find it myself.
-	Jayce: Suit yourself, blondie.
-	Player: Let's see what I can find around here.
+	# step 2.227: no solo playthrough (Layla is always with Fiona). fallback only, so the branch stays valid.
+	Player: This is a template line.
 	=> END
 
 ~ lab_access_again
@@ -197,10 +209,8 @@ if Flags.get_level_flag("party_companion_staged") == true:
 	do party_unhuddle()
 	Jayce: Well, glad I could help you ladies with that.
 else
-	# TEMPLATE — solo path (no Layla); developer may rewrite.
-	Player: (Someone from Biochem, maybe. There's one guy who's come by our lab to see Greene a few times.)
-	Player: (If he's around, I could ask him. Even though I'd rather not.)
-	Jayce: Well, glad I could help ya with that, blondie.
+	# step 2.227: no solo playthrough (Layla is always with Fiona). fallback only, so the branch stays valid.
+	Player: This is a template line.
 Player: Right. Thanks.
 => jayce_return_hub
 

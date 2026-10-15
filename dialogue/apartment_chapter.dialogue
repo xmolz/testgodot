@@ -1,0 +1,86 @@
+# res://dialogue/apartment_chapter.dialogue
+# added by Claude: driver for the memory box chapter "Late Delivery" (placeholder name).
+# plays in place over the hub through conversation/apartment_chapter_overlay.tscn, after the
+# portal swirl and the "apartment_1" monologue in dialogue/chapter_launch.dialogue.
+# beats, in order: alone, phone_check, order_pizza, delivery, bonding, the_number, then the call.
+# every CG and background name here is a placeholder alias in the overlay's cg_aliases and
+# background_aliases (placeholders point at res://1080test1.jpg). swap the paths there when
+# the art is ready; no dialogue edits needed.
+# the call itself stays in res://phone_talk.dialogue so it can still be tested on its own.
+
+import "res://phone_talk.dialogue" as call
+
+~ start
+# the overlay prestages fiona_from_the_back, so the portal clears straight onto it.
+=> alone
+
+~ alone
+# TEMPLATE: Fiona-alone beats. CGs in order: fiona_from_the_back (prestaged), fiona_closeup_1, fiona_closeup_2.
+TEMPLATE — Fiona, home alone.
+TEMPLATE — a quiet moment.
+do show_cg("fiona_closeup_1", "fade", 0.6)
+TEMPLATE — closer.
+do show_cg("fiona_closeup_2", "fade", 0.6)
+TEMPLATE — closer still.
+=> phone_check
+
+~ phone_check
+# TEMPLATE: she checks her phone over the floor; the pizza pamphlet lies behind it.
+# "phone_floor" is a scene CG (conversation/apartment/apartment_phone_shot.tscn): it fades in
+# over the last closeup, which is then cleared underneath it.
+do show_scene_cg("phone_floor", "fade", 0.6)
+do hide_cg("none", 0.0)
+TEMPLATE — she flips her phone open.
+TEMPLATE — Contacts. All three of them.
+Player: TEMPLATE — (Mom.)
+do scene_cg_call("select_contact", [1])
+Player: TEMPLATE — (Layla.)
+do scene_cg_call("select_contact", [2])
+Player: TEMPLATE — (Professor Greene.)
+Player: TEMPLATE — (Not exactly a booty-call lineup.)
+Player: TEMPLATE — ...Wait. What's that?
+do scene_cg_call("focus_pamphlet")
+TEMPLATE — a pizza flyer, face up on the floor.
+Player: TEMPLATE — (Delivered in 20 or it's free, huh?)
+=> order_pizza
+
+~ order_pizza
+# TEMPLATE: she orders pizza.
+do change_background("apt_living_room", "fade", 0.5)
+do hide_scene_cg("fade", 0.5)
+do actor_enter("Fiona", "base", "left")
+Player: TEMPLATE — (Starving. Pizza it is.)
+TEMPLATE — she places the order.
+TEMPLATE — time passes. The doorbell rings.
+=> delivery
+
+~ delivery
+# TEMPLATE: the door, the funny exposing moment, he reveals he's gay.
+do change_background("apt_front_door", "fade", 0.5)
+do actor_enter("Anton", "base", "right")
+do actor_flip("Anton", true)
+Pizza guy: TEMPLATE — pizza delivery.
+Player: TEMPLATE — Fiona answers the door.
+do show_cg("fiona_on_the_floor", "fade", 0.5)
+TEMPLATE — the exposing moment.
+do hide_cg("fade", 0.5)
+Pizza guy: TEMPLATE — he reveals he's gay.
+=> bonding
+
+~ bonding
+# TEMPLATE: they bond over other stuff and become friends.
+Anton: TEMPLATE — he introduces himself.
+Player: TEMPLATE — they get talking.
+Anton: TEMPLATE — friends now.
+=> the_number
+
+~ the_number
+# TEMPLATE: he mentions his friend and gives her the number.
+Anton: TEMPLATE — he mentions a friend.
+Anton: TEMPLATE — he gives her the number.
+Player: TEMPLATE — she takes it.
+do actor_leave("Anton")
+do actor_leave("Fiona")
+do change_background("apt_sofa_night", "fade", 0.8)
+# the call opens with "A couple of days later..." as its own time skip.
+=> call/start

@@ -1,0 +1,86 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://conversation/phone/phone_cg.gd" id="1_phone"]
+[ext_resource type="Script" path="res://conversation/phone/phone_screen.gd" id="2_screen"]
+[ext_resource type="Shader" path="res://conversation/phone/lcd_screen.gdshader" id="3_lcd"]
+[ext_resource type="Texture2D" path="res://Backgrounds/CG/phone_cg.png" id="4_art"]
+[ext_resource type="Shader" path="res://conversation/phone/focus_blur.gdshader" id="5_blur"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_blur"]
+shader = ExtResource("5_blur")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lcd"]
+shader = ExtResource("3_lcd")
+
+[sub_resource type="Gradient" id="Gradient_glow"]
+colors = PackedColorArray(0.55, 0.72, 1, 1, 0.55, 0.72, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_glow"]
+gradient = SubResource("Gradient_glow")
+width = 256
+height = 256
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_add"]
+blend_mode = 1
+
+[node name="PhoneCG" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_phone")
+
+[node name="ScreenViewport" type="SubViewport" parent="."]
+disable_3d = true
+canvas_item_default_texture_filter = 0
+size = Vector2i(194, 262)
+render_target_update_mode = 4
+
+[node name="PhoneScreen" type="Control" parent="ScreenViewport"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_screen")
+
+[node name="Frame" type="Node2D" parent="."]
+
+[node name="Backdrop" type="ColorRect" parent="Frame"]
+offset_right = 3840.0
+offset_bottom = 2160.0
+mouse_filter = 2
+color = Color(0.075, 0.055, 0.05, 1)
+
+[node name="Focus" type="CanvasGroup" parent="Frame"]
+material = SubResource("ShaderMaterial_blur")
+fit_margin = 64.0
+clear_margin = 64.0
+
+[node name="Rig" type="Node2D" parent="Frame/Focus"]
+position = Vector2(1920, 1080)
+
+[node name="Screen" type="Sprite2D" parent="Frame/Focus/Rig"]
+texture_filter = 2
+material = SubResource("ShaderMaterial_lcd")
+position = Vector2(-83.5, -336.75)
+rotation = -0.18187
+scale = Vector2(5, 5)
+
+[node name="PhoneArt" type="Sprite2D" parent="Frame/Focus/Rig"]
+texture = ExtResource("4_art")
+
+[node name="ScreenGlow" type="Sprite2D" parent="Frame/Focus/Rig"]
+modulate = Color(1, 1, 1, 0.16)
+material = SubResource("CanvasItemMaterial_add")
+position = Vector2(-83.5, -336.75)
+scale = Vector2(9, 9)
+texture = SubResource("GradientTexture2D_glow")

@@ -1,11 +1,58 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://bf8hpulvd8iyh"]
 
-[ext_resource type="Script" path="res://interactions/interactable.gd" id="1_interactable"]
-[ext_resource type="Material" path="res://interactions/actions/interactable_outline.tres" id="2_outline"]
-[ext_resource type="Script" path="res://data/InteractionResponse.gd" id="3_response"]
-[ext_resource type="Script" path="res://interactions/action.gd" id="4_action"]
-[ext_resource type="Script" path="res://interactions/actions/StartConversationAction.gd" id="5_startconv"]
-[ext_resource type="Resource" path="res://interactions/actions/DefaultExamineResponse.tres" id="6_examine"]
+[ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactions/interactable.gd" id="1_interactable"]
+[ext_resource type="Material" uid="uid://dww3d0txyl18g" path="res://interactions/actions/interactable_outline.tres" id="2_outline"]
+[ext_resource type="Script" uid="uid://bmq0s1nqhqi4j" path="res://data/InteractionResponse.gd" id="3_response"]
+[ext_resource type="Script" uid="uid://dltqnu07oiff" path="res://interactions/action.gd" id="4_action"]
+[ext_resource type="Script" uid="uid://h83nrnu1277x" path="res://interactions/actions/StartConversationAction.gd" id="5_startconv"]
+[ext_resource type="Resource" uid="uid://bivfrghh084ym" path="res://interactions/actions/DefaultExamineResponse.tres" id="6_examine"]
+[ext_resource type="Texture2D" uid="uid://dv57x3k4xh4jk" path="res://Animations/julian/julian_idle/julian_idle_0001.png" id="7_idle1"]
+[ext_resource type="Texture2D" uid="uid://dhts37fn8jl7f" path="res://Animations/julian/julian_idle/julian_idle_0003.png" id="8_idle3"]
+[ext_resource type="Texture2D" uid="uid://btejx0yuc4jgl" path="res://Animations/julian/julian_idle/julian_idle_0005.png" id="9_idle5"]
+[ext_resource type="Texture2D" uid="uid://r5l8mcsc7m7j" path="res://Animations/julian/julian_idle/julian_idle_0006.png" id="10_idle6"]
+[ext_resource type="Texture2D" uid="uid://cx55gocojivsv" path="res://Animations/julian/julian_idle/julian_idle_0007.png" id="11_idle7"]
+[ext_resource type="Texture2D" uid="uid://crs48ba2wg6mt" path="res://Animations/julian/julian_idle/julian_idle_0013.png" id="12_idle13"]
+[ext_resource type="Texture2D" uid="uid://d1fi3nxqhlmlf" path="res://Animations/julian/julian_idle/julian_idle_0014.png" id="13_idle14"]
+[ext_resource type="Texture2D" uid="uid://d3mm0lq1rhfo7" path="res://characters/character_floor_shadow.tres" id="14_shadow"]
+
+[sub_resource type="Animation" id="Animation_julian_reset"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("7_idle1")]
+}
+
+[sub_resource type="Animation" id="Animation_julian_idle"]
+resource_name = "idle"
+length = 2.0
+loop_mode = 1
+step = 0.0833
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0833, 0.1667, 0.25, 0.3333, 0.4167, 0.5, 0.5833, 0.6667, 0.75, 0.8333, 0.9167, 1, 1.0833, 1.1667, 1.25, 1.3333, 1.4167, 1.5, 1.5833, 1.6667, 1.75, 1.8333, 1.9167),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("7_idle1"), ExtResource("7_idle1"), ExtResource("8_idle3"), ExtResource("8_idle3"), ExtResource("9_idle5"), ExtResource("10_idle6"), ExtResource("11_idle7"), ExtResource("11_idle7"), ExtResource("11_idle7"), ExtResource("10_idle6"), ExtResource("9_idle5"), ExtResource("8_idle3"), ExtResource("12_idle13"), ExtResource("13_idle14"), ExtResource("12_idle13"), ExtResource("8_idle3"), ExtResource("8_idle3"), ExtResource("9_idle5"), ExtResource("10_idle6"), ExtResource("11_idle7"), ExtResource("11_idle7"), ExtResource("10_idle6"), ExtResource("8_idle3"), ExtResource("7_idle1")]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_julian"]
+_data = {
+&"RESET": SubResource("Animation_julian_reset"),
+&"idle": SubResource("Animation_julian_idle")
+}
 
 [sub_resource type="Resource" id="Resource_julian_talk_action"]
 script = ExtResource("5_startconv")
@@ -16,35 +63,36 @@ verb_id = "talk_to"
 actions_to_perform = Array[ExtResource("4_action")]([SubResource("Resource_julian_talk_action")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
-[sub_resource type="Gradient" id="Gradient_julian"]
-colors = PackedColorArray(0.22, 0.27, 0.42, 1, 0.22, 0.27, 0.42, 1)
+[node name="JulianCharacter" type="Node2D" unique_id=1807661320]
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_julian"]
-gradient = SubResource("Gradient_julian")
-width = 200
-height = 540
+[node name="FloorShadow" type="Sprite2D" parent="." unique_id=203817604]
+modulate = Color(1, 1, 1, 0.85)
+position = Vector2(0, -26)
+texture = ExtResource("14_shadow")
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_julian"]
-size = Vector2(200, 540)
-
-[node name="JulianCharacter" type="Node2D"]
-
-[node name="Sprite" type="Sprite2D" parent="."]
+[node name="Sprite" type="Sprite2D" parent="." unique_id=1116671562]
 material = ExtResource("2_outline")
-position = Vector2(0, -270)
-texture = SubResource("GradientTexture2D_julian")
+position = Vector2(0, -302.8)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("7_idle1")
 
-[node name="InteractionArea" type="Area2D" parent="."]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1611235346]
+libraries/ = SubResource("AnimationLibrary_julian")
+autoplay = &"idle"
+
+[node name="InteractionArea" type="Area2D" parent="." unique_id=1238199732]
 script = ExtResource("1_interactable")
 object_display_name = "Julian"
 object_id = "julian"
 category = 1
+keep_distance = 250.0
+examine_without_walking = true
 interactions = Array[ExtResource("3_response")]([ExtResource("6_examine"), SubResource("Resource_julian_talk_response")])
 character_conversation_scene_path = "res://conversation/julian_advanced_overlay.tscn"
-examine_without_walking = true
 
-[node name="ClickShape" type="CollisionShape2D" parent="InteractionArea"]
-position = Vector2(0, -270)
-shape = SubResource("RectangleShape2D_julian")
+[node name="InteractionClickShape" type="CollisionPolygon2D" parent="InteractionArea" unique_id=394028078]
+position = Vector2(0, -302.8)
+scale = Vector2(0.5, 0.5)
+polygon = PackedVector2Array(27, -584.5, 11, -581.5, 11, -580.5, 3, -582.5, -11, -582.5, -35, -572.5, -37, -572.5, -46, -564.5, -48, -564.5, -73, -535.5, -73, -533.5, -85, -524.5, -85, -523.5, -94, -525.5, -96, -525.5, -103, -536.5, -103, -537.5, -108, -536.5, -110, -536.5, -110, -529.5, -110, -519.5, -105, -508.5, -104, -508.5, -110, -504.5, -110, -499.5, -106, -493.5, -106, -491.5, -86, -478.5, -85, -478.5, -90, -468.5, -90, -467.5, -98, -467.5, -101, -470.5, -104, -470.5, -108, -465.5, -108, -462.5, -103, -455.5, -103, -453.5, -93, -447.5, -89, -447.5, -89, -434.5, -84, -424.5, -84, -423.5, -80, -423.5, -78, -423.5, -75, -428.5, -75, -430.5, -72, -432.5, -72, -433.5, -70, -431.5, -68, -431.5, -64, -423.5, -64, -415.5, -68, -412.5, -68, -411.5, -76, -412.5, -80, -412.5, -83, -409.5, -83, -405.5, -77, -398.5, -77, -397.5, -66, -392.5, -56, -392.5, -56, -388.5, -56, -386.5, -50, -383.5, -49, -383.5, -51, -376.5, -51, -374.5, -45, -372.5, -45, -371.5, -63, -349.5, -63, -346.5, -105, -332.5, -108, -332.5, -148, -312.5, -150, -312.5, -166, -294.5, -167, -294.5, -172, -278.5, -173, -278.5, -173, -262.5, -167, -240.5, -166, -240.5, -162, -163.5, -162, -154.5, -154, -125.5, -154, -123.5, -138, -106.5, -138, -105.5, -123, -94.5, -123, -93.5, -77, -73.5, -77, -72.5, -68, -75.5, -67, -75.5, -62, -63.5, -62, -62.5, -67, -54.5, -68, -54.5, -68, -35.5, -68, -31.5, -87, 50.5, -88, 50.5, -97, 139.5, -97, 147.5, -109, 212.5, -109, 217.5, -152, 348.5, -153, 348.5, -166, 404.5, -166, 408.5, -184, 460.5, -185, 460.5, -191, 486.5, -191, 490.5, -189, 493.5, -189, 495.5, -174, 505.5, -174, 507.5, -187, 525.5, -188, 525.5, -193, 538.5, -194, 538.5, -194, 545.5, -195, 545.5, -194, 564.5, -194, 575.5, -186, 581.5, -186, 582.5, -168, 584.5, -128, 584.5, -110, 579.5, -109, 579.5, -104, 561.5, -103, 561.5, -98, 527.5, -98, 517.5, -93, 516.5, -91, 516.5, -88, 511.5, -87, 511.5, -75, 451.5, -75, 446.5, -39, 292.5, -39, 288.5, -31, 269.5, -31, 266.5, -4, 214.5, -3, 214.5, 23, 126.5, 23, 122.5, 32, 101.5, 32, 98.5, 39, 87.5, 39, 85.5, 51, 72.5, 54, 72.5, 59, 112.5, 60, 112.5, 66, 203.5, 66, 249.5, 53, 326.5, 52, 326.5, 30, 488.5, 29, 488.5, 30, 491.5, 30, 493.5, 38, 499.5, 39, 499.5, 33, 517.5, 32, 517.5, 31, 546.5, 31, 553.5, 36, 559.5, 36, 560.5, 68, 562.5, 77, 562.5, 132, 574.5, 132, 575.5, 155, 577.5, 155, 578.5, 191, 576.5, 194, 576.5, 198, 573.5, 199, 573.5, 202, 562.5, 203, 562.5, 203, 542.5, 199, 534.5, 199, 532.5, 174, 522.5, 171, 522.5, 156, 513.5, 154, 513.5, 136, 496.5, 135, 496.5, 131, 486.5, 130, 486.5, 132, 402.5, 132, 387.5, 149, 263.5, 150, 263.5, 162, 142.5, 163, 142.5, 167, 74.5, 167, 42.5, 165, 22.5, 165, 15.5, 152, -18.5, 152, -21.5, 141, -42.5, 140, -42.5, 134, -64.5, 133, -64.5, 135, -68.5, 135, -75.5, 128, -80.5, 128, -90.5, 129, -90.5, 129, -98.5, 169, -89.5, 169, -88.5, 188, -95.5, 191, -95.5, 207, -107.5, 208, -107.5, 216, -131.5, 216, -168.5, 208, -187.5, 208, -189.5, 184, -224.5, 183, -224.5, 178, -236.5, 177, -236.5, 158, -287.5, 158, -290.5, 147, -310.5, 147, -312.5, 121, -322.5, 121, -323.5, 55, -342.5, 50, -342.5, 84, -367.5, 86, -367.5, 98, -386.5, 98, -388.5, 107, -388.5, 111, -388.5, 121, -394.5, 123, -394.5, 125, -402.5, 125, -404.5, 115, -407.5, 115, -408.5, 119, -410.5, 119, -412.5, 129, -410.5, 134, -410.5, 142, -417.5, 143, -417.5, 142, -420.5, 142, -422.5, 139, -424.5, 135, -424.5, 131, -429.5, 131, -431.5, 142, -431.5, 145, -431.5, 157, -442.5, 158, -442.5, 157, -447.5, 157, -449.5, 152, -449.5, 144, -449.5, 136, -455.5, 135, -455.5, 151, -466.5, 152, -466.5, 159, -481.5, 160, -481.5, 160, -487.5, 156, -490.5, 156, -491.5, 150, -486.5, 150, -484.5, 147, -485.5, 145, -485.5, 133, -504.5, 132, -504.5, 131, -507.5, 131, -510.5, 141, -526.5, 141, -535.5, 135, -542.5, 132, -542.5, 125, -530.5, 115, -530.5, 80, -566.5, 80, -567.5, 70, -573.5, 70, -575.5, 44, -584.5, 44, -585.5, 27, -585.5)
 
-[node name="WalkToPoint" type="Marker2D" parent="InteractionArea"]
+[node name="WalkToPoint" type="Marker2D" parent="InteractionArea" unique_id=843090877]

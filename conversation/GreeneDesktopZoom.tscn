@@ -1,0 +1,187 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://conversation/object_zoom_overlay.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://Backgrounds/Kit/Faculty Offices/Greene Office/barbara_wallpaper.jpg" id="2_wallpaper"]
+[ext_resource type="Texture2D" path="res://Sprites/dialogue sprites/prof_greene_dialogue_sprite.png" id="3_avatar"]
+[ext_resource type="FontFile" path="res://Fonts/VarelaRound-Regular.ttf" id="4_font"]
+[ext_resource type="Script" path="res://interactions/view_reaction.gd" id="5_reaction"]
+[ext_resource type="Resource" path="res://dialogue/greene_office.dialogue" id="6_dialogue"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wallpaper"]
+atlas = ExtResource("2_wallpaper")
+region = Rect2(0, 392, 2184, 1228.5)
+
+[sub_resource type="Gradient" id="Gradient_dim"]
+offsets = PackedFloat32Array(0, 0.5, 1)
+colors = PackedColorArray(0, 0, 0, 0.05, 0, 0, 0, 0.12, 0, 0, 0, 0.55)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_dim"]
+gradient = SubResource("Gradient_dim")
+width = 16
+height = 256
+fill_to = Vector2(0, 1)
+
+[sub_resource type="Shader" id="Shader_circle_mask"]
+code = "shader_type canvas_item;
+
+// step 2.194: crops the avatar to a circle (soft 1% edge).
+void fragment() {
+	vec4 c = texture(TEXTURE, UV);
+	float d = distance(UV, vec2(0.5));
+	c.a *= 1.0 - smoothstep(0.49, 0.5, d);
+	COLOR = c * COLOR;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_circle_mask"]
+shader = SubResource("Shader_circle_mask")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_avatar_ring"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(1, 1, 1, 0.9)
+corner_radius_top_left = 100
+corner_radius_top_right = 100
+corner_radius_bottom_right = 100
+corner_radius_bottom_left = 100
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_password_pill"]
+content_margin_left = 22.0
+content_margin_top = 12.0
+content_margin_right = 22.0
+content_margin_bottom = 12.0
+bg_color = Color(1, 1, 1, 0.22)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 0.35)
+corner_radius_top_left = 26
+corner_radius_top_right = 26
+corner_radius_bottom_right = 26
+corner_radius_bottom_left = 26
+
+[node name="GreeneDesktopZoom" type="CanvasLayer"]
+process_mode = 3
+layer = 2
+script = ExtResource("1_script")
+background_texture = SubResource("AtlasTexture_wallpaper")
+show_verb_panel = false
+show_inventory = false
+allowed_verb_ids = Array[String](["examine"])
+
+[node name="RootContainer" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="BackgroundRect" type="ColorRect" parent="RootContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="ZoomBackground" type="TextureRect" parent="RootContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Dim" type="TextureRect" parent="RootContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_dim")
+expand_mode = 1
+
+[node name="InteractableContainer" type="Node2D" parent="RootContainer"]
+
+[node name="LoginCard" type="VBoxContainer" parent="RootContainer"]
+layout_mode = 1
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -220.0
+offset_top = -390.0
+offset_right = 220.0
+offset_bottom = -90.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_override_constants/separation = 16
+alignment = 2
+
+[node name="AvatarRing" type="PanelContainer" parent="RootContainer/LoginCard"]
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_avatar_ring")
+
+[node name="Avatar" type="TextureRect" parent="RootContainer/LoginCard/AvatarRing"]
+material = SubResource("ShaderMaterial_circle_mask")
+custom_minimum_size = Vector2(180, 180)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("3_avatar")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="NameLabel" type="Label" parent="RootContainer/LoginCard"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.55)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 34
+text = "Alan Greene"
+horizontal_alignment = 1
+
+[node name="PasswordPill" type="PanelContainer" parent="RootContainer/LoginCard"]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_password_pill")
+
+[node name="Placeholder" type="Label" parent="RootContainer/LoginCard/PasswordPill"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.7)
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 22
+text = "Enter Password"
+
+[node name="CloseButton" type="Button" parent="RootContainer"]
+layout_mode = 0
+offset_left = 22.0
+offset_top = 26.0
+offset_right = 130.0
+offset_bottom = 83.0
+text = "Back"
+
+[node name="Reaction" type="Node" parent="."]
+script = ExtResource("5_reaction")
+seen_flag = "greene_lockscreen_seen"
+other_seen_flag = "greene_la_marr_photo_seen"
+reaction_done_flag = "greene_la_marr_link_noticed"
+dialogue_resource = ExtResource("6_dialogue")
+dialogue_title = "lockscreen_after_photo"

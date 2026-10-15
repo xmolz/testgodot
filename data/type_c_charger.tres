@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Texture2D" path="res://Backgrounds/Kit/Lab Corridoor/type_c_charger.png" id="1_icon"]
+[ext_resource type="Script" path="res://data/ItemData.gd" id="2_script"]
+
+[resource]
+script = ExtResource("2_script")
+item_id = "type_c_charger"
+display_name = "Type-C Charger"
+icon = ExtResource("1_icon")
+description = "A wall charger with a Type-C cable. The right kind for most phones these days."

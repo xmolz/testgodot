@@ -9,7 +9,7 @@
 class_name WakeCGLayer
 extends CanvasLayer
 
-@export_file("*.png", "*.jpg") var cg_path: String = "res://Backgrounds/CG/chapter2_wake.png"
+@export_file("*.png", "*.jpg") var cg_path: String = "res://Backgrounds/CG/layla_library_cg.png"
 
 # frames: (centre_x, centre_y) in source px, plus zoom. values tuned in the dev harness.
 @export var start_cx: float = 2048.0

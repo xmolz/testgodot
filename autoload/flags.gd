@@ -20,6 +20,23 @@ func get_game_flag(flag_name: String) -> bool:
 	return game_flags.get(flag_name, false)
 
 
+# /////////////////// global counters (step 2.233)
+# whole numbers kept in game_flags under a "counter_" prefix, so the existing save/load and
+# reset_run_state cover them. they never go through get_game_flag / game_flag_changed.
+const COUNTER_PREFIX := "counter_"
+
+func add_game_counter(counter_name: String, delta: float) -> float:
+	var key := COUNTER_PREFIX + counter_name
+	var value: float = float(game_flags.get(key, 0.0)) + delta
+	game_flags[key] = value
+	print_rich("[color=yellow]Flags: %s %+.1f -> %.1f[/color]" % [counter_name, delta, value])
+	return value
+
+
+func get_game_counter(counter_name: String) -> float:
+	return float(game_flags.get(COUNTER_PREFIX + counter_name, 0.0))
+
+
 # ////////////////[current level's flags]
 func register_level_state_manager(lsm: LevelStateManager):
 	current_level_state_manager = lsm

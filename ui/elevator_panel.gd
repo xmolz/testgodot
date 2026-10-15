@@ -301,6 +301,8 @@ func _close_with_transition(floor_id: String) -> void:
 		if player.has_method("stop_movement"):
 			player.stop_movement()
 		player.global_position = target_node.global_position
+		# bring an attached companion along while the screen is still covered.
+		player.get_tree().call_group("companion_followers", "place_for_teleport", target_node)
 		var camera := get_viewport().get_camera_2d()
 		if camera and camera.has_method("snap_to_target"):
 			camera.snap_to_target()

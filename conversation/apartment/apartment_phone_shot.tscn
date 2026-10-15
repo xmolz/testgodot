@@ -1,0 +1,61 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://conversation/apartment/apartment_phone_shot.gd" id="1_shot"]
+[ext_resource type="Texture2D" path="res://Backgrounds/apartment_floor_far.png" id="2_far"]
+[ext_resource type="Texture2D" path="res://Backgrounds/apartment_floor_close.png" id="3_close"]
+[ext_resource type="Texture2D" path="res://Backgrounds/CG/pizza_pamphlet.png" id="4_pamphlet"]
+[ext_resource type="PackedScene" path="res://conversation/phone/phone_cg.tscn" id="5_phone"]
+
+[node name="ApartmentPhoneShot" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_shot")
+
+[node name="Frame" type="Node2D" parent="."]
+
+[node name="Underlay" type="ColorRect" parent="Frame"]
+offset_left = -64.0
+offset_top = -64.0
+offset_right = 3904.0
+offset_bottom = 2224.0
+mouse_filter = 2
+color = Color(0.48, 0.32, 0.2, 1)
+
+[node name="FarView" type="Node2D" parent="Frame"]
+
+[node name="FloorFar" type="Sprite2D" parent="Frame/FarView"]
+texture = ExtResource("2_far")
+centered = false
+scale = Vector2(1.2, 1.2)
+
+[node name="CloseView" type="Node2D" parent="Frame"]
+modulate = Color(1, 1, 1, 0)
+
+[node name="FloorClose" type="Sprite2D" parent="Frame/CloseView"]
+texture = ExtResource("3_close")
+centered = false
+scale = Vector2(1.2, 1.2)
+
+[node name="PamphletView" type="Node2D" parent="Frame"]
+
+[node name="PamphletShadow" type="Sprite2D" parent="Frame/PamphletView"]
+modulate = Color(0, 0, 0, 0.3)
+position = Vector2(2098, 712)
+rotation = -0.1222
+scale = Vector2(0.468, 0.468)
+texture = ExtResource("4_pamphlet")
+
+[node name="Pamphlet" type="Sprite2D" parent="Frame/PamphletView"]
+position = Vector2(2080, 690)
+rotation = -0.1222
+scale = Vector2(0.468, 0.468)
+texture = ExtResource("4_pamphlet")
+
+[node name="PhoneCG" parent="." instance=ExtResource("5_phone")]
+layout_mode = 1
+show_backdrop = false

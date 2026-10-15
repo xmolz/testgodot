@@ -5,12 +5,13 @@
 [ext_resource type="Texture2D" uid="uid://vdwyiuwirh3j" path="res://Backgrounds/Kit/Lab Corridoor/locker_exterior.png" id="3_locker_art"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_locker"]
-size = Vector2(120, 580)
+size = Vector2(111, 576)
 
 [node name="Locker" type="Area2D" unique_id=2146324801]
 script = ExtResource("1_interactable")
 object_display_name = "Locker"
 object_id = "locker"
+hover_front_group = &"locker_row"
 
 [node name="ObjectSprite" type="Sprite2D" parent="." unique_id=992783755]
 material = ExtResource("2_outline")
@@ -19,7 +20,7 @@ scale = Vector2(0.5, 0.5)
 texture = ExtResource("3_locker_art")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1517899075]
-position = Vector2(0, -290)
+position = Vector2(1, -289)
 shape = SubResource("RectangleShape2D_locker")
 
 [node name="WalkToPoint" type="Marker2D" parent="." unique_id=501883500]

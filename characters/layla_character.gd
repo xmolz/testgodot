@@ -9,6 +9,10 @@ extends CharacterBody2D
 @onready var interaction_area: Interactable = $InteractionArea if has_node("InteractionArea") else null
 @onready var anim: AnimationPlayer = $AnimationPlayer if has_node("AnimationPlayer") else null
 
+# her walk cycle plays at this fraction of Fiona's rate, so their steps drift apart
+# instead of locking together. keep it close to 1 or her feet start to slide.
+@export_range(0.5, 1.5, 0.01) var walk_cadence: float = 0.92
+
 func _ready() -> void:
 	# record which side the player is standing on the moment an interaction fires.
 	# interaction_started is emitted at the top of attempt_interaction — after the
@@ -45,7 +49,24 @@ func _update_animation(walking: bool) -> void:
 	var wanted: String = "walk" if walking else "idle"
 	if anim.current_animation != wanted:
 		anim.play(wanted)
+		if walking:
+			_offset_walk_phase()
 	if walking and is_instance_valid(follow) and follow.speed > 0.0:
-		anim.speed_scale = absf(velocity.x) / follow.speed
+		anim.speed_scale = absf(velocity.x) / follow.speed * walk_cadence
 	else:
 		anim.speed_scale = 1.0
+
+
+# start her stride half a cycle away from Fiona's so they step on opposite feet;
+# if Fiona isn't walking, start anywhere in the cycle.
+func _offset_walk_phase() -> void:
+	var length: float = anim.current_animation_length
+	if length <= 0.0:
+		return
+	var phase: float = randf() * length
+	var player_anim: AnimationPlayer = null
+	if is_instance_valid(follow) and is_instance_valid(follow.get_target()):
+		player_anim = follow.get_target().get_node_or_null("AnimationPlayer") as AnimationPlayer
+	if player_anim and player_anim.current_animation == "walk":
+		phase = fposmod(player_anim.current_animation_position + length * 0.5, length)
+	anim.seek(phase, true)

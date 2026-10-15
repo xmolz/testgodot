@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Texture2D" path="res://Backgrounds/Kit/Lab Corridoor/layla_phone.png" id="1_icon"]
+[ext_resource type="Script" path="res://data/ItemData.gd" id="2_script"]
+
+[resource]
+script = ExtResource("2_script")
+item_id = "layla_phone"
+display_name = "Layla's Phone"
+icon = ExtResource("1_icon")
+description = "Layla's phone, in a pink case with a little flower on it. Completely dead."

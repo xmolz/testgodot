@@ -111,6 +111,7 @@ func launch(data: MemoryChapterData, overlay: CanvasLayer, drawer: Control) -> v
 		# over the hub and hand the player straight back to the memory box afterwards.
 		var intro_instance: Node = null
 		var wake_layer: Node = null
+		var played_intro := false
 
 		if not intro_path.strip_edges().is_empty() and ResourceLoader.exists(intro_path):
 			var intro_packed: PackedScene = load(intro_path)
@@ -123,6 +124,7 @@ func launch(data: MemoryChapterData, overlay: CanvasLayer, drawer: Control) -> v
 						get_tree().root.add_child(wake_layer)
 
 				intro_instance = intro_packed.instantiate()
+				played_intro = true
 				if "autostart" in intro_instance:
 					intro_instance.autostart = false
 				if is_instance_valid(wake_layer) and "extra_game_states" in intro_instance:
@@ -174,7 +176,8 @@ func launch(data: MemoryChapterData, overlay: CanvasLayer, drawer: Control) -> v
 		overlay = null
 		drawer = null
 
-		if NotificationManager:
+		# the dev notice is only for placeholder chapters that had nothing to play.
+		if NotificationManager and not played_intro:
 			NotificationManager.add_notification("Portal complete — chapter launch pipeline not built yet.")
 
 		_launching = false

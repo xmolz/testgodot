@@ -1,22 +1,60 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://bgorw24v40t2"]
 
-[ext_resource type="Script" path="res://interactions/interactable.gd" id="1_interactable"]
-[ext_resource type="Script" path="res://data/InteractionResponse.gd" id="2_response"]
-[ext_resource type="Script" path="res://interactions/action.gd" id="3_action"]
-[ext_resource type="Script" path="res://interactions/actions/StartConversationAction.gd" id="4_startconv"]
-[ext_resource type="Resource" path="res://interactions/actions/DefaultExamineResponse.tres" id="5_examine"]
-[ext_resource type="Material" path="res://interactions/actions/interactable_outline.tres" id="6_outline"]
+[ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactions/interactable.gd" id="1_interactable"]
+[ext_resource type="Script" uid="uid://bmq0s1nqhqi4j" path="res://data/InteractionResponse.gd" id="2_response"]
+[ext_resource type="Script" uid="uid://dltqnu07oiff" path="res://interactions/action.gd" id="3_action"]
+[ext_resource type="Script" uid="uid://h83nrnu1277x" path="res://interactions/actions/StartConversationAction.gd" id="4_startconv"]
+[ext_resource type="Resource" uid="uid://bivfrghh084ym" path="res://interactions/actions/DefaultExamineResponse.tres" id="5_examine"]
+[ext_resource type="Material" uid="uid://dww3d0txyl18g" path="res://interactions/actions/interactable_outline.tres" id="6_outline"]
+[ext_resource type="Texture2D" uid="uid://b4mr4krbpyne3" path="res://Animations/jayce/jayce_idle/jayce_idle_0001.png" id="7_idle1"]
+[ext_resource type="Texture2D" uid="uid://4t8r5ktk2fc3" path="res://Animations/jayce/jayce_idle/jayce_idle_0002.png" id="8_idle2"]
+[ext_resource type="Texture2D" uid="uid://pk2o7d53tibi" path="res://Animations/jayce/jayce_idle/jayce_idle_0003.png" id="9_idle3"]
+[ext_resource type="Texture2D" uid="uid://kgbxucmkwppd" path="res://Animations/jayce/jayce_idle/jayce_idle_0004.png" id="10_idle4"]
+[ext_resource type="Texture2D" uid="uid://oqaum4x5lc4d" path="res://Animations/jayce/jayce_idle/jayce_idle_0005.png" id="11_idle5"]
+[ext_resource type="Texture2D" uid="uid://bibvmf10q31an" path="res://Animations/jayce/jayce_idle/jayce_idle_0006.png" id="12_idle6"]
+[ext_resource type="Texture2D" uid="uid://bbkii7oqddjga" path="res://Animations/jayce/jayce_idle/jayce_idle_0007.png" id="13_idle7"]
+[ext_resource type="Texture2D" uid="uid://d11sk3ie7bxjs" path="res://Animations/jayce/jayce_idle/jayce_idle_0013.png" id="14_idle13"]
+[ext_resource type="Texture2D" uid="uid://d1jdow8ake31j" path="res://Animations/jayce/jayce_idle/jayce_idle_0014.png" id="15_idle14"]
+[ext_resource type="Texture2D" uid="uid://d3mm0lq1rhfo7" path="res://characters/character_floor_shadow.tres" id="16_shadow"]
 
-[sub_resource type="Gradient" id="Gradient_guard"]
-colors = PackedColorArray(0.18, 0.22, 0.32, 1, 0.18, 0.22, 0.32, 1)
+[sub_resource type="Animation" id="Animation_jayce_reset"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("7_idle1")]
+}
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_guard"]
-gradient = SubResource("Gradient_guard")
-width = 130
-height = 310
+[sub_resource type="Animation" id="Animation_jayce_idle"]
+resource_name = "idle"
+length = 2.0
+loop_mode = 1
+step = 0.0833
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0833, 0.1667, 0.25, 0.3333, 0.4167, 0.5, 0.5833, 0.6667, 0.75, 0.8333, 0.9167, 1, 1.0833, 1.1667, 1.25, 1.3333, 1.4167, 1.5, 1.5833, 1.6667, 1.75, 1.8333, 1.9167),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("7_idle1"), ExtResource("8_idle2"), ExtResource("9_idle3"), ExtResource("10_idle4"), ExtResource("11_idle5"), ExtResource("12_idle6"), ExtResource("13_idle7"), ExtResource("13_idle7"), ExtResource("13_idle7"), ExtResource("12_idle6"), ExtResource("11_idle5"), ExtResource("10_idle4"), ExtResource("14_idle13"), ExtResource("15_idle14"), ExtResource("14_idle13"), ExtResource("9_idle3"), ExtResource("10_idle4"), ExtResource("11_idle5"), ExtResource("12_idle6"), ExtResource("13_idle7"), ExtResource("13_idle7"), ExtResource("12_idle6"), ExtResource("9_idle3"), ExtResource("7_idle1")]
+}
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_guard"]
-size = Vector2(130, 310)
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_jayce"]
+_data = {
+&"RESET": SubResource("Animation_jayce_reset"),
+&"idle": SubResource("Animation_jayce_idle")
+}
 
 [sub_resource type="Resource" id="Resource_guard_talk_action"]
 script = ExtResource("4_startconv")
@@ -28,21 +66,34 @@ verb_id = "talk_to"
 actions_to_perform = Array[ExtResource("3_action")]([SubResource("Resource_guard_talk_action")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
-[node name="GuardCharacter" type="Node2D"]
+[node name="GuardCharacter" type="Node2D" unique_id=883821911]
 
-[node name="Sprite" type="Sprite2D" parent="."]
+[node name="FloorShadow" type="Sprite2D" parent="." unique_id=420211114]
+modulate = Color(1, 1, 1, 0.85)
+position = Vector2(0, -4)
+texture = ExtResource("16_shadow")
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=366471876]
 material = ExtResource("6_outline")
-position = Vector2(0, -155)
-texture = SubResource("GradientTexture2D_guard")
+position = Vector2(0, -302.8)
+scale = Vector2(0.52, 0.52)
+texture = ExtResource("7_idle1")
 
-[node name="InteractionArea" type="Area2D" parent="."]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1039921909]
+libraries/ = SubResource("AnimationLibrary_jayce")
+autoplay = &"idle"
+
+[node name="InteractionArea" type="Area2D" parent="." unique_id=1402428337]
 script = ExtResource("1_interactable")
-object_display_name = "Security Guard"
+object_display_name = "The Janitor"
+introduced_flag_id = "jayce_introduced"
+introduced_display_name = "Janitor Jayce"
 object_id = "lab_guard"
 category = 1
 interactions = Array[ExtResource("2_response")]([ExtResource("5_examine"), SubResource("Resource_guard_talk_response")])
 character_conversation_scene_path = "res://conversation/guard_advanced_overlay.tscn"
 
-[node name="ClickShape" type="CollisionShape2D" parent="InteractionArea"]
-position = Vector2(0, -155)
-shape = SubResource("RectangleShape2D_guard")
+[node name="InteractionClickShape" type="CollisionPolygon2D" parent="InteractionArea" unique_id=1137910797]
+position = Vector2(0, -302.8)
+scale = Vector2(0.52, 0.52)
+polygon = PackedVector2Array(3, -493.5, -5, -491.5, -8, -491.5, -23, -483.5, -25, -483.5, -44, -468.5, -46, -468.5, -59, -453.5, -60, -453.5, -78, -426.5, -79, -426.5, -83, -417.5, -84, -417.5, -84, -410.5, -85, -410.5, -76, -372.5, -76, -369.5, -71, -363.5, -70, -363.5, -62, -343.5, -62, -341.5, -30, -314.5, -28, -314.5, -22, -303.5, -22, -301.5, -18, -299.5, -18, -293.5, -38, -279.5, -38, -277.5, -75, -264.5, -78, -264.5, -116, -245.5, -118, -245.5, -133, -231.5, -134, -231.5, -151, -185.5, -152, -185.5, -160, -145.5, -161, -145.5, -170, -73.5, -170, -58.5, -133, 18.5, -132, 18.5, -119, 51.5, -119, 53.5, -113, 58.5, -113, 59.5, -97, 66.5, -96, 66.5, -93, 81.5, -93, 88.5, -104, 161.5, -105, 161.5, -112, 253.5, -112, 271.5, -137, 351.5, -137, 354.5, -167, 433.5, -168, 433.5, -166, 447.5, -166, 452.5, -155, 480.5, -155, 507.5, -145, 518.5, -145, 522.5, -165, 544.5, -166, 544.5, -172, 557.5, -173, 557.5, -174, 581.5, -174, 585.5, -168, 592.5, -168, 593.5, -156, 597.5, -156, 598.5, -123, 600.5, -119, 600.5, -105, 592.5, -103, 592.5, -80, 563.5, -80, 561.5, -65, 549.5, -64, 549.5, -62, 545.5, -62, 536.5, -69, 509.5, -69, 507.5, -64, 503.5, -63, 503.5, -61, 489.5, -61, 475.5, -48, 464.5, -47, 464.5, -41, 450.5, -40, 450.5, -32, 385.5, -32, 366.5, -10, 324.5, -9, 324.5, 7, 270.5, 7, 266.5, 24, 222.5, 24, 220.5, 25, 220.5, 25, 255.5, 17, 357.5, 17, 370.5, 4, 444.5, 3, 444.5, 4, 460.5, 4, 465.5, 12, 482.5, 13, 482.5, 10, 528.5, 9, 528.5, 12, 545.5, 12, 548.5, 16, 553.5, 16, 555.5, 24, 560.5, 24, 561.5, 46, 567.5, 49, 567.5, 94, 587.5, 94, 588.5, 122, 589.5, 132, 589.5, 141, 586.5, 145, 586.5, 154, 580.5, 155, 580.5, 160, 568.5, 161, 568.5, 163, 555.5, 164, 555.5, 163, 547.5, 163, 542.5, 160, 538.5, 160, 536.5, 147, 528.5, 147, 527.5, 121, 518.5, 119, 518.5, 107, 506.5, 107, 492.5, 120, 489.5, 122, 489.5, 126, 479.5, 127, 479.5, 123, 436.5, 123, 406.5, 141, 278.5, 142, 278.5, 149, 197.5, 149, 157.5, 151, 158.5, 157, 158.5, 162, 153.5, 162, 152.5, 178, 154.5, 180, 154.5, 186, 141.5, 187, 141.5, 191, 123.5, 192, 123.5, 180, 94.5, 179, 94.5, 183, 87.5, 184, 87.5, 179, 64.5, 179, 61.5, 187, 49.5, 187, 41.5, 170, 21.5, 169, 21.5, 168, 8.5, 168, 4.5, 149, -44.5, 148, -44.5, 141, -113.5, 141, -123.5, 135, -156.5, 135, -162.5, 127, -192.5, 127, -196.5, 116, -225.5, 116, -228.5, 108, -235.5, 108, -236.5, 55, -261.5, 52, -261.5, 50, -266.5, 49, -266.5, 71, -268.5, 79, -268.5, 84, -271.5, 86, -271.5, 105, -309.5, 106, -309.5, 111, -332.5, 112, -332.5, 108, -361.5, 108, -373.5, 113, -388.5, 113, -408.5, 109, -427.5, 109, -431.5, 101, -448.5, 101, -450.5, 92, -460.5, 92, -461.5, 75, -468.5, 73, -468.5, 69, -473.5, 69, -474.5, 54, -483.5, 54, -484.5, 35, -492.5, 35, -493.5, 3, -494.5)

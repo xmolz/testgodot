@@ -1,0 +1,158 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://interactions/interactable.gd" id="1_interactable"]
+[ext_resource type="Texture2D" path="res://Backgrounds/Kit/Faculty Offices/Greene Office/greene_office_portrait.png" id="2_tex"]
+[ext_resource type="FontFile" path="res://Fonts/VarelaRound-Regular.ttf" id="3_font"]
+[ext_resource type="Script" path="res://data/InteractionResponse.gd" id="4_response"]
+[ext_resource type="Script" path="res://interactions/action.gd" id="5_action"]
+[ext_resource type="Script" path="res://interactions/actions/OpenCloseupAction.gd" id="6_closeup_action"]
+[ext_resource type="PackedScene" path="res://Interactables/Game World/University/la_marr_photo_closeup.tscn" id="7_closeup_scene"]
+[ext_resource type="FontVariation" path="res://Fonts/varela_round_italic.tres" id="8_italic"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_outer_frame"]
+bg_color = Color(0.12, 0.13, 0.16, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.32, 0.28, 0.22, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_color = Color(0, 0, 0, 0.45)
+shadow_size = 10
+shadow_offset = Vector2(0, 6)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_inner_mat"]
+bg_color = Color(0.06, 0.07, 0.08, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.18, 0.16, 0.14, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_plaque"]
+bg_color = Color(0.72, 0.6, 0.36, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.45, 0.36, 0.2, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_photo"]
+size = Vector2(264, 344)
+
+[sub_resource type="Resource" id="Resource_photo_closeup"]
+script = ExtResource("6_closeup_action")
+content_scene = ExtResource("7_closeup_scene")
+
+[sub_resource type="Resource" id="Resource_photo_examine"]
+script = ExtResource("4_response")
+verb_id = "examine"
+actions_to_perform = Array[ExtResource("5_action")]([SubResource("Resource_photo_closeup")])
+
+[sub_resource type="Resource" id="Resource_photo_use"]
+script = ExtResource("4_response")
+verb_id = "use"
+actions_to_perform = Array[ExtResource("5_action")]([SubResource("Resource_photo_closeup")])
+
+[node name="LaMarrPortrait" type="Area2D"]
+script = ExtResource("1_interactable")
+object_display_name = "Framed Photo"
+object_id = "greene_office_la_marr_photo"
+interactions = Array[ExtResource("4_response")]([SubResource("Resource_photo_examine"), SubResource("Resource_photo_use")])
+
+[node name="Frame" type="Panel" parent="."]
+offset_left = -132.0
+offset_top = -172.0
+offset_right = 132.0
+offset_bottom = 172.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_outer_frame")
+
+[node name="Mat" type="Panel" parent="."]
+offset_left = -126.0
+offset_top = -166.0
+offset_right = 126.0
+offset_bottom = 166.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_inner_mat")
+
+[node name="ObjectSprite" type="Sprite2D" parent="."]
+position = Vector2(0, -27)
+scale = Vector2(0.335, 0.335)
+texture = ExtResource("2_tex")
+
+[node name="Plaque" type="Panel" parent="."]
+offset_left = -120.0
+offset_top = 119.0
+offset_right = 120.0
+offset_bottom = 160.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_plaque")
+
+[node name="PlaqueTitle" type="Label" parent="."]
+offset_left = -120.0
+offset_top = 121.0
+offset_right = 120.0
+offset_bottom = 137.0
+theme_override_colors/font_color = Color(0.22, 0.15, 0.08, 1)
+theme_override_fonts/font = ExtResource("8_italic")
+theme_override_font_sizes/font_size = 9
+text = "The Girl Who Was Too Beautiful for Hollywood"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PlaqueName" type="Label" parent="."]
+offset_left = -120.0
+offset_top = 136.0
+offset_right = 120.0
+offset_bottom = 158.0
+theme_override_colors/font_color = Color(0.22, 0.15, 0.08, 1)
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 14
+text = "Barbara La Marr"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HoverGlow" type="Node2D" parent="."]
+visible = false
+
+[node name="GlowTop" type="ColorRect" parent="HoverGlow"]
+offset_left = -136.0
+offset_top = -176.0
+offset_right = 136.0
+offset_bottom = -168.0
+mouse_filter = 2
+color = Color(0.2, 0.85, 1, 1)
+
+[node name="GlowBottom" type="ColorRect" parent="HoverGlow"]
+offset_left = -136.0
+offset_top = 168.0
+offset_right = 136.0
+offset_bottom = 176.0
+mouse_filter = 2
+color = Color(0.2, 0.85, 1, 1)
+
+[node name="GlowLeft" type="ColorRect" parent="HoverGlow"]
+offset_left = -136.0
+offset_top = -176.0
+offset_right = -128.0
+offset_bottom = 176.0
+mouse_filter = 2
+color = Color(0.2, 0.85, 1, 1)
+
+[node name="GlowRight" type="ColorRect" parent="HoverGlow"]
+offset_left = 128.0
+offset_top = -176.0
+offset_right = 136.0
+offset_bottom = 176.0
+mouse_filter = 2
+color = Color(0.2, 0.85, 1, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_photo")
+
+[node name="WalkToPoint" type="Marker2D" parent="."]
+position = Vector2(0, 395)

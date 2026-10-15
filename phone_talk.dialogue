@@ -1,40 +1,576 @@
+# added by Claude: file header.
+# phone_talk.dialogue — Fiona calls the number Anton gave her.
+# choice flags (game flags, bools, so they also work in the in-place memory box chapter): phone_mood_good, phone_mood_alright, phone_mood_low,
+# phone_assistant_cute, phone_confessed_streaming, phone_confessed_roommate, phone_confessed_nice.
+# game flag: leander_name_known (set when he gives his name; later scenes can check it).
+# all of them are cleared at the start so a replay doesn't inherit old answers.
+
+# added by Claude: title.
+~ start
+# added by Claude: reset this call's choice flags.
+do Flags.set_game_flag("phone_mood_good", false)
+do Flags.set_game_flag("phone_mood_alright", false)
+do Flags.set_game_flag("phone_mood_low", false)
+do Flags.set_game_flag("phone_assistant_cute", false)
+do Flags.set_game_flag("phone_confessed_streaming", false)
+do Flags.set_game_flag("phone_confessed_roommate", false)
+do Flags.set_game_flag("phone_confessed_nice", false)
+do Flags.set_game_flag("leander_name_known", false)
+
 A couple of days later...
-right before you go off to sleep. 
-you put your eaphones on.
-sat on your sofa.
-And dialled the number anton gave you.
+Late at night, you take a break from the paper you're reviewing,
+put your earphones on,
+sit on your sofa,
+and dial the number Anton gave you.
 
 Player: Hey...
 Man on the phone: Hey. Who's this?
 Player: Fiona. I got your number from Anton the other day.
 Man on the phone: Oh wow, wasn't expecting to actually get a call from you.
-Man on the phone: Glad I did though.
-Player: Yeah well, I guess the boredom got the better of me today.
-Man on the phone: Fair enough. Happens to the best of us.
-Man on the phone: Anton told me a lot about you.
-Man on the phone: Your deadpan sense of humour, your ultra science-y job...
+Man on the phone: Glad I did, though.
+Player: Yeah, well, I guess the boredom got the better of me today.
+Man on the phone: Fair enough, ma'am. Happens to the best of us.
+Man on the phone: So, how've you been? What's up?
+- I'm good
+	# added by Claude: remember the answer, then jump.
+	do Flags.set_game_flag("phone_mood_good", true)
+	=> mood_good
+- I'm fine
+	# added by Claude: remember the answer, then jump.
+	do Flags.set_game_flag("phone_mood_alright", true)
+	=> mood_alright
+- Not so good
+	# added by Claude: remember the answer, then jump.
+	do Flags.set_game_flag("phone_mood_low", true)
+	=> mood_low
+
+# added by Claude: title.
+~ mood_good
+Player: I'm... good, actually.
+Player: Work was stressful, but it got better recently.
+Man on the phone: Well, that's good to hear.
+Man on the phone: Anton did mention how stressed you were when you guys last met.
+Man on the phone: Nice to hear you're in low-cortisol mode now.
+# added by Claude: Fiona's lead-in to the assistant topic.
+Player: Yeah. Turns out things are easier with some help.
+Player: We have this new assistant at the lab...
+Player: She's nice and helpful.
+Man on the phone: Oh. Is she cute?
+- Yes
+	# added by Claude: remember the answer.
+	do Flags.set_game_flag("phone_assistant_cute", true)
+	Player: Yeah.
+	Man on the phone: Hah! Good for you, I suppose!
+	Man on the phone: Wish I had a cute girl to assist me at work!
+	Player: Don't we all?
+- No
+	Player: She's fine. Not my type, though.
+	Man on the phone: Unfortunate.
+# added by Claude: jump to the shared next beat.
+=> his_day
+
+# added by Claude: title.
+~ mood_alright
+Player: I'm... alright? I guess.
+Player: Just not much to write home about.
+Player: Things just... are.
+Player: And I'm somewhere between them, too.
+Man on the phone: Been there.
+Man on the phone: Well, lucky for you, you called me!
+Man on the phone: This life of yours is about to get a whole lot more interesting.
+Player: Yeah, well... good luck.
+Player: It's been a while since I've been interested in anything.
+Man on the phone: Are you sure?
+Man on the phone: 'Cause the way Anton spoke of you...
+Man on the phone: It seemed like you had a lot going for you.
+# added by Claude: Fiona's reply to that.
+Player: Oh, for sure. Livin' the dream, honestly.
+Player: Totally not spendin' 14-hour days working.
+Player: Absolutely thriving.
+Man on the phone: Hah.
+Man on the phone: Love a sarcastic queen.
+# added by Claude: jump to the shared next beat.
+=> his_day
+
+# added by Claude: title.
+~ mood_low
+Player: Well, I've... been better, honestly.
+Man on the phone: I'm sorry to hear that.
+Man on the phone: Would you wanna... talk about it? Anything that's bothering you?
+Player: Not really.
+Player: But thanks.
+Man on the phone: Don't mention it.
+Man on the phone: I hope you feel better soon.
+# added by Claude: jump to the shared next beat.
+=> his_day
+
+# added by Claude: title.
+~ his_day
+Player: So, how've you been?
+Man on the phone: Oh, I'm just alright, ma'am.
+# added by Claude: one follow-up per earlier answer (your four response notes).
+if Flags.get_game_flag("phone_mood_good") == true and Flags.get_game_flag("phone_assistant_cute") == true:
+	Man on the phone: Still jealous of your cute assistant, honestly.
+	Man on the phone: Life would be better with one of those.
+	Man on the phone: Say, you looking for a new job?
+	Man on the phone: Could ask my employer if there are any open roles.
+	Man on the phone: Ones in close proximity to me, obviously.
+	Player: Ha-ha.
+	Player: I'm good.
+	Player: Let me ask the same of you, though.
+	Player: Are you interested in the study of genomics, by any chance?
+	Player: Life would be even better with TWO cute assistants.
+	Player: Although, wait. I'm not sure what you look like. Hmm...
+	He laughs.
+	Man on the phone: Hahaha. Funny.
+	Man on the phone: Isn't that just wonderful? I could look like whatever you want me to look like.
+	Player: Well, that's not untrue, I suppose.
+	Player: (The same applies for him too.)
+	Player: (I wonder how he's imagining me right now.)
+elif Flags.get_game_flag("phone_mood_good") == true:
+	# added by Claude: response 2 draft.
+	Man on the phone: Shame about your assistant, though. I was rooting for you.
+	Man on the phone: Tell you what. If the position for "cute assistant" ever opens up...
+	Man on the phone: I'm available.
+	Player: You? In a genomics lab?
+	Man on the phone: I'm a quick learner. Great with my hands, too.
+	Player: Do you even know what a pipette is?
+	Man on the phone: ...No. But I'd look good holding one.
+	Player: I'll be the judge of that.
+	Player: Oh wait, I can't. I have no idea what you look like.
+	Man on the phone: Then you'll just have to imagine it.
+	Player: (Honestly, I've been doing that this whole call.)
+	Player: (And wondering what he's imagining on his end.)
+elif Flags.get_game_flag("phone_mood_alright") == true:
+	Man on the phone: Kinda like you. Just there.
+	Man on the phone: Sometimes I feel like I'm waiting for something.
+	Man on the phone: But I don't know what.
+	Man on the phone: You feel me?
+	Player: (I know exactly what he means.)
+	Player: Yeah, I guess.
+	# added by Claude: optional bridge.
+	Man on the phone: Well. Maybe this call's what we were waiting for, eh?
+	Player: (Bet he'd put a wink on the end of that sentence if he sent it as a text.)
+else
+	Man on the phone: Had a rather difficult week myself.
+	Man on the phone: But hey, we hang in there.
+	Man on the phone: Wouldn't you agree, Fiona?
+	Player: Yeah, we do.
+	Player: Can't do anything else.
+	# added by Claude: bridge into a lighter topic.
+	Man on the phone: Well, then. Enough gloom for one night.
+	Man on the phone: Let's talk about something more fun.
+	Player: (Here we go.)
+# added by Claude: jump.
+=> anton_told_me
+
+# added by Claude: title.
+~ anton_told_me
+Man on the phone: Anyway, Anton told me a lot about you.
+Man on the phone: Your deadpan sense of humor, your ultra science-y job...
 Man on the phone: And most importantly...
 Man on the phone: Your big beautiful ass.
-You let our a lil chuckle.
+You let out a lil chuckle.
 Player: Well, technically, it's not a job. I'm a PhD student.
 Player: And regarding the ass... well, soon he'll have a good one too.
-Man on the phone: Well, good for him I suppose!
-Man on the phone: Unfortunately for me, the betterment of his ass is a topic I am least interested in.
-Player: Oh is that so?
+Man on the phone: Well, good for him, I suppose!
+Man on the phone: Unfortunately for me, the betterment of his ass is the topic I'm least interested in.
+Player: Oh, is that so?
 Player: Not a very good friend, are you?
-He chuckles too. 
-Man on the phone: Hah! I suppose. It's just his ass never appealed much to me, you know? 
-Man on the phone: Yours however, that's a different story.
+He chuckles too.
+Man on the phone: Hah! Probably. It's just that his ass never appealed much to me, you know?
+Man on the phone: Yours, however, that's a different story.
 Man on the phone: That is an ass I'm very, very interested in.
-Man on the phone: infact, I'm so interested. I'm gonna request a photo from you right now.
+Man on the phone: In fact, I'm so interested, I'm gonna request a photo from you right now.
 Player: Haha. You wish.
 Player: I use a phone from 2004. It can't send any pictures.
-Player: Hell, I don't even know if it's got a camera.
+Player: Hell, I don't even know if it's got a working camera.
 Player: Besides, I don't even know your name yet.
-Man on the phone: Well, you didn't know Anton's either when you took everything off for him did you?
+Man on the phone: Well, you didn't know Anton's either when you took everything off in front of him, did you?
 Something hot flushes inside of you.
-You suddnly feel rather exposed.
-- embrace it
-- [act shy/blush  about it?]
+You suddenly feel rather exposed.
+- Embrace it
+	Player: Yeah, well, I prefer not to waste too much time, you see.
+	Player: Too bad he's not into women.
+	Man on the phone: That he is indeed not.
+	Man on the phone: I am, though.
+	# added by Claude: jump.
+	=> after_exposed
+- Get flustered
+	Player: Ummm...
+	Man on the phone: Aww, did I embarrass you?
+	Man on the phone: I'm sorry. Didn't mean to.
+	Man on the phone: Honestly, I thought it was really hot. What you did.
+	Player: Yeah?
+	Player: (...He means it.)
+	Player: I do that kinda thing more than you'd think.
+	Man on the phone: Love that, ma'am.
+	Player: (He's been saying ma'am a lot.)
+	Player: (Is he southern? Or is this just a flirting thing?)
+	# added by Claude: jump.
+	=> after_exposed
 
- 
+# added by Claude: where the call continues after either choice.
+~ after_exposed
+Man on the phone: The name's Leander, by the way.
+# added by Claude: from here on he is Leander.
+do Flags.set_game_flag("leander_name_known", true)
+Player: (Leander. Huh.)
+Player: (That's a hot name.)
+Player: I like your name.
+Leander: And I yours, ma'am.
+Player: I still can't send you a picture of my ass, though. You know that, right?
+Player: I mean, I do have a high-quality webcam, but...
+Player: I just can't be bothered to turn the PC on right now...
+Leander: Oh, don't worry about it.
+Leander: My imagination's still good, you know.
+Player: Is that so?
+Player: Not a lot of people can make a claim like that.
+Player: Not in this age of the infinite scroll and short-form video.
+Leander: Truly. Our generation is...
+Leander: As some would say...
+Leander: Rather 'cooked'.
+Player: (Did he just say "cooked" in quotes?)
+Player: Yeah. We're cooked, fr fr.
+Leander: Fr fr?
+Player: For real for real.
+He lets out a huge laugh.
+Leander: Oh, you're amazing, Fiona.
+Player: I suppose.
+Leander: Also, can I tell you something?
+Player: Uh-huh?
+Leander: You've got, like, a really sexy voice.
+Player: Yeah? You think so, Leander?
+Leander: Yes. Low, raspy. Smoky.
+Leander: It's really, really sexy.
+Player: You know, you sound pretty hot too.
+Player: Like this one southern actor.
+Player: Can't recall his name.
+Player: But he played a sad cowboy in a western with dragons in it.
+Leander: A western with dragons in it?
+Player: Yep. Fr fr.
+He chuckles again.
+Leander: Anyway... can I ask you something?
+Player: Shoot.
+Leander: What's the sluttiest thing you've ever done?
+Player: (Oh boy.)
+Player: (Where do I even begin?)
+
+- Online streaming
+	# added by Claude: remember the answer (picks his callback line later).
+	do Flags.set_game_flag("phone_confessed_streaming", true)
+	Player: Let's just say... I have an audience.
+	Leander: An audience?
+	Player: People subscribe to watch me. Online.
+	He takes a pregnant pause.
+	Leander: No way.
+	Leander: No way, no way, no wayyyy!
+	Leander: That is HOT.
+	Leander: Tell me your @.
+	Player: Not a chance.
+	Player: (Not yet, anyway.)
+	# added by Claude: no condition needed; every route hears "My imagination's still good" earlier.
+	Player: I'm afraid you're gonna have to keep relying on your imagination a bit longer.
+	Leander: Aw, man.
+	Leander: You know what? Fair.
+	Leander: Just know that this really turned me on, though.
+	Leander: But hey, since you're not telling me your @...
+	Leander: You gotta tell me more about the streaming.
+	Leander: What kind of content do you make?
+	Player: Well, mostly short-form stuff.
+	Player: I can get five or six GIFs ready in an hour of work. I've gotten pretty efficient.
+	Player: A good chunk of the work is in the cosplay.
+	Player: Oh. And sometimes I do one-on-one calls with my top subs.
+	Player: They usually ask me to assume different positions and please myself for them.
+	Player: Talk sweetly.
+	Player: Like a really sexual girlfriend.
+	Leander: Wow.
+	Leander: Do you usually stream solo?
+	Leander: I'm available if you ever need a guy for your streams, just sayin'.
+	Player: Unfortunately, that's bad for business.
+	Player: My subs wouldn't appreciate it if I had another guy on my streams.
+	Player: Another girl, though...
+	Player: That's a different story.
+	# added by Claude: jump.
+	=> after_confession
+- Threesome with my old roommate and her boyfriend
+	# added by Claude: remember the answer (picks his callback line later).
+	do Flags.set_game_flag("phone_confessed_roommate", true)
+	Player: Well, okay. So I had this roommate last year...
+	Leander: Okayyy...
+	Player: Proper bombshell. With a figure you wouldn't believe.
+	Leander: Uh-huh...
+	Player: And really nice, too. Super sweet. I had the best time living with her.
+	Leander: Go on.
+	Player: I never made a move on her, though, since she was in a committed relationship.
+	Player: Her boyfriend would come over often, and the three of us would watch movies together.
+	Player: It was usually a chill time. We had snacks.
+	Player: But after every movie, I'd go back to my room to work or sleep.
+	Player: And they'd start having the loudest sex right there on the couch.
+	Player: The sounds got too distracting.
+	Player: I usually ended up touching myself to the sound of them going at it.
+	Leander: That's so hot...
+	Player: There's more.
+	Player: One night, same routine. We watched a movie, and then I went to bed.
+	Player: Then, boom, ten minutes later, like clockwork, I start hearing moaning.
+	Player: This time, I couldn't help myself.
+	Player: I went out of my room wearing only my bra and undies.
+	Player: The very same ones I'm wearing right now.
+	Player: I acted like I needed to grab something from the fridge.
+	Player: They were right there, going at it. They didn't notice me until I closed the fridge.
+	Player: As soon as I closed it, my roommate and I locked eyes.
+	Player: Her boyfriend was fucking her from behind.
+	Player: With a smile on her flushed face, she waved me over.
+	Player: I went immediately.
+	Player: And, well... you can guess what happened after that.
+	Player: Use your beloved imagination for that, I suppose.
+	# added by Claude: replaces the old "you said yes" lines and the two templates.
+	Leander: Damn, Fiona.
+	Leander: And the next morning?
+	Player: We all had breakfast together.
+	Player: Didn't seem to affect anything between us, really.
+	# added by Claude: jump.
+	=> after_confession
+- Exhibitionism and sex with a stranger
+	# added by Claude: remember the answer (picks his callback line later).
+	do Flags.set_game_flag("phone_confessed_nice", true)
+	Player: Well, okay.
+	Player: So, last year, I went to France for a research conference.
+	Player: And no, not Paris. It was in Nice.
+	Player: For some reason, the council booked me a four-bedroom villa all to myself.
+	Player: And it was rather lavish. It even had a pool in the backyard.
+	# added by Claude: interjection.
+	Leander: Science pays better than I thought.
+	Player: It really doesn't. That was a one-time thing.
+	Player: Anyway, I spent most of my time in Nice either at the event or back at the villa, working.
+	Player: But I did put that pool to good use.
+	Player: The weather demanded it. It was just perfect.
+	Player: And one day, I was sunbathing by the pool...
+	Player: When I heard a couple of guys next door.
+	Player: The house next door had been empty the whole time I was there.
+	Player: As far as I could tell, the guests had just checked in.
+	Player: The houses were built so that if you stood on the second floor of either one...
+	Player: You'd have a full view of the other's backyard.
+	# added by Claude: interjection.
+	Leander: Oh no.
+	Player: Oh yes.
+	Player: Needless to say, every time I was by the pool for the rest of my stay...
+	Player: I had nothing on.
+	Player: Hoping to give the boys a good show.
+	Player: On my second-to-last day, one of them came over.
+	Player: And yeah, I invited him in.
+	Player: You know the rest.
+	Leander: Fuuuuuuck.
+	Leander: Lucky bastard.
+	Leander: Wish that was me.
+	Player: Well, keep trying your luck and it might be.
+	Player: Someday.
+	Leander: Someday.
+	Leander: Well, if both of them had come over...
+	Leander: What would you have done then?
+	Player: You'll find I'm very good at multitasking, Leander.
+	Player: If you know what I mean.
+	# added by Claude: jump.
+	=> after_confession
+
+# added by Claude: where the call continues after any confession.
+~ after_confession
+Leander: That's so hot.
+Leander: That was one of the hottest things I've heard in a while.
+Player: Oookay. Your turn now.
+Player: What's the sluttiest thing YOU'VE done?
+Leander: Aw, gosh, I don't know. Lemme think...
+Leander: Does fucking one's college professor count?
+Player: It might. Tell me more.
+Leander: Okay. So, second year of college, I had to pick some electives.
+Leander: I really didn't care which ones. So I picked the one where I thought I'd have the highest probability of getting laid.
+Leander: So, naturally, I picked theater.
+Player: Theater?
+Player: Gosh. I didn't know they still offered that.
+Leander: Well, they did at my school.
+Leander: Anyway, I did get laid in that class.
+Leander: There was this one girl I had to practice a scene with.
+Leander: We were paired together for a project.
+Leander: So we'd meet up in the college theater ahead of time and fuck right there. Backstage.
+Leander: It was pretty chill. No one ever came there ahead of time.
+Player: Why backstage?
+Player: Why not in the comfort of your dorm?
+Leander: Because... that's where it started.
+Leander: And there's always this thrill of potentially getting caught by someone, you know?
+Player: I do.
+Player: That's hot.
+Player: But wait, didn't you say you fucked a professor?
+Leander: I did.
+Leander: So one day, we were doing the business as usual.
+Leander: This girl was on her knees blowing me.
+Leander: Then it happened.
+Leander: The door opened, and the professor stood there.
+Leander: The girl had her back to the door, so she didn't see her.
+Leander: But the professor and I looked right at each other.
+Leander: At first, I almost stopped her. The girl, I mean. From blowing me.
+Leander: But I don't know.
+Leander: Something about this hot ass MILF looking me right in the eye...
+Leander: While this hot blonde chick was sucking my dick...
+Leander: Turned me on so much.
+Leander: That I didn't ask her to stop.
+Leander: And I kid you not.
+Leander: The professor stood at that door for a whole minute before she left.
+Player: Fuck.
+Player: And then?
+Leander: For a while, nothing. The professor acted as if nothing had happened.
+Leander: The girl and I kept fucking around.
+Leander: After the project, the professor gave me a B on the assignment.
+Leander: I didn't care much. But I figured it was a good enough excuse to go see her in her office.
+Leander: So I made an appointment by email and went to see her the next day.
+Leander: Soon as I entered her office, I felt the tension.
+Leander: I asked her why I didn't get an A, and how I could improve.
+Leander: I don't remember exactly what she said. Something about being too uptight during the act, unlike my partner.
+Leander: She said we weren't in sync.
+Leander: So I asked her, were we in sync enough when she saw us backstage?
+Leander: She blushed. And said "pretty much".
+Leander: I couldn't believe what I'd just said.
+Leander: Fiona, I'm telling you. My goddamn EARS were hot.
+Player: So are mine listening to this.
+Leander: Well, then I asked her if she'd like me to do to her what that girl was doing to me.
+Player: No way.
+Player: Eat her pussy?
+Leander: Yes.
+Player: Well, did you?
+Leander: Yes. Happily.
+Leander: Like no tomorrow.
+Leander: Right in her office. Loved every second of it.
+Player: Fuck.
+Leander: It only escalated from there.
+Leander: We almost dropped and broke her laptop while fucking on her desk.
+Leander: Yeah. It was quite something.
+Player: This is making me feel things...
+Leander: Fiona, are you touching yourself right now?
+Player: Yes.
+Leander: What are you thinking of, precisely?
+Player: I'm thinking... about you and your professor.
+Player: How good it must've felt to have her pussy eaten.
+Player: ...and how good it must've felt to eat it.
+Player: Right there in her office.
+Leander: Yeah, it was.
+Leander: I could do the same for you. You know?
+Player: Aw yeah?
+Player: What else would you do?
+Leander: Whatever I'd want in that moment, baby girl.
+Leander: As long as you want it too, of course.
+Player: You can do whatever you want to me when you see me.
+Leander: Promise? Anything I want?
+Player: Yes.
+Leander: Alright then. Deal.
+Leander: I'll fuck you so hard.
+# added by Claude: one callback per confession.
+if Flags.get_game_flag("phone_confessed_streaming") == true:
+	Leander: That'd make your subscribers cry with jealousy, if they were ever to know.
+elif Flags.get_game_flag("phone_confessed_roommate") == true:
+	Leander: Harder than your ex-roommate and her boyfriend ever could.
+else
+	Leander: Harder than that guy in France ever did.
+Player: Yeah? You'd do that?
+Player: Say you come over and I open the door completely naked for you.
+Player: What'd you do then?
+Leander: Easy. I'd waste no time.
+Leander: I'd grab you and pin you against the wall.
+Leander: Then, immediately, I'd start kissing you all over.
+Leander: I'd begin with the neck.
+Leander: Feel my way around with my lips and my tongue.
+Leander: All the while, I'd touch your naked body everywhere.
+Leander: My hands on your ass.
+Leander: On your tits.
+Leander: All over that slutty body.
+Player: Yes...
+Leander: Eventually, my mouth would make its way down. And I'd be on my knees.
+Leander: Kissing and licking the inside of your thighs.
+Leander: At that point, we'd move away from the wall.
+Player: Yes...
+Leander: Then, I'd eat you.
+Leander: Eat you like my life depends on it.
+Leander: I'd suck on your slutty lil clit.
+Leander: Savor your juices.
+Leander: Make a home down there, really.
+Player: My turn.
+Player: Now I'd finally start to undress you.
+Player: I'd take your shirt off.
+Player: Then your pants.
+Player: Then your underwear.
+Player: I'd take your cock in my hand.
+Player: In all its glory. Hard and throbbing.
+Player: Oh, I am so wet even thinking about it, Leander.
+Player: Then I'd start kissing the underside.
+Player: Slow and steady.
+Player: Lovingly, even. At first.
+Player: I'd kiss and lick your balls.
+Leander: Yes, baby.
+Player: Then, I'd take your cock in my mouth.
+Player: All of it.
+Player: I'd suck on it real good.
+Player: Make it all slobby and wet with my mouth.
+Player: I'd suck it like it's the only thing I was born to do in this world.
+Player: Get you off, Leander.
+Leander: Fuck yes, baby.
+Leander: Please suck on it.
+Player: I will.
+Player: And then, soon as you get close...
+Player: I'd lie on the bed...
+Player: And open my legs.
+Player: From there on out, I'd be all yours to use.
+Leander: I'd mount you immediately.
+Leander: Insert myself in you.
+Leander: Let you feel all of it.
+Leander: First, I'd just stay in there.
+Leander: No thrusting.
+Leander: Feel myself in there.
+Player: Yes, baby.
+Player: Fuck me.
+Leander: Then I start.
+Leander: I'm pounding that pussy down. Hard.
+Player: I deserve it.
+Leander: You do.
+# some more dialogue here.
+Player: Please fuck me good, Leander.
+Leander: I will.
+Player: Oh god.
+Player: Shit... I'm gonna...
+Player: Oh, Leander. I'm almost there.
+Leander: Pounding you feels so good.
+Leander: It's all I wanna do right now.
+Leander: I wanna fuck your brains out and cum inside you, Fiona.
+Leander: I wanna fucking cum inside you.
+# added by Claude: climax animation cue (the peak).
+Player: Oh GOD!!!
+Intense pleasure takes over your body.
+Vigorous vibrations, with a mind of their own, take hold of you.
+You let out moans louder in volume than you happen to realize.
+Player: (This is all I needed.)
+For a minute, neither you nor Leander says anything.
+Player: Sorry about that...
+Player: I got really into it, it seems.
+Leander: Oh, don't mention it, ma'am.
+Leander: Honestly, the pleasure is all mine.
+Player: I'd... like to see you someday.
+Leander: And I you.
+Leander: Unfortunately, I won't be back in town for another couple of months.
+Leander: Would you still wanna meet ol' Leander after that?
+Player: Of course.
+Player: If I'm here myself.
+Leander: Of course.
+Player: I'm sorry, I didn't ask you earlier.
+Player: But... were you touching yourself too?
+Leander: Absolutely. I came listening to your moans.
+Player: Wait, I was moaning?
+Player: Shit, I didn't even realize.
+Leander: Happens to the best of us, ma'am.
+You let out some air through your nostrils.
+Player: Alright, Leander. I'm afraid I've gotta get back to work now.
+Player: This paper needs to be reviewed by tomorrow.
+Leander: Alright then, doc. I'll let you have at it.
+Leander: Thanks for the call. Talk again soon.
+Leander: Hopefully.
+Player: Yes. Sure.
+Player: (Will I actually talk to him or see him again?)
+Player: Goodnight, Leander.
+Leander: G'nite, Fiona.
+=> END

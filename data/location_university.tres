@@ -3,7 +3,6 @@
 [ext_resource type="Script" uid="uid://bfrll5vc6bmcg" path="res://data/MemoryChapterData.gd" id="1_rnoe7"]
 [ext_resource type="Script" uid="uid://coccmochs1n0s" path="res://data/MemoryGroupData.gd" id="2_ayeaq"]
 [ext_resource type="Resource" uid="uid://etyqyvpqbws" path="res://data/chapter_university_1.tres" id="3_chapter1"]
-[ext_resource type="Resource" uid="uid://bnm8g3a8idp2s" path="res://data/chapter_university_2.tres" id="4_chapter2"]
 [ext_resource type="Resource" uid="uid://o8gogh6pfshr" path="res://data/chapter_university_3.tres" id="5_chapter3"]
 [ext_resource type="Resource" uid="uid://bkwnupwlp84j7" path="res://data/chapter_university_4.tres" id="6_chapter4"]
 [ext_resource type="Resource" uid="uid://j60hdqi30bat" path="res://data/chapter_university_5.tres" id="7_chapter5"]
@@ -13,5 +12,5 @@
 script = ExtResource("2_ayeaq")
 group_name = "University"
 group_thumbnail_path = "res://Memory Box Chapter Images/Locations/University.png"
-chapters = Array[ExtResource("1_rnoe7")]([ExtResource("3_chapter1"), ExtResource("4_chapter2"), ExtResource("5_chapter3"), ExtResource("6_chapter4"), ExtResource("7_chapter5"), ExtResource("8_chapter6")])
+chapters = Array[ExtResource("1_rnoe7")]([ExtResource("3_chapter1"), ExtResource("5_chapter3"), ExtResource("6_chapter4"), ExtResource("7_chapter5"), ExtResource("8_chapter6")])
 metadata/_custom_type_script = "uid://coccmochs1n0s"

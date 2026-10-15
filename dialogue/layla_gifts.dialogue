@@ -3,8 +3,12 @@
 # unusables.dialogue and giveables.dialogue (which import this file).
 
 ~ liked
-Layla: Oh! That's for me?
-Layla: Thank you, Fiona!
+do Flags.add_game_counter("layla_closeness", 0.5)
+if Flags.get_game_counter("layla_closeness") < 0:
+	Layla: Oh. ...Thanks.
+else
+	Layla: Oh! That's for me?
+	Layla: Thank you, Fiona!
 Player: Sure.
 Player: (Something tells me that while she liked it, she probably didn't LOVE it.)
 Player: (Did I... want her to love it?)
@@ -12,10 +16,21 @@ do Flags.set_level_flag("layla_gift_given", true)
 => END
 
 ~ loved
-Layla: Oh my god! That's my favorite!!
-Layla: Thank you, Fee!
-Player: Sure thing.
-Player: (She called me Fee...)
+do Flags.add_game_counter("layla_closeness", 2)
+if Flags.get_game_counter("layla_closeness") >= 3:
+	Layla: Oh my god! That's my favorite!!
+	Layla: Thank you, Fee!
+	Player: Sure thing.
+	Player: (She called me Fee...)
+elif Flags.get_game_counter("layla_closeness") >= 0:
+	Layla: Oh my god! That's my favorite!!
+	Layla: Thank you, Fiona!
+	Player: Sure thing.
+else
+	Layla: ...That's my favorite.
+	Layla: Thanks.
+	Player: Sure thing.
+	Player: (She's warming up. A little.)
 do Flags.set_level_flag("layla_gift_given", true)
 do Flags.set_level_flag("layla_gift_loved", true)
 => END

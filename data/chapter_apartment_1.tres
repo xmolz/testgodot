@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="MemoryChapterData" format=3]
+
+[ext_resource type="Script" path="res://data/MemoryChapterData.gd" id="1_chapter"]
+
+[resource]
+script = ExtResource("1_chapter")
+chapter_name = "Late Delivery"
+thumbnail_path = "res://1080test1.jpg"
+chapter_type = 1
+chapter_description = "TEMPLATE: a quiet night in, a pizza, a new friend, and a phone number."
+content_tags = Array[String](["Placeholder Tag"])
+is_optional = true
+launch_dialogue_title = "apartment_1"
+intro_overlay_path = "res://conversation/apartment_chapter_overlay.tscn"

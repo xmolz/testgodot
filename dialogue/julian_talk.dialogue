@@ -7,7 +7,7 @@ Julian: Yes?
 What do you want to say to him?
 - What were you talking about on the phone?
 	=> phone_talk
-- Ask him about the keypad password. [if Flags.get_level_flag("lab_keypad_interacted") == true and Flags.get_level_flag("jayce_date_hint_given") == true]
+- Ask him about the keypad password. [if (Flags.get_level_flag("lab_keypad_interacted") == true and Flags.get_level_flag("jayce_date_hint_given") == true) or Flags.get_level_flag("dev_julian_all_topics") == true]
 	=> keypad_password
 - Nothing. Never mind. [Leave]
 	=> leave
@@ -39,33 +39,50 @@ Julian: The last one I remember using was the date of independence.
 Player: Yeah. Unfortunately, that isn't working anymore.
 Julian: Too bad. Why don't you call your professor and ask him?
 if Flags.get_level_flag("party_companion_staged") == true:
+	do actor_effect("Layla", "tremble")
 	Layla: Well, we... can't do that.
 Player: Yeah. It's complicated.
 Julian: Well, too bad, I guess.
 Julian: Anyway, I need to get back to work. So, will there be anything else?
 if Flags.get_level_flag("party_companion_staged") == true:
+	do actor_effect("Layla", "lean_in")
 	Layla: Actually... the janitor told us that all his previous passwords have been dates.
 	Layla: Would you, by any chance, be aware of any such dates that the professor would've been fond of?
 else
-	# TEMPLATE — solo path (no Layla); developer may rewrite.
-	Player: Actually... the janitor said all his previous passwords have been dates.
-	Player: Any idea what dates the professor might be fond of?
+	# step 2.227: no solo playthrough (Layla is always with Fiona). fallback only, so the branch stays valid.
+	Player: This is a template line.
+if Flags.get_level_flag("party_companion_staged") == true:
+	do actor_effect("Layla", "upright")
 Julian: Hmmm. I'm not su-
+do actor_effect("Julian", "shock")
 Julian: Wait.
+do actor_focus("Julian", 1.5, 0.5)
 Julian: Come to think of it, he did mention some important event in genomics to me about a week ago, when I went to see him for counsel.
 Julian: Something about... Crick, Watson, and some other guy.
-Julian: How one or both of them are wrongly credited with discovering DNA.
-Julian: When in actuality, it was discovered almost a century earlier, by a guy whose name I can't recall.
+Julian: How everyone credits them with discovering DNA, when what they actually figured out was its structure.
+Julian: The double helix. I hope you've heard of it.
+do actor_focus("Fiona", 1.5, 0.35)
+Player: (This cheeky bastard.)
+Player: Oh no! How could I have ever heard of that?
+Player: It's not like I'm the youngest lead researcher under the most celebrated genomicist in the world.
+Julian: Right. Indeed, you're not. You're just the lead who seems to be locked out of her own lab.
+You almost crack a smile. Almost.
+Player: (Bastard.)
+do actor_focus("Julian", 1.5, 0.35)
+Julian: Anyway. The molecule itself was found more than eighty years earlier, by some Swiss guy whose name I can't recall.
+do actor_unfocus_all(0.4)
 Julian: He seemed rather fond of that fact. I remember he rattled off some dates too.
 Julian: Well. That's all I can say. I don't remember what those dates were.
 do Flags.set_level_flag("julian_password_asked", true)
 if Flags.get_level_flag("party_companion_staged") == true:
+	do actor_effect("Layla", "jump")
 	Layla: Oh my god! This is great!
 	do party_huddle()
 	Layla: Fiona, it's highly likely that one of those dates is the key to the lab!
 	Layla: All we need to do is find out what those dates were!
 	Layla: Lemme just quickly google this.
 	She whips out her phone.
+	do actor_effect("Layla", "tremble")
 	Layla: Oh no! My battery's run out.
 	Layla: Fiona, could we use your phone to...
 	She stops mid-sentence, remembering your phone situation.
@@ -76,24 +93,29 @@ if Flags.get_level_flag("party_companion_staged") == true:
 	Layla stares at the floor.
 	do party_unhuddle()
 else
-	# TEMPLATE — solo path (no Layla); developer may rewrite.
-	Player: (One of those dates could be the code. I need to look them up.)
-	Player: (Not that my phone can get on the internet.)
+	# step 2.227: no solo playthrough (Layla is always with Fiona). fallback only, so the branch stays valid.
+	Player: This is a template line.
 Player: Anyway, do you think you could search for those dates quickly on your phone?
 Julian: ...
+do actor_effect("Julian", "lean_in")
 Julian: Perhaps. First, tell me. Why can't you really ask your professor?
-- It's none of your business
+- That's none of your business. [matters]
 	do Flags.set_level_flag("julian_refused_help", true)
+	do Flags.add_game_counter("layla_closeness", 1)
+	do actor_effect("Julian", "upright")
 	Player: That's none of your business.
 	Julian: Sure thing.
 	Julian: Then my phone is none of yours.
 	Julian: Good luck finding your dates.
 	Player: Yeah, well. Whatever.
 	=> post_confrontation_discussion
-- Tell him the truth
+- Tell him about Layla's deadline. [matters]
 	do Flags.set_level_flag("julian_nearly_told_truth", true)
+	do Flags.add_game_counter("layla_closeness", -1)
+	do actor_effect("Julian", "upright")
 	Player: Fine. Layla has some sequencing—
 	if Flags.get_level_flag("party_companion_staged") == true:
+		do actor_effect("Layla", "tremble")
 		Layla: Fiona...!
 	Julian: ...
 	Player: Hmm. Sorry, I forgot. We can't tell you.
@@ -111,6 +133,7 @@ Julian: I've told you everything I remember. The rest is your problem.
 
 ~ post_confrontation_discussion
 # julian walks off for good; from here it's fiona and layla alone (huddle layout).
+do actor_effect("Julian", "turn_away")
 Julian turns back to his work without another word.
 do party_dismiss()
 if Flags.get_level_flag("party_companion_staged") == true:
@@ -118,6 +141,7 @@ if Flags.get_level_flag("party_companion_staged") == true:
 		# TEMPLATE — Fiona nearly told Julian about the sequencing.
 		Layla: Fiona! You almost told him!
 		Player: I know. It slipped out. My bad.
+		do actor_effect("Layla", "tremble")
 		Layla: He's the last person who should know I haven't finished the sequencing...
 		Layla: Or maybe, second last. I don't know...
 		Player: Relax. He didn't get anything out of us.
@@ -131,12 +155,15 @@ if Flags.get_level_flag("party_companion_staged") == true:
 	Player: Hmmm. I'm not sure.
 	Player: All I know is that we need to find out that date one way or another.
 	Player: The date DNA was discovered.
-	Layla: Got it. Let's do what we can!
+	if Flags.get_game_counter("layla_closeness") < 0:
+		Layla: ...Okay.
+	else
+		do actor_effect("Layla", "jump")
+		Layla: Got it. Let's do what we can!
 	Player: Yep.
 else
-	# TEMPLATE — solo path (no Layla).
-	Player: (Well, that was a waste of time.)
-	Player: (The library has computers. I can look it up there.)
+	# step 2.227: no solo playthrough (Layla is always with Fiona). fallback only, so the branch stays valid.
+	Player: This is a template line.
 do Flags.set_level_flag("dna_dates_lookup_pending", true)
 => END
 

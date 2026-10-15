@@ -1,0 +1,145 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://conversation/props/thought_bubble.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://Dev/fiona_test_sprite.png" id="2_fiona"]
+[ext_resource type="Texture2D" path="res://Sprites/characters/fiona/fiona_naked_base.png" id="3_fiona_naked"]
+[ext_resource type="Texture2D" path="res://Icons/tank_top.png" id="4_tank"]
+[ext_resource type="FontFile" path="res://Fonts/VarelaRound-Regular.ttf" id="5_font"]
+[ext_resource type="Texture2D" path="res://Icons/thought_shorts.png" id="6_shorts"]
+
+[sub_resource type="Gradient" id="Gradient_glow"]
+colors = PackedColorArray(1, 0.55, 0.75, 0.7, 1, 0.75, 0.88, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_glow"]
+gradient = SubResource("Gradient_glow")
+width = 128
+height = 128
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[node name="LaylaThoughtBubble" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 800.0
+offset_bottom = 480.0
+mouse_filter = 2
+script = ExtResource("1_script")
+
+[node name="Items" type="Control" parent="."]
+layout_mode = 0
+offset_right = 800.0
+offset_bottom = 480.0
+mouse_filter = 2
+
+[node name="FionaDressed" type="Control" parent="Items"]
+layout_mode = 0
+offset_left = 190.0
+offset_top = 40.0
+offset_right = 330.0
+offset_bottom = 352.0
+mouse_filter = 2
+
+[node name="Clip" type="Control" parent="Items/FionaDressed"]
+clip_contents = true
+layout_mode = 0
+offset_right = 140.0
+offset_bottom = 312.0
+mouse_filter = 2
+
+[node name="Picture" type="TextureRect" parent="Items/FionaDressed/Clip"]
+layout_mode = 0
+offset_right = 140.0
+offset_bottom = 312.0
+mouse_filter = 2
+texture = ExtResource("2_fiona")
+expand_mode = 1
+
+[node name="Minus" type="Label" parent="Items"]
+layout_mode = 0
+offset_left = 338.0
+offset_top = 150.0
+offset_right = 398.0
+offset_bottom = 250.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.12, 0.1, 0.12, 1)
+theme_override_fonts/font = ExtResource("5_font")
+theme_override_font_sizes/font_size = 80
+text = "−"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TankTop" type="TextureRect" parent="Items"]
+layout_mode = 0
+offset_left = 404.0
+offset_top = 100.0
+offset_right = 504.0
+offset_bottom = 200.0
+mouse_filter = 2
+texture = ExtResource("4_tank")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Shorts" type="TextureRect" parent="Items"]
+layout_mode = 0
+offset_left = 404.0
+offset_top = 204.0
+offset_right = 504.0
+offset_bottom = 304.0
+mouse_filter = 2
+texture = ExtResource("6_shorts")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Equals" type="Label" parent="Items"]
+layout_mode = 0
+offset_left = 516.0
+offset_top = 150.0
+offset_right = 576.0
+offset_bottom = 250.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.12, 0.1, 0.12, 1)
+theme_override_fonts/font = ExtResource("5_font")
+theme_override_font_sizes/font_size = 80
+text = "="
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Reveal" type="Control" parent="."]
+layout_mode = 0
+offset_right = 800.0
+offset_bottom = 480.0
+mouse_filter = 2
+
+[node name="FionaBare" type="Control" parent="Reveal"]
+layout_mode = 0
+offset_left = 300.0
+offset_top = 30.0
+offset_right = 580.0
+offset_bottom = 360.0
+mouse_filter = 2
+
+[node name="Glow" type="TextureRect" parent="Reveal/FionaBare"]
+layout_mode = 0
+offset_left = -60.0
+offset_top = -20.0
+offset_right = 340.0
+offset_bottom = 350.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_glow")
+expand_mode = 1
+
+[node name="Clip" type="Control" parent="Reveal/FionaBare"]
+clip_contents = true
+layout_mode = 0
+offset_right = 280.0
+offset_bottom = 330.0
+mouse_filter = 2
+
+[node name="Picture" type="TextureRect" parent="Reveal/FionaBare/Clip"]
+layout_mode = 0
+offset_right = 280.0
+offset_bottom = 330.0
+mouse_filter = 2
+texture = ExtResource("3_fiona_naked")
+expand_mode = 1

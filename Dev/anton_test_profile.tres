@@ -8,10 +8,12 @@ actor_id = "Anton"
 default_scale = 1.0
 expressions = {
 "anton_bighead": "res://Dev/Pizza guy speaking sprite BIG HEAD.png",
+"anton_revised": "res://Dev/pizza_guy_revised.png",
 "anton_wide": "res://Dev/Pizza guy speaking sprite WIDE.png",
 "base": "res://Dev/pg_1.png",
 "jayce_bighead": "res://Dev/janitor speaking sprite BIG HEAD.png",
 "jayce_current": "res://Sprites/characters/janitor/janitor_base.png",
+"jayce_revised": "res://Dev/janitor_revised.png",
 "jayce_wide": "res://Dev/janitor speaking sprite WIDE.png",
 "pg1": "res://Dev/pg_1.png",
 "pg2": "res://Dev/pg_2.png",

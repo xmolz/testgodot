@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://dc67ce40dnw6"
+path="res://.godot/imported/apartment_chapter.dialogue-131d7c0ab91e6e4c87b5e8ca7c7d0e05.tres"
+
+[deps]
+
+source_file="res://dialogue/apartment_chapter.dialogue"
+dest_files=["res://.godot/imported/apartment_chapter.dialogue-131d7c0ab91e6e4c87b5e8ca7c7d0e05.tres"]
+
+[params]
+
+defaults=true

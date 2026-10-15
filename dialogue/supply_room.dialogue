@@ -1,0 +1,23 @@
+# res://dialogue/supply_room.dialogue
+# added by Claude (step 2.204): lines for the supply room's wall socket and charging spot.
+
+~ socket_examine
+if Flags.get_level_flag("supply_phone_charging") == true:
+	Player: (Layla's phone, charging away.)
+elif Flags.get_level_flag("supply_charger_plugged") == true:
+	Player: (The charger's plugged in. Now I just need something to charge.)
+else
+	Player: (A wall socket. One of the few things in here that still works.)
+=> END
+
+~ charger_plugged
+Player: (There. Plugged in.)
+=> END
+
+~ phone_plugged
+Player: (And... charging. Come on, little battery.)
+=> END
+
+~ phone_no_charger
+Player: (I'd need a charger for that first.)
+=> END

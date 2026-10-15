@@ -34,12 +34,16 @@ signal detached
 
 # how far below her placed position to look for the floor when settling her.
 @export var floor_snap_distance: float = 2000.0
+# child Marker2D under a player spawn marker that marks where her feet go after a teleport.
+@export var spawn_child_name: String = "CompanionSpawn"
 
 var _body: CharacterBody2D = null
 var _target: Node2D = null
 var _moving: bool = false
 # set on spawn and after every room snap; consumed on the next physics frame.
 var _snap_to_floor_pending: bool = true
+# set when a teleport action has already placed her, so room_changed leaves her alone.
+var _placed_for_teleport: bool = false
 
 func _ready() -> void:
 	_body = get_parent() as CharacterBody2D
@@ -68,6 +72,10 @@ func _try_auto_attach() -> void:
 # cosmetic limit: she pops in as the transition doors reopen rather than walking in.
 func _on_room_changed() -> void:
 	if not is_attached() or _body == null:
+		return
+	# a teleport action already placed her while the screen was covered.
+	if _placed_for_teleport:
+		_placed_for_teleport = false
 		return
 	var side: float = signf(_body.global_position.x - _target.global_position.x)
 	if side == 0.0:
@@ -159,3 +167,21 @@ func _snap_to_floor() -> void:
 	_body.velocity = Vector2.ZERO
 	_body.reset_physics_interpolation()
 
+# teleport actions call this through the "companion_followers" group right after moving
+# the player, while the screen is still covered. a CompanionSpawn child on the player's
+# marker says exactly where her feet go; without one she goes beside the player and is
+# settled onto the floor on the next physics frame.
+func place_for_teleport(player_marker: Node2D) -> void:
+	if not is_attached() or _body == null or not is_instance_valid(player_marker):
+		return
+	var spot := player_marker.get_node_or_null(spawn_child_name) as Node2D
+	if spot:
+		_body.global_position = spot.global_position
+		_snap_to_floor_pending = false
+	else:
+		_body.global_position = player_marker.global_position + Vector2(-follow_gap, 0.0)
+		_snap_to_floor_pending = true
+	_body.velocity = Vector2.ZERO
+	_moving = false
+	_placed_for_teleport = true
+	_body.reset_physics_interpolation()

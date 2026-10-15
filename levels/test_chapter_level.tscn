@@ -10,7 +10,7 @@
 [ext_resource type="Script" uid="uid://8c6cnm8lo25p" path="res://interactions/actions/ShowCustomDialogueAction.gd" id="10_showdialogue"]
 [ext_resource type="Script" uid="uid://bmq0s1nqhqi4j" path="res://data/InteractionResponse.gd" id="11_response"]
 [ext_resource type="Script" uid="uid://dltqnu07oiff" path="res://interactions/action.gd" id="12_action"]
-[ext_resource type="PackedScene" path="res://characters/layla_character.tscn" id="15_layla"]
+[ext_resource type="PackedScene" uid="uid://yide24s1eqs7" path="res://characters/layla_character.tscn" id="15_layla"]
 [ext_resource type="PackedScene" path="res://Interactables/Game World/room_exit_sign.tscn" id="16_exitsign"]
 [ext_resource type="Script" uid="uid://cwgcwktmorn74" path="res://Non Interactables/camera_region.gd" id="19_camregion"]
 [ext_resource type="PackedScene" uid="uid://d2d8nx3loto6b" path="res://Non Interactables/room_light_spill.tscn" id="20_lightspill"]
@@ -32,7 +32,7 @@
 [ext_resource type="Texture2D" uid="uid://hm8s280sxuhj" path="res://Backgrounds/Kit/Tiles/blue_square_tile.png" id="36_kitbluesquare"]
 [ext_resource type="PackedScene" uid="uid://hq61qnbtv16s" path="res://Interactables/Game World/University/faculty_door.tscn" id="37_facultydoor"]
 [ext_resource type="Script" uid="uid://c2dr7xqkw6807" path="res://interactions/actions/SlideWipeTeleportAction.gd" id="38_slidewipe"]
-[ext_resource type="PackedScene" path="res://characters/guard_character.tscn" id="39_guard"]
+[ext_resource type="PackedScene" uid="uid://bgorw24v40t2" path="res://characters/guard_character.tscn" id="39_guard"]
 [ext_resource type="Texture2D" uid="uid://blafp1o0joa83" path="res://Backgrounds/Kit/Faculty Offices/faculty_window_panel.png" id="40_facwindow"]
 [ext_resource type="PackedScene" path="res://Non Interactables/faculty_nameplate.tscn" id="41_nameplate"]
 [ext_resource type="Texture2D" uid="uid://bieosdrbw6hm7" path="res://Backgrounds/Kit/Grad Commons/grad_common_blinds.png" id="42_gradblinds"]
@@ -42,7 +42,7 @@
 [ext_resource type="Script" uid="uid://bmmibrx8idml8" path="res://Cutscenes/JulianIntroCutscene.gd" id="46_julian_cutscene"]
 [ext_resource type="PackedScene" path="res://Interactables/Game World/University/vending_machine.tscn" id="47_vending"]
 [ext_resource type="PackedScene" uid="uid://blsnuk51nt3by" path="res://Interactables/Game World/University/locker.tscn" id="49_locker"]
-[ext_resource type="PackedScene" path="res://characters/julian_character.tscn" id="50_julian"]
+[ext_resource type="PackedScene" uid="uid://bf8hpulvd8iyh" path="res://characters/julian_character.tscn" id="50_julian"]
 [ext_resource type="PackedScene" uid="uid://bgqned16xdtnl" path="res://Non Interactables/plant_pot.tscn" id="51_plantpot"]
 [ext_resource type="PackedScene" path="res://Non Interactables/wayfinding_sign.tscn" id="53_waysign"]
 [ext_resource type="Script" uid="uid://dosqfqbexlf5k" path="res://interactions/actions/OpenZoomViewAction.gd" id="54_zoomaction"]
@@ -60,6 +60,17 @@
 [ext_resource type="Texture2D" uid="uid://dip8tvtn5ln3x" path="res://Backgrounds/Kit/Library/books_3.png" id="66_books3"]
 [ext_resource type="Texture2D" uid="uid://dfi87aumh0ndd" path="res://Backgrounds/Kit/Library/books_4.png" id="67_books4"]
 [ext_resource type="PackedScene" path="res://Dev/anton_test_character.tscn" id="68_antontest"]
+[ext_resource type="PackedScene" path="res://Interactables/Game World/University/greene_bookshelf.tscn" id="69_greeneshelf"]
+[ext_resource type="PackedScene" path="res://Interactables/Game World/University/la_marr_portrait.tscn" id="73_lamarrportrait"]
+[ext_resource type="Texture2D" uid="uid://bcuenia86pemw" path="res://Backgrounds/Kit/Faculty Offices/Greene Office/desk_and_chair.png" id="74_greenedesk"]
+[ext_resource type="PackedScene" path="res://Interactables/Game World/University/greene_computer.tscn" id="75_greenecomputer"]
+[ext_resource type="PackedScene" path="res://Interactables/Game World/University/greene_journal.tscn" id="76_greenejournal"]
+[ext_resource type="Script" uid="uid://b4i2dd2kqpmun" path="res://interactions/actions/RemoveItemAction.gd" id="78_removeitem"]
+[ext_resource type="Script" uid="uid://8n5g87ifbnd5" path="res://interactions/actions/SetLevelFlagAction.gd" id="79_setlevelflag"]
+[ext_resource type="Resource" uid="uid://b6vkgspvt7kdt" path="res://dialogue/supply_room.dialogue" id="80_supplydialogue"]
+[ext_resource type="Texture2D" uid="uid://bnif5ucekt1is" path="res://Backgrounds/Kit/Lab Corridoor/type_c_charger.png" id="81_typeccharger"]
+[ext_resource type="Texture2D" uid="uid://85n38ig5pp52" path="res://Backgrounds/Kit/Lab Corridoor/layla_phone.png" id="82_laylaphone"]
+[ext_resource type="Script" uid="uid://c0qlbvvvye4ch" path="res://interactions/flag_visibility.gd" id="83_flagvis"]
 
 [sub_resource type="Gradient" id="Gradient_kit_lib_wall"]
 offsets = PackedFloat32Array(0, 0.09, 0.16, 0.5, 0.88, 1)
@@ -418,11 +429,129 @@ verb_id = "use"
 actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_fiona_locker_zoom")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_e4ea3"]
-size = Vector2(3980, 142)
+[sub_resource type="Resource" id="Resource_socket_charger_remove"]
+script = ExtResource("78_removeitem")
+item_id_to_remove = "type_c_charger"
+
+[sub_resource type="Resource" id="Resource_socket_charger_flag"]
+script = ExtResource("79_setlevelflag")
+flag_name = "supply_charger_plugged"
+
+[sub_resource type="Resource" id="Resource_socket_charger_line"]
+script = ExtResource("10_showdialogue")
+dialogue_resource = ExtResource("80_supplydialogue")
+dialogue_checkpoint = "charger_plugged"
+
+[sub_resource type="Resource" id="Resource_socket_use_charger"]
+script = ExtResource("11_response")
+verb_id = "use"
+required_item_id = "type_c_charger"
+actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_socket_charger_remove"), SubResource("Resource_socket_charger_flag"), SubResource("Resource_socket_charger_line")])
+
+[sub_resource type="Resource" id="Resource_socket_phone_remove"]
+script = ExtResource("78_removeitem")
+item_id_to_remove = "layla_phone"
+
+[sub_resource type="Resource" id="Resource_socket_phone_flag"]
+script = ExtResource("79_setlevelflag")
+flag_name = "supply_phone_charging"
+
+[sub_resource type="Resource" id="Resource_socket_phone_line"]
+script = ExtResource("10_showdialogue")
+dialogue_resource = ExtResource("80_supplydialogue")
+dialogue_checkpoint = "phone_plugged"
+
+[sub_resource type="Resource" id="Resource_socket_use_phone"]
+script = ExtResource("11_response")
+verb_id = "use"
+required_item_id = "layla_phone"
+required_flag_id = "supply_charger_plugged"
+actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_socket_phone_remove"), SubResource("Resource_socket_phone_flag"), SubResource("Resource_socket_phone_line")])
+
+[sub_resource type="Resource" id="Resource_socket_no_charger_line"]
+script = ExtResource("10_showdialogue")
+dialogue_resource = ExtResource("80_supplydialogue")
+dialogue_checkpoint = "phone_no_charger"
+
+[sub_resource type="Resource" id="Resource_socket_phone_no_charger"]
+script = ExtResource("11_response")
+verb_id = "use"
+required_item_id = "layla_phone"
+actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_socket_no_charger_line")])
+
+[sub_resource type="Resource" id="Resource_socket_examine_line"]
+script = ExtResource("10_showdialogue")
+dialogue_resource = ExtResource("80_supplydialogue")
+dialogue_checkpoint = "socket_examine"
+
+[sub_resource type="Resource" id="Resource_socket_examine"]
+script = ExtResource("11_response")
+verb_id = "examine"
+requires_walk = false
+actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_socket_examine_line")])
+
+[sub_resource type="Resource" id="Resource_greene_office_tp"]
+script = ExtResource("43_swingdoor")
+target_marker_name = "GreeneOfficeSpawnPoint"
+
+[sub_resource type="Resource" id="Resource_greene_office_use"]
+script = ExtResource("11_response")
+verb_id = "use"
+required_flag_id = "greene_office_unlocked"
+actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_greene_office_tp")])
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_greene_sun_add"]
+blend_mode = 1
+
+[sub_resource type="Gradient" id="Gradient_greene_sun"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.15)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_greene_sun"]
+gradient = SubResource("Gradient_greene_sun")
+width = 16
+fill_to = Vector2(0, 1)
+
+[sub_resource type="Gradient" id="Gradient_greene_desk_contact"]
+colors = PackedColorArray(0, 0, 0, 0.9, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_greene_desk_contact"]
+gradient = SubResource("Gradient_greene_desk_contact")
+width = 256
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="Gradient" id="Gradient_greene_desk_core"]
+offsets = PackedFloat32Array(0, 0.6, 1)
+colors = PackedColorArray(0, 0, 0, 0.85, 0, 0, 0, 0.7, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_greene_desk_core"]
+gradient = SubResource("Gradient_greene_desk_core")
+width = 256
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="Resource" id="Resource_greene_office_exit_tp"]
+script = ExtResource("43_swingdoor")
+target_marker_name = "GreeneDoorCorridorSpawnPoint"
+
+[sub_resource type="Resource" id="Resource_greene_office_exit_use"]
+script = ExtResource("11_response")
+verb_id = "use"
+actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_greene_office_exit_tp")])
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_greene_office_floor"]
+size = Vector2(2740, 142)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall"]
 size = Vector2(80, 1400)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cam_greene_office"]
+size = Vector2(2562, 1080)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e4ea3"]
+size = Vector2(3980, 142)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bathroom_floor"]
 size = Vector2(2400, 76)
@@ -1427,7 +1556,7 @@ position = Vector2(5671, 446)
 position = Vector2(5840, 451)
 
 [node name="LabGuard" parent="." unique_id=339138940 instance=ExtResource("39_guard")]
-position = Vector2(6523, 692)
+position = Vector2(6517, 745)
 
 [node name="SupplyRoomDoor" parent="." unique_id=1994429665 instance=ExtResource("37_facultydoor")]
 position = Vector2(9100, 424)
@@ -1469,14 +1598,14 @@ position = Vector2(7457, 330)
 
 [node name="LockerRowShadowLeft" type="Sprite2D" parent="." unique_id=1520253580]
 modulate = Color(1, 1, 1, 0.16)
-position = Vector2(8233, 116)
+position = Vector2(8234.3, 116)
 scale = Vector2(1, 0.9896552)
 texture = SubResource("GradientTexture2D_locker_shadow_l")
 centered = false
 
 [node name="LockerRowShadowRight" type="Sprite2D" parent="." unique_id=1026881199]
 modulate = Color(1, 1, 1, 0.28)
-position = Vector2(8686, 116)
+position = Vector2(8684.8, 116)
 scale = Vector2(1, 0.9896552)
 texture = SubResource("GradientTexture2D_locker_shadow_r")
 centered = false
@@ -1487,24 +1616,24 @@ scale = Vector2(1.0903851, 0.9333325)
 texture = SubResource("GradientTexture2D_locker_shadow_floor")
 
 [node name="FionaLocker" parent="." unique_id=323438803 instance=ExtResource("49_locker")]
-position = Vector2(8295, 690)
+position = Vector2(8296.3, 690)
 object_display_name = "Fiona's Locker"
 object_id = "locker_fiona"
 interactions = Array[ExtResource("11_response")]([SubResource("Resource_fiona_locker_use")])
 object_zoom_overlay_scene = ExtResource("55_fionalockerzoom")
 
 [node name="JulianLocker" parent="." unique_id=282017803 instance=ExtResource("49_locker")]
-position = Vector2(8406, 690)
+position = Vector2(8406.8, 690)
 object_display_name = "Julian's Locker"
 object_id = "locker_julian"
 
 [node name="LaylaLocker" parent="." unique_id=1386939792 instance=ExtResource("49_locker")]
-position = Vector2(8518, 690)
+position = Vector2(8517.3, 690)
 object_display_name = "Layla's Locker"
 object_id = "locker_layla"
 
 [node name="SpareLocker" parent="." unique_id=320511310 instance=ExtResource("49_locker")]
-position = Vector2(8629, 690)
+position = Vector2(8627.8, 690)
 object_id = "locker_spare"
 
 [node name="SupplyLockerShadowLeft" type="Sprite2D" parent="." unique_id=1510852891]
@@ -1543,6 +1672,23 @@ centered = false
 
 [node name="SupplyRoomSocket" parent="." unique_id=1824297421 instance=ExtResource("63_wallsocket")]
 position = Vector2(11820, 395)
+introduced_flag_id = "supply_charger_plugged"
+introduced_display_name = "Charger"
+interactions = Array[ExtResource("11_response")]([SubResource("Resource_socket_use_charger"), SubResource("Resource_socket_use_phone"), SubResource("Resource_socket_phone_no_charger"), SubResource("Resource_socket_examine")])
+
+[node name="SupplyDeskPhone" type="Sprite2D" parent="." unique_id=554679431]
+position = Vector2(11737.001, 445)
+scale = Vector2(0.27, 0.27)
+texture = ExtResource("82_laylaphone")
+script = ExtResource("83_flagvis")
+flag_name = "supply_phone_charging"
+
+[node name="SupplyDeskCharger" type="Sprite2D" parent="." unique_id=245405448]
+position = Vector2(11824, 414)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("81_typeccharger")
+script = ExtResource("83_flagvis")
+flag_name = "supply_charger_plugged"
 
 [node name="DevAntonTest" parent="." unique_id=61616972 instance=ExtResource("68_antontest")]
 position = Vector2(1400, 690)
@@ -1557,12 +1703,16 @@ object_id = "library_bookshelf_right"
 
 [node name="FacultyDoorTemplate" parent="." unique_id=224867791 instance=ExtResource("37_facultydoor")]
 position = Vector2(2973, 4926)
+object_display_name = "Dr. Song's Office"
+object_id = "song_office_door"
+interactions = Array[ExtResource("11_response")]([])
 
 [node name="DrSongNameplate" parent="." unique_id=906827584 instance=ExtResource("41_nameplate")]
 position = Vector2(2973, 4634)
 
 [node name="SongCardReader" parent="." unique_id=2028946723 instance=ExtResource("58_cardreader")]
 position = Vector2(2804, 4931)
+object_id = "song_card_reader"
 
 [node name="FionaWorkstation" parent="." unique_id=883993605 instance=ExtResource("44_workstation")]
 position = Vector2(8850, 3699)
@@ -1597,6 +1747,7 @@ plate_text = "Dr. Duflo"
 
 [node name="DufloCardReader" parent="." unique_id=1013372629 instance=ExtResource("58_cardreader")]
 position = Vector2(181, 4931)
+object_id = "duflo_card_reader"
 
 [node name="KingDoor" parent="." unique_id=1749313912 instance=ExtResource("37_facultydoor")]
 position = Vector2(900, 4926)
@@ -1610,6 +1761,7 @@ plate_text = "Dr. King"
 
 [node name="KingCardReader" parent="." unique_id=274805784 instance=ExtResource("58_cardreader")]
 position = Vector2(731, 4931)
+object_id = "king_card_reader"
 
 [node name="OfficesPainting" parent="." unique_id=573967697 instance=ExtResource("60_humanitiespainting")]
 position = Vector2(1220, 4830)
@@ -1632,6 +1784,7 @@ plate_text = "Dr. Ember"
 
 [node name="EmberCardReader" parent="." unique_id=46984101 instance=ExtResource("58_cardreader")]
 position = Vector2(5569, 4931)
+object_id = "ember_card_reader"
 
 [node name="GreyDoor" parent="." unique_id=1781329894 instance=ExtResource("37_facultydoor")]
 position = Vector2(5850, 4926)
@@ -1645,21 +1798,21 @@ plate_text = "Dr. Grey"
 
 [node name="GreyCardReader" parent="." unique_id=1568008844 instance=ExtResource("58_cardreader")]
 position = Vector2(6019, 4931)
+object_id = "grey_card_reader"
 
 [node name="GreeneDoor" parent="." unique_id=1142155763 instance=ExtResource("37_facultydoor")]
 position = Vector2(7550, 4926)
 object_display_name = "Dr. Greene's Office"
 object_id = "greene_office_door"
-interactions = Array[ExtResource("11_response")]([])
+interactions = Array[ExtResource("11_response")]([SubResource("Resource_greene_office_use")])
 
 [node name="GreeneNameplate" parent="." unique_id=932293952 instance=ExtResource("41_nameplate")]
 position = Vector2(7550, 4634)
 plate_text = "Dr. Greene"
 
-[node name="GreeneKeypad" parent="." unique_id=428337472 instance=ExtResource("23_labkeypad")]
+[node name="GreeneCardReader" parent="." unique_id=602600925 instance=ExtResource("58_cardreader")]
 position = Vector2(7719, 4931)
-object_id = "greene_office_keypad"
-interactions = Array[ExtResource("11_response")]([])
+object_id = "greene_office_card_reader"
 
 [node name="WingPainting" parent="." unique_id=944955686 instance=ExtResource("59_sciencepainting")]
 position = Vector2(8050, 4830)
@@ -1671,7 +1824,7 @@ position = Vector2(5150, 5188)
 position = Vector2(7320, 5188)
 
 [node name="JulianCharacter" parent="." unique_id=79298766 instance=ExtResource("50_julian")]
-position = Vector2(7310, 3775)
+position = Vector2(7309, 3717)
 
 [node name="LibrarySignRight" parent="." unique_id=735402489 instance=ExtResource("53_waysign")]
 position = Vector2(3620, 178)
@@ -1733,14 +1886,237 @@ position = Vector2(7160, 1955)
 object_id = "elevator_4f"
 metadata/floor_id = "4F"
 
+[node name="GreeneOfficeKitWall" type="TextureRect" parent="." unique_id=200746831]
+layout_mode = 0
+offset_left = 13440.0
+offset_right = 16000.0
+offset_bottom = 670.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_kit_lib_wall")
+
+[node name="GreeneOfficeWinHalo" type="TextureRect" parent="." unique_id=1289179965]
+layout_mode = 0
+offset_left = 14188.0
+offset_top = 20.0
+offset_right = 15092.0
+offset_bottom = 656.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_lib_win_halo")
+
+[node name="GreeneOfficeWinSky" type="TextureRect" parent="." unique_id=1841925479]
+layout_mode = 0
+offset_left = 14300.0
+offset_top = 108.0
+offset_right = 14980.0
+offset_bottom = 572.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_lib_win_sky")
+
+[node name="GreeneOfficeWinFrame" type="TextureRect" parent="." unique_id=977718727]
+layout_mode = 0
+offset_left = 14273.0
+offset_top = 88.0
+offset_right = 16310.0
+offset_bottom = 1126.0
+scale = Vector2(0.36, 0.5)
+mouse_filter = 2
+texture = ExtResource("31_kitlibwindow")
+
+[node name="GreeneOfficeWinSillShadow" type="TextureRect" parent="." unique_id=658176037]
+layout_mode = 0
+offset_left = 14273.0
+offset_top = 607.0
+offset_right = 15007.0
+offset_bottom = 627.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_lib_floor_shadow_down")
+
+[node name="GreeneOfficeKitFloor" type="TextureRect" parent="." unique_id=820953144]
+texture_repeat = 2
+layout_mode = 0
+offset_left = 13440.0
+offset_top = 670.0
+offset_right = 19840.0
+offset_bottom = 1695.0
+scale = Vector2(0.4, 0.4)
+mouse_filter = 2
+texture = ExtResource("29_kitredcarpet")
+stretch_mode = 1
+
+[node name="GreeneOfficeKitBaseboard" type="ColorRect" parent="." unique_id=2064414084]
+layout_mode = 0
+offset_left = 13440.0
+offset_top = 656.0
+offset_right = 16000.0
+offset_bottom = 672.0
+mouse_filter = 2
+color = Color(0.376, 0.251, 0.149, 1)
+
+[node name="GreeneOfficeKitWallSeamShadow" type="TextureRect" parent="." unique_id=1687982752]
+layout_mode = 0
+offset_left = 13440.0
+offset_top = 520.0
+offset_right = 16000.0
+offset_bottom = 656.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_lib_shadow_up")
+
+[node name="GreeneOfficeKitFloorSeamShadow" type="TextureRect" parent="." unique_id=604757768]
+layout_mode = 0
+offset_left = 13440.0
+offset_top = 672.0
+offset_right = 16000.0
+offset_bottom = 784.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_faculty_red_floor_shadow_down")
+
+[node name="GreeneOfficeKitBottomShadow" type="TextureRect" parent="." unique_id=1722875013]
+layout_mode = 0
+offset_left = 13440.0
+offset_top = 920.0
+offset_right = 16000.0
+offset_bottom = 1080.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_faculty_red_floor_shadow_up")
+
+[node name="GreeneOfficeSunPatch" type="Node2D" parent="." unique_id=1949173324]
+modulate = Color(1, 0.86, 0.62, 0.22)
+material = SubResource("CanvasItemMaterial_greene_sun_add")
+position = Vector2(0, 35.6)
+
+[node name="PaneBackLeft" type="Polygon2D" parent="GreeneOfficeSunPatch" unique_id=1722260920]
+use_parent_material = true
+texture = SubResource("GradientTexture2D_greene_sun")
+polygon = PackedVector2Array(14310, 726, 14632, 726, 14632, 850, 14310, 850)
+uv = PackedVector2Array(0, 0, 16, 0, 16, 30.6, 0, 30.6)
+
+[node name="PaneBackRight" type="Polygon2D" parent="GreeneOfficeSunPatch" unique_id=696325435]
+use_parent_material = true
+texture = SubResource("GradientTexture2D_greene_sun")
+polygon = PackedVector2Array(14648, 726, 14973, 726, 14973, 850, 14648, 850)
+uv = PackedVector2Array(0, 0, 16, 0, 16, 30.6, 0, 30.6)
+
+[node name="PaneFrontLeft" type="Polygon2D" parent="GreeneOfficeSunPatch" unique_id=1958395766]
+use_parent_material = true
+texture = SubResource("GradientTexture2D_greene_sun")
+polygon = PackedVector2Array(14310, 862, 14632, 862, 14632, 1000, 14310, 1000)
+uv = PackedVector2Array(0, 33.3, 16, 33.3, 16, 64, 0, 64)
+
+[node name="PaneFrontRight" type="Polygon2D" parent="GreeneOfficeSunPatch" unique_id=1113568603]
+use_parent_material = true
+texture = SubResource("GradientTexture2D_greene_sun")
+polygon = PackedVector2Array(14648, 862, 14973, 862, 14973, 1000, 14648, 1000)
+uv = PackedVector2Array(0, 33.3, 16, 33.3, 16, 64, 0, 64)
+
+[node name="GreeneOfficeLaMarrPortrait" parent="." unique_id=1434216887 instance=ExtResource("73_lamarrportrait")]
+position = Vector2(14000, 305)
+
+[node name="GreeneOfficePhotoPlaceholder1" type="ColorRect" parent="." unique_id=708948805]
+layout_mode = 0
+offset_left = 15105.0
+offset_top = 220.0
+offset_right = 15225.0
+offset_bottom = 370.0
+mouse_filter = 2
+color = Color(0.85, 0.84, 0.8, 0.6)
+
+[node name="GreeneOfficePhotoPlaceholder2" type="ColorRect" parent="." unique_id=2059944749]
+layout_mode = 0
+offset_left = 15105.0
+offset_top = 410.0
+offset_right = 15225.0
+offset_bottom = 560.0
+mouse_filter = 2
+color = Color(0.85, 0.84, 0.8, 0.6)
+
+[node name="GreeneDeskShadow" type="Sprite2D" parent="." unique_id=228845074]
+position = Vector2(14638.8, 753.6)
+scale = Vector2(4.5, 1.72)
+texture = SubResource("GradientTexture2D_greene_desk_contact")
+
+[node name="GreeneDeskShadowCore" type="Sprite2D" parent="." unique_id=1676348657]
+position = Vector2(14638.8, 751.6)
+scale = Vector2(2.8, 0.8)
+texture = SubResource("GradientTexture2D_greene_desk_core")
+
+[node name="GreeneDesk" type="Sprite2D" parent="." unique_id=952086918]
+position = Vector2(14310.8, 442)
+scale = Vector2(0.41, 0.41)
+texture = ExtResource("74_greenedesk")
+centered = false
+
+[node name="GreeneComputer" parent="." unique_id=428157316 instance=ExtResource("75_greenecomputer")]
+position = Vector2(14540.4, 520.5)
+scale = Vector2(0.41, 0.41)
+
+[node name="GreeneJournal" parent="." unique_id=116518556 instance=ExtResource("76_greenejournal")]
+position = Vector2(14827.4, 537.1)
+scale = Vector2(0.41, 0.41)
+
+[node name="GreeneShelfContactShadow" type="TextureRect" parent="." unique_id=805196060]
+modulate = Color(1, 1, 1, 0.9)
+layout_mode = 0
+offset_left = 15321.5
+offset_top = 690.0
+offset_right = 15878.5
+offset_bottom = 714.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_lib_floor_shadow_down")
+
+[node name="GreeneBookshelf" parent="." unique_id=1264628704 instance=ExtResource("69_greeneshelf")]
+position = Vector2(15600, 419.25)
+
+[node name="GreeneOfficeExitDoor" parent="." unique_id=1161562218 instance=ExtResource("37_facultydoor")]
+position = Vector2(13700, 424)
+object_display_name = "Corridor Door"
+object_id = "greene_office_exit_door"
+interactions = Array[ExtResource("11_response")]([SubResource("Resource_greene_office_exit_use")])
+
+[node name="GreeneOfficeFloor" type="StaticBody2D" parent="." unique_id=670114112]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GreeneOfficeFloor" unique_id=685951751]
+position = Vector2(14720, 856)
+shape = SubResource("RectangleShape2D_greene_office_floor")
+
+[node name="GreeneOfficeLeftWall" type="StaticBody2D" parent="." unique_id=1934396078]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GreeneOfficeLeftWall" unique_id=1437098055]
+position = Vector2(13380, 300)
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="GreeneOfficeRightWall" type="StaticBody2D" parent="." unique_id=1406310668]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GreeneOfficeRightWall" unique_id=1443800403]
+position = Vector2(16060, 300)
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="GreeneOfficeSpawnPoint" type="Marker2D" parent="." unique_id=1234282843]
+position = Vector2(13700, 700)
+
+[node name="CompanionSpawn" type="Marker2D" parent="GreeneOfficeSpawnPoint" unique_id=1492728778]
+position = Vector2(170, 88)
+
+[node name="GreeneDoorCorridorSpawnPoint" type="Marker2D" parent="." unique_id=1497030145]
+position = Vector2(7550, 5200)
+
+[node name="CompanionSpawn" type="Marker2D" parent="GreeneDoorCorridorSpawnPoint" unique_id=970954839]
+position = Vector2(170, 88)
+
+[node name="GreeneOfficeCameraRegion" type="Area2D" parent="." unique_id=328950266]
+script = ExtResource("19_camregion")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GreeneOfficeCameraRegion" unique_id=557855241]
+position = Vector2(14720, 542)
+shape = SubResource("RectangleShape2D_cam_greene_office")
+
 [node name="LevelStateManager" parent="." unique_id=1948342172 instance=ExtResource("5_lsm")]
 level_id = "chapter_test"
 
 [node name="Layla" parent="." unique_id=1983909141 instance=ExtResource("15_layla")]
-position = Vector2(1241, 778)
+position = Vector2(1241, 788)
 
 [node name="Player" parent="." unique_id=1000725987 instance=ExtResource("3_player")]
-position = Vector2(907, 550)
+position = Vector2(909, 602)
 
 [node name="LibTableSet" type="TextureRect" parent="." unique_id=511418702]
 layout_mode = 0
@@ -1780,7 +2156,7 @@ layer = 2
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=108077512]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=298668331]
-position = Vector2(1920, 846)
+position = Vector2(1920, 856)
 shape = SubResource("RectangleShape2D_e4ea3")
 
 [node name="LeftWall" type="StaticBody2D" parent="." unique_id=1270229109]
@@ -1798,7 +2174,7 @@ shape = SubResource("RectangleShape2D_wall")
 [node name="BathroomFloor" type="StaticBody2D" parent="." unique_id=1112424788]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BathroomFloor" unique_id=391979387]
-position = Vector2(1290, 2350)
+position = Vector2(1290, 2360)
 shape = SubResource("RectangleShape2D_bathroom_floor")
 
 [node name="BathroomLeftWall" type="StaticBody2D" parent="." unique_id=1118468322]
@@ -1818,6 +2194,9 @@ position = Vector2(1149, 2092)
 
 [node name="HallwaySpawnPoint" type="Marker2D" parent="." unique_id=1856822715]
 position = Vector2(3550, 700)
+
+[node name="CompanionSpawn" type="Marker2D" parent="HallwaySpawnPoint" unique_id=1061364865]
+position = Vector2(-170, 88)
 
 [node name="ExitToBathroom" parent="." unique_id=837312589 instance=ExtResource("16_exitsign")]
 position = Vector2(3600, 201)
@@ -1850,7 +2229,7 @@ shape = SubResource("RectangleShape2D_cam_bathroom")
 [node name="LabCorridorFloor" type="StaticBody2D" parent="." unique_id=125227047]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LabCorridorFloor" unique_id=1372963526]
-position = Vector2(7200, 846)
+position = Vector2(7200, 856)
 shape = SubResource("RectangleShape2D_lab_floor")
 
 [node name="LabCorridorLeftWall" type="StaticBody2D" parent="." unique_id=605344397]
@@ -1867,6 +2246,9 @@ shape = SubResource("RectangleShape2D_wall")
 
 [node name="LabCorridorSpawnPoint" type="Marker2D" parent="." unique_id=170156906]
 position = Vector2(5000, 700)
+
+[node name="CompanionSpawn" type="Marker2D" parent="LabCorridorSpawnPoint" unique_id=1503512661]
+position = Vector2(170, 88)
 
 [node name="ExitToLabCorridor" parent="." unique_id=180152002 instance=ExtResource("16_exitsign")]
 position = Vector2(1950, 1755)
@@ -1891,7 +2273,7 @@ shape = SubResource("RectangleShape2D_cam_lab")
 [node name="SupplyRoomFloor" type="StaticBody2D" parent="." unique_id=689779311]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SupplyRoomFloor" unique_id=1321641378]
-position = Vector2(11520, 846)
+position = Vector2(11520, 856)
 shape = SubResource("RectangleShape2D_supply_floor")
 
 [node name="SupplyRoomLeftWall" type="StaticBody2D" parent="." unique_id=841104163]
@@ -1909,8 +2291,14 @@ shape = SubResource("RectangleShape2D_wall")
 [node name="SupplyRoomSpawnPoint" type="Marker2D" parent="." unique_id=432815619]
 position = Vector2(12200, 700)
 
+[node name="CompanionSpawn" type="Marker2D" parent="SupplyRoomSpawnPoint" unique_id=900057490]
+position = Vector2(-170, 88)
+
 [node name="SupplyDoorCorridorSpawnPoint" type="Marker2D" parent="." unique_id=381604859]
 position = Vector2(9100, 700)
+
+[node name="CompanionSpawn" type="Marker2D" parent="SupplyDoorCorridorSpawnPoint" unique_id=702058751]
+position = Vector2(170, 88)
 
 [node name="SupplyRoomCameraRegion" type="Area2D" parent="." unique_id=237473203]
 script = ExtResource("19_camregion")
@@ -1931,25 +2319,43 @@ peak_alpha = 0.5
 [node name="Hub2FSpawnLeft" type="Marker2D" parent="." unique_id=1093993689]
 position = Vector2(500, 2092)
 
+[node name="CompanionSpawn" type="Marker2D" parent="Hub2FSpawnLeft" unique_id=639682062]
+position = Vector2(170, 233)
+
 [node name="Hub2FSpawnRight" type="Marker2D" parent="." unique_id=733891462]
 position = Vector2(1800, 2092)
+
+[node name="CompanionSpawn" type="Marker2D" parent="Hub2FSpawnRight" unique_id=81216787]
+position = Vector2(170, 233)
 
 [node name="Hub3FSpawnRight" type="Marker2D" parent="." unique_id=27272964]
 position = Vector2(4800, 2092)
 
+[node name="CompanionSpawn" type="Marker2D" parent="Hub3FSpawnRight" unique_id=703347900]
+position = Vector2(170, 233)
+
 [node name="Hub4FSpawnLeft" type="Marker2D" parent="." unique_id=905217658]
 position = Vector2(6620, 2092)
+
+[node name="CompanionSpawn" type="Marker2D" parent="Hub4FSpawnLeft" unique_id=119407152]
+position = Vector2(-170, 233)
 
 [node name="Hub4FSpawnRight" type="Marker2D" parent="." unique_id=1620879056]
 position = Vector2(7800, 2092)
 
+[node name="CompanionSpawn" type="Marker2D" parent="Hub4FSpawnRight" unique_id=1097524958]
+position = Vector2(170, 233)
+
 [node name="Elevator2FSpawnPoint" type="Marker2D" parent="." unique_id=1005057453]
 position = Vector2(1160, 2153)
+
+[node name="CompanionSpawn" type="Marker2D" parent="Elevator2FSpawnPoint" unique_id=1151188708]
+position = Vector2(-170, 172)
 
 [node name="Floor3FloorBody" type="StaticBody2D" parent="." unique_id=458461549]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor3FloorBody" unique_id=1195253434]
-position = Vector2(4290, 2350)
+position = Vector2(4290, 2360)
 shape = SubResource("RectangleShape2D_bathroom_floor")
 
 [node name="Floor3LeftWall" type="StaticBody2D" parent="." unique_id=1898455101]
@@ -1967,6 +2373,9 @@ shape = SubResource("RectangleShape2D_wall")
 [node name="Elevator3FSpawnPoint" type="Marker2D" parent="." unique_id=1302768595]
 position = Vector2(4160, 2153)
 
+[node name="CompanionSpawn" type="Marker2D" parent="Elevator3FSpawnPoint" unique_id=67043827]
+position = Vector2(-170, 172)
+
 [node name="Floor3CameraRegion" type="Area2D" parent="." unique_id=406989046]
 script = ExtResource("19_camregion")
 
@@ -1977,7 +2386,7 @@ shape = SubResource("RectangleShape2D_cam_bathroom")
 [node name="Floor4FloorBody" type="StaticBody2D" parent="." unique_id=170774576]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor4FloorBody" unique_id=2050924558]
-position = Vector2(7290, 2350)
+position = Vector2(7290, 2360)
 shape = SubResource("RectangleShape2D_bathroom_floor")
 
 [node name="Floor4LeftWall" type="StaticBody2D" parent="." unique_id=1440005602]
@@ -1995,6 +2404,9 @@ shape = SubResource("RectangleShape2D_wall")
 [node name="Elevator4FSpawnPoint" type="Marker2D" parent="." unique_id=876130934]
 position = Vector2(7160, 2153)
 
+[node name="CompanionSpawn" type="Marker2D" parent="Elevator4FSpawnPoint" unique_id=647367604]
+position = Vector2(-170, 172)
+
 [node name="Floor4CameraRegion" type="Area2D" parent="." unique_id=656838898]
 script = ExtResource("19_camregion")
 
@@ -2005,7 +2417,7 @@ shape = SubResource("RectangleShape2D_cam_bathroom")
 [node name="Floor3CorrFloorBody" type="StaticBody2D" parent="." unique_id=1572151439]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor3CorrFloorBody" unique_id=1744726195]
-position = Vector2(7200, 3846)
+position = Vector2(7200, 3856)
 shape = SubResource("RectangleShape2D_grad_floor")
 
 [node name="Floor3CorrLeftWall" type="StaticBody2D" parent="." unique_id=1119560459]
@@ -2023,6 +2435,9 @@ shape = SubResource("RectangleShape2D_wall")
 [node name="Floor3CorridorSpawnPoint" type="Marker2D" parent="." unique_id=1706614923]
 position = Vector2(5000, 3700)
 
+[node name="CompanionSpawn" type="Marker2D" parent="Floor3CorridorSpawnPoint" unique_id=1952828594]
+position = Vector2(170, 88)
+
 [node name="Floor3CorrCameraRegion" type="Area2D" parent="." unique_id=60725396]
 script = ExtResource("19_camregion")
 
@@ -2036,7 +2451,7 @@ position = Vector2(4149, 2092)
 [node name="Floor4LibFloorBody" type="StaticBody2D" parent="." unique_id=1378344723]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor4LibFloorBody" unique_id=1795182713]
-position = Vector2(1920, 5346)
+position = Vector2(1920, 5356)
 shape = SubResource("RectangleShape2D_e4ea3")
 
 [node name="Floor4LibLeftWall" type="StaticBody2D" parent="." unique_id=1136856136]
@@ -2054,8 +2469,14 @@ shape = SubResource("RectangleShape2D_wall")
 [node name="Floor4LibrarySpawnPoint" type="Marker2D" parent="." unique_id=553432375]
 position = Vector2(3550, 5200)
 
+[node name="CompanionSpawn" type="Marker2D" parent="Floor4LibrarySpawnPoint" unique_id=727787987]
+position = Vector2(-170, 88)
+
 [node name="FacultyDoorSpawnPoint" type="Marker2D" parent="." unique_id=508995474]
 position = Vector2(1400, 5200)
+
+[node name="CompanionSpawn" type="Marker2D" parent="FacultyDoorSpawnPoint" unique_id=1308191725]
+position = Vector2(-170, 88)
 
 [node name="Floor4LibCameraRegion" type="Area2D" parent="." unique_id=1588191957]
 script = ExtResource("19_camregion")
@@ -2067,7 +2488,7 @@ shape = SubResource("RectangleShape2D_cam_strip")
 [node name="Floor4CorrFloorBody" type="StaticBody2D" parent="." unique_id=1903899779]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor4CorrFloorBody" unique_id=1966278927]
-position = Vector2(6720, 5346)
+position = Vector2(6720, 5356)
 shape = SubResource("RectangleShape2D_e4ea3")
 
 [node name="Floor4CorrLeftWall" type="StaticBody2D" parent="." unique_id=762727734]
@@ -2084,6 +2505,9 @@ shape = SubResource("RectangleShape2D_wall")
 
 [node name="Floor4CorridorSpawnPoint" type="Marker2D" parent="." unique_id=1442544696]
 position = Vector2(5000, 5200)
+
+[node name="CompanionSpawn" type="Marker2D" parent="Floor4CorridorSpawnPoint" unique_id=760710689]
+position = Vector2(170, 88)
 
 [node name="Floor4CorrCameraRegion" type="Area2D" parent="." unique_id=2003266707]
 script = ExtResource("19_camregion")

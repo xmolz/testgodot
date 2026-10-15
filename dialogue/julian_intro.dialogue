@@ -35,18 +35,21 @@ Player: Well, for us at the genomics lab, the biochem department poses a real th
 Player: Since we compete for the same sources of funding.
 Layla: Oh... that's unfortunate.
 Player: Tell me about it. 
-Player: Anyway, why'd you not tell him you're the new Research Assistant for the Genomics lab?
+Player: Anyway, why didn't you tell him you're the new Research Assistant for the Genomics lab?
 Layla: I don't know! He seemed so intimidating. 
 Layla: I thought he'd dismiss me if I told him I'm just an undergrad RA.
 What do you want to say to Layla?
 
-- Everyone starts somewhere
-
-	Player: I'd suggest you not to worry too much about it. 
+- Everyone starts somewhere [matters]
+	do Flags.set_level_flag("layla_julian_intro_encouraged", true)
+	do Flags.add_game_counter("layla_closeness", 1)
+	Player: I'd suggest you not worry too much about it.
 	Player: All of us start somewhere.
 	Layla: Yeah... you're right.
 	Layla: Thanks, Fiona.
-- Right
+- Right [matters]
+	do Flags.set_level_flag("layla_julian_intro_agreed", true)
+	do Flags.add_game_counter("layla_closeness", -0.5)
 	Player: Yeah... an undergrad RA holds basically no standing amongst grad students.
 	Player: He might've dismissed you indeed.
 	Layla: Yeah...
@@ -55,7 +58,8 @@ What do you want to say to Layla?
 
 Player: Right. Anyway, I don't like him much.
 Player: He's good at his work though. Annoyingly.
-Layla: Well if you don't like him, I don't like him.
+if Flags.get_level_flag("layla_julian_intro_agreed") == false and Flags.get_game_counter("layla_closeness") >= 0:
+	Layla: Well if you don't like him, I don't like him.
 Layla: Also, who was he talking to like that? On the phone?
 Player: (I suppose he did say something about some wrong numbers getting signed off...)
 Player: (Wonder what that was about.)

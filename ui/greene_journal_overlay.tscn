@@ -1,0 +1,22 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://ui/journal_overlay.tscn" id="1_overlay"]
+[ext_resource type="Script" path="res://data/JournalPageData.gd" id="2_page"]
+
+[sub_resource type="Resource" id="Resource_greene_page_1"]
+script = ExtResource("2_page")
+page_index = 0
+page_text = "Monday.\n\nThe sequencer jammed again. Third time this month. The machine is older than half my students, and it sulks like one.\n\nMust order more pipette tips. And must stop leaving my reading glasses in the cold room."
+
+[sub_resource type="Resource" id="Resource_greene_page_2"]
+script = ExtResource("2_page")
+page_index = 1
+page_text = "Watched one of her pictures again last night. They called her the girl who was too beautiful, and for once the studio was right.\n\nHer birthday comes round again on the twenty-eighth of July. I always raise a glass to her that night, whatever else is going on."
+
+[sub_resource type="Resource" id="Resource_greene_page_3"]
+script = ExtResource("2_page")
+page_index = 2
+page_text = "Facilities sent another memo. Every lab code must now change once a year, as if a man my age can be trusted to remember a new string of numbers every January.\n\nSo this year I chose a date I could never forget.\n\nNote to self: do NOT write the code down. Not even here."
+
+[node name="GreeneJournalOverlay" instance=ExtResource("1_overlay")]
+journal_entries = Array[ExtResource("2_page")]([SubResource("Resource_greene_page_1"), SubResource("Resource_greene_page_2"), SubResource("Resource_greene_page_3")])

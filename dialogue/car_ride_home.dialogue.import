@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://bl2broee8eco3"
+path="res://.godot/imported/car_ride_home.dialogue-483a1080b22c7570d76f46e406621f34.tres"
+
+[deps]
+
+source_file="res://dialogue/car_ride_home.dialogue"
+dest_files=["res://.godot/imported/car_ride_home.dialogue-483a1080b22c7570d76f46e406621f34.tres"]
+
+[params]
+
+defaults=true

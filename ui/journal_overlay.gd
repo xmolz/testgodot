@@ -1,6 +1,7 @@
 extends CanvasLayer
 
 var custom_font = preload("res://Fonts/VarelaRound-Regular.ttf")
+var journal_text_font = preload("res://Fonts/varela_round_italic.tres")
 
 signal journal_closed
 
@@ -108,7 +109,7 @@ func update_display():
 	# stack the transparent png
 	for entry in journal_entries:
 		# safety check if an array
-		if not entry or not entry.page_texture:
+		if not entry or (not entry.page_texture and entry.page_text.is_empty()):
 			continue
 			
 		# check if this layer requires a flag to be visible
@@ -125,9 +126,9 @@ func update_display():
 		
 		# add the image to the correct side of the book
 		if entry.page_index == left_idx:
-			_add_image_layer(left_page_layers, entry.page_texture)
+			_add_entry_layer(left_page_layers, entry)
 		elif entry.page_index == right_idx:
-			_add_image_layer(right_page_layers, entry.page_texture)
+			_add_entry_layer(right_page_layers, entry)
 
 	# update ui
 	page_indicator_label.text = str(current_spread + 1) + " / " + str(total_spreads)
@@ -143,6 +144,30 @@ func _add_image_layer(parent: Control, tex: Texture2D):
 	rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	parent.add_child(rect)
+
+# step 2.200: a page can be a painted png (page_texture) or, until one is painted, plain
+# handwritten-style text (page_text). when both are set, the png wins.
+func _add_entry_layer(parent: Control, entry: JournalPageData):
+	if entry.page_texture:
+		_add_image_layer(parent, entry.page_texture)
+	elif not entry.page_text.is_empty():
+		_add_text_layer(parent, entry.page_text)
+
+func _add_text_layer(parent: Control, text: String):
+	var label = Label.new()
+	label.text = text
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+	label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	label.offset_left = 28
+	label.offset_top = 28
+	label.offset_right = -28
+	label.offset_bottom = -28
+	label.add_theme_font_override("font", journal_text_font)
+	label.add_theme_font_size_override("font_size", 40 if OS.has_feature("mobile") else 24)
+	label.add_theme_color_override("font_color", Color(0.17, 0.13, 0.1, 1))
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	parent.add_child(label)
 
 func _on_prev_pressed():
 	if SoundManager: SoundManager.play_sfx("ui_click")

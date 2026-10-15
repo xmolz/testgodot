@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://48xvb6j61ly0"
+path="res://.godot/imported/greene_office.dialogue-3a9bcd8cbe83f563b5a6ba4e35219b9f.tres"
+
+[deps]
+
+source_file="res://dialogue/greene_office.dialogue"
+dest_files=["res://.godot/imported/greene_office.dialogue-3a9bcd8cbe83f563b5a6ba4e35219b9f.tres"]
+
+[params]
+
+defaults=true

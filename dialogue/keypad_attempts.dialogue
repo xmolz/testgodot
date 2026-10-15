@@ -10,9 +10,8 @@ if Flags.get_level_flag("keypad_companion_present") == true:
 	Layla: Let's look around more.
 	Player: Yep.
 else
-	# TEMPLATE — solo path (no Layla); developer may rewrite.
-	Player: (So it isn't his birthdate.)
-	Player: (I suppose it would've been too easy if it were.)
+	# step 2.227: no solo playthrough (Layla is always with Fiona). fallback only, so the branch stays valid.
+	Player: This is a template line.
 => after_portrait_date
 
 ~ ember_birthday
@@ -22,19 +21,19 @@ if Flags.get_level_flag("keypad_companion_present") == true:
 	else
 		Player: Well, so it isn't Dr. Ember's birthdate.
 	Layla: Right. That one was a long shot anyway.
-	Player: Yeah, I don't think there's anything like that between them.
-	Layla: You think so?
-	Layla: I think Dr. Ember might have a thing for him...
-	Player: Even though she's always at his throat?
-	Layla: Yeah! That's precisely why I think so!
-	Layla: They'll be like a classic enemies-to-lovers trope!
-	Layla: And it'll be glorious.
-	Player: Hmm.
-	Player: Interesting.
+	if Flags.get_game_counter("layla_closeness") >= 0:
+		Player: Yeah, I don't think there's anything like that between them.
+		Layla: You think so?
+		Layla: I think Dr. Ember might have a thing for him...
+		Player: Even though she's always at his throat?
+		Layla: Yeah! That's precisely why I think so!
+		Layla: They'll be like a classic enemies-to-lovers trope!
+		Layla: And it'll be glorious.
+		Player: Hmm.
+		Player: Interesting.
 else
-	# TEMPLATE — solo path (no Layla); developer may rewrite.
-	Player: (Not Dr. Ember's birthdate, then.)
-	Player: (That one was a long shot anyway.)
+	# step 2.227: no solo playthrough (Layla is always with Fiona). fallback only, so the branch stays valid.
+	Player: This is a template line.
 => after_portrait_date
 
 ~ after_portrait_date
@@ -50,16 +49,11 @@ if Flags.get_level_flag("keypad_companion_present") == true:
 		Layla: We should probably look into that date thing Julian mentioned.
 		Player: Right, that's a better lead.
 	elif Flags.get_level_flag("jayce_pointed_to_biochem") == true:
-		Layla: We should probably look around the wing for more clues.
+		Layla: We should probably look around the building for more clues.
 		Player: Right, there's gotta be something more substantial here.
 else
-	# TEMPLATE — solo path (no Layla); developer may rewrite.
-	Player: (That's both the dates from the portraits in here.)
-	Player: (Looks like I need to try something else.)
-	if Flags.get_level_flag("julian_password_asked") == true and Flags.get_level_flag("dna_dates_found") == false:
-		Player: (That date thing Julian mentioned is a better lead.)
-	elif Flags.get_level_flag("jayce_pointed_to_biochem") == true:
-		Player: (There's gotta be something more substantial around the wing.)
+	# step 2.227: no solo playthrough (Layla is always with Fiona). fallback only, so the branch stays valid.
+	Player: This is a template line.
 => END
 
 ~ voss_birthday
@@ -68,7 +62,6 @@ if Flags.get_level_flag("keypad_companion_present") == true:
 	Player: Seems like it.
 	Player: (I'm glad it isn't.)
 else
-	# TEMPLATE — solo path (no Layla); developer may rewrite.
-	Player: (Not Leon Voss's birthday, then.)
-	Player: (Good.)
+	# step 2.227: no solo playthrough (Layla is always with Fiona). fallback only, so the branch stays valid.
+	Player: This is a template line.
 => END

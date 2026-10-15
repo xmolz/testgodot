@@ -34,6 +34,16 @@ const ZOOM_HUD_LAYER := 3
 @export var test_run_free_elevator: bool = true
 ## julian: his intro CG doesn't play on first entry to the grad commons (marked as seen).
 @export var test_run_skip_julian_intro: bool = true
+## greene's office: its corridor door opens (sets the level flag greene_office_unlocked).
+@export var test_run_open_greene_office: bool = true
+## supply room: start with the Type-C charger and Layla's phone in the inventory.
+@export var test_run_give_charger_and_phone: bool = true
+## layla: the wake-up chat after the intro is skipped (marked as seen).
+@export var test_run_skip_layla_wake_chat: bool = true
+## julian: "Ask him about the keypad password" is offered without the keypad / Jayce prerequisites (sets dev_julian_all_topics).
+@export var test_run_julian_all_topics: bool = true
+## julian: once play starts, jump fiona and layla to the grad commons so his intro plays (overrides skip_julian_intro).
+@export var test_run_play_julian_intro: bool = false
 
 func _ready():
 	if GameManager:
@@ -128,6 +138,94 @@ func _ready():
 			print_rich("[color=yellow]TestChapterLevel: dev unlock of 'think' (direct run).[/color]")
 	_apply_disabled_verbs()
 
+	# test run: open dr. greene's office (later the real unlock is the office keypad).
+	if test_run_allows("open_greene_office"):
+		Flags.set_level_flag("greene_office_unlocked", true)
+	# test run: start with the type-c charger and layla's phone (step 2.204).
+	if test_run_allows("give_charger_and_phone"):
+		if not Inventory.has_item("type_c_charger") and not Flags.get_level_flag("supply_charger_plugged"):
+			Inventory.add_item("type_c_charger")
+		if not Inventory.has_item("layla_phone") and not Flags.get_level_flag("supply_phone_charging"):
+			Inventory.add_item("layla_phone")
+	# test run: skip layla's wake-up chat (step 2.212).
+	if test_run_allows("skip_layla_wake_chat"):
+		Flags.set_level_flag("dev_skip_layla_wake_chat", true)
+	# test run: julian's password topic without its prerequisites (step 2.227).
+	if test_run_allows("julian_all_topics"):
+		Flags.set_level_flag("dev_julian_all_topics", true)
+
+	# step 2.227: first arrival in the 3F elevator hub shows a few seconds of "try Examine" tip
+	_setup_examine_hint()
+
+	# step 2.236: test run, jump to the grad commons so julian's intro plays
+	if test_run_allows("play_julian_intro"):
+		_dev_jump_to_grad_commons()
+
+# ---------------------------------------------------------------------------
+# step 2.227: first-visit Examine tip. the first time the player arrives in the 3F elevator hub
+# (near the vending machine), the quiet hint banner shows for a few seconds, silently. once per playthrough.
+const HintBannerScript = preload("res://conversation/hint_banner.gd")
+const EXAMINE_HINT_FLAG := "examine_hint_seen"
+const EXAMINE_HINT_TEXT := "Tip: using Examine on objects may reveal important information."
+const EXAMINE_HINT_SECONDS := 4.5
+const EXAMINE_HINT_ANCHOR := "Hub3FVendingMachine"
+const EXAMINE_HINT_REACH := Vector2(900, 500)
+var _examine_hint_layer: CanvasLayer = null
+
+
+func _setup_examine_hint() -> void:
+	if not Flags or Flags.get_game_flag(EXAMINE_HINT_FLAG):
+		return
+	if Events and Events.has_signal("room_changed") and not Events.room_changed.is_connected(_on_room_changed_examine_hint):
+		Events.room_changed.connect(_on_room_changed_examine_hint)
+
+
+func _on_room_changed_examine_hint() -> void:
+	if Flags.get_game_flag(EXAMINE_HINT_FLAG):
+		return
+	var player = GameManager.player_node if GameManager else null
+	var anchor = find_child(EXAMINE_HINT_ANCHOR, true, false)
+	if not is_instance_valid(player) or not is_instance_valid(anchor):
+		return
+	var d: Vector2 = (player.global_position - anchor.global_position).abs()
+	if d.x > EXAMINE_HINT_REACH.x or d.y > EXAMINE_HINT_REACH.y:
+		return
+	Flags.set_game_flag(EXAMINE_HINT_FLAG, true)
+	_examine_hint_layer = CanvasLayer.new()
+	_examine_hint_layer.layer = 95
+	add_child(_examine_hint_layer)
+	var banner = HintBannerScript.new()
+	_examine_hint_layer.add_child(banner)
+	banner.flash_hint(EXAMINE_HINT_TEXT, null, EXAMINE_HINT_SECONDS)
+
+
+# step 2.236 (test run): wait for normal play, then move fiona (and layla) into the grad commons
+# and announce the room change, so JulianIntroCutscene starts.
+func _dev_jump_to_grad_commons() -> void:
+	var waited := 0.0
+	while waited < 60.0:
+		if GameManager and GameManager.current_game_state == GameManager.GameState.IN_GAME_PLAY and not _dialogue_active:
+			break
+		await get_tree().create_timer(0.25).timeout
+		waited += 0.25
+	await get_tree().create_timer(0.3).timeout
+	var player = GameManager.player_node if GameManager else null
+	var marker = find_child("Floor3CorridorSpawnPoint", true, false)
+	if not is_instance_valid(player) or not is_instance_valid(marker):
+		push_warning("TestChapterLevel: can't jump to the grad commons (player or Floor3CorridorSpawnPoint missing).")
+		return
+	if player.has_method("stop_movement"):
+		player.stop_movement()
+	player.global_position = marker.global_position
+	get_tree().call_group("companion_followers", "place_for_teleport", marker)
+	var camera := get_viewport().get_camera_2d()
+	if camera and camera.has_method("snap_to_target"):
+		camera.snap_to_target()
+	if Events and Events.has_signal("room_changed"):
+		Events.room_changed.emit()
+	print_rich("[color=orange]TestChapterLevel: jumped to the grad commons for julian's intro (TEST RUN).[/color]")
+
+
 func _on_interaction_state_changed(_new_state: int) -> void:
 	_refresh_hud()
 
@@ -198,6 +296,9 @@ func _on_zoom_hud_config_requested(show_verb_panel: bool, show_inventory: bool) 
 # are both on. other scripts reach this through the current level root.
 func test_run_allows(option: String) -> bool:
 	if not test_run:
+		return false
+	# step 2.236: playing julian's intro wins over skipping it
+	if option == "skip_julian_intro" and test_run_play_julian_intro:
 		return false
 	return get("test_run_" + option) == true
 

@@ -1,0 +1,46 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://interactions/interactable.gd" id="1_interactable"]
+[ext_resource type="Script" path="res://data/InteractionResponse.gd" id="2_response"]
+[ext_resource type="Script" path="res://interactions/action.gd" id="3_action"]
+[ext_resource type="Script" path="res://interactions/actions/OpenJournalAction.gd" id="4_journal_action"]
+[ext_resource type="PackedScene" path="res://ui/greene_journal_overlay.tscn" id="5_journal_overlay"]
+[ext_resource type="Texture2D" path="res://Backgrounds/Kit/Faculty Offices/Greene Office/greene_journal.png" id="6_journal"]
+[ext_resource type="Shader" path="res://interactions/actions/interactable_outline.gdshader" id="7_outline"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_journal_outline"]
+resource_local_to_scene = true
+shader = ExtResource("7_outline")
+shader_parameter/enable_outline = true
+shader_parameter/outline_color = Color(0.2, 0.85, 1, 1)
+shader_parameter/outline_width = 12.0
+
+[sub_resource type="Resource" id="Resource_open_journal"]
+script = ExtResource("4_journal_action")
+journal_scene = ExtResource("5_journal_overlay")
+
+[sub_resource type="Resource" id="Resource_journal_examine"]
+script = ExtResource("2_response")
+verb_id = "examine"
+actions_to_perform = Array[ExtResource("3_action")]([SubResource("Resource_open_journal")])
+
+[sub_resource type="Resource" id="Resource_journal_use"]
+script = ExtResource("2_response")
+verb_id = "use"
+actions_to_perform = Array[ExtResource("3_action")]([SubResource("Resource_open_journal")])
+
+[node name="GreeneJournal" type="Area2D"]
+script = ExtResource("1_interactable")
+object_display_name = "Journal"
+object_id = "greene_journal"
+interactions = Array[ExtResource("2_response")]([SubResource("Resource_journal_examine"), SubResource("Resource_journal_use")])
+
+[node name="ObjectSprite" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_journal_outline")
+texture = ExtResource("6_journal")
+
+[node name="ClickShape" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(118, 3, 113, 13, -32, 34, -48, 34, -114, 4, -117, -8, -109, -20, 30, -35, 111, -14, 117, -7)
+
+[node name="WalkToPoint" type="Marker2D" parent="."]
+position = Vector2(0, 540)

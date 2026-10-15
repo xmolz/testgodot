@@ -7,6 +7,7 @@ extends CanvasLayer
 
 const PLAYER_NAMES = ["Player"]
 var custom_font = preload("res://Fonts/VarelaRound-Regular.ttf")
+const TextFx = preload("res://conversation/text_fx.gd")
 
 var character_colors: Dictionary = {
 	"aiDA": Color("#20B2AA"),
@@ -201,6 +202,8 @@ func _populate_log():
 
 		if entry["type"] == "line":
 			var text = entry["text"]
+			# step 2.215: the log is for reading, so motion tags go and [small] becomes a real size
+			text = TextFx.expand_small(TextFx.strip_motion(text), 42 if OS.has_feature("mobile") else 28)
 			var text_label = RichTextLabel.new()
 			text_label.bbcode_enabled = true
 			text_label.fit_content = true
@@ -225,7 +228,8 @@ func _populate_log():
 			var selected_index = entry["selected_index"]
 
 			for i in range(options.size()):
-				var clean_text = options[i].replacen("[proceed]", "").replacen("[back]", "").replacen("[leave]", "").strip_edges()
+				var clean_text = options[i].replacen("[proceed]", "").replacen("[back]", "").replacen("[leave]", "").replacen("[once]", "").replacen("[matters]", "").replacen("[repeatable]", "").replacen("[unavailable]", "").strip_edges()
+				clean_text = RegEx.create_from_string("\\[state=[^\\]]*\\]").sub(clean_text, "", true).strip_edges()
 				var choice_label = RichTextLabel.new()
 				choice_label.bbcode_enabled = true
 				choice_label.fit_content = true

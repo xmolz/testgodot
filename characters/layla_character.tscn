@@ -1,46 +1,33 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://yide24s1eqs7"]
 
-[ext_resource type="Script" path="res://characters/layla_character.gd" id="1_script"]
-[ext_resource type="Script" path="res://characters/companion_follow.gd" id="2_follow"]
-[ext_resource type="Script" path="res://interactions/interactable.gd" id="3_interactable"]
-[ext_resource type="Script" path="res://data/InteractionResponse.gd" id="4_response"]
-[ext_resource type="Script" path="res://interactions/action.gd" id="5_action"]
-[ext_resource type="Script" path="res://interactions/actions/StartConversationAction.gd" id="6_startconv"]
-[ext_resource type="Resource" path="res://interactions/actions/DefaultExamineResponse.tres" id="7_examine"]
-[ext_resource type="Material" path="res://interactions/actions/interactable_outline.tres" id="8_outline"]
-[ext_resource type="Texture2D" path="res://Animations/layla/layla_walk/layla_walk_0001.png" id="10_walk1"]
-[ext_resource type="Texture2D" path="res://Animations/layla/layla_walk/layla_walk_0002.png" id="11_walk2"]
-[ext_resource type="Texture2D" path="res://Animations/layla/layla_walk/layla_walk_0003.png" id="12_walk3"]
-[ext_resource type="Texture2D" path="res://Animations/layla/layla_walk/layla_walk_0004.png" id="13_walk4"]
-[ext_resource type="Texture2D" path="res://Animations/layla/layla_walk/layla_walk_0005.png" id="14_walk5"]
-[ext_resource type="Texture2D" path="res://Animations/layla/layla_walk/layla_walk_0006.png" id="15_walk6"]
-[ext_resource type="Texture2D" path="res://Animations/layla/layla_walk/layla_walk_0007.png" id="16_walk7"]
-[ext_resource type="Texture2D" path="res://Animations/layla/layla_walk/layla_walk_0008.png" id="17_walk8"]
-[ext_resource type="Texture2D" path="res://Animations/layla/layla_idle/layla_idle_0001.png" id="18_idle1"]
-[ext_resource type="Texture2D" path="res://Animations/layla/layla_idle/layla_idle_0002.png" id="19_idle2"]
-[ext_resource type="Texture2D" path="res://Animations/layla/layla_idle/layla_idle_0003.png" id="20_idle3"]
-[ext_resource type="Texture2D" path="res://Animations/layla/layla_idle/layla_idle_0004.png" id="21_idle4"]
-[ext_resource type="Texture2D" path="res://Animations/layla/layla_idle/layla_idle_0005.png" id="22_idle5"]
-[ext_resource type="Texture2D" path="res://Animations/layla/layla_idle/layla_idle_0006.png" id="23_idle6"]
-[ext_resource type="Texture2D" path="res://Animations/layla/layla_idle/layla_idle_0007.png" id="24_idle7"]
-[ext_resource type="Texture2D" path="res://Animations/layla/layla_idle/layla_idle_0008.png" id="25_idle8"]
-[ext_resource type="Texture2D" path="res://Animations/layla/layla_idle/layla_idle_0009.png" id="26_idle9"]
-[ext_resource type="Texture2D" path="res://Animations/layla/layla_idle/layla_idle_0013.png" id="27_idle13"]
-[ext_resource type="Texture2D" path="res://Animations/layla/layla_idle/layla_idle_0014.png" id="28_idle14"]
-[ext_resource type="Texture2D" path="res://characters/character_floor_shadow.tres" id="29_shadow"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_layla"]
-size = Vector2(194, 506)
-
-[sub_resource type="Resource" id="Resource_layla_talk_action"]
-script = ExtResource("6_startconv")
-metadata/_custom_type_script = "uid://h83nrnu1277x"
-
-[sub_resource type="Resource" id="Resource_layla_talk_response"]
-script = ExtResource("4_response")
-verb_id = "talk_to"
-actions_to_perform = Array[ExtResource("5_action")]([SubResource("Resource_layla_talk_action")])
-metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+[ext_resource type="Script" uid="uid://dll14kaj5c2lo" path="res://characters/layla_character.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://bwrmcei47dfgv" path="res://characters/companion_follow.gd" id="2_follow"]
+[ext_resource type="Script" uid="uid://dwldhrx7leysr" path="res://interactions/interactable.gd" id="3_interactable"]
+[ext_resource type="Script" uid="uid://bmq0s1nqhqi4j" path="res://data/InteractionResponse.gd" id="4_response"]
+[ext_resource type="Script" uid="uid://dltqnu07oiff" path="res://interactions/action.gd" id="5_action"]
+[ext_resource type="Script" uid="uid://h83nrnu1277x" path="res://interactions/actions/StartConversationAction.gd" id="6_startconv"]
+[ext_resource type="Resource" uid="uid://bivfrghh084ym" path="res://interactions/actions/DefaultExamineResponse.tres" id="7_examine"]
+[ext_resource type="Material" uid="uid://dww3d0txyl18g" path="res://interactions/actions/interactable_outline.tres" id="8_outline"]
+[ext_resource type="Texture2D" uid="uid://dqtg41e0ah164" path="res://Animations/layla/layla_walk/layla_walk_0001.png" id="10_walk1"]
+[ext_resource type="Texture2D" uid="uid://be60sf6pt30ia" path="res://Animations/layla/layla_walk/layla_walk_0002.png" id="11_walk2"]
+[ext_resource type="Texture2D" uid="uid://byl2uq021yitf" path="res://Animations/layla/layla_walk/layla_walk_0003.png" id="12_walk3"]
+[ext_resource type="Texture2D" uid="uid://dpfn4hndmmdbw" path="res://Animations/layla/layla_walk/layla_walk_0004.png" id="13_walk4"]
+[ext_resource type="Texture2D" uid="uid://degpomjyrab6p" path="res://Animations/layla/layla_walk/layla_walk_0005.png" id="14_walk5"]
+[ext_resource type="Texture2D" uid="uid://ddgtloka02lrv" path="res://Animations/layla/layla_walk/layla_walk_0006.png" id="15_walk6"]
+[ext_resource type="Texture2D" uid="uid://dn5pa35p28ra8" path="res://Animations/layla/layla_walk/layla_walk_0007.png" id="16_walk7"]
+[ext_resource type="Texture2D" uid="uid://dy1vic0boyn44" path="res://Animations/layla/layla_walk/layla_walk_0008.png" id="17_walk8"]
+[ext_resource type="Texture2D" uid="uid://6iki6vk1gvqh" path="res://Animations/layla/layla_idle/layla_idle_0001.png" id="18_idle1"]
+[ext_resource type="Texture2D" uid="uid://pdmxgo2ykqqt" path="res://Animations/layla/layla_idle/layla_idle_0002.png" id="19_idle2"]
+[ext_resource type="Texture2D" uid="uid://dwujwifdramhw" path="res://Animations/layla/layla_idle/layla_idle_0003.png" id="20_idle3"]
+[ext_resource type="Texture2D" uid="uid://xgup1jpldkg5" path="res://Animations/layla/layla_idle/layla_idle_0004.png" id="21_idle4"]
+[ext_resource type="Texture2D" uid="uid://475fl4tuk2rx" path="res://Animations/layla/layla_idle/layla_idle_0005.png" id="22_idle5"]
+[ext_resource type="Texture2D" uid="uid://dqnkira2jgal6" path="res://Animations/layla/layla_idle/layla_idle_0006.png" id="23_idle6"]
+[ext_resource type="Texture2D" uid="uid://m3lymv2t7w4a" path="res://Animations/layla/layla_idle/layla_idle_0007.png" id="24_idle7"]
+[ext_resource type="Texture2D" uid="uid://m7m2v0wgwqu2" path="res://Animations/layla/layla_idle/layla_idle_0008.png" id="25_idle8"]
+[ext_resource type="Texture2D" uid="uid://btimi25ha2l88" path="res://Animations/layla/layla_idle/layla_idle_0009.png" id="26_idle9"]
+[ext_resource type="Texture2D" uid="uid://ci643hrxlu6u0" path="res://Animations/layla/layla_idle/layla_idle_0013.png" id="27_idle13"]
+[ext_resource type="Texture2D" uid="uid://bqeu7u5yhrxib" path="res://Animations/layla/layla_idle/layla_idle_0014.png" id="28_idle14"]
+[ext_resource type="Texture2D" uid="uid://d3mm0lq1rhfo7" path="res://characters/character_floor_shadow.tres" id="29_shadow"]
 
 [sub_resource type="Animation" id="Animation_layla_reset"]
 length = 0.001
@@ -100,41 +87,56 @@ _data = {
 &"walk": SubResource("Animation_layla_walk")
 }
 
-[node name="LaylaCharacter" type="CharacterBody2D" groups=["saveable_npc"]]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_layla"]
+size = Vector2(194, 506)
+
+[sub_resource type="Resource" id="Resource_layla_talk_action"]
+script = ExtResource("6_startconv")
+metadata/_custom_type_script = "uid://h83nrnu1277x"
+
+[sub_resource type="Resource" id="Resource_layla_talk_response"]
+script = ExtResource("4_response")
+verb_id = "talk_to"
+actions_to_perform = Array[ExtResource("5_action")]([SubResource("Resource_layla_talk_action")])
+metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
+
+[node name="LaylaCharacter" type="CharacterBody2D" unique_id=574201258 groups=["saveable_npc"]]
 collision_layer = 0
-collision_mask = 1
 script = ExtResource("1_script")
 
-[node name="FloorShadow" type="Sprite2D" parent="."]
+[node name="FloorShadow" type="Sprite2D" parent="." unique_id=539203855]
 modulate = Color(1, 1, 1, 0.85)
+position = Vector2(0, -36)
 texture = ExtResource("29_shadow")
 
-[node name="Sprite" type="Sprite2D" parent="."]
+[node name="Sprite" type="Sprite2D" parent="." unique_id=364195512]
 material = ExtResource("8_outline")
 position = Vector2(0, -270)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("18_idle1")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1637575244]
 libraries/ = SubResource("AnimationLibrary_layla")
 autoplay = &"idle"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=568341750]
 position = Vector2(-6, -253)
 shape = SubResource("RectangleShape2D_layla")
 
-[node name="CompanionFollow" type="Node" parent="."]
+[node name="CompanionFollow" type="Node" parent="." unique_id=573673336]
 script = ExtResource("2_follow")
 auto_attach_to_player = true
 
-[node name="InteractionArea" type="Area2D" parent="."]
+[node name="InteractionArea" type="Area2D" parent="." unique_id=884332692]
 script = ExtResource("3_interactable")
 object_display_name = "Layla"
 object_id = "layla"
 category = 1
+keep_distance = 250.0
 interactions = Array[ExtResource("4_response")]([ExtResource("7_examine"), SubResource("Resource_layla_talk_response")])
 character_conversation_scene_path = "res://conversation/layla_advanced_overlay.tscn"
 
-[node name="InteractionClickShape" type="CollisionShape2D" parent="InteractionArea"]
-position = Vector2(-6, -253)
-shape = SubResource("RectangleShape2D_layla")
+[node name="InteractionClickShape" type="CollisionPolygon2D" parent="InteractionArea" unique_id=159094571]
+position = Vector2(0, -270)
+scale = Vector2(0.5, 0.5)
+polygon = PackedVector2Array(-27, -513, -43, -509, -46, -509, -80, -491, -82, -491, -93, -482, -95, -482, -105, -471, -106, -471, -116, -454, -118, -454, -128, -425, -129, -425, -133, -405, -133, -381, -131, -373, -131, -364, -125, -348, -125, -346, -131, -327, -132, -327, -130, -298, -130, -290, -134, -293, -134, -294, -137, -293, -139, -293, -141, -284, -142, -284, -142, -268, -136, -260, -136, -259, -148, -239, -149, -239, -152, -222, -153, -222, -152, -213, -152, -207, -165, -192, -166, -192, -167, -190, -167, -187, -164, -183, -164, -182, -172, -174, -174, -174, -200, -134, -202, -134, -209, -117, -210, -117, -202, -96, -202, -94, -170, -65, -170, -64, -183, -56, -183, -55, -206, -52, -210, -52, -225, -44, -227, -44, -245, -28, -247, -28, -263, -9, -264, -9, -262, -2, -262, -1, -253, -2, -252, -2, -257, 11, -257, 14, -246, 23, -246, 24, -238, 20, -236, 20, -229, 12, -228, 12, -229, 15, -229, 22, -225, 26, -222, 26, -217, 22, -216, 22, -208, 8, -208, 7, -203, 13, -201, 13, -223, 43, -223, 45, -218, 49, -218, 50, -212, 49, -210, 49, -214, 58, -214, 63, -208, 67, -208, 68, -200, 67, -194, 67, -185, 60, -184, 60, -182, 67, -180, 67, -184, 77, -185, 77, -184, 81, -184, 83, -173, 83, -171, 83, -173, 92, -174, 92, -172, 98, -172, 100, -157, 101, -152, 101, -144, 141, -144, 145, -129, 182, -128, 182, -128, 201, -127, 201, -140, 283, -140, 288, -153, 302, -154, 302, -168, 323, -168, 324, -195, 332, -197, 332, -198, 334, -198, 349, -194, 367, -194, 370, -217, 393, -219, 393, -220, 395, -220, 399, -226, 405, -227, 405, -211, 429, -211, 430, -230, 434, -240, 434, -251, 439, -253, 439, -259, 446, -260, 446, -264, 457, -264, 469, -260, 474, -260, 475, -246, 482, -246, 483, -213, 491, -208, 491, -204, 500, -204, 501, -188, 507, -188, 508, -172, 510, -172, 511, -98, 507, -84, 507, -72, 504, -69, 504, -60, 498, -60, 497, -42, 503, -42, 504, -30, 505, -30, 506, -1, 504, -1, 503, 14, 506, 30, 506, 42, 503, 45, 503, 56, 497, 60, 497, 63, 500, 63, 501, 76, 505, 76, 506, 148, 511, 172, 511, 191, 506, 194, 506, 202, 501, 204, 501, 208, 494, 208, 491, 226, 488, 231, 488, 243, 483, 246, 483, 258, 475, 260, 475, 263, 469, 264, 469, 262, 453, 262, 450, 253, 440, 253, 439, 214, 430, 211, 430, 227, 406, 227, 405, 219, 395, 219, 393, 217, 392, 215, 392, 195, 370, 194, 370, 197, 349, 198, 349, 197, 334, 197, 332, 193, 332, 190, 332, 172, 324, 168, 324, 158, 309, 158, 307, 141, 288, 140, 288, 128, 211, 127, 211, 128, 187, 128, 182, 142, 148, 143, 148, 152, 110, 152, 101, 170, 100, 172, 100, 174, 96, 174, 92, 171, 85, 171, 83, 183, 83, 184, 83, 185, 81, 185, 77, 181, 69, 180, 69, 184, 64, 184, 60, 194, 66, 194, 67, 205, 68, 208, 68, 213, 63, 214, 63, 210, 51, 210, 49, 212, 50, 218, 50, 222, 45, 223, 45, 218, 35, 218, 33, 201, 14, 201, 13, 203, 12, 205, 12, 207, 7, 208, 7, 216, 20, 216, 22, 222, 26, 225, 26, 228, 22, 229, 22, 228, 12, 229, 12, 243, 24, 246, 24, 253, 18, 255, 18, 256, 14, 257, 14, 252, 0, 252, -2, 255, 0, 260, 0, 264, -4, 264, -9, 247, -27, 247, -28, 227, -43, 227, -44, 210, -51, 210, -52, 189, -55, 183, -55, 171, -64, 170, -64, 200, -94, 202, -94, 210, -112, 210, -117, 202, -132, 202, -134, 174, -172, 174, -174, 165, -182, 164, -182, 167, -187, 167, -190, 153, -207, 152, -207, 152, -222, 152, -230, 137, -259, 136, -259, 142, -268, 142, -284, 139, -291, 139, -293, 137, -294, 134, -294, 131, -290, 130, -290, 132, -302, 132, -327, 126, -346, 125, -346, 133, -381, 133, -405, 129, -421, 129, -425, 118, -452, 118, -454, 106, -469, 106, -471, 90, -485, 90, -486, 46, -508, 46, -509, 27, -513, 27, -514, -27, -514)

@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://b6vkgspvt7kdt"
+path="res://.godot/imported/supply_room.dialogue-2330502fe7eef18ad0819abfd31315ed.tres"
+
+[deps]
+
+source_file="res://dialogue/supply_room.dialogue"
+dest_files=["res://.godot/imported/supply_room.dialogue-2330502fe7eef18ad0819abfd31315ed.tres"]
+
+[params]
+
+defaults=true

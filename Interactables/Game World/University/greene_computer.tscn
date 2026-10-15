@@ -1,0 +1,46 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://interactions/interactable.gd" id="1_interactable"]
+[ext_resource type="PackedScene" path="res://conversation/GreeneDesktopZoom.tscn" id="2_zoom"]
+[ext_resource type="Script" path="res://data/InteractionResponse.gd" id="3_response"]
+[ext_resource type="Script" path="res://interactions/action.gd" id="4_action"]
+[ext_resource type="Script" path="res://interactions/actions/OpenZoomViewAction.gd" id="5_zoomaction"]
+[ext_resource type="Texture2D" path="res://Backgrounds/Kit/Faculty Offices/Greene Office/greene_laptop.png" id="6_laptop"]
+[ext_resource type="Shader" path="res://interactions/actions/interactable_outline.gdshader" id="7_outline"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_laptop_outline"]
+resource_local_to_scene = true
+shader = ExtResource("7_outline")
+shader_parameter/enable_outline = true
+shader_parameter/outline_color = Color(0.2, 0.85, 1, 1)
+shader_parameter/outline_width = 12.0
+
+[sub_resource type="Resource" id="Resource_open_desktop"]
+script = ExtResource("5_zoomaction")
+
+[sub_resource type="Resource" id="Resource_computer_examine"]
+script = ExtResource("3_response")
+verb_id = "examine"
+actions_to_perform = Array[ExtResource("4_action")]([SubResource("Resource_open_desktop")])
+
+[sub_resource type="Resource" id="Resource_computer_use"]
+script = ExtResource("3_response")
+verb_id = "use"
+actions_to_perform = Array[ExtResource("4_action")]([SubResource("Resource_open_desktop")])
+
+[node name="GreeneComputer" type="Area2D"]
+script = ExtResource("1_interactable")
+object_display_name = "Laptop"
+object_id = "greene_computer"
+object_zoom_overlay_scene = ExtResource("2_zoom")
+interactions = Array[ExtResource("3_response")]([SubResource("Resource_computer_examine"), SubResource("Resource_computer_use")])
+
+[node name="ObjectSprite" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_laptop_outline")
+texture = ExtResource("6_laptop")
+
+[node name="ClickShape" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(153, 59.5, 119, 70.5, -135, 70.5, -140, 67.5, -159, -45.5, -158, -55.5, -151, -62.5, 94, -61.5, 101, -56.5, 153, 54.5)
+
+[node name="WalkToPoint" type="Marker2D" parent="."]
+position = Vector2(0, 540)
