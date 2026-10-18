@@ -6,6 +6,8 @@ if Flags.get_level_flag("supply_phone_charging") == true:
 	Player: (Layla's phone, charging away.)
 elif Flags.get_level_flag("supply_charger_plugged") == true:
 	Player: (The charger's plugged in. Now I just need something to charge.)
+elif Flags.get_level_flag("supply_dumb_charger_plugged") == true:
+	Player: (My pin charger's plugged in. Not that anything here can use it.)
 else
 	Player: (A wall socket. One of the few things in here that still works.)
 => END
@@ -20,4 +22,18 @@ Player: (And... charging. Come on, little battery.)
 
 ~ phone_no_charger
 Player: (I'd need a charger for that first.)
+=> END
+
+~ dumb_charger_phone_tried
+# step 2.245: the pin charger is in the socket, but Layla's phone can't attach to it.
+Player: (Huh... am I really tryna charge this modern-day phone with this ancient-ass pin charger?)
+Player: (C'mon.)
+=> END
+
+~ charger_busy
+Player: (Not while Layla's phone is charging on it.)
+=> END
+
+~ charger_unplugged
+Player: (Unplugged.)
 => END

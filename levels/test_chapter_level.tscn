@@ -71,6 +71,9 @@
 [ext_resource type="Texture2D" uid="uid://bnif5ucekt1is" path="res://Backgrounds/Kit/Lab Corridoor/type_c_charger.png" id="81_typeccharger"]
 [ext_resource type="Texture2D" uid="uid://85n38ig5pp52" path="res://Backgrounds/Kit/Lab Corridoor/layla_phone.png" id="82_laylaphone"]
 [ext_resource type="Script" uid="uid://c0qlbvvvye4ch" path="res://interactions/flag_visibility.gd" id="83_flagvis"]
+[ext_resource type="Texture2D" uid="uid://ci4o5bajkw5na" path="res://Backgrounds/Kit/Lab Corridoor/dumbphone_charger_world.png" id="200_dumbchargerworld"]
+[ext_resource type="Script" uid="uid://nvyqoryt5sbh" path="res://interactions/actions/AddItemAction.gd" id="201_additem"]
+[ext_resource type="PackedScene" path="res://Interactables/Game World/University/greene_certificate.tscn" id="202_greenecertificate"]
 
 [sub_resource type="Gradient" id="Gradient_kit_lib_wall"]
 offsets = PackedFloat32Array(0, 0.09, 0.16, 0.5, 0.88, 1)
@@ -429,6 +432,35 @@ verb_id = "use"
 actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_fiona_locker_zoom")])
 metadata/_custom_type_script = "uid://bmq0s1nqhqi4j"
 
+[sub_resource type="Resource" id="Resource_socket_sw_t_add_dumb"]
+script = ExtResource("201_additem")
+item_id_to_add = "dumbphone_charger"
+
+[sub_resource type="Resource" id="Resource_socket_sw_t_clear_dumb"]
+script = ExtResource("79_setlevelflag")
+flag_name = "supply_dumb_charger_plugged"
+flag_value = false
+
+[sub_resource type="Resource" id="Resource_socket_sw_t_remove_typec"]
+script = ExtResource("78_removeitem")
+item_id_to_remove = "type_c_charger"
+
+[sub_resource type="Resource" id="Resource_socket_sw_t_set_typec"]
+script = ExtResource("79_setlevelflag")
+flag_name = "supply_charger_plugged"
+
+[sub_resource type="Resource" id="Resource_socket_sw_plugged_line"]
+script = ExtResource("10_showdialogue")
+dialogue_resource = ExtResource("80_supplydialogue")
+dialogue_checkpoint = "charger_plugged"
+
+[sub_resource type="Resource" id="Resource_socket_swap_to_typec"]
+script = ExtResource("11_response")
+verb_id = "use"
+required_item_id = "type_c_charger"
+required_flag_id = "supply_dumb_charger_plugged"
+actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_socket_sw_t_add_dumb"), SubResource("Resource_socket_sw_t_clear_dumb"), SubResource("Resource_socket_sw_t_remove_typec"), SubResource("Resource_socket_sw_t_set_typec"), SubResource("Resource_socket_sw_plugged_line")])
+
 [sub_resource type="Resource" id="Resource_socket_charger_remove"]
 script = ExtResource("78_removeitem")
 item_id_to_remove = "type_c_charger"
@@ -468,6 +500,18 @@ required_item_id = "layla_phone"
 required_flag_id = "supply_charger_plugged"
 actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_socket_phone_remove"), SubResource("Resource_socket_phone_flag"), SubResource("Resource_socket_phone_line")])
 
+[sub_resource type="Resource" id="Resource_socket_dumb_phone_line"]
+script = ExtResource("10_showdialogue")
+dialogue_resource = ExtResource("80_supplydialogue")
+dialogue_checkpoint = "dumb_charger_phone_tried"
+
+[sub_resource type="Resource" id="Resource_socket_dumb_phone"]
+script = ExtResource("11_response")
+verb_id = "use"
+required_item_id = "layla_phone"
+required_flag_id = "supply_dumb_charger_plugged"
+actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_socket_dumb_phone_line")])
+
 [sub_resource type="Resource" id="Resource_socket_no_charger_line"]
 script = ExtResource("10_showdialogue")
 dialogue_resource = ExtResource("80_supplydialogue")
@@ -478,6 +522,84 @@ script = ExtResource("11_response")
 verb_id = "use"
 required_item_id = "layla_phone"
 actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_socket_no_charger_line")])
+
+[sub_resource type="Resource" id="Resource_socket_busy_line"]
+script = ExtResource("10_showdialogue")
+dialogue_resource = ExtResource("80_supplydialogue")
+dialogue_checkpoint = "charger_busy"
+
+[sub_resource type="Resource" id="Resource_socket_dumb_blocked"]
+script = ExtResource("11_response")
+verb_id = "use"
+required_item_id = "dumbphone_charger"
+required_flag_id = "supply_phone_charging"
+actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_socket_busy_line")])
+
+[sub_resource type="Resource" id="Resource_socket_sw_d_add_typec"]
+script = ExtResource("201_additem")
+item_id_to_add = "type_c_charger"
+
+[sub_resource type="Resource" id="Resource_socket_sw_d_clear_typec"]
+script = ExtResource("79_setlevelflag")
+flag_name = "supply_charger_plugged"
+flag_value = false
+
+[sub_resource type="Resource" id="Resource_socket_sw_d_remove_dumb"]
+script = ExtResource("78_removeitem")
+item_id_to_remove = "dumbphone_charger"
+
+[sub_resource type="Resource" id="Resource_socket_sw_d_set_dumb"]
+script = ExtResource("79_setlevelflag")
+flag_name = "supply_dumb_charger_plugged"
+
+[sub_resource type="Resource" id="Resource_socket_swap_to_dumb"]
+script = ExtResource("11_response")
+verb_id = "use"
+required_item_id = "dumbphone_charger"
+required_flag_id = "supply_charger_plugged"
+actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_socket_sw_d_add_typec"), SubResource("Resource_socket_sw_d_clear_typec"), SubResource("Resource_socket_sw_d_remove_dumb"), SubResource("Resource_socket_sw_d_set_dumb"), SubResource("Resource_socket_sw_plugged_line")])
+
+[sub_resource type="Resource" id="Resource_socket_dumb_remove"]
+script = ExtResource("78_removeitem")
+item_id_to_remove = "dumbphone_charger"
+
+[sub_resource type="Resource" id="Resource_socket_dumb_flag"]
+script = ExtResource("79_setlevelflag")
+flag_name = "supply_dumb_charger_plugged"
+
+[sub_resource type="Resource" id="Resource_socket_dumb_line"]
+script = ExtResource("10_showdialogue")
+dialogue_resource = ExtResource("80_supplydialogue")
+dialogue_checkpoint = "charger_plugged"
+
+[sub_resource type="Resource" id="Resource_socket_use_dumb_charger"]
+script = ExtResource("11_response")
+verb_id = "use"
+required_item_id = "dumbphone_charger"
+actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_socket_dumb_remove"), SubResource("Resource_socket_dumb_flag"), SubResource("Resource_socket_dumb_line")])
+
+[sub_resource type="Resource" id="Resource_socket_pickup_blocked"]
+script = ExtResource("11_response")
+verb_id = "pickup"
+required_flag_id = "supply_phone_charging"
+actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_socket_busy_line")])
+
+[sub_resource type="Resource" id="Resource_socket_pickup_line"]
+script = ExtResource("10_showdialogue")
+dialogue_resource = ExtResource("80_supplydialogue")
+dialogue_checkpoint = "charger_unplugged"
+
+[sub_resource type="Resource" id="Resource_socket_pickup_typec"]
+script = ExtResource("11_response")
+verb_id = "pickup"
+required_flag_id = "supply_charger_plugged"
+actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_socket_sw_d_add_typec"), SubResource("Resource_socket_sw_d_clear_typec"), SubResource("Resource_socket_pickup_line")])
+
+[sub_resource type="Resource" id="Resource_socket_pickup_dumb"]
+script = ExtResource("11_response")
+verb_id = "pickup"
+required_flag_id = "supply_dumb_charger_plugged"
+actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_socket_sw_t_add_dumb"), SubResource("Resource_socket_sw_t_clear_dumb"), SubResource("Resource_socket_pickup_line")])
 
 [sub_resource type="Resource" id="Resource_socket_examine_line"]
 script = ExtResource("10_showdialogue")
@@ -1674,7 +1796,7 @@ centered = false
 position = Vector2(11820, 395)
 introduced_flag_id = "supply_charger_plugged"
 introduced_display_name = "Charger"
-interactions = Array[ExtResource("11_response")]([SubResource("Resource_socket_use_charger"), SubResource("Resource_socket_use_phone"), SubResource("Resource_socket_phone_no_charger"), SubResource("Resource_socket_examine")])
+interactions = Array[ExtResource("11_response")]([SubResource("Resource_socket_swap_to_typec"), SubResource("Resource_socket_use_charger"), SubResource("Resource_socket_use_phone"), SubResource("Resource_socket_dumb_phone"), SubResource("Resource_socket_phone_no_charger"), SubResource("Resource_socket_dumb_blocked"), SubResource("Resource_socket_swap_to_dumb"), SubResource("Resource_socket_use_dumb_charger"), SubResource("Resource_socket_pickup_blocked"), SubResource("Resource_socket_pickup_typec"), SubResource("Resource_socket_pickup_dumb"), SubResource("Resource_socket_examine")])
 
 [node name="SupplyDeskPhone" type="Sprite2D" parent="." unique_id=554679431]
 position = Vector2(11737.001, 445)
@@ -1689,6 +1811,13 @@ scale = Vector2(0.5, 0.5)
 texture = ExtResource("81_typeccharger")
 script = ExtResource("83_flagvis")
 flag_name = "supply_charger_plugged"
+
+[node name="SupplyDeskDumbCharger" type="Sprite2D" parent="." unique_id=726817016]
+position = Vector2(11824, 414)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("200_dumbchargerworld")
+script = ExtResource("83_flagvis")
+flag_name = "supply_dumb_charger_plugged"
 
 [node name="DevAntonTest" parent="." unique_id=61616972 instance=ExtResource("68_antontest")]
 position = Vector2(1400, 690)
@@ -1715,7 +1844,7 @@ position = Vector2(2804, 4931)
 object_id = "song_card_reader"
 
 [node name="FionaWorkstation" parent="." unique_id=883993605 instance=ExtResource("44_workstation")]
-position = Vector2(8850, 3699)
+position = Vector2(5900, 3699)
 object_display_name = "Fiona's Workstation"
 object_id = "workstation_fiona"
 examine_without_walking = true
@@ -1727,7 +1856,7 @@ object_id = "workstation_julian"
 examine_without_walking = true
 
 [node name="SpareWorkstation" parent="." unique_id=633347604 instance=ExtResource("44_workstation")]
-position = Vector2(5900, 3699)
+position = Vector2(8850, 3699)
 object_display_name = "Empty Workstation"
 object_id = "workstation_spare"
 examine_without_walking = true
@@ -2011,23 +2140,8 @@ uv = PackedVector2Array(0, 33.3, 16, 33.3, 16, 64, 0, 64)
 [node name="GreeneOfficeLaMarrPortrait" parent="." unique_id=1434216887 instance=ExtResource("73_lamarrportrait")]
 position = Vector2(14000, 305)
 
-[node name="GreeneOfficePhotoPlaceholder1" type="ColorRect" parent="." unique_id=708948805]
-layout_mode = 0
-offset_left = 15105.0
-offset_top = 220.0
-offset_right = 15225.0
-offset_bottom = 370.0
-mouse_filter = 2
-color = Color(0.85, 0.84, 0.8, 0.6)
-
-[node name="GreeneOfficePhotoPlaceholder2" type="ColorRect" parent="." unique_id=2059944749]
-layout_mode = 0
-offset_left = 15105.0
-offset_top = 410.0
-offset_right = 15225.0
-offset_bottom = 560.0
-mouse_filter = 2
-color = Color(0.85, 0.84, 0.8, 0.6)
+[node name="GreeneOfficeCertificate" parent="." unique_id=479347160 instance=ExtResource("202_greenecertificate")]
+position = Vector2(15165, 305)
 
 [node name="GreeneDeskShadow" type="Sprite2D" parent="." unique_id=228845074]
 position = Vector2(14638.8, 753.6)
@@ -2117,6 +2231,7 @@ position = Vector2(1241, 788)
 
 [node name="Player" parent="." unique_id=1000725987 instance=ExtResource("3_player")]
 position = Vector2(909, 602)
+outfit_path = "res://characters/outfits/fiona_casual.tres"
 
 [node name="LibTableSet" type="TextureRect" parent="." unique_id=511418702]
 layout_mode = 0

@@ -22,6 +22,7 @@ if Flags.get_game_counter("layla_closeness") >= 3:
 	Layla: Thank you, Fee!
 	Player: Sure thing.
 	Player: (She called me Fee...)
+	do Flags.set_level_flag("layla_said_fee", true)
 elif Flags.get_game_counter("layla_closeness") >= 0:
 	Layla: Oh my god! That's my favorite!!
 	Layla: Thank you, Fiona!

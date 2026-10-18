@@ -6,10 +6,31 @@
 #   do car_speed(0.0, 1.5)                    ease to a stop over 1.5 s (a red light); car_speed(1.0) = cruising
 #   do car_think_begin() / do car_think_end() Fiona drifts into thought (slow push-in + the dream as a
 #                                             faint mental image) / snaps out of it
+#   do car_end()                              fade to black at the end of the ride. the real car scene
+#                                             returns to the memory box here.
 # planned later, not available yet: expression changes and face close-ups over the car art.
+#
+# mood: Flags.get_game_counter("layla_closeness") -> close >= 3, neutral 0 to under 3, distant < 0.
+# chapter memories: the university level copies these level flags into game flags with a "kb_" prefix
+# (the car scene has no LevelStateManager, so level flags are always false here):
+#   kb_layla_work_comforted, kb_layla_work_reprimanded   (Layla hub, "Ask her about work")
+#   kb_julian_refused_help, kb_julian_nearly_told_truth  (julian_talk, one of the two is always set)
+#   kb_layla_gift_given, kb_layla_gift_loved             (layla_gifts; given = any snack, loved = protein bar)
+#   kb_layla_said_fee                                    (layla_gifts ~ loved, close branch)
+#   kb_jayce_flashed, kb_jayce_camera_seen               (janitor route, not built yet: Fiona flashed him /
+#                                                         saw what's on his camera. either or both)
+# set here, for the next chapter (game flags, all reset to false at the start of every ride):
+#   kb_coffee_offered, kb_layla_came_up   (the coffee choice; a distant Layla can decline)
+#   kb_car_broke_silence                  (distant: Fiona spoke up instead of leaving her be)
+#   kb_car_apologized, kb_car_stood_by    (distant: the repair choice; apologizing also adds +1 closeness)
 
 ~ start
 do car_darkness()
+do Flags.set_game_flag("kb_coffee_offered", false)
+do Flags.set_game_flag("kb_layla_came_up", false)
+do Flags.set_game_flag("kb_car_broke_silence", false)
+do Flags.set_game_flag("kb_car_apologized", false)
+do Flags.set_game_flag("kb_car_stood_by", false)
 Without much ado, you and Layla go to the parking lot and get in her car.
 Before long, you're out of the parking lot and onto the freeway.
 On your way. Back to your place.
@@ -30,30 +51,346 @@ Who treated you and her so wrong.
 Especially her.
 Speaking of her... you wonder what she must be doing right now.
 It's been a week sin-
-do car_think_end(0.8)
-Layla: Ummm... Fiona?
-Layla interrupts your thoughts. Her voice is soft and careful. Her brows knit together.
-Layla: Are you... okay?
-Layla: I don't know. I just felt like I should ask you that.
-Player: Oh yes, of course.
-Player: Sorry, I got too in the zone while driving I guess.
-Layla: That;s alright.
-The two of you stay mostly silent.
-This is a template line.
-Player: This is a template line.
-Layla: This is a template line.
-do car_bump(1.0)
-Layla: This is a template line.
-Player: This is a template line.
-- This is a template choice.
-	Player: This is a template line.
-	Layla: This is a template line.
-- This is another template choice.
-	Layla: This is a template line.
-	Player: This is a template line.
-do car_speed(0.0, 1.5)
-This is a template line. The car rolls to a stop at a red light.
-Layla: This is a template line.
-do car_speed(1.0, 2.0)
-Player: This is a template line.
+if Flags.get_game_counter("layla_closeness") >= 3:
+	do car_think_end(0.8)
+	Layla: Ummm... Fiona?
+	Layla interrupts your thoughts. Her voice is soft and careful. Her brows are angled in concern.
+	Layla: Are you... okay?
+	Layla: I don't know. I just felt like I should ask you that.
+elif Flags.get_game_counter("layla_closeness") >= 0:
+	do car_think_end(0.8)
+	Layla: ...Fiona?
+	Layla's gentle voice halts your racing thoughts. She sounds unsure whether she should have spoken at all.
+	Layla: Sorry. You just looked... so far away.
+	Layla: Are you okay?
+else
+	do car_bump(1.0)
+	do car_think_end(0.4)
+	The car jolts over a bump, and your thoughts scatter.
+	Layla doesn't seem to notice. She's staring out the window.
+	=> distant_ride
+Player: Oh, yes, of course.
+Player: Sorry, I got too in the zone while driving, I guess.
+Layla: That's alright.
+=> long_day
+
+~ long_day
+Player: So, it's barely afternoon...
+Player: Yet it feels like the end of a long-ass day, doesn't it?
+if Flags.get_game_counter("layla_closeness") >= 3:
+	Layla: Oh Em Gee! Yes! I am SO tired.
+	Layla: But that could be a side effect of worrying too much about the work.
+else
+	Layla: Honestly? Yes. I'm exhausted.
+	Layla: I think worrying about the work got me more worn out than the work itself.
+# NOT DECIDED: how the professor's call reaches them (Fiona's phone, or Layla's once it's charged).
+Layla: All of that only for the professor to call and tell us he's taking a day off!
+Player: Yeah. Bet that was a relief for you, wasn't it?
+if Flags.get_game_counter("layla_closeness") >= 3:
+	Layla: You bet, Fee!
+	if Flags.get_game_flag("kb_layla_said_fee") == true:
+		Player: (Fee again...)
+	else
+		Player: (Fee...)
+else
+	Layla: It really was.
+=> thanks
+
+~ thanks
+# each line is gated on what actually happened; the mood only sets the tone.
+if Flags.get_game_counter("layla_closeness") >= 3:
+	Layla: You were too kind to me today. Honestly.
+	if Flags.get_game_flag("kb_layla_work_comforted") == true:
+		Layla: You made me feel confident in my abilities.
+	elif Flags.get_game_flag("kb_layla_work_reprimanded") == true:
+		Layla: I know you were kind of harsh with me earlier.
+		Layla: But I think I probably needed to hear it.
+		Layla: Yeah, it was a much-needed reality check. Thanks for that.
+	if Flags.get_game_flag("kb_julian_refused_help") == true:
+		Layla: You didn't tell Julian about my role and my unfinished work...
+		Layla: I really didn't want that to happen...
+	elif Flags.get_game_flag("kb_julian_nearly_told_truth") == true:
+		Layla: You almost told Julian about my role and my unfinished work, though...
+		Layla: But you stopped. That counts, right?
+	Layla: You actually helped me get my work done quickly.
+	Layla: Which, by the way, you are SO good at?
+	if Flags.get_game_flag("kb_layla_gift_loved") == true:
+		Layla: And you even got me my favorite snack from the vending machine!
+	elif Flags.get_game_flag("kb_layla_gift_given") == true:
+		Layla: And you even got me a snack from the vending machine!
+	Layla: You're the best!! Thank you, Fee.
+	Player: (Ehhh...)
+	Player: (I am flattered, but I can't let this get to my head.)
+	Player: Don't... mention it.
+	Player: I'm just happy I was able to help.
+else
+	Layla: By the way, thanks a lot for today.
+	if Flags.get_game_flag("kb_layla_work_comforted") == true:
+		Layla: What you said earlier, about my work... It really helped.
+	elif Flags.get_game_flag("kb_layla_work_reprimanded") == true:
+		Layla: Even if you were a bit harsh with me earlier.
+	if Flags.get_game_flag("kb_julian_refused_help") == true:
+		Layla: And thanks for not telling Julian about my role and unfinished work.
+	elif Flags.get_game_flag("kb_julian_nearly_told_truth") == true:
+		if Flags.get_game_flag("kb_layla_work_reprimanded") == true:
+			Layla: And you almost told Julian about my role and unfinished work...
+		else
+			Layla: Even though you almost told Julian about my role and unfinished work...
+		Layla: I'm trying not to think about that.
+		Player: (Ouch.)
+	Layla: You really helped me get my work done. Quick, too.
+	if Flags.get_game_flag("kb_layla_gift_loved") == true:
+		Layla: And hey, the protein bar. That was sweet of you.
+	elif Flags.get_game_flag("kb_layla_gift_given") == true:
+		Layla: And the snack, too.
+	Layla: So... thank you. Really.
+	Player: Don't mention it.
+	Player: I'm just happy I was able to help.
+=> getting_to_know
+
+~ getting_to_know
+# NOT TIERED YET: Drishti will rework this section (and decide whether a distant Layla gets it).
+Layla: You know, I'd love to know more about you, Fiona.
+Layla: I mean, I know we've known each other since we were kids...
+Layla: But before this semester, I hadn't seen you in like... 14 years!
+Player: (That's right.)
+Player: (We did spend the first six years of my life growing up together. In the same town.)
+Player: (But everything changed when my family had to move away.)
+Player: I really don't know what to tell you, Layla.
+Player: I mean, I'm practically working all the time. Even when I'm not at the lab.
+Player: Apart from that, I do like to hit the gym when I can.
+Player: Oh, and reading. Reading's neat.
+Layla: Really? Is that all you do?
+Layla: There's gotta be more! Tell me about your friends! Do you go out with them?
+Layla: What about your BOYFRIEND? Do you have one?
+Layla: Is he prettier than me?
+Player: What? No. I don't have a boyfriend.
+Player: Not too many friends either.
+Player: Jeez, honestly, I can't recall the last time I hung out with anyone except my mom.
+Layla: Really? I never would've guessed that!
+Layla: I actually saw you with a guy in the cafeteria a couple of weeks ago.
+Layla: And then, a few days later - a girl!
+Layla: She was so good-looking, too!
+Layla: I thought... you were dating them for sure.
+Player: Oh.
+Player: Yeah, no. We just hooked up.
+Player: They weren't my friends in any sense of the word.
+# EXPRESSION HOOK (later, needs car art layers): Layla doesn't know how to respond.
+Layla doesn't seem to know how to respond. She fidgets with her hands.
+Layla: Oh...
+Layla: So would you... not hook up with... someone you're friends with?
+Player: Well, it's not like a policy or anything.
+Player: I suppose I could. Depends on the moment.
+A smile seems to have returned to her face.
+Layla: Oh, I see!
+Layla: Good! I think one should be friends with all their romantic interests.
+Layla: At least to some extent.
+Player: Uh huh.
+if Flags.get_game_flag("kb_jayce_flashed") == true or Flags.get_game_flag("kb_jayce_camera_seen") == true:
+	=> janitor_talk
+=> arrival
+
+~ janitor_talk
+# Fiona got past the janitor (Jayce) by flashing him, or by blackmailing him with what's on his camera
+# (only if she picked the camera up). either or both can have happened; every combination reads naturally.
+For a minute, there is silence in the car.
+Until...
+Layla: So... that incident with the janitor.
+Player: Yeah. Quite a thing to happen.
+if Flags.get_game_flag("kb_jayce_flashed") == true:
+	Player: I'm sorry if I happened to traumatize you with the flashing.
+	Player: It's just... it's the only way you can get sleazebags like him to do anything, you know?
+	# Layla is very much into Fiona and very flustered about it. EXPRESSION / CLOSE-UP HOOKS: to discuss.
+	Layla: [speed=1.8]Oh no! I wasn't traumatized by it in the slightest![/speed]
+	Layla: [speed=0.6]I was just...[/speed]
+	Layla: Well, let's just say it was a surprise to see your[wait=0.3] [small=0.85]boobies[/small] this fine morning, [speed=1.6]is all.[/speed]
+	Layla: But no, "traumatized" is the last word [small=0.9]I'd use...[/small]
+	Layla: I mean, it's just boobs, right? [wave amp=12 freq=6]Hehe.[/wave][wait=0.2] [speed=2.4][mutter][small=0.9]Not like I'm into them or anything.[/small][/mutter][/speed] [wave amp=16 freq=8][small=0.85]Hehehehehehehe.[/small][/wave]
+	Player: Yes. Sure.
+if Flags.get_game_flag("kb_jayce_camera_seen") == true:
+	if Flags.get_game_flag("kb_jayce_flashed") == true:
+		Layla: But... that camera, though...
+	else
+		Layla: That camera, though...
+	Player: Oh, yeah. That was horrendous.
+	Player: Let's report him to the admin first thing tomorrow.
+	Layla: Yes! I'm so glad to hear you say that!
+	Player: Of course. It's the only thing to do.
+=> arrival
+
+~ arrival
+do car_speed(0.0, 2.5)
+The car slows to a stop in front of your building.
+Player: Well, this is it. I'm here.
+Layla: Great! I'll take the wheel.
+Layla: Goodbye, Fiona! Take care!
+Layla: And... thanks again!
+You take a closer look at Layla's face.
+Is there anything you would like to say to her?
+- Invite her up for coffee. [matters]
+	do Flags.set_game_flag("kb_coffee_offered", true)
+	do Flags.set_game_flag("kb_layla_came_up", true)
+	Player: Umm... would you wanna come up for some coffee before you go?
+	Layla: Umm... yeah, sure. I suppose I could. I do have an hour to spare.
+	Player: Great. Let's park here and go up, then.
+	The two of you head upstairs together.
+- Say goodbye. [matters]
+	do Flags.set_game_flag("kb_coffee_offered", false)
+	do Flags.set_game_flag("kb_layla_came_up", false)
+	Player: No worries, Layla. See you soon.
+	You get out of the car and take your leave.
+	Layla waves at you as she pulls away.
+do car_end()
+=> END
+
+~ distant_ride
+# DISTANT Layla (closeness < 0). she doesn't carry the conversation, so Fiona has to - or doesn't.
+# a distant Layla always has at least one hurt: Fiona nearly told Julian, or reprimanded her (+ "Right").
+Layla's hands are folded in her lap. The usual bounce in her is gone.
+Even the teddy bear on the dashboard seems quieter, somehow.
+Player: (...)
+You could say something. Or you could let it be.
+- Break the silence. [matters]
+	do Flags.set_game_flag("kb_car_broke_silence", true)
+	=> distant_talk
+- Leave her be. [matters]
+	=> distant_quiet
+
+~ distant_quiet
+You keep your eyes on the road.
+The city slides past the windows. Neither of you says a word.
+do car_bump(0.5)
+Layla shifts in her seat, then goes still again.
+Player: (Maybe it's better this way. For today.)
+=> arrival_distant
+
+~ distant_talk
+Player: So... long day, huh?
+Layla: Yeah.
+Player: Can't believe the professor just called and took the day off.
+Layla: Mm. At least the work got done.
+Layla: Thanks for helping with it.
+Player: (Okay. This is going to be harder than I thought.)
+if Flags.get_game_flag("kb_julian_nearly_told_truth") == true:
+	Layla: Can I ask you something?
+	Layla: Back there, with Julian...
+	Layla: You were about to tell him about my role and my unfinished work. Weren't you?
+	Player: I...
+	Layla: It's fine. You stopped.
+	Layla: I just... didn't expect that from you, I guess.
+	=> distant_repair_julian
+elif Flags.get_game_flag("kb_layla_work_reprimanded") == true:
+	Layla: Can I ask you something?
+	Layla: Earlier, when you told me off about my work...
+	Layla: Did you mean all of it?
+	=> distant_repair_reprimand
+else
+	# fallback (only reachable through dev toggles): distant with no hurt on record.
+	Layla: ...Never mind. It's nothing.
+	=> distant_after
+
+~ distant_repair_julian
+- Apologize. [matters]
+	do Flags.set_game_flag("kb_car_apologized", true)
+	do Flags.add_game_counter("layla_closeness", 1)
+	Player: You're right. I shouldn't have gone there.
+	Player: I'm sorry, Layla. It wasn't mine to tell.
+	Layla: ...
+	Layla: Thank you. For saying that.
+- Explain yourself. [matters]
+	do Flags.set_game_flag("kb_car_stood_by", true)
+	Player: He'd have found out sooner or later, Layla.
+	Player: I figured it was better coming from us.
+	Layla: Maybe.
+	Layla: It still should've been my call.
+- Change the subject. [matters]
+	Player: Hey, look. The traffic's finally thinning out.
+	Layla: ...Yeah. I guess it is.
+=> distant_after
+
+~ distant_repair_reprimand
+- Apologize. [matters]
+	do Flags.set_game_flag("kb_car_apologized", true)
+	do Flags.add_game_counter("layla_closeness", 1)
+	Player: Not the way I said it. I'm sorry, Layla.
+	Player: You didn't deserve to be talked to like that.
+	Layla: ...Okay.
+	Layla: Thank you. For saying that.
+- Stand by it. [matters]
+	do Flags.set_game_flag("kb_car_stood_by", true)
+	Player: I did. You needed to hear it, even if it stung.
+	Player: But I said it because I think you can do better. Not because I think less of you.
+	Layla: ...
+	Layla: I know. It still stung.
+- Change the subject. [matters]
+	Player: Let's... not do this right now. It's been a long day.
+	Layla: Sure. Okay.
+=> distant_after
+
+~ distant_after
+if Flags.get_game_flag("kb_car_apologized") == true:
+	# the thaw: a kindness on record finally shows.
+	if Flags.get_game_flag("kb_layla_gift_loved") == true:
+		Layla: The protein bar was... nice, by the way. Thanks.
+	elif Flags.get_game_flag("kb_layla_gift_given") == true:
+		Layla: And thanks for the snack. I never said.
+	elif Flags.get_game_flag("kb_layla_work_comforted") == true:
+		Layla: What you said about my work earlier... That was nice, too.
+	A small smile tugs at the corner of her mouth.
+if Flags.get_game_flag("kb_jayce_flashed") == true or Flags.get_game_flag("kb_jayce_camera_seen") == true:
+	=> distant_janitor
+=> arrival_distant
+
+~ distant_janitor
+For a while, the only sound is the road.
+if Flags.get_game_flag("kb_jayce_flashed") == true:
+	Layla: About the janitor...
+	Player: Look, if the flashing made you uncomfortable-
+	Layla: [speed=1.6]It's fine.[/speed][wait=0.3] [small=0.9]It was... fine.[/small]
+	Layla doesn't look at you. The tips of her ears have gone a little pink.
+if Flags.get_game_flag("kb_jayce_camera_seen") == true:
+	if Flags.get_game_flag("kb_jayce_flashed") == true:
+		Layla: That camera, though...
+	else
+		Layla: About the janitor...
+		Layla: That camera...
+	Player: Yeah. That was horrendous.
+	Player: Let's report him to the admin first thing tomorrow.
+	Layla: ...Yes. Let's.
+	Layla: At least we agree on that.
+=> arrival_distant
+
+~ arrival_distant
+do car_speed(0.0, 2.5)
+The car slows to a stop in front of your building.
+Player: Well, this is it. I'm here.
+if Flags.get_game_flag("kb_car_apologized") == true:
+	Layla: I'll take the wheel from here.
+	Layla: Bye, Fiona. Get some rest.
+else
+	Layla: I'll take it from here.
+	Layla: Bye, Fiona.
+Is there anything you would like to say to her?
+- Invite her up for coffee. [matters]
+	do Flags.set_game_flag("kb_coffee_offered", true)
+	Player: Do you... want to come up for some coffee before you go?
+	if Flags.get_game_flag("kb_car_apologized") == true:
+		do Flags.set_game_flag("kb_layla_came_up", true)
+		Layla: ...
+		Layla: Okay. Just one cup.
+		The two of you head upstairs together, a careful distance between you.
+	else
+		do Flags.set_game_flag("kb_layla_came_up", false)
+		Layla: Maybe another time.
+		You get out of the car. Layla pulls away without looking back.
+- Say goodbye. [matters]
+	do Flags.set_game_flag("kb_coffee_offered", false)
+	do Flags.set_game_flag("kb_layla_came_up", false)
+	Player: Bye, Layla. Drive safe.
+	You get out of the car.
+	if Flags.get_game_flag("kb_car_apologized") == true:
+		Layla gives you a small wave as she pulls away.
+	else
+		Layla pulls away without looking back.
+do car_end()
 => END

@@ -16,6 +16,10 @@ var player_half_width: float = 65.0
 @onready var prompt_label = $ThoughtBubblePivot/ThoughtBubble/MarginContainer/PromptLabel
 var _thought_bounce_tween: Tween
 
+## the outfit this Fiona uses: an AnimationLibrary .tres. it's a path (not a resource) so only the chosen
+## outfit's frames are ever loaded into VRAM. set per level on the Player instance.
+@export_file("*.tres") var outfit_path: String = "res://characters/outfits/fiona_gown.tres"
+
 var current_animation_state = "idle"
 
 var _is_walking_to_target: bool = false
@@ -43,6 +47,7 @@ func _ready():
 		pass
 		# print_rich("[color=yellow]player: could not calc width
 	
+	_load_outfit()
 	play_animation("idle")
 
 	thought_bubble_pivot.visible = false
@@ -281,6 +286,37 @@ func face_target(target_global_position: Vector2):
 		sprite_2d.flip_h = false 
 	elif target_global_position.x < global_position.x - 1.0: 
 		sprite_2d.flip_h = true
+
+
+# step 2.239: puts the outfit library in the AnimationPlayer's default slot and shows its idle at once.
+func _load_outfit() -> void:
+	if not is_instance_valid(animation_player) or outfit_path == "":
+		return
+	var lib := load(outfit_path) as AnimationLibrary
+	if lib == null:
+		push_warning("player: could not load outfit %s." % outfit_path)
+		return
+	if animation_player.has_animation_library(&""):
+		animation_player.remove_animation_library(&"")
+	animation_player.add_animation_library(&"", lib)
+	if animation_player.has_animation("idle"):
+		animation_player.play("idle")
+		animation_player.advance(0.0)
+	print_rich("[color=gray]player: outfit %s[/color]" % outfit_path)
+
+
+# change outfit mid-level (a costume change). the old outfit's frames are freed once nothing uses them.
+func set_outfit(path: String) -> void:
+	if path == outfit_path:
+		return
+	var was: String = current_animation_state
+	outfit_path = path
+	if is_instance_valid(animation_player):
+		animation_player.stop()
+	_load_outfit()
+	if is_instance_valid(animation_player) and animation_player.has_animation(was):
+		animation_player.play(was)
+
 
 func set_animation_state(new_state: String):
 	if not is_instance_valid(animation_player): return

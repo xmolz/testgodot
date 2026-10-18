@@ -1,0 +1,377 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://Backgrounds/Kit/Faculty Offices/Greene Office/certificate_head.jpg" id="1_head"]
+[ext_resource type="Texture2D" path="res://Backgrounds/Kit/Faculty Offices/Greene Office/certificate_dog.jpg" id="2_dog"]
+[ext_resource type="Shader" path="res://Interactables/Game World/University/ink_to_color.gdshader" id="3_ink"]
+
+[sub_resource type="SystemFont" id="SystemFont_serif"]
+font_names = PackedStringArray("Cinzel", "Georgia", "Times New Roman", "Liberation Serif", "DejaVu Serif", "serif")
+
+[sub_resource type="SystemFont" id="SystemFont_serif_italic"]
+font_names = PackedStringArray("Georgia", "Times New Roman", "Liberation Serif", "DejaVu Serif", "serif")
+font_italic = true
+
+[sub_resource type="SystemFont" id="SystemFont_script"]
+font_names = PackedStringArray("Pinyon Script", "Great Vibes", "Edwardian Script ITC", "Brush Script MT", "URW Chancery L", "cursive")
+font_italic = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gold_ink"]
+shader = ExtResource("3_ink")
+shader_parameter/ink_color = Color(0.7, 0.54, 0.22, 1)
+shader_parameter/paper_cut = 0.86
+shader_parameter/ink_full = 0.25
+shader_parameter/boost = 1.8
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dark_ink"]
+shader = ExtResource("3_ink")
+shader_parameter/ink_color = Color(0.36, 0.27, 0.12, 1)
+shader_parameter/paper_cut = 0.86
+shader_parameter/ink_full = 0.25
+shader_parameter/boost = 1.8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_folder"]
+content_margin_left = 22.0
+content_margin_top = 22.0
+content_margin_right = 22.0
+content_margin_bottom = 22.0
+bg_color = Color(0.07, 0.07, 0.08, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.2, 0.19, 0.18, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_color = Color(0, 0, 0, 0.5)
+shadow_size = 24
+shadow_offset = Vector2(0, 10)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_paper"]
+content_margin_left = 16.0
+content_margin_top = 16.0
+content_margin_right = 16.0
+content_margin_bottom = 16.0
+bg_color = Color(0.97, 0.95, 0.89, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.7, 0.54, 0.22, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_inner_rule"]
+content_margin_left = 34.0
+content_margin_top = 18.0
+content_margin_right = 34.0
+content_margin_bottom = 20.0
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.7, 0.54, 0.22, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dropcap"]
+content_margin_left = 6.0
+content_margin_top = 0.0
+content_margin_right = 6.0
+content_margin_bottom = 2.0
+bg_color = Color(0.13, 0.2, 0.44, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.7, 0.54, 0.22, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_seal"]
+bg_color = Color(0.74, 0.58, 0.25, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.55, 0.41, 0.15, 1)
+corner_radius_top_left = 40
+corner_radius_top_right = 40
+corner_radius_bottom_right = 40
+corner_radius_bottom_left = 40
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_rule"]
+color = Color(0.7, 0.54, 0.22, 1)
+thickness = 1
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_signature"]
+color = Color(0.25, 0.22, 0.18, 1)
+thickness = 1
+
+[node name="GreeneCertificateCloseup" type="PanelContainer"]
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_folder")
+
+[node name="Paper" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(600, 720)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_paper")
+
+[node name="InnerRule" type="PanelContainer" parent="Paper"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_inner_rule")
+
+[node name="Column" type="VBoxContainer" parent="Paper/InnerRule"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="HeadOrnament" type="TextureRect" parent="Paper/InnerRule/Column"]
+texture_filter = 4
+material = SubResource("ShaderMaterial_gold_ink")
+custom_minimum_size = Vector2(0, 84)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("1_head")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="AwardTitle" type="Label" parent="Paper/InnerRule/Column"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.62, 0.46, 0.16, 1)
+theme_override_fonts/font = SubResource("SystemFont_script")
+theme_override_font_sizes/font_size = 30
+text = "Distinguished Award"
+horizontal_alignment = 1
+
+[node name="AwardTitle2" type="Label" parent="Paper/InnerRule/Column"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.62, 0.46, 0.16, 1)
+theme_override_fonts/font = SubResource("SystemFont_script")
+theme_override_font_sizes/font_size = 30
+text = "in Genomic Science"
+horizontal_alignment = 1
+
+[node name="PresentedBy" type="Label" parent="Paper/InnerRule/Column"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.25, 0.22, 0.18, 1)
+theme_override_fonts/font = SubResource("SystemFont_serif_italic")
+theme_override_font_sizes/font_size = 14
+text = "Presented by the"
+horizontal_alignment = 1
+
+[node name="Academy" type="Label" parent="Paper/InnerRule/Column"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.18, 0.16, 0.13, 1)
+theme_override_fonts/font = SubResource("SystemFont_serif")
+theme_override_font_sizes/font_size = 19
+text = "INTERNATIONAL ACADEMY OF"
+horizontal_alignment = 1
+
+[node name="Academy2" type="Label" parent="Paper/InnerRule/Column"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.18, 0.16, 0.13, 1)
+theme_override_fonts/font = SubResource("SystemFont_serif")
+theme_override_font_sizes/font_size = 19
+text = "GENOMIC SCIENCES"
+horizontal_alignment = 1
+
+[node name="To" type="Label" parent="Paper/InnerRule/Column"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.25, 0.22, 0.18, 1)
+theme_override_fonts/font = SubResource("SystemFont_serif_italic")
+theme_override_font_sizes/font_size = 14
+text = "to"
+horizontal_alignment = 1
+
+[node name="Recipient" type="Label" parent="Paper/InnerRule/Column"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.13, 0.12, 0.1, 1)
+theme_override_fonts/font = SubResource("SystemFont_serif")
+theme_override_font_sizes/font_size = 30
+text = "DR. ALAN GREENE"
+horizontal_alignment = 1
+
+[node name="Institution" type="Label" parent="Paper/InnerRule/Column"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.25, 0.22, 0.18, 1)
+theme_override_fonts/font = SubResource("SystemFont_serif_italic")
+theme_override_font_sizes/font_size = 15
+text = "Greendale University"
+horizontal_alignment = 1
+
+[node name="SpacerTop" type="Control" parent="Paper/InnerRule/Column"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="Rule" type="HSeparator" parent="Paper/InnerRule/Column"]
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_rule")
+
+[node name="Citation" type="HBoxContainer" parent="Paper/InnerRule/Column"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="DropCap" type="PanelContainer" parent="Paper/InnerRule/Column/Citation"]
+layout_mode = 2
+size_flags_vertical = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_dropcap")
+
+[node name="Letter" type="Label" parent="Paper/InnerRule/Column/Citation/DropCap"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.86, 0.7, 0.34, 1)
+theme_override_fonts/font = SubResource("SystemFont_serif")
+theme_override_font_sizes/font_size = 52
+text = "F"
+horizontal_alignment = 1
+
+[node name="Text" type="Label" parent="Paper/InnerRule/Column/Citation"]
+custom_minimum_size = Vector2(440, 0)
+layout_mode = 2
+theme_override_constants/line_spacing = 0
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.2, 0.18, 0.15, 1)
+theme_override_fonts/font = SubResource("SystemFont_serif_italic")
+theme_override_font_sizes/font_size = 18
+text = "or pioneering discoveries in the regulation of the human genome, and for a lifetime of leadership that has shaped the course of modern genomic science."
+autowrap_mode = 3
+
+[node name="Spacer" type="Control" parent="Paper/InnerRule/Column"]
+custom_minimum_size = Vector2(0, 6)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="SealRow" type="HBoxContainer" parent="Paper/InnerRule/Column"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="BeastLeft" type="TextureRect" parent="Paper/InnerRule/Column/SealRow"]
+texture_filter = 4
+material = SubResource("ShaderMaterial_dark_ink")
+custom_minimum_size = Vector2(72, 90)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("2_dog")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Seal" type="PanelContainer" parent="Paper/InnerRule/Column/SealRow"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_seal")
+
+[node name="SealText" type="Label" parent="Paper/InnerRule/Column/SealRow/Seal"]
+layout_mode = 2
+theme_override_constants/line_spacing = 0
+theme_override_colors/font_color = Color(0.42, 0.3, 0.1, 1)
+theme_override_fonts/font = SubResource("SystemFont_serif")
+theme_override_font_sizes/font_size = 13
+text = "I · A · G · S
+MCMLXXI"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BeastRight" type="TextureRect" parent="Paper/InnerRule/Column/SealRow"]
+texture_filter = 4
+material = SubResource("ShaderMaterial_dark_ink")
+custom_minimum_size = Vector2(72, 90)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("2_dog")
+expand_mode = 1
+stretch_mode = 5
+flip_h = true
+
+[node name="Signatures" type="HBoxContainer" parent="Paper/InnerRule/Column"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 40
+alignment = 1
+
+[node name="Left" type="VBoxContainer" parent="Paper/InnerRule/Column/Signatures"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Signed" type="Label" parent="Paper/InnerRule/Column/Signatures/Left"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.15, 0.2, 0.4, 1)
+theme_override_fonts/font = SubResource("SystemFont_script")
+theme_override_font_sizes/font_size = 22
+text = "Helena Marsh"
+horizontal_alignment = 1
+
+[node name="Line" type="HSeparator" parent="Paper/InnerRule/Column/Signatures/Left"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_signature")
+
+[node name="Name" type="Label" parent="Paper/InnerRule/Column/Signatures/Left"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.25, 0.22, 0.18, 1)
+theme_override_fonts/font = SubResource("SystemFont_serif")
+theme_override_font_sizes/font_size = 11
+text = "Dr. Helena Marsh"
+horizontal_alignment = 1
+
+[node name="Title" type="Label" parent="Paper/InnerRule/Column/Signatures/Left"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.25, 0.22, 0.18, 1)
+theme_override_fonts/font = SubResource("SystemFont_serif")
+theme_override_font_sizes/font_size = 11
+text = "President"
+horizontal_alignment = 1
+
+[node name="Right" type="VBoxContainer" parent="Paper/InnerRule/Column/Signatures"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Signed" type="Label" parent="Paper/InnerRule/Column/Signatures/Right"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.15, 0.2, 0.4, 1)
+theme_override_fonts/font = SubResource("SystemFont_script")
+theme_override_font_sizes/font_size = 22
+text = "Thomas Ferrand"
+horizontal_alignment = 1
+
+[node name="Line" type="HSeparator" parent="Paper/InnerRule/Column/Signatures/Right"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_signature")
+
+[node name="Name" type="Label" parent="Paper/InnerRule/Column/Signatures/Right"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.25, 0.22, 0.18, 1)
+theme_override_fonts/font = SubResource("SystemFont_serif")
+theme_override_font_sizes/font_size = 11
+text = "Prof. Thomas Ferrand"
+horizontal_alignment = 1
+
+[node name="Title" type="Label" parent="Paper/InnerRule/Column/Signatures/Right"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.25, 0.22, 0.18, 1)
+theme_override_fonts/font = SubResource("SystemFont_serif")
+theme_override_font_sizes/font_size = 11
+text = "Chair, Award Jury"
+horizontal_alignment = 1
+
+[node name="Place" type="Label" parent="Paper/InnerRule/Column"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.62, 0.46, 0.16, 1)
+theme_override_fonts/font = SubResource("SystemFont_serif_italic")
+theme_override_font_sizes/font_size = 13
+text = "Geneva"
+horizontal_alignment = 1

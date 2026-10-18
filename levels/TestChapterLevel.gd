@@ -49,6 +49,7 @@ func _ready():
 	if GameManager:
 		if is_instance_valid(level_state_manager):
 			Flags.register_level_state_manager(level_state_manager)
+			_setup_chapter_memories()
 
 	# ****************[dev return button]
 	# temporary way back to the hub until real chapter content exists. top-left, above the
@@ -316,6 +317,48 @@ func _apply_disabled_verbs() -> void:
 			changed = true
 	if changed:
 		Verbs.set_active_scene_verbs(active)
+
+
+# ****************[chapter memories] step 2.238
+# the car ride (and later chapters) can't see this level's flags once it unloads, so the
+# flags they react to are mirrored live into game flags as "kb_<flag>" (saved, cross-level).
+# add a flag here when a later scene needs to react to it.
+const CHAPTER_MEMORY_PREFIX := "kb_"
+const CHAPTER_MEMORY_FLAGS: Array[String] = [
+	"layla_work_comforted",
+	"layla_work_reprimanded",
+	"julian_refused_help",
+	"julian_nearly_told_truth",
+	"layla_gift_given",
+	"layla_gift_loved",
+	"layla_said_fee",
+	"jayce_flashed",
+	"jayce_camera_seen",
+]
+
+
+func _setup_chapter_memories() -> void:
+	if not is_instance_valid(level_state_manager):
+		return
+	if not level_state_manager.level_flag_changed.is_connected(_on_chapter_memory_flag_changed):
+		level_state_manager.level_flag_changed.connect(_on_chapter_memory_flag_changed)
+	if not level_state_manager.level_state_restored.is_connected(_sync_chapter_memories):
+		level_state_manager.level_state_restored.connect(_sync_chapter_memories)
+	_sync_chapter_memories()
+
+
+# writes every tracked flag (true or false), so a replay of the chapter overwrites the last run's memories
+func _sync_chapter_memories() -> void:
+	if not is_instance_valid(level_state_manager):
+		return
+	for flag_name in CHAPTER_MEMORY_FLAGS:
+		Flags.set_game_flag(CHAPTER_MEMORY_PREFIX + flag_name, level_state_manager.get_level_flag(flag_name))
+
+
+func _on_chapter_memory_flag_changed(flag_name: String, new_value: bool) -> void:
+	if flag_name in CHAPTER_MEMORY_FLAGS:
+		Flags.set_game_flag(CHAPTER_MEMORY_PREFIX + flag_name, new_value)
+		print_rich("[color=gray]Chapter memory: %s%s = %s[/color]" % [CHAPTER_MEMORY_PREFIX, flag_name, new_value])
 
 
 func _exit_tree():

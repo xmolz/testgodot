@@ -49,30 +49,40 @@ Player: (I don't have anything to plug in.)
 => END
 
 ~ vending_machine
+# before Fiona's first card swipe, snacks she can't afford look normal (she doesn't know the reader is broken).
+# once the swipe fails (vending_card_declined), they grey out.
 What do you want to get from the vending machine?
 - Cheddar cheese balls – $1.75 [repeatable] [if Inventory.get_count("cash") >= 175]
 	do Inventory.remove_amount("cash", 175)
 	do Inventory.add_item("vending_cheese_balls")
 	=> vending_bought
-- Cheddar cheese balls – $1.75 [unavailable] [if Inventory.get_count("cash") < 175]
+- Cheddar cheese balls – $1.75 [repeatable] [if Inventory.get_count("cash") < 175 and Flags.get_level_flag("vending_card_declined") == false]
+	=> vending_cant_pay
+- Cheddar cheese balls – $1.75 [unavailable] [if Inventory.get_count("cash") < 175 and Flags.get_level_flag("vending_card_declined") == true]
 	=> vending_cant_pay
 - Pink-pack protein bar – $3.25 [repeatable] [if Inventory.get_count("cash") >= 325]
 	do Inventory.remove_amount("cash", 325)
 	do Inventory.add_item("vending_protein_bar")
 	=> vending_bought
-- Pink-pack protein bar – $3.25 [unavailable] [if Inventory.get_count("cash") < 325]
+- Pink-pack protein bar – $3.25 [repeatable] [if Inventory.get_count("cash") < 325 and Flags.get_level_flag("vending_card_declined") == false]
+	=> vending_cant_pay
+- Pink-pack protein bar – $3.25 [unavailable] [if Inventory.get_count("cash") < 325 and Flags.get_level_flag("vending_card_declined") == true]
 	=> vending_cant_pay
 - Boba tea – $3.75 [repeatable] [if Inventory.get_count("cash") >= 375]
 	do Inventory.remove_amount("cash", 375)
 	do Inventory.add_item("vending_boba_tea")
 	=> vending_bought
-- Boba tea – $3.75 [unavailable] [if Inventory.get_count("cash") < 375]
+- Boba tea – $3.75 [repeatable] [if Inventory.get_count("cash") < 375 and Flags.get_level_flag("vending_card_declined") == false]
+	=> vending_cant_pay
+- Boba tea – $3.75 [unavailable] [if Inventory.get_count("cash") < 375 and Flags.get_level_flag("vending_card_declined") == true]
 	=> vending_cant_pay
 - Diet cola – $2.25 [repeatable] [if Inventory.get_count("cash") >= 225]
 	do Inventory.remove_amount("cash", 225)
 	do Inventory.add_item("vending_diet_cola")
 	=> vending_bought
-- Diet cola – $2.25 [unavailable] [if Inventory.get_count("cash") < 225]
+- Diet cola – $2.25 [repeatable] [if Inventory.get_count("cash") < 225 and Flags.get_level_flag("vending_card_declined") == false]
+	=> vending_cant_pay
+- Diet cola – $2.25 [unavailable] [if Inventory.get_count("cash") < 225 and Flags.get_level_flag("vending_card_declined") == true]
 	=> vending_cant_pay
 - Nothing. Never mind. [Leave]
 	=> END

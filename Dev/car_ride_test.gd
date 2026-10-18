@@ -29,6 +29,21 @@ const BALLOON_PATH := "res://conversation/conversationballoon.tscn"
 @export var dialogue_title: String = "start"
 ## seconds before the first line
 @export var dialogue_delay: float = 1.0
+## centre the dialogue choices, like the test level (read by conversationballoon.gd)
+@export var center_dialogue_responses: bool = true
+
+@export_group("Test memories (dev)")
+## fakes Layla's mood and the chapter memories before the dialogue starts.
+## untick to use the real game flags (e.g. when arriving from the university level).
+@export var test_memories: bool = true
+@export_enum("close", "neutral", "distant") var test_mood: String = "close"
+@export_enum("not asked", "comforted", "reprimanded") var test_work: String = "comforted"
+@export_enum("refused help", "nearly told") var test_julian: String = "refused help"
+@export_enum("none", "other snack", "protein bar") var test_snack: String = "protein bar"
+## Layla already called Fiona "Fee" at the vending machine (only happens when close + protein bar)
+@export var test_said_fee: bool = true
+## the janitor route: what Fiona did to get past Jayce (flash him / see his camera / both)
+@export_enum("none", "flashed", "camera", "both") var test_janitor: String = "flashed"
 
 @export_group("Thinking (push-in + memory)")
 ## Fiona's face in the car art, as a fraction of the screen (after the overscan)
@@ -207,8 +222,32 @@ func _start_dialogue() -> void:
 	if not ResourceLoader.exists(dialogue_path):
 		push_warning("car_ride_test: no dialogue at %s." % dialogue_path)
 		return
+	_apply_test_memories()
 	var res = load(dialogue_path)
 	DialogueManager.show_dialogue_balloon_scene(BALLOON_PATH, res, dialogue_title, [self])
+
+
+# step 2.238: dev-only stand-ins for the mood and the "kb_" chapter memories the dialogue reads.
+func _apply_test_memories() -> void:
+	if not test_memories:
+		return
+	var target: float = 4.0
+	match test_mood:
+		"neutral":
+			target = 1.0
+		"distant":
+			target = -1.0
+	Flags.add_game_counter("layla_closeness", target - Flags.get_game_counter("layla_closeness"))
+	Flags.set_game_flag("kb_layla_work_comforted", test_work == "comforted")
+	Flags.set_game_flag("kb_layla_work_reprimanded", test_work == "reprimanded")
+	Flags.set_game_flag("kb_julian_refused_help", test_julian == "refused help")
+	Flags.set_game_flag("kb_julian_nearly_told_truth", test_julian == "nearly told")
+	Flags.set_game_flag("kb_layla_gift_given", test_snack != "none")
+	Flags.set_game_flag("kb_layla_gift_loved", test_snack == "protein bar")
+	Flags.set_game_flag("kb_layla_said_fee", test_said_fee)
+	Flags.set_game_flag("kb_jayce_flashed", test_janitor == "flashed" or test_janitor == "both")
+	Flags.set_game_flag("kb_jayce_camera_seen", test_janitor == "camera" or test_janitor == "both")
+	print_rich("[color=orange]car_ride_test: test memories on — mood %s, work %s, julian %s, snack %s, fee %s[/color]" % [test_mood, test_work, test_julian, test_snack, test_said_fee])
 
 
 # --- dialogue hooks ---------------------------------------------------------
@@ -224,6 +263,16 @@ func car_reveal(seconds: float = 1.5) -> void:
 		_black_tween.kill()
 	_black_tween = create_tween()
 	_black_tween.tween_property(_black, "color:a", 0.0, maxf(0.01, seconds)).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+
+# end of the ride: fade to black. the dev scene stops there; the real car scene will hand back to the
+# memory box here (ChapterLaunchSequence.return_to_hub()) once the level -> car handoff is built.
+func car_end(seconds: float = 2.0) -> void:
+	if _black_tween and _black_tween.is_valid():
+		_black_tween.kill()
+	_black_tween = create_tween()
+	_black_tween.tween_property(_black, "color:a", 1.0, maxf(0.01, seconds)).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	_black_tween.tween_callback(func(): print_rich("[color=orange]car_ride_test: ride over. the real car scene returns to the memory box here.[/color]"))
 
 
 func car_bump(strength: float = 1.0) -> void:

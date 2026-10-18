@@ -1,0 +1,27 @@
+[gd_resource type="Animation" format=3]
+
+[ext_resource type="Texture2D" path="res://Animations/Protag/Protag_idle_new_clothes/Protag_idle_new_clothes_0001.png" id="1_f0001"]
+[ext_resource type="Texture2D" path="res://Animations/Protag/Protag_idle_new_clothes/Protag_idle_new_clothes_0003.png" id="2_f0003"]
+[ext_resource type="Texture2D" path="res://Animations/Protag/Protag_idle_new_clothes/Protag_idle_new_clothes_0005.png" id="3_f0005"]
+[ext_resource type="Texture2D" path="res://Animations/Protag/Protag_idle_new_clothes/Protag_idle_new_clothes_0006.png" id="4_f0006"]
+[ext_resource type="Texture2D" path="res://Animations/Protag/Protag_idle_new_clothes/Protag_idle_new_clothes_0007.png" id="5_f0007"]
+[ext_resource type="Texture2D" path="res://Animations/Protag/Protag_idle_new_clothes/Protag_idle_new_clothes_0013.png" id="6_f0013"]
+[ext_resource type="Texture2D" path="res://Animations/Protag/Protag_idle_new_clothes/Protag_idle_new_clothes_0014.png" id="7_f0014"]
+
+[resource]
+resource_name = "idle"
+length = 2.0
+loop_mode = 1
+step = 0.0833
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0833, 0.1667, 0.25, 0.3333, 0.4167, 0.5, 0.5833, 0.6667, 0.75, 0.8333, 0.9167, 1, 1.0833, 1.1667, 1.25, 1.3333, 1.4167, 1.5, 1.5833, 1.6667, 1.75, 1.8333, 1.9167),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("1_f0001"), ExtResource("1_f0001"), ExtResource("2_f0003"), ExtResource("2_f0003"), ExtResource("3_f0005"), ExtResource("4_f0006"), ExtResource("5_f0007"), ExtResource("5_f0007"), ExtResource("5_f0007"), ExtResource("4_f0006"), ExtResource("3_f0005"), ExtResource("2_f0003"), ExtResource("6_f0013"), ExtResource("7_f0014"), ExtResource("6_f0013"), ExtResource("2_f0003"), ExtResource("2_f0003"), ExtResource("3_f0005"), ExtResource("4_f0006"), ExtResource("5_f0007"), ExtResource("5_f0007"), ExtResource("4_f0006"), ExtResource("2_f0003"), ExtResource("1_f0001")]
+}

@@ -12,4 +12,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_car")
 car_image_path = "uid://brusbtgslju77"
+test_mood = "neutral"
+test_work = "reprimanded"
+test_snack = "other snack"
 far_texture = ExtResource("2_4wtye")

@@ -1,0 +1,83 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://interactions/interactable.gd" id="1_interactable"]
+[ext_resource type="Script" path="res://data/InteractionResponse.gd" id="2_response"]
+[ext_resource type="Script" path="res://interactions/action.gd" id="3_action"]
+[ext_resource type="Script" path="res://interactions/actions/OpenCloseupAction.gd" id="4_closeup_action"]
+[ext_resource type="PackedScene" path="res://Interactables/Game World/University/greene_certificate_closeup.tscn" id="5_certificate"]
+[ext_resource type="Script" path="res://Interactables/Game World/University/certificate_wall_fit.gd" id="6_fit"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_certificate"]
+size = Vector2(138, 164)
+
+[sub_resource type="Resource" id="Resource_certificate_closeup"]
+script = ExtResource("4_closeup_action")
+content_scene = ExtResource("5_certificate")
+
+[sub_resource type="Resource" id="Resource_certificate_examine"]
+script = ExtResource("2_response")
+verb_id = "examine"
+requires_walk = false
+actions_to_perform = Array[ExtResource("3_action")]([SubResource("Resource_certificate_closeup")])
+
+[sub_resource type="Resource" id="Resource_certificate_use"]
+script = ExtResource("2_response")
+verb_id = "use"
+actions_to_perform = Array[ExtResource("3_action")]([SubResource("Resource_certificate_closeup")])
+
+[node name="GreeneCertificate" type="Area2D"]
+script = ExtResource("1_interactable")
+object_display_name = "Framed Certificate"
+object_id = "greene_office_certificate"
+interactions = Array[ExtResource("2_response")]([SubResource("Resource_certificate_examine"), SubResource("Resource_certificate_use")])
+
+[node name="Certificate" parent="." instance=ExtResource("5_certificate")]
+offset_left = -69.23
+offset_top = -82.13
+offset_right = 574.77
+offset_bottom = 681.87
+scale = Vector2(0.215, 0.215)
+
+[node name="HoverGlow" type="Node2D" parent="."]
+visible = false
+
+[node name="GlowTop" type="ColorRect" parent="HoverGlow"]
+offset_left = -73.23
+offset_top = -86.13
+offset_right = 73.23
+offset_bottom = -78.13
+mouse_filter = 2
+color = Color(0.2, 0.85, 1, 1)
+
+[node name="GlowBottom" type="ColorRect" parent="HoverGlow"]
+offset_left = -73.23
+offset_top = 78.13
+offset_right = 73.23
+offset_bottom = 86.13
+mouse_filter = 2
+color = Color(0.2, 0.85, 1, 1)
+
+[node name="GlowLeft" type="ColorRect" parent="HoverGlow"]
+offset_left = -73.23
+offset_top = -86.13
+offset_right = -65.23
+offset_bottom = 86.13
+mouse_filter = 2
+color = Color(0.2, 0.85, 1, 1)
+
+[node name="GlowRight" type="ColorRect" parent="HoverGlow"]
+offset_left = 65.23
+offset_top = -86.13
+offset_right = 73.23
+offset_bottom = 86.13
+mouse_filter = 2
+color = Color(0.2, 0.85, 1, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_certificate")
+
+[node name="WalkToPoint" type="Marker2D" parent="."]
+position = Vector2(0, 380)
+
+[node name="WallFit" type="Node" parent="."]
+script = ExtResource("6_fit")
