@@ -34,7 +34,7 @@ func _ready():
 
 	# *******************(mobile scaling for journal)
 	if OS.has_feature("mobile"):
-		$CenterContainer/LayoutAnchor.custom_minimum_size = Vector2(1400, 800)
+		$CenterContainer/LayoutAnchor.custom_minimum_size = Vector2(1760, 820)
 		page_indicator_label.add_theme_font_size_override("font_size", 46)
 
 		close_button.position.y = -120
@@ -153,21 +153,38 @@ func _add_entry_layer(parent: Control, entry: JournalPageData):
 	elif not entry.page_text.is_empty():
 		_add_text_layer(parent, entry.page_text)
 
+# page_text is bbcode, so a page can strike a word out ([s]...[/s]) like a real handwritten note.
 func _add_text_layer(parent: Control, text: String):
-	var label = Label.new()
+	var label = RichTextLabel.new()
+	label.bbcode_enabled = true
 	label.text = text
+	label.scroll_active = false
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 	label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	label.offset_left = 28
 	label.offset_top = 28
 	label.offset_right = -28
 	label.offset_bottom = -28
-	label.add_theme_font_override("font", journal_text_font)
-	label.add_theme_font_size_override("font_size", 40 if OS.has_feature("mobile") else 24)
-	label.add_theme_color_override("font_color", Color(0.17, 0.13, 0.1, 1))
+	label.add_theme_font_override("normal_font", journal_text_font)
+	label.add_theme_font_size_override("normal_font_size", 52 if OS.has_feature("mobile") else 34)
+	label.add_theme_constant_override("line_separation", 9 if OS.has_feature("mobile") else 6)
+	label.add_theme_color_override("default_color", Color(0.17, 0.13, 0.1, 1))
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	label.modulate.a = 0.0
 	parent.add_child(label)
+	_shrink_to_fit(label)
+
+# a page keeps its full text size unless it would run off the bottom; then it steps down until it
+# fits. hidden while it measures so the player never sees it resize.
+func _shrink_to_fit(label: RichTextLabel):
+	await get_tree().process_frame
+	var font_size = label.get_theme_font_size("normal_font_size") if is_instance_valid(label) else 0
+	while is_instance_valid(label) and font_size > 16 and label.get_content_height() > label.size.y:
+		font_size -= 2
+		label.add_theme_font_size_override("normal_font_size", font_size)
+		await get_tree().process_frame
+	if is_instance_valid(label):
+		label.modulate.a = 1.0
 
 func _on_prev_pressed():
 	if SoundManager: SoundManager.play_sfx("ui_click")

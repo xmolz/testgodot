@@ -6,17 +6,44 @@
 [sub_resource type="Resource" id="Resource_greene_page_1"]
 script = ExtResource("2_page")
 page_index = 0
-page_text = "Monday.\n\nThe sequencer jammed again. Third time this month. The machine is older than half my students, and it sulks like one.\n\nMust order more pipette tips. And must stop leaving my reading glasses in the cold room."
+page_text = "Monday.
 
-[sub_resource type="Resource" id="Resource_greene_page_2"]
+Our sequencers jammed up during today's experiments. Usually that would've meant another $150k spent on replacing them. But Fiona came up with a better solution. She flushed the clogged fluidics lines, recalibrated the flow cells by hand, and got them running again. She even fine-tuned the optics so we can capture our results more accurately than before."
+
+[sub_resource type="Resource" id="Resource_greene_page_1b"]
 script = ExtResource("2_page")
 page_index = 1
-page_text = "Watched one of her pictures again last night. They called her the girl who was too beautiful, and for once the studio was right.\n\nHer birthday comes round again on the twenty-eighth of July. I always raise a glass to her that night, whatever else is going on."
+page_text = "I have no doubt in my mind she'll become one of the greatest scientists in our field. Honestly, I wish I had that attitude myself. But that hunger, that [s]attitude[/s] fire seems to have left me with age.
 
-[sub_resource type="Resource" id="Resource_greene_page_3"]
+Regardless, it seems the future is in good hands.
+
+I am going to spend the rest of the day watching movies."
+
+[sub_resource type="Resource" id="Resource_greene_tuesday_1"]
 script = ExtResource("2_page")
 page_index = 2
-page_text = "Facilities sent another memo. Every lab code must now change once a year, as if a man my age can be trusted to remember a new string of numbers every January.\n\nSo this year I chose a date I could never forget.\n\nNote to self: do NOT write the code down. Not even here."
+page_text = "Tuesday.\n\nWoke up late today because I stayed up watching The White Moth. I can never get enough of her beauty in it. Such an honest performance. To say so much without saying a single word. The subtlety.\n\nIt's how I aim to do my science, too. More with less. I've lived a long life, and I'd like to think I've contributed a good deal to the field of genomics. But I now understand something quite important."
+
+[sub_resource type="Resource" id="Resource_greene_tuesday_2"]
+script = ExtResource("2_page")
+page_index = 3
+page_text = "I need to do MORE for science. Not by doing more OF science, but by nurturing the next generation of scientists.\n\nStudent enrolments in STEM PhD programs are at an all-time high. There must be a way I can use this to our advantage.\n\nHow do I get more brilliant students to come and work for our lab?"
+
+[sub_resource type="Resource" id="Resource_greene_wednesday_1"]
+script = ExtResource("2_page")
+page_index = 4
+page_text = "Wednesday.
+
+One thing I like least about working in academia is the sheer amount of bureaucracy involved in getting your work done. Every department wants to get in the way. Finance asks about your funds. Marketing asks if we have anything worth bragging about on their site.
+
+I am tired."
+
+[sub_resource type="Resource" id="Resource_greene_wednesday_2"]
+script = ExtResource("2_page")
+page_index = 5
+page_text = "I was even made to change the password to our lab today. Why couldn't this have waited till tomorrow? Regardless, I set it yet again as something easy to remember: her birth date. My inspiration.
+
+But, well, I guess the day wasn't a complete waste. Our new RA, Layla, has been showing promise in the lab. I think I will start handing her more complex tasks from now on. About time Fiona had some help."
 
 [node name="GreeneJournalOverlay" instance=ExtResource("1_overlay")]
-journal_entries = Array[ExtResource("2_page")]([SubResource("Resource_greene_page_1"), SubResource("Resource_greene_page_2"), SubResource("Resource_greene_page_3")])
+journal_entries = Array[ExtResource("2_page")]([SubResource("Resource_greene_page_1"), SubResource("Resource_greene_page_1b"), SubResource("Resource_greene_tuesday_1"), SubResource("Resource_greene_tuesday_2"), SubResource("Resource_greene_wednesday_1"), SubResource("Resource_greene_wednesday_2")])

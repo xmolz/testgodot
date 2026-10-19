@@ -150,7 +150,7 @@ mouse_filter = 2
 theme = SubResource("Theme_Journal")
 
 [node name="LayoutAnchor" type="Control" parent="CenterContainer" unique_id=1256329933]
-custom_minimum_size = Vector2(1200, 750)
+custom_minimum_size = Vector2(1600, 900)
 layout_mode = 2
 mouse_filter = 2
 

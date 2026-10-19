@@ -64,10 +64,11 @@ elif Flags.get_game_counter("layla_closeness") >= 0:
 	Layla: Sorry. You just looked... so far away.
 	Layla: Are you okay?
 else
+	Layla doesn't seem to have noticed your lil mid-drive daydream.
+	Instead, she seems to be looking out the window and having daydream thoughts of her own.
 	do car_bump(1.0)
 	do car_think_end(0.4)
-	The car jolts over a bump, and your thoughts scatter.
-	Layla doesn't seem to notice. She's staring out the window.
+	The car jolts over a bump, bringing you back to reality.
 	=> distant_ride
 Player: Oh, yes, of course.
 Player: Sorry, I got too in the zone while driving, I guess.
@@ -246,10 +247,9 @@ do car_end()
 ~ distant_ride
 # DISTANT Layla (closeness < 0). she doesn't carry the conversation, so Fiona has to - or doesn't.
 # a distant Layla always has at least one hurt: Fiona nearly told Julian, or reprimanded her (+ "Right").
-Layla's hands are folded in her lap. The usual bounce in her is gone.
-Even the teddy bear on the dashboard seems quieter, somehow.
-Player: (...)
-You could say something. Or you could let it be.
+Her hands are folded in her lap. Her usual 'bounce' is gone.
+She sits right next to you, but feels miles away.
+Player: (Should I... say something to her?)
 - Break the silence. [matters]
 	do Flags.set_game_flag("kb_car_broke_silence", true)
 	=> distant_talk
@@ -258,9 +258,9 @@ You could say something. Or you could let it be.
 
 ~ distant_quiet
 You keep your eyes on the road.
-The city slides past the windows. Neither of you says a word.
+The city slides past your windows. Neither of you says a word.
 do car_bump(0.5)
-Layla shifts in her seat, then goes still again.
+She shifts and shuffles a bit in her seat, but then goes still again.
 Player: (Maybe it's better this way. For today.)
 => arrival_distant
 
