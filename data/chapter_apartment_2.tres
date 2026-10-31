@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="MemoryChapterData" format=3 uid="uid://bevex8j7600k4"]
+
+[ext_resource type="Script" uid="uid://bfrll5vc6bmcg" path="res://data/MemoryChapterData.gd" id="1_chapter"]
+
+[resource]
+script = ExtResource("1_chapter")
+chapter_name = "Late Night Phone Call"
+unlock_flag = "full_game_unlocked"
+chapter_type = 1
+chapter_description = "It happened again. The horny took over. And... I had to do something about it."
+content_tags = Array[String](["TEMPLATE - to be written"])
+is_optional = true
+launch_dialogue_title = "apartment_1"
+intro_overlay_path = "res://conversation/apartment_chapter_overlay.tscn"

@@ -3,10 +3,30 @@
 [ext_resource type="Script" path="res://data/MemoryChapterData.gd" id="1_chapter_script"]
 [ext_resource type="Script" path="res://data/MemoryGroupData.gd" id="2_group_script"]
 [ext_resource type="Resource" path="res://data/chapter_apartment_1.tres" id="3_chapter1"]
+[ext_resource type="Resource" path="res://data/chapter_apartment_2.tres" id="4_chapter2"]
+
+[sub_resource type="Resource" id="Resource_apt3"]
+script = ExtResource("1_chapter_script")
+chapter_name = "TEMPLATE - to be written"
+chapter_type = 1
+unlock_flag = "chapter_apartment_placeholder"
+
+[sub_resource type="Resource" id="Resource_apt4"]
+script = ExtResource("1_chapter_script")
+chapter_name = "TEMPLATE - to be written"
+chapter_type = 1
+unlock_flag = "chapter_apartment_placeholder"
+
+[sub_resource type="Resource" id="Resource_apt5"]
+script = ExtResource("1_chapter_script")
+chapter_name = "TEMPLATE - to be written"
+chapter_type = 1
+unlock_flag = "chapter_apartment_placeholder"
 
 [resource]
 script = ExtResource("2_group_script")
 group_name = "Fiona's Apartment"
-group_thumbnail_path = "res://1080test1.jpg"
+unlock_flag = "chapter_keeping_busy_done"
+group_thumbnail_path = "res://Backgrounds/Apartment/apartment_living_room.png"
 category = 1
-chapters = Array[ExtResource("1_chapter_script")]([ExtResource("3_chapter1")])
+chapters = Array[ExtResource("1_chapter_script")]([ExtResource("3_chapter1"), ExtResource("4_chapter2"), SubResource("Resource_apt3"), SubResource("Resource_apt4"), SubResource("Resource_apt5")])

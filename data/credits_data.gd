@@ -8,16 +8,25 @@ class_name CreditsData
 
 const PATRON_TIERS := [
 	{
-		"tier": "Legacy Members",
+		"tier": "Patrons",
 		"names": [
-			"happywheels12",
+			"Spencer S",
+			"Varithan",
+			"Sagei il Cercatore",
+			"Okami",
+			"Deadshy",
+			"gamejumper80",
+			"Zvulcaain",
+			"Sayian_Rini",
+			"Tahu LordofFlame",
+			"Bicho Rojo",
+			"TheBoss BS911",
 			"Marvin",
-			"Mattia Sant",
-			"Ryan Duncan",
-			"seemron",
-			"dev_pecx",
-			"Ishaan",
-			"AGKhan"
+			"Runejazz",
+			"happywheels12",
+			"Devashish Singh",
+			"Simranjit Gill",
+			"Ishaan Kohli"
 		]
 	},
 ]
@@ -29,4 +38,5 @@ const TEAM := [
 	{ "role": "Icons", "names": ["Flaticon - flaticon.com"] },
 	{ "role": "Sound & Music", "names": ["Freesound.org", "Pixabay", "JDSherbert - jdsherbert.itch.io"] },
 	{ "role": "Additional Sprite Art", "names": ["Potat0Master - potat0master.itch.io"] },
+	{ "role": "Special Thanks", "names": ["u/0Yasmin0"] },
 ]

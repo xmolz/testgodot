@@ -1,0 +1,8 @@
+{
+	"base": "hand_in_pocket smirk",
+	"creepy": "hand_in_pocket creepy_smile",
+	"sorry": "hand_in_pocket sorry_smile",
+	"sorry_talk": "hand_in_pocket sorry_talk",
+	"stunned": "hand_in_pocket stunned",
+	"talk": "hand_in_pocket smirk_talk"
+}

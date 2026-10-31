@@ -10,6 +10,13 @@ extends CanvasLayer
 const LocationRowScene = preload("res://ui/LocationRow.tscn")
 const ADVANCED_OVERLAY_SCENE = preload("res://conversation/AdvancedConversationOverlay.tscn")
 const ChapterDetailDrawerScene = preload("res://ui/ChapterDetailDrawer.tscn")
+# step 2.421: the one-time "this is where this build ends" note (see _show_build_end_note_once)
+const BUILD_END_NOTE_FLAG := "build_end_note_seen"
+const BUILD_END_NOTE_TITLE := "build_end_note"
+const BUILD_END_NOTE_DIALOGUE_PATH := "res://dialogue/chapter_launch.dialogue"
+const BUILD_END_NOTE_BALLOON_PATH := "res://conversation/conversationballoon.tscn"
+# step 2.315: one knob for the size of all text in the memory box and its drawer (PC)
+const UITextScale = preload("res://ui/UITextScale.gd")
 
 var _active_drawer: Control = null
 
@@ -37,7 +44,16 @@ func _ready():
 		var scroll = $Panel/ScrollContainer
 		scroll.anchor_top = 0.20
 
+	# step 2.309: the same chunky cyan scrollbar as the settings menu and the controls screen.
+	# step 2.311: done BEFORE the rows exist. it moves the list into a margin container, and moving rows
+	# that are already filled out of the tree runs their _exit_tree(), which drops their pictures (the
+	# VRAM release) - that's what blanked the chapter and location pictures in step 2.310.
+	_style_scrollbar()
 	_populate_list()
+	# step 2.315: bigger text on PC (the title keeps its size)
+	UITextScale.apply(panel, UITextScale.memory_box_factor(), [$Panel/TitleLabel])
+	# step 2.308: bring a newly unlocked chapter into view
+	_focus_new_chapter()
 
 	# hide the panel instantly before
 	panel.modulate.a = 0.0
@@ -67,7 +83,35 @@ func _on_back_button_pressed():
 
 	print("Back button pressed, closing overlay.")
 	DebugVRAM.snapshot("memory box closed")
+	# step 2.421: once, after Keeping Busy is finished: the end-of-build note
+	_show_build_end_note_once()
 	queue_free()
+
+
+# step 2.421: the first time the box is closed with chapter_keeping_busy_done set, a speaker-less balloon from
+# chapter_launch.dialogue (~ build_end_note). the Think verb's path: hold the player, show the balloon, and
+# GameManager.restore_world_after_object_dialogue hands control back when it ends.
+func _show_build_end_note_once() -> void:
+	if not Flags.get_game_flag("chapter_keeping_busy_done") or Flags.get_game_flag(BUILD_END_NOTE_FLAG):
+		return
+	if ChapterLaunchSequence and ChapterLaunchSequence.is_launching():
+		return
+	if not ResourceLoader.exists(BUILD_END_NOTE_DIALOGUE_PATH):
+		return
+	var note_resource = load(BUILD_END_NOTE_DIALOGUE_PATH)
+	var table = note_resource.get("titles") if note_resource else null
+	if table == null and note_resource:
+		table = note_resource.get("cues")
+	if not (table is Dictionary) or not table.has(BUILD_END_NOTE_TITLE):
+		push_warning("MemoryBoxOverlay: '%s' is missing from chapter_launch.dialogue." % BUILD_END_NOTE_TITLE)
+		return
+	Flags.set_game_flag(BUILD_END_NOTE_FLAG, true)
+	if GameManager:
+		if is_instance_valid(GameManager.player_node) and GameManager.player_node.has_method("set_can_move"):
+			GameManager.player_node.set_can_move(false)
+		if not DialogueManager.dialogue_ended.is_connected(GameManager.restore_world_after_object_dialogue):
+			DialogueManager.dialogue_ended.connect(GameManager.restore_world_after_object_dialogue, CONNECT_ONE_SHOT)
+	DialogueManager.show_dialogue_balloon_scene(BUILD_END_NOTE_BALLOON_PATH, note_resource, BUILD_END_NOTE_TITLE)
 
 
 func _on_chapter_selected(data: MemoryChapterData):
@@ -97,7 +141,76 @@ func _on_chapter_selected(data: MemoryChapterData):
 		_active_drawer.ready.connect(func(): _active_drawer.open())
 
 func _launch_chapter(data: MemoryChapterData):
+	# step 2.308: the memory box test on Main skips the chapter itself: a quick portal, and it counts as finished
+	if Engine.get_meta("dev_quick_chapters", false):
+		ChapterLaunchSequence.quick_complete(data, self, _active_drawer)
+		return
 	ChapterLaunchSequence.launch(data, self, _active_drawer)
+
+## step 2.309: the list's scrollbar in the settings menu's style (a dark track and a cyan grabber).
+## step 2.310: wider than the settings one (20 px on PC, 36 px on mobile), with a gap between it and the
+## rows' right arrows: the list is moved into a MarginContainer with a right margin, as settings does.
+func _style_scrollbar() -> void:
+	var scroll = get_node_or_null("Panel/ScrollContainer")
+	if not scroll is ScrollContainer:
+		return
+	var is_mobile: bool = OS.has_feature("mobile")
+
+	if location_list_container.get_parent() == scroll:
+		var margin := MarginContainer.new()
+		margin.name = "ScrollMargin"
+		margin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		margin.add_theme_constant_override("margin_right", 40 if is_mobile else 24)
+		scroll.remove_child(location_list_container)
+		margin.add_child(location_list_container)
+		scroll.add_child(margin)
+		location_list_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+
+	var vbar: VScrollBar = scroll.get_v_scroll_bar()
+	vbar.custom_minimum_size.x = 36 if is_mobile else 20
+
+	var track_style := StyleBoxFlat.new()
+	track_style.bg_color = Color(0.1, 0.12, 0.15, 1.0)
+	track_style.set_corner_radius_all(8)
+
+	var grabber_style := StyleBoxFlat.new()
+	grabber_style.bg_color = Color(0.2, 0.85, 1.0, 0.9)
+	grabber_style.set_corner_radius_all(8)
+
+	var grabber_hl: StyleBoxFlat = grabber_style.duplicate()
+	grabber_hl.bg_color = Color(0.2, 0.85, 1.0, 1.0)
+
+	vbar.add_theme_stylebox_override("scroll", track_style)
+	vbar.add_theme_stylebox_override("scroll_focus", track_style)
+	vbar.add_theme_stylebox_override("grabber", grabber_style)
+	vbar.add_theme_stylebox_override("grabber_highlight", grabber_hl)
+	vbar.add_theme_stylebox_override("grabber_pressed", grabber_hl)
+
+	if is_mobile:
+		scroll.scroll_deadzone = 24
+
+## step 2.308: rebuild the rows (after a chapter is finished in place) and bring any new chapter into view.
+func refresh() -> void:
+	_populate_list()
+	UITextScale.apply(panel, UITextScale.memory_box_factor(), [$Panel/TitleLabel])
+	_focus_new_chapter()
+
+## step 2.308: scroll the list to the first row with a newly unlocked chapter, and that row to the chapter.
+func _focus_new_chapter() -> void:
+	# rows and buttons need a couple of frames to be laid out before scrolling means anything
+	await get_tree().process_frame
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var scroll = get_node_or_null("Panel/ScrollContainer")
+	for row in location_list_container.get_children():
+		if row.is_queued_for_deletion() or not row.has_method("get_new_chapter_button"):
+			continue
+		var button = row.get_new_chapter_button()
+		if button:
+			if scroll is ScrollContainer:
+				scroll.ensure_control_visible(row)
+			row.scroll_to_chapter(button)
+			return
 
 # -----------(relaxed retro boot sequence)
 func play_boot_sequence():

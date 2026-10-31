@@ -72,8 +72,12 @@ var character_colors: Dictionary = {
 	"The... Toilet?": Color("#DC143C"),
 	"Player": Color("#FFD65C"),
 	"Alyssa": Color("#9370DB"),
+	# step 2.423: icy blue for Julian, purple for Jayce
+	"Julian": Color("#8FD8FF"),
+	"Jayce": Color("#B07CFF"),
 }
 
+const RigPortraitsScript = preload("res://conversation/rig_portraits.gd")   # step 2.405
 # ********************[character portrait lookup table]
 var character_portraits: Dictionary = {
 	"aiDA": preload("res://Sprites/dialogue sprites/aida_dialogue_sprite.PNG"),
@@ -140,6 +144,17 @@ var character_bg_colors: Dictionary = {
 		"bot": Color("#E6E6FA"),
 		"dot": Color(1.0, 1.0, 1.0, 0.4)
 	},
+	# step 2.423: icy blue for Julian, purple for Jayce
+	"Julian": {
+		"top": Color("#1E3F5E"),
+		"bot": Color("#C6F0FF"),
+		"dot": Color(1.0, 1.0, 1.0, 0.35)
+	},
+	"Jayce": {
+		"top": Color("#3A1860"),
+		"bot": Color("#D2B4FF"),
+		"dot": Color(1.0, 1.0, 1.0, 0.3)
+	},
 }
 # the current line
 var dialogue_line: DialogueLine:
@@ -185,6 +200,9 @@ var auto_advance_timer: Timer = Timer.new()
 # is the ui currently hidden by the player?
 var is_ui_hidden: bool = false
 
+# step 2.267: true while a scripted beat must not be skipped (see the overlay's lock_dialogue_input).
+var is_input_locked: bool = false
+
 var _is_log_open: bool = false
 
 # quick menu references
@@ -196,6 +214,13 @@ var _is_log_open: bool = false
 
 
 func _ready() -> void:
+	# step 2.405: inside a memory chapter, the rigged cast's portraits are cut from their own neutral
+	# pictures (conversation/rig_portraits.gd); in the hub the old ones stay, as Fiona dresses differently there
+	# step 2.423: an in-place chapter (Layla Runs Away) never sets in_memory; any active chapter counts
+	var in_chapter: bool = (Inventory and Inventory.get("in_memory") == true) \
+			or (ChapterLaunchSequence and ChapterLaunchSequence.active_chapter != null)
+	if in_chapter:
+		character_portraits.merge(RigPortraitsScript.all(), true)
 	if log_button:
 		log_button.pressed.connect(_on_log_button_pressed)
 	if menu_button:
@@ -418,6 +443,10 @@ func _level_wants_centered_responses() -> bool:
 	return level.get("center_dialogue_responses") == true
 
 func _unhandled_input(event: InputEvent) -> void:
+	# step 2.267: locked during a scripted beat. swallow it, like the end of this function does.
+	if is_input_locked:
+		get_viewport().set_input_as_handled()
+		return
 	# *******************[arrow keys summon the highlight when no option is focused]
 	# (when an option is focused,
 	# focus consumed natively
@@ -523,7 +552,7 @@ func apply_dialogue_line() -> void:
 	# create display name
 	var display_name = raw_name_with_tags
 	if lookup_key == "Player":
-		if GameManager and Flags.get_game_flag("first_name_correct"):
+		if GameManager and _player_name_known():
 			display_name = display_name.replace("Player", "Fiona")
 		else:
 			display_name = display_name.replace("Player", "???")
@@ -729,7 +758,7 @@ func apply_dialogue_line() -> void:
 	if GameManager and not dialogue_line.text.is_empty():
 		var history_display_name = lookup_key
 		if lookup_key == "Player":
-			if Flags.get_game_flag("first_name_correct"):
+			if _player_name_known():
 				history_display_name = "Fiona"
 			else:
 				history_display_name = "???"
@@ -793,6 +822,10 @@ func _on_mutated(_mutation: Dictionary) -> void:
 	# mutation_cooldown.start(0.1)
 
 func _on_balloon_gui_input(event: InputEvent) -> void:
+	# step 2.267: locked during a scripted beat: no advance, no un-hide, no log, no typing skip.
+	if is_input_locked:
+		get_viewport().set_input_as_handled()
+		return
 	var is_right_click = event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.is_pressed()
 	var is_h_key = event is InputEventKey and event.keycode == KEY_H and event.is_pressed() and not event.is_echo()
 
@@ -866,7 +899,7 @@ func _on_responses_menu_response_selected(response: DialogueResponse) -> void:
 				chosen_idx = i
 
 		var player_name = "Player"
-		if Flags.get_game_flag("first_name_correct"):
+		if _player_name_known():
 			player_name = "Fiona"
 		else:
 			player_name = "???"
@@ -954,6 +987,12 @@ func set_ui_hidden(hide: bool) -> void:
 	else:
 		name_panel.visible = false
 		portrait_container.visible = false
+
+# step 2.267: see AdvancedConversationOverlay.lock_dialogue_input(). locking also ends Skip mode.
+func set_input_locked(locked: bool) -> void:
+	is_input_locked = locked
+	if locked and GameManager and Settings.is_skipping:
+		Settings.is_skipping = false
 
 func _restore_dialogue_visibility() -> void:
 	set_ui_hidden(false)
@@ -1115,6 +1154,7 @@ func _is_skip_available() -> bool:
 
 func _should_skip_now() -> bool:
 	if not GameManager: return false
+	if is_input_locked: return false
 	if dialogue_line == null: return false
 	if dialogue_line.responses.size() > 0: return false
 	if _is_log_open or is_ui_hidden: return false
@@ -1175,3 +1215,9 @@ func _exit_tree() -> void:
 	if GameManager:
 		Settings.is_skipping = false
 		DialogueHistory.save_seen_lines()
+
+
+## step 2.420: Fiona's name shows on her lines once the insurance form has it (first_name_correct), or once
+## someone in a memory has called her by it (fiona_name_known, set in dialogue). until then: "???".
+func _player_name_known() -> bool:
+	return Flags.get_game_flag("first_name_correct") or Flags.get_game_flag("fiona_name_known")

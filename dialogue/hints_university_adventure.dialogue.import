@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://cdx7vu586kyv"
+path="res://.godot/imported/hints_university_adventure.dialogue-89e15406cf978263b7039cc5583bb655.tres"
+
+[deps]
+
+source_file="res://dialogue/hints_university_adventure.dialogue"
+dest_files=["res://.godot/imported/hints_university_adventure.dialogue-89e15406cf978263b7039cc5583bb655.tres"]
+
+[params]
+
+defaults=true

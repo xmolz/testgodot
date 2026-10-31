@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="CharacterProfile" format=3 uid="uid://bi0k4mc2olfbp"]
+
+[ext_resource type="Script" uid="uid://yiootngfe2lt" path="res://characters/CharacterProfile.gd" id="1_profile"]
+
+[resource]
+script = ExtResource("1_profile")
+actor_id = "Anton"
+default_scale = 1.0
+expressions = {
+"anton_bighead": "res://Sprites/characters/anton/anton_bighead.png",
+"anton_revised": "res://Sprites/characters/anton/anton_revised.png",
+"anton_wide": "res://Sprites/characters/anton/anton_wide.png",
+"base": "res://Sprites/characters/anton/anton_pg_1.png",
+"pg1": "res://Sprites/characters/anton/anton_pg_1.png",
+"pg2": "res://Sprites/characters/anton/anton_pg_2.png",
+"pg3": "res://Sprites/characters/anton/anton_pg_3.png",
+"pg4": "res://Sprites/characters/anton/anton_pg_4.png"
+}

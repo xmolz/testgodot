@@ -5,9 +5,15 @@
 [resource]
 script = ExtResource("1_cp")
 actor_id = "Fiona"
-default_scale = 1.0
-canvas_anchor_x = 0.3741
-face_y_ratio = 0.36
 expressions = {
-"base": "res://Dev/fiona_test_sprite.png"
+"rig_expressions": "res://characters/fiona/fiona_expressions.json",
+"rig_parts": "res://characters/fiona/parts/fiona_parts.json"
 }
+canvas_anchor_x = 0.4545
+face_x_ratio = 0.558
+talk_mouths = {
+"*": "open",
+"smile": "smile_open",
+"tilted": "tilted_open"
+}
+face_y_ratio = 0.353

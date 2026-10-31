@@ -84,3 +84,314 @@ do Inventory.remove_item("vending_diet_cola")
 
 ~ vending_machine_item_cash
 => unusables/vending_machine
+
+# ---------------------------------------------------------------------------
+# step 2.411: items given to people and things in Keeping Busy: the same reactions as using them
+# (dialogue/unusables.dialogue keeps an identical copy for the use verb). each
+# "<object id>_item_<item id>" title below jumps to one of these knots.
+
+~ item_julian_snack
+Julian: Thanks, but why are you giving me this?
+Player: (Shoot.)
+=> END
+
+~ item_julian_cash
+Julian: Hah! Nice joke.
+He refuses to take your offering.
+=> END
+
+~ item_julian_camera
+Player: (I don't think he needs to see this...)
+=> END
+
+~ item_julian_phone
+Player: (I doubt that dickhead will help us with this dead phone.)
+=> END
+
+~ item_julian_charger
+Player: (I've no business showing my damn charger to this dickhead.)
+=> END
+
+~ item_handy_later
+Player: (I think this might come in handy later...)
+=> END
+
+~ item_jayce_snack
+Player: (Yeah, I'm not giving him that.)
+Player: (Don't want him to get the wrong idea...)
+=> END
+
+~ item_jayce_cash
+He just takes the money.
+do Inventory.remove_amount("cash", Inventory.get_count("cash"))
+Jayce: 'Preciate it, sugar.
+=> END
+
+~ item_jayce_camera
+Player: (I think I should keep this to myself for now...)
+=> END
+
+~ item_jayce_phone
+Player: (I don't need his help with this...)
+=> END
+
+~ item_jayce_pins
+Player: (I think I'll pass on that...)
+=> END
+
+~ item_layla_camera
+Player: (I should hold onto this for now...)
+=> END
+
+~ item_layla_cash
+Layla: Oh, cash?
+do Inventory.remove_amount("cash", Inventory.get_count("cash"))
+Layla: Thanks, Fiona!
+She blushes.
+=> END
+
+~ item_layla_phone
+Player: (I should figure out a way to charge it before I hand it back to her...)
+=> END
+
+~ item_layla_old_charger
+Layla: Oh, Fiona...
+Layla: I don't think your phone's charger will work with mine.
+Layla: It's... old.
+Player: (She's right.)
+=> END
+
+~ item_no_electronic_lockpick
+Player: (I can't... lockpick an electronic lock.)
+=> END
+
+~ item_keypad_dumb
+Player: (This is dumb...)
+=> END
+
+~ item_wont_work
+Player: (I don't think this will work out...)
+=> END
+
+~ item_cola_machine
+Player: (Giving cola... to a machine?)
+Player: (Hmmmm.)
+=> END
+
+~ item_portrait_snack
+Player: Have a snack, dickhead.
+# layla is with fiona everywhere except greene's office
+if Flags.get_level_flag("layla_waiting_outside_office") == false:
+	Layla: Fiona, are you alright?
+	Player: Yes. Sorry about that.
+	Player: (Shoot.)
+=> END
+
+~ item_no_returns
+Layla: I don't think we can return snacks, Fiona.
+Player: Hmm.
+=> END
+
+~ item_julian_spot
+Player: (I don't think he wants me putting anything here.)
+=> END
+
+~ item_locker_julian_snoop
+Player: (I can't snoop into Julian's locker with Layla around.)
+Player: (That's a bit much.)
+Player: (There might be some lockers in this building she won't mind me looking into, though...)
+=> END
+
+~ item_locker_layla_snoop
+Player: (I can't snoop into Layla's locker with her around.)
+Player: (That's a bit much.)
+Player: (There might be some lockers in this building she won't mind me looking into, though...)
+=> END
+
+~ item_jayce_locker_camera
+Player: (Nah. I need to keep this to myself for now.)
+=> END
+
+# the titles (object id + item id), grouped by who or what the item is given to
+
+~ julian_item_vending_protein_bar
+=> item_julian_snack
+~ julian_item_vending_boba_tea
+=> item_julian_snack
+~ julian_item_vending_diet_cola
+=> item_julian_snack
+~ julian_item_vending_cheese_balls
+=> item_julian_snack
+~ julian_item_cash
+=> item_julian_cash
+~ julian_item_jayce_camera
+=> item_julian_camera
+~ julian_item_layla_phone
+=> item_julian_phone
+~ julian_item_dumbphone_charger
+=> item_julian_charger
+~ julian_item_bobby_pins
+=> item_handy_later
+~ julian_item_steel_bobby_pins
+=> item_handy_later
+
+~ lab_guard_item_vending_protein_bar
+=> item_jayce_snack
+~ lab_guard_item_vending_boba_tea
+=> item_jayce_snack
+~ lab_guard_item_vending_diet_cola
+=> item_jayce_snack
+~ lab_guard_item_vending_cheese_balls
+=> item_jayce_snack
+~ lab_guard_item_cash
+=> item_jayce_cash
+~ lab_guard_item_jayce_camera
+=> item_jayce_camera
+~ lab_guard_item_layla_phone
+=> item_jayce_phone
+~ lab_guard_item_bobby_pins
+=> item_jayce_pins
+~ lab_guard_item_steel_bobby_pins
+=> item_jayce_pins
+
+~ layla_item_jayce_camera
+=> item_layla_camera
+~ layla_item_cash
+=> item_layla_cash
+~ layla_item_bobby_pins
+=> item_handy_later
+~ layla_item_steel_bobby_pins
+=> item_handy_later
+~ layla_item_layla_phone
+=> item_layla_phone
+~ layla_item_dumbphone_charger
+=> item_layla_old_charger
+
+~ lab_keypad_item_bobby_pins
+=> item_no_electronic_lockpick
+~ lab_keypad_item_steel_bobby_pins
+=> item_no_electronic_lockpick
+~ lab_keypad_item_cash
+=> item_keypad_dumb
+~ lab_keypad_item_vending_protein_bar
+=> item_keypad_dumb
+~ lab_keypad_item_vending_boba_tea
+=> item_keypad_dumb
+~ lab_keypad_item_vending_diet_cola
+=> item_keypad_dumb
+~ lab_keypad_item_vending_cheese_balls
+=> item_keypad_dumb
+
+~ greene_office_card_reader_item_bobby_pins
+=> item_no_electronic_lockpick
+~ greene_office_card_reader_item_steel_bobby_pins
+=> item_no_electronic_lockpick
+
+~ greene_computer_item_layla_phone
+=> item_wont_work
+~ greene_computer_item_vending_diet_cola
+=> item_cola_machine
+
+~ greene_office_la_marr_photo_item_jayce_camera
+=> item_wont_work
+
+~ greene_portrait_item_jayce_camera
+=> item_wont_work
+~ greene_portrait_item_vending_protein_bar
+=> item_portrait_snack
+~ greene_portrait_item_vending_boba_tea
+=> item_portrait_snack
+~ greene_portrait_item_vending_diet_cola
+=> item_portrait_snack
+~ greene_portrait_item_vending_cheese_balls
+=> item_portrait_snack
+
+~ ember_portrait_item_vending_protein_bar
+=> item_portrait_snack
+~ ember_portrait_item_vending_boba_tea
+=> item_portrait_snack
+~ ember_portrait_item_vending_diet_cola
+=> item_portrait_snack
+~ ember_portrait_item_vending_cheese_balls
+=> item_portrait_snack
+
+~ voss_portrait_item_vending_protein_bar
+=> item_portrait_snack
+~ voss_portrait_item_vending_boba_tea
+=> item_portrait_snack
+~ voss_portrait_item_vending_diet_cola
+=> item_portrait_snack
+~ voss_portrait_item_vending_cheese_balls
+=> item_portrait_snack
+
+~ professor_portrait_item_vending_protein_bar
+=> item_portrait_snack
+~ professor_portrait_item_vending_boba_tea
+=> item_portrait_snack
+~ professor_portrait_item_vending_diet_cola
+=> item_portrait_snack
+~ professor_portrait_item_vending_cheese_balls
+=> item_portrait_snack
+
+~ vending_machine_item_vending_protein_bar
+=> item_no_returns
+~ vending_machine_item_vending_boba_tea
+=> item_no_returns
+~ vending_machine_item_vending_diet_cola
+=> item_no_returns
+~ vending_machine_item_vending_cheese_balls
+=> item_no_returns
+
+~ workstation_julian_item_vending_protein_bar
+=> item_julian_spot
+~ workstation_julian_item_vending_boba_tea
+=> item_julian_spot
+~ workstation_julian_item_vending_diet_cola
+=> item_julian_spot
+~ workstation_julian_item_vending_cheese_balls
+=> item_julian_spot
+~ workstation_julian_item_bobby_pins
+=> item_julian_spot
+~ workstation_julian_item_steel_bobby_pins
+=> item_julian_spot
+~ workstation_julian_item_cash
+=> item_julian_spot
+~ workstation_julian_item_jayce_camera
+=> item_julian_spot
+~ workstation_julian_item_layla_phone
+=> item_julian_spot
+~ workstation_julian_item_dumbphone_charger
+=> item_julian_spot
+~ workstation_julian_item_type_c_charger
+=> item_julian_spot
+
+~ locker_julian_item_bobby_pins
+=> item_locker_julian_snoop
+~ locker_julian_item_steel_bobby_pins
+=> item_locker_julian_snoop
+~ locker_julian_item_vending_protein_bar
+=> item_julian_spot
+~ locker_julian_item_vending_boba_tea
+=> item_julian_spot
+~ locker_julian_item_vending_diet_cola
+=> item_julian_spot
+~ locker_julian_item_vending_cheese_balls
+=> item_julian_spot
+~ locker_julian_item_cash
+=> item_julian_spot
+~ locker_julian_item_jayce_camera
+=> item_julian_spot
+~ locker_julian_item_layla_phone
+=> item_julian_spot
+~ locker_julian_item_dumbphone_charger
+=> item_julian_spot
+~ locker_julian_item_type_c_charger
+=> item_julian_spot
+
+~ locker_layla_item_bobby_pins
+=> item_locker_layla_snoop
+~ locker_layla_item_steel_bobby_pins
+=> item_locker_layla_snoop
+
+~ supply_lockers_item_jayce_camera
+=> item_jayce_locker_camera

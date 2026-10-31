@@ -6,6 +6,7 @@
 process_mode = 3
 layer = 50
 script = ExtResource("1_script")
+correct_code = "07281896"
 
 [node name="Dim" type="ColorRect" parent="."]
 anchors_preset = 15

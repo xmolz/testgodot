@@ -15,5 +15,9 @@ enum MemoryCategory { STORY, SPICY }
 # the category this group will be displayed under.
 @export var category: MemoryCategory = MemoryCategory.STORY
 
+# step 2.308: the game flag that opens this location. while it is false the row shows "?" for its name,
+# a dark "?" tile for its picture, and every chapter in it as locked. empty = always open.
+@export var unlock_flag: String = ""
+
 # an array that holds all
 @export var chapters: Array[MemoryChapterData] = []

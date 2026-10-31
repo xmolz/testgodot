@@ -56,6 +56,8 @@ func _ready():
 	# --------------------- close button polish
 	close_button.text = "Close"
 	close_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	prev_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	next_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	close_button.add_theme_font_override("font", custom_font)
 	close_button.add_theme_font_size_override("font_size", 24)
 
@@ -134,6 +136,8 @@ func update_display():
 	page_indicator_label.text = str(current_spread + 1) + " / " + str(total_spreads)
 	prev_button.disabled = (current_spread == 0)
 	next_button.disabled = (current_spread >= total_spreads - 1)
+	_style_arrow(prev_button)
+	_style_arrow(next_button)
 
 # /////////////[helper function to spawn a texturerect dynamically using the assigned texture]
 func _add_image_layer(parent: Control, tex: Texture2D):
@@ -185,6 +189,14 @@ func _shrink_to_fit(label: RichTextLabel):
 		await get_tree().process_frame
 	if is_instance_valid(label):
 		label.modulate.a = 1.0
+
+# step 2.250: a disabled page arrow dims its icon and drops the hand cursor so it reads as
+# unavailable. the box itself uses the theme's "disabled" stylebox. tune the 0.25 to taste.
+func _style_arrow(button: Button) -> void:
+	var icon := button.get_node_or_null("IconRect") as CanvasItem
+	if icon:
+		icon.modulate = Color(1, 1, 1, 0.25) if button.disabled else Color.WHITE
+	button.mouse_default_cursor_shape = Control.CURSOR_ARROW if button.disabled else Control.CURSOR_POINTING_HAND
 
 func _on_prev_pressed():
 	if SoundManager: SoundManager.play_sfx("ui_click")

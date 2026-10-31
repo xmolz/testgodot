@@ -667,7 +667,7 @@ size = Vector2(9603, 1138)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jx0wj"]
 size = Vector2(1913, 1292)
 
-[node name="Main" type="Control" unique_id=1988882771]
+[node name="LevelStateManager" type="Control" unique_id=1988882771]
 layout_mode = 3
 anchors_preset = 0
 offset_left = -5752.0
@@ -945,7 +945,6 @@ target_path = NodePath("../Player")
 [node name="LevelStateManager" type="Node" parent="." unique_id=1325462510]
 script = ExtResource("10_4c57u")
 level_id = "hospital_hub"
-override_give_techpass = true
 
 [node name="GameUI" type="Node" parent="." unique_id=1791351286]
 script = ExtResource("90_gameui")

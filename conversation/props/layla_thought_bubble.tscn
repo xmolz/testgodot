@@ -1,7 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://conversation/props/thought_bubble.gd" id="1_script"]
-[ext_resource type="Texture2D" path="res://Dev/fiona_test_sprite.png" id="2_fiona"]
+[ext_resource type="Texture2D" path="res://Sprites/characters/fiona/fiona_thought_bubble_dressed.png" id="2_fiona"]
 [ext_resource type="Texture2D" path="res://Sprites/characters/fiona/fiona_naked_base.png" id="3_fiona_naked"]
 [ext_resource type="Texture2D" path="res://Icons/tank_top.png" id="4_tank"]
 [ext_resource type="FontFile" path="res://Fonts/VarelaRound-Regular.ttf" id="5_font"]

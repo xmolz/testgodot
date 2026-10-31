@@ -22,19 +22,16 @@ Which book?
 	do BookReader.open("history_of_heredity")
 	do Flags.set_level_flag("dna_dates_found", true)
 	=> left_history
-- Twisted Ladders: The Race for DNA
-	do BookReader.open("race_for_the_helix")
+- The Voyage of the Beagle (Darwin)
+	do BookReader.open("darwin_beagle")
 	=> left_history
 - Back to the shelves [Back]
 	=> left_stand
 
 ~ left_genetics
 Which book?
-- On the Origin of Species (Darwin)
-	do BookReader.open("darwin_origin")
-	=> left_genetics
-- The Bench Guide to Sequencing
-	do BookReader.open("sequencing_handbook")
+- The Physical Basis of Heredity (T. H. Morgan)
+	do BookReader.open("morgan_heredity")
 	=> left_genetics
 - Safety Guidelines for Overworked Grad Students
 	do BookReader.open("grad_safety_guidelines")
@@ -44,22 +41,22 @@ Which book?
 
 ~ left_chemistry
 Which book?
-- Nothing Is Lost
-	do BookReader.open("conservation_of_mass")
+- The Chemical History of a Candle (Faraday)
+	do BookReader.open("faraday_candle")
 	=> left_chemistry
-- Laboratory Safety, 9th Edition
-	do BookReader.open("lab_safety")
+- Ignition! (John D. Clark)
+	do BookReader.open("ignition")
 	=> left_chemistry
 - Back to the shelves [Back]
 	=> left_stand
 
 ~ left_stats
 Which book?
-- The Trouble with P-Values
-	do BookReader.open("p_values")
+- The Power of Placebos (Howick)
+	do BookReader.open("power_of_placebos")
 	=> left_stats
-- Numbers for Nervous Biologists
-	do BookReader.open("numbers_for_biologists")
+- The Grammar of Science (Pearson)
+	do BookReader.open("pearson_grammar")
 	=> left_stats
 - Back to the shelves [Back]
 	=> left_stand
@@ -101,11 +98,11 @@ Which book?
 
 ~ right_art
 Which book?
-- Rembrandt and the Light
-	do BookReader.open("rembrandt_light")
+- The Artist's Reality (Rothko)
+	do BookReader.open("the_artists_reality")
 	=> right_art
-- Brick and Glass: The Buildings of Greendale
-	do BookReader.open("campus_buildings")
+- The Poetics of Space (Bachelard)
+	do BookReader.open("poetics_of_space")
 	=> right_art
 - Back to the shelves [Back]
 	=> right_stand
@@ -115,8 +112,17 @@ Which book?
 - A History of Greendale University
 	do BookReader.open("greendale_history")
 	=> right_history
-- Greendale Yearbook
-	do BookReader.open("yearbook")
-	=> right_history
 - Back to the shelves [Back]
 	=> right_stand
+
+~ greene_shelf
+Which book?
+- Barbara La Marr: A Life in Silent Film
+	do BookReader.open("la_marr_biography")
+	do Flags.set_level_flag("la_marr_book_read", true)
+	=> greene_shelf
+- She Has Her Mother's Laugh
+	do BookReader.open("she_has_her_mothers_laugh")
+	=> greene_shelf
+- Nothing. Never mind. [Leave]
+	=> END

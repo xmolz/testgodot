@@ -6,5 +6,5 @@
 [resource]
 script = ExtResource("2_script")
 item_id = "dumbphone_charger"
-display_name = "Dumbphone Charger"
+display_name = "Pin-Style Charger"
 icon = ExtResource("1_icon")

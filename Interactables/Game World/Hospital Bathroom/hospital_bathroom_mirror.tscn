@@ -97,7 +97,7 @@ theme_override_constants/outline_size = 8
 theme_override_constants/shadow_outline_size = 4
 theme_override_fonts/font = ExtResource("3_5u6mx")
 theme_override_font_sizes/font_size = 56
-text = "17 September 2094
+text = "September 17, 2094
 7:00 PM
 98.6°"
 horizontal_alignment = 2

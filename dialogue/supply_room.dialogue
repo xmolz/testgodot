@@ -17,7 +17,61 @@ Player: (There. Plugged in.)
 => END
 
 ~ phone_plugged
-Player: (And... charging. Come on, little battery.)
+# step 2.265: layla's phone on the type-c charger. after the wait, layla looks up the nuclein date.
+# layla keeps her phone afterwards, so supply_phone_charging goes back to false (the desk sprite hides).
+# step 2.268: no npc or prop here, so the two face each other (as in layla's hub) instead of stage_party.
+do actor_enter("Fiona", "base", "left")
+do actor_enter("Layla", "base", "right")
+do actor_flip("Layla", true)
+# step 2.376: Layla's expressions (rig). she enters as "base"; this lands while she fades in.
+do actor_change("Layla", "attentive")
+You plug the phone into the charger.
+if Flags.get_game_counter("layla_closeness") < 0:
+	do actor_change("Layla", "sad")
+	Layla: This will charge the thing, I suppose.
+	do actor_change("Layla", "downcast")
+else
+	do actor_change("Layla", "excited")
+	do actor_effect("Layla", "jump")
+	Layla: Oh! You actually found a spare charger and an outlet to charge my phone!
+	do actor_change("Layla", "beaming")
+	Layla: Lesssgooo.
+	do actor_change("Layla", "eager")
+Player: Yep. Let's wait a few minutes...
+do fade_to_black(0.6)
+You allow a few minutes for the phone to charge.
+if Flags.get_game_counter("layla_closeness") >= 3:
+	You and Layla sit in silence as it does.
+	But in that silence, there is a certain sense of comfort.
+	It... feels right.
+# her face after the wait, set under the black: close, warm; neutral, waiting; distant, quiet
+if Flags.get_game_counter("layla_closeness") >= 3:
+	do actor_change("Layla", "warm")
+elif Flags.get_game_counter("layla_closeness") >= 0:
+	do actor_change("Layla", "attentive")
+else
+	do actor_change("Layla", "downcast")
+do fade_from_black(0.6)
+Player: Yep. Seems like it's done now.
+do actor_change("Fiona", "explain")
+Player: Do you wanna quickly google the things Julian mentioned?
+do actor_change("Layla", "asking")
+Layla: Yes, let's do that. The date the DNA was discovered, correct?
+# step 2.404: her phone, held up beside her through "Some Swiss guy"
+do actor_item("Layla", "phone")
+do actor_change("Layla", "talking")
+Layla: Lemme see...
+do actor_change("Layla", "explaining_talk")
+Layla: Yep. Got it. It's February 26, 1869.
+Layla: Some Swiss guy named Friedrich Miescher.
+do actor_change("Layla", "explaining")
+do actor_change("Fiona", "base")
+do actor_item_hide("Layla")
+Player: Uh-huh.
+Player: Got it. Let's try that.
+do Flags.set_level_flag("supply_phone_charging", false)
+do Flags.set_level_flag("layla_phone_charged", true)
+do Flags.set_level_flag("dna_dates_found", true)
 => END
 
 ~ phone_no_charger
@@ -36,4 +90,81 @@ Player: (Not while Layla's phone is charging on it.)
 
 ~ charger_unplugged
 Player: (Unplugged.)
+=> END
+
+~ locker_rusty_pins
+# step 2.277: rusty bobby pins on the supply-room locker. the pick snaps; the pins are used up.
+You slide the bobby pins into the locker's keyhole.
+Player: Lemme see. A lil turn here.
+Player: A lil turn there. And...
+# step 2.393: the pick snapping
+do SoundManager.play_sfx("pencil_snap")
+Unfortunately, your makeshift lockpick breaks.
+do Inventory.remove_item("bobby_pins")
+Player: (Eh.)
+Player: (Didn't have much hope for those rusty-ass bobby pins anyway.)
+Player: (Well, what now?)
+=> END
+
+~ locker_steel_pins
+# step 2.277: steel bobby pins open the locker (staged overlay: supply_locker_advanced_overlay.tscn).
+# the camera's footage stays unsaid. they've seen it, so jayce_camera_seen is set here (the car ride
+# reads kb_jayce_camera_seen); fiona keeps the camera (jayce_camera) for the blackmail route.
+You slide the bobby pins into the locker's keyhole.
+Player: Lemme see. A lil turn here.
+Player: A lil turn there. And...
+# step 2.393: the lock giving way
+do SoundManager.play_sfx("door_open_success")
+do Flags.set_level_flag("supply_locker_opened", true)
+Player: (Gotcha.)
+Player: (Well, what do we have here, then...)
+Player: (Let's see...)
+Player: (Some cleaning liquid. That's uninteresting.)
+Player: (A change of clothes... presumably Jayce's...)
+Player: (The pockets are empty... so nothing here either.)
+Player: (Oh wait, what's that?)
+You come across a camera.
+Player: (Lemme turn this on and see what's inside.)
+do actor_change("Fiona", "suspicious")
+Player: Oh... wow.
+do actor_enter("Fiona", "base", "left")
+do actor_enter("Layla", "base", "right")
+do actor_flip("Layla", true)
+# step 2.377: Layla's expressions (rig). she enters as "base"; this lands while she fades in.
+do actor_change("Layla", "attentive")
+Player: Umm... Layla... I might have found something in this locker here.
+do actor_change("Layla", "asking")
+if Flags.get_game_counter("layla_closeness") < 0:
+	Layla: What is it?
+else
+	Layla: Really? What is it, Fiona?
+do actor_change("Layla", "attentive")
+do actor_change("Fiona", "explain")
+# step 2.404: the camera goes from fiona to layla, and away once they've seen enough
+do actor_item("Fiona", "camera")
+Player: Check this out.
+do actor_item_hide("Fiona")
+do actor_item("Layla", "camera")
+You hand Layla the camera and tell her to open the gallery.
+# shock, then disgust
+do actor_change("Layla", "surprised")
+Layla: No way...
+do actor_change("Layla", "fuming")
+do actor_change("Fiona", "base")
+Player: Yep.
+do actor_change("Layla", "angry_talk")
+Layla: This is sickening.
+do actor_change("Layla", "angry")
+Player: You bet.
+do actor_change("Fiona", "thinking")
+do actor_item_hide("Layla")
+Player: Anyway, lemme figure out what to do with this.
+if Flags.get_game_counter("layla_closeness") < 0:
+	do actor_change("Layla", "sad")
+	Layla: Fine.
+else
+	do actor_change("Layla", "talking")
+	Layla: Sure, Fiona.
+do Flags.set_level_flag("jayce_camera_seen", true)
+do Inventory.add_item("jayce_camera")
 => END

@@ -5,6 +5,8 @@ extends Node
 const INSURANCE_FORM_SCENE = preload("res://ui/insurance_form.tscn")
 const JOURNAL_OVERLAY_SCENE = preload("res://ui/journal_overlay.tscn")
 const INTRO_DIALOGUE = preload("res://dialogue/intro.dialogue")
+# step 2.423: the start-point choice after the difficulty screen (see _ask_start_point)
+const START_POINT_SCREEN_SCRIPT = preload("res://ui/start_point_screen.gd")
 const CONVERSATION_BALLOON_SCENE = preload("res://conversation/conversationballoon.tscn")
 
 var _insurance_form_instance: CanvasLayer = null
@@ -162,8 +164,8 @@ func _ready():
 				pause_menu_ui.menu_panel.show()
 
 			await get_tree().process_frame
-			SoundManager.play_ambience("room_tone_air", -5.0)
-			SoundManager.play_ambience("room_tone_electric", -15.0)
+			# step 2.380: the hub's room tone (skipped while a level plays its own, e.g. a direct run of the university)
+			SoundManager.play_hub_ambience()
 #endregion
 
 # _process and _unhandled_input mix concerns (hint eval + hold-to-walk) and sit outside top-level regions to avoid moving code.
@@ -357,8 +359,7 @@ func change_game_state(new_state: GameState):
 				# soundmanager.play_music()
 				
 				# ***** start ambience for main game *****
-				SoundManager.play_ambience("room_tone_air", -5.0) 
-				SoundManager.play_ambience("room_tone_electric", -15.0)
+				SoundManager.play_hub_ambience()   # step 2.380
 
 			# ***** b. restoration phase (run this every time we enter in_game_play) *****
 			
@@ -434,6 +435,9 @@ func select_verb(verb_id_to_select: String):
 				if is_instance_valid(hint_res):
 					last_read_hint = current_hint_manager.evaluate_hint()
 					new_hint_available.emit(false)
+					# step 2.358: no hint for this moment of the level: think does nothing
+					if last_read_hint == "":
+						return
 
 					if not DialogueManager.dialogue_ended.is_connected(restore_world_after_object_dialogue):
 						DialogueManager.dialogue_ended.connect(restore_world_after_object_dialogue, CONNECT_ONE_SHOT)
@@ -1205,6 +1209,11 @@ func reset_run_state():
 	# ***** sibling autoload run-state (sergey conversation memory etc., all dat crap) *****
 	if ConversationEventManager and ConversationEventManager.has_method("reset_run_state"):
 		ConversationEventManager.reset_run_state()
+	# step 2.417: no chapter is active after a new game or a load (a memory load re-arms its own)
+	if ChapterLaunchSequence and ChapterLaunchSequence.has_method("reset_run_state"):
+		ChapterLaunchSequence.reset_run_state()
+	# step 2.423: a start-point choice from an earlier run never leaks into this one
+	Engine.set_meta("start_at_demo_end", false)
 
 	# ***** stale references (their owning scenes were freed on quit) *****
 	current_hint_manager = null
@@ -1362,11 +1371,36 @@ func _on_difficulty_chosen(is_assisted: bool):
 	if is_instance_valid(difficulty_screen):
 		difficulty_screen.queue_free()
 
+	# step 2.423: one more choice under the closed iris: play the opening, or start where the demo ended
+	var skip_to_demo_end: bool = await _ask_start_point()
+	if skip_to_demo_end:
+		# the hub's LevelStateManager reads this once and sets the demo's end state (flags + TechPass);
+		# the intro conversation is skipped, and the same eyes-open arrival as after it plays
+		Engine.set_meta("start_at_demo_end", true)
+		_on_intro_conversation_finished(null)
+		return
+
 	change_game_state(GameState.INTRO_CONVERSATION)
 
 	if is_instance_valid(transition_layer):
 		await get_tree().create_timer(0.5).timeout
 		transition_layer.play_iris_open()
+
+
+# step 2.423: shows ui/start_point_screen.gd under the closed iris, opens the iris on it, waits for the choice,
+# closes the iris again. true = start where the demo ended.
+func _ask_start_point() -> bool:
+	var screen = START_POINT_SCREEN_SCRIPT.new()
+	screen.name = "StartPointScreen"
+	get_tree().root.add_child(screen)
+	if is_instance_valid(transition_layer):
+		await get_tree().create_timer(0.3).timeout
+		await transition_layer.play_iris_open()
+	var skip: bool = await screen.start_point_chosen
+	if is_instance_valid(transition_layer):
+		await transition_layer.play_iris_close()
+	screen.queue_free()
+	return skip
 
 func _on_main_menu_quit_requested():
 	get_tree().quit()

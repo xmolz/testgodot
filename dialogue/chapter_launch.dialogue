@@ -8,6 +8,11 @@
 You're here now.
 Swirling.
 Floating.
+# step 2.392: the dream's music starts with the swirl and plays on into chapter2_intro.dialogue, where it
+# cuts out as Fiona wakes up. step 2.397: the portal's hum carries the first three lines alone, then fades
+# as the music takes over here. to start the haunt on another line, move these two lines together.
+do SoundManager.fade_out_portal_hum(3.0)
+do SoundManager.play_music_track("haunted_techno", 3.0)
 Going back to who you once were.
 What will your first memory reveal to you?
 Whose face will you see first?
@@ -18,14 +23,73 @@ Now, that's a strong emotion.
 Let's start at the beginning.
 => END
 
+~ university_2_replay
+# step 2.419: a REPLAY of Keeping Busy (the chapter has been finished once). draft lines: rewrite freely, keep the
+# title. the two "do" lines match ~ university_2: the dream's music has to be playing when chapter2_intro starts.
+do SoundManager.fade_out_portal_hum(3.0)
+do SoundManager.play_music_track("haunted_techno", 3.0)
+You've been here before.
+You know how this one ends.
+Go on. Look around. Try the other door.
+It won't change a thing.
+It already happened.
+=> END
+
 ~ apartment_1
 # TEMPLATE: placeholder launch monologue for the apartment chapter (Late Delivery).
 TEMPLATE — a warmer room than this one.
 TEMPLATE — a quiet night, not so long ago.
 => END
 
+~ layla_runs_away
+# step 2.413: the launch monologue for "Layla Runs Away"
+Layla.
+You remember Layla now, don't you?
+She... was clearly important enough to you for you to have this memory.
+A day spent working together.
+An invite for coffee.
+Who knows what it could lead to... right?
+Just... remember one thing about Layla.
+In the beginning of fall, when you lo-
+Oh, wait, what?
+Never mind.
+You have arrived.
+Have fun.
+=> END
+
+~ layla_runs_away_replay
+# step 2.419: a REPLAY of Layla Runs Away. draft lines: rewrite freely, keep the title.
+Layla, again.
+You've turned this one over before.
+Nothing in it is going to move.
+But it's a nice one to sit in.
+=> END
+
 ~ return_to_hub
-The memory folds shut.
-It keeps what it keeps.
-Back to the white room.
+Fading out.
+You're back.
+Back to your reality.
+Who's gonna pay your bills?
+Who are you?
+Is anyone... out there thinking about you?
+=> END
+
+~ layla_runs_away_return
+# step 2.423: the exit monologue of "Layla Runs Away", under black after its conversation
+Ah.
+Looking back, it all makes sense.
+The girl was flustered at the thought of your naked body.
+What about you, though?
+What were you feeling then?
+What are you feeling... now?
+=> END
+
+~ build_end_note
+# step 2.421: shown once, the first time the memory box is closed after Keeping Busy is finished. an out-of-world
+# note from the developer, so nobody goes looking for new scenes in the hospital. speaker-less on purpose.
+# draft lines: rewrite freely, keep the title.
+A note from the developer:
+This is where the story stops for this build. The hospital stays as it is for now.
+The memories stay open. Go back into them whenever you like, and keep an eye out for anything the insurance form might want.
+Thanks for playing. More soon.
 => END

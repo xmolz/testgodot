@@ -2,42 +2,65 @@
 if Flags.get_level_flag("lab_keypad_interacted") == true:
 	=> retry
 do stage_party("", "base")
+# step 2.374: Layla's expressions (rig). she enters as "base"; this lands while she fades in.
+do actor_change("Layla", "eager")
 do prop_enter("Keypad", "res://ui/keypad_prop.tscn", "opposite", 470.0, 0.9)
 Player: (The keypad lock to the lab.)
 Player: (Easy enough. I've got this.)
+do actor_change("Fiona", "explain")
 Player: Easiest date for an American to remember, baby.
 do prop_call("Keypad", "type_code", "07041776")
 You hit OK.
 do prop_call("Keypad", "deny")
+do actor_change("Layla", "surprised")
 The screen flashes red with a flat, ugly buzz. The door doesn't move.
 do party_huddle()
 do Flags.set_level_flag("lab_keypad_interacted", true)
+do actor_change("Fiona", "suspicious")
 Player: Umm. Layla...
 Player: Did we have a password change recently?
 Player: I could've sworn it was the usual yesterday afternoon.
+# her funny shock face for the first two lines, then a comic wail, then real tears at the slump
+do actor_change("Layla", "funny_shock")
 do actor_effect("Layla", "jump")
 Layla: [wave amp=50.0 freq=5.0 connected=1][speed=0.25]WHAAAAT?![/speed][/wave]
 Layla: No way! Who could've changed it?
+do actor_change("Layla", "whining")
 Layla: Why did this have to happen today of all days?!
 do actor_effect("Layla", "tremble")
 Layla: I'm screwed. I'm so screwed!
+do actor_change("Layla", "teary")
 do actor_effect("Layla", "slump")
 Layla: There goes my letter of recommendation! [wave amp=50.0 freq=5.0 connected=1][speed=0.25]Noooooo![/speed][/wave]
 She seems really shaken by this.
+# she quiets down (sad eyes, same pose), and brightens a little at "figure out a way"
+do actor_change("Layla", "downcast")
+do actor_change("Fiona", "shrug")
 Player: I need you to calm down.
 Player: There's still time before the professor comes in.
+do actor_change("Layla", "pensive")
+do actor_change("Fiona", "base")
 Player: We can figure out a way to get in.
+do actor_change("Fiona", "thinking")
 Player: Maybe we should talk to that janitor.
+# met him already: a comic wail at "CREEEEEPY", a pout (fists) while Fiona argues, then a reluctant yes
 if Flags.get_level_flag("jayce_introduced") == true:
+	do actor_change("Layla", "whining")
 	do actor_effect("Layla", "shock")
 	Layla: But he's [wave amp=50.0 freq=5.0 connected=1][speed=0.25]CREEEEEPY![/speed][/wave]
+	do actor_change("Layla", "huffy")
+	do actor_change("Fiona", "base")
 	Player: I suppose. But he's our only lead.
 	Player: Besides, don't janitors have access to every room in this building?
 	Player: You know, for cleaning and everything?
+	do actor_change("Layla", "hesitant")
 	Layla: Fine. I guess it's the only thing we can do.
+	do actor_change("Layla", "touched")
 	Player: Yep. Let's go.
 else
+	do actor_change("Fiona", "base")
 	Player: He probably has access to every room in this building.
+	do actor_change("Layla", "hesitant")
 	Layla: Fine. Let's do that.
 => END
 
@@ -51,3 +74,224 @@ else
 	Player: (No point. The code's been changed.)
 	Player: (We need another way in. The janitor.)
 => END
+
+~ code_correct
+# step 2.280 / 2.281: the lab code (la marr's birth date) worked. staged after the keypad closes.
+# the professor calls fiona's phone. sets lab_entry_ready (the walk-in sequence comes later).
+do actor_enter("Fiona", "base", "left")
+do actor_enter("Layla", "base", "right")
+do actor_flip("Layla", true)
+# step 2.377: Layla's expressions (rig). she enters as "base"; this lands while she fades in. the door
+# has just unlocked.
+do actor_change("Layla", "surprised")
+# step 2.288: the right code before any la marr clue was seen (book, framed photo, lock screen).
+if Flags.get_level_flag("la_marr_book_read") == false and Flags.get_level_flag("greene_la_marr_photo_seen") == false and Flags.get_level_flag("greene_lockscreen_seen") == false:
+	=> code_correct_speedrun
+if Flags.get_game_counter("layla_closeness") < 0:
+	Layla: It... actually worked.
+	do actor_change("Layla", "talking")
+	Layla: You did it.
+	do actor_change("Layla", "neutral")
+else
+	do actor_change("Layla", "excited")
+	do actor_effect("Layla", "bounce")
+	Layla: Oh my God! It worked!
+	Layla: You did it, Fiona! You did it!
+	do actor_change("Layla", "beaming")
+	Layla: Yayyyyyyyyyyy!
+	do actor_change("Layla", "eager")
+do actor_change("Fiona", "shy")
+Player: Hehe.
+Player: We did.
+do actor_change("Fiona", "shrug")
+Player: Crazy. I really didn't expect this to work.
+Player: I mean, what are the odds, right?
+if Flags.get_game_counter("layla_closeness") < 0:
+	Layla doesn't answer your rhetorical question.
+elif Flags.get_level_flag("fiona_said_nine_half") == true:
+	do actor_change("Layla", "explaining_talk")
+	do actor_effect("Layla", "jump")
+	Layla: They were nine and a half percent!
+	# mouth shut before the push-in on Fiona
+	do actor_change("Layla", "explaining")
+	do actor_focus("Fiona", 1.6, 0.4)
+	if Flags.get_game_counter("layla_closeness") >= 3:
+		# step 2.403: the smile layla spots (in the close-up)
+		do actor_change("Fiona", "smile")
+		Player: I suppose they were.
+		# she spots the smile: wowed, then excited, then a blush at "cute"; flustered when Fiona teases back
+		do actor_change("Layla", "wowed")
+		Layla: Oh my God. Did you just smile?
+		do actor_change("Layla", "excited")
+		Layla: That's probably the first time I've seen you smile today!
+		do actor_change("Layla", "bashful_talk")
+		Layla: You're so... cute when you're smiling.
+		do actor_change("Layla", "bashful")
+		do actor_change("Fiona", "suspicious")
+		Player: What do you mean? Am I not cute otherwise?
+		Player: How rude.
+		do actor_change("Layla", "flustered")
+		Layla: What! No. Of course not. That's not what I mea-
+	else
+		do actor_change("Fiona", "smile")
+		Player: I suppose they were.
+	do actor_unfocus_all(0.3)
+else
+	# layla isn't distant, but fiona never gave her "nine and a half percent" estimate in this run.
+	do actor_change("Layla", "happy_talk")
+	Layla: Pretty low, I bet!
+	do actor_change("Layla", "neutral")
+	Player: I suppose they were.
+~ code_correct_call
+do SoundManager.play_sfx("fiona_phone_ringtone")
+do wait(1.2)
+# step 2.377: the phone rings (this is also where the speedrun version joins)
+do actor_change("Layla", "surprised")
+do actor_change("Fiona", "suspicious")
+Player: Huh... why's the professor calling me?
+do SoundManager.stop_sfx("fiona_phone_ringtone")
+# she listens in, anxious (hand on chest)
+do actor_change("Layla", "troubled")
+You accept the call and put it on speaker, so that Layla can hear too.
+do actor_change("Fiona", "base")
+Player: Ummm... hello, Professor.
+Player: What's up?
+Professor Greene: Oh, good morning, Fiona! How are you?
+Player: Good, good.
+Player: Tell me, how can I help you?
+Professor Greene: Oh, I wish you could.
+Professor Greene: I just wanted to tell you I won't be able to review the drafts you sent me yesterday. I've taken ill this morning.
+Professor Greene: I'm barely able to make it out of bed!
+do actor_change("Fiona", "sad")
+Player: Oh no. I'm so sorry.
+Player: Do you need anything? Layla and I can come over and spend some time with you if you'd like.
+Player: We're both at the university right now.
+Professor Greene: Oh, no, don't worry about it.
+Professor Greene: Last thing an oldie like me wants is to inconvenience you youngins.
+Professor Greene: I'll be fine.
+Professor Greene: Oh, and if you and Layla are together...
+# relief creeps in (same pose)
+do actor_change("Layla", "touched")
+Professor Greene: Please let her know I won't be able to come in today and review her work either.
+Professor Greene: I tried reaching her earlier, but her phone was off.
+Player: Sure, Professor. I'll let her know.
+Professor Greene: Thanks, Fiona. Alright then. You take care now.
+Player: You too, Professor. Don't hesitate to reach out if you need anything.
+Professor Greene: Of course. Bye now.
+You and Layla look at each other for a second.
+do actor_change("Fiona", "hands_back_sad")
+Player: Yeah, well. So that happened.
+if Flags.get_game_counter("layla_closeness") < 0:
+	do actor_change("Layla", "giggling")
+	Layla lets out a short laugh, despite herself.
+	Layla: Ha...
+else
+	do actor_change("Layla", "laughing")
+	# step 2.414: a close-up on her belly laugh
+	do actor_focus("Layla", 1.8, 0.4)
+	Layla bursts into belly laughter.
+	Layla: Hahahahahahah!
+	do actor_unfocus_all(0.3)
+do actor_change("Layla", "content")
+# step 2.414: a plain, curious "What?" (the suspicious face read as confrontational)
+do actor_change("Fiona", "hands_back")
+Player: What?
+do actor_change("Layla", "happy_talk")
+Layla: Oh no, it's nothing.
+Layla: Just... seems funny.
+do actor_change("Layla", "explaining_talk")
+Layla: How things turn out sometimes, you know?
+do actor_change("Layla", "explaining")
+do actor_change("Fiona", "base")
+Player: Heh. I agree.
+do actor_change("Layla", "hesitant")
+Layla: I mean, I'm obviously not happy that he's sick. I hope you know that.
+do actor_change("Layla", "happy_talk")
+Layla: It's just... funny. I was so worried. Only for him to take the day off!
+do actor_change("Layla", "neutral")
+Player: Well, shall we go in and finish the job anyway?
+if Flags.get_game_counter("layla_closeness") < 0:
+	do actor_change("Layla", "talking")
+	Layla: Yeah. Let's.
+else
+	do actor_change("Layla", "excited")
+	Layla: Yes! Let's do that!
+do Flags.set_level_flag("lab_entry_ready", true)
+=> END
+
+~ lab_twenty_minutes
+# step 2.282: over black, between the lab walk-in and the car ride (played as a portal monologue,
+# plain balloon, no staging). distant variants: next step.
+You and Layla spend about twenty minutes in the lab.
+Then, just before you're about to finish:
+Player: Okay, so you see this thing here? You need to place it over here.
+Player: Then, observe it under the microscope.
+Player: Do you see the changes?
+if Flags.get_game_counter("layla_closeness") < 0:
+	Layla: ...Yeah. I see it.
+else
+	Layla: Yes! Oh wow. This is... amazing.
+Player: It is, really.
+Player: You know, if this works out, we could do some really amazing things.
+Player: We could reverse any kind of disease. Just like that.
+Layla: That's incredible...
+Layla: Is that your goal, Fiona?
+Layla's question makes you contemplate a bit.
+Player: Yeah. I suppose you could say that.
+if Flags.get_game_counter("layla_closeness") < 0:
+	Layla: ...That's a good goal. I suppose.
+elif Flags.get_game_counter("layla_closeness") >= 3:
+	Layla: Then I'll help you in whatever way I can. No matter what.
+	Player: (That's sweet of her.)
+	Player: Umm... yes. Sure. Thank you.
+else
+	Layla: That's a great goal. I'd love to help, if I can.
+	Player: Umm... yes. Sure. Thank you.
+Player: Well, looks like we're done here.
+Player: Shall we leave? I really need to take a shower.
+if Flags.get_game_counter("layla_closeness") < 0:
+	Layla: Yeah. Let's go.
+	Layla: ...Thanks for today.
+else
+	Layla: Yes! I'm ready to leave too.
+	Layla: Thank you, Fiona!
+Player: Great. I'll book my cab.
+if Flags.get_game_counter("layla_closeness") < 0:
+	Layla: I'll drop you home. It's on my way.
+elif Flags.get_game_counter("layla_closeness") >= 3:
+	Layla: Huh? Cab? Oh, please.
+	Layla: I'm dropping you home. Don't you even try to say no!
+else
+	Layla: Huh? Cab?
+	Layla: Let me drop you home. It's no trouble.
+Player: Oh. Is that so?
+Player: Sure. But only if you let me drive. Hehe.
+if Flags.get_game_counter("layla_closeness") < 0:
+	Layla: ...Fine.
+else
+	Layla: Hah! Works for me!
+=> END
+
+~ code_correct_speedrun
+# step 2.288: the code worked, but fiona never found the clues. joins the call after this.
+# step 2.377: distant, wary (a side glance while Fiona answers); otherwise wowed
+if Flags.get_game_counter("layla_closeness") < 0:
+	Layla: ...How did you know that?
+	do actor_change("Layla", "suspicious")
+else
+	do actor_change("Layla", "wowed")
+	do actor_effect("Layla", "jump")
+	Layla: Fiona! Wow, how'd you know the password to this?
+	do actor_change("Layla", "eager")
+do actor_change("Fiona", "shrug")
+Player: I'm not sure...
+Player: Maybe I just got lucky?
+do actor_change("Fiona", "base")
+Player: Anyway, let's go in?
+if Flags.get_game_counter("layla_closeness") < 0:
+	do actor_change("Layla", "sad")
+	Layla: Sure.
+else
+	do actor_change("Layla", "excited")
+	Layla: Yes!
+=> code_correct_call

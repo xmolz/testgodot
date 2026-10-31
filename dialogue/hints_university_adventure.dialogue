@@ -1,0 +1,74 @@
+# res://dialogue/hints_university_adventure.dialogue
+# step 2.358: think-verb hints for the university level (Keeping Busy), adventure mode. the stage is
+# picked by levels/university_hint_manager.gd, latest stage first. assisted mode uses this file too
+# until its own lines are written.
+
+~ hint_start
+Player: (Layla needs my help in the lab...)
+Player: (I should not keep her waiting.)
+=> END
+
+~ hint_keypad_locked
+Player: (Well, our code isn't working anymore...)
+Player: (I should probably ask that janitor there about it.)
+=> END
+
+~ hint_try_date
+Player: (The professor's reset the code.)
+Player: (After our talk with the janitor... it's likely a date.)
+Player: (But... what date?)
+=> END
+
+# a date has been tried on the keypad and failed, before Julian's lead. the elevators (and the Grad
+# Commons on 3F) are open from here.
+~ hint_after_first_date
+Player: (That last code didn't work...)
+Player: (I need to think harder.)
+Player: (Or ask, or look in the right places.)
+=> END
+
+~ hint_dna_lookup
+Player: (Julian said the professor told him a fun fact about a week ago.)
+Player: (Something about the day DNA was actually discovered.)
+Player: (We don't have any way to get on the internet, though...)
+=> END
+
+~ hint_charge_phone
+Player: (I have Layla's dead phone...)
+Player: (But can I actually charge it?)
+Player: (If I can, finding that date would be easy.)
+=> END
+
+~ hint_go_to_office
+Player: (Welp, we tried the DNA date. Didn't work.)
+Player: (I'm not gonna back down, though...)
+Player: (I'll look for clues in his office.)
+Player: (There's gotta be something there.)
+=> END
+
+~ hint_get_keycard
+Player: (The office needs a keycard. The janitor said his opens almost every room. Time to pay him a visit.)
+=> END
+
+~ hint_find_leverage
+Player: (That Jayce is not playing nice...)
+Player: (Time to find some leverage on the fucker.)
+=> END
+
+~ hint_use_camera
+Player: (Well, I got the dirt I was looking for.)
+Player: (I should try talking to Jayce again.)
+Player: (Teach him a goddamn lesson.)
+=> END
+
+~ hint_office_open
+Player: (The door to Professor Greene's office is open.)
+Player: (I need to look for clues in there.)
+=> END
+
+~ hint_in_office
+Player: (I'm in here.)
+Player: (Can I piece together a date-code I can use on the lab's keypad?)
+Player: (I must. Look. Carefully.)
+Player: (God, this is fun.)
+=> END

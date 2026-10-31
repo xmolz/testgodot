@@ -6,5 +6,8 @@
 script = ExtResource("1_profile")
 actor_id = "Julian"
 expressions = {
-"base": "res://Dev/test_profiles/julian_base.png"
+"rig_expressions": "res://characters/julian/julian_expressions.json",
+"rig_parts": "res://characters/julian/parts/julian_parts.json"
 }
+canvas_anchor_x = 0.4995
+face_y_ratio = 0.201

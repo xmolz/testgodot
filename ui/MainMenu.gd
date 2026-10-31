@@ -15,6 +15,7 @@ signal quit_game_requested
 @onready var quit_btn = $Content/ButtonBlock/QuitButton
 
 func _ready():
+	start_btn.text = "NEW GAME"   # step 2.415: was "Start Demo" (the first release); step 2.422: caps like the other buttons
 	if SaveManager:
 		var recent_slot = SaveManager.get_most_recent_slot()
 		continue_btn.visible = not recent_slot.is_empty()

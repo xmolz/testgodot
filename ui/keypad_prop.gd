@@ -118,6 +118,9 @@ func type_code(code: String) -> void:
 
 func deny() -> void:
 	await press("OK")
+	# step 2.393: the wrong-code beep, as on the keypad panel
+	if SoundManager:
+		SoundManager.play_sfx("incorrect_beep")
 	if _cursor_tween:
 		_cursor_tween.kill()
 	# red LCD, digits solid, flash, then wipe to empty slots

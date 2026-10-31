@@ -12,7 +12,7 @@ background_aliases = {
 "test": "res://Backgrounds/Levels/static_hospital_background_ventless.png"
 }
 cg_aliases = {
-"at_the_door": "res://Dev/At the door.png",
+"at_the_door": "res://Backgrounds/CG/at_the_door.png",
 "sergey_neutral": "res://Backgrounds/Sergey/sergey_neutral.png",
 "sergey_hand_up": "res://Backgrounds/Sergey/sergey_hand_up.png",
 "sergey_frown": "res://Backgrounds/Sergey/sergey_frown.png",

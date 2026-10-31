@@ -5,8 +5,15 @@
 [resource]
 script = ExtResource("1_d2ybx")
 chapter_name = "Keeping Busy"
-thumbnail_path = "res://Memory Box Chapter Images/Chapters/Chapter 1 - University.png"
+thumbnail_path = "res://Memory Box Chapter Images/Chapters/keeping_busy_cover.png"
+detail_image_path = "res://Backgrounds/CG/layla_library_cg.png"
+detail_image_focus = 0.0
+chapter_description = "A dream. A familiar face. A rival. A lock. And a really pervy... janitor? Whatever, I just wanna go home and shower."
+form_clues = Array[String](["First name"])
+skippable_tags = Array[String](["Exhibitionism"])
 scene_path_to_load = "res://levels/test_chapter_level.tscn"
+completion_flag = "chapter_keeping_busy_done"
+replay_reset_prefixes = Array[String](["kb_", "counter_layla_closeness", "layla_locked_distant"])
 launch_dialogue_title = "university_2"
 intro_overlay_path = "res://conversation/chapter2_intro_overlay.tscn"
 wake_cg_scene_path = "res://conversation/wake_cg_layer.tscn"

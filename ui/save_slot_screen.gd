@@ -327,11 +327,16 @@ func _create_slot_button(slot_id: String, can_save: bool) -> Button:
 			btn.focus_mode = Control.FOCUS_NONE
 			btn.mouse_default_cursor_shape = Control.CURSOR_ARROW
 	else:
-		var time_dict = Time.get_datetime_dict_from_unix_time(meta.get("timestamp_unix", 0))
+		# step 2.422: the stamp is UTC; shift it into the player's time zone before showing it
+		var local_bias_s: int = int(Time.get_time_zone_from_system().get("bias", 0)) * 60
+		var time_dict = Time.get_datetime_dict_from_unix_time(int(meta.get("timestamp_unix", 0)) + local_bias_s)
 		var time_str = "%04d-%02d-%02d %02d:%02d" % [time_dict.year, time_dict.month, time_dict.day, time_dict.hour, time_dict.minute]
 		
 		var play_secs = int(meta.get("playtime_seconds", 0))
-		var play_str = "%d:%02d" % [play_secs / 3600, (play_secs % 3600) / 60]
+		# step 2.422: "7m" / "1h 07m" ("0:07" read like minutes:seconds)
+		var play_str = "%dh %02dm" % [play_secs / 3600, (play_secs % 3600) / 60]
+		if play_secs < 3600:
+			play_str = "%dm" % [play_secs / 60]
 		
 		info_lbl.text = "%s  •  %s  •  %s" % [time_str, meta.get("location_label", "Unknown"), play_str]
 	

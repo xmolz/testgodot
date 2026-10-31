@@ -19,6 +19,14 @@ var _defaults: Dictionary = {
 	"aida_in_main_room": true
 }
 
+# step 2.423: the hub flags "start where the demo ended" sets (see _ready)
+const DEMO_END_FLAGS: Array[String] = [
+	"has_spoken_to_aida",
+	"aida_explanation_shown",
+	"insurance_button_unlocked",
+	"has_tried_memory_box",
+]
+
 @export_group("Debug Flag Toggles")
 @export var override_has_spoken_to_aida: bool = false
 @export var override_aida_explanation_shown: bool = false
@@ -37,6 +45,15 @@ var _defaults: Dictionary = {
 @export var override_learned_techpass_from_sergey: bool = false
 @export var override_give_techpass: bool = false
 @export var override_dev_cta_completed: bool = false
+
+# step 2.308: memory box testing (Main only). both are for this session only and never go into a save.
+@export_group("Memory Box Test")
+## the memory box as on a first visit: only Keeping Busy open. choosing a chapter plays a quick portal
+## swirl and counts it as finished instead of playing it, so the chapter it unlocks lights up as new.
+## also lets the memory box be used straight away (as if aiDA had already been talked to).
+@export var test_memory_box_first_visit: bool = false
+## every chapter and location open (no "new" glow), e.g. to play a chapter that is normally still locked
+@export var unlock_all_chapters: bool = false
 
 
 func _ready():
@@ -70,7 +87,40 @@ func _ready():
 	if override_give_techpass and GameManager:
 		Inventory.add_item("techpass")
 
+	# step 2.423: "start where the demo ended" (GameManager._ask_start_point): the hub as the first release left
+	# it, the same five things the override toggles above do. applied once, on the hub's first instance of the
+	# run, so a hub rebuilt on the way back from a chapter (or by a load) doesn't hand out a second pass.
+	if level_id == "hospital_hub" and Engine.get_meta("start_at_demo_end", false):
+		Engine.set_meta("start_at_demo_end", false)
+		for flag_name in DEMO_END_FLAGS:
+			_flags[flag_name] = true
+		if GameManager and not Inventory.has_item("techpass"):
+			Inventory.add_item("techpass")
+		print_rich("[color=cyan]LevelStateManager: starting where the demo ended.[/color]")
+
+	# step 2.308: memory box test toggles
+	_apply_memory_box_test()
+
 	print_rich("[color=LawnGreen]LevelStateManager for '%s' is ready.[/color]" % (get_parent().name if get_parent() else "UnnamedLevel"))
+
+
+# step 2.308: the memory box test toggles. the "first visit" reset clears every chapter_ game flag (finished,
+# unlocked, seen) once per session, so coming back to the hub from a chapter doesn't wipe it again.
+func _apply_memory_box_test() -> void:
+	# only ever switched on (other levels' managers leave them alone); a new run starts with them off
+	if unlock_all_chapters:
+		Engine.set_meta("dev_unlock_all_chapters", true)
+	if not test_memory_box_first_visit:
+		return
+	Engine.set_meta("dev_quick_chapters", true)
+	_flags["has_spoken_to_aida"] = true
+	if Engine.get_meta("memory_box_test_reset_done", false):
+		return
+	Engine.set_meta("memory_box_test_reset_done", true)
+	for key in Flags.game_flags.keys():
+		if String(key).begins_with("chapter_"):
+			Flags.game_flags.erase(key)
+	print_rich("[color=cyan]LevelStateManager: memory box test on - first visit, only Keeping Busy open.[/color]")
 
 
 func print_initial_flags():

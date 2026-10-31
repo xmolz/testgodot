@@ -27,10 +27,23 @@ const COUNTER_PREFIX := "counter_"
 
 func add_game_counter(counter_name: String, delta: float) -> float:
 	var key := COUNTER_PREFIX + counter_name
+	# step 2.296: while layla is locked distant (two hurts in one chapter), nothing raises her closeness.
+	if counter_name == "layla_closeness" and delta > 0.0 and game_flags.get("layla_locked_distant", false) == true:
+		print_rich("[color=yellow]Flags: layla_closeness %+.1f ignored (locked distant)[/color]" % delta)
+		return float(game_flags.get(key, 0.0))
 	var value: float = float(game_flags.get(key, 0.0)) + delta
 	game_flags[key] = value
 	print_rich("[color=yellow]Flags: %s %+.1f -> %.1f[/color]" % [counter_name, delta, value])
 	return value
+
+
+## step 2.296: reprimanding layla and nearly telling julian about her, in one chapter, locks her distant
+## for the rest of it: closeness drops to at most -1 and can't rise again. the car ride clears the flag.
+func lock_layla_distant() -> void:
+	set_game_flag("layla_locked_distant", true)
+	var current: float = get_game_counter("layla_closeness")
+	if current > -1.0:
+		add_game_counter("layla_closeness", -1.0 - current)
 
 
 func get_game_counter(counter_name: String) -> float:

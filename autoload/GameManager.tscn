@@ -25,8 +25,9 @@
 [ext_resource type="Resource" path="res://data/vending_diet_cola.tres" id="24_dietcola"]
 [ext_resource type="Resource" path="res://data/type_c_charger.tres" id="90_typeccharger"]
 [ext_resource type="Resource" path="res://data/layla_phone.tres" id="91_laylaphone"]
+[ext_resource type="Resource" path="res://data/jayce_camera.tres" id="92_jaycecamera"]
 
 [node name="GameManager" type="Node" unique_id=666986880]
 script = ExtResource("1_108xg")
 all_verb_data_resources = Array[ExtResource("2_dxunw")]([ExtResource("3_pdxvr"), ExtResource("4_iyray"), ExtResource("7_0145d"), ExtResource("8_0q1rh"), ExtResource("9_l3fct"), ExtResource("10_jjrwh"), ExtResource("10_ow34n")])
-all_item_data_resources = Array[ExtResource("8_0145d")]([ExtResource("11_5me18"), ExtResource("12_dm6qn"), ExtResource("13_lhkyk"), ExtResource("15_3ky0o"), ExtResource("16_techpass"), ExtResource("17_bobbypins"), ExtResource("18_charger"), ExtResource("19_cash"), ExtResource("20_steelpins"), ExtResource("21_cheeseballs"), ExtResource("22_proteinbar"), ExtResource("23_bobatea"), ExtResource("24_dietcola"), ExtResource("90_typeccharger"), ExtResource("91_laylaphone")])
+all_item_data_resources = Array[ExtResource("8_0145d")]([ExtResource("11_5me18"), ExtResource("12_dm6qn"), ExtResource("13_lhkyk"), ExtResource("15_3ky0o"), ExtResource("16_techpass"), ExtResource("17_bobbypins"), ExtResource("18_charger"), ExtResource("19_cash"), ExtResource("20_steelpins"), ExtResource("21_cheeseballs"), ExtResource("22_proteinbar"), ExtResource("23_bobatea"), ExtResource("24_dietcola"), ExtResource("90_typeccharger"), ExtResource("91_laylaphone"), ExtResource("92_jaycecamera")])

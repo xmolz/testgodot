@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://bn1kogsccxmvt"]
+
+[ext_resource type="Texture2D" uid="uid://du7ahf1c6vlp8" path="res://Sprites/inventory_items/jayce_camera_icon.png" id="1_icon"]
+[ext_resource type="Script" uid="uid://by8o1t3tdwrep" path="res://data/ItemData.gd" id="2_script"]
+
+[resource]
+script = ExtResource("2_script")
+item_id = "jayce_camera"
+display_name = "Camera"
+icon = ExtResource("1_icon")
+description = "A small digital camera from the janitor's locker."

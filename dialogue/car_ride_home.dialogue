@@ -1,6 +1,6 @@
 # car_ride_home.dialogue: Fiona drives Layla's car back to Fiona's apartment after the university.
 #
-# hooks provided by the car scene (Dev/car_ride_test.gd, later the real car scene):
+# hooks provided by the car scene (levels/car/car_ride_home.gd):
 #   do car_darkness() / do car_reveal(1.5)    black screen / fade the car in
 #   do car_bump(1.0)                          a bump; 0.5 small, 1.5 big
 #   do car_speed(0.0, 1.5)                    ease to a stop over 1.5 s (a red light); car_speed(1.0) = cruising
@@ -8,7 +8,33 @@
 #                                             faint mental image) / snaps out of it
 #   do car_end()                              fade to black at the end of the ride. the real car scene
 #                                             returns to the memory box here.
-# planned later, not available yet: expression changes and face close-ups over the car art.
+#   do car_fiona("sideways frown")           step 2.299: Fiona's eyes / mouth / pose by option name (a short
+#                                             crossfade). eyes: straight sideways squished. mouth: frown smile o
+#                                             open_happy open_neutral. pose: base hand_up pointing_up. leave a part
+#                                             out to keep it; "default" = straight frown base.
+#   do car_closeup()                         step 2.305: a quick fade through black to a close-up of Fiona's
+#                                             face, for her inner moments. car_closeup(0.4) = seconds per half.
+#   do car_closeup_end()                     fade back to the normal view. car_closeup_end(0.4) = same.
+#                                             Fiona's changes asked for during a fade never show mid-cut: going in,
+#                                             they happen behind the black; coming out, after the fade back in.
+#   do car_layla("glance smile")            step 2.383-2.387: Layla's parts by option name, like car_fiona.
+#                                            pose: straight side (side = turned toward Fiona).
+#                                            facing forward - eyes: regular closed glance sad. brows: base
+#                                            glance_brows sad_brows. mouth: neutral flat smile small_open
+#                                            open_happy. blush: no_blush cute_blush. face: no_face
+#                                            flustered_face (a whole face; hides the others while it shows).
+#                                            turned (only show with "side") - eyes: side_eyes (at Fiona)
+#                                            side_away side_closed side_sad. brows: side_brows side_lowered
+#                                            side_tilted_1
+#                                            side_tilted_2. mouth: side_frown side_smile side_open_happy
+#                                            side_o side_sad_mouth. blush: no_side_blush side_blush. lines:
+#                                            no_side_lines side_lines. "default" = straight, and every part
+#                                            back to its default.
+#   do car_layla_closeup()                  step 2.388: a slow push-in on Layla's face (her own close-up),
+#                                            no fade; do car_layla_closeup_end() eases back out. seconds
+#                                            optional (default: the scene's layla_zoom_seconds)
+#   do car_layla_mood("warm", "distant")    step 2.388: car_layla() with the first spec, or the second when
+#                                            she's distant (layla_closeness below 0)
 #
 # mood: Flags.get_game_counter("layla_closeness") -> close >= 3, neutral 0 to under 3, distant < 0.
 # chapter memories: the university level copies these level flags into game flags with a "kb_" prefix
@@ -26,6 +52,7 @@
 
 ~ start
 do car_darkness()
+do car_layla_mood("straight regular base smile no_blush no_face", "straight sad sad_brows flat no_blush no_face", 0.0)
 do Flags.set_game_flag("kb_coffee_offered", false)
 do Flags.set_game_flag("kb_layla_came_up", false)
 do Flags.set_game_flag("kb_car_broke_silence", false)
@@ -34,6 +61,8 @@ do Flags.set_game_flag("kb_car_stood_by", false)
 Without much ado, you and Layla go to the parking lot and get in her car.
 Before long, you're out of the parking lot and onto the freeway.
 On your way. Back to your place.
+# step 2.405: the ride's music comes up with the car (car_end() fades it with the picture)
+do SoundManager.play_music_track("car_ride_back", 4.0)
 do car_reveal(1.5)
 Layla's car smells exactly how you expected it to.
 Like flowers.
@@ -53,140 +82,250 @@ Speaking of her... you wonder what she must be doing right now.
 It's been a week sin-
 if Flags.get_game_counter("layla_closeness") >= 3:
 	do car_think_end(0.8)
+	do car_fiona("sideways frown")
+	do car_layla("side side_eyes side_tilted_1 side_sad_mouth no_side_blush no_side_lines")
 	Layla: Ummm... Fiona?
 	Layla interrupts your thoughts. Her voice is soft and careful. Her brows are angled in concern.
 	Layla: Are you... okay?
 	Layla: I don't know. I just felt like I should ask you that.
 elif Flags.get_game_counter("layla_closeness") >= 0:
 	do car_think_end(0.8)
+	do car_fiona("sideways frown")
+	do car_layla("side side_eyes side_tilted_1 side_sad_mouth no_side_blush no_side_lines")
 	Layla: ...Fiona?
 	Layla's gentle voice halts your racing thoughts. She sounds unsure whether she should have spoken at all.
 	Layla: Sorry. You just looked... so far away.
 	Layla: Are you okay?
 else
+	do car_layla("straight sad sad_brows flat no_blush no_face")
 	Layla doesn't seem to have noticed your lil mid-drive daydream.
-	Instead, she seems to be looking out the window and having daydream thoughts of her own.
+	Instead, she seems to be looking out the window, lost in a daydream of her own.
 	do car_bump(1.0)
 	do car_think_end(0.4)
 	The car jolts over a bump, bringing you back to reality.
 	=> distant_ride
-Player: Oh, yes, of course.
-Player: Sorry, I got too in the zone while driving, I guess.
+do car_fiona("straight open_neutral hand_up")
+do car_layla("side side_eyes side_tilted_1 side_frown no_side_blush no_side_lines")
+Player: Oh, yeah, of course.
+Player: Sorry, I guess I zoned out for a second there.
+do car_fiona("sideways frown base")
+do car_layla("side side_eyes side_brows side_smile no_side_blush no_side_lines")
 Layla: That's alright.
 => long_day
 
 ~ long_day
+do car_fiona("squished open_neutral hand_up")
 Player: So, it's barely afternoon...
-Player: Yet it feels like the end of a long-ass day, doesn't it?
+Player: But it already feels like the end of a long-ass day, doesn't it?
+do car_fiona("straight frown base")
 if Flags.get_game_counter("layla_closeness") >= 3:
+	do car_layla("straight closed base open_happy no_blush no_face")
 	Layla: Oh Em Gee! Yes! I am SO tired.
+	do car_layla("straight regular base small_open no_blush no_face")
 	Layla: But that could be a side effect of worrying too much about the work.
 else
+	do car_layla("straight regular sad_brows small_open no_blush no_face")
 	Layla: Honestly? Yes. I'm exhausted.
 	Layla: I think worrying about the work got me more worn out than the work itself.
-# NOT DECIDED: how the professor's call reaches them (Fiona's phone, or Layla's once it's charged).
+do car_layla("straight glance base open_happy no_blush no_face")
 Layla: All of that only for the professor to call and tell us he's taking a day off!
+do car_fiona("sideways open_neutral")
+do car_layla("straight regular base smile no_blush no_face")
 Player: Yeah. Bet that was a relief for you, wasn't it?
+do car_fiona("frown")
 if Flags.get_game_counter("layla_closeness") >= 3:
+	do car_layla("side side_closed side_brows side_open_happy no_side_blush no_side_lines")
 	Layla: You bet, Fee!
 	if Flags.get_game_flag("kb_layla_said_fee") == true:
+		do car_fiona("squished frown")
+		do car_layla("side side_eyes side_brows side_smile no_side_blush no_side_lines")
 		Player: (Fee again...)
 	else
+		do car_fiona("squished frown")
+		do car_layla("side side_eyes side_brows side_smile no_side_blush no_side_lines")
 		Player: (Fee...)
 else
+	do car_fiona("frown")
+	do car_layla("straight regular base small_open no_blush no_face")
 	Layla: It really was.
 => thanks
 
 ~ thanks
 # each line is gated on what actually happened; the mood only sets the tone.
+do car_fiona("straight frown")
 if Flags.get_game_counter("layla_closeness") >= 3:
+	do car_layla("side side_eyes side_tilted_2 side_sad_mouth no_side_blush no_side_lines")
+	do car_layla_closeup()
 	Layla: You were too kind to me today. Honestly.
 	if Flags.get_game_flag("kb_layla_work_comforted") == true:
 		Layla: You made me feel confident in my abilities.
 	elif Flags.get_game_flag("kb_layla_work_reprimanded") == true:
+		do car_layla("straight sad sad_brows small_open no_blush no_face")
 		Layla: I know you were kind of harsh with me earlier.
 		Layla: But I think I probably needed to hear it.
+		do car_layla("straight regular base small_open no_blush no_face")
 		Layla: Yeah, it was a much-needed reality check. Thanks for that.
 	if Flags.get_game_flag("kb_julian_refused_help") == true:
+		do car_layla("side side_eyes side_tilted_2 side_open_happy no_side_blush no_side_lines")
 		Layla: You didn't tell Julian about my role and my unfinished work...
+		do car_layla("side side_eyes side_tilted_2 side_sad_mouth no_side_blush no_side_lines")
 		Layla: I really didn't want that to happen...
 	elif Flags.get_game_flag("kb_julian_nearly_told_truth") == true:
+		do car_layla("straight sad sad_brows small_open no_blush no_face")
 		Layla: You almost told Julian about my role and my unfinished work, though...
+		do car_layla("side side_eyes side_tilted_1 side_open_happy no_side_blush no_side_lines")
 		Layla: But you stopped. That counts, right?
+	do car_layla("side side_eyes side_brows side_open_happy no_side_blush no_side_lines")
 	Layla: You actually helped me get my work done quickly.
 	Layla: Which, by the way, you are SO good at?
 	if Flags.get_game_flag("kb_layla_gift_loved") == true:
+		do car_layla("straight closed base open_happy no_blush no_face")
 		Layla: And you even got me my favorite snack from the vending machine!
 	elif Flags.get_game_flag("kb_layla_gift_given") == true:
+		do car_layla("straight closed base open_happy no_blush no_face")
 		Layla: And you even got me a snack from the vending machine!
+	do car_fiona("sideways frown")
+	do car_layla("side side_eyes side_brows side_open_happy side_blush side_lines")
 	Layla: You're the best!! Thank you, Fee.
+	do car_closeup()
+	do car_fiona("squished frown")
 	Player: (Ehhh...)
-	Player: (I am flattered, but I can't let this get to my head.)
+	Player: (I'm flattered, but I can't let this go to my head.)
+	do car_closeup_end()
+	do car_fiona("sideways open_neutral")
+	do car_layla("straight glance base smile cute_blush no_face")
 	Player: Don't... mention it.
+	do car_fiona("open_neutral")
 	Player: I'm just happy I was able to help.
 else
+	do car_layla("straight regular base small_open no_blush no_face")
+	do car_layla_closeup()
 	Layla: By the way, thanks a lot for today.
 	if Flags.get_game_flag("kb_layla_work_comforted") == true:
 		Layla: What you said earlier, about my work... It really helped.
 	elif Flags.get_game_flag("kb_layla_work_reprimanded") == true:
+		do car_layla("straight glance sad_brows small_open no_blush no_face")
 		Layla: Even if you were a bit harsh with me earlier.
 	if Flags.get_game_flag("kb_julian_refused_help") == true:
+		do car_layla("side side_eyes side_brows side_open_happy no_side_blush no_side_lines")
 		Layla: And thanks for not telling Julian about my role and unfinished work.
 	elif Flags.get_game_flag("kb_julian_nearly_told_truth") == true:
 		if Flags.get_game_flag("kb_layla_work_reprimanded") == true:
+			do car_layla("straight sad sad_brows small_open no_blush no_face")
 			Layla: And you almost told Julian about my role and unfinished work...
 		else
+			do car_layla("straight sad sad_brows small_open no_blush no_face")
 			Layla: Even though you almost told Julian about my role and unfinished work...
 		Layla: I'm trying not to think about that.
+		do car_fiona("squished frown")
+		do car_layla("straight sad sad_brows flat no_blush no_face")
 		Player: (Ouch.)
+		do car_fiona("sideways frown")
+	do car_layla("straight regular base small_open no_blush no_face")
 	Layla: You really helped me get my work done. Quick, too.
 	if Flags.get_game_flag("kb_layla_gift_loved") == true:
+		do car_layla("straight glance base small_open no_blush no_face")
 		Layla: And hey, the protein bar. That was sweet of you.
 	elif Flags.get_game_flag("kb_layla_gift_given") == true:
+		do car_layla("straight glance base small_open no_blush no_face")
 		Layla: And the snack, too.
+	do car_layla("side side_eyes side_tilted_2 side_sad_mouth no_side_blush no_side_lines")
 	Layla: So... thank you. Really.
+	do car_fiona("sideways open_neutral")
+	do car_layla_closeup_end()
+	do car_layla("side side_eyes side_tilted_2 side_smile no_side_blush no_side_lines")
 	Player: Don't mention it.
+	do car_fiona("open_neutral")
 	Player: I'm just happy I was able to help.
 => getting_to_know
 
 ~ getting_to_know
-# NOT TIERED YET: Drishti will rework this section (and decide whether a distant Layla gets it).
+# step 2.295: close and neutral share this section; the flirty beats are close only. distant layla never reaches it.
+do car_fiona("straight frown")
+do car_layla("side side_eyes side_brows side_open_happy no_side_blush no_side_lines")
 Layla: You know, I'd love to know more about you, Fiona.
 Layla: I mean, I know we've known each other since we were kids...
 Layla: But before this semester, I hadn't seen you in like... 14 years!
+do car_layla("side side_eyes side_brows side_smile no_side_blush no_side_lines")
+do car_closeup()
+do car_fiona("straight frown")
 Player: (That's right.)
-Player: (We did spend the first six years of my life growing up together. In the same town.)
+Player: (We grew up together in the same town, until I was six.)
+do car_fiona("squished")
 Player: (But everything changed when my family had to move away.)
+do car_closeup_end()
+do car_fiona("sideways open_neutral hand_up")
+do car_layla("straight regular base smile no_blush no_face")
 Player: I really don't know what to tell you, Layla.
+do car_fiona("straight")
 Player: I mean, I'm practically working all the time. Even when I'm not at the lab.
 Player: Apart from that, I do like to hit the gym when I can.
+do car_fiona("open_happy pointing_up")
 Player: Oh, and reading. Reading's neat.
+do car_fiona("sideways base frown")
+do car_layla("straight glance glance_brows small_open no_blush no_face")
 Layla: Really? Is that all you do?
+do car_layla("side side_eyes side_brows side_open_happy no_side_blush no_side_lines")
 Layla: There's gotta be more! Tell me about your friends! Do you go out with them?
+do car_layla("straight glance glance_brows open_happy no_blush no_face")
 Layla: What about your BOYFRIEND? Do you have one?
-Layla: Is he prettier than me?
+if Flags.get_game_counter("layla_closeness") >= 3:
+	do car_layla("straight glance base small_open cute_blush no_face")
+	Layla: Is he prettier than me?
+do car_fiona("open_neutral")
+do car_layla("straight regular base smile no_blush no_face")
 Player: What? No. I don't have a boyfriend.
+do car_fiona("straight open_neutral")
 Player: Not too many friends either.
+do car_fiona("squished hand_up")
 Player: Jeez, honestly, I can't recall the last time I hung out with anyone except my mom.
+do car_fiona("straight frown base")
+do car_layla("side side_eyes side_tilted_1 side_o no_side_blush no_side_lines")
 Layla: Really? I never would've guessed that!
+do car_layla("straight regular base small_open no_blush no_face")
 Layla: I actually saw you with a guy in the cafeteria a couple of weeks ago.
 Layla: And then, a few days later - a girl!
+do car_layla("straight sad base small_open cute_blush no_face")
 Layla: She was so good-looking, too!
+do car_layla("straight glance base small_open cute_blush no_face")
 Layla: I thought... you were dating them for sure.
+do car_fiona("straight o")
+do car_layla("straight glance base flat no_blush no_face")
 Player: Oh.
+do car_fiona("open_neutral")
 Player: Yeah, no. We just hooked up.
 Player: They weren't my friends in any sense of the word.
+do car_fiona("frown")
 # EXPRESSION HOOK (later, needs car art layers): Layla doesn't know how to respond.
+do car_layla("straight sad sad_brows flat cute_blush no_face")
 Layla doesn't seem to know how to respond. She fidgets with her hands.
-Layla: Oh...
-Layla: So would you... not hook up with... someone you're friends with?
-Player: Well, it's not like a policy or anything.
-Player: I suppose I could. Depends on the moment.
-A smile seems to have returned to her face.
-Layla: Oh, I see!
-Layla: Good! I think one should be friends with all their romantic interests.
-Layla: At least to some extent.
-Player: Uh huh.
+if Flags.get_game_counter("layla_closeness") >= 3:
+	do car_fiona("frown")
+	Layla: Oh...
+	do car_layla("straight glance sad_brows small_open cute_blush no_face")
+	Layla: So would you... not hook up with... someone you're friends with?
+	do car_fiona("sideways open_neutral hand_up")
+	do car_layla("straight glance sad_brows flat cute_blush no_face")
+	Player: Well, it's not like a policy or anything.
+	do car_fiona("open_neutral")
+	Player: I suppose I could. Depends on the moment.
+	do car_fiona("frown base")
+	do car_layla("straight glance base smile cute_blush no_face")
+	A smile seems to have returned to her face.
+	do car_layla("straight closed base open_happy cute_blush no_face")
+	Layla: Oh, I see!
+	do car_layla("straight glance base small_open cute_blush no_face")
+	Layla: Good! I think you should be friends with anyone you're into.
+	Layla: At least to some extent.
+	do car_fiona("squished open_neutral")
+	do car_layla("straight glance base smile cute_blush no_face")
+	Player: Uh huh.
+else
+	do car_fiona("frown")
+	do car_layla("straight regular sad_brows small_open no_blush no_face")
+	Layla: Oh... okay! Fair enough.
+	do car_layla("straight glance sad_brows flat no_blush no_face")
+	She looks like she wants to say more, but won't allow herself to.
 if Flags.get_game_flag("kb_jayce_flashed") == true or Flags.get_game_flag("kb_jayce_camera_seen") == true:
 	=> janitor_talk
 => arrival
@@ -194,52 +333,94 @@ if Flags.get_game_flag("kb_jayce_flashed") == true or Flags.get_game_flag("kb_ja
 ~ janitor_talk
 # Fiona got past the janitor (Jayce) by flashing him, or by blackmailing him with what's on his camera
 # (only if she picked the camera up). either or both can have happened; every combination reads naturally.
+do car_fiona("straight frown base")
+do car_layla("straight regular base smile no_blush no_face")
 For a minute, there is silence in the car.
 Until...
+do car_fiona("frown")
+do car_layla("straight glance glance_brows small_open no_blush no_face")
 Layla: So... that incident with the janitor.
-Player: Yeah. Quite a thing to happen.
+do car_fiona("sideways open_neutral")
+do car_layla("straight glance glance_brows flat no_blush no_face")
+Player: Yeah. That was... something.
 if Flags.get_game_flag("kb_jayce_flashed") == true:
-	Player: I'm sorry if I happened to traumatize you with the flashing.
+	do car_fiona("hand_up")
+	Player: Sorry if the flashing traumatized you.
+	do car_fiona("squished")
 	Player: It's just... it's the only way you can get sleazebags like him to do anything, you know?
+	do car_fiona("sideways frown base")
 	# Layla is very much into Fiona and very flustered about it. EXPRESSION / CLOSE-UP HOOKS: to discuss.
+	do car_layla("straight flustered_face")
 	Layla: [speed=1.8]Oh no! I wasn't traumatized by it in the slightest![/speed]
 	Layla: [speed=0.6]I was just...[/speed]
 	Layla: Well, let's just say it was a surprise to see your[wait=0.3] [small=0.85]boobies[/small] this fine morning, [speed=1.6]is all.[/speed]
 	Layla: But no, "traumatized" is the last word [small=0.9]I'd use...[/small]
 	Layla: I mean, it's just boobs, right? [wave amp=12 freq=6]Hehe.[/wave][wait=0.2] [speed=2.4][mutter][small=0.9]Not like I'm into them or anything.[/small][/mutter][/speed] [wave amp=16 freq=8][small=0.85]Hehehehehehehe.[/small][/wave]
+	do car_fiona("squished open_neutral")
 	Player: Yes. Sure.
 if Flags.get_game_flag("kb_jayce_camera_seen") == true:
 	if Flags.get_game_flag("kb_jayce_flashed") == true:
+		do car_fiona("frown")
+		do car_layla("straight regular sad_brows small_open no_blush no_face")
 		Layla: But... that camera, though...
 	else
-		Layla: That camera, though...
+		do car_fiona("frown")
+		do car_layla("straight glance sad_brows small_open no_blush no_face")
+		Layla: About the janitor...
+		do car_layla("straight regular sad_brows small_open no_blush no_face")
+		Layla: That camera...
+	do car_fiona("straight open_neutral")
+	do car_layla("straight regular sad_brows flat no_blush no_face")
 	Player: Oh, yeah. That was horrendous.
-	Player: Let's report him to the admin first thing tomorrow.
+	do car_fiona("sideways pointing_up")
+	Player: Let's report him to the administration first thing tomorrow.
+	do car_fiona("base frown")
+	do car_layla("side side_eyes side_brows side_open_happy no_side_blush no_side_lines")
 	Layla: Yes! I'm so glad to hear you say that!
+	do car_fiona("open_neutral")
+	do car_layla("side side_eyes side_brows side_smile no_side_blush no_side_lines")
 	Player: Of course. It's the only thing to do.
 => arrival
 
 ~ arrival
+do car_fiona("straight frown base")
 do car_speed(0.0, 2.5)
+do car_layla("straight regular base neutral no_blush no_face")
 The car slows to a stop in front of your building.
+do car_fiona("sideways open_neutral")
 Player: Well, this is it. I'm here.
+do car_fiona("frown")
+do car_layla("side side_eyes side_brows side_open_happy no_side_blush no_side_lines")
 Layla: Great! I'll take the wheel.
 Layla: Goodbye, Fiona! Take care!
+do car_layla("side side_away side_tilted_2 side_sad_mouth side_blush side_lines")
 Layla: And... thanks again!
+do car_layla("side side_away side_tilted_2 side_smile side_blush no_side_lines")
+do car_layla_closeup()
 You take a closer look at Layla's face.
 Is there anything you would like to say to her?
 - Invite her up for coffee. [matters]
 	do Flags.set_game_flag("kb_coffee_offered", true)
 	do Flags.set_game_flag("kb_layla_came_up", true)
+	do car_fiona("sideways open_neutral")
+	do car_layla_closeup_end()
 	Player: Umm... would you wanna come up for some coffee before you go?
+	do car_layla("side side_eyes side_tilted_1 side_open_happy side_blush side_lines")
 	Layla: Umm... yeah, sure. I suppose I could. I do have an hour to spare.
+	do car_fiona("open_neutral")
+	do car_layla("side side_eyes side_tilted_1 side_smile side_blush no_side_lines")
 	Player: Great. Let's park here and go up, then.
+	do car_fiona("straight frown")
 	The two of you head upstairs together.
 - Say goodbye. [matters]
 	do Flags.set_game_flag("kb_coffee_offered", false)
 	do Flags.set_game_flag("kb_layla_came_up", false)
+	do car_fiona("open_neutral hand_up")
+	do car_layla_closeup_end()
 	Player: No worries, Layla. See you soon.
+	do car_fiona("straight frown base")
 	You get out of the car and take your leave.
+	do car_layla("side side_closed side_brows side_smile no_side_blush no_side_lines")
 	Layla waves at you as she pulls away.
 do car_end()
 => END
@@ -247,8 +428,12 @@ do car_end()
 ~ distant_ride
 # DISTANT Layla (closeness < 0). she doesn't carry the conversation, so Fiona has to - or doesn't.
 # a distant Layla always has at least one hurt: Fiona nearly told Julian, or reprimanded her (+ "Right").
+do car_fiona("straight frown base")
+do car_layla("straight sad sad_brows flat no_blush no_face")
 Her hands are folded in her lap. Her usual 'bounce' is gone.
 She sits right next to you, but feels miles away.
+do car_closeup()
+do car_fiona("sideways open_neutral")
 Player: (Should I... say something to her?)
 - Break the silence. [matters]
 	do Flags.set_game_flag("kb_car_broke_silence", true)
@@ -257,140 +442,321 @@ Player: (Should I... say something to her?)
 	=> distant_quiet
 
 ~ distant_quiet
+do car_closeup_end()
+do car_fiona("straight")
+Player: (Maybe I'll just let her be.)
 You keep your eyes on the road.
 The city slides past your windows. Neither of you says a word.
 do car_bump(0.5)
 She shifts and shuffles a bit in her seat, but then goes still again.
+do car_fiona("squished")
 Player: (Maybe it's better this way. For today.)
 => arrival_distant
 
 ~ distant_talk
+do car_closeup_end()
+do car_fiona("sideways open_neutral")
 Player: So... long day, huh?
+do car_layla("straight sad sad_brows small_open no_blush no_face")
 Layla: Yeah.
+do car_fiona("straight hand_up")
+do car_layla("straight sad sad_brows flat no_blush no_face")
 Player: Can't believe the professor just called and took the day off.
+do car_fiona("straight frown base")
+do car_layla("straight regular sad_brows small_open no_blush no_face")
 Layla: Mm. At least the work got done.
+do car_layla("side side_sad side_lowered side_sad_mouth no_side_blush no_side_lines")
 Layla: Thanks for helping with it.
+do car_fiona("squished frown")
+do car_layla("straight regular sad_brows flat no_blush no_face")
 Player: (Okay. This is going to be harder than I thought.)
+do car_fiona("frown")
 if Flags.get_game_flag("kb_julian_nearly_told_truth") == true:
+	do car_layla("straight glance sad_brows small_open no_blush no_face")
 	Layla: Can I ask you something?
 	Layla: Back there, with Julian...
+	do car_layla("side side_sad side_lowered side_sad_mouth no_side_blush no_side_lines")
 	Layla: You were about to tell him about my role and my unfinished work. Weren't you?
+	do car_fiona("sideways frown")
+	do car_layla("side side_sad side_lowered side_frown no_side_blush no_side_lines")
 	Player: I...
+	do car_layla("straight sad sad_brows small_open no_blush no_face")
 	Layla: It's fine. You stopped.
 	Layla: I just... didn't expect that from you, I guess.
+	if Flags.get_game_flag("kb_layla_work_reprimanded") == true:
+		# step 2.296: both hurts, raised in one go.
+		Layla: Especially after earlier.
+		Layla: When you told me off about my work...
+		do car_layla("side side_sad side_tilted_2 side_sad_mouth no_side_blush no_side_lines")
+		Layla: Did you mean all of it?
+		=> distant_repair_both
 	=> distant_repair_julian
 elif Flags.get_game_flag("kb_layla_work_reprimanded") == true:
+	do car_layla("straight glance sad_brows small_open no_blush no_face")
 	Layla: Can I ask you something?
 	Layla: Earlier, when you told me off about my work...
+	do car_layla("side side_sad side_tilted_2 side_sad_mouth no_side_blush no_side_lines")
 	Layla: Did you mean all of it?
 	=> distant_repair_reprimand
 else
 	# fallback (only reachable through dev toggles): distant with no hurt on record.
+	do car_layla("straight sad sad_brows small_open no_blush no_face")
 	Layla: ...Never mind. It's nothing.
 	=> distant_after
 
 ~ distant_repair_julian
+do car_layla("straight sad sad_brows flat no_blush no_face")
+What do you wanna say to her?
 - Apologize. [matters]
 	do Flags.set_game_flag("kb_car_apologized", true)
 	do Flags.add_game_counter("layla_closeness", 1)
-	Player: You're right. I shouldn't have gone there.
-	Player: I'm sorry, Layla. It wasn't mine to tell.
+	do car_fiona("sideways open_neutral")
+	do car_layla("straight sad sad_brows flat no_blush no_face")
+	Player: You're right. I shouldn't have done that.
+	Player: You did mention earlier you wouldn't want him to know.
+	if Flags.get_game_flag("kb_layla_julian_intro_encouraged") == true:
+		Player: And while I do think it wouldn't have mattered...
+	Player: It still wasn't my call to tell him.
+	Player: I'm really sorry, Layla.
+	do car_layla("straight sad sad_brows flat no_blush no_face")
 	Layla: ...
+	do car_layla("side side_eyes side_tilted_2 side_sad_mouth no_side_blush no_side_lines")
 	Layla: Thank you. For saying that.
 - Explain yourself. [matters]
 	do Flags.set_game_flag("kb_car_stood_by", true)
-	Player: He'd have found out sooner or later, Layla.
+	do car_fiona("straight open_neutral hand_up")
+	do car_layla("straight sad sad_brows flat no_blush no_face")
+	Player: Honestly? He'd have found out sooner or later, Layla.
 	Player: I figured it was better coming from us.
+	Player: Besides, you don't even have a real reason to hide it from anyone.
+	do car_layla("straight sad sad_brows small_open no_blush no_face")
 	Layla: Maybe.
 	Layla: It still should've been my call.
 - Change the subject. [matters]
-	Player: Hey, look. The traffic's finally thinning out.
+	do car_fiona("sideways open_neutral hand_up")
+	do car_layla("straight sad sad_brows flat no_blush no_face")
+	Player: Hey, look! There's barely any traffic this time of day.
+	Player: That's cool, isn't it?
+	do car_layla("straight sad sad_brows small_open no_blush no_face")
 	Layla: ...Yeah. I guess it is.
+	do car_fiona("squished frown base")
+	do car_layla("straight sad sad_brows flat no_blush no_face")
+	Player: (What am I even saying...)
 => distant_after
 
 ~ distant_repair_reprimand
+do car_layla("side side_sad side_tilted_2 side_frown no_side_blush no_side_lines")
+What do you wanna say to her?
 - Apologize. [matters]
 	do Flags.set_game_flag("kb_car_apologized", true)
 	do Flags.add_game_counter("layla_closeness", 1)
+	do car_fiona("sideways open_neutral")
+	do car_layla("side side_sad side_tilted_2 side_frown no_side_blush no_side_lines")
 	Player: Not the way I said it. I'm sorry, Layla.
 	Player: You didn't deserve to be talked to like that.
+	Player: I guess I'm just cranky because I didn't sleep too well last night.
+	Player: But that's not an excuse.
+	Player: I'm genuinely sorry.
+	do car_layla("straight sad sad_brows small_open no_blush no_face")
 	Layla: ...Okay.
+	do car_layla("side side_eyes side_tilted_2 side_sad_mouth no_side_blush no_side_lines")
 	Layla: Thank you. For saying that.
 - Stand by it. [matters]
 	do Flags.set_game_flag("kb_car_stood_by", true)
-	Player: I did. You needed to hear it, even if it stung.
-	Player: But I said it because I think you can do better. Not because I think less of you.
+	do car_fiona("straight open_neutral pointing_up")
+	do car_layla("side side_sad side_tilted_2 side_frown no_side_blush no_side_lines")
+	Player: I did... but only because you needed to hear it.
+	Player: But know this: I said what I said because I know you can do better.
+	Player: Not because I think less of you.
+	do car_layla("straight sad sad_brows flat no_blush no_face")
 	Layla: ...
-	Layla: I know. It still stung.
+	do car_layla("straight sad sad_brows small_open no_blush no_face")
+	Layla: I know. It still stung, though...
 - Change the subject. [matters]
+	do car_fiona("squished open_neutral")
+	do car_layla("side side_sad side_tilted_2 side_frown no_side_blush no_side_lines")
 	Player: Let's... not do this right now. It's been a long day.
-	Layla: Sure. Okay.
+	do car_layla("straight sad sad_brows small_open no_blush no_face")
+	Layla: Sure.
+=> distant_after
+
+~ distant_repair_both
+# step 2.296: both hurts on record (layla is locked distant for the rest of the chapter).
+do car_layla("side side_sad side_tilted_2 side_frown no_side_blush no_side_lines")
+What do you wanna say to her?
+- Apologize. [matters]
+	do Flags.set_game_flag("kb_car_apologized", true)
+	do Flags.add_game_counter("layla_closeness", 1)
+	do car_fiona("sideways open_neutral")
+	do car_layla("side side_sad side_tilted_2 side_frown no_side_blush no_side_lines")
+	Player: You're right. I shouldn't have done that.
+	Player: You did mention earlier you wouldn't want him to know.
+	if Flags.get_game_flag("kb_layla_julian_intro_encouraged") == true:
+		Player: And while I do think it wouldn't have mattered...
+	Player: It still wasn't my call to tell him.
+	Player: And earlier, when I was talking about the delay in your work...
+	Player: You're right. I was too harsh.
+	Player: You didn't deserve to be talked to like that.
+	Player: I guess I'm just cranky because I didn't sleep too well last night.
+	Player: But that's not an excuse.
+	Player: I'm really sorry, Layla. For both of those things.
+	do car_layla("straight sad sad_brows flat no_blush no_face")
+	Layla: ...
+	do car_layla("side side_eyes side_tilted_2 side_sad_mouth no_side_blush no_side_lines")
+	Layla: Thank you. For saying that.
+	Layla: I appreciate it. I do.
+	do car_layla("straight sad sad_brows small_open no_blush no_face")
+	Layla: It's just... a lot, for one day.
+- Explain yourself. [matters]
+	do Flags.set_game_flag("kb_car_stood_by", true)
+	do car_fiona("straight open_neutral hand_up")
+	do car_layla("side side_sad side_tilted_2 side_frown no_side_blush no_side_lines")
+	Player: Honestly? He'd have found out sooner or later, Layla.
+	Player: I figured it was better coming from us.
+	Player: Besides, you don't even have a real reason to hide it from anyone.
+	do car_fiona("pointing_up")
+	Player: And what I said about your work... I meant it. But only because you needed to hear it.
+	Player: I said what I said because I know you can do better.
+	Player: Not because I think less of you.
+	do car_layla("straight sad sad_brows flat no_blush no_face")
+	Layla: ...
+	do car_layla("straight sad sad_brows small_open no_blush no_face")
+	Layla: Maybe. But it should've been my call. And it still stung.
+- Change the subject. [matters]
+	do car_fiona("sideways open_neutral hand_up")
+	do car_layla("side side_sad side_tilted_2 side_frown no_side_blush no_side_lines")
+	Player: Hey, look! There's barely any traffic this time of day.
+	Player: That's cool, isn't it?
+	do car_layla("straight sad sad_brows small_open no_blush no_face")
+	Layla: ...Yeah. I guess it is.
+	do car_fiona("squished frown base")
+	do car_layla("straight sad sad_brows flat no_blush no_face")
+	Player: (What am I even saying...)
+	She turns back to the window.
 => distant_after
 
 ~ distant_after
-if Flags.get_game_flag("kb_car_apologized") == true:
-	# the thaw: a kindness on record finally shows.
+do car_fiona("straight frown base")
+if Flags.get_game_flag("kb_car_apologized") == true and Flags.get_game_flag("layla_locked_distant") == false:
+	# the thaw: a kindness on record finally shows (never while layla is locked distant).
 	if Flags.get_game_flag("kb_layla_gift_loved") == true:
-		Layla: The protein bar was... nice, by the way. Thanks.
+		do car_fiona("frown")
+		do car_layla("side side_eyes side_tilted_2 side_sad_mouth no_side_blush no_side_lines")
+		Layla: The protein bar was... sweet, by the way. Thank you.
 	elif Flags.get_game_flag("kb_layla_gift_given") == true:
-		Layla: And thanks for the snack. I never said.
+		do car_fiona("frown")
+		do car_layla("side side_eyes side_tilted_2 side_sad_mouth no_side_blush no_side_lines")
+		Layla: And thanks for the snack.
 	elif Flags.get_game_flag("kb_layla_work_comforted") == true:
+		do car_fiona("frown")
+		do car_layla("side side_eyes side_tilted_2 side_sad_mouth no_side_blush no_side_lines")
 		Layla: What you said about my work earlier... That was nice, too.
-	A small smile tugs at the corner of her mouth.
+	do car_layla("side side_eyes side_tilted_2 side_smile no_side_blush no_side_lines")
+	A small smile tugs at the corner of her lips.
 if Flags.get_game_flag("kb_jayce_flashed") == true or Flags.get_game_flag("kb_jayce_camera_seen") == true:
 	=> distant_janitor
 => arrival_distant
 
 ~ distant_janitor
+do car_layla("straight regular base flat no_blush no_face")
 For a while, the only sound is the road.
 if Flags.get_game_flag("kb_jayce_flashed") == true:
+	do car_fiona("frown")
+	do car_layla("straight glance sad_brows small_open no_blush no_face")
 	Layla: About the janitor...
+	do car_fiona("sideways open_neutral")
+	do car_layla("straight glance sad_brows flat no_blush no_face")
 	Player: Look, if the flashing made you uncomfortable-
+	do car_layla("straight sad sad_brows small_open cute_blush no_face")
 	Layla: [speed=1.6]It's fine.[/speed][wait=0.3] [small=0.9]It was... fine.[/small]
-	Layla doesn't look at you. The tips of her ears have gone a little pink.
+	do car_fiona("frown")
+	do car_layla("straight sad sad_brows flat cute_blush no_face")
+	Layla isn't looking at you. The tips of her ears seem to have become a little pink.
 if Flags.get_game_flag("kb_jayce_camera_seen") == true:
 	if Flags.get_game_flag("kb_jayce_flashed") == true:
+		do car_fiona("frown")
+		do car_layla("straight regular sad_brows small_open no_blush no_face")
 		Layla: That camera, though...
 	else
+		do car_fiona("frown")
+		do car_layla("straight glance sad_brows small_open no_blush no_face")
 		Layla: About the janitor...
+		do car_layla("straight regular sad_brows small_open no_blush no_face")
 		Layla: That camera...
+	do car_fiona("straight open_neutral")
+	do car_layla("straight regular sad_brows flat no_blush no_face")
 	Player: Yeah. That was horrendous.
-	Player: Let's report him to the admin first thing tomorrow.
-	Layla: ...Yes. Let's.
-	Layla: At least we agree on that.
+	do car_fiona("sideways pointing_up")
+	Player: Let's report him to the administration first thing tomorrow.
+	do car_fiona("base frown")
+	do car_layla("side side_eyes side_brows side_open_happy no_side_blush no_side_lines")
+	Layla: Yes! I'm so glad to hear you say that!
+	do car_fiona("open_neutral")
+	do car_layla("side side_eyes side_brows side_smile no_side_blush no_side_lines")
+	Player: Of course. It's the only thing to do.
 => arrival_distant
 
 ~ arrival_distant
 do car_speed(0.0, 2.5)
+do car_layla("straight regular sad_brows neutral no_blush no_face")
 The car slows to a stop in front of your building.
+do car_fiona("sideways open_neutral base")
 Player: Well, this is it. I'm here.
+do car_fiona("frown")
 if Flags.get_game_flag("kb_car_apologized") == true:
+	do car_layla("straight regular base small_open no_blush no_face")
 	Layla: I'll take the wheel from here.
+	do car_layla("side side_eyes side_lowered side_sad_mouth no_side_blush no_side_lines")
 	Layla: Bye, Fiona. Get some rest.
 else
+	do car_layla("straight sad sad_brows small_open no_blush no_face")
 	Layla: I'll take it from here.
 	Layla: Bye, Fiona.
 Is there anything you would like to say to her?
 - Invite her up for coffee. [matters]
 	do Flags.set_game_flag("kb_coffee_offered", true)
+	do Flags.set_game_flag("kb_layla_came_up", false)
+	do car_fiona("sideways open_neutral")
 	Player: Do you... want to come up for some coffee before you go?
 	if Flags.get_game_flag("kb_car_apologized") == true:
-		do Flags.set_game_flag("kb_layla_came_up", true)
+		do car_layla("straight glance sad_brows flat no_blush no_face")
 		Layla: ...
-		Layla: Okay. Just one cup.
-		The two of you head upstairs together, a careful distance between you.
+		do car_fiona("frown")
+		do car_layla("straight sad sad_brows small_open no_blush no_face")
+		Layla: ...I'm afraid I won't be able to today.
+		# step 2.411: a slow push-in on her face for "some other time?", held through fiona's answer
+		do car_layla_closeup()
+		do car_layla("side side_away side_tilted_1 side_sad_mouth side_blush no_side_lines")
+		Layla: But... some other time?
+		do car_fiona("open_neutral")
+		do car_layla("side side_eyes side_tilted_1 side_smile side_blush no_side_lines")
+		Player: Sure. That works.
+		Player: See ya.
+		do car_layla_closeup_end()
+		do car_fiona("straight frown")
+		You get out of the car. She waits until you reach the door before she drives off.
 	else
-		do Flags.set_game_flag("kb_layla_came_up", false)
+		do car_layla("straight sad sad_brows small_open no_blush no_face")
 		Layla: Maybe another time.
+		do car_fiona("squished frown")
+		do car_layla("straight sad sad_brows flat no_blush no_face")
 		You get out of the car. Layla pulls away without looking back.
 - Say goodbye. [matters]
 	do Flags.set_game_flag("kb_coffee_offered", false)
 	do Flags.set_game_flag("kb_layla_came_up", false)
+	do car_fiona("sideways open_neutral")
 	Player: Bye, Layla. Drive safe.
 	You get out of the car.
 	if Flags.get_game_flag("kb_car_apologized") == true:
-		Layla gives you a small wave as she pulls away.
+		do car_layla("side side_eyes side_brows side_smile no_side_blush no_side_lines")
+		Layla waves at you, then pulls away.
+		do car_fiona("straight frown")
+		Player: (Guess she wasn't that mad after all...)
 	else
+		do car_fiona("squished frown")
+		do car_layla("straight sad sad_brows flat no_blush no_face")
 		Layla pulls away without looking back.
+# step 2.296: the distant lock only lasts for this chapter.
+do Flags.set_game_flag("layla_locked_distant", false)
 do car_end()
 => END

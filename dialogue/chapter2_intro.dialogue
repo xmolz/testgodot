@@ -9,6 +9,9 @@
 import "res://dialogue/layla_chapter_1.dialogue" as layla_ch1
 
 ~ start
+# step 2.392: the dream's music. it already started with the launch swirl (chapter_launch.dialogue
+# ~ university_2); this only starts it if it isn't playing yet. it never restarts a playing track.
+do SoundManager.play_music_track("haunted_techno", 3.0)
 Standing at the door.
 A tall shadow.
 His back turned against you.
@@ -39,19 +42,26 @@ do shake_stop()
 
 # the hand-off happens UNDER the black: the overlay's opaque layers go dark and the wake CG
 # is staged on layer 70 beneath the overlay's 75, so the eyelid opens straight onto it.
+# step 2.392: the dream's music cuts dead with the cut to black (the ambience stays down, so the black is
+# silent), and the wake-up music fades in as her eyes open. it plays until the talk with layla ends
+# (layla_chapter_1.dialogue ~ post_wake_intro).
+do SoundManager.cut_music()
 do cut_to_black(0.9)
 do hide_visual_layers()
 do stage_wake_cg()
+do SoundManager.play_music_track("woken_up_to_layla", 2.5)
 do wake_blink(1.0)
 
 Boobs: Fiona! Rise and shine!
-Fiona: Huh!? Boobs?
+Player: Huh!? Boobs?
 Layla: Boobs?
 
 do pan()
 Layla: What are you talking about?
 
 do reveal()
+# step 2.420: the first time anyone calls her by name in a memory: her nameplate reads "Fiona" from here on
+do Flags.set_game_flag("fiona_name_known", true)
 Layla: Hey. Earth to Fiona.
 
 # the reveal tween may still be running under that line: let it land, then fade the wake

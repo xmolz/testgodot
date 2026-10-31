@@ -71,7 +71,12 @@ func _ready():
 		layout.add_theme_constant_override("margin_top", 24)
 		layout.add_theme_constant_override("margin_bottom", 28)
 
-	_build_portrait_row()
+	# step 2.415: the first release's welcome page (title, text, the portrait row, patrons, footer) is gone:
+	# just the loading bar, then the age notice and Continue
+	for node in [title_label, body_label, caption_label, portrait_row, patron_label, footer_label]:
+		node.visible = false
+	# step 2.422: this update's page over the loading bar: patrons, what's new, what's next, thanks again
+	_build_update_page(custom_font)
 	continue_button.pressed.connect(_on_continue_pressed)
 
 	progress_bar.value = 0
@@ -118,6 +123,71 @@ func _resize_portraits():
 		var w: float = h * child.get_meta("aspect", 0.5)
 		if absf(child.custom_minimum_size.x - w) > 1.0:
 			child.custom_minimum_size = Vector2(w, 0)
+
+# step 2.422: the page shown over the loading bar and the Continue button. the patron thank-you at the top
+# (every name in CreditsData.PATRON_TIERS, so the credits stay the one place to edit them), the update notes
+# side by side under it, and thanks again at the bottom (the footer label, under Continue). the hidden
+# BodyLabel, CaptionLabel and PortraitRow stay hidden. text lives in the constants; rewrite freely.
+const UPDATE_THANKS_TOP := "THANK YOU, PATRONS"
+const UPDATE_THANKS_BOTTOM := "Thank you again. This update exists because of you."
+const UPDATE_COLUMNS := [
+	["IN THIS UPDATE", "1 new puzzle level\n2 love interests introduced: Layla and Julian\n1 spicy scene with a love interest (Layla)\nA save system"],
+	["NEXT UPDATE  -  NOVEMBER 14", "Bug fixes, quality-of-life improvements, and one new lewd scene."],
+	["THE ONE AFTER  -  ABOUT 2 MONTHS", "Bringing the demo part of the game up to date with the rest. Some decisions made since the demo mean that part is no longer a true foundation for the story this game wants to tell, so it gets rebuilt."],
+]
+
+func _build_update_page(font) -> void:
+	var mobile := OS.has_feature("mobile")
+	var column: VBoxContainer = title_label.get_parent()
+
+	title_label.text = UPDATE_THANKS_TOP
+	title_label.visible = true
+
+	var names: Array[String] = []
+	for tier in CreditsData.PATRON_TIERS:
+		for n in tier.get("names", []):
+			names.append(String(n))
+	patron_label.text = "  ·  ".join(names)
+	patron_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	patron_label.add_theme_color_override("font_color", Color(0.87, 0.87, 0.87))
+	patron_label.add_theme_font_size_override("font_size", 28 if mobile else 24)
+	patron_label.visible = true
+	# the names sit right under the heading (the label used to live below the portrait row)
+	column.move_child(patron_label, title_label.get_index() + 1)
+
+	var row := HBoxContainer.new()
+	row.name = "UpdateRow"
+	row.alignment = BoxContainer.ALIGNMENT_CENTER
+	row.add_theme_constant_override("separation", 36)
+	for entry in UPDATE_COLUMNS:
+		var box := VBoxContainer.new()
+		box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		box.add_theme_constant_override("separation", 10)
+		var head := Label.new()
+		head.text = entry[0]
+		head.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		head.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		head.add_theme_font_override("font", font)
+		head.add_theme_color_override("font_color", Color(0.835294, 0.94902, 0.572549))
+		head.add_theme_font_size_override("font_size", 30 if mobile else 26)
+		box.add_child(head)
+		var body := Label.new()
+		body.text = entry[1]
+		body.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		body.add_theme_font_override("font", font)
+		body.add_theme_color_override("font_color", Color(0.87, 0.87, 0.87))
+		body.add_theme_font_size_override("font_size", 26 if mobile else 24)
+		box.add_child(body)
+		row.add_child(box)
+	column.add_child(row)
+	column.move_child(row, patron_label.get_index() + 1)
+
+	footer_label.text = UPDATE_THANKS_BOTTOM
+	footer_label.add_theme_color_override("font_color", Color(0.87, 0.87, 0.87))
+	footer_label.add_theme_font_size_override("font_size", 26 if mobile else 22)
+	footer_label.visible = true
+
 
 func _start_next_load():
 	if current_load_index >= load_queue.size():

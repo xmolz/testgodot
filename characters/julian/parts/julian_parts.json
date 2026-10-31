@@ -1,0 +1,154 @@
+{
+	"base_slot": "body",
+	"character": "julian",
+	"size": [
+		921,
+		1665
+	],
+	"slots": [
+		{
+			"default": "crossed_arms",
+			"name": "body",
+			"order": 1,
+			"variants": {
+				"crossed_arms": {
+					"file": "julian_body @crossed_arms.png",
+					"pos": [
+						0,
+						0
+					],
+					"size": [
+						921,
+						1665
+					]
+				},
+				"hand_on_chin": {
+					"file": "julian_body @hand_on_chin.png",
+					"pos": [
+						0,
+						0
+					],
+					"size": [
+						921,
+						1665
+					]
+				},
+				"hand_up": {
+					"file": "julian_body @hand_up.png",
+					"pos": [
+						0,
+						0
+					],
+					"size": [
+						921,
+						1665
+					]
+				}
+			}
+		},
+		{
+			"default": "neutral",
+			"name": "face",
+			"order": 2,
+			"variants": {
+				"neutral": {
+					"file": "julian_face @neutral.png",
+					"pos": [
+						509,
+						209
+					],
+					"size": [
+						180,
+						181
+					]
+				},
+				"neutral_talk": {
+					"file": "julian_face @neutral_talk.png",
+					"pos": [
+						509,
+						209
+					],
+					"size": [
+						180,
+						181
+					]
+				},
+				"side_eye": {
+					"file": "julian_face @side_eye.png",
+					"pos": [
+						511,
+						211
+					],
+					"size": [
+						178,
+						220
+					]
+				},
+				"side_eye_talk": {
+					"file": "julian_face @side_eye_talk.png",
+					"pos": [
+						511,
+						211
+					],
+					"size": [
+						178,
+						220
+					]
+				},
+				"smirk": {
+					"file": "julian_face @smirk.png",
+					"pos": [
+						506,
+						209
+					],
+					"size": [
+						182,
+						175
+					]
+				},
+				"smirk_talk": {
+					"file": "julian_face @smirk_talk.png",
+					"pos": [
+						506,
+						209
+					],
+					"size": [
+						182,
+						177
+					]
+				},
+				"sus": {
+					"file": "julian_face @sus.png",
+					"pos": [
+						506,
+						207
+					],
+					"size": [
+						184,
+						177
+					]
+				},
+				"sus_talk": {
+					"file": "julian_face @sus_talk.png",
+					"pos": [
+						506,
+						207
+					],
+					"size": [
+						184,
+						189
+					]
+				}
+			}
+		}
+	],
+	"source_canvas": [
+		1100,
+		1740
+	],
+	"source_origin": [
+		23,
+		75
+	],
+	"version": 1
+}

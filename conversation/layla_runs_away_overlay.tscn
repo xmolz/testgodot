@@ -1,0 +1,19 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://conversation/AdvancedConversationOverlay.tscn" id="1_aco"]
+[ext_resource type="Resource" path="res://dialogue/layla_runs_away.dialogue" id="2_diag"]
+
+[node name="LaylaRunsAwayOverlay" instance=ExtResource("1_aco")]
+dialogue_resource = ExtResource("2_diag")
+autostart = false
+prestage_background = "apt_living_room"
+prestage_cg = ""
+background_dim = Color(0.72, 0.72, 0.76, 1)
+vignette_strength = 0.45
+background_aliases = {
+"apt_living_room": "res://Backgrounds/Apartment/apartment_living_room.png",
+"apt_living_room_2": "res://Backgrounds/Apartment/apartment_living_room_2.png"
+}
+foreground_aliases = {
+"table": "res://Backgrounds/Apartment/fiona_apartment_coffee_table.png"
+}

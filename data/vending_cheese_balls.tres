@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://bmofbugi7ce1m"]
 
-[ext_resource type="Texture2D" uid="uid://cfkvy6v701sh1" path="res://icon.svg" id="1_icon"]
+[ext_resource type="Texture2D" uid="uid://cmi8nkve3mbs5" path="res://Sprites/inventory_items/cheese_balls_icon.png" id="1_icon"]
 [ext_resource type="Script" uid="uid://by8o1t3tdwrep" path="res://data/ItemData.gd" id="2_script"]
 
 [resource]

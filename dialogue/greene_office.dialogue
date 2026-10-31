@@ -12,3 +12,96 @@ Player: (Oh, isn't this the same lady as in the framed photo?)
 Player: (Seems so... He must be really fond of this old-time actress.)
 Player: (Huh. Didn't know he had this side to him...)
 => END
+
+~ office_locked_keycard
+# step 2.270: first use / examine of dr. greene's office door or its card reader (4F), while locked.
+# plays once (greene_office_keycard_talk_seen); sends them to the janitor for a keycard.
+do actor_enter("Fiona", "base", "left")
+do actor_enter("Layla", "base", "right")
+do actor_flip("Layla", true)
+# step 2.377: Layla's expressions (rig). she enters as "base"; this lands while she fades in.
+do actor_change("Layla", "attentive")
+do Flags.set_level_flag("greene_office_keycard_talk_seen", true)
+do actor_change("Fiona", "suspicious")
+Player: This seems to be locked as well.
+Player: Seems like we'll need a keycard to enter, though.
+do actor_change("Layla", "asking")
+Layla: A keycard?
+do actor_change("Layla", "explaining_talk")
+Layla: Wait, didn't the janitor say something about something like that today?
+do actor_change("Layla", "explaining")
+Player: (She's right...)
+# the janitor again: her face falls (same pose)
+do actor_change("Layla", "stern")
+do actor_change("Fiona", "base")
+Player: Welp. Let's go ask him then.
+# a closed-mouth "Ugh" on purpose (puffed cheeks), as at Jayce's "sugars"
+do actor_change("Layla", "fuming")
+Layla: Ugh. Okay.
+do actor_change("Layla", "angry_talk")
+Layla: Sorry, I just can't stand him.
+do actor_change("Layla", "angry")
+Player: Understandable.
+=> END
+
+~ office_door
+# step 2.280: the door overlay's entry point. right after jayce unlocks the office, the entry talk;
+# otherwise the locked-door keycard talk (step 2.270).
+if Flags.get_level_flag("greene_office_entry_pending") == true:
+	=> office_entry_talk
+=> office_locked_keycard
+
+~ office_entry_talk
+# step 2.280: first use of the office door after jayce unlocked it. layla waits outside; fiona goes in alone.
+# step 2.408: layla keeps following after this talk; the office door sets layla_waiting_outside_office as
+# fiona goes in (the level detaches her follower then; the office exit door re-attaches her).
+do actor_enter("Fiona", "base", "left")
+do actor_enter("Layla", "base", "right")
+do actor_flip("Layla", true)
+do Flags.set_level_flag("greene_office_entry_pending", false)
+# step 2.377: Layla's expressions (rig). she enters as "base"; this lands while she fades in.
+do actor_change("Layla", "surprised")
+Layla: He really did open it.
+do actor_change("Layla", "hesitant")
+Layla: I guess we should go in now.
+do actor_change("Layla", "touched")
+Player: Yes.
+# she notices the look (same pose)
+do actor_change("Layla", "who_me")
+You take a long, hard look at Layla before you enter.
+do actor_change("Fiona", "explain")
+Player: You know what?
+Player: I think you should stay out here. Let me go in alone.
+if Flags.get_game_counter("layla_closeness") < 0:
+	do actor_change("Layla", "sad")
+	Layla: ...Why?
+	do actor_change("Layla", "downcast")
+else
+	do actor_change("Layla", "who_me_talk")
+	Layla: Huh? But why?
+	do actor_change("Layla", "who_me")
+Player: While I totally think the professor and the university won't take any strict actions against ME if we get caught...
+Player: I can't say the same for you.
+Player: I'm a grad student. You're a fresh undergrad.
+Player: It's likely the same rules don't apply to us.
+do actor_change("Layla", "hesitant")
+Layla: But-
+do actor_change("Layla", "pensive")
+She takes a moment, but what you said seems to have finally gotten through to her.
+do actor_change("Fiona", "base")
+Player: It'll be fine. I'll be in and out in a second.
+if Flags.get_game_counter("layla_closeness") < 0:
+	do actor_change("Layla", "sad")
+	Layla: If you say so.
+	Layla: Fine. I'll wait here.
+	do actor_change("Layla", "downcast")
+else
+	do actor_change("Layla", "hesitant")
+	Layla: You sure?
+	do actor_change("Layla", "touched")
+	Player: Yes.
+	do actor_change("Layla", "admiring")
+	Layla: Okay then. I'll wait right here for you.
+	do actor_change("Layla", "warm")
+Player: Good.
+=> END

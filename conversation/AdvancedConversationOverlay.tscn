@@ -11,7 +11,7 @@
 [ext_resource type="Resource" path="res://characters/fiona_profile.tres" id="9_fiona"]
 [ext_resource type="Resource" path="res://characters/jayce_profile.tres" id="10_jayce"]
 [ext_resource type="Resource" path="res://characters/julian_profile.tres" id="11_julian"]
-[ext_resource type="Resource" path="res://Dev/anton_test_profile.tres" id="12_antontest"]
+[ext_resource type="Resource" path="res://characters/anton_profile.tres" id="12_antontest"]
 [ext_resource type="Shader" uid="uid://6nbhjebfrh7f" path="res://ui/dream_haze.gdshader" id="9_dream_haze"]
 [ext_resource type="Shader" uid="uid://dbrkjgqfq3gie" path="res://ui/eyelid_blink.gdshader" id="10_eyelid_blink"]
 

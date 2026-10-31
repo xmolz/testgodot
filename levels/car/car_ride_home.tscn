@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://cx3tlloq43b6e"]
+
+[ext_resource type="Script" uid="uid://crdpfinq7ld7" path="res://levels/car/car_ride_home.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://bowgo2tk08vvx" path="res://Backgrounds/Car/wispy_sky.png" id="2_4wtye"]
+
+[node name="CarRideHome" type="Control" unique_id=1103865216]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+car_image_path = "uid://brusbtgslju77"
+test_mood = "distant"
+test_work = "not asked"
+test_julian = "nearly told"
+test_snack = "other snack"
+test_said_fee = false
+far_texture = ExtResource("2_4wtye")

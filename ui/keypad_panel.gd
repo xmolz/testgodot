@@ -65,11 +65,33 @@ const KNOWN_CODES := {
 	"03141968": "ember_birthday", "14031968": "ember_birthday",
 	# voss: his date is painted into voss_portrait.png ("b. 06/28/1971") — update here if the art changes
 	"06281971": "voss_birthday", "28061971": "voss_birthday",
+	# step 2.264: miescher's nuclein letter, february 26, 1869 (threads of inheritance). its reaction unlocks 4F.
+	"02261869": "miescher_discovery", "26021869": "miescher_discovery",
+	# step 2.286: more dates from threads of inheritance, the near miss, and the old code (each reacts once).
+	"08131844": "miescher_birth", "13081844": "miescher_birth_dm",
+	"08261895": "miescher_death", "26081895": "miescher_death_dm",
+	"02281953": "double_helix", "28021953": "double_helix_dm",
+	"28071896": "la_marr_day_first",
+	"07041776": "old_code",
 }
 const REACTION_FLAGS := {
 	"greene_birthday": "keypad_tried_greene_birthday",
 	"ember_birthday": "keypad_tried_ember_birthday",
 	"voss_birthday": "keypad_tried_voss_birthday",
+	"miescher_discovery": "keypad_tried_miescher_discovery",
+	"miescher_birth": "keypad_tried_miescher_birth", "miescher_birth_dm": "keypad_tried_miescher_birth",
+	"miescher_death": "keypad_tried_miescher_death", "miescher_death_dm": "keypad_tried_miescher_death",
+	"double_helix": "keypad_tried_double_helix", "double_helix_dm": "keypad_tried_double_helix",
+	"la_marr_day_first": "keypad_tried_la_marr_day_first",
+	"old_code": "keypad_tried_old_code",
+}
+## step 2.280: the right code: after the green flash the keypad closes and this overlay plays
+## keypad_lab.dialogue ~ code_correct (celebration, the professor's call).
+const CODE_CORRECT_SCENE := "res://conversation/lab_code_correct_advanced_overlay.tscn"
+## step 2.269: reactions too long for the open keypad. the keypad closes and this overlay plays the
+## title instead (staged, Fiona and Layla facing each other).
+const STAGED_REACTIONS := {
+	"miescher_discovery": "res://conversation/miescher_keypad_advanced_overlay.tscn",
 }
 const COMPANION_PRESENT_FLAG := "keypad_companion_present"
 
@@ -250,6 +272,9 @@ func _play_open_animation() -> void:
 func _on_key_pressed(key_label: String) -> void:
 	if _is_resolving:
 		return
+	# step 2.393: every key clicks, like the conversation keypad (keypad_prop.gd press())
+	if SoundManager:
+		SoundManager.play_sfx("ui_click")
 	match key_label:
 		"C":
 			_entered = ""
@@ -270,6 +295,7 @@ func _submit() -> void:
 		Flags.set_level_flag(UNLOCK_FLAG, true)
 		_is_resolving = false
 		_close()
+		_start_staged_reaction(CODE_CORRECT_SCENE)
 		return
 	await _flash_denied()
 	var tried: String = _entered
@@ -286,7 +312,14 @@ func _play_attempt_reaction(code: String) -> void:
 	if Flags.get_level_flag(flag):
 		return   # already reacted to this date
 	Flags.set_level_flag(flag, true)
+	# step 2.358: any real date tried (not the old code) opens the elevators (elevator_panel.gd)
+	if title != "old_code":
+		Flags.set_level_flag("keypad_date_tried", true)
 	Flags.set_level_flag(COMPANION_PRESENT_FLAG, _companion_following())
+	if STAGED_REACTIONS.has(title):
+		_close()
+		_start_staged_reaction(STAGED_REACTIONS[title])
+		return
 	var resource = load(REACTION_DIALOGUE_PATH)
 	if resource == null or not DialogueManager:
 		return
@@ -294,6 +327,18 @@ func _play_attempt_reaction(code: String) -> void:
 	DialogueManager.show_dialogue_balloon_scene(REACTION_BALLOON_PATH, resource, title)
 	await DialogueManager.dialogue_ended
 	_is_resolving = false
+
+
+# step 2.269: launches a staged reaction overlay the same way StartConversationAction does.
+func _start_staged_reaction(scene_path: String) -> void:
+	var packed: PackedScene = load(scene_path)
+	if packed == null or not GameManager:
+		push_warning("KeypadPanel: staged reaction scene missing: %s" % scene_path)
+		return
+	GameManager.enter_conversation_state()
+	var inst: Node = packed.instantiate()
+	get_tree().root.add_child.call_deferred(inst)
+	GameManager.register_character_conversation(inst)
 
 
 # true when a companion (Layla) is following the player right now.
@@ -307,6 +352,9 @@ func _companion_following() -> bool:
 func _flash_denied() -> void:
 	# same language as the conversation prop's deny(): red LCD, four flashes, wipe
 	_is_resolving = true
+	# step 2.393: the wrong-code beep
+	if SoundManager:
+		SoundManager.play_sfx("incorrect_beep")
 	if _cursor_tween:
 		_cursor_tween.kill()
 	var red := Color(1.0, 0.35, 0.3, 1.0)
@@ -334,7 +382,7 @@ func _flash_granted() -> void:
 		slot.modulate.a = 1.0
 	_screen_style.bg_color = Color(0.05, 0.24, 0.09, 1.0)
 	if SoundManager:
-		SoundManager.play_sfx("form_correct_input")
+		SoundManager.play_sfx("door_open_success")   # step 2.393: the lock giving way
 	await get_tree().create_timer(0.65).timeout
 
 

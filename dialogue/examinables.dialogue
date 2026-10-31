@@ -50,17 +50,22 @@ Player: (My phone's charger. Not that I need to use it right now.)
 
 ~ books_and_coat
 Player: (My lab coat, folded on top of this term's reading.)
-Player: (Advanced Genomics — Greene. Inferential Statistics — Berger. And Robben's creativity book, which I've opened exactly once.)
+Player: (Advanced Genomics by Greene. Inferential Statistics by Berger. And Robben's book on creativity.)
+Player: (The last one has been surprisingly useful in my work.)
 => END
 
 ~ fiona_trophy
-# TEMPLATE — placeholder lines; developer will paste the final text
-Player: (My trophy.)
-Player: (Still here. Still a little dusty.)
+Player: (A trophy I received last semester, during that conference in France.)
+Player: (Still here. Still pretty dusty.)
 => END
 
 ~ greene_office_door
-Player: (That's the door to Professor Greene's office. He's Layla's and my supervisor.)
+if Flags.get_level_flag("greene_office_unlocked") == true:
+	# step 2.287: jayce has unlocked the office.
+	Player: (Professor Greene's office door.)
+	Player: (It's open now, thanks to Jayce.)
+else
+	Player: (That's the door to Professor Greene's office. He's Layla's and my supervisor.)
 => END
 
 ~ duflo_office_door
@@ -88,6 +93,13 @@ Player: (That's the door to the Biochem lab.)
 => END
 
 ~ greene_office_card_reader
+# step 2.287: once jayce has unlocked the office, its reader gets its own lines; otherwise the shared one.
+if Flags.get_level_flag("greene_office_unlocked") == true:
+	Player: (I don't need to bother with this now.)
+	Player: (Jayce's left it open for us.)
+	=> END
+=> song_card_reader
+
 ~ song_card_reader
 ~ duflo_card_reader
 ~ king_card_reader
@@ -98,23 +110,92 @@ Player: (A keycard reader. It'll open the door next to it if I use the right car
 => END
 
 ~ supply_lockers
-# TEMPLATE — developer may rewrite.
-Player: (A row of spare lockers. Nobody seems to have claimed them.)
+if Flags.get_level_flag("supply_locker_opened") == true:
+	# step 2.287: after the steel bobby pins.
+	Player: (The supply locker I opened up using some bobby pins.)
+	Player: (I think I already got what I wanted out of here.)
+	=> END
+Player: (The supply room's lockers. They're locked.)
+Player: (If I had the right tool, though...)
 => END
 
 ~ supply_room_socket
-# TEMPLATE — developer may rewrite.
-Player: (A wall socket. Looks like it still works.)
+Player: (A wall socket. Does what sockets do.)
+Player: (Charge stuff.)
 => END
 
 ~ vending_machine
-Player: (A vending machine. The only one in this building.)
-if GameManager.is_companion_following() and Flags.get_game_counter("layla_closeness") >= 0:
-	Layla notices you looking toward it.
-	Layla: Oh! I love the Pink-pack protein bars they have in here!
-	Layla: They're chewy and also... crunchy?
-	Player: Oh. That's nice.
-	Player: (Should I get it for her?)
+# step 2.356: Fiona's thought changes once Layla has told her about her favorite snack, and again once
+# Fiona has given her something (layla_gift_given / layla_gift_loved come from layla_gifts.dialogue)
+if Flags.get_level_flag("layla_gift_loved"):
+	Player: (A vending machine. The only one in this building.)
+elif Flags.get_level_flag("layla_gift_given"):
+	Player: (The vending machine. I already got Layla something from here.)
+elif Flags.get_level_flag("vending_layla_hint_heard"):
+	Player: (The vending machine. Layla said she loves the Pink-pack protein bars in here.)
+else
+	Player: (A vending machine. The only one in this building.)
+	if GameManager.is_companion_following() and Flags.get_game_counter("layla_closeness") >= 0:
+		Layla notices you looking toward it.
+		Layla: Oh! I love the Pink-pack protein bars they have in here!
+		Layla: They're chewy and also... crunchy?
+		Player: Oh. That's nice.
+		Player: (Should I get it for her?)
+		do Flags.set_level_flag("vending_layla_hint_heard", true)
+=> END
+
+# step 2.356: elevators (all three say the same)
+~ hub_elevator
+Player: (The door to a short-distance vertical transportation machine.)
+=> END
+
+~ elevator_3f
+=> hub_elevator
+
+~ elevator_4f
+=> hub_elevator
+
+# step 2.356: doors that don't lead to an office
+~ supply_room_door
+Player: (Seems like this leads to the supply room.)
+=> END
+
+~ supply_room_exit_door
+Player: (This door leads back to the lab corridor.)
+=> END
+
+~ greene_office_exit_door
+Player: (This door leads back to the Science Faculty corridor.)
+=> END
+
+# step 2.356: the lockers in the lab corridor
+~ locker_fiona
+Player: (My locker. I might have a few things in there, I guess.)
+=> END
+
+~ locker_layla
+Player: (Layla's locker. Probably locked.)
+=> END
+
+~ locker_julian
+Player: (That's that damn Julian's locker. Probably locked.)
+=> END
+
+~ locker_spare
+Player: (An unassigned locker. Probably empty.)
+=> END
+
+# step 2.357: the characters. each title is that character's object_id (see Task 0)
+~ julian
+Player: (Julian. My rival. And the biggest asshole I know.)
+Player: (...)
+Player: (...He's also the hardest working person I know.)
+Player: (Huh!)
+=> END
+
+~ lab_guard
+Player: (The janitor...)
+Player: (Such a smug look on his face.)
 => END
 
 ~ workstation_fiona
@@ -123,8 +204,7 @@ Player: (Wonder if there's anything useful in the drawer.)
 => END
 
 ~ workstation_spare
-Player: (An unassigned workstation.)
-Player: (Wonder if there's anything in the drawer.)
+Player: (An unassigned workstation. It was months ago when this was last used. Pretty dusty.)
 => END
 
 ~ workstation_julian
@@ -133,8 +213,7 @@ Player: (His corkboard is pinned with dozens of notes.)
 => END
 
 ~ locker_cash
-# TEMPLATE — developer may rewrite.
-Player: (Three dollars. My emergency cash. I forgot I even had this.)
+Player: (Three dollars... forgot I had them tucked away like this.)
 => END
 
 ~ library_bookshelf_left
@@ -143,6 +222,10 @@ Player: (Shelves of science books, sorted by subject. Worth a closer look.)
 
 ~ library_bookshelf_right
 Player: (Literature, philosophy, art... and the university's own history.)
+=> END
+
+~ greene_bookshelf
+Player: (Professor's bookshelf. A number of books here catch my eye.)
 => END
 
 ~ lab_door
@@ -299,7 +382,13 @@ Player: (I don't think I should go there right now.)
 => END
 
 ~ elevator_floor_deadline
-Player: (Layla's got a deadline. I think we should head to the lab and not loiter around the building.)
+# step 2.358 / 2.375: travel now opens with the janitor's keypad talk alone (ui/elevator_panel.gd), so this
+# plays only before it and the first branch below is no longer reached
+if Flags.get_level_flag("jayce_date_hint_given"):
+	Player: (I'm sure I will be able to go there later.)
+	Player: (First, I need to help Layla with the sequencing stuff in the lab.)
+else
+	Player: (Layla's got a deadline. I think we should head to the lab and not loiter around the building.)
 => END
 
 ~ elevator_floor_current

@@ -1,0 +1,442 @@
+{
+	"base_slot": "body",
+	"character": "layla",
+	"size": [
+		924,
+		1375
+	],
+	"slots": [
+		{
+			"default": "hand_on_waist",
+			"name": "body",
+			"order": 1,
+			"variants": {
+				"fists_clenched": {
+					"file": "layla_body @fists_clenched.png",
+					"pos": [
+						0,
+						0
+					],
+					"size": [
+						924,
+						1375
+					]
+				},
+				"hand_on_chest": {
+					"file": "layla_body @hand_on_chest.png",
+					"pos": [
+						0,
+						0
+					],
+					"size": [
+						924,
+						1375
+					]
+				},
+				"hand_on_waist": {
+					"file": "layla_body @hand_on_waist.png",
+					"pos": [
+						0,
+						0
+					],
+					"size": [
+						924,
+						1375
+					]
+				},
+				"hand_up": {
+					"file": "layla_body @hand_up.png",
+					"pos": [
+						0,
+						0
+					],
+					"size": [
+						924,
+						1375
+					]
+				},
+				"hands_down": {
+					"file": "layla_body @hands_down.png",
+					"pos": [
+						0,
+						0
+					],
+					"size": [
+						924,
+						1375
+					]
+				}
+			}
+		},
+		{
+			"default": "regular",
+			"name": "eyes",
+			"order": 2,
+			"variants": {
+				"cartoon_side": {
+					"file": "layla_eyes @cartoon_side.png",
+					"pos": [
+						337,
+						184
+					],
+					"size": [
+						245,
+						123
+					]
+				},
+				"closed": {
+					"file": "layla_eyes @closed.png",
+					"pos": [
+						332,
+						187
+					],
+					"size": [
+						250,
+						121
+					]
+				},
+				"funny_white": {
+					"file": "layla_eyes @funny_white.png",
+					"pos": [
+						337,
+						189
+					],
+					"size": [
+						244,
+						109
+					]
+				},
+				"regular": {
+					"file": "layla_eyes @regular.png",
+					"pos": [
+						343,
+						196
+					],
+					"size": [
+						238,
+						100
+					]
+				},
+				"regular_big": {
+					"file": "layla_eyes @regular_big.png",
+					"pos": [
+						343,
+						190
+					],
+					"size": [
+						238,
+						106
+					]
+				},
+				"sad": {
+					"file": "layla_eyes @sad.png",
+					"pos": [
+						342,
+						190
+					],
+					"size": [
+						241,
+						111
+					]
+				}
+			}
+		},
+		{
+			"default": "smile",
+			"name": "mouth",
+			"order": 3,
+			"variants": {
+				"baby_cry": {
+					"file": "layla_mouth @baby_cry.png",
+					"pos": [
+						388,
+						291
+					],
+					"size": [
+						104,
+						78
+					]
+				},
+				"frown": {
+					"file": "layla_mouth @frown.png",
+					"pos": [
+						386,
+						300
+					],
+					"size": [
+						98,
+						77
+					]
+				},
+				"funny_mouth": {
+					"file": "layla_mouth @funny_mouth.png",
+					"pos": [
+						380,
+						285
+					],
+					"size": [
+						113,
+						79
+					]
+				},
+				"grin": {
+					"file": "layla_mouth @grin.png",
+					"pos": [
+						394,
+						296
+					],
+					"size": [
+						101,
+						69
+					]
+				},
+				"o": {
+					"file": "layla_mouth @o.png",
+					"pos": [
+						374,
+						293
+					],
+					"size": [
+						103,
+						74
+					]
+				},
+				"open_happy": {
+					"file": "layla_mouth @open_happy.png",
+					"pos": [
+						394,
+						293
+					],
+					"size": [
+						94,
+						66
+					]
+				},
+				"puffy": {
+					"file": "layla_mouth @puffy.png",
+					"pos": [
+						388,
+						291
+					],
+					"size": [
+						104,
+						78
+					]
+				},
+				"small_open": {
+					"file": "layla_mouth @small_open.png",
+					"pos": [
+						386,
+						300
+					],
+					"size": [
+						98,
+						77
+					]
+				},
+				"smile": {
+					"file": "layla_mouth @smile.png",
+					"pos": [
+						397,
+						296
+					],
+					"size": [
+						82,
+						57
+					]
+				},
+				"troubled": {
+					"file": "layla_mouth @troubled.png",
+					"pos": [
+						394,
+						293
+					],
+					"size": [
+						94,
+						73
+					]
+				}
+			}
+		},
+		{
+			"default": "base",
+			"name": "brows",
+			"order": 4,
+			"variants": {
+				"angry": {
+					"file": "layla_brows @angry.png",
+					"pos": [
+						380,
+						146
+					],
+					"size": [
+						200,
+						89
+					]
+				},
+				"base": {
+					"file": "layla_brows @base.png",
+					"pos": [
+						382,
+						167
+					],
+					"size": [
+						189,
+						63
+					]
+				},
+				"funny": {
+					"file": "layla_brows @funny.png",
+					"pos": [
+						387,
+						151
+					],
+					"size": [
+						193,
+						100
+					]
+				},
+				"slightly_pensive": {
+					"file": "layla_brows @slightly_pensive.png",
+					"pos": [
+						378,
+						166
+					],
+					"size": [
+						191,
+						61
+					]
+				},
+				"slightly_raised": {
+					"file": "layla_brows @slightly_raised.png",
+					"pos": [
+						380,
+						166
+					],
+					"size": [
+						190,
+						76
+					]
+				}
+			}
+		},
+		{
+			"default": "no_flush",
+			"name": "flush",
+			"order": 5,
+			"variants": {
+				"funny_red": {
+					"file": "layla_flush @funny_red.png",
+					"pos": [
+						258,
+						99
+					],
+					"size": [
+						345,
+						323
+					]
+				},
+				"no_flush": {
+					"file": "",
+					"pos": [
+						0,
+						0
+					],
+					"size": [
+						0,
+						0
+					]
+				}
+			}
+		},
+		{
+			"default": "no_blush",
+			"name": "blush",
+			"order": 6,
+			"variants": {
+				"big_lines": {
+					"file": "layla_blush @big_lines.png",
+					"pos": [
+						360,
+						244
+					],
+					"size": [
+						180,
+						78
+					]
+				},
+				"cute_blush": {
+					"file": "layla_blush @cute_blush.png",
+					"pos": [
+						350,
+						232
+					],
+					"size": [
+						204,
+						123
+					]
+				},
+				"no_blush": {
+					"file": "",
+					"pos": [
+						0,
+						0
+					],
+					"size": [
+						0,
+						0
+					]
+				},
+				"slight_blush": {
+					"file": "layla_blush @slight_blush.png",
+					"pos": [
+						367,
+						265
+					],
+					"size": [
+						168,
+						56
+					]
+				}
+			}
+		},
+		{
+			"default": "no_tears",
+			"name": "tears",
+			"order": 7,
+			"variants": {
+				"no_tears": {
+					"file": "",
+					"pos": [
+						0,
+						0
+					],
+					"size": [
+						0,
+						0
+					]
+				},
+				"tears": {
+					"file": "layla_tears @tears.png",
+					"pos": [
+						363,
+						238
+					],
+					"size": [
+						181,
+						66
+					]
+				}
+			}
+		}
+	],
+	"source_canvas": [
+		1100,
+		1740
+	],
+	"source_origin": [
+		173,
+		365
+	],
+	"version": 1
+}

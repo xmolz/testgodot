@@ -6,15 +6,18 @@ Player: (That doesn't seem to work.)
 => END
 
 ~ greene_office_door
-Player: (It's locked. Looks like I'll need a keycard for the card reader.)
-Player: (I don't think I want to break in, though.)
-Player: (...Not yet.)
+# step 2.270: after the keycard talk (greene_office.dialogue, ~ office_locked_keycard).
+Player: (Locked. We need that keycard from the janitor.)
 => END
 
 ~ greene_office_card_reader
-Player: (I can't unlock this without a card.)
-Player: (Anyway, I don't think I want to break in.)
-Player: (...Not yet.)
+if Flags.get_level_flag("greene_office_unlocked") == true:
+	# step 2.287: jayce has unlocked the office.
+	Player: (I don't need to bother with this now.)
+	Player: (Jayce's left it open for us.)
+	=> END
+# step 2.270: after the keycard talk, while locked.
+Player: (Can't enter until it's open. I should talk to the janitor first.)
 => END
 
 ~ duflo_office_door
@@ -38,13 +41,15 @@ Player: (Anyway, I don't think I want to break in.)
 => END
 
 ~ supply_lockers
+if Flags.get_level_flag("supply_locker_opened") == true:
+	Player: (I don't think I need to look in here again.)
+	=> END
 Player: (It seems to be locked.)
 Player: (Although, even a child could pick a lock this old.)
 Player: (If they had the right tool.)
 => END
 
 ~ supply_room_socket
-# TEMPLATE — developer may rewrite.
 Player: (I don't have anything to plug in.)
 => END
 
@@ -90,6 +95,8 @@ What do you want to get from the vending machine?
 ~ vending_cant_pay
 if Flags.get_level_flag("vending_card_declined") == false:
 	You swipe your card through the card reader.
+	# step 2.397: the reader's error beep (the keypad's wrong-code beep)
+	do SoundManager.play_sfx("incorrect_beep")
 	Vending Machine Screen: CARD READER OUT OF SERVICE. PLEASE USE CASH.
 	do Flags.set_level_flag("vending_card_declined", true)
 	Player: (Oh, shoot. And I'm out of cash for that.)
@@ -99,6 +106,8 @@ else
 
 ~ vending_bought
 You feed the cash into the machine.
+# step 2.397: the snack dropping into the tray
+do SoundManager.play_sfx("vending_machine")
 It whirs, and your pick drops into the tray.
 => END
 
@@ -115,23 +124,30 @@ What do you want to do at your desk?
 	=> fiona_desk_corkboard
 - Open the drawer
 	=> fiona_desk_drawer
+- Log in
+	=> fiona_desk_login
 - Nothing. Never mind. [Leave]
 	=> END
 
+# step 2.358: the workstation can't be used to get online (that would skip the DNA-date hunt)
+~ fiona_desk_login
+Player: (It's been so long since I've worked here...)
+Player: (I've forgotten the damn password.)
+=> fiona_desk_hub
+
 ~ fiona_desk_cpu
-# TEMPLATE — developer fills in.
-Player: (My computer. It sounds like a jet engine whenever I run anything serious.)
+Player: (64 GB of RAM, baby! So lucky we got this before RAM prices shot up.)
 => fiona_desk_hub
 
 ~ fiona_desk_monitor
-# TEMPLATE — developer fills in.
-Player: (There's a sticky note on the bezel. "SAVE YOUR WORK." In my handwriting.)
-Player: (I know myself too well.)
+Player: (A crisp 4K monitor. Perfect for working.)
+Player: (Hmmm. Maybe I should come in here to work more often.)
 => fiona_desk_hub
 
 ~ fiona_desk_corkboard
-# TEMPLATE — developer fills in.
-Player: (Conference flyers, a lab safety notice, and a to-do list I stopped updating months ago.)
+Player: (My corkboard's empty.)
+Player: (Naturally. This isn't my primary workplace.)
+Player: (I mean... who'd want to work here all day with THAT guy around?)
 => fiona_desk_hub
 
 ~ fiona_desk_drawer
@@ -147,31 +163,30 @@ What do you want to look at?
 	=> fiona_drawer_book
 - Take the loose change [if Flags.get_level_flag("fiona_desk_coins_taken") == false]
 	=> fiona_drawer_coins
-- Take the steel bobby pins [if Flags.get_level_flag("fiona_desk_steel_pins_taken") == false]
+- Take the bobby pins [if Flags.get_level_flag("fiona_desk_steel_pins_taken") == false]
 	=> fiona_drawer_pins
 - Close the drawer [Back]
 	=> fiona_desk_hub
 
 ~ fiona_drawer_notes
-# TEMPLATE — developer fills in.
-Player: (Old lecture notes. My handwriting was neater back then.)
+Player: (Old lecture notes. Nothing of interest in them.)
 => fiona_drawer_hub
 
 ~ fiona_drawer_book
-# TEMPLATE — developer fills in.
-Player: (A paperback I started last spring. The bookmark hasn't moved since.)
+Player: (A spy novel I read many moons ago.)
+Player: (Seems to have left quite an impact on me.)
 => fiona_drawer_hub
 
 ~ fiona_drawer_coins
-# TEMPLATE — developer fills in.
-Player: (Seventy-five cents. Three quarters, to be exact.)
+Player: (Seventy-five cents.)
+Player: (It ain't much. But it might come in handy, I guess.)
 do Flags.set_level_flag("fiona_desk_coins_taken", true)
 do Inventory.add_item("cash", 75)
 => fiona_drawer_hub
 
 ~ fiona_drawer_pins
-# TEMPLATE — developer fills in.
-Player: (Steel bobby pins. Much sturdier than the usual kind.)
+Player: (Bobby pins. Made of stainless steel.)
+Player: (Could be useful.)
 do Flags.set_level_flag("fiona_desk_steel_pins_taken", true)
 do Inventory.add_item("steel_bobby_pins")
 => fiona_drawer_hub
@@ -204,24 +219,46 @@ What do you want to do at this desk?
 	=> spare_desk_cpu
 - Look at the monitor
 	=> spare_desk_monitor
+- Look at the corkboard
+	=> spare_desk_corkboard
 - Open the drawer
 	=> spare_desk_drawer
 - Nothing. Never mind. [Leave]
 	=> END
 
 ~ spare_desk_cpu
-# TEMPLATE — developer fills in.
-Player: (A standard-issue computer. Someone at least left it plugged in.)
+Player: (Say... a CPU with 64 GB of RAM. Same as mine.)
+Player: (Too bad no one's here to use it, though. What a waste.)
 => spare_desk_hub
 
 ~ spare_desk_monitor
-# TEMPLATE — developer fills in.
-Player: (The screen's dark. Nobody's logged in here in a while.)
+Player: (A crisp 4K monitor. Same as mine.)
+Player: (And not a soul to look at it. What a waste.)
+=> spare_desk_hub
+
+~ spare_desk_corkboard
+Player: (It's empty.)
 => spare_desk_hub
 
 ~ spare_desk_drawer
 You open the drawer.
+if Flags.get_level_flag("spare_desk_charger_taken") == false:
+	There's just a single item inside - a Type-C charger.
+	=> spare_drawer_hub
 It's empty.
+=> spare_desk_hub
+
+~ spare_drawer_hub
+What do you want to do?
+- Take the Type-C charger [if Flags.get_level_flag("spare_desk_charger_taken") == false]
+	=> spare_drawer_charger
+- Close the drawer [Back]
+	=> spare_desk_hub
+
+~ spare_drawer_charger
+Player: (A Type-C charger. The last grad student must've left it behind.)
+do Flags.set_level_flag("spare_desk_charger_taken", true)
+do Inventory.add_item("type_c_charger")
 => spare_desk_hub
 
 ~ workstation_julian
@@ -233,6 +270,9 @@ Player: (I can't snoop around in this while he's around.)
 
 ~ library_bookshelf_right
 => library_books/right_stand
+
+~ greene_bookshelf
+=> library_books/greene_shelf
 
 ~ lab_door
 if Flags.get_level_flag("lab_keypad_interacted") == true:
@@ -463,3 +503,324 @@ Player: (This really isn't my brightest idea, is it?)
 ~ main_room_door_item_techpass
 Player: (I might be using this on the wrong machine...)
 => END
+
+# ---------------------------------------------------------------------------
+# step 2.411: items used (or given, via giveables.dialogue) on people and things in Keeping Busy. each
+# "<object id>_item_<item id>" title below jumps to one of these knots.
+
+~ item_julian_snack
+Julian: Thanks, but why are you giving me this?
+Player: (Shoot.)
+=> END
+
+~ item_julian_cash
+Julian: Hah! Nice joke.
+He refuses to take your offering.
+=> END
+
+~ item_julian_camera
+Player: (I don't think he needs to see this...)
+=> END
+
+~ item_julian_phone
+Player: (I doubt that dickhead will help us with this dead phone.)
+=> END
+
+~ item_julian_charger
+Player: (I've no business showing my damn charger to this dickhead.)
+=> END
+
+~ item_handy_later
+Player: (I think this might come in handy later...)
+=> END
+
+~ item_jayce_snack
+Player: (Yeah, I'm not giving him that.)
+Player: (Don't want him to get the wrong idea...)
+=> END
+
+~ item_jayce_cash
+He just takes the money.
+do Inventory.remove_amount("cash", Inventory.get_count("cash"))
+Jayce: 'Preciate it, sugar.
+=> END
+
+~ item_jayce_camera
+Player: (I think I should keep this to myself for now...)
+=> END
+
+~ item_jayce_phone
+Player: (I don't need his help with this...)
+=> END
+
+~ item_jayce_pins
+Player: (I think I'll pass on that...)
+=> END
+
+~ item_layla_camera
+Player: (I should hold onto this for now...)
+=> END
+
+~ item_layla_cash
+Layla: Oh, cash?
+do Inventory.remove_amount("cash", Inventory.get_count("cash"))
+Layla: Thanks, Fiona!
+She blushes.
+=> END
+
+~ item_layla_phone
+Player: (I should figure out a way to charge it before I hand it back to her...)
+=> END
+
+~ item_layla_old_charger
+Layla: Oh, Fiona...
+Layla: I don't think your phone's charger will work with mine.
+Layla: It's... old.
+Player: (She's right.)
+=> END
+
+~ item_no_electronic_lockpick
+Player: (I can't... lockpick an electronic lock.)
+=> END
+
+~ item_keypad_dumb
+Player: (This is dumb...)
+=> END
+
+~ item_wont_work
+Player: (I don't think this will work out...)
+=> END
+
+~ item_cola_machine
+Player: (Giving cola... to a machine?)
+Player: (Hmmmm.)
+=> END
+
+~ item_portrait_snack
+Player: Have a snack, dickhead.
+# layla is with fiona everywhere except greene's office
+if Flags.get_level_flag("layla_waiting_outside_office") == false:
+	Layla: Fiona, are you alright?
+	Player: Yes. Sorry about that.
+	Player: (Shoot.)
+=> END
+
+~ item_no_returns
+Layla: I don't think we can return snacks, Fiona.
+Player: Hmm.
+=> END
+
+~ item_julian_spot
+Player: (I don't think he wants me putting anything here.)
+=> END
+
+~ item_locker_julian_snoop
+Player: (I can't snoop into Julian's locker with Layla around.)
+Player: (That's a bit much.)
+Player: (There might be some lockers in this building she won't mind me looking into, though...)
+=> END
+
+~ item_locker_layla_snoop
+Player: (I can't snoop into Layla's locker with her around.)
+Player: (That's a bit much.)
+Player: (There might be some lockers in this building she won't mind me looking into, though...)
+=> END
+
+~ item_jayce_locker_camera
+Player: (Nah. I need to keep this to myself for now.)
+=> END
+
+# the titles (object id + item id), grouped by who or what the item is used on
+
+~ julian_item_vending_protein_bar
+=> item_julian_snack
+~ julian_item_vending_boba_tea
+=> item_julian_snack
+~ julian_item_vending_diet_cola
+=> item_julian_snack
+~ julian_item_vending_cheese_balls
+=> item_julian_snack
+~ julian_item_cash
+=> item_julian_cash
+~ julian_item_jayce_camera
+=> item_julian_camera
+~ julian_item_layla_phone
+=> item_julian_phone
+~ julian_item_dumbphone_charger
+=> item_julian_charger
+~ julian_item_bobby_pins
+=> item_handy_later
+~ julian_item_steel_bobby_pins
+=> item_handy_later
+
+~ lab_guard_item_vending_protein_bar
+=> item_jayce_snack
+~ lab_guard_item_vending_boba_tea
+=> item_jayce_snack
+~ lab_guard_item_vending_diet_cola
+=> item_jayce_snack
+~ lab_guard_item_vending_cheese_balls
+=> item_jayce_snack
+~ lab_guard_item_cash
+=> item_jayce_cash
+~ lab_guard_item_jayce_camera
+=> item_jayce_camera
+~ lab_guard_item_layla_phone
+=> item_jayce_phone
+~ lab_guard_item_bobby_pins
+=> item_jayce_pins
+~ lab_guard_item_steel_bobby_pins
+=> item_jayce_pins
+
+~ layla_item_jayce_camera
+=> item_layla_camera
+~ layla_item_cash
+=> item_layla_cash
+~ layla_item_bobby_pins
+=> item_handy_later
+~ layla_item_steel_bobby_pins
+=> item_handy_later
+~ layla_item_layla_phone
+=> item_layla_phone
+~ layla_item_dumbphone_charger
+=> item_layla_old_charger
+
+~ lab_keypad_item_bobby_pins
+=> item_no_electronic_lockpick
+~ lab_keypad_item_steel_bobby_pins
+=> item_no_electronic_lockpick
+~ lab_keypad_item_cash
+=> item_keypad_dumb
+~ lab_keypad_item_vending_protein_bar
+=> item_keypad_dumb
+~ lab_keypad_item_vending_boba_tea
+=> item_keypad_dumb
+~ lab_keypad_item_vending_diet_cola
+=> item_keypad_dumb
+~ lab_keypad_item_vending_cheese_balls
+=> item_keypad_dumb
+
+~ greene_office_card_reader_item_bobby_pins
+=> item_no_electronic_lockpick
+~ greene_office_card_reader_item_steel_bobby_pins
+=> item_no_electronic_lockpick
+
+~ greene_computer_item_layla_phone
+=> item_wont_work
+~ greene_computer_item_vending_diet_cola
+=> item_cola_machine
+
+~ greene_office_la_marr_photo_item_jayce_camera
+=> item_wont_work
+
+~ greene_portrait_item_jayce_camera
+=> item_wont_work
+~ greene_portrait_item_vending_protein_bar
+=> item_portrait_snack
+~ greene_portrait_item_vending_boba_tea
+=> item_portrait_snack
+~ greene_portrait_item_vending_diet_cola
+=> item_portrait_snack
+~ greene_portrait_item_vending_cheese_balls
+=> item_portrait_snack
+
+~ ember_portrait_item_vending_protein_bar
+=> item_portrait_snack
+~ ember_portrait_item_vending_boba_tea
+=> item_portrait_snack
+~ ember_portrait_item_vending_diet_cola
+=> item_portrait_snack
+~ ember_portrait_item_vending_cheese_balls
+=> item_portrait_snack
+
+~ voss_portrait_item_vending_protein_bar
+=> item_portrait_snack
+~ voss_portrait_item_vending_boba_tea
+=> item_portrait_snack
+~ voss_portrait_item_vending_diet_cola
+=> item_portrait_snack
+~ voss_portrait_item_vending_cheese_balls
+=> item_portrait_snack
+
+~ professor_portrait_item_vending_protein_bar
+=> item_portrait_snack
+~ professor_portrait_item_vending_boba_tea
+=> item_portrait_snack
+~ professor_portrait_item_vending_diet_cola
+=> item_portrait_snack
+~ professor_portrait_item_vending_cheese_balls
+=> item_portrait_snack
+
+~ vending_machine_item_vending_protein_bar
+=> item_no_returns
+~ vending_machine_item_vending_boba_tea
+=> item_no_returns
+~ vending_machine_item_vending_diet_cola
+=> item_no_returns
+~ vending_machine_item_vending_cheese_balls
+=> item_no_returns
+
+~ workstation_julian_item_vending_protein_bar
+=> item_julian_spot
+~ workstation_julian_item_vending_boba_tea
+=> item_julian_spot
+~ workstation_julian_item_vending_diet_cola
+=> item_julian_spot
+~ workstation_julian_item_vending_cheese_balls
+=> item_julian_spot
+~ workstation_julian_item_bobby_pins
+=> item_julian_spot
+~ workstation_julian_item_steel_bobby_pins
+=> item_julian_spot
+~ workstation_julian_item_cash
+=> item_julian_spot
+~ workstation_julian_item_jayce_camera
+=> item_julian_spot
+~ workstation_julian_item_layla_phone
+=> item_julian_spot
+~ workstation_julian_item_dumbphone_charger
+=> item_julian_spot
+~ workstation_julian_item_type_c_charger
+=> item_julian_spot
+
+# step 2.414: just using Julian's or Layla's locker
+~ locker_layla
+Player: (I can't use Layla's locker.)
+Player: (I mean, she's right here with me!)
+=> END
+
+~ locker_julian
+Player: (I can't break into Julian's locker with Layla around.)
+Player: (I've no use looking into this locker.)
+=> END
+
+~ locker_julian_item_bobby_pins
+=> item_locker_julian_snoop
+~ locker_julian_item_steel_bobby_pins
+=> item_locker_julian_snoop
+~ locker_julian_item_vending_protein_bar
+=> item_julian_spot
+~ locker_julian_item_vending_boba_tea
+=> item_julian_spot
+~ locker_julian_item_vending_diet_cola
+=> item_julian_spot
+~ locker_julian_item_vending_cheese_balls
+=> item_julian_spot
+~ locker_julian_item_cash
+=> item_julian_spot
+~ locker_julian_item_jayce_camera
+=> item_julian_spot
+~ locker_julian_item_layla_phone
+=> item_julian_spot
+~ locker_julian_item_dumbphone_charger
+=> item_julian_spot
+~ locker_julian_item_type_c_charger
+=> item_julian_spot
+
+~ locker_layla_item_bobby_pins
+=> item_locker_layla_snoop
+~ locker_layla_item_steel_bobby_pins
+=> item_locker_layla_snoop
+
+~ supply_lockers_item_jayce_camera
+=> item_jayce_locker_camera

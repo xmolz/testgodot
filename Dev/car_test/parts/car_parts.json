@@ -1,0 +1,23 @@
+{
+	"base": "res://Dev/car_test/parts/car_full.png",
+	"canvas": [
+		3840,
+		2160
+	],
+	"slots": {
+		"fiona_face": {
+			"default": "frown_straight",
+			"rect": [
+				688,
+				656,
+				528,
+				320
+			],
+			"variants": {
+				"frown_side": "res://Dev/car_test/parts/fiona_face__frown_side.png",
+				"frown_straight": "res://Dev/car_test/parts/fiona_face__frown_straight.png",
+				"smile_straight": "res://Dev/car_test/parts/fiona_face__smile_straight.png"
+			}
+		}
+	}
+}

@@ -332,8 +332,11 @@ func portal_enter(texture: Texture2D, start_rect: Rect2, duration: float = 1.0) 
 		_set_gm_transitioning(false)
 		return
 
-	# *****************((future audio spot: a rising portal whoosh goes here!))
-	# /////////// if soundmanager: soundmanager.play_sfx("portal_open")
+	# step 2.397: the portal opening (going in), with its hum rising underneath. every launch and return grows
+	# the portal through here. the hum loops until the portal lets go (portal_exit) or dialogue fades it.
+	if SoundManager:
+		SoundManager.play_sfx("portal_going_in")
+		SoundManager.start_portal_hum(duration)
 
 	_debug_phase_tag = "grow_started"
 	if ChapterLaunchSequence.PORTAL_DEBUG:
@@ -381,6 +384,11 @@ func portal_exit(duration: float = 0.8) -> void:
 
 	_idle_target = 0.0
 
+	# step 2.397: the portal letting go (coming out), with its hum fading as it does
+	if SoundManager:
+		SoundManager.play_sfx("portal_coming_out")
+		SoundManager.fade_out_portal_hum(duration)
+
 	var exit_tween = create_tween().bind_node(_portal_rect)
 	exit_tween.tween_property(_portal_mat, "shader_parameter/progress", 1.0, duration)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
@@ -399,6 +407,9 @@ func portal_exit(duration: float = 0.8) -> void:
 	portal_abort()
 
 func portal_abort() -> void:
+	# step 2.397: a portal that ends any other way takes its hum with it (nothing to do once it has faded)
+	if SoundManager:
+		SoundManager.fade_out_portal_hum(0.3)
 	_portal_active = false
 	_debug_phase_tag = ""
 	if is_instance_valid(_active_balloon):

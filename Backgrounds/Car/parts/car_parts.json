@@ -1,0 +1,647 @@
+{
+	"canvas": [
+		3840,
+		2160
+	],
+	"format": 2,
+	"slots": {
+		"fiona_body": {
+			"default": "base",
+			"rect": [
+				464,
+				363,
+				1259,
+				1797
+			],
+			"variants": {
+				"base": {
+					"path": "res://Backgrounds/Car/parts/fiona_body__base.png",
+					"rect": [
+						464,
+						363,
+						1010,
+						1797
+					]
+				},
+				"hand_up": {
+					"path": "res://Backgrounds/Car/parts/fiona_body__hand_up.png",
+					"rect": [
+						464,
+						363,
+						1259,
+						1797
+					]
+				},
+				"pointing_up": {
+					"path": "res://Backgrounds/Car/parts/fiona_body__pointing_up.png",
+					"rect": [
+						464,
+						363,
+						1080,
+						1797
+					]
+				}
+			}
+		},
+		"fiona_eyes": {
+			"default": "straight",
+			"rect": [
+				733,
+				676,
+				462,
+				204
+			],
+			"variants": {
+				"sideways": {
+					"path": "res://Backgrounds/Car/parts/fiona_eyes__sideways.png",
+					"rect": [
+						736,
+						676,
+						459,
+						203
+					]
+				},
+				"squished": {
+					"path": "res://Backgrounds/Car/parts/fiona_eyes__squished.png",
+					"rect": [
+						734,
+						678,
+						453,
+						202
+					]
+				},
+				"straight": {
+					"path": "res://Backgrounds/Car/parts/fiona_eyes__straight.png",
+					"rect": [
+						733,
+						678,
+						453,
+						202
+					]
+				}
+			}
+		},
+		"fiona_mouth": {
+			"default": "frown",
+			"rect": [
+				866,
+				896,
+				183,
+				86
+			],
+			"variants": {
+				"frown": {
+					"path": "res://Backgrounds/Car/parts/fiona_mouth__frown.png",
+					"rect": [
+						866,
+						900,
+						180,
+						82
+					]
+				},
+				"o": {
+					"path": "res://Backgrounds/Car/parts/fiona_mouth__o.png",
+					"rect": [
+						899,
+						911,
+						144,
+						60
+					]
+				},
+				"open_happy": {
+					"path": "res://Backgrounds/Car/parts/fiona_mouth__open_happy.png",
+					"rect": [
+						874,
+						896,
+						175,
+						81
+					]
+				},
+				"open_neutral": {
+					"path": "res://Backgrounds/Car/parts/fiona_mouth__open_neutral.png",
+					"rect": [
+						866,
+						900,
+						180,
+						75
+					]
+				},
+				"smile": {
+					"path": "res://Backgrounds/Car/parts/fiona_mouth__smile.png",
+					"rect": [
+						904,
+						921,
+						136,
+						24
+					]
+				}
+			}
+		},
+		"layla_blush": {
+			"default": "no_blush",
+			"rect": [
+				2070,
+				898,
+				307,
+				115
+			],
+			"variants": {
+				"cute_blush": {
+					"path": "res://Backgrounds/Car/parts/layla_blush__cute_blush.png",
+					"rect": [
+						2070,
+						898,
+						307,
+						115
+					]
+				}
+			}
+		},
+		"layla_body": {
+			"covers": [
+				"layla_eyes",
+				"layla_mouth",
+				"layla_brows",
+				"layla_blush",
+				"layla_face"
+			],
+			"default": "straight",
+			"rect": [
+				1635,
+				530,
+				1282,
+				1369
+			],
+			"variants": {
+				"side": {
+					"path": "res://Backgrounds/Car/parts/layla_body__side.png",
+					"rect": [
+						1638,
+						533,
+						1279,
+						1366
+					]
+				},
+				"straight": {
+					"path": "res://Backgrounds/Car/parts/layla_body__straight.png",
+					"rect": [
+						1635,
+						530,
+						1282,
+						1369
+					]
+				}
+			}
+		},
+		"layla_brows": {
+			"default": "base",
+			"rect": [
+				2106,
+				741,
+				303,
+				112
+			],
+			"variants": {
+				"base": {
+					"path": "res://Backgrounds/Car/parts/layla_brows__base.png",
+					"rect": [
+						2129,
+						741,
+						260,
+						71
+					]
+				},
+				"glance_brows": {
+					"path": "res://Backgrounds/Car/parts/layla_brows__glance_brows.png",
+					"rect": [
+						2130,
+						784,
+						256,
+						46
+					]
+				},
+				"sad_brows": {
+					"path": "res://Backgrounds/Car/parts/layla_brows__sad_brows.png",
+					"rect": [
+						2106,
+						804,
+						303,
+						49
+					]
+				}
+			}
+		},
+		"layla_eyes": {
+			"default": "regular",
+			"rect": [
+				2052,
+				809,
+				356,
+				145
+			],
+			"variants": {
+				"closed": {
+					"path": "res://Backgrounds/Car/parts/layla_eyes__closed.png",
+					"rect": [
+						2070,
+						839,
+						324,
+						96
+					]
+				},
+				"glance": {
+					"path": "res://Backgrounds/Car/parts/layla_eyes__glance.png",
+					"rect": [
+						2053,
+						809,
+						355,
+						132
+					]
+				},
+				"regular": {
+					"path": "res://Backgrounds/Car/parts/layla_eyes__regular.png",
+					"rect": [
+						2052,
+						809,
+						356,
+						133
+					]
+				},
+				"sad": {
+					"path": "res://Backgrounds/Car/parts/layla_eyes__sad.png",
+					"rect": [
+						2073,
+						841,
+						333,
+						113
+					]
+				}
+			}
+		},
+		"layla_face": {
+			"covers": [
+				"layla_eyes",
+				"layla_mouth",
+				"layla_brows",
+				"layla_blush"
+			],
+			"default": "no_face",
+			"rect": [
+				2064,
+				784,
+				365,
+				239
+			],
+			"variants": {
+				"flustered_face": {
+					"path": "res://Backgrounds/Car/parts/layla_face__flustered_face.png",
+					"rect": [
+						2064,
+						784,
+						365,
+						239
+					]
+				}
+			}
+		},
+		"layla_mouth": {
+			"default": "neutral",
+			"rect": [
+				2176,
+				986,
+				94,
+				63
+			],
+			"variants": {
+				"flat": {
+					"path": "res://Backgrounds/Car/parts/layla_mouth__flat.png",
+					"rect": [
+						2203,
+						1015,
+						64,
+						21
+					]
+				},
+				"neutral": {
+					"path": "res://Backgrounds/Car/parts/layla_mouth__neutral.png",
+					"rect": [
+						2231,
+						1004,
+						24,
+						17
+					]
+				},
+				"open_happy": {
+					"path": "res://Backgrounds/Car/parts/layla_mouth__open_happy.png",
+					"rect": [
+						2183,
+						989,
+						87,
+						60
+					]
+				},
+				"small_open": {
+					"path": "res://Backgrounds/Car/parts/layla_mouth__small_open.png",
+					"rect": [
+						2202,
+						1002,
+						66,
+						41
+					]
+				},
+				"smile": {
+					"path": "res://Backgrounds/Car/parts/layla_mouth__smile.png",
+					"rect": [
+						2176,
+						986,
+						93,
+						28
+					]
+				}
+			}
+		},
+		"layla_side_blush": {
+			"default": "no_side_blush",
+			"rect": [
+				1912,
+				888,
+				312,
+				160
+			],
+			"shown_with": [
+				"layla_body",
+				"side"
+			],
+			"variants": {
+				"side_blush": {
+					"path": "res://Backgrounds/Car/parts/layla_side_blush__side_blush.png",
+					"rect": [
+						1912,
+						888,
+						312,
+						160
+					]
+				}
+			}
+		},
+		"layla_side_brows": {
+			"default": "side_brows",
+			"rect": [
+				1927,
+				763,
+				293,
+				84
+			],
+			"shown_with": [
+				"layla_body",
+				"side"
+			],
+			"variants": {
+				"side_brows": {
+					"path": "res://Backgrounds/Car/parts/layla_side_brows__side_brows.png",
+					"rect": [
+						1935,
+						763,
+						280,
+						42
+					]
+				},
+				"side_lowered": {
+					"path": "res://Backgrounds/Car/parts/layla_side_brows__side_lowered.png",
+					"rect": [
+						1933,
+						805,
+						280,
+						42
+					]
+				},
+				"side_tilted_1": {
+					"path": "res://Backgrounds/Car/parts/layla_side_brows__side_tilted_1.png",
+					"rect": [
+						1931,
+						794,
+						265,
+						49
+					]
+				},
+				"side_tilted_2": {
+					"path": "res://Backgrounds/Car/parts/layla_side_brows__side_tilted_2.png",
+					"rect": [
+						1927,
+						793,
+						293,
+						50
+					]
+				}
+			}
+		},
+		"layla_side_eyes": {
+			"default": "side_eyes",
+			"rect": [
+				1895,
+				832,
+				367,
+				130
+			],
+			"shown_with": [
+				"layla_body",
+				"side"
+			],
+			"variants": {
+				"side_away": {
+					"path": "res://Backgrounds/Car/parts/layla_side_eyes__side_away.png",
+					"rect": [
+						1895,
+						838,
+						366,
+						107
+					]
+				},
+				"side_closed": {
+					"path": "res://Backgrounds/Car/parts/layla_side_eyes__side_closed.png",
+					"rect": [
+						1899,
+						859,
+						362,
+						90
+					]
+				},
+				"side_eyes": {
+					"path": "res://Backgrounds/Car/parts/layla_side_eyes__side_eyes.png",
+					"rect": [
+						1896,
+						832,
+						366,
+						113
+					]
+				},
+				"side_sad": {
+					"path": "res://Backgrounds/Car/parts/layla_side_eyes__side_sad.png",
+					"rect": [
+						1901,
+						838,
+						359,
+						124
+					]
+				}
+			}
+		},
+		"layla_side_lines": {
+			"default": "no_side_lines",
+			"rect": [
+				1934,
+				918,
+				261,
+				56
+			],
+			"shown_with": [
+				"layla_body",
+				"side"
+			],
+			"variants": {
+				"side_lines": {
+					"path": "res://Backgrounds/Car/parts/layla_side_lines__side_lines.png",
+					"rect": [
+						1934,
+						918,
+						261,
+						56
+					]
+				}
+			}
+		},
+		"layla_side_mouth": {
+			"default": "side_frown",
+			"rect": [
+				2011,
+				993,
+				92,
+				58
+			],
+			"shown_with": [
+				"layla_body",
+				"side"
+			],
+			"variants": {
+				"side_frown": {
+					"path": "res://Backgrounds/Car/parts/layla_side_mouth__side_frown.png",
+					"rect": [
+						2031,
+						1013,
+						40,
+						19
+					]
+				},
+				"side_o": {
+					"path": "res://Backgrounds/Car/parts/layla_side_mouth__side_o.png",
+					"rect": [
+						2032,
+						1007,
+						39,
+						29
+					]
+				},
+				"side_open_happy": {
+					"path": "res://Backgrounds/Car/parts/layla_side_mouth__side_open_happy.png",
+					"rect": [
+						2011,
+						993,
+						82,
+						58
+					]
+				},
+				"side_sad_mouth": {
+					"path": "res://Backgrounds/Car/parts/layla_side_mouth__side_sad_mouth.png",
+					"rect": [
+						2027,
+						1010,
+						44,
+						28
+					]
+				},
+				"side_smile": {
+					"path": "res://Backgrounds/Car/parts/layla_side_mouth__side_smile.png",
+					"rect": [
+						2015,
+						1007,
+						88,
+						31
+					]
+				}
+			}
+		}
+	},
+	"stack": [
+		{
+			"fixed": "res://Backgrounds/Car/parts/fixed_0.png",
+			"rect": [
+				0,
+				0,
+				3840,
+				2160
+			]
+		},
+		{
+			"slot": "layla_body"
+		},
+		{
+			"slot": "fiona_body"
+		},
+		{
+			"slot": "layla_eyes"
+		},
+		{
+			"slot": "layla_brows"
+		},
+		{
+			"slot": "layla_blush"
+		},
+		{
+			"slot": "layla_face"
+		},
+		{
+			"slot": "layla_side_blush"
+		},
+		{
+			"slot": "layla_side_lines"
+		},
+		{
+			"slot": "layla_side_eyes"
+		},
+		{
+			"slot": "layla_side_brows"
+		},
+		{
+			"slot": "fiona_eyes"
+		},
+		{
+			"slot": "layla_mouth"
+		},
+		{
+			"slot": "layla_side_mouth"
+		},
+		{
+			"slot": "fiona_mouth"
+		},
+		{
+			"fixed": "res://Backgrounds/Car/parts/fixed_1.png",
+			"rect": [
+				158,
+				0,
+				3682,
+				2160
+			]
+		},
+		{
+			"path": "res://Backgrounds/Car/parts/layla_body__side__8.png",
+			"piece": "layla_body",
+			"rect": [
+				2243,
+				1170,
+				154,
+				193
+			],
+			"variant": "side"
+		}
+	]
+}

@@ -37,6 +37,7 @@ offset_top = -82.13
 offset_right = 574.77
 offset_bottom = 681.87
 scale = Vector2(0.215, 0.215)
+factor = 1.0
 
 [node name="HoverGlow" type="Node2D" parent="."]
 visible = false

@@ -1,15 +1,32 @@
 ~ start
+# step 2.289: after "Find another way." with no dirt on him yet, fiona doesn't talk to him at all.
+if Flags.get_level_flag("jayce_keycard_refused") == true and Flags.get_level_flag("greene_office_unlocked") == false and Inventory.has_item("jayce_camera") == false:
+	Player: (I don't think I should try talking to him again until I've found some real dirt on him.)
+	=> END
 do stage_party("Jayce", "base")
+# step 2.396: Jayce's theme, for as long as he's in the conversation. it fades when he leaves (party_dismiss)
+# or the talk ends, and stops dead with a record scratch when Fiona brings out his camera.
+do SoundManager.play_music_track("jayce_hub_theme", 2.0)
+# step 2.374: Layla's expressions (rig). she stays wary of him (side glance) unless something moves her.
+# she enters as "base"; this lands while she fades in.
+do actor_change("Layla", "suspicious")
+# step 2.289: back with his camera after "Find another way.": straight to the blackmail.
+if Flags.get_level_flag("jayce_keycard_refused") == true and Flags.get_level_flag("greene_office_unlocked") == false:
+	=> jayce_keycard_camera_return
 if Flags.get_level_flag("jayce_date_hint_given") == true:
 	=> lab_access_again
 elif Flags.get_level_flag("jayce_introduced") == true:
+	do actor_change("Jayce", "talk")
 	Jayce: Back again, sweetheart?
 else
-	A man in a grey work jacket leans against the wall, arms folded, watching the corridor.
+	A man in a grey work jacket leans against the wall, one hand in his pocket, watching the corridor.
 	He's looking at you and Layla like a hyena looking at an unattended picnic.
 => hub
 
 ~ hub
+do actor_change("Layla", "suspicious")
+do actor_change("Jayce", "base")
+do actor_change("Fiona", "base")
 What do you want to say to him?
 - Who are you?
 	=> who_are_you
@@ -21,199 +38,663 @@ What do you want to say to him?
 ~ who_are_you
 Player: Hey. Do you mind telling us who you are?
 You notice him straightening up. He wasn't expecting to be spoken to first.
+do actor_change("Jayce", "talk")
 Jayce: Me? Course not, sweetheart.
 Jayce: Name's Jayce. Work is Maintenance.
 do Flags.set_level_flag("jayce_introduced", true)
 Jayce: And what do I owe the pleasure?
+do actor_change("Jayce", "base")
+do actor_change("Fiona", "explain")
 Player: I'm Fiona, and this is Layla. We work here, in the genomics lab.
 Player: First time I've seen you around.
+do actor_change("Jayce", "talk")
 Jayce: Wouldn't have. I only do nights.
 Jayce: You lot don't turn up till ten most days.
+do actor_change("Jayce", "base")
+do actor_change("Fiona", "base")
 Player: Fair enough.
 Player: I usually take my late nights in the library instead of the lab. Unless I absolutely need to be here.
 if Flags.get_level_flag("party_companion_staged") == true:
+	# the same mock scolding as when she woke Fiona (hand up), mouth shut while Fiona answers
+	do actor_change("Layla", "scolding")
 	Layla: Which you shouldn't be doing at all!
 	Layla: Nights are for rest and recovery!
+	do actor_change("Layla", "stern")
 	Player: Yeah, yeah. I know.
 	He watches the two of you for a beat longer than the exchange warrants.
+	do actor_change("Jayce", "talk")
 	Jayce: Aww, what a bunch of lovebirds y'all are.
 	Jayce: How 'bout a sleepover, huh? Bet you girls do those all the time.
+	do actor_change("Jayce", "creepy")
 	Jayce: Bet it smells nice in there in the sheets with you two.
+	do actor_change("Layla", "asking")
 	Layla: ...Sorry?
+	do actor_change("Layla", "annoyed")
+	do actor_change("Jayce", "talk")
 	Jayce: Oh, don't mind it, sweetheart.
 	Jayce: It's just that looking at how much you care for each other has gotten me a lil' bit...
+	do actor_change("Jayce", "creepy")
 	Jayce: Excited.
 	#Fiona turns to Layla
+	do actor_change("Jayce", "base")
 	do party_huddle()
+	do actor_change("Layla", "whining")
 	Layla: Fiona! This man is hella creepy! Let's get away from him!
+	do actor_change("Layla", "huffy")
+	do actor_change("Fiona", "suspicious")
 	Player: Don't worry. People like him can be made useful.
+	do actor_change("Layla", "asking")
 	Layla: What do you mean?
+	do actor_change("Layla", "attentive")
 	Player: Don't know yet. But you'll see soon.
 	if Flags.get_game_counter("layla_closeness") < 0:
+		do actor_change("Layla", "sad")
 		Layla: ...If you say so.
+		do actor_change("Layla", "downcast")
 	else
+		do actor_change("Layla", "talking")
 		Layla: Hmm. If you say so, Fiona.
+		do actor_change("Layla", "neutral")
 	do party_unhuddle()
+	# step 2.404: she turns back to Jayce all innocence, hands behind her back
+	do actor_change("Fiona", "hands_back")
+	do actor_change("Layla", "annoyed")
+	do actor_change("Jayce", "talk")
+	# step 2.415: a wolf whistle
+	do SoundManager.play_sfx("whistle")
 	Jayce: What are you two hot things whisperin' about?
+	do actor_change("Jayce", "base")
 	Player: Nothing you need to worry about.
+do actor_change("Jayce", "talk")
 Jayce: Anyway. I'll let you get back to it.
 Jayce: You know where to find me.
+do actor_change("Jayce", "base")
+do actor_change("Fiona", "base")
 Player: Sure.
 => hub
 
 ~ lab_access
 if Flags.get_level_flag("jayce_date_hint_given") == true:
 	=> lab_access_again
+do actor_change("Fiona", "explain")
 Player: Hey. As maintenance, you must have access to all the rooms in this building, right?
+do actor_change("Jayce", "talk")
 Jayce: Sure do. Got my keycard right here.
+do actor_change("Jayce", "base")
+# step 2.404: his keycard, held up beside him for a few lines
+do actor_item("Jayce", "keycard")
 He whips a keycard out of his front pocket.
+do actor_change("Jayce", "talk")
 Jayce: Can get into any darn room with this thing.
 Jayce: Well... most of 'em. Keypad rooms, not so much.
 Jayce: Why? Wanna break into some place you're not supposed to be, sugar?
+do actor_change("Jayce", "base")
+do actor_item_hide("Jayce")
 Player: Not really. We want to get into our own lab. But the password seems to have been changed.
+do actor_change("Jayce", "talk")
 Jayce: Huh? Has it? It was the same yesterday.
 Jayce: Good ol' freedom day. Seen ya professor punch it in a hundred times.
+do actor_change("Jayce", "base")
 Player: That's what we tried, but it doesn't seem to work now.
 Player: And we've got urgent work that needs to be done in there.
+do actor_change("Jayce", "talk")
 Jayce: Well, too damn bad, sweetie. Looks like it can't be helped.
 Jayce: The keypad enforces a password change once every year.
 Jayce: Suppose it was yesterday it asked for one, and ya professor obliged.
 Jayce: And my card don't do nothin' for it.
+do actor_change("Jayce", "base")
 if Flags.get_level_flag("party_companion_staged") == true:
+	do actor_change("Layla", "surprised")
 	do actor_effect("Layla", "jump")
 	Layla: No way!
+	do actor_change("Layla", "sad")
 	do actor_effect("Layla", "tremble")
 	Layla: Fiona! What should we do now?
 	if Flags.get_game_counter("layla_closeness") >= 0:
+		do actor_change("Layla", "whining")
 		Layla: Should I let go of my goals?
 		Layla: Do I belong in the streets?
+		do actor_change("Layla", "huffy")
 		Player: No.
+		do actor_change("Fiona", "shrug")
 		Player: I mean, I don't know. But probably not?
+	else
+		do actor_change("Layla", "downcast")
+do actor_change("Fiona", "thinking")
 Player: There's gotta be something we can do still.
+do actor_change("Fiona", "explain")
 Player: So hey, Jayce. Jayce it was, right?
 Player: Jayce, can you tell us anything about the previous passwords?
 Player: You know, before this one?
 Player: Maybe there's a pattern here we can uncover.
+do actor_change("Jayce", "talk")
 Jayce: Well, babe, I been here three years.
 Jayce: And while I don't remember no old passwords digit by digit...
 Jayce: I do remember all of 'em been some kind of a date.
 Jayce: Easier for your professor to remember, I reckon.
+do actor_change("Jayce", "base")
 if Flags.get_level_flag("party_companion_staged") == true:
+	do actor_change("Layla", "talking")
 	Layla: That's true.
 	Layla: I've noticed the professor randomly drops dates into conversation.
+	do actor_change("Layla", "happy_talk")
 	Layla: He's definitely a nerd that way.
+do actor_change("Layla", "neutral")
+do actor_change("Fiona", "thinking")
 Player: I see...
 Player: If... if all his previous passwords have been dates...
 Player: It IS likely the new one is too.
 if Flags.get_level_flag("party_companion_staged") == true:
+	do actor_change("Layla", "asking")
 	Layla: But what could it be, Fiona?
+do actor_change("Layla", "attentive")
+do actor_change("Fiona", "shrug")
 Player: Not sure. We'll have to look around. There might be clues here.
+do actor_change("Layla", "annoyed")
+do actor_change("Jayce", "creepy")
+# step 2.415: and another
+do SoundManager.play_sfx("whistle")
 Jayce: Love the go-getter attitude. It's hot on ya, blondie.
+do actor_change("Jayce", "talk")
 Jayce: Tell ol' Jayce one thing, though. Why not just call ya professor and ask him for it?
 do Flags.set_level_flag("jayce_date_hint_given", true)
+do actor_change("Jayce", "base")
 if Flags.get_level_flag("party_companion_staged") == true:
+	do actor_change("Layla", "sad")
 	do actor_effect("Layla", "slump")
 	Layla: Well, we could do that...
 	do actor_effect("Layla", "tremble")
 	Layla: But I'd rather not.
+	do actor_change("Layla", "hesitant")
 	Layla: I don't even want him thinking for a second I got the sequencing done today.
 	Layla: According to him, it was done days ago!
+	do actor_change("Layla", "troubled")
+	do actor_change("Jayce", "creepy")
 	Jayce: I'll sequence you if you lemme, girl.
+	do actor_change("Layla", "scolding")
 	do actor_effect("Layla", "shock")
 	Layla: OH. MY. GOD. Shut up!
+	do actor_change("Layla", "stern")
+	do actor_change("Jayce", "base")
+	do actor_change("Fiona", "base")
 	Player: It's alright. Never mind, Jayce. We'll look around and see what we can do.
+	do actor_change("Jayce", "talk")
 	Jayce: Sure thing. All the best, blondie and brownie.
+	do actor_change("Jayce", "base")
 	do party_huddle()
+	do actor_change("Layla", "angry_talk")
 	Layla: So, I hate him.
+	do actor_change("Layla", "angry")
 	Player: I know, but let's keep it cool with him.
 	Player: Never know if he could turn out helpful.
+	if Flags.get_game_counter("layla_closeness") < 0:
+		do actor_change("Layla", "sad")
+	else
+		do actor_change("Layla", "talking")
 	do actor_effect("Layla", "slump")
 	if Flags.get_game_counter("layla_closeness") < 0:
 		Layla: Fine.
+		do actor_change("Layla", "downcast")
 	else
 		Layla: Ugh. Okay, Fiona. I'll try.
+		do actor_change("Layla", "explaining_talk")
 		Layla: But only because you insist!
+		do actor_change("Layla", "explaining")
 	Player: Thanks, Layla.
+	do actor_change("Fiona", "explain")
 	Player: Anyway. We should look for clues. Stuff around the building. Anything that pertains to Professor Greene.
 	Player: And can lead us to a date.
+	do actor_change("Layla", "excited")
 	Layla: Alright, let's do this!
+	do actor_change("Layla", "eager")
+	do actor_change("Fiona", "shrug")
 	Player: I'm letting you know this, though. It's probably a long shot.
 	Player: He may not have even set a date as the passcode.
 	if Flags.get_game_counter("layla_closeness") >= 0:
+		do Flags.set_level_flag("fiona_said_nine_half", true)
+		do actor_change("Fiona", "explain")
 		Player: I would rate our chances of success at approximately...
 		Player: Nine and a half percent!
+		do actor_change("Layla", "wowed")
 		do actor_effect("Layla", "jump")
 		Layla: NINE AND A HALF!
+		do actor_change("Layla", "impressed")
 		Layla: So precise! I bet you used some complicated formula in your mind to come to that number!
+		do actor_change("Layla", "suggesting")
 		Player: Yeah.
+		do actor_change("Fiona", "shy")
 		Player: (I pulled that outta my ass. She takes everything I say at face value.)
+		do actor_change("Layla", "happy_talk")
 		Layla: Regardless, I'll take those chances.
 		Layla: It's all that I can do right now!
+		do actor_change("Layla", "excited")
 		Layla: Put my trust in my prodigious mentor!
+		do actor_change("Layla", "eager")
 		Player: Yeah, yeah.
 	else
+		do actor_change("Layla", "sad")
 		Layla: Then we'd better start.
+		do actor_change("Layla", "downcast")
+	do actor_change("Fiona", "base")
 	Player: Anyway, let's go.
 	do party_unhuddle()
+	# step 2.375: the elevators open from here (ui/elevator_panel.gd, TRAVEL_UNLOCK_FLAG)
+	do show_hint_banner("New floors may be accessible through the elevator.")
+	do SoundManager.fade_out_music(2.0)
 	=> END
 
 else
 	# step 2.227: no solo playthrough (Layla is always with Fiona). fallback only, so the branch stays valid.
 	Player: This is a template line.
+	do show_hint_banner("New floors may be accessible through the elevator.")
+	do SoundManager.fade_out_music(2.0)
 	=> END
 
 ~ lab_access_again
+do actor_change("Jayce", "talk")
 Jayce: Still locked out, huh, blondie?
+do actor_change("Jayce", "base")
 Player: Working on it.
 => jayce_return_hub
 
 ~ jayce_return_hub
+do actor_change("Layla", "suspicious")
+do actor_change("Jayce", "base")
+do actor_change("Fiona", "base")
 What do you want to ask him?
 - Ask him about his life.
 	=> jayce_life
 - Ask him where you should look.
 	=> jayce_where_to_look
+- Ask him about his keycard. [Proceed] [if Flags.get_level_flag("greene_office_keycard_talk_seen") == true and Flags.get_level_flag("greene_office_unlocked") == false]
+	=> jayce_keycard
 - That's all. [Leave]
 	=> leave
 
 ~ jayce_life
 Player: So, Jayce. How long have you been mopping these halls?
+do actor_change("Jayce", "talk")
 Jayce: Long enough to know which doors stick, sugar.
 Jayce: Nights mostly. Quiet.
+do actor_change("Jayce", "creepy")
 Jayce: Nobody there to watch the watcher.
+do actor_change("Fiona", "suspicious")
 Player: Hmm. That's... comforting.
 if Flags.get_level_flag("party_companion_staged") == true:
+	do actor_change("Layla", "troubled")
 	Behind you, Layla winces.
 => jayce_return_hub
 
 ~ jayce_where_to_look
-do Flags.set_level_flag("jayce_pointed_to_biochem", true)
+do actor_change("Fiona", "thinking")
 Player: If you were us, where would you start looking?
+do actor_change("Jayce", "talk")
 Jayce: Dunno, sugar. But since ya can't call the man himself...
 Jayce: Ain't there any other of y'all lil science nerds working in your lab who could help ya?
+# step 2.272: already asked julian -> short version (and no jayce_pointed_to_biochem; they have his lead).
+if Flags.get_level_flag("julian_password_asked") == true:
+	=> jayce_where_to_look_julian_asked
+do Flags.set_level_flag("jayce_pointed_to_biochem", true)
+do actor_change("Jayce", "base")
+do actor_change("Fiona", "base")
 Player: Not really. It's just us who work in this lab.
 Player: Well, apart from the professor himself, obviously.
 if Flags.get_level_flag("party_companion_staged") == true:
 	do party_huddle()
-	Layla: Fiona, what about someone from the Biochem lab?
-	Layla: I imagine the departments cross-collaborate a lot, don't they?
-	Layla: Surely someone from there must know something, right?
-	Player: Well, there's one guy from that department who's entered our lab multiple times to talk to Professor Greene.
-	Player: He doesn't usually come around at this hour.
-	Player: And anyway, he visits us infrequently.
-	Player: Not a high chance he was in here yesterday evening.
-	Layla: Oh. I see.
-	Player: Regardless, if he is around, I suppose we could ask him about it.
-	Player: Even though I'd rather not.
-	Layla: You'll see.
+	if Flags.get_level_flag("julian_intro_seen") == true:
+		# step 2.272: they've met julian (his intro), so layla names him and knows fiona can't stand him.
+		do actor_change("Layla", "asking")
+		Layla: I suppose we could ask Julian?
+		Layla: I imagine he must visit the genomics lab often. To cross-collaborate?
+		do actor_change("Layla", "attentive")
+		do actor_change("Fiona", "suspicious")
+		Player: Ugh.
+		Layla studies your face, as if listening for the part you didn't say out loud.
+		do actor_change("Layla", "hesitant")
+		Layla: Oh... right. You two don't really get along.
+		do actor_change("Layla", "touched")
+		do actor_change("Fiona", "shrug")
+		Player: Ding-ding-ding.
+		Player: Anyway, what the hell. Sure.
+		Player: We'll ask him, I guess.
+	else
+		do actor_change("Layla", "asking")
+		Layla: Fiona, what about someone from the Biochem lab?
+		Layla: I imagine the departments cross-collaborate a lot, don't they?
+		do actor_change("Layla", "explaining_talk")
+		Layla: Surely someone from there must know something, right?
+		do actor_change("Layla", "explaining")
+		do actor_change("Fiona", "hands_back")
+		Player: Well, there's one guy from that department who's entered our lab multiple times to talk to Professor Greene.
+		Player: He doesn't usually come around at this hour.
+		Player: And anyway, he visits us infrequently.
+		Player: Not a high chance he was in here yesterday evening.
+		do actor_change("Layla", "talking")
+		Layla: Oh. I see.
+		do actor_change("Layla", "neutral")
+		Player: Regardless, if he is around, I suppose we could ask him about it.
+		do actor_change("Fiona", "shy")
+		Player: Even though I'd rather not.
+		do actor_change("Layla", "happy_talk")
+		Layla: You'll see.
+		do actor_change("Layla", "neutral")
 	do party_unhuddle()
+	# step 2.404: and again, turning back to him after talking about Julian
+	do actor_change("Fiona", "hands_back")
+	do actor_change("Jayce", "talk")
 	Jayce: Well, glad I could help you ladies with that.
 else
 	# step 2.227: no solo playthrough (Layla is always with Fiona). fallback only, so the branch stays valid.
 	Player: This is a template line.
+do actor_change("Jayce", "base")
+do actor_change("Fiona", "hands_back")
 Player: Right. Thanks.
 => jayce_return_hub
 
+~ jayce_where_to_look_julian_asked
+# step 2.272: they've already asked julian for help.
+do actor_change("Jayce", "base")
+do actor_change("Fiona", "hands_back")
+Player: Well, there's this one guy who works in the OTHER lab.
+Player: We've already asked him for his help.
+do actor_change("Jayce", "talk")
+Jayce: Right.
+Jayce: Welp, in that case I'm afraid I can't help you two ladies much.
+Jayce: Sorry, sugars.
+if Flags.get_level_flag("party_companion_staged") == true:
+	do actor_change("Layla", "asking")
+	do actor_change("Jayce", "base")
+	Layla: Did you just say sugars?
+	do actor_change("Layla", "annoyed")
+	do actor_change("Jayce", "talk")
+	Jayce: Yep.
+	# a closed-mouth "Ugh" on purpose (puffed cheeks)
+	do actor_change("Layla", "fuming")
+	do actor_change("Jayce", "base")
+	Layla: Ugh.
+do actor_change("Jayce", "base")
+do actor_change("Fiona", "base")
+Player: Right. Thanks.
+=> jayce_return_hub
+
+~ jayce_keycard
+# step 2.273: after the office-door talk (greene_office.dialogue, ~ office_locked_keycard).
+# jayce refuses on principle, then the choice. both routes are stubs until the next step.
+do actor_change("Fiona", "explain")
+Player: Hey, Jayce. That keycard you mentioned earlier...
+Player: Could we borrow that quickly? Just for a few minutes?
+do actor_change("Jayce", "talk")
+Jayce: Huh? My keycard, ya say...
+Jayce: Why'd ya want that now? Tell me, what are you two birds plottin'?
+do actor_change("Jayce", "base")
+do actor_change("Fiona", "hands_back")
+Player: We... actually need to look into the professor's office.
+Player: For, you know, clues.
+do actor_change("Jayce", "talk")
+Jayce: Damn, girl. Didn't know ya were that desperate.
+Jayce: Well, sucks to be ya, I guess.
+Jayce: As the guardian of these sacred halls of education and advancement...
+Jayce: Afraid I can't allow that.
+do actor_change("Jayce", "base")
+if Flags.get_level_flag("party_companion_staged") == true:
+	do actor_change("Layla", "explaining_talk")
+	Layla: C'mon! Just this once!
+	Layla: We promise we'll make it quick.
+	do actor_change("Layla", "stern")
+	do actor_change("Jayce", "talk")
+	Jayce: Heh. You wish, brownie fudge.
+do actor_change("Jayce", "talk")
+Jayce: Unfortunately, ol' Jayce here believes in followin' the law.
+Jayce: Besides, what's in it for me? Nothin'!
+do actor_change("Jayce", "creepy")
+Jayce: Two hot babes beggin' me for somethin', and I can't even...
+- Flash him. [matters]
+	=> jayce_keycard_flash
+- Show him his camera. [matters] [if Inventory.has_item("jayce_camera") == true]
+	=> jayce_keycard_blackmail
+- Find another way. [if Inventory.has_item("jayce_camera") == false]
+	=> jayce_keycard_other_way
+
+~ jayce_keycard_flash
+# step 2.274: the seduction route. fiona flashes him (off-screen); he unlocks dr. greene's office and
+# leaves for the day. sets jayce_flashed (chapter memory -> kb_jayce_flashed for the car ride),
+# greene_office_unlocked and jayce_gone (the level removes him from his post when this dialogue ends).
+do actor_change("Jayce", "base")
+do actor_change("Fiona", "suspicious")
+Player: (Yep... only one way to get sleazebags like him to do anything.)
+do actor_change("Layla", "surprised")
+You clutch the lower half of your crop top and pull it up.
+# step 2.402: fiona's flash pose (her rig's flash body).
+# (Layla's cues: step 2.374. Jayce's: step 2.395.)
+# step 2.404: his theme stops dead at the flash, with the record winding down (the fade as he leaves
+# brings the ambience back)
+do SoundManager.cut_music()
+do SoundManager.play_sfx("vinyl_stop", 1.0, 0.0, "Main Music")
+do actor_change("Fiona", "flash")
+do actor_change("Jayce", "stunned")
+do actor_effect("Jayce", "shock")
+Jayce: They're...
+if Flags.get_level_flag("party_companion_staged") == true and Flags.get_game_counter("layla_closeness") >= 0:
+	# close / neutral: she short-circuits (her funny face, with the red flush)
+	do actor_change("Layla", "funny_face")
+	do actor_effect("Layla", "shock")
+	Layla: So...
+	Layla and Jayce: Perfect!!!
+else
+	Jayce: ...Perfect.
+	if Flags.get_level_flag("party_companion_staged") == true:
+		do actor_change("Layla", "downcast")
+		do actor_effect("Layla", "turn_away")
+		Layla looks away.
+do Flags.set_level_flag("jayce_flashed", true)
+if Flags.get_game_counter("layla_closeness") >= 0:
+	do actor_change("Layla", "flustered")
+do actor_change("Fiona", "base")
+You pull your top back down.
+Player: Well, there you have it.
+do actor_change("Jayce", "sorry")
+do actor_change("Fiona", "explain")
+Player: You got something out of this.
+Player: Here's what you'll do now: You'll go up and unlock Professor Greene's office for us.
+Player: Then, you'll go back to your place. Immediately.
+Player: We don't want you around here anymore. At least for the rest of the day.
+do actor_change("Jayce", "sorry_talk")
+Jayce: Y-yes, ma'am.
+Jayce: That's what I'll do.
+do actor_change("Jayce", "sorry")
+do actor_change("Fiona", "suspicious")
+Player: (Huh... he's agreeable all of a sudden.)
+do Flags.set_level_flag("jayce_gone", true)
+do SoundManager.fade_out_music(2.0)
+do party_dismiss()
+Jayce scurries away, practically hopping.
+do Flags.set_level_flag("greene_office_unlocked", true)
+do Flags.set_level_flag("greene_office_entry_pending", true)
+if Flags.get_level_flag("party_companion_staged") == true:
+	if Flags.get_game_counter("layla_closeness") < 0:
+		do actor_change("Layla", "sad")
+		Layla: ...You really did that.
+		do actor_change("Layla", "downcast")
+		do actor_change("Fiona", "shy")
+		Player: Yep. Sorry if that bothered you.
+		Layla avoids your eyes.
+		do actor_change("Layla", "sad")
+		Layla: It's fine.
+		do actor_change("Layla", "downcast")
+		do actor_change("Fiona", "base")
+		Player: Let's go, then?
+		do actor_change("Layla", "sad")
+		Layla: Sure.
+	else
+		Layla: Fiona! You really just... did that!
+		do actor_change("Fiona", "shy")
+		Player: Yep. Sorry if that bothered you.
+		do actor_change("Layla", "bashful")
+		do actor_effect("Layla", "shy")
+		Layla shuffles her feet shyly.
+		do actor_change("Layla", "bashful_talk")
+		Layla: No, no. Not at all.
+		do actor_change("Layla", "bashful")
+		do actor_change("Fiona", "base")
+		Player: Let's go, then?
+		do actor_change("Layla", "bashful_talk")
+		Layla: Yes...
+else
+	# step 2.227: no solo playthrough (Layla is always with Fiona). fallback only, so the branch stays valid.
+	Player: This is a template line.
+=> END
+
+~ jayce_keycard_blackmail
+# step 2.275: the blackmail route, with jayce's camera in hand. he unlocks dr. greene's office and leaves
+# for the day. sets jayce_camera_seen (chapter memory -> kb_jayce_camera_seen for the car ride),
+# greene_office_unlocked and jayce_gone. fiona keeps the camera.
+do actor_change("Jayce", "base")
+do actor_change("Fiona", "suspicious")
+Player: Well, you don't have much of a choice, you see?
+# step 2.374: Layla enjoys this (a smug side glance)
+do actor_change("Layla", "smug")
+# step 2.396: the camera comes out and his theme stops dead, with a record winding down (on the music bus,
+# so it sits at the music's level). the silence holds until he leaves.
+do SoundManager.cut_music()
+do SoundManager.play_sfx("vinyl_stop", 1.0, 0.0, "Main Music")
+do actor_change("Fiona", "explain")
+# step 2.404: the camera, held up beside her until he gives in
+do actor_item("Fiona", "camera")
+Player: We did some looking around, and we came across this lil thing.
+do actor_change("Jayce", "sorry")
+do actor_change("Fiona", "suspicious")
+Player: We know what's in it, and we know what kind of a man you are.
+Player: So here is what you're gonna do now.
+Player: You're gonna go up and unlock that door for us.
+Player: And then, you'll end your shift and go home.
+Player: 'Cause frankly, I've had enough of your fucking bullshit, Jayce.
+Jayce takes a long pause.
+do actor_change("Jayce", "sorry_talk")
+Jayce: Sure. I'll do that.
+Jayce: Just... don't go showin' that to nobody now, will ya?
+do actor_change("Jayce", "sorry")
+do actor_change("Fiona", "base")
+do actor_item_hide("Fiona")
+Player: On your way, Jayce.
+do Flags.set_level_flag("jayce_gone", true)
+# step 2.396: nothing is playing after the record scratch; this brings the corridor's ambience back up
+do SoundManager.fade_out_music(2.0)
+do party_dismiss()
+Jayce slips away silently.
+do Flags.set_level_flag("jayce_camera_seen", true)
+do Flags.set_level_flag("greene_office_unlocked", true)
+do Flags.set_level_flag("greene_office_entry_pending", true)
+if Flags.get_level_flag("party_companion_staged") == true:
+	if Flags.get_game_counter("layla_closeness") < 0:
+		do actor_change("Layla", "talking")
+		Layla: ...Good. He had it coming.
+		do actor_change("Layla", "neutral")
+		do actor_change("Fiona", "shrug")
+		Player: I just did what I had to do to get things going our way, Layla.
+		Player: If something else was required, I would've done that too.
+		do actor_change("Layla", "hesitant")
+		Layla: ...Thanks. For doing that.
+		do actor_change("Layla", "touched")
+		do actor_change("Fiona", "base")
+		Player: Don't mention it.
+		Player: Anyway, let's go?
+		do actor_change("Layla", "hesitant")
+		Layla: Let's go.
+	else
+		do actor_change("Layla", "excited")
+		do actor_effect("Layla", "jump")
+		Layla: Fiona! Wow! That was amazing!
+		Layla: You've really taught him a lesson!
+		do actor_change("Layla", "eager")
+		do actor_change("Fiona", "shrug")
+		Player: I just did what I had to do to get things going our way, Layla.
+		Player: If something else was required, I would've done that too.
+		if Flags.get_game_counter("layla_closeness") >= 3:
+			do actor_change("Layla", "admiring")
+			Layla: You're...
+			do actor_change("Layla", "warm")
+			do actor_change("Fiona", "suspicious")
+			Player: Sorry?
+			# happy tears with her blush, then the same with her mouth shut while Fiona answers
+			do actor_change("Layla", "happy_tears")
+			Layla: You're the most amazing person ever, Fiona.
+			do actor_change("Layla", "teary_smile")
+			Player: Doubt it.
+		else
+			do actor_change("Layla", "admiring")
+			Layla: That was... really something, Fiona.
+			do actor_change("Layla", "warm")
+			do actor_change("Fiona", "base")
+			Player: Heh. If you say so.
+		do actor_change("Fiona", "base")
+		Player: Anyway, let's go?
+		do actor_change("Layla", "excited")
+		Layla: Let's go!
+else
+	# step 2.227: no solo playthrough (Layla is always with Fiona). fallback only, so the branch stays valid.
+	Player: This is a template line.
+=> END
+
+~ jayce_keycard_other_way
+# step 2.276: no camera yet. fiona backs off; she and layla decide to find dirt on him.
+# sets jayce_keycard_refused (hub: "Show him his camera." once they carry it).
+do actor_change("Jayce", "base")
+do actor_change("Fiona", "suspicious")
+Player: (I don't like his tone...)
+do actor_change("Fiona", "base")
+Player: You know what? Never mind.
+Player: I'll be back in a bit, probably.
+do actor_change("Jayce", "talk")
+Jayce: I'll be waitin'.
+do SoundManager.fade_out_music(2.0)
+do party_dismiss()
+do Flags.set_level_flag("jayce_keycard_refused", true)
+if Flags.get_level_flag("party_companion_staged") == true:
+	if Flags.get_game_counter("layla_closeness") < 0:
+		do actor_change("Layla", "sad")
+		Layla: Doesn't look like he's gonna help us.
+		do actor_change("Layla", "downcast")
+	else
+		do actor_change("Layla", "hesitant")
+		Layla: What now, Fiona? It doesn't seem like he's gonna help us.
+		do actor_change("Layla", "troubled")
+	do actor_change("Fiona", "suspicious")
+	Player: Oh, we'll MAKE him.
+	Player: We just gotta find some dirt on him.
+	do actor_change("Fiona", "thinking")
+	Player: Let's think... where would a janitor keep his belongings in this building?
+	do actor_change("Layla", "hesitant")
+	Layla: Fiona... are you sure about doing something like that?
+	do actor_change("Layla", "troubled")
+	do actor_change("Fiona", "suspicious")
+	Player: Absolutely. I hate his guts.
+	do actor_change("Layla", "pensive")
+	Layla contemplates for a second.
+	if Flags.get_game_counter("layla_closeness") < 0:
+		do actor_change("Layla", "talking")
+		Layla: ...Fine. He deserves it, anyway, I guess.
+		do actor_change("Layla", "neutral")
+	else
+		do actor_change("Layla", "excited")
+		do actor_effect("Layla", "jump")
+		Layla: Okay! Let's do it! We'll show him.
+		do actor_change("Layla", "eager")
+	do actor_change("Fiona", "base")
+	Player: Hell yeah. Let's go.
+else
+	# step 2.227: no solo playthrough (Layla is always with Fiona). fallback only, so the branch stays valid.
+	Player: This is a template line.
+=> END
+
+~ jayce_keycard_camera_return
+# step 2.276: back with the camera after "find another way". bridges into the blackmail route.
+Player: So, about that keycard...
+do actor_change("Jayce", "talk")
+Jayce: Back already, sugar? Told ya. Ain't nothin' in it for me.
+=> jayce_keycard_blackmail
+
 ~ leave
+do actor_change("Jayce", "talk")
 Jayce: Suit yourself.
+do SoundManager.fade_out_music(2.0)
 => END

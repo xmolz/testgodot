@@ -1,0 +1,300 @@
+{
+	"base_slot": "body",
+	"character": "fiona",
+	"size": [
+		1027,
+		1376
+	],
+	"slots": [
+		{
+			"default": "hand_on_hip",
+			"name": "body",
+			"order": 1,
+			"variants": {
+				"both_hands_up": {
+					"file": "fiona_body @both_hands_up.png",
+					"pos": [
+						0,
+						0
+					],
+					"size": [
+						1027,
+						1376
+					]
+				},
+				"finger_on_chin": {
+					"file": "fiona_body @finger_on_chin.png",
+					"pos": [
+						0,
+						0
+					],
+					"size": [
+						1027,
+						1376
+					]
+				},
+				"flash": {
+					"file": "fiona_body @flash.png",
+					"pos": [
+						0,
+						0
+					],
+					"size": [
+						1027,
+						1376
+					]
+				},
+				"hand_on_hip": {
+					"file": "fiona_body @hand_on_hip.png",
+					"pos": [
+						0,
+						0
+					],
+					"size": [
+						1027,
+						1376
+					]
+				},
+				"hand_up": {
+					"file": "fiona_body @hand_up.png",
+					"pos": [
+						0,
+						0
+					],
+					"size": [
+						1027,
+						1376
+					]
+				},
+				"hands_back": {
+					"file": "fiona_body @hands_back.png",
+					"pos": [
+						0,
+						0
+					],
+					"size": [
+						1027,
+						1376
+					]
+				},
+				"jacket": {
+					"file": "fiona_body @jacket.png",
+					"pos": [
+						0,
+						0
+					],
+					"size": [
+						1027,
+						1376
+					]
+				},
+				"nude_hand_on_hip": {
+					"file": "fiona_body @nude_hand_on_hip.png",
+					"pos": [
+						0,
+						0
+					],
+					"size": [
+						1027,
+						1376
+					]
+				},
+				"nude_hands_back": {
+					"file": "fiona_body @nude_hands_back.png",
+					"pos": [
+						0,
+						0
+					],
+					"size": [
+						1027,
+						1376
+					]
+				},
+				"nude_one_arm": {
+					"file": "fiona_body @nude_one_arm.png",
+					"pos": [
+						0,
+						0
+					],
+					"size": [
+						1027,
+						1376
+					]
+				}
+			}
+		},
+		{
+			"default": "neutral",
+			"name": "head",
+			"order": 2,
+			"variants": {
+				"neutral": {
+					"file": "fiona_head @neutral.png",
+					"pos": [
+						306,
+						8
+					],
+					"size": [
+						416,
+						439
+					]
+				},
+				"sad": {
+					"file": "fiona_head @sad.png",
+					"pos": [
+						306,
+						8
+					],
+					"size": [
+						416,
+						439
+					]
+				},
+				"smile": {
+					"file": "fiona_head @smile.png",
+					"pos": [
+						306,
+						8
+					],
+					"size": [
+						416,
+						439
+					]
+				},
+				"suspicious": {
+					"file": "fiona_head @suspicious.png",
+					"pos": [
+						306,
+						8
+					],
+					"size": [
+						416,
+						439
+					]
+				},
+				"tilted": {
+					"file": "fiona_head @tilted.png",
+					"pos": [
+						320,
+						13
+					],
+					"size": [
+						421,
+						435
+					]
+				}
+			}
+		},
+		{
+			"default": "closed",
+			"name": "mouth",
+			"order": 3,
+			"variants": {
+				"closed": {
+					"file": "",
+					"pos": [
+						0,
+						0
+					],
+					"size": [
+						0,
+						0
+					]
+				},
+				"open": {
+					"file": "fiona_mouth @open.png",
+					"pos": [
+						561,
+						323
+					],
+					"size": [
+						49,
+						30
+					]
+				},
+				"smile_open": {
+					"file": "fiona_mouth @smile_open.png",
+					"pos": [
+						558,
+						320
+					],
+					"size": [
+						43,
+						41
+					]
+				},
+				"tilted_open": {
+					"file": "fiona_mouth @tilted_open.png",
+					"pos": [
+						556,
+						341
+					],
+					"size": [
+						46,
+						26
+					]
+				}
+			}
+		},
+		{
+			"default": "no_arm",
+			"name": "arm",
+			"order": 4,
+			"variants": {
+				"chin_hand": {
+					"file": "fiona_arm @chin_hand.png",
+					"pos": [
+						655,
+						353
+					],
+					"size": [
+						185,
+						456
+					]
+				},
+				"no_arm": {
+					"file": "",
+					"pos": [
+						0,
+						0
+					],
+					"size": [
+						0,
+						0
+					]
+				},
+				"nude_chin_hand": {
+					"file": "fiona_arm @nude_chin_hand.png",
+					"pos": [
+						655,
+						353
+					],
+					"size": [
+						185,
+						456
+					]
+				},
+				"nude_palm_up": {
+					"file": "fiona_arm @nude_palm_up.png",
+					"pos": [
+						713,
+						408
+					],
+					"size": [
+						306,
+						392
+					]
+				}
+			}
+		}
+	],
+	"source_canvas": [
+		1100,
+		1740
+	],
+	"source_origin": [
+		45,
+		364
+	],
+	"version": 1
+}

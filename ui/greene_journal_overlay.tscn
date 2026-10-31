@@ -6,7 +6,7 @@
 [sub_resource type="Resource" id="Resource_greene_page_1"]
 script = ExtResource("2_page")
 page_index = 0
-page_text = "Monday.
+page_text = "Thursday, 07/23.
 
 Our sequencers jammed up during today's experiments. Usually that would've meant another $150k spent on replacing them. But Fiona came up with a better solution. She flushed the clogged fluidics lines, recalibrated the flow cells by hand, and got them running again. She even fine-tuned the optics so we can capture our results more accurately than before."
 
@@ -22,7 +22,7 @@ I am going to spend the rest of the day watching movies."
 [sub_resource type="Resource" id="Resource_greene_tuesday_1"]
 script = ExtResource("2_page")
 page_index = 2
-page_text = "Tuesday.\n\nWoke up late today because I stayed up watching The White Moth. I can never get enough of her beauty in it. Such an honest performance. To say so much without saying a single word. The subtlety.\n\nIt's how I aim to do my science, too. More with less. I've lived a long life, and I'd like to think I've contributed a good deal to the field of genomics. But I now understand something quite important."
+page_text = "Friday, 07/24.\n\nWoke up late today because I stayed up watching The White Moth. I can never get enough of her beauty in it. Such an honest performance. To say so much without saying a single word. The subtlety.\n\nIt's how I aim to do my science, too. More with less. I've lived a long life, and I'd like to think I've contributed a good deal to the field of genomics. But I now understand something quite important."
 
 [sub_resource type="Resource" id="Resource_greene_tuesday_2"]
 script = ExtResource("2_page")
@@ -32,7 +32,7 @@ page_text = "I need to do MORE for science. Not by doing more OF science, but by
 [sub_resource type="Resource" id="Resource_greene_wednesday_1"]
 script = ExtResource("2_page")
 page_index = 4
-page_text = "Wednesday.
+page_text = "Monday, 07/27.
 
 One thing I like least about working in academia is the sheer amount of bureaucracy involved in getting your work done. Every department wants to get in the way. Finance asks about your funds. Marketing asks if we have anything worth bragging about on their site.
 
@@ -41,7 +41,7 @@ I am tired."
 [sub_resource type="Resource" id="Resource_greene_wednesday_2"]
 script = ExtResource("2_page")
 page_index = 5
-page_text = "I was even made to change the password to our lab today. Why couldn't this have waited till tomorrow? Regardless, I set it yet again as something easy to remember: her birth date. My inspiration.
+page_text = "I was even made to change the password to our lab today. Why couldn't this have waited till tomorrow? Regardless, I set it yet again as something easy to remember: her birth date. My inspiration. (Which coincidentally happens to be tomorrow.)
 
 But, well, I guess the day wasn't a complete waste. Our new RA, Layla, has been showing promise in the lab. I think I will start handing her more complex tasks from now on. About time Fiona had some help."
 

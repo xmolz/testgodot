@@ -65,3 +65,168 @@ else
 	# step 2.227: no solo playthrough (Layla is always with Fiona). fallback only, so the branch stays valid.
 	Player: This is a template line.
 => END
+
+~ miescher_discovery
+# step 2.269: the nuclein letter date failed on the lab keypad. staged in its own overlay
+# (miescher_keypad_advanced_overlay.tscn; the keypad closes first). every version unlocks 4F.
+do actor_enter("Fiona", "base", "left")
+do actor_enter("Layla", "base", "right")
+do actor_flip("Layla", true)
+# step 2.376: Layla's expressions (rig). she enters as "base"; this lands while she fades in. she's just
+# watched the code fail.
+do actor_change("Layla", "surprised")
+if Flags.get_level_flag("julian_password_asked") == true and (Flags.get_level_flag("miescher_book_date_seen") == true or Flags.get_level_flag("layla_phone_charged") == true):
+	=> miescher_natural
+# step 2.288: the date tried without the book page or the phone, or before julian's lead. fiona
+# decides on the office herself, then the scene joins layla's reaction to that idea.
+do actor_change("Fiona", "thinking")
+Player: You know, I don't know why...
+Player: But having this code fail makes me feel like we probably won't find the code here.
+do actor_change("Fiona", "explain")
+Player: We should probably look in his office. Cut to the chase.
+=> miescher_office_idea
+
+~ miescher_natural
+# the date came from the book page and/or layla's phone, after julian's lead.
+do actor_change("Fiona", "suspicious")
+Player: Huh. Seems like this... isn't it.
+if Flags.get_level_flag("miescher_book_date_seen") == true and Flags.get_level_flag("layla_phone_charged") == true:
+	Player: That's weird. The book and the internet both pointed toward this date.
+elif Flags.get_level_flag("layla_phone_charged") == true:
+	do actor_change("Layla", "whining")
+	Layla: No! But that... can't be. We literally looked it up!
+else
+	do actor_change("Fiona", "sad")
+	Player: I was so certain it would be this. I verified it through the book in the library.
+if Flags.get_game_counter("layla_closeness") < 0:
+	do actor_change("Layla", "sad")
+	Layla: So, what now?
+else
+	do actor_change("Layla", "whining")
+	do actor_effect("Layla", "tremble")
+	Layla: Oh no! What are we gonna do now?
+do actor_change("Layla", "sad")
+if Flags.get_level_flag("layla_phone_charged") == true:
+	Layla: Should I just... send an email to the professor? Requesting extra days?
+else
+	Layla: Should I email the professor once my phone's alive?
+do actor_change("Layla", "downcast")
+Player: ...
+# she looks up (same pose)
+do actor_change("Layla", "surprised")
+do actor_change("Fiona", "base")
+Player: No. We have another way.
+if Flags.get_game_counter("layla_closeness") < 0:
+	do actor_change("Layla", "sad")
+	Layla: Sure. Like what?
+	do actor_change("Layla", "downcast")
+else
+	do actor_change("Layla", "asking")
+	Layla: Really? What would that be, Fiona?
+	do actor_change("Layla", "attentive")
+do actor_change("Fiona", "explain")
+Player: We look for clues in his office?
+~ miescher_office_idea
+if Flags.get_game_counter("layla_closeness") < 0:
+	do actor_change("Layla", "angry_talk")
+	Layla: Listen, that's probably illegal.
+	Layla: Surely you must know that?
+	do actor_change("Layla", "angry")
+else
+	do actor_change("Layla", "wowed")
+	Layla: His... OFFICE?
+	# the comic shock (her funny set), then a fists-pout while Fiona talks her round
+	do actor_change("Layla", "funny_shock")
+	do actor_effect("Layla", "shock")
+	Layla: Nooooooo! That sounds so...
+	Layla: ILLEGAL.
+	do actor_change("Layla", "huffy")
+do actor_change("Fiona", "explain")
+Player: Maybe. But... if I remember correctly, there aren't any cameras on the faculty office floor.
+Player: And, there's barely anyone in this building anyway.
+Player: And, if I'm being really honest...
+do actor_change("Fiona", "shy")
+Player: I'm kinda having fun trying to break in.
+if Flags.get_game_counter("layla_closeness") < 0:
+	do actor_change("Layla", "suspicious")
+	Layla stares at you, unconvinced.
+	do actor_change("Layla", "sad")
+	Layla: Fine.
+	Layla: Just... don't drag me into it.
+	do actor_change("Layla", "downcast")
+else
+	do actor_change("Layla", "surprised")
+	Layla looks at you like a confused puppy trying to figure out what its human wants it to do.
+	do actor_change("Layla", "troubled")
+	Layla: Ummm... okay, Fiona.
+	do actor_change("Layla", "hesitant")
+	Layla: I just... don't want you to get into trouble for me.
+	do actor_change("Layla", "touched")
+do actor_change("Fiona", "shrug")
+Player: Fair. But honestly, there's no way they'll do anything to me.
+Player: The lab is way too dependent on me.
+Player: And even if the professor does find out, I'm sure I'll be able to wiggle my way out of it, somehow.
+do actor_change("Layla", "asking")
+Layla: You sound... like you're rather experienced in this regard.
+do actor_change("Layla", "attentive")
+do actor_change("Fiona", "shy")
+Player: Sometimes a girl's gotta do what she's gotta do, you know?
+do actor_change("Fiona", "base")
+Player: Let's go?
+if Flags.get_game_counter("layla_closeness") < 0:
+	do actor_change("Layla", "sad")
+	Layla: Fine. Let's go.
+else
+	do actor_change("Layla", "excited")
+	do actor_effect("Layla", "jump")
+	Layla: Let's go!
+do Flags.set_level_flag("faculty_floor_unlocked", true)
+do show_hint_banner("Floor 4F (Faculty Offices) is now accessible.")
+=> END
+
+# step 2.286: dates from threads of inheritance, either format. the day-first (_dm) versions add the
+# format thought. each date reacts once (keypad_panel.gd REACTION_FLAGS).
+~ miescher_birth
+Player: (Welp, so it's not Miescher's birthday.)
+Player: (Never mind, onto the next guess.)
+=> END
+
+~ miescher_birth_dm
+Player: (Welp, so it's not Miescher's birthday.)
+Player: (Never mind, onto the next guess.)
+Player: (Also, did I enter it in the right format? We do month first, here in America.)
+=> END
+
+~ miescher_death
+Player: (Welp, so it's not Miescher's death date.)
+Player: (Never mind, onto the next guess.)
+=> END
+
+~ miescher_death_dm
+Player: (Welp, so it's not Miescher's death date.)
+Player: (Never mind, onto the next guess.)
+Player: (Also, did I enter it in the right format? We do month first, here in America.)
+=> END
+
+~ double_helix
+Player: (Welp, so it's not the date the double helix was discovered.)
+Player: (Never mind, onto the next guess.)
+=> END
+
+~ double_helix_dm
+Player: (Welp, so it's not the date the double helix was discovered.)
+Player: (Never mind, onto the next guess.)
+Player: (Also, did I enter it in the right format? We do month first, here in America.)
+=> END
+
+# step 2.286: la marr's birth date, day first. the near miss.
+~ la_marr_day_first
+Player: (Shoot.)
+Player: (I could've sworn this was it.)
+Player: (Wait, did I enter it in the correct format? Month first?)
+=> END
+
+# step 2.286: the old code, entered on the panel.
+~ old_code
+Player: (Why... am I trying a code I know doesn't work?)
+=> END

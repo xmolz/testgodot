@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://b2e3dwujia32m"]
+
+[ext_resource type="PackedScene" path="res://conversation/layla_runs_away_overlay.tscn" id="1_overlay"]
+
+[node name="LaylaRunsAwayTest" unique_id=1735652697 instance=ExtResource("1_overlay")]
+autostart = true

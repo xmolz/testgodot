@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://cpfmbn6hqydab"
+path="res://.godot/imported/layla_runs_away.dialogue-f29c7201ac025351ec0c82f1a68e2fdf.tres"
+
+[deps]
+
+source_file="res://dialogue/layla_runs_away.dialogue"
+dest_files=["res://.godot/imported/layla_runs_away.dialogue-f29c7201ac025351ec0c82f1a68e2fdf.tres"]
+
+[params]
+
+defaults=true

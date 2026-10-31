@@ -29,6 +29,12 @@ var scene_cg: Node = null
 # dream haze intensity to arm before the portal flash clears. 0.0 = no dream.
 @export var prestage_dream: float = 0.0
 
+# step 2.326: optional room treatment, set per overlay. background_dim multiplies the background picture
+# (darker, without the milky look of a grey layer on top); vignette_strength (0..1) darkens the edges of
+# the picture. both sit under the characters, so the sprites keep their own colours.
+@export var background_dim: Color = Color(1, 1, 1, 1)
+@export_range(0.0, 1.0, 0.05) var vignette_strength: float = 0.0
+
 var _conversation_started: bool = false
 
 var active_actors: Dictionary = {}
@@ -121,6 +127,9 @@ func _ready():
 		if _eyelid_mat:
 			_eyelid_mat.set_shader_parameter("openness", 1.0)
 		eyelid_overlay.visible = false
+
+	# step 2.326: the room treatment, before anything is shown
+	_apply_room_treatment()
 
 	if autostart:
 		begin_conversation()
@@ -274,7 +283,7 @@ func actor_enter(actor_id: String, emotion: String, slot_name: String):
 		push_warning("Actor profile not found: " + actor_id)
 		return
 
-	var tex_path: String = profile.expressions.get(emotion, "")
+	var tex_path: String = _expression_path(profile, emotion)
 	if tex_path.is_empty():
 		push_warning("Emotion '" + emotion + "' not found for actor: " + actor_id)
 		return
@@ -347,12 +356,60 @@ func actor_change(actor_id: String, emotion: String) -> void:
 	if not profile:
 		return
 
-	var tex_path: String = profile.expressions.get(emotion, "")
+	var tex_path: String = _expression_path(profile, emotion)
 	if not tex_path.is_empty():
 		var tex: Texture2D = await _get_texture_async(tex_path)
 		if tex:
 			var rect: TextureRect = active_actors[actor_id]
 			rect.texture = tex
+			_apply_talking(actor_id)   # step 2.401: still mid-line? the new picture talks too
+
+
+# step 2.267: fast-forward safety (Ctrl held, or quick clicks). an effect or a focus/unfocus that
+# started while another was still tweening the same actor used to read the half-finished pose as
+# its resting pose, so the actor could stay floating, squashed, oversized or zoomed in. every
+# effect tween and the focus/unfocus tween are now tracked, and a new one settles the old first.
+var _actor_effect_tweens: Dictionary = {}   # actor_id -> Tween
+var _focus_tween: Tween = null
+
+
+# runs a tween to its end state at once (its callbacks fire), then stops it.
+func _finish_tween(t: Tween) -> void:
+	if t != null and t.is_valid():
+		t.custom_step(1000.0)
+	if t != null and t.is_valid():
+		t.kill()
+
+
+func _new_effect_tween(actor_id: String) -> Tween:
+	var t := create_tween()
+	_actor_effect_tweens[actor_id] = t
+	return t
+
+
+# finishes running effect tweens: one actor's, or everyone's when actor_id is "".
+func _settle_actor_effects(actor_id: String = "") -> void:
+	for id in _actor_effect_tweens.keys():
+		if actor_id == "" or id == actor_id:
+			_finish_tween(_actor_effect_tweens[id])
+			_actor_effect_tweens.erase(id)
+
+
+# step 2.415: Layla's hops (the jump and bounce effects) get a little jump sound now and then. a sound on
+# every hop got repetitive, so it never plays twice within HOP_SFX_GAP seconds, and each one is pitched a
+# touch higher or lower.
+const HOP_SFX := "jump_sound_effect"
+const HOP_SFX_GAP := 6.0
+var _last_hop_sfx_ms: int = -100000
+
+func _hop_sound(actor_id: String) -> void:
+	if actor_id != "Layla" or not SoundManager:
+		return
+	var now: int = Time.get_ticks_msec()
+	if now - _last_hop_sfx_ms < int(HOP_SFX_GAP * 1000.0):
+		return
+	_last_hop_sfx_ms = now
+	SoundManager.play_sfx(HOP_SFX, randf_range(0.94, 1.08))
 
 
 func actor_effect(actor_id: String, effect_name: String) -> void:
@@ -362,12 +419,22 @@ func actor_effect(actor_id: String, effect_name: String) -> void:
 
 	var rect: TextureRect = active_actors[actor_id]
 
+	# step 2.267: let anything still moving this actor land first, so the pose read below is real.
+	_settle_actor_effects(actor_id)
+	# step 2.375: remembered so a party stance change can tell whether this effect changes her size
+	_actor_effect_names[actor_id] = effect_name
+	_finish_tween(_focus_tween)
+	_focus_tween = null
+	_finish_tween(_party_stance_tween)
+	if _approach_tweens.has(actor_id):
+		_finish_tween(_approach_tweens[actor_id])
+
 	if effect_name == "shock":
 		var original_x = rect.position.x
 		var base_s = rect.scale
 		var peak_s = base_s * 1.05
 
-		var tween = create_tween()
+		var tween = _new_effect_tween(actor_id)
 		tween.tween_property(rect, "scale", peak_s, 0.05)
 		tween.tween_property(rect, "position:x", original_x + 15.0, 0.025)
 		tween.tween_property(rect, "position:x", original_x - 15.0, 0.05)
@@ -377,28 +444,30 @@ func actor_effect(actor_id: String, effect_name: String) -> void:
 		tween.tween_property(rect, "scale", base_s, 0.05)
 	elif effect_name == "jump":
 		# a hop: feet leave the stage line and land with a small bounce
+		_hop_sound(actor_id)   # step 2.415
 		var y0: float = rect.position.y
-		var t = create_tween()
+		var t = _new_effect_tween(actor_id)
 		t.tween_property(rect, "position:y", y0 - 70.0, 0.13).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 		t.tween_property(rect, "position:y", y0, 0.22).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
 	elif effect_name == "tremble":
 		# fast small side-to-side shiver, ends exactly where it started
 		var x0: float = rect.position.x
-		var t = create_tween()
+		var t = _new_effect_tween(actor_id)
 		for i in 10:
 			t.tween_property(rect, "position:x", x0 + (5.0 if i % 2 == 0 else -5.0), 0.035)
 		t.tween_property(rect, "position:x", x0, 0.035)
 	elif effect_name == "slump":
 		# shoulders drop: squash a little on y (bottom pivot keeps the feet planted), then recover
 		var s0: Vector2 = rect.scale
-		var t = create_tween()
+		var t = _new_effect_tween(actor_id)
 		# step 2.218: y only, so a turn/flip during the squash is not undone
 		t.tween_property(rect, "scale:y", s0.y * 0.955, 0.25).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 		t.tween_property(rect, "scale:y", s0.y, 0.7).set_delay(0.45).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	elif effect_name == "bounce":
 		# step 2.216: excited double hop
+		_hop_sound(actor_id)   # step 2.415
 		var yb: float = rect.position.y
-		var tb = create_tween()
+		var tb = _new_effect_tween(actor_id)
 		tb.tween_property(rect, "position:y", yb - 45.0, 0.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 		tb.tween_property(rect, "position:y", yb, 0.12).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 		tb.tween_property(rect, "position:y", yb - 28.0, 0.09).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
@@ -416,13 +485,13 @@ func actor_effect(actor_id: String, effect_name: String) -> void:
 			if is_instance_valid(rect):
 				var sx: float = -1.0 if rect.scale.x < 0.0 else 1.0
 				rect.scale = Vector2(sx * shy_base.x * f, shy_base.y * f)
-		var ts = create_tween()
+		var ts = _new_effect_tween(actor_id)
 		ts.tween_method(apply_shy, 1.0, 0.97, 0.22).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 		ts.tween_method(apply_shy, 0.97, 1.0, 0.8).set_delay(0.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	elif effect_name == "nod":
 		# step 2.216: two small dips on y
 		var s_nod: Vector2 = rect.scale
-		var tn = create_tween()
+		var tn = _new_effect_tween(actor_id)
 		for i in 2:
 			tn.tween_property(rect, "scale:y", s_nod.y * 0.982, 0.11).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 			tn.tween_property(rect, "scale:y", s_nod.y, 0.14).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
@@ -445,7 +514,7 @@ func actor_walk_in(actor_id: String, emotion: String, slot_name: String, scale_m
 		push_warning("Actor profile not found: " + actor_id)
 		return
 
-	var tex_path: String = profile.expressions.get(emotion, "")
+	var tex_path: String = _expression_path(profile, emotion)
 	if tex_path.is_empty():
 		push_warning("Emotion '" + emotion + "' not found for actor: " + actor_id)
 		return
@@ -491,6 +560,777 @@ func actor_walk_in(actor_id: String, emotion: String, slot_name: String, scale_m
 
 	var tween = create_tween()
 	tween.tween_property(rect, "position:x", target_pos.x, 0.6).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+
+
+# ---------------------------------------------------------------------------
+# step 2.326: gentle movement, for people walking into and around a room at an easy pace.
+#   actor_stroll_in("Fiona", "base", "center", 2.6)       walks in from the left edge (through a door),
+#                                                          fading in over her first steps
+#   actor_stroll_in("Layla", "base", "center_left", 2.2, "left", true)   ...flipped (mirrored) from the start,
+#                                                          e.g. so she faces the way she walks
+#   actor_stroll_to("Fiona", "right", 1.4)                 a few steps to another spot
+#   actor_stroll_out("Fiona", "right", 2.0)                walks off that side, fading out at the end
+# slots: "left", "center", "right" (the stage markers), "center_left", "center_right", or (step 2.327) a
+# number in quotes for a spot across the screen, 0 = left edge to 1 = right edge, e.g. "0.3".
+# step 2.333: or "x,y" for a spot across AND down, where her feet (the bottom of her sprite) go: "0.25,0.53".
+#   for depth: further back = smaller (size) and higher on screen. size is 1 = her normal height.
+#   actor_stroll_in("Fiona", "base", "0.22,0.53", 3.0, "right", true, 0.55, true)   small, behind the
+#       background occluder (background_occluder), so the sofa hides her below the line
+#   actor_stroll_to("Fiona", "0.5,0.62", 1.6, 0.8)    closer: moves down the screen and grows to 0.8
+# each eases in and out, with a slight walking bob, and the dialogue waits until the walk is done.
+const STROLL_BOB_PX := 6.0
+const STROLL_STEP_SECONDS := 0.5
+
+func _stroll_slot_feet(slot_name: String) -> Vector2:
+	# step 2.333: "x,y" - a spot across and down the screen (0..1 each)
+	if slot_name.contains(","):
+		var parts: PackedStringArray = slot_name.split(",")
+		if parts.size() == 2 and parts[0].strip_edges().is_valid_float() and parts[1].strip_edges().is_valid_float():
+			var vp: Vector2 = get_viewport().get_visible_rect().size
+			return Vector2(vp.x * parts[0].strip_edges().to_float(), vp.y * parts[1].strip_edges().to_float())
+	# step 2.327: a number is a spot across the screen: 0 = left edge, 1 = right edge (e.g. "0.3")
+	if slot_name.is_valid_float():
+		return Vector2(get_viewport().get_visible_rect().size.x * slot_name.to_float(), 1080)
+	match slot_name.to_lower():
+		"center_right":
+			return Vector2(1200, 1080)
+		"center_left":
+			return Vector2(720, 1080)
+	var marker = actor_stage.get_node_or_null("Slot" + slot_name.capitalize())
+	if not marker:
+		push_warning("Could not find slot marker: Slot" + slot_name.capitalize())
+		marker = actor_stage.get_node("SlotCenter")
+	return marker.position
+
+func _stroll_bob(rect: Control, base_y: float, duration: float, amplitude: float = STROLL_BOB_PX) -> void:
+	var steps: int = maxi(1, int(round(duration / STROLL_STEP_SECONDS)))
+	var half: float = duration / float(steps) * 0.5
+	var bob := create_tween()
+	for i in steps:
+		bob.tween_property(rect, "position:y", base_y - amplitude, half).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		bob.tween_property(rect, "position:y", base_y, half).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+
+func actor_stroll_in(actor_id: String, emotion: String, slot_name: String, duration: float = 2.4, from_side: String = "left", flipped: bool = false, size: float = 1.0, behind: bool = false) -> void:
+	var profile = get_profile(actor_id)
+	if not profile:
+		push_warning("Actor profile not found: " + actor_id)
+		return
+	var tex_path: String = _expression_path(profile, emotion)
+	if tex_path.is_empty():
+		push_warning("Emotion '" + emotion + "' not found for actor: " + actor_id)
+		return
+	var tex: Texture2D = await _get_texture_async(tex_path)
+	if not tex:
+		push_warning("Failed to load texture: " + tex_path)
+		return
+
+	var rect = TextureRect.new()
+	rect.texture = tex
+	var screen_size: Vector2 = get_viewport().get_visible_rect().size
+	var tex_size: Vector2 = tex.get_size()
+	var base_scale: float = screen_size.y / float(tex_size.y) * profile.default_scale
+	var final_scale: float = base_scale * size
+	rect.scale = Vector2(-final_scale if flipped else final_scale, final_scale)
+	rect.pivot_offset = Vector2(tex_size.x * profile.canvas_anchor_x, tex_size.y)
+	rect.set_meta("stroll_base_scale", base_scale)
+	actor_stage.add_child(rect)
+	active_actors[actor_id] = rect
+	# step 2.333: behind everyone else (and behind a background occluder), e.g. walking behind the sofa
+	if behind:
+		actor_stage.move_child(rect, 0)
+
+	var target_pos: Vector2 = _stroll_slot_feet(slot_name) - rect.pivot_offset
+	# start with her feet just past the screen edge she comes in from
+	var start_feet_x: float = -120.0 if from_side.to_lower() != "right" else screen_size.x + 120.0
+	rect.position = Vector2(start_feet_x - rect.pivot_offset.x, target_pos.y)
+	rect.modulate.a = 0.0
+
+	var walk := create_tween().set_parallel(true)
+	walk.tween_property(rect, "position:x", target_pos.x, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	walk.tween_property(rect, "modulate:a", 1.0, minf(0.7, duration * 0.4)).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	_stroll_bob(rect, target_pos.y, duration, STROLL_BOB_PX * size)
+	await walk.finished
+
+# step 2.333: size > 0 also grows/shrinks her to that size on the way (closer/further); a spot with no
+# height ("left", "0.3") keeps her at her current height on screen.
+# step 2.342: easing - "in_out" (default: eases in and out), "linear" (steady pace the whole way, e.g.
+# walking on from off-screen and stopping dead - follow with actor_halt), "in" (speeds up, stops dead).
+func actor_stroll_to(actor_id: String, slot_name: String, duration: float = 1.4, size: float = -1.0, easing: String = "in_out") -> void:
+	if not active_actors.has(actor_id):
+		push_warning("Cannot stroll actor, not found on stage: " + actor_id)
+		return
+	var rect: TextureRect = active_actors[actor_id]
+	var feet: Vector2 = _stroll_slot_feet(slot_name)
+	if not slot_name.contains(","):
+		feet.y = rect.position.y + rect.pivot_offset.y
+	var from_pos: Vector2 = rect.position
+	var to_pos: Vector2 = feet - rect.pivot_offset
+	var from_scale: Vector2 = rect.scale
+	var to_scale: Vector2 = from_scale
+	var base: float = _stroll_base_scale(actor_id, rect)
+	if size > 0.0 and base > 0.0:
+		to_scale = Vector2(signf(from_scale.x) * base * size, base * size)
+	var steps: int = maxi(1, int(round(duration / STROLL_STEP_SECONDS)))
+	var walk := create_tween()
+	walk.tween_method(func(k: float):
+		if not is_instance_valid(rect):
+			return
+		var e: float = 0.5 - 0.5 * cos(PI * k)
+		if easing == "linear":
+			e = k
+		elif easing == "in":
+			e = 1.0 - cos(PI * 0.5 * k)
+		var sc: Vector2 = from_scale.lerp(to_scale, e)
+		var bob: float = STROLL_BOB_PX * absf(sc.y) / maxf(base, 0.0001) * absf(sin(PI * k * float(steps)))
+		rect.scale = sc
+		rect.position = from_pos.lerp(to_pos, e) - Vector2(0.0, bob)
+	, 0.0, 1.0, duration)
+	await walk.finished
+
+# her normal scale (size 1), from the stroll that brought her in or from her profile
+func _stroll_base_scale(actor_id: String, rect: TextureRect) -> float:
+	if rect.has_meta("stroll_base_scale"):
+		return float(rect.get_meta("stroll_base_scale"))
+	var profile = get_profile(actor_id)
+	if profile and rect.texture:
+		return float(get_viewport().get_visible_rect().size.y) / float(rect.texture.get_height()) * profile.default_scale
+	return absf(rect.scale.y)
+
+func actor_stroll_out(actor_id: String, direction: String = "right", duration: float = 2.0) -> void:
+	if not active_actors.has(actor_id):
+		return
+	var rect: TextureRect = active_actors[actor_id]
+	active_actors.erase(actor_id)
+	var screen_w: float = get_viewport().get_visible_rect().size.x
+	var target_feet_x: float = screen_w + 120.0 if direction.to_lower() == "right" else -120.0
+	var walk := create_tween().set_parallel(true)
+	walk.tween_property(rect, "position:x", target_feet_x - rect.pivot_offset.x, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	walk.tween_property(rect, "modulate:a", 0.0, minf(0.7, duration * 0.4)).set_delay(maxf(0.0, duration - minf(0.7, duration * 0.4)))
+	_stroll_bob(rect, rect.position.y, duration, STROLL_BOB_PX * absf(rect.scale.y) / maxf(_stroll_base_scale(actor_id, rect), 0.0001))
+	await walk.finished
+	if is_instance_valid(rect):
+		rect.queue_free()
+
+# ---------------------------------------------------------------------------
+# step 2.328: seated close shots. stage these under black (fade_to_black, change_background, actor_sit,
+# fade_from_black); a seated actor is drawn bigger and lowered so the bottom of the screen cuts her off
+# around the waist, with the sofa's backrest behind her.
+#   actor_sit("Layla", "base", "0.32", 1.3, 0.35)          zoom 1.3x, the lowest 35% of her below the screen
+#   actor_sit("Fiona", "base", "0.68", 1.3, 0.35, true)    ...flipped (mirrored)
+#   actor_rise("Fiona", 0.7)                                she stands up (rises by what was hidden)
+# spots work like the stroll commands: "left", "center", "right", "center_left", "center_right" or "0.3".
+func actor_sit(actor_id: String, emotion: String, spot: String, zoom: float = 1.3, sink: float = 0.35, flipped: bool = false) -> void:
+	if active_actors.has(actor_id):
+		actor_hide(actor_id)
+	var profile = get_profile(actor_id)
+	if not profile:
+		push_warning("Actor profile not found: " + actor_id)
+		return
+	var tex_path: String = _expression_path(profile, emotion)
+	if tex_path.is_empty():
+		push_warning("Emotion '" + emotion + "' not found for actor: " + actor_id)
+		return
+	var tex: Texture2D = await _get_texture_async(tex_path)
+	if not tex:
+		push_warning("Failed to load texture: " + tex_path)
+		return
+
+	var rect = TextureRect.new()
+	rect.texture = tex
+	var screen_h: float = float(get_viewport().get_visible_rect().size.y)
+	var tex_size: Vector2 = tex.get_size()
+	var final_scale: float = screen_h / float(tex_size.y) * profile.default_scale * zoom
+	rect.scale = Vector2(-final_scale if flipped else final_scale, final_scale)
+	rect.pivot_offset = Vector2(tex_size.x * profile.canvas_anchor_x, tex_size.y)
+	actor_stage.add_child(rect)
+	active_actors[actor_id] = rect
+
+	# her feet go this far below the bottom of the screen
+	var sunk_px: float = tex_size.y * final_scale * clampf(sink, 0.0, 0.9)
+	var feet: Vector2 = _stroll_slot_feet(spot)
+	rect.position = Vector2(feet.x, feet.y + sunk_px) - rect.pivot_offset
+	rect.set_meta("sit_sunk_px", sunk_px)
+	rect.modulate.a = 1.0
+
+# step 2.336: to_feet_y (0..1 down the screen, like the "x,y" spots) stops her where her feet reach
+# that height instead of rising by everything that was hidden - e.g. to stand level with someone.
+func actor_rise(actor_id: String, duration: float = 0.7, to_feet_y: float = -1.0) -> void:
+	if not active_actors.has(actor_id):
+		push_warning("Cannot raise actor, not found on stage: " + actor_id)
+		return
+	var rect: TextureRect = active_actors[actor_id]
+	var rise_px: float = float(rect.get_meta("sit_sunk_px", 0.0))
+	if to_feet_y >= 0.0:
+		var feet_now: float = rect.position.y + rect.pivot_offset.y
+		rise_px = feet_now - to_feet_y * float(get_viewport().get_visible_rect().size.y)
+	if rise_px <= 0.0:
+		return
+	rect.set_meta("sit_sunk_px", 0.0)
+	var up := create_tween()
+	up.tween_property(rect, "position:y", rect.position.y - rise_px, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	await up.finished
+
+# ---------------------------------------------------------------------------
+# step 2.330: framing the background - zoom into part of it and soften it (depth of field).
+#   background_view(1.6, 0.615, 0.49, 4.0)          zoom 1.6x on that point (0..1 across, down), 4 px blur, instantly
+#   background_view(1.6, 0.615, 0.49, 4.0, 1.2)     ...the same, eased in over 1.2 s
+#   background_view()                                back to the whole, sharp picture
+# the room tint (background_dim) and the vignette are unaffected.
+const BackgroundViewShader = preload("res://conversation/background_view.gdshader")
+var _bg_view_mat: ShaderMaterial = null
+var _bg_view: Vector4 = Vector4(1.0, 0.5, 0.5, 0.0)  # zoom, centre x, centre y, blur
+
+func background_view(zoom: float = 1.0, center_x: float = 0.5, center_y: float = 0.5, blur_px: float = 0.0, duration: float = 0.0) -> void:
+	if not is_instance_valid(background_layer):
+		return
+	if _bg_view_mat == null:
+		_bg_view_mat = ShaderMaterial.new()
+		_bg_view_mat.shader = BackgroundViewShader
+		background_layer.material = _bg_view_mat
+	var target := Vector4(zoom, center_x, center_y, blur_px)
+	if duration <= 0.0:
+		_set_bg_view(target)
+	else:
+		var tw := create_tween()
+		tw.tween_method(_set_bg_view, _bg_view, target, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+		await tw.finished
+	if is_equal_approx(zoom, 1.0) and blur_px <= 0.0 and is_instance_valid(background_layer):
+		background_layer.material = null
+		_bg_view_mat = null
+
+func _set_bg_view(v: Vector4) -> void:
+	_bg_view = v
+	if _bg_view_mat:
+		_bg_view_mat.set_shader_parameter("zoom", v.x)
+		_bg_view_mat.set_shader_parameter("center", Vector2(v.y, v.z))
+		_bg_view_mat.set_shader_parameter("blur_px", v.w)
+
+# step 2.330: a foreground layer in front of the characters (under the dialogue box), e.g. a table so
+# standing poses read as seated. names come from foreground_aliases: a full-screen image with
+# transparency (the table at the bottom). step 2.413: the stand-in drawn in code is gone.
+#   show_foreground("table")          instantly (stage it under black)
+#   show_foreground("table", 0.5)     ...or fading in
+#   hide_foreground(0.5)
+@export var foreground_aliases: Dictionary = {}
+var _foreground: Control = null
+
+func show_foreground(fg_name: String, duration: float = 0.0) -> void:
+	if is_instance_valid(_foreground):
+		_foreground.queue_free()
+		_foreground = null
+	var entry = foreground_aliases.get(fg_name, fg_name)
+	var node: Control = null
+	var source: String = String(entry)
+	var tex: Texture2D = await _get_texture_async(source) if ResourceLoader.exists(source) else null
+	if tex == null:
+		push_warning("show_foreground: no foreground alias or image '%s'." % fg_name)
+		return
+	var rect := TextureRect.new()
+	rect.texture = tex
+	rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	var vp: Vector2 = get_viewport().get_visible_rect().size
+	var tex_aspect: float = float(tex.get_width()) / float(tex.get_height())
+	if tex_aspect > vp.x / vp.y + 0.01:
+		# step 2.350: a strip wider than the screen - a full-screen drawing with its empty top cropped
+		# off - is laid along the bottom of the screen at full width, so it lines up as drawn
+		rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		rect.stretch_mode = TextureRect.STRETCH_SCALE
+		var holder := Control.new()
+		holder.add_child(rect)
+		rect.anchor_left = 0.0
+		rect.anchor_right = 1.0
+		rect.anchor_bottom = 1.0
+		rect.anchor_top = 1.0 - (vp.x / tex_aspect) / vp.y
+		rect.offset_left = 0.0
+		rect.offset_right = 0.0
+		rect.offset_top = 0.0
+		rect.offset_bottom = 0.0
+		node = holder
+	else:
+		rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+		node = rect
+	node.name = "Foreground"
+	node.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	node.set_anchors_preset(Control.PRESET_FULL_RECT)
+	add_child(node)
+	# right in front of the characters, behind CGs and fades
+	move_child(node, actor_stage.get_index() + 1)
+	_foreground = node
+	# step 2.352: the table props stand on the table, so they come back with it, just in front of it
+	if is_instance_valid(_table_props):
+		move_child(_table_props, node.get_index() + 1)
+		_table_props.visible = true
+		_table_props.modulate.a = 1.0
+	if duration > 0.0:
+		node.modulate.a = 0.0
+		var tw := create_tween().set_parallel(true)
+		tw.tween_property(node, "modulate:a", 1.0, duration)
+		if is_instance_valid(_table_props):
+			_table_props.modulate.a = 0.0
+			tw.tween_property(_table_props, "modulate:a", 1.0, duration)
+		await tw.finished
+
+func hide_foreground(duration: float = 0.0) -> void:
+	if not is_instance_valid(_foreground):
+		return
+	var node: Control = _foreground
+	_foreground = null
+	if duration > 0.0:
+		var tw := create_tween().set_parallel(true)
+		tw.tween_property(node, "modulate:a", 0.0, duration)
+		# step 2.352: the table props on the table go with it
+		if is_instance_valid(_table_props):
+			tw.tween_property(_table_props, "modulate:a", 0.0, duration)
+		await tw.finished
+	if is_instance_valid(node):
+		node.queue_free()
+	if is_instance_valid(_table_props):
+		_table_props.visible = false
+
+# ---------------------------------------------------------------------------
+# step 2.352: table props - small pictures standing on the table (mugs, a laptop). each is drawn at the size it
+# appears on a 3840x2160 reference, so it scales with the screen. they sit in front of the table and the
+# characters, follow the camera tilt, and hide and come back with the table (hide_foreground /
+# show_foreground). spot "x,y" (0..1 across, down): where the prop stands - the middle of its picture,
+# at its lowest visible pixel. size scales it; flipped mirrors it; shadow puts a soft shadow under it.
+# showing the same id again replaces it in place (e.g. a laptop opening).
+#   do show_table_prop("laptop", "res://Backgrounds/Apartment/laptop_closed.png", "0.5,0.8")
+#   do show_table_prop("mug_layla", "res://Backgrounds/Apartment/coffee_mug.png", "0.36,0.79", 1.0, true)
+#   do hide_table_prop("mug_fiona")
+const PROP_REFERENCE_HEIGHT := 2160.0
+var _table_props: Control = null
+var _table_prop_nodes: Dictionary = {}
+var _table_prop_shadow_tex: GradientTexture2D = null
+
+func _ensure_table_props() -> Control:
+	if is_instance_valid(_table_props):
+		return _table_props
+	_table_props = Control.new()
+	_table_props.name = "TableProps"
+	_table_props.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_table_props.set_anchors_preset(Control.PRESET_FULL_RECT)
+	add_child(_table_props)
+	var after: Node = _foreground if is_instance_valid(_foreground) else actor_stage
+	move_child(_table_props, after.get_index() + 1)
+	# follow a camera tilt that is already on
+	_table_props.position.y = _camera_tilt * float(get_viewport().get_visible_rect().size.y)
+	_table_props.visible = is_instance_valid(_foreground)
+	return _table_props
+
+func show_table_prop(prop_id: String, image_path: String, spot: String, size: float = 1.0, flipped: bool = false, shadow: bool = true) -> void:
+	if not ResourceLoader.exists(image_path):
+		push_warning("show_table_prop: image not found: " + image_path)
+		return
+	var tex: Texture2D = await _get_texture_async(image_path)
+	if not tex:
+		push_warning("show_table_prop: failed to load: " + image_path)
+		return
+	hide_table_prop(prop_id)
+	var props: Control = _ensure_table_props()
+	var vp: Vector2 = get_viewport().get_visible_rect().size
+	var k: float = vp.y / PROP_REFERENCE_HEIGHT * size
+	var tex_size: Vector2 = tex.get_size()
+	var used := Rect2(Vector2.ZERO, tex_size)
+	var img: Image = tex.get_image()
+	if img:
+		used = Rect2(img.get_used_rect())
+	# the middle of the canvas, at its lowest visible pixel - so two drawings on the same canvas (a laptop
+	# closed and open) swap without moving
+	var anchor := Vector2(tex_size.x * 0.5, used.end.y)
+	var feet: Vector2 = _stroll_slot_feet(spot)
+	var holder := Control.new()
+	holder.name = "Prop_" + prop_id
+	holder.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if shadow:
+		if _table_prop_shadow_tex == null:
+			var grad := Gradient.new()
+			grad.offsets = PackedFloat32Array([0.0, 0.6, 1.0])
+			grad.colors = PackedColorArray([Color(0, 0, 0, 0.45), Color(0, 0, 0, 0.22), Color(0, 0, 0, 0)])
+			_table_prop_shadow_tex = GradientTexture2D.new()
+			_table_prop_shadow_tex.gradient = grad
+			_table_prop_shadow_tex.fill = GradientTexture2D.FILL_RADIAL
+			_table_prop_shadow_tex.fill_from = Vector2(0.5, 0.5)
+			_table_prop_shadow_tex.fill_to = Vector2(1.0, 0.5)
+			_table_prop_shadow_tex.width = 128
+			_table_prop_shadow_tex.height = 128
+		var sh := TextureRect.new()
+		sh.texture = _table_prop_shadow_tex
+		sh.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		sh.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		sh.stretch_mode = TextureRect.STRETCH_SCALE
+		var sw: float = used.size.x * k * 1.05
+		var shh: float = maxf(sw * 0.14, 6.0)
+		var mid_x: float = (used.position.x + used.size.x * 0.5 - anchor.x) * k * (-1.0 if flipped else 1.0)
+		sh.size = Vector2(sw, shh)
+		# step 2.353: tucked under the prop (most of it hidden behind the picture, peeking out around the
+		# base), not hanging below it
+		sh.position = Vector2(feet.x + mid_x - sw * 0.5, feet.y - shh * 0.9)
+		holder.add_child(sh)
+	var pic := TextureRect.new()
+	pic.texture = tex
+	pic.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	pic.pivot_offset = anchor
+	pic.scale = Vector2(-k if flipped else k, k)
+	pic.position = feet - anchor
+	holder.add_child(pic)
+	props.add_child(holder)
+	_table_prop_nodes[prop_id] = holder
+	# step 2.353: nearer props (standing lower on the screen) are drawn in front of farther ones
+	holder.set_meta("depth", feet.y)
+	var order: Array = props.get_children()
+	order.sort_custom(func(a, b): return float(a.get_meta("depth", 0.0)) < float(b.get_meta("depth", 0.0)))
+	for i in order.size():
+		props.move_child(order[i], i)
+
+func hide_table_prop(prop_id: String) -> void:
+	if _table_prop_nodes.has(prop_id):
+		var old = _table_prop_nodes[prop_id]
+		if is_instance_valid(old):
+			old.queue_free()
+		_table_prop_nodes.erase(prop_id)
+
+# ---------------------------------------------------------------------------
+# step 2.340: lean (tilt) a character around her feet, e.g. peeking around a corner. negative degrees
+# tip her top to the left, positive to the right. actor_lean("Fiona", 0.0) straightens her up.
+#   do actor_lean("Fiona", -8.0, 0.4)
+func actor_lean(actor_id: String, degrees: float, duration: float = 0.4) -> void:
+	if not active_actors.has(actor_id):
+		push_warning("Cannot lean actor, not found on stage: " + actor_id)
+		return
+	var rect: Control = active_actors[actor_id]
+	if duration <= 0.0:
+		rect.rotation_degrees = degrees
+		return
+	var tw := create_tween()
+	tw.tween_property(rect, "rotation_degrees", degrees, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	await tw.finished
+
+# step 2.371: a mild, endless wave on an actor - she sways from her base and a slow ripple runs up her,
+# as if she's short-circuiting. it keeps going through expression changes, walks and effects until it is
+# switched off. strength 1.0 = mild; speed 1.0 = normal; it fades in (and out) over fade seconds.
+#   do actor_wobble("Layla")              start
+#   do actor_wobble("Layla", 1.6, 1.3)    stronger and faster
+#   do actor_wobble("Layla", 0.0)         settle her back (fades out, then the effect is removed)
+const ACTOR_WOBBLE_SHADER = preload("res://conversation/actor_wobble.gdshader")
+
+func actor_wobble(actor_id: String, strength: float = 1.0, speed: float = 1.0, fade: float = 0.6) -> void:
+	if not active_actors.has(actor_id):
+		push_warning("Cannot wobble actor, not found on stage: " + actor_id)
+		return
+	var rect: CanvasItem = active_actors[actor_id]
+	var mat := rect.material as ShaderMaterial
+	var has_wobble: bool = mat != null and mat.shader == ACTOR_WOBBLE_SHADER
+	if strength <= 0.0:
+		if not has_wobble:
+			return
+		if fade <= 0.0:
+			rect.material = null
+			return
+		var tw_out := create_tween()
+		tw_out.tween_property(mat, "shader_parameter/strength", 0.0, fade).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+		tw_out.tween_callback(func() -> void:
+			if is_instance_valid(rect) and rect.material == mat:
+				rect.material = null)
+		return
+	if not has_wobble:
+		mat = ShaderMaterial.new()
+		mat.shader = ACTOR_WOBBLE_SHADER
+		mat.set_shader_parameter("strength", 0.0)
+		rect.material = mat
+	mat.set_shader_parameter("speed", speed)
+	if fade <= 0.0:
+		mat.set_shader_parameter("strength", strength)
+		return
+	var tw := create_tween()
+	tw.tween_property(mat, "shader_parameter/strength", strength, fade).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+
+# step 2.342: a sudden stop. right after a walk ends abruptly (actor_stroll_to with "linear" or "in"),
+# her momentum tips her forward - the way she is facing - then she rocks back and settles.
+#   do actor_halt("Fiona")          strength = how far she tips, in degrees
+func actor_halt(actor_id: String, strength: float = 7.0) -> void:
+	if not active_actors.has(actor_id):
+		push_warning("Cannot halt actor, not found on stage: " + actor_id)
+		return
+	var rect: Control = active_actors[actor_id]
+	# facing right (unflipped) = tip to the right (positive degrees); facing left = tip left
+	var forward: float = strength if rect.scale.x >= 0.0 else -strength
+	var tw := create_tween()
+	tw.tween_property(rect, "rotation_degrees", forward, 0.07).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tw.tween_property(rect, "rotation_degrees", -forward * 0.3, 0.14).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tw.tween_property(rect, "rotation_degrees", 0.0, 0.2).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	await tw.finished
+
+# ---------------------------------------------------------------------------
+# step 2.343: a smash cut through a white flash. make the cut's changes between the two:
+#   do flash_in(0.06)        the screen goes white, fast
+#   ...swap the shot...
+#   do flash_out(0.3)
+func flash_in(duration: float = 0.06, color: Color = Color.WHITE) -> void:
+	if not fade_overlay:
+		return
+	fade_overlay.color = color
+	fade_overlay.show()
+	var tween := create_tween()
+	tween.tween_property(fade_overlay, "modulate:a", 1.0, duration)
+	await tween.finished
+
+func flash_out(duration: float = 0.3) -> void:
+	if not fade_overlay:
+		return
+	var tween := create_tween()
+	tween.tween_property(fade_overlay, "modulate:a", 0.0, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	await tween.finished
+
+# step 2.343: any picture as a character on the stage - e.g. a two-person pose drawn as one image with a
+# transparent background. placed like actor_sit: spot across ("0.5", or "x,y"), zoom = its height on
+# screen relative to the screen's, sink = how much of it (0..0.9) goes below the bottom of the screen.
+#   do actor_image("Pair", "res://Backgrounds/CG/layla_fiona_inspection.png", "0.5", 1.1, 0.08)
+# remove it again with actor_hide("Pair").
+func actor_image(actor_id: String, image_path: String, spot: String = "0.5", zoom: float = 1.0, sink: float = 0.0, flipped: bool = false) -> void:
+	if active_actors.has(actor_id):
+		actor_hide(actor_id)
+	if not ResourceLoader.exists(image_path):
+		push_warning("actor_image: image not found: " + image_path)
+		return
+	var tex: Texture2D = await _get_texture_async(image_path)
+	if not tex:
+		push_warning("actor_image: failed to load: " + image_path)
+		return
+	var rect := TextureRect.new()
+	rect.texture = tex
+	var screen_h: float = float(get_viewport().get_visible_rect().size.y)
+	var tex_size: Vector2 = tex.get_size()
+	var final_scale: float = screen_h / tex_size.y * zoom
+	rect.scale = Vector2(-final_scale if flipped else final_scale, final_scale)
+	rect.pivot_offset = Vector2(tex_size.x * 0.5, tex_size.y)
+	rect.set_meta("stroll_base_scale", screen_h / tex_size.y)
+	actor_stage.add_child(rect)
+	active_actors[actor_id] = rect
+	var sunk_px: float = tex_size.y * final_scale * clampf(sink, 0.0, 0.9)
+	var feet: Vector2 = _stroll_slot_feet(spot)
+	rect.position = Vector2(feet.x, feet.y + sunk_px) - rect.pivot_offset
+	rect.set_meta("sit_sunk_px", sunk_px)
+
+# step 2.343: a quick pop for impact - she (or the picture) starts `amount` bigger and settles to size.
+# wait = false lets the next line run at once (e.g. pop while the flash fades).
+func actor_pop(actor_id: String, amount: float = 0.06, duration: float = 0.25, wait: bool = true) -> void:
+	if not active_actors.has(actor_id):
+		return
+	var rect: Control = active_actors[actor_id]
+	var size_now: Vector2 = rect.scale
+	rect.scale = size_now * (1.0 + amount)
+	var tw := create_tween()
+	tw.tween_property(rect, "scale", size_now, duration).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	if wait:
+		await tw.finished
+
+# step 2.343: mood overlays, in front of the characters (and any foreground), under CGs, fades and the
+# dialogue box. strength 0 = off, 1 = full, reached over `duration` seconds.
+#   do focus_lines(1.0, 0.0)     manga focus lines at the screen edges
+#   do focus_lines(0.0, 1.5)     ...fading away
+#   do heat_glow(1.0, 0.0)       a pink glow at the edges, pulsing like a heartbeat
+const MoodShader = preload("res://conversation/mood_overlay.gdshader")
+var _mood: ColorRect = null
+
+func focus_lines(strength: float = 1.0, duration: float = 0.1) -> void:
+	await _tween_mood("focus", strength, duration)
+
+func heat_glow(strength: float = 1.0, duration: float = 0.6) -> void:
+	await _tween_mood("heat", strength, duration)
+
+func _ensure_mood() -> ColorRect:
+	if is_instance_valid(_mood):
+		return _mood
+	_mood = ColorRect.new()
+	_mood.name = "MoodOverlay"
+	_mood.color = Color.WHITE
+	_mood.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_mood.set_anchors_preset(Control.PRESET_FULL_RECT)
+	var mat := ShaderMaterial.new()
+	mat.shader = MoodShader
+	_mood.material = mat
+	add_child(_mood)
+	var after: Node = _foreground if is_instance_valid(_foreground) else actor_stage
+	# step 2.352: and in front of any table props
+	if is_instance_valid(_table_props):
+		after = _table_props
+	move_child(_mood, after.get_index() + 1)
+	return _mood
+
+func _tween_mood(param: String, value: float, duration: float) -> void:
+	var mat: ShaderMaterial = _ensure_mood().material
+	# a parameter never set yet reads back as null (its default, 0)
+	var current = mat.get_shader_parameter(param)
+	var from: float = 0.0 if current == null else float(current)
+	if duration <= 0.0:
+		mat.set_shader_parameter(param, value)
+		return
+	var tw := create_tween()
+	tw.tween_method(func(v: float): mat.set_shader_parameter(param, v), from, value, duration)
+	await tw.finished
+
+# step 2.348: zoom a character - or an actor_image picture, e.g. one face in a two-person pose - in on a
+# point of her picture. zoom = how many times bigger than she was before the first zoom; point_x/point_y =
+# where in her picture (0..1 across, down) to zoom on, which lands at screen_x/screen_y (0..1). zoom 1.0
+# puts her back exactly as she was. duration 0 = instantly (a cut).
+#   do actor_zoom("Pair", 1.8, 0.39, 0.3, 0.4)     push in on the face at that point of the picture
+#   do actor_zoom("Pair", 1.0, 0.5, 0.5, 0.0)      straight back out
+func actor_zoom(actor_id: String, zoom: float, point_x: float = 0.5, point_y: float = 0.35, duration: float = 0.4, screen_x: float = 0.5, screen_y: float = 0.4) -> void:
+	if not active_actors.has(actor_id):
+		push_warning("Cannot zoom actor, not found on stage: " + actor_id)
+		return
+	var rect: TextureRect = active_actors[actor_id]
+	if not rect.has_meta("zoom_home"):
+		rect.set_meta("zoom_home", {"pos": rect.position, "scale": rect.scale})
+	var home: Dictionary = rect.get_meta("zoom_home")
+	var target_scale: Vector2 = home["scale"]
+	var target_pos: Vector2 = home["pos"]
+	var going_home: bool = is_equal_approx(zoom, 1.0)
+	if not going_home:
+		target_scale = home["scale"] * zoom
+		var tex_size: Vector2 = rect.texture.get_size()
+		var local: Vector2 = Vector2(tex_size.x * point_x, tex_size.y * point_y)
+		var vp: Vector2 = get_viewport().get_visible_rect().size
+		var screen_pt: Vector2 = Vector2(vp.x * screen_x, vp.y * screen_y) - actor_stage.position
+		# a point p of the picture is drawn at position + pivot + (p - pivot) * scale
+		target_pos = screen_pt - rect.pivot_offset - (local - rect.pivot_offset) * target_scale
+	if duration <= 0.0:
+		rect.scale = target_scale
+		rect.position = target_pos
+	else:
+		var tw := create_tween().set_parallel(true)
+		tw.tween_property(rect, "scale", target_scale, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		tw.tween_property(rect, "position", target_pos, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		await tw.finished
+	if going_home and is_instance_valid(rect):
+		rect.remove_meta("zoom_home")
+
+# ---------------------------------------------------------------------------
+# step 2.336: a small camera move. amount > 0 tilts the camera up: the characters and the foreground move
+# down the screen by that much (0..1 of the screen height), the zoomed background by background_follow
+# of it (less, so it reads as depth). camera_tilt(0.0) puts it back. wait = false lets the next line
+# start straight away, e.g. so someone stands up while the camera moves:
+#   do camera_tilt(0.09, 0.9, 0.6, false)
+#   do actor_rise("Layla", 0.8, 1.12)
+# the background only moves while a background_view is on, and never so far that its edge shows.
+var _camera_tilt: float = 0.0
+var _camera_tilt_tween: Tween
+
+func camera_tilt(amount: float, duration: float = 0.9, background_follow: float = 0.6, wait: bool = true) -> void:
+	if not is_instance_valid(actor_stage):
+		return
+	var vp_h: float = float(get_viewport().get_visible_rect().size.y)
+	var from: float = _camera_tilt
+	var stage_y0: float = actor_stage.position.y - from * vp_h
+	var fg_y0: float = 0.0
+	if is_instance_valid(_foreground):
+		fg_y0 = _foreground.position.y - from * vp_h
+	# step 2.352: the table props on the table move with it
+	var props_y0: float = 0.0
+	if is_instance_valid(_table_props):
+		props_y0 = _table_props.position.y - from * vp_h
+	var bg_cy0: float = _bg_view.z + from * background_follow / maxf(_bg_view.x, 1.0)
+	if _camera_tilt_tween and _camera_tilt_tween.is_valid():
+		_camera_tilt_tween.kill()
+	_camera_tilt_tween = create_tween()
+	_camera_tilt_tween.tween_method(func(t: float):
+		_camera_tilt = t
+		if is_instance_valid(actor_stage):
+			actor_stage.position.y = stage_y0 + t * vp_h
+		if is_instance_valid(_foreground):
+			_foreground.position.y = fg_y0 + t * vp_h
+		if is_instance_valid(_table_props):
+			_table_props.position.y = props_y0 + t * vp_h
+		if _bg_view_mat:
+			var v: Vector4 = _bg_view
+			v.z = bg_cy0 - t * background_follow / maxf(v.x, 1.0)
+			_set_bg_view(v)
+	, from, amount, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	if wait:
+		await _camera_tilt_tween.finished
+
+# ---------------------------------------------------------------------------
+# step 2.333: depth. background_occluder(line_y) puts a copy of the background's lower part - everything
+# below line_y (0..1 down the screen) - among the characters, pixel-identical to the background (same
+# zoom/blur, dim and vignette). anyone placed behind it (actor_stroll_in(..., behind = true), or
+# actor_to_back) is hidden below that line, e.g. walking behind the sofa with the backrest hiding her legs.
+# characters placed after it stand in front of it. clear_background_occluder() removes it.
+var _occluder: Control = null
+
+func background_occluder(line_y: float) -> void:
+	clear_background_occluder()
+	if not is_instance_valid(background_layer) or not is_instance_valid(actor_stage):
+		return
+	var vp: Vector2 = get_viewport().get_visible_rect().size
+	var clip := Control.new()
+	clip.name = "BackgroundOccluder"
+	clip.clip_contents = true
+	clip.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	clip.position = Vector2(0.0, vp.y * line_y) - actor_stage.position
+	clip.size = Vector2(vp.x, vp.y * (1.0 - line_y))
+	var copy := TextureRect.new()
+	copy.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	copy.texture = background_layer.texture
+	copy.expand_mode = background_layer.expand_mode
+	copy.stretch_mode = background_layer.stretch_mode
+	copy.material = background_layer.material
+	copy.self_modulate = background_layer.self_modulate
+	copy.position = background_layer.position - (clip.position + actor_stage.position)
+	copy.size = background_layer.size
+	clip.add_child(copy)
+	if is_instance_valid(_vignette):
+		var vig: Control = _vignette.duplicate()
+		copy.add_child(vig)
+	actor_stage.add_child(clip)
+	actor_stage.move_child(clip, 0)
+	_occluder = clip
+
+func clear_background_occluder() -> void:
+	if is_instance_valid(_occluder):
+		_occluder.queue_free()
+	_occluder = null
+
+# step 2.333: draw order among the characters (and the occluder): to_back = behind everyone
+func actor_to_back(actor_id: String) -> void:
+	if active_actors.has(actor_id):
+		actor_stage.move_child(active_actors[actor_id], 0)
+
+func actor_to_front(actor_id: String) -> void:
+	if active_actors.has(actor_id):
+		actor_stage.move_child(active_actors[actor_id], -1)
+
+# step 2.326: dims the background picture (multiply) and adds a soft vignette over it, under the actors
+var _vignette: TextureRect = null
+
+func _apply_room_treatment() -> void:
+	if not is_instance_valid(background_layer):
+		return
+	background_layer.self_modulate = background_dim
+	if vignette_strength <= 0.0:
+		if is_instance_valid(_vignette):
+			_vignette.queue_free()
+		return
+	if not is_instance_valid(_vignette):
+		var grad := Gradient.new()
+		grad.offsets = PackedFloat32Array([0.0, 0.55, 1.0])
+		grad.colors = PackedColorArray([Color(0, 0, 0, 0), Color(0, 0, 0, 0), Color(0, 0, 0, 1)])
+		var tex := GradientTexture2D.new()
+		tex.gradient = grad
+		tex.fill = GradientTexture2D.FILL_RADIAL
+		tex.fill_from = Vector2(0.5, 0.5)
+		tex.fill_to = Vector2(1.05, 0.5)
+		tex.width = 256
+		tex.height = 256
+		_vignette = TextureRect.new()
+		_vignette.name = "Vignette"
+		_vignette.texture = tex
+		_vignette.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_vignette.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		_vignette.stretch_mode = TextureRect.STRETCH_SCALE
+		_vignette.set_anchors_preset(Control.PRESET_FULL_RECT)
+		background_layer.add_child(_vignette)
+	_vignette.modulate.a = vignette_strength
 
 
 func actor_walk_out(actor_id: String, direction: String = "left"):
@@ -653,7 +1493,7 @@ func actor_dash_in(actor_id: String, emotion: String, slot_name: String, scale_m
 		push_warning("Actor profile not found: " + actor_id)
 		return
 
-	var tex_path: String = profile.expressions.get(emotion, "")
+	var tex_path: String = _expression_path(profile, emotion)
 	if tex_path.is_empty():
 		push_warning("Emotion '" + emotion + "' not found for actor: " + actor_id)
 		return
@@ -703,7 +1543,7 @@ func actor_dash_in(actor_id: String, emotion: String, slot_name: String, scale_m
 func actor_peek_in(actor_id: String, emotion: String, side: String = "right"):
 	var profile = get_profile(actor_id)
 	if not profile: return
-	var tex_path: String = profile.expressions.get(emotion, "")
+	var tex_path: String = _expression_path(profile, emotion)
 	if tex_path.is_empty(): return
 	var tex: Texture2D = await _get_texture_async(tex_path)
 	if not tex: return
@@ -833,11 +1673,58 @@ func _set_companion_front(front: bool) -> void:
 	if _party_stance_tween and _party_stance_tween.is_valid():
 		_party_stance_tween.kill()
 	_party_stance_tween = create_tween().set_parallel(true)
-	_party_stance_tween.tween_property(rect, "scale", target_scale, PARTY_STANCE_TIME).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	# step 2.375: a size effect (slump, shy, nod, shock) still playing on her owns her size. it ends by
+	# putting back the size she had when it started, which left her squashed (wide from the new stance,
+	# short from the old one) for as long as she kept talking. the tint changes now; the size follows
+	# smoothly once the effect is done.
+	if _size_effect_running(_party_companion_id):
+		_resize_companion_after_effect()
+	else:
+		_party_stance_tween.tween_property(rect, "scale", target_scale, PARTY_STANCE_TIME).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 	# rgb only — actor_enter's fade-in may still own modulate:a
 	_party_stance_tween.tween_property(rect, "modulate:r", target_tint.r, PARTY_STANCE_TIME).set_trans(Tween.TRANS_SINE)
 	_party_stance_tween.tween_property(rect, "modulate:g", target_tint.g, PARTY_STANCE_TIME).set_trans(Tween.TRANS_SINE)
 	_party_stance_tween.tween_property(rect, "modulate:b", target_tint.b, PARTY_STANCE_TIME).set_trans(Tween.TRANS_SINE)
+
+
+# step 2.375: actor effects that change an actor's size (the rest move or tilt her).
+const SIZE_EFFECTS := ["shock", "slump", "shy", "nod"]
+var _actor_effect_names: Dictionary = {}   # actor_id -> the name of her last actor_effect
+
+
+func _size_effect_running(actor_id: String) -> bool:
+	var t = _actor_effect_tweens.get(actor_id)
+	if t == null or not t.is_valid() or not t.is_running():
+		return false
+	return SIZE_EFFECTS.has(_actor_effect_names.get(actor_id, ""))
+
+
+# step 2.375: once the companion's size effect has finished, ease her to the size of her current stance.
+# deferred, so the effect tween is fully done (and a new effect started in the same frame is seen).
+func _resize_companion_after_effect() -> void:
+	var t = _actor_effect_tweens.get(_party_companion_id)
+	if t == null or not t.is_valid():
+		return
+	if not t.finished.is_connected(_resize_companion_to_stance):
+		t.finished.connect(_resize_companion_to_stance, CONNECT_ONE_SHOT | CONNECT_DEFERRED)
+
+
+func _resize_companion_to_stance() -> void:
+	if _party_companion_id.is_empty() or not active_actors.has(_party_companion_id):
+		return
+	if not _original_actor_transforms.is_empty() or _huddle_active:
+		return   # a close-up or the huddle owns her transform now
+	if _size_effect_running(_party_companion_id):
+		_resize_companion_after_effect()   # another size effect started meanwhile: wait for that one
+		return
+	var rect: TextureRect = active_actors[_party_companion_id]
+	var factor: float = PARTY_FRONT_STEP_SCALE if _party_companion_front else PARTY_BACK_ROW_SCALE
+	var target_scale: Vector2 = _party_scale_for(_party_companion_id, factor, rect.scale.x < 0.0)
+	if rect.scale.is_equal_approx(target_scale):
+		return
+	_finish_tween(_party_stance_tween)
+	_party_stance_tween = create_tween()
+	_party_stance_tween.tween_property(rect, "scale", target_scale, PARTY_STANCE_TIME).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
 
 func _party_scale_for(actor_id: String, factor: float, flipped: bool) -> Vector2:
@@ -1112,12 +1999,46 @@ func show_dialogue_ui():
 	if current_balloon and current_balloon.has_method("set_ui_hidden"):
 		current_balloon.set_ui_hidden(false)
 
+# step 2.267: blocks every way of moving the dialogue on (clicks, keys, Ctrl-skip, Skip, Auto, the
+# log, un-hiding the box) while a scripted beat plays. always pair with unlock_dialogue_input().
+func lock_dialogue_input() -> void:
+	if current_balloon and current_balloon.has_method("set_input_locked"):
+		current_balloon.set_input_locked(true)
+
+func unlock_dialogue_input() -> void:
+	if current_balloon and current_balloon.has_method("set_input_locked"):
+		current_balloon.set_input_locked(false)
+
+# step 2.271: the quiet top-of-screen banner (the same one as the first-visit "try Examine" tip),
+# from dialogue:  do show_hint_banner("Floor 4F (Faculty Offices) is now accessible.")
+# it sits on its own layer under the root, so it outlives this overlay, and frees itself after.
+func show_hint_banner(text: String, seconds: float = 4.5) -> void:
+	var layer := CanvasLayer.new()
+	layer.layer = 95
+	get_tree().root.add_child(layer)
+	var banner = preload("res://conversation/hint_banner.gd").new()
+	layer.add_child(banner)
+	banner.flash_hint(text, null, seconds)
+	var cleanup := Timer.new()
+	cleanup.one_shot = true
+	cleanup.wait_time = seconds + 1.5
+	cleanup.timeout.connect(layer.queue_free)
+	layer.add_child(cleanup)
+	cleanup.start()
+
 var _original_actor_transforms = {}
 
 # screen_x_ratio / screen_y_ratio (step 2.212): where on screen the face lands; 0.5, 0.35 is
 # the classic centred close-up. do actor_focus("Layla", 1.6, 0.45, -1.0, 0.3) puts her face at 30%.
 func actor_focus(actor_id: String, zoom_modifier: float = 2.0, duration: float = 0.01, face_x_ratio: float = -1.0, screen_x_ratio: float = 0.5, screen_y_ratio: float = 0.35):
 	if not active_actors.has(actor_id): return
+
+	# step 2.267: settle effects first (so no half-finished pose gets snapshotted), then take over
+	# from any focus/unfocus still running. killing a running unfocus keeps the saved resting poses.
+	_settle_actor_effects()
+	_finish_tween(_party_stance_tween)
+	if _focus_tween != null and _focus_tween.is_valid():
+		_focus_tween.kill()
 
 	if _original_actor_transforms.is_empty():
 		for id in active_actors:
@@ -1137,12 +2058,14 @@ func actor_focus(actor_id: String, zoom_modifier: float = 2.0, duration: float =
 	if rect.scale.x < 0: target_scale.x = -target_scale.x
 
 	# -1.0 = "use the profile's measured anchor". an explicit ratio from a dialogue still wins.
-	var fx: float = face_x_ratio if face_x_ratio >= 0.0 else profile.canvas_anchor_x
+	# step 2.401: then the profile's own face position (face_x_ratio), then its anchor
+	var fx: float = face_x_ratio if face_x_ratio >= 0.0 else (profile.face_x_ratio if profile.face_x_ratio >= 0.0 else profile.canvas_anchor_x)
 	var local_face = Vector2(tex_size.x * fx, tex_size.y * profile.face_y_ratio)
 	var screen_focus_point = Vector2(screen_size.x * screen_x_ratio, screen_size.y * screen_y_ratio)
 	var target_pos = screen_focus_point - rect.pivot_offset - (local_face - rect.pivot_offset) * target_scale
 
 	var tween = create_tween().set_parallel(true)
+	_focus_tween = tween
 	var is_smash_cut = duration <= 0.05
 
 	if is_smash_cut:
@@ -1177,7 +2100,12 @@ func actor_focus(actor_id: String, zoom_modifier: float = 2.0, duration: float =
 					tween.tween_property(other_rect, "modulate", Color(1.0, 1.0, 1.0, 0.0), duration)
 
 func actor_unfocus_all(duration: float = 0.2):
+	# step 2.267: as in actor_focus: settle effects, then take over from a running focus/unfocus.
+	_settle_actor_effects()
+	if _focus_tween != null and _focus_tween.is_valid():
+		_focus_tween.kill()
 	var tween = create_tween().set_parallel(true)
+	_focus_tween = tween
 	var is_smash_cut = duration <= 0.05
 
 	if is_instance_valid(background_layer):
@@ -1314,7 +2242,7 @@ func actor_show(actor_id: String, emotion: String, slot_name: String):
 		push_warning("Actor profile not found: " + actor_id)
 		return
 
-	var tex_path: String = profile.expressions.get(emotion, "")
+	var tex_path: String = _expression_path(profile, emotion)
 	if tex_path.is_empty():
 		push_warning("Emotion '" + emotion + "' not found for actor: " + actor_id)
 		return
@@ -1735,6 +2663,7 @@ func _on_got_dialogue(line: DialogueLine):
 
 	_update_predictive_cache(line)
 	_apply_speaker_stance(line.character)
+	_update_talking(line)   # step 2.401
 
 
 # *************************[predictive preloader subsystem]
@@ -1843,7 +2772,7 @@ func _extract_paths_from_mutation(mutation: Dictionary, out_paths: Dictionary):
 			if not actor_id.is_empty() and not emotion.is_empty():
 				var profile = get_profile(actor_id)
 				if profile:
-					var tex_path: String = profile.expressions.get(emotion, "")
+					var tex_path: String = _expression_path(profile, emotion)
 					if not tex_path.is_empty():
 						out_paths[tex_path] = true
 
@@ -1891,9 +2820,159 @@ func _extract_string_arg(token: Dictionary, index: int) -> String:
 	return ""
 
 
+# ---------------------------------------------------------------------------
+# step 2.365: rigged characters. a profile whose expressions hold "rig_parts" (the parts map written by
+# Dev/rig_tools/rig_parts_cutter.gd) and "rig_expressions" (name -> parts list, kept by the rig viewer)
+# is drawn from parts: actor_change("Layla", "happy") looks "happy" up and composes that picture. a name
+# that isn't in the list is read as part names directly (e.g. "regular o"); "base" falls back to
+# "neutral", for older dialogue. only the composed picture is kept in video memory.
+const ActorRigComposerScript = preload("res://characters/rig/actor_rig_composer.gd")
+var _rig_expression_sets: Dictionary = {}   # expressions file -> {name: parts list}
+
+func _expression_path(profile, emotion: String) -> String:
+	var ex: Dictionary = profile.expressions
+	var parts_path: String = String(ex.get("rig_parts", ""))
+	if parts_path != "":
+		return "rig:%s|%s|%s" % [parts_path, String(ex.get("rig_expressions", "")), emotion]
+	return ex.get(emotion, "")
+
+func _rig_texture(path: String) -> Texture2D:
+	if _texture_cache.has(path):
+		return _texture_cache[path]
+	var bits: PackedStringArray = path.substr(4).split("|")
+	if bits.size() < 3:
+		return null
+	var parts_path: String = bits[0]
+	var ex_path: String = bits[1]
+	var emotion: String = bits[2]
+	var parts: String = _rig_parts_for(ex_path, emotion)
+	var tex: Texture2D = ActorRigComposerScript.compose(parts_path, parts)
+	if tex:
+		_texture_cache[path] = tex
+		_rig_paths[tex.get_instance_id()] = path   # step 2.401: which picture this is (for talking)
+	return tex
+
+
+# a name from the expressions file -> its parts list. a name that isn't in it is already a parts list;
+# "base" falls back to "neutral".
+func _rig_parts_for(ex_path: String, emotion: String) -> String:
+	if not _rig_expression_sets.has(ex_path):
+		var data = null
+		if ex_path != "" and FileAccess.file_exists(ex_path):
+			data = JSON.parse_string(FileAccess.get_file_as_string(ex_path))
+		_rig_expression_sets[ex_path] = data if data is Dictionary else {}
+	var named: Dictionary = _rig_expression_sets[ex_path]
+	if named.has(emotion):
+		return String(named[emotion])
+	if emotion == "base" and named.has("neutral"):
+		return String(named["neutral"])
+	return emotion
+
+
+# ---------------------------------------------------------------------------
+# step 2.401: talking mouths (characters/rig/rig_talk.gd). a profile with talk_mouths (Fiona) gets the mouth
+# that fits her head added while one of her lines is up (her name, or "Player" for the protagonist; not a
+# thought in parentheses or a silent "..."), and taken off again for anyone else's line. the shut and the
+# talking picture are kept together, so switching back and forth never builds a picture twice.
+const RigTalkScript = preload("res://characters/rig/rig_talk.gd")
+var _rig_paths: Dictionary = {}         # composed texture's instance id -> its rig path
+var _talking: Dictionary = {}           # actor id -> speaking out loud on the current line
+var _talk_shut_paths: Dictionary = {}   # talking picture's path -> its shut picture's path
+var _talk_keep: Dictionary = {}         # actor id -> {path: texture}, the pictures in use
+
+func _update_talking(line: DialogueLine) -> void:
+	for actor_id in active_actors.keys():
+		var profile = get_profile(actor_id)
+		if profile == null or profile.talk_mouths.is_empty():
+			continue
+		_talking[actor_id] = RigTalkScript.is_speaking(actor_id, actor_id == PROTAGONIST_ACTOR_ID, line.character, line.text)
+		_apply_talking(actor_id)
+
+
+func _apply_talking(actor_id: String) -> void:
+	if not active_actors.has(actor_id):
+		return
+	var profile = get_profile(actor_id)
+	if profile == null or profile.talk_mouths.is_empty():
+		return
+	var rect: TextureRect = active_actors[actor_id]
+	if rect.texture == null:
+		return
+	var current: String = String(_rig_paths.get(rect.texture.get_instance_id(), ""))
+	if current == "":
+		return
+	var talking: bool = _talking.get(actor_id, false)
+	if talking == _talk_shut_paths.has(current):
+		return
+	var target: String = ""
+	if talking:
+		var bits: PackedStringArray = current.substr(4).split("|")
+		if bits.size() < 3:
+			return
+		var open_parts: String = RigTalkScript.talking_parts(bits[0], _rig_parts_for(bits[1], bits[2]), profile.talk_mouths, profile.talk_head_slot)
+		if open_parts == "":
+			return
+		target = "rig:%s|%s|%s" % [bits[0], bits[1], open_parts]
+		_talk_shut_paths[target] = current
+		_keep_talk_texture(actor_id, current, rect.texture)
+	else:
+		target = _talk_shut_paths[current]
+	var keep: Dictionary = _talk_keep.get(actor_id, {})
+	var tex: Texture2D = keep[target] if keep.has(target) else _rig_texture(target)
+	if tex == null:
+		return
+	_keep_talk_texture(actor_id, target, tex)
+	rect.texture = tex
+
+
+# holds on to a few of an actor's pictures (the shut and talking ones in use), out of reach of the
+# predictive cache's clean-up
+func _keep_talk_texture(actor_id: String, path: String, tex: Texture2D) -> void:
+	var keep: Dictionary = _talk_keep.get(actor_id, {})
+	if not keep.has(path) and keep.size() >= 4:
+		keep.clear()
+	keep[path] = tex
+	_talk_keep[actor_id] = keep
+
+
+# ---------------------------------------------------------------------------
+# step 2.404: items shown beside a character, not in her hand (characters/rig/held_item.gd): a phone, a
+# keycard, a camera. the item is a child of her picture, so it follows her moves, close-ups and dimming,
+# and goes when she does.
+#   do actor_item("Layla", "phone")     pops in beside her, on the side facing the others, and bobs
+#   do actor_item_hide("Layla")         pops away
+const HeldItemScript = preload("res://characters/rig/held_item.gd")
+var _actor_items: Dictionary = {}   # actor id -> the item showing beside her
+
+func actor_item(actor_id: String, item: String) -> void:
+	if not active_actors.has(actor_id):
+		return
+	actor_item_hide(actor_id)
+	var profile = get_profile(actor_id)
+	var face := Vector2(0.5, 0.3)
+	if profile:
+		face = Vector2(profile.face_x_ratio if profile.face_x_ratio >= 0.0 else profile.canvas_anchor_x, profile.face_y_ratio)
+	var node = HeldItemScript.new()
+	if not node.setup(item, face):
+		node.free()
+		return
+	active_actors[actor_id].add_child(node)
+	_actor_items[actor_id] = node
+
+
+func actor_item_hide(actor_id: String) -> void:
+	var node = _actor_items.get(actor_id)
+	_actor_items.erase(actor_id)
+	if is_instance_valid(node):
+		node.leave()
+
+
 func _get_texture_async(path: String) -> Texture2D:
 	if path.is_empty():
 		return null
+	# step 2.365: a rigged character's picture is composed from parts, not loaded
+	if path.begins_with("rig:"):
+		return _rig_texture(path)
 
 	# already in cache
 	if _texture_cache.has(path):

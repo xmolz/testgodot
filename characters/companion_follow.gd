@@ -99,7 +99,8 @@ func attach(target: Node2D) -> void:
 	attached.emit(target)
 
 func detach() -> void:
-	_clear_target_exception()
+	# step 2.408: the exception with the player stays, so while she waits she can still be walked through
+	# rather than shoved along (attach() replaces it)
 	_target = null
 	_moving = false
 	detached.emit()

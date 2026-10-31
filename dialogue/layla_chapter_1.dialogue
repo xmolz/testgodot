@@ -15,46 +15,83 @@ do actor_flip("Layla", true)
 ~ post_wake_intro
 # step 2.212: Test Run's "Skip Layla Wake Chat" sets this flag; the wake-up talk is then skipped.
 if Flags.get_level_flag("dev_skip_layla_wake_chat") == true:
+	# step 2.392: the wake-up music (chapter2_intro.dialogue) ends with the skipped talk
+	do SoundManager.fade_out_music(3.0)
 	do Flags.set_level_flag("layla_post_wake_intro_seen", true)
 	=> END
 # [post opening cutscene convo with us]
 # reached from chapter2_intro.dialogue with Fiona (left) and Layla (right, flipped)
 # already on stage over the dimmed live level.
+# step 2.372: Layla's expressions from her rig (characters/layla/layla_expressions.json). an open mouth
+# on her own lines; while Fiona talks she keeps her pose with her mouth closed. she enters as "base"
+# (chapter2_intro.dialogue, or the safety net in ~ start), and the first change lands while she fades in.
+# a mock scolding first: hand up, cross brows, held for all three lines
+do actor_change("Layla", "scolding")
+do actor_change("Fiona", "jacket")
 Layla: Fionaaaa! You fell asleep while working again!
-# do actor_change("Layla", "angry_1")
 Layla: How many times do I need to tell you that you need to rest properly!
 Layla: In your own bed! In your own home!
-# do actor_change("Layla", "base")
+# the same pose with her mouth shut ("stern" is scolding's closed twin)
+do actor_change("Layla", "stern")
 Player: I know, I know.
 Player: I just really got into it. Going home would've broken that flow.
+# she lets the scolding go when Fiona asks about the jacket (same pose, a small reaction)
+do actor_change("Layla", "explaining")
+do actor_change("Fiona", "jacket_suspicious")
 Player: Also, what's this thing over me?
+do actor_change("Layla", "admiring")
 Layla: It's my jacket. I kept it over you to keep you warm as you slept.
+do actor_change("Layla", "warm")
+do actor_change("Fiona", "jacket")
 Player: Oh.
+do actor_change("Layla", "happy_talk")
 Layla: Wait, lemme take it off you. I'll put it in my car later.
+# step 2.423: she steps up to Fiona, the jacket comes off, and she steps back to her spot
+do actor_approach("Layla", "Fiona", 300.0, 0.6)
+do wait(0.7)
+do actor_change("Layla", "neutral")
+do actor_change("Fiona", "base")
+do wait(0.4)
+do actor_step_back("Layla", 0.6)
 Player: Thanks, Layla.
 Player: What time is it? Has the professor come in yet?
+do actor_change("Layla", "explaining_talk")
 Layla: It's 7:30 right now. The professor doesn't come in until 10, usually.
-# do actor_change("Layla", "pout")
+# the favor: hesitant, then worried, then a comic wail ("whining" is "crying" without the tears)
+do actor_change("Layla", "hesitant")
 Layla: And um... Fiona. Would you still help me with what I asked you yesterday?
 Layla: You know, the genomic sequencing thing?
+do actor_change("Layla", "sad")
 Layla: The professor asked me to show him the results first thing after he arrived.
+do actor_change("Layla", "whining")
+do actor_effect("Layla", "tremble")
 Layla: If I don't do that, I'm doomed!
-# do actor_change("Layla", "base")
+# relieved at "Sure" (same pose), held while Fiona goes on
+do actor_change("Layla", "eager")
 Player: Sure. I can do that. Shouldn't take me more than ten minutes.
+do actor_change("Fiona", "explain")
 Player: You know that you could easily do it yourself though, right?
 Player: Objectively, you're smarter than the average undergrad Research Assistant.
 Player: If I can do it in 10 minutes, you should know it's possible for you to do in under an hour.
-# layla is shy. TODO: swap for a proper shy expression when the art lands.
-# do actor_change("Layla", "pout")
+# layla is shy...
+do actor_change("Layla", "hesitant")
 Layla: Umm... I'm glad you think that.
-# layla is extra shy
+# ...then extra shy: the blush comes in here, with a small shrink
+do actor_change("Layla", "bashful_talk")
+do actor_effect("Layla", "shy")
 Layla: I would still like to have you do it for me once, if you don't mind...
 Layla: I learn faster when you teach me.
+do actor_change("Layla", "bashful")
+do actor_change("Fiona", "base")
 Player: No worries. Let's get to the lab ASAP. I need to go home and shower after this.
-# do actor_change("Layla", "victory")
+do actor_change("Layla", "beaming")
+do actor_effect("Layla", "bounce")
 Layla: Yaaaaay! Thanks Fiona! I owe you one.
-# do actor_change("Layla", "base")
+do actor_change("Layla", "eager")
 Player: Let's go.
+# step 2.392: the wake-up music (started in chapter2_intro.dialogue) fades out as the talk ends, and the
+# library's ambience comes back up under it. does nothing when no music is playing.
+do SoundManager.fade_out_music(3.0)
 do Flags.set_level_flag("layla_post_wake_intro_seen", true)
 => END
 
@@ -70,79 +107,237 @@ else:
 	do actor_enter("Layla", "base", "left")
 	do actor_enter("Fiona", "base", "right")
 	do actor_flip("Fiona", true)
+# step 2.405: her theme for as long as you talk (it fades when you leave)
+do SoundManager.play_music_track("layla_hub_theme", 1.5)
+# step 2.373: Layla's expressions from her rig. she enters as "base"; the first change lands while she fades in.
 if Flags.get_game_counter("layla_closeness") >= 3:
+	do actor_change("Layla", "warm")
 	Layla is following you with glistening eyes.
 	Her scent reminds you of lavender drenched in dew.
 elif Flags.get_game_counter("layla_closeness") >= 0:
+	do actor_change("Layla", "content")
 	Layla follows along, humming to herself.
 	Her scent reminds you of lavender drenched in dew.
 else
+	do actor_change("Layla", "downcast")
 	Layla follows a step behind, quieter than usual.
 ~ hub_return
-# do actor_change("Layla", "base")
+# step 2.373: her resting face while you pick a topic, by closeness tier (close / neutral / distant).
+# every topic comes back here, so this also resets her after each one.
+if Flags.get_game_counter("layla_closeness") >= 3:
+	do actor_change("Layla", "warm")
+elif Flags.get_game_counter("layla_closeness") >= 0:
+	do actor_change("Layla", "neutral")
+else
+	do actor_change("Layla", "downcast")
+do actor_change("Fiona", "base")
 What do you want to say to her?
 
-- Ask about our objective [state={{Flags.get_level_flag("lab_keypad_interacted")}}-{{Flags.get_level_flag("jayce_date_hint_given")}}-{{Flags.get_level_flag("julian_password_asked")}}]
-	if Flags.get_level_flag("julian_password_asked") == true:
-		# step 2.226: Julian's lead. the code is probably one of Greene's DNA dates
-		Player: So, the password to the lab might be one of the dates Julian mentioned.
-		Player: The date the double helix was discovered...
-		Player: Or the day nuclein was discovered. The DNA molecule.
-		do actor_effect("Layla", "jump")
-		Layla: Yes! That's gotta be it!
-		Player: We only need to find a way to... get those dates now.
-		Layla: Indeed... with my dead phone and your dumb one, we're not in a great position.
-		if Flags.get_game_counter("layla_closeness") >= 0:
+- Ask about our objective [state={{Flags.get_level_flag("lab_keypad_interacted")}}-{{Flags.get_level_flag("jayce_date_hint_given")}}-{{Flags.get_level_flag("julian_password_asked")}}-{{Flags.get_level_flag("faculty_floor_unlocked")}}-{{Flags.get_level_flag("greene_office_keycard_talk_seen")}}-{{Flags.get_level_flag("jayce_keycard_refused")}}-{{Inventory.has_item("jayce_camera")}}-{{Flags.get_level_flag("greene_office_unlocked")}}-{{Flags.get_level_flag("layla_waiting_outside_office")}}-{{Flags.get_level_flag("layla_phone_charged")}}]
+	# step 2.290: the later stages, latest first.
+	if Flags.get_level_flag("layla_waiting_outside_office") == true:
+		do actor_change("Fiona", "explain")
+		Player: Layla, wait outside, okay? I'll see if there's anything I can find in the office and come out.
+		Player: I don't wanna jeopardize you for something I'm having fun doing.
+		# step 2.377: Layla's expressions (rig)
+		if Flags.get_game_counter("layla_closeness") < 0:
+			do actor_change("Layla", "sad")
+			Layla: ...Fine. I'll wait outside.
+		else
+			do actor_change("Layla", "explaining_talk")
+			Layla: You might be having fun doing it, but...
+			Layla: I'm benefitting too!
+			do actor_change("Layla", "talking")
+			Layla: But regardless, I get it.
+			do actor_change("Layla", "happy_talk")
+			Layla: I'll wait outside, Fiona.
+			do actor_change("Layla", "neutral")
+			if Flags.get_game_counter("layla_closeness") >= 3:
+				Player: Good girl.
+				# flustered, with the blush, set before the push-in and held through it
+				do actor_change("Layla", "flustered")
+				do actor_focus("Layla", 1.5, 0.4)
+				Layla: ...
+				do actor_unfocus_all(0.3)
+	elif Flags.get_level_flag("greene_office_unlocked") == true:
+		Player: Jayce must've opened the office door by now...
+		Player: We should hurry. It's getting closer to the professor's arrival time.
+		# step 2.374: Layla's expressions (rig)
+		if Flags.get_game_counter("layla_closeness") < 0:
+			do actor_change("Layla", "talking")
+			Layla: Then let's hurry.
+		else
+			do actor_change("Layla", "surprised")
 			do actor_effect("Layla", "tremble")
-			Layla: Fiona... what if we can't make it?
-			Layla: The professor would never write me a letter of recommendation after that... would he?
-			do actor_effect("Layla", "slump")
-			Her shoulders slump.
-			Player: Don't worry. We've got this.
-			Player: We'll figure it out and get in, one way or another.
-			Then, as if solely for you, she straightens her back and puts on a brave face.
-			do actor_effect("Layla", "nod")
-			Layla: Of course! I trust you.
+			Layla: Oh no! Let's hurry!
+	elif Flags.get_level_flag("jayce_keycard_refused") == true and Inventory.has_item("jayce_camera") == true:
+		Player: I bet this camera in our hands will scare the living shit outta Jayce.
+		# step 2.374: Layla's expressions (rig)
+		if Flags.get_game_counter("layla_closeness") < 0:
+			do actor_change("Layla", "talking")
+			Layla: Good. Let's use it.
+		else
+			do actor_change("Layla", "excited")
+			do actor_effect("Layla", "jump")
+			Layla: Hell yeah! Let's tell him what we've got our hands on!
+			do actor_change("Layla", "fierce")
+			Layla: And then, GET HIM FIRED!!
+			Player: (She seems excited about that...)
+	elif Flags.get_level_flag("jayce_keycard_refused") == true:
+		do actor_change("Fiona", "suspicious")
+		Player: We need to find some dirt on that... dirtbag.
+		Player: Only then will he cooperate.
+		# step 2.374: Layla's expressions (rig)
+		do actor_change("Layla", "talking")
+		Layla: Bet it won't be that difficult. Given his... nature.
+		do actor_change("Layla", "neutral")
+		do actor_change("Fiona", "thinking")
+		Player: Yes. But... where should we look?
+	elif Flags.get_level_flag("greene_office_keycard_talk_seen") == true:
+		Player: So his office is locked. As expected.
+		Player: We need to talk to the janitor. He mentioned having a keycard, right?
+		# step 2.374: Layla's expressions (rig)
+		if Flags.get_game_counter("layla_closeness") < 0:
+			do actor_change("Layla", "sad")
+			Layla: He did. Let's go.
+		else
+			do actor_change("Layla", "happy_talk")
+			Layla: He did! Let's go talk to him.
+	elif Flags.get_level_flag("faculty_floor_unlocked") == true:
+		do actor_change("Fiona", "explain")
+		Player: So, as I mentioned earlier...
+		Player: With the nuclein discovery date failing...
+		Player: Our only shot is to look for other clues by breaking into his office...
+		# step 2.376: Layla's expressions (rig)
+		if Flags.get_game_counter("layla_closeness") < 0:
+			do actor_change("Layla", "sad")
+			Layla: ...I don't like it.
+			Layla: But fine. I'll come.
+			do actor_change("Layla", "downcast")
+		else
+			do actor_change("Layla", "troubled")
+			Layla: Umm... yeah.
+			do actor_change("Layla", "hesitant")
+			Layla: Even though I'm pretty hesitant about that...
+			do actor_change("Layla", "admiring")
+			Layla: I'll go with you. This is that important.
+			do actor_change("Layla", "warm")
+			if Flags.get_game_counter("layla_closeness") >= 3:
+				# step 2.292: close only (moved here from julian's lead).
+				do actor_change("Layla", "sad")
+				do actor_effect("Layla", "tremble")
+				Layla: Fiona... what if we can't make it?
+				Layla: The professor would never write me a letter of recommendation after that... would he?
+				do actor_change("Layla", "downcast")
+				do actor_effect("Layla", "slump")
+				Her shoulders slump.
+				do actor_change("Fiona", "base")
+				Player: Don't worry. We've got this.
+				Player: We'll figure it out and get in, one way or another.
+				# the brave face
+				do actor_change("Layla", "eager")
+				Then, as if solely for you, she straightens her back and puts on a brave face.
+				do actor_change("Layla", "excited")
+				do actor_effect("Layla", "nod")
+				Layla: Of course! I trust you.
+				do actor_change("Layla", "eager")
+		Player: Yep. Let's move on.
+	elif Flags.get_level_flag("layla_phone_charged") == true:
+		# step 2.291: the date came from layla's phone and hasn't been tried yet.
+		Player: We've got the date, through your phone. Let's go enter it now.
+		# step 2.376: Layla's expressions (rig)
+		if Flags.get_game_counter("layla_closeness") < 0:
+			do actor_change("Layla", "sad")
+			Layla: Fine. Let's go.
+		else
+			do actor_change("Layla", "excited")
+			do actor_effect("Layla", "jump")
+			Layla: Yes! Let's go. February 26, 1869 it is!
+	elif Flags.get_level_flag("julian_password_asked") == true:
+		# step 2.226 / 2.291: julian's lead. the book route stays on these lines (less obvious).
+		do actor_change("Fiona", "explain")
+		Player: What we need to do now is find the precise date Julian mentioned.
+		Player: That's our best lead.
+		# step 2.376: Layla's expressions (rig)
+		if Flags.get_game_counter("layla_closeness") < 0:
+			do actor_change("Layla", "sad")
+			Layla: Right. That date.
+		else
+			do actor_change("Layla", "excited")
+			do actor_effect("Layla", "jump")
+			Layla: Yes! That DNA-related date!
+		do actor_change("Layla", "hesitant")
+		Layla: I wonder how we're gonna figure it out, though...
+		do actor_change("Layla", "touched")
+		do actor_change("Fiona", "thinking")
+		Player: Hmmm.
+		Player: I'll find a way, I guess.
+		if Flags.get_game_counter("layla_closeness") < 0:
+			do actor_change("Layla", "sad")
+			Layla: Hope so.
+		else
+			do actor_change("Layla", "happy_talk")
+			Layla: Of course!
 	elif Flags.get_level_flag("jayce_date_hint_given") == true:
 		# step 2.222: Jayce couldn't open it, but the password is (probably) a date
+		do actor_change("Fiona", "thinking")
 		Player: So, it seems like the janitor can't help us much either...
 		Player: But... we do know the password's going to be a date.
 		Player: Well, most likely.
+		# step 2.374: Layla's expressions (rig)
 		if Flags.get_game_counter("layla_closeness") < 0:
+			do actor_change("Layla", "sad")
 			Layla: Right. A date.
 		else
+			do actor_change("Layla", "excited")
 			do actor_effect("Layla", "jump")
 			Layla: Yes! Now we only need to know WHAT date it could be.
+		do actor_change("Layla", "explaining_talk")
 		Layla: We should ask someone!
+		do actor_change("Layla", "explaining")
+		do actor_change("Fiona", "base")
 		Player: Probably.
+		do actor_change("Fiona", "thinking")
 		Player: (But... who?)
 	elif Flags.get_level_flag("lab_keypad_interacted") == true:
 		# step 2.221: the code didn't work, so the plan is now the janitor
 		Player: So, we're locked out of the lab, unfortunately.
 		Player: I think we should talk to the janitor there.
 		Player: What do you think?
+		# step 2.373: uneasy about him (hand on chest), a little reassured while Fiona takes the lead
+		do actor_change("Layla", "hesitant")
 		Layla: Yeah... let's do that.
 		do actor_effect("Layla", "tremble")
 		Layla: Although, I don't like the way he's been looking at us since we entered the room.
+		do actor_change("Layla", "touched")
 		Player: Yeah, I get it.
 		Player: I'll take the lead. And we'll be cautious.
 		if Flags.get_game_counter("layla_closeness") < 0:
+			do actor_change("Layla", "hesitant")
 			Layla: Got it.
 		else
+			do actor_change("Layla", "happy_talk")
 			do actor_effect("Layla", "nod")
 			Layla: Got it!
 	else
 		Player: So, just to be clear, Layla. All I need to do is go to the lab with you and help with the sequencing, correct?
 		Player: Then I can go home and shower, right?
+		# step 2.373: distant, quiet and hands down; otherwise a cheerful promise, then a happy hop
 		if Flags.get_game_counter("layla_closeness") < 0:
+			do actor_change("Layla", "sad")
 			Layla: Yes. That's all. I won't bother you after that.
+			do actor_change("Layla", "downcast")
 		else
+			do actor_change("Layla", "explaining_talk")
 			Layla: Yes! That's all I want from you. I promise I won't bug you after that.
+			do actor_change("Layla", "explaining")
 		Player: It's alright. You ain't buggin' me.
 		Player: Cool. Let's do this, then.
 		if Flags.get_game_counter("layla_closeness") < 0:
+			do actor_change("Layla", "sad")
 			Layla: Thanks.
 		else
+			do actor_change("Layla", "excited")
 			do actor_effect("Layla", "jump")
 			Layla: Yay! Thanks, Fiona.
 	=> hub_return
@@ -150,36 +345,53 @@ What do you want to say to her?
 - Ask her about the janitor [if Flags.get_level_flag("jayce_introduced") == true]
 	do Flags.set_level_flag("layla_talked_about_jayce", true)
 	Player: So... that janitor...
+	# step 2.374: Layla's expressions (rig): a comic shudder, then cautious (hand on chest)
+	do actor_change("Layla", "whining")
 	do actor_effect("Layla", "tremble")
 	Layla: Yeah, he's so creeepy!
+	do actor_change("Layla", "hesitant")
 	Layla: We should tread carefully around him, Fiona.
+	do actor_change("Layla", "touched")
+	do actor_change("Fiona", "shrug")
 	Player: Oh, don't worry, Layla. I've met thousands like him.
 	Player: I'll handle him.
 	if Flags.get_game_counter("layla_closeness") < 0:
+		do actor_change("Layla", "sad")
 		Layla: ...Whatever you think is best.
 	else
+		do actor_change("Layla", "troubled")
 		She seems hesitant, but says:
+		do actor_change("Layla", "happy_talk")
 		do actor_effect("Layla", "nod")
 		Layla: Okay, sure! If you say so!
 	=> hub_return
 - Ask her about work [once] [if Flags.get_level_flag("layla_asked_about_work") == false]
 	do Flags.set_level_flag("layla_asked_about_work", true)
+	do actor_change("Fiona", "explain")
 	Player: You know, I'm happy to help you with this, but I have to ask...
 	Player: Why didn't you do it sooner?
 	Player: It makes sense to finish off difficult tasks way before deadlines.
 	Player: As your mentor, I need to point this out.
 	Player: We need to move fast if we want to secure funding.
+	# step 2.373: deflated (hands down), then explaining herself (hand on chest)
+	do actor_change("Layla", "downcast")
 	do actor_effect("Layla", "slump")
 	You notice her shoulders slump after hearing that remark.
-	# do actor_change("Layla", "pout")
+	do actor_change("Layla", "sad")
 	Layla: I know... I'm sorry.
 	Layla: It's just... I was afraid of messing it up.
+	do actor_change("Layla", "hesitant")
 	Layla: The equipment is limited, and expensive.
 	Layla: If I got it wrong, it would've come out of the lab's pocket.
 	Layla: I didn't wanna disappoint the professor.
+	# step 2.373: "Or... you." is flustered, so the blush comes in; distant, she just goes quiet
 	if Flags.get_game_counter("layla_closeness") >= 0:
+		do actor_change("Layla", "bashful_talk")
 		do actor_effect("Layla", "shy")
 		Layla: Or... you.
+		do actor_change("Layla", "bashful")
+	else
+		do actor_change("Layla", "downcast")
 	do actor_effect("Layla", "turn_away")
 	She looks away, but her mind's eye looks toward you.
 	What do you wanna say to her?
@@ -188,22 +400,28 @@ What do you want to say to her?
 		do Flags.set_level_flag("layla_work_comforted", true)
 		do Flags.add_game_counter("layla_closeness", 1)
 		do actor_effect("Layla", "turn_back")
+		do actor_change("Fiona", "hands_back")
 		Player: That's... alright.
 		Player: I would only say that you need to believe in yourself more.
 		Player: You're better at this than you realize.
-		# TODO: shy expression when the art lands.
+		# step 2.373 / 2.374: flustered before the push-in and held through "Her face turns a bright red" (the red
+		# flush is for the funny-face set only), then a warm thanks. changes happen before a push-in or push-out.
+		do actor_change("Layla", "flustered")
 		do actor_focus("Layla", 1.6, 0.3)
 		Layla: ....!
 		do actor_effect("Layla", "tremble")
 		Her face turns a bright red.
+		do actor_change("Layla", "heartfelt")
 		Layla: Thank you, Fiona.
 		Layla: I guess I needed to hear that.
+		do actor_change("Layla", "bashful")
 		do actor_unfocus_all(0.4)
 		Layla will remember this.
-		# do actor_change("Layla", "victory")
+		do actor_change("Layla", "excited")
 		do actor_effect("Layla", "jump")
 		Layla: Still, I promise I'll be more punctual!
 		Layla: Can't disappoint my prodigious mentor, after all!
+		do actor_change("Layla", "eager")
 		Player: Yeah, yeah.
 		Player: Anyway...
 		=> hub_return
@@ -211,96 +429,160 @@ What do you want to say to her?
 	- Reprimand her [matters]
 		do Flags.set_level_flag("layla_work_reprimanded", true)
 		do Flags.add_game_counter("layla_closeness", -1)
+		do actor_change("Fiona", "suspicious")
 		Player: Afraid?
+		# step 2.373: the blush drains (same pose, hands down)
+		do actor_change("Layla", "downcast")
 		Player: That sounds like an excuse rather than a reason, to be honest.
 		Player: You had days, Layla. Days.
 		Player: And if we keep moving at this pace...
 		Player: We can say goodbye to funding.
 		Unable to meet your gaze, she says:
+		do actor_change("Layla", "sad")
 		do actor_effect("Layla", "tremble")
 		Layla: That's not fair, Fiona. I was trying to be careful...
+		# she sulks through the lecture (same pose; step 2.374: "sulking" is the pout with her sad eyes)
+		do actor_change("Layla", "sulking")
+		do actor_change("Fiona", "explain_suspicious")
 		Player: Careful doesn't get results.
 		Player: But unfortunately, results get funding.
 		Player: Next time something scares you, come to me sooner.
 		Player: Don't... freeze.
-		# do actor_change("Layla", "pout")
+		do actor_change("Layla", "downcast")
 		do actor_effect("Layla", "slump")
 		Layla is looking down. Shuffling her feet.
+		do actor_change("Layla", "sad")
 		Layla: ...Okay.
 		do actor_effect("Layla", "turn_back")
 		Layla: I'm sorry. I'll do better.
+		do actor_change("Layla", "downcast")
+		do actor_change("Fiona", "base")
 		Player: Good.
 		Layla will remember this.
+		if Flags.get_level_flag("julian_nearly_told_truth") == true:
+			# step 2.296: the second hurt (julian came first). layla is locked distant for the chapter.
+			do Flags.lock_layla_distant()
+			# step 2.374: the dimmed look is her sad eyes ("downcast"), set before the push-in.
+			do actor_change("Layla", "downcast")
+			do actor_focus("Layla", 1.6, 0.4)
+			Somehow, you notice a change in Layla.
+			The light behind her eyes seems dimmer. And she's looking at you differently.
+			do actor_unfocus_all(0.3)
 		Player: Anyway...
 		=> hub_return
 
 - Ask her about her life [once] [if Flags.get_level_flag("layla_asked_about_life") == false]
 	do Flags.set_level_flag("layla_asked_about_life", true)
+	do actor_change("Fiona", "hands_back")
 	Player: So... apart from work, what've you been up to lately?
 	if Flags.get_level_flag("layla_work_reprimanded") == true:
 		# step 2.234: after a reprimand she's guarded at first, then thaws
+		# step 2.373: a wary side glance, hands down; surprise at "Oh?"; "who, me?" disbelief to finish
+		do actor_change("Layla", "suspicious")
 		do actor_effect("Layla", "shy")
 		Layla: ...
+		do actor_change("Layla", "sad")
 		Layla: You're not about to tell me off again, are you?
+		do actor_change("Layla", "suspicious")
+		do actor_change("Fiona", "shy")
 		Player: What? No.
 		Player: Of course not.
+		do actor_change("Layla", "surprised")
 		Layla: Oh?
+		do actor_change("Layla", "who_me_talk")
 		Layla: Then... you're asking me about something other than work?
 	elif Flags.get_game_counter("layla_closeness") < 0:
 		# step 2.236: distant without a reprimand. guarded, but she lets it happen
+		# step 2.373: the same wary side glance, hands down, then "who, me?" disbelief
+		do actor_change("Layla", "suspicious")
 		do actor_effect("Layla", "shy")
 		Layla: ...
+		do actor_change("Layla", "sad")
 		Layla: Why the sudden interest?
+		do actor_change("Layla", "suspicious")
 		Player: Can't I just ask?
+		do actor_change("Layla", "sad")
 		Layla: I guess you can.
+		do actor_change("Layla", "who_me_talk")
 		Layla: Then... you're asking me about something other than work?
 	else
 		# step 2.216: she can't believe it. a jolt, then a happy, disbelieving double hop.
+		# step 2.373: the jolt is her funny shock face; the happy hop is excited
+		do actor_change("Layla", "funny_shock")
 		do actor_effect("Layla", "shock")
 		Layla: Whaaaaaa?
+		do actor_change("Layla", "excited")
 		do actor_effect("Layla", "bounce")
 		Layla: You're asking me about something other than work!?
 	# worry: she leans in for a proper look.
+	# step 2.373: worried, hand on chest; she keeps the pose (mouth shut) while Fiona answers
+	do actor_change("Layla", "hesitant")
 	do actor_effect("Layla", "lean_in")
 	Layla: Are you okay? Do you have a high temperature?
 	# she closes the gap herself. Fiona stays put and lets her.
 	if Flags.get_level_flag("layla_work_reprimanded") == true or Flags.get_game_counter("layla_closeness") >= 0:
 		do actor_approach("Layla", "Fiona", 440.0, 0.5)
 		Layla: Come here, lemme touch your forehead.
+	do actor_change("Layla", "touched")
+	do actor_change("Fiona", "hands_back")
 	Player: I'm okay, actually.
 	do actor_effect("Fiona", "nod")
 	Player: Guess I just... realized I hadn't asked you that in a minute.
 	# it lands. she straightens, notices how close she is, and drifts back, bashful.
 	do actor_effect("Layla", "upright")
 	do actor_step_back("Layla", 0.8)
+	# step 2.373: bashful (with the blush) only if she came close to touch Fiona's forehead; otherwise
+	# just thoughtful (same condition as the approach above)
+	if Flags.get_level_flag("layla_work_reprimanded") == true or Flags.get_game_counter("layla_closeness") >= 0:
+		do actor_change("Layla", "bashful")
+	else
+		do actor_change("Layla", "pensive")
 	do actor_effect("Layla", "shy")
 	Layla will remember that.
+	if Flags.get_level_flag("layla_work_reprimanded") == true or Flags.get_game_counter("layla_closeness") >= 0:
+		do actor_change("Layla", "bashful_talk")
+	else
+		do actor_change("Layla", "sad")
 	Layla: Oh... okay.
 	Layla: Lemme see. Well...
-	# do actor_change("Layla", "victory")
+	# step 2.373: the movie: excited, then beaming at "ALL TIME"
+	do actor_change("Layla", "excited")
 	do actor_effect("Layla", "jump")
 	Layla: Oh, I watched this movie recently! Devil Wears Grada 2.
+	do actor_change("Layla", "beaming")
 	Layla: The first one was my favorite movie of ALL TIME!!!
-	# do actor_change("Layla", "base")
+	do actor_change("Layla", "eager")
 	Player: Oh. I see. How'd you like this one then?
+	# her review: unsure, deflated, then her opinion (talking, asking), and a pout (closed mouth on purpose)
+	do actor_change("Layla", "hesitant")
 	Layla: It was....
+	# step 2.374: "hesitant" holds here ("sad" has the sad eyes now, too heavy for a so-so movie)
 	do actor_effect("Layla", "slump")
 	Layla: Okay? I guess.
+	do actor_change("Layla", "talking")
 	Layla: I mean, it had its moments, but it lacked something the genius original had, you know?
+	do actor_change("Layla", "asking")
 	Layla: I also feel it had too many product placements?
-	# do actor_change("Layla", "pout")
+	do actor_change("Layla", "pouting")
 	Layla: Got a bit tiring seeing a cola can company be advertised for the third time...
-	# do actor_change("Layla", "victory")
+	do actor_change("Layla", "excited")
 	do actor_effect("Layla", "bounce")
 	Layla: But ohmygod. The fashion in it!
 	Layla: That remained top notch.
-	# do actor_change("Layla", "base")
+	do actor_change("Layla", "talking")
 	Layla: Okay, maybe it was just a lil' bit worse than the last one, if I'm being honest.
+	do actor_change("Layla", "explaining_talk")
 	Layla: But that was already such a high bar!
+	do actor_change("Layla", "explaining")
 	All of a sudden, she seems more animated.
+	do actor_change("Fiona", "base")
 	Player: I didn't realize you liked fashion that much.
+	do actor_change("Layla", "happy_talk")
 	do actor_effect("Layla", "lean_in")
 	Layla: That's because you never asked!
+	# quieter: hand on chest. nothing may go between her last line and the choices, so her closed-mouth
+	# twin is set at the top of each choice instead
+	do actor_change("Layla", "hesitant")
 	do actor_effect("Layla", "upright")
 	Layla: ... Or maybe I didn't let it show.
 	Layla: I dress pretty basic for someone who's into fashion this much.
@@ -308,52 +590,103 @@ What do you want to say to her?
 	- Ask her why she does that [matters]
 		do Flags.set_level_flag("layla_life_asked_why", true)
 		do Flags.add_game_counter("layla_closeness", 1)
+		# step 2.373: her closed-mouth twin while Fiona asks
+		do actor_change("Layla", "touched")
+		do actor_change("Fiona", "hands_back")
 		Player: Oh. Do you mind if I ask why?
-		# do actor_change("Layla", "pout")
+		# step 2.373: opening up, hands down; changes go before the push-in and the push-out
+		do actor_change("Layla", "sad")
 		# step 2.217: a gentle close-up while she opens up, released before Fiona answers.
 		do actor_focus("Layla", 1.35, 0.6)
 		Layla: Well, my parents are immigrants...
 		Layla: Let's say they raised me in their own way.
 		Layla: I was taught not to attract too much attention to myself.
 		Layla: Whenever I've tried dressing up, it's led to a lot of mixed feelings, you know?
+		do actor_change("Layla", "pensive")
 		do actor_unfocus_all(0.5)
 		Player: I see.
+		do actor_change("Fiona", "hands_back_sad")
 		Player: I'm sorry about that. I hope you can find your confidence someday.
+		do actor_change("Fiona", "shrug")
 		Player: For me, clothes are just a matter of convenience.
+		# a small reaction in the same pose
+		do actor_change("Layla", "surprised")
 		Player: If I could, I'd roam around naked everywhere.
 		Player: Unfortunately, that would land me in jail.
 		# step 2.212: layla imagines it. she slides left and close so the thought bubble has the right half.
-		# TODO: swap to her blushing + thinking expression when the art lands, e.g.
-		# do actor_change("Layla", "blush_thinking")
+		# step 2.373: eyes closed, a dreamy smile and the blush ("daydreaming"), set before the push-in
+		do actor_change("Layla", "daydreaming")
 		do actor_focus("Layla", 1.6, 0.45, -1.0, 0.3)
+		do lock_dialogue_input()
 		do hide_dialogue_ui()
 		do prop_enter("Thought", "res://conversation/props/layla_thought_bubble.tscn", "right", 330.0, 1.3)
 		do prop_call("Thought", "play")
 		do show_dialogue_ui()
+		do unlock_dialogue_input()
 		Layla: ...
 		# the penny drops: she jolts, the screen shakes, and the bubble pops.
+		# step 2.373 / 2.379: her full funny face, held through "No!"; bashful for "I mean - Yes! No no."; then her
+		# funny face without the red flush (funny_shock) for the ramble
+		do actor_change("Layla", "funny_face")
 		do actor_effect("Layla", "shock")
 		do shake(0.35, 9.0)
 		do prop_call("Thought", "burst")
 		do prop_leave("Thought")
+		do actor_change("Fiona", "suspicious")
 		Player: Layla, you alright?
 		Layla: No!
+		do actor_change("Layla", "bashful_talk")
 		do actor_effect("Layla", "tremble")
 		Layla: I mean - Yes! No no.
+		do actor_change("Layla", "bashful")
 		Player: Huh?
+		# step 2.379: held through the push-out and Fiona's "Riiiight." (hub_return resets her after)
+		do actor_change("Layla", "funny_shock")
 		Layla: [speed=0.7]Oh well,[/speed][wait=0.3] [speed=1.5]I think it's getting quite hot in here,[/speed] [wave amp=16 freq=7]hehe?[/wave] [speed=2.6][mutter][small=0.9]What do you think about the weather?[/small] [small=0.84]And what are your thoughts about the[/small] [small=0.78]economic and political state of the world?[/small][/mutter][/speed]
 		do actor_unfocus_all(0.4)
+		do actor_change("Fiona", "suspicious")
 		Player: Riiiight.
+		do actor_change("Fiona", "base")
 		Player: Anyway...
 		=> hub_return
 
 	- Move on [matters]
 		do Flags.set_level_flag("layla_life_moved_on", true)
+		# step 2.373: her closed-mouth twin, then a small letdown in the same pose
+		do actor_change("Layla", "touched")
 		Player: I see.
+		do actor_change("Fiona", "suspicious")
 		Player: That's... interesting.
+		do actor_change("Layla", "troubled")
 		do actor_effect("Layla", "slump")
+		do actor_change("Fiona", "base")
 		Player: Anyway...
 		=> hub_return
 
+- Ask for her phone [once] [if Flags.get_level_flag("layla_phone_dead_known") == true and Flags.get_level_flag("layla_phone_given") == false]
+	# step 2.264 / 2.265: shown once her dead battery has come up (julian_talk), until she hands the phone over.
+	Player: Hey Layla, think I can grab your phone real quick?
+	# step 2.376: Layla's expressions (rig)
+	# step 2.404: she holds out her phone, and it goes once fiona has it
+	do actor_item("Layla", "phone")
+	do actor_change("Layla", "happy_talk")
+	Layla: Of course!
+	do Flags.set_level_flag("layla_phone_given", true)
+	do Inventory.add_item("layla_phone")
+	do actor_item_hide("Layla")
+	=> hub_return
+
+- Ask her about the date again [if Flags.get_level_flag("layla_phone_charged") == true and Flags.get_level_flag("keypad_tried_miescher_discovery") == false]
+	# step 2.265 / 2.287: reminder of the date from her phone; hidden once it's been tried on the keypad.
+	Player: Hey Layla. What was the date again? The one you just googled.
+	# step 2.376: Layla's expressions (rig)
+	do actor_change("Layla", "explaining_talk")
+	Layla: It was February 26, 1869.
+	Layla: So, 02261869, if we're entering it into the keypad.
+	do actor_change("Layla", "explaining")
+	Player: Got it, thanks.
+	=> hub_return
+
 - Never mind [Leave]
+	do SoundManager.fade_out_music(2.0)
 	=> END

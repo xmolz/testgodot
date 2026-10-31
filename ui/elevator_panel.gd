@@ -10,6 +10,7 @@ const CHECKPOINT_DEADLINE := "elevator_floor_deadline"
 
 ## Until this level flag is true, every floor except the current one plays the
 ## deadline line instead of travelling. "" disables the lock (normal travel).
+## step 2.375: the janitor's keypad talk alone opens travel; a date no longer has to be tried first.
 const TRAVEL_UNLOCK_FLAG := "jayce_date_hint_given"
 
 ## Black-hold duration for elevator rides. Exit-sign door teleports keep the
@@ -25,7 +26,7 @@ const ELEVATOR_HOLD_SECONDS := 3.5
 const FLOORS: Array[Dictionary] = [
 	{"id": "R", "label": "R     Rooftop", "behavior": "restricted"},
 	{"id": "5F", "label": "5F    Gym, Leisure Room", "behavior": "restricted"},
-	{"id": "4F", "label": "4F    Faculty Offices", "behavior": "transition", "spawn_marker": "Elevator4FSpawnPoint"},
+	{"id": "4F", "label": "4F    Faculty Offices", "behavior": "transition", "spawn_marker": "Elevator4FSpawnPoint", "unlock_flag": "faculty_floor_unlocked"},
 	{"id": "3F", "label": "3F    Classrooms, Grad Commons", "behavior": "transition", "spawn_marker": "Elevator3FSpawnPoint"},
 	{"id": "2F", "label": "2F    Library, Science Labs", "behavior": "transition", "spawn_marker": "Elevator2FSpawnPoint"},
 	{"id": "1F", "label": "1F    Cafeteria, Auditorium", "behavior": "restricted"},
@@ -110,7 +111,7 @@ func _ready() -> void:
 		button.text = floor_data["label"]
 		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		var is_greyed: bool = floor_data.get("behavior", "restricted") != "transition" and not is_current
+		var is_greyed: bool = (floor_data.get("behavior", "restricted") != "transition" or _floor_locked(floor_data["id"])) and not is_current
 		_setup_button(button, row_size, is_current, is_greyed)
 		button.pressed.connect(_on_floor_pressed.bind(floor_data["id"]))
 		row.add_child(button)
@@ -219,12 +220,25 @@ func _travel_locked() -> bool:
 		return false
 	return not Flags.get_level_flag(TRAVEL_UNLOCK_FLAG)
 
+# step 2.264: a floor with an "unlock_flag" stays greyed (the "not currently accessible" notice)
+# until that level flag is set. 4F (faculty offices) opens once the nuclein date has been tried
+# on the lab keypad (keypad_attempts.dialogue, ~ miescher_discovery).
+# test run: test_run_open_faculty_floor skips this.
+func _floor_locked(floor_id: String) -> bool:
+	if _test_run_allows("open_faculty_floor"):
+		return false
+	for floor_data in FLOORS:
+		if floor_data["id"] == floor_id:
+			var flag: String = str(floor_data.get("unlock_flag", ""))
+			return flag != "" and not Flags.get_level_flag(flag)
+	return false
+
 func _on_floor_pressed(floor_id: String) -> void:
 	if _is_resolving:
 		return
 	if floor_id == current_floor_id:
 		_close_with_line(CHECKPOINT_CURRENT)
-	elif _behavior_for(floor_id) != "transition":
+	elif _behavior_for(floor_id) != "transition" or _floor_locked(floor_id):
 		_show_inaccessible_notice()
 	elif _travel_locked():
 		_close_with_line(CHECKPOINT_DEADLINE)

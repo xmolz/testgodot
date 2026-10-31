@@ -1,0 +1,463 @@
+# res://dialogue/layla_runs_away.dialogue
+# step 2.323: TEMPLATE test scene for the memory box chapter "Layla Runs Away", to see Fiona and Layla
+# against a room. plays in place over the hub through conversation/layla_runs_away_overlay.tscn, after
+# the portal swirl and the "layla_runs_away" monologue in dialogue/chapter_launch.dialogue.
+# rooms: the overlay's background aliases ("apt_living_room", "apt_living_room_2", in
+# res://Backgrounds/Apartment/ since step 2.413).
+# step 2.330: the coffee is a closer, blurred view of the same room (background_view) with the overlay's
+# "table" foreground in front (Backgrounds/Apartment/fiona_apartment_coffee_table.png).
+# step 2.324: Layla uses only her "base" sprite (the one from the puzzle level). her other expressions
+# in characters/layla_profile.tres are old art and are not to be used.
+# step 2.326: the same afternoon as the car ride. they come in through the front door on the left, at an
+# easy pace (actor_stroll_in / actor_stroll_to / actor_stroll_out; the dialogue waits while they walk).
+# step 2.328: facing. both sprites face right unflipped (flip = face left).
+#   Fiona walks in facing the room, turns back to the door (flipped) and backs up to make room;
+#   Layla walks in facing the room, glances back at the door (flipped), then turns to Fiona (unflipped).
+# then a cut to the two of them on the sofa (actor_sit), Layla on the left, Fiona on the right facing her.
+# test on its own: Dev/layla_runs_away_test.tscn (F6).
+
+~ start
+# already staged when it comes from the memory box; needed when the scene is run on its own
+do change_background("apt_living_room", "none", 0.0)
+# step 2.410: her mischief theme, from the arrival until the pose (a record stop cuts it there)
+do SoundManager.play_music_track("mischief_music", 2.0)
+A few minutes and a climb of stairs later, you arrive at your apartment.
+# step 2.339: the door unlocks - the dialogue waits for the sound to finish - then Fiona walks in
+do SoundManager.play_sfx_and_wait("door_unlock")
+# step 2.327: she stops just inside, about one of her own widths from the left edge
+do actor_stroll_in("Fiona", "base", "0.3", 2.2)
+# she looks back over her shoulder at the door...
+do actor_flip("Fiona", true)
+Player: Come on in.
+# ...and backs up into the room to make way, still facing the door
+do actor_stroll_to("Fiona", "0.6", 1.6)
+# step 2.344: Layla comes in to about where Fiona stopped...
+# step 2.365: she comes in curious, looking around
+do actor_stroll_in("Layla", "curious", "0.28", 2.4)
+# ...glances back at the door and the plant...
+do actor_flip("Layla", true)
+do wait(0.7)
+do actor_flip("Layla", false)
+# ...and wanders on across the room, looking around, passing in front of Fiona to the far side
+do actor_stroll_to("Layla", "0.84", 3.2)
+# step 2.345: at the far side she turns and wanders back, past Fiona again, to Fiona's left, then turns
+# to face her (Fiona is still facing the door side, so she already faces Layla)
+do actor_flip("Layla", true)
+do wait(0.4)
+do actor_stroll_to("Layla", "0.33", 2.6)
+do actor_flip("Layla", false)
+# step 2.366: an open mouth when she speaks, the same mood with her mouth closed while Fiona does
+do actor_change("Layla", "excited")
+Layla: Fiona! This apartment is huge!
+do actor_change("Layla", "explaining_talk")
+Layla: And so neat and tidy! I love it.
+do actor_change("Layla", "explaining")
+Player: Thanks.
+do actor_change("Layla", "asking")
+Layla: Are your roommates home right now?
+do actor_change("Layla", "curious")
+do actor_change("Fiona", "hands_back")
+Player: I don't have any.
+Player: I've been living alone for a while now.
+do actor_change("Layla", "pensive")
+Layla takes a second to process that.
+# step 2.367/2.368: genuinely impressed (not blushing) - how can a grad student afford this?
+do actor_change("Layla", "wowed")
+do actor_effect("Layla", "bounce")
+Layla: Oh, wow! That's amazing!
+do actor_change("Layla", "eager")
+do actor_change("Fiona", "explain")
+Player: Anyway, make yourself comfortable.
+Player: I'll get us coffee.
+# step 2.330: cut to a closer, softer view of the same room - the two of them on the sofa, the coffee
+# table in front (it hides the standing poses' hands, so they read as seated)
+do fade_to_black(0.6)
+About half an hour and two cups of coffee later...
+# step 2.337: testing a second room picture (the bookshelf wall) for the seated shots; the entrance keeps
+# "apt_living_room". to go back, delete the change_background line below.
+do change_background("apt_living_room_2", "none", 0.0)
+do background_view(1.6, 0.615, 0.49, 20.0)
+do actor_hide("Fiona")
+do actor_hide("Layla")
+# step 2.368: Layla speaks with her mouth open; while Fiona talks she keeps her pose and just closes her
+# mouth (a different pose only on her own lines, or as a small reaction in the same pose)
+do actor_sit("Layla", "talking", "0.28", 1.3, 0.14)
+do actor_sit("Fiona", "base", "0.72", 1.3, 0.14, true)
+do show_foreground("table")
+# step 2.352: on the table - Fiona's laptop, closed, between them, and a mug each (Layla's mirrored, so
+# both handles face outward)
+do show_table_prop("laptop", "res://Backgrounds/Apartment/laptop_closed.png", "0.5,0.8")
+do show_table_prop("mug_layla", "res://Backgrounds/Apartment/coffee_mug.png", "0.31,0.79", 1.0, true)
+do show_table_prop("mug_fiona", "res://Backgrounds/Apartment/coffee_mug.png", "0.69,0.79")
+do fade_from_black(0.6)
+Layla: Anyway, that's the story of how Bark Ruffalo died.
+do actor_change("Layla", "neutral")
+do actor_change("Fiona", "sad")
+Player: I'm sorry about that.
+do actor_change("Fiona", "shrug")
+Player: Not the worst way for a dog of sixteen to die, though.
+do actor_change("Fiona", "explain_smile")
+Player: Humping a garden gnome in a blaze of glory.
+do actor_change("Layla", "excited")
+Layla: FOR REAL! We didn't expect that at all!
+Layla: He could barely walk by then!
+do actor_change("Layla", "eager")
+do actor_change("Fiona", "base")
+Player: Right.
+Player: I get it, though, honestly.
+do actor_change("Fiona", "explain")
+Player: Bark Ruffalo and I aren't that different.
+do actor_change("Layla", "asking")
+Layla: How come? Do you hump strange objects against your better judgment?
+do actor_change("Layla", "attentive")
+do actor_change("Fiona", "shrug")
+Player: Unfortunately, all the time.
+# step 2.345: a push-in on Layla (the table steps aside for the close-ups)...
+do hide_foreground(0.15)
+do actor_focus("Layla", 2.0, 0.4)
+do actor_change("Layla", "giggling")
+Layla: Oh, Fiona...
+do actor_change("Layla", "laughing_tears")
+Layla: You're such a prankster!
+# ...then on Fiona
+do actor_focus("Fiona", 2.0, 0.4)
+do actor_change("Fiona", "suspicious")
+Player: (...)
+Player: (She thinks I'm kidding?)
+do actor_change("Layla", "hesitant")
+do actor_unfocus_all(0.4)
+do show_foreground("table", 0.2)
+Layla: Anyway, Fiona... I want to ask you something.
+do actor_change("Layla", "touched")
+do actor_change("Fiona", "base")
+Player: Shoot.
+do actor_change("Layla", "hesitant")
+Layla: Far as I know, the university doesn't pay grad students much.
+do actor_change("Layla", "explaining_talk")
+Layla: Yet... you're able to rent this beautiful place all by yourself.
+Layla: Do you work on the side?
+do actor_change("Layla", "hesitant")
+Layla: Sorry if I'm overstepping...
+do actor_change("Layla", "touched")
+do actor_change("Fiona", "explain")
+Player: Oh, no. Not at all.
+Player: And yes, I do.
+do actor_change("Fiona", "explain_smile")
+Player: I'm a streamer.
+do actor_change("Layla", "surprised")
+do actor_effect("Layla", "jump")
+Layla: WHAAAT?! A streamer?!
+do actor_change("Layla", "excited")
+Layla: That's awesome!!!
+Layla: Tell me more! How many subscribers do you have?
+Layla: Do you stream games?
+do actor_change("Layla", "eager")
+do actor_change("Fiona", "smile")
+Player: I'm about to hit a thousand.
+do actor_change("Fiona", "explain_smile")
+Player: And yeah, I've streamed games... but I'm not limited to them.
+# step 2.369/2.370: her funny face (without the red) at the thousand subscribers, with a jump, held
+# through her next line too
+do actor_change("Layla", "funny_shock")
+do actor_effect("Layla", "jump")
+Layla: What?! A thousand?!
+Layla: You're basically a celebrity!!!
+do actor_change("Layla", "eager")
+do actor_change("Fiona", "shrug_smile")
+Player: Hah. Not quite.
+do actor_change("Layla", "hesitant")
+do hide_foreground(0.15)
+do actor_focus("Layla", 2.0, 0.4)
+Layla: It's just...
+# step 2.370: warmer - hands down, pensive brows, blush and an open smile; she keeps the pose (mouth
+# closed) while Fiona answers
+do actor_change("Layla", "heartfelt")
+Layla: You never fail to amaze me.
+do actor_change("Layla", "bashful")
+do actor_unfocus_all(0.4)
+do show_foreground("table", 0.2)
+do actor_change("Fiona", "shrug")
+Player: Oh, come on.
+do actor_change("Fiona", "explain")
+Player: Anyone can stream. It's not that difficult.
+Player: You especially.
+do actor_change("Fiona", "smile")
+Player: People would pay good money to watch you.
+do actor_change("Layla", "who_me_talk")
+Layla: To watch me... play?
+do actor_change("Layla", "who_me")
+do actor_change("Fiona", "thinking_suspicious")
+Player: Err... yeah. If you wanna call it that.
+do actor_change("Layla", "touched")
+Layla seems to pause at that, but brushes past it in her excitement.
+do actor_change("Layla", "excited")
+Layla: Really, Fiona? You think I can actually do it?
+do actor_change("Layla", "eager")
+do actor_change("Fiona", "explain")
+Player: Of course. You'll just need to market yourself properly.
+Player: And figure out a schedule for posting and going live.
+do actor_change("Fiona", "smile")
+Player: I'll help you with all that, though. Don't worry.
+do actor_change("Layla", "beaming")
+Layla: OMG, yay! Thank you!!!
+do actor_change("Layla", "asking")
+Layla: Say, Fiona, do you mind if I check out your pages right now?
+do actor_change("Layla", "happy_talk")
+Layla: I'd love to learn more about your content.
+do actor_change("Layla", "neutral")
+do actor_change("Fiona", "explain")
+Player: Sure, here. You can check them out on my laptop.
+# step 2.352: the laptop opens where it stands
+do show_table_prop("laptop", "res://Backgrounds/Apartment/laptop_open.png", "0.5,0.8")
+Player: My profile's already open in a tab, and everything else is on the drive.
+do actor_change("Fiona", "thinking")
+Player: Also...
+do actor_change("Fiona", "explain")
+Player: I'm gonna hop in the shower while you do that. I'll be back in a few.
+do actor_change("Fiona", "base")
+Player: Does that work?
+do actor_change("Layla", "happy_talk")
+Layla: Yes! Of course!
+Layla: I'll be right here, sippin' my coffee and studying your content.
+do actor_change("Layla", "neutral")
+do actor_change("Fiona", "smile")
+Player: Great.
+# she gets up...
+do actor_rise("Fiona", 0.7)
+do actor_change("Fiona", "base")
+Player: Well, in that case...
+Player: Be right back.
+# ...turns, and walks off to the right (the bathroom is further in)
+do actor_flip("Fiona", false)
+do actor_stroll_out("Fiona", "right", 1.8)
+# step 2.346: the bathroom - Fiona's thoughts, on a black screen for now (no bathroom art yet)
+do fade_to_black(0.8)
+# step 2.410: the shower runs while she's in the bathroom
+do SoundManager.play_looping_sfx("shower_loop", 1.5, 0.0)
+Player: (Well, she seems like she's having fun.)
+Player: (Honestly, I didn't know she'd be so eager to create content of her own.)
+Player: (Didn't peg her as the type.)
+Player: (Welp, anyway...)
+You take your clothes off.
+Player: (I've got my shower gel...)
+Player: (My shampoo...)
+# a loud noise from outside. step 2.382: layla's scream, muffled as Fiona hears it through the bathroom
+# door (drop the "Muffled SFX" argument for the clear version)
+do SoundManager.play_sfx("layla_scream", 1.0, 0.0, "Muffled SFX")
+do shake(0.4, 10.0)
+Layla: [shake rate=20 level=12]OH MY GOD!!!!!![/shake]
+Player: (Huh. What was that?)
+Player: (Was that Layla?)
+Player: (Unlikely... Sounded more like the neighbor's cat...)
+Player: (Layla's got no reason to scream like that.)
+Player: (Anyway, where was I?)
+Player: (Oh, yeah. And my conditioner, which smells like coconut...)
+Player: (Great, let's s-)
+You realize you forgot to bring your towel and your change of clothes.
+Player: (FUCK.)
+do SoundManager.stop_looping_sfx("shower_loop", 0.6)
+# step 2.333/2.334: a new angle over the coffee table: Layla has moved down to the rug and sits at the
+# table with the laptop, big in the middle (step 2.342), facing left; the room behind her soft.
+# Fiona walks between Layla and the sofa (behind Layla, in front of the sofa): further away than Layla,
+# so smaller, with the table hiding her from the hips down. then she comes closer.
+do background_view(1.7, 0.6, 0.45, 22.0)
+# seated low (on the rug): her shoulders at the sofa's backrest, her hands below the table
+# step 2.371: after what she's seen on the laptop she's short-circuiting: her funny face, red, swaying
+do actor_sit("Layla", "short_circuit", "0.5", 1.4, 0.19, true)
+do actor_wobble("Layla", 1.0, 1.0, 0.0)
+do show_foreground("table")
+# step 2.352: the open laptop in front of her, to her left (she's turned toward it), her mug on her right;
+# Fiona's mug is out of this shot
+do show_table_prop("laptop", "res://Backgrounds/Apartment/laptop_open.png", "0.4,0.8")
+do show_table_prop("mug_layla", "res://Backgrounds/Apartment/coffee_mug.png", "0.66,0.79")
+do hide_table_prop("mug_fiona")
+do fade_from_black(0.8)
+# step 2.341: first, Fiona's head pokes in from outside the screen, on the right, behind Layla. she is
+# placed just past the right edge (no walk, so she isn't seen entering), then leans in until only her
+# head and a shoulder come into view
+# step 2.408: from here to the end she's fresh out of the shower: her nude poses (bashful as she peeks in)
+do actor_stroll_in("Fiona", "nude_shy", "1.08,0.78", 0.01, "right", true, 0.82, true)
+do actor_lean("Fiona", -20.0, 0.5)
+Player: Umm... Layla? I forgot to bring my towel.
+Player: I'm going to quickly cross behind you and grab it, okay?
+Player: Don't turn around.
+do actor_effect("Layla", "bounce")
+Layla: Fiona... towel... don't look back. Instructions... received. Hehe.
+Player: (She sounds funny.)
+# she leans back out of view, then walks in from the right and crosses behind Layla, right out of the
+# screen on the left, like nothing happened, facing the way she walks
+do actor_lean("Fiona", 0.0, 0.3)
+do actor_stroll_to("Fiona", "-0.12,0.78", 3.6)
+# off-screen, she grabs the towel
+do wait(1.0)
+# step 2.342: back the other way at a steady pace, heading for the right edge - and 80% of the way
+# across she stops dead (actor_halt: her momentum tips her forward, then she settles)
+do actor_flip("Fiona", false)
+do actor_stroll_to("Fiona", "0.8,0.78", 3.0, -1.0, "linear")
+do actor_halt("Fiona")
+do actor_change("Fiona", "nude_thinking_suspicious")
+Player: (She seems... off.)
+# she turns and closes in on Layla from the right: the same size as Layla (1.4), so the same distance
+# from us, standing at her right with her head well above Layla's
+do actor_flip("Fiona", true)
+do actor_stroll_to("Fiona", "0.72,1.12", 2.2, 1.4)
+# step 2.347: right behind her
+do actor_change("Fiona", "nude")
+Player: Oh, I see. You're watching the video I posted last week.
+do actor_change("Fiona", "nude_explain")
+Player: That toy is actually bigger than it looks.
+Player: Was quite hard to take in.
+do actor_effect("Layla", "tremble")
+Layla: Fiona took toy. Inside.
+Layla: Inside her orifice.
+Layla: That. Happened. That was seen.
+Layla: Layla just saw that.
+do actor_change("Fiona", "nude_thinking_suspicious")
+Player: (Wow, something's really off.)
+Player: (Is she fucking with me?)
+do actor_change("Fiona", "nude_thinking")
+Player: (Or is she nervous after seeing my content...)
+Player: (Probably the latter. She doesn't seem like the type to mess with someone like this.)
+do actor_change("Fiona", "nude_explain")
+Player: Listen, I know this kind of content can be intimidating.
+Player: But you don't have to make stuff like this right away!
+Player: We could start small, you know?
+Player: Simple nudes. Titty-drop GIFs. Shit like that.
+do actor_change("Fiona", "nude_smile")
+Player: It'll be fine!
+Layla: Titty. Drop.
+do actor_effect("Layla", "bounce")
+Layla: Titty drop mentioned. Fiona said. Titty drop. Hehehehe.
+Layla: Too bad for Layla. Layla small-breasted.
+Layla: Layla cannot. Titty drop. No.
+do actor_change("Fiona", "nude_thinking")
+Player: (She must be worried about her curves.)
+Player: (Naturally... It happens to everyone.)
+do actor_change("Fiona", "nude_explain")
+Player: Layla, do me a favor and stand up?
+# step 2.348: Layla shoots up with a jolt, level with Fiona; the camera tilts up a little at the same
+# time to keep both faces in frame (they and the table move down, the room behind a little less)
+# step 2.371: the jolt snaps her out of the sway
+do actor_wobble("Layla", 0.0, 1.0, 0.15)
+do camera_tilt(0.09, 0.35, 0.6, false)
+do actor_rise("Layla", 0.12, 1.12)
+do actor_effect("Layla", "shock")
+Layla: Up! Your wish is my command!
+do actor_change("Fiona", "nude_smile")
+Player: (Heh. Who's the prankster now?)
+Player: You know, you're quite curvy too!
+# Fiona ducks down for a closer look...
+do actor_stroll_to("Fiona", "0.72,1.38", 0.45)
+You duck down for a closer look.
+do actor_change("Fiona", "nude_hands_back")
+Player: You've got an excellent hip-to-waist ratio...
+Player: Your legs are great...
+# ...and straightens back up
+do actor_stroll_to("Fiona", "0.72,1.12", 0.45)
+You straighten back up.
+do actor_change("Fiona", "nude_explain")
+Player: And honestly? Your boobs aren't even small!
+do actor_change("Fiona", "nude_shy")
+Player: Do you mind if I touch them to check something?
+Layla: Fiona. Wants to inspect. Layla boob.
+do actor_effect("Layla", "bounce")
+Layla: Layla blessed individual.
+Layla: Please. Inspect.
+do actor_change("Fiona", "nude_smile")
+Player: Okay!
+# the pose: a smash cut through a white flash. the camera has punched in closer and the room is blurred
+# more; the two of them are one picture (actor_image), popping in a little big and settling. manga focus
+# lines on the cut, fading after her first line; a pink glow pulsing at the edges for the whole shot.
+# step 2.410: things get touchy: the music stops dead with a record winding down, and her heartbeat takes over
+do SoundManager.cut_music()
+do SoundManager.play_sfx("vinyl_stop", 1.0, 0.0, "Main Music")
+do flash_in(0.06)
+do actor_hide("Fiona")
+do actor_hide("Layla")
+do hide_foreground(0.0)
+do camera_tilt(0.0, 0.01)
+do background_view(2.1, 0.6, 0.42, 30.0)
+do actor_image("Pair", "res://Backgrounds/CG/layla_fiona_inspection.png", "0.5", 1.1, 0.08)
+do focus_lines(1.0, 0.0)
+do heat_glow(0.8, 0.0)
+do actor_pop("Pair", 0.06, 0.25, false)
+# step 2.355: the squeak on the first touch too, as the pose appears
+do SoundManager.play_sfx("squeaky_toy")
+do SoundManager.play_looping_sfx("thudding_heartbeat", 0.4, 0.0)
+do flash_out(0.3)
+Player: Hah! Just as I thought! They're perky as hell!
+do focus_lines(0.0, 1.5)
+Player: Even perkier than mine. You'll have a great time making titty-drop GIFs with these.
+Layla: Huh? What!
+Layla: Wait! What's happening!!!!?
+Player: They're firm. All the guys and gals online would love them.
+Player: You should be proud! And confident!
+# step 2.409: as she decides it's a dream, the picture changes to the one focused on her face (same size and
+# place, so it reads as her expression changing); the jolt below brings the first one back
+do actor_image("Pair", "res://Backgrounds/CG/layla_fiona_inspection_dream.png", "0.5", 1.1, 0.08)
+Layla: Surely... I must be... dreaming.
+# step 2.348: a push-in on Layla's face in the picture (0.39 across, 0.3 down the picture)
+do actor_zoom("Pair", 1.8, 0.39, 0.3, 0.5)
+Layla: Yes, this is a dream. That must be it.
+Layla: Maybe I should just... sit back.
+Layla: Relax.
+Layla: Let... go.
+Layla: Yeah... that's it.
+Layla: I'm having the perfect dream right now.
+Layla: That's exactly what's happening.
+Player: (Is she for real?)
+Player: (I'm tryna hype her up, and she's choosing to keep up her bit?)
+Player: (Anyway...)
+You squeeze her left boob again.
+# straight back out, with a jolt - and a squeak (step 2.354)
+do SoundManager.play_sfx("squeaky_toy")
+do actor_image("Pair", "res://Backgrounds/CG/layla_fiona_inspection.png", "0.5", 1.1, 0.08)
+do actor_pop("Pair", 0.05, 0.2, false)
+do focus_lines(1.0, 0.0)
+Player: The symmetry is unparalleled too!
+do shake(0.35, 12.0)
+Layla: WHAT?!
+do focus_lines(0.0, 1.0)
+Having finished your inspection, you finally let go of her boobs.
+# step 2.349: a quick cut back to the two of them standing, Fiona right behind Layla, as before the pose
+do fade_to_black(0.25)
+do actor_hide("Pair")
+do heat_glow(0.0, 0.0)
+do background_view(1.7, 0.6, 0.45, 22.0)
+# step 2.350: Layla a step further left than before the pose, so when she turns they're face to face
+# step 2.409: turned away, flustered and blushing (not her funny face yet)
+do actor_stroll_in("Layla", "flustered", "0.3,1.12", 0.01, "left", true, 1.4)
+do actor_stroll_in("Fiona", "nude_smile", "0.72,1.12", 0.01, "right", true, 1.4, true)
+do show_foreground("table")
+do camera_tilt(0.09, 0.01)
+do fade_from_black(0.25)
+Player: There. I'd say you'll do great as a streamer.
+do actor_change("Fiona", "nude_explain")
+Player: There's nothing to worry about. You're practically built for the job.
+# she turns around, finally facing Fiona, face to face - and shakes
+do actor_flip("Layla", false)
+# step 2.409: and as she turns, the funny face with the red blush is back (no wobble this time)
+do actor_change("Layla", "short_circuit")
+do actor_effect("Layla", "tremble")
+Layla: You're... naked.
+Layla: Entirely... naked.
+do actor_change("Fiona", "nude_suspicious")
+Player: Huh?
+# she turns toward the door and holds there for a moment...
+do actor_flip("Layla", true)
+do wait(1.5)
+# ...then bolts - off the left edge at full speed
+do actor_stroll_to("Layla", "-0.35,1.12", 0.3, -1.0, "in")
+Layla bolts for the door like there's no tomorrow.
+# the front door slams (step 2.354)
+# step 2.410: her heartbeat goes with her
+do SoundManager.stop_looping_sfx("thudding_heartbeat", 0.3)
+do SoundManager.play_sfx("door_slam")
+do shake(0.3, 10.0)
+do actor_change("Fiona", "nude_thinking_suspicious")
+Player: (???)
+Player: (What just happened?)
+# the memory ends (step 2.410: and the silence after the record stop lets go)
+do SoundManager.fade_out_music(1.0)
+do fade_to_black(1.5)
+=> END

@@ -67,7 +67,7 @@ const BALLOON_PATH := "res://conversation/conversationballoon.tscn"
 @export var near_texture: Texture2D
 
 @export_group("Motion")
-## speeds in screen widths per second at cruising speed (step 2.230: half of 2.229's, Drishti's pick)
+## speeds in screen widths per second at cruising speed (step 2.230: half of 2.229's, the chosen value)
 @export var far_speed: float = 0.01
 @export var mid_speed: float = 0.08
 @export var near_speed: float = 0.65

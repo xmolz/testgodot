@@ -1,0 +1,110 @@
+{
+	"base_slot": "body",
+	"character": "jayce",
+	"size": [
+		846,
+		1519
+	],
+	"slots": [
+		{
+			"default": "hand_in_pocket",
+			"name": "body",
+			"order": 1,
+			"variants": {
+				"hand_in_pocket": {
+					"file": "jayce_body @hand_in_pocket.png",
+					"pos": [
+						0,
+						0
+					],
+					"size": [
+						846,
+						1519
+					]
+				}
+			}
+		},
+		{
+			"default": "smirk",
+			"name": "face",
+			"order": 2,
+			"variants": {
+				"creepy_smile": {
+					"file": "jayce_face @creepy_smile.png",
+					"pos": [
+						433,
+						190
+					],
+					"size": [
+						215,
+						196
+					]
+				},
+				"smirk": {
+					"file": "jayce_face @smirk.png",
+					"pos": [
+						427,
+						190
+					],
+					"size": [
+						221,
+						203
+					]
+				},
+				"smirk_talk": {
+					"file": "jayce_face @smirk_talk.png",
+					"pos": [
+						427,
+						190
+					],
+					"size": [
+						221,
+						203
+					]
+				},
+				"sorry_smile": {
+					"file": "jayce_face @sorry_smile.png",
+					"pos": [
+						427,
+						208
+					],
+					"size": [
+						221,
+						185
+					]
+				},
+				"sorry_talk": {
+					"file": "jayce_face @sorry_talk.png",
+					"pos": [
+						427,
+						208
+					],
+					"size": [
+						221,
+						185
+					]
+				},
+				"stunned": {
+					"file": "jayce_face @stunned.png",
+					"pos": [
+						416,
+						165
+					],
+					"size": [
+						216,
+						257
+					]
+				}
+			}
+		}
+	],
+	"source_canvas": [
+		1100,
+		1740
+	],
+	"source_origin": [
+		148,
+		221
+	],
+	"version": 1
+}

@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://djj7rm7dn8yut"]
 
-[ext_resource type="Texture2D" uid="uid://cfkvy6v701sh1" path="res://icon.svg" id="1_icon"]
+[ext_resource type="Texture2D" uid="uid://bvidrbb2j1qw0" path="res://Sprites/inventory_items/pink_protein_bar_icon.png" id="1_icon"]
 [ext_resource type="Script" uid="uid://by8o1t3tdwrep" path="res://data/ItemData.gd" id="2_script"]
 
 [resource]

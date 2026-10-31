@@ -31,7 +31,7 @@ can_pick_up = true
 
 [node name="Interactable" type="Area2D" parent="."]
 script = ExtResource("3_interactable")
-object_display_name = "Dumbphone Charger"
+object_display_name = "Pin-Style Charger"
 object_id = "dumbphone_charger"
 state_flag_id = "dumbphone_charger_taken"
 interaction_location = 1

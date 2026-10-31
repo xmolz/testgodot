@@ -1,0 +1,12 @@
+{
+	"annoyed": "crossed_arms side_eye",
+	"annoyed_talk": "crossed_arms side_eye_talk",
+	"base": "crossed_arms neutral",
+	"explain": "hand_up neutral",
+	"explain_talk": "hand_up neutral_talk",
+	"sus": "crossed_arms sus",
+	"sus_talk": "crossed_arms sus_talk",
+	"talk": "crossed_arms neutral_talk",
+	"think": "hand_on_chin side_eye",
+	"think_talk": "hand_on_chin side_eye_talk"
+}

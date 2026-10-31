@@ -1,165 +1,274 @@
 ~ start
+# step 2.294: once julian has given his lead, there's nothing more to talk about.
+if Flags.get_level_flag("julian_password_asked") == true:
+	Player: (I doubt there's much left for us to discuss with him.)
+	=> END
 do stage_party("Julian", "base")
+# step 2.396: Julian's theme, for as long as he's in the conversation (it fades when he turns away or the
+# talk ends)
+do SoundManager.play_music_track("julian_hub_theme", 2.0)
+# step 2.375: Layla's expressions (rig). around Julian she's polite but unsure of herself; she enters as
+# "base" and this lands while she fades in.
+do actor_change("Layla", "pensive")
+do actor_change("Julian", "talk")
 Julian: Yes?
 => hub
 
 ~ hub
+do actor_change("Layla", "pensive")
+do actor_change("Julian", "base")
+do actor_change("Fiona", "base")
 What do you want to say to him?
 - What were you talking about on the phone?
 	=> phone_talk
-- Ask him about the keypad password. [if (Flags.get_level_flag("lab_keypad_interacted") == true and Flags.get_level_flag("jayce_date_hint_given") == true) or Flags.get_level_flag("dev_julian_all_topics") == true]
+- Ask him about the keypad password. [Proceed] [if (Flags.get_level_flag("lab_keypad_interacted") == true and Flags.get_level_flag("jayce_date_hint_given") == true) or Flags.get_level_flag("dev_julian_all_topics") == true]
 	=> keypad_password
 - Nothing. Never mind. [Leave]
 	=> leave
 
 ~ phone_talk
+do actor_change("Fiona", "hands_back")
 Player: Saw you talking pretty intensely over the phone.
 Player: Didn't seem like a pleasant conversation.
+do actor_change("Julian", "talk")
 Julian: It wasn't.
 Julian: It also doesn't concern you.
+do actor_change("Julian", "explain_talk")
 Julian: No wonder you all are scrambling over in the Genomics department.
 Julian: No one there wants to work anymore.
 if Flags.get_level_flag("party_companion_staged") == true:
+	do actor_change("Layla", "angry_talk")
+	do actor_change("Julian", "explain")
 	Layla: Well, we're at work right now!
+	do actor_change("Layla", "angry")
+	do actor_change("Julian", "explain_talk")
 	Julian: Are you? I thought you were just visiting.
+	# step 2.376: troubled from her own "Umm..." line, held through Julian's
+	do actor_change("Layla", "troubled")
+	do actor_change("Julian", "explain")
 	Layla: Umm... yes, I am doing that...
 	Layla: But also...
+	do actor_change("Julian", "talk")
 	Julian: I'd love to know more, but I'm very busy right now.
-	# then I want this to go to: Anything else you want to waste my time with ? Andd we go back to the hub.
+do actor_change("Julian", "base")
+do actor_change("Fiona", "base")
 Player: Right. Carry on, then.
+do actor_change("Julian", "annoyed_talk")
+Julian: Anything else you want to waste my time with?
 => hub
 
 ~ keypad_password
-if Flags.get_level_flag("julian_password_asked") == true:
-	=> keypad_password_again
+do actor_change("Fiona", "hands_back")
 Player: Listen. Seems like someone changed our lab's password yesterday.
 Player: Any chance you know the updated one?
+do actor_change("Julian", "talk")
 Julian: Not really. I barely visit your lab anyway.
+do actor_change("Julian", "explain_talk")
 Julian: The last one I remember using was the date of independence.
+do actor_change("Julian", "explain")
+do actor_change("Fiona", "base")
 Player: Yeah. Unfortunately, that isn't working anymore.
+do actor_change("Julian", "explain_talk")
 Julian: Too bad. Why don't you call your professor and ask him?
+do actor_change("Julian", "base")
 if Flags.get_level_flag("party_companion_staged") == true:
+	do actor_change("Layla", "hesitant")
 	do actor_effect("Layla", "tremble")
 	Layla: Well, we... can't do that.
+	do actor_change("Layla", "troubled")
 Player: Yeah. It's complicated.
+do actor_change("Julian", "talk")
 Julian: Well, too bad, I guess.
 Julian: Anyway, I need to get back to work. So, will there be anything else?
+do actor_change("Julian", "base")
 if Flags.get_level_flag("party_companion_staged") == true:
+	do actor_change("Layla", "explaining_talk")
 	do actor_effect("Layla", "lean_in")
 	Layla: Actually... the janitor told us that all his previous passwords have been dates.
+	do actor_change("Layla", "asking")
 	Layla: Would you, by any chance, be aware of any such dates that the professor would've been fond of?
+	do actor_change("Layla", "attentive")
 else
 	# step 2.227: no solo playthrough (Layla is always with Fiona). fallback only, so the branch stays valid.
 	Player: This is a template line.
 if Flags.get_level_flag("party_companion_staged") == true:
 	do actor_effect("Layla", "upright")
+do actor_change("Julian", "think_talk")
 Julian: Hmmm. I'm not su-
 do actor_effect("Julian", "shock")
 Julian: Wait.
-do actor_focus("Julian", 1.5, 0.5)
+do actor_focus("Julian", 1.5, 0.5, 0.565)
 Julian: Come to think of it, he did mention some important event in genomics to me about a week ago, when I went to see him for counsel.
 Julian: Something about... Crick, Watson, and some other guy.
 Julian: How everyone credits them with discovering DNA, when what they actually figured out was its structure.
+do actor_change("Julian", "talk")
 Julian: The double helix. I hope you've heard of it.
 do actor_focus("Fiona", 1.5, 0.35)
+do actor_change("Julian", "base")
+do actor_change("Fiona", "suspicious")
 Player: (This cheeky bastard.)
+do actor_change("Fiona", "shrug")
 Player: Oh no! How could I have ever heard of that?
+do actor_change("Fiona", "explain")
 Player: It's not like I'm the youngest lead researcher under the most celebrated genomicist in the world.
+do actor_change("Julian", "talk")
 Julian: Right. Indeed, you're not. You're just the lead who seems to be locked out of her own lab.
+do actor_change("Julian", "base")
+do actor_change("Fiona", "shy")
 You almost crack a smile. Almost.
 Player: (Bastard.)
-do actor_focus("Julian", 1.5, 0.35)
+do actor_focus("Julian", 1.5, 0.35, 0.565)
+do actor_change("Julian", "explain_talk")
 Julian: Anyway. The molecule itself was found more than eighty years earlier, by some Swiss guy whose name I can't recall.
 do actor_unfocus_all(0.4)
 Julian: He seemed rather fond of that fact. I remember he rattled off some dates too.
+do actor_change("Julian", "talk")
 Julian: Well. That's all I can say. I don't remember what those dates were.
 do Flags.set_level_flag("julian_password_asked", true)
+do actor_change("Julian", "base")
 if Flags.get_level_flag("party_companion_staged") == true:
+	do actor_change("Layla", "excited")
 	do actor_effect("Layla", "jump")
 	Layla: Oh my god! This is great!
 	do party_huddle()
+	do actor_change("Layla", "explaining_talk")
 	Layla: Fiona, it's highly likely that one of those dates is the key to the lab!
 	Layla: All we need to do is find out what those dates were!
+	do actor_change("Layla", "happy_talk")
 	Layla: Lemme just quickly google this.
+	# step 2.404: her phone, held up beside her until she gives up on it
+	do actor_item("Layla", "phone")
+	do actor_change("Layla", "neutral")
 	She whips out her phone.
+	do actor_change("Layla", "whining")
 	do actor_effect("Layla", "tremble")
 	Layla: Oh no! My battery's run out.
+	do Flags.set_level_flag("layla_phone_dead_known", true)
+	do actor_change("Layla", "asking")
 	Layla: Fiona, could we use your phone to...
+	do actor_change("Layla", "troubled")
 	She stops mid-sentence, remembering your phone situation.
+	do actor_item_hide("Layla")
 	Player: Well, I guess you already know the answer to that question.
+	do actor_change("Layla", "hesitant")
 	Layla: Yeah. I remember you use a dumb phone with no internet.
+	do actor_change("Layla", "touched")
 	Player: It's great for focus.
+	# a doubtful side glance, mouth shut on purpose
+	do actor_change("Layla", "smug")
 	Layla: Sure...
+	do actor_change("Layla", "downcast")
 	Layla stares at the floor.
 	do party_unhuddle()
 else
 	# step 2.227: no solo playthrough (Layla is always with Fiona). fallback only, so the branch stays valid.
 	Player: This is a template line.
+# step 2.375: she looks up hopefully, then tenses at his question (same pose)
+do actor_change("Layla", "pensive")
+do actor_change("Fiona", "hands_back")
 Player: Anyway, do you think you could search for those dates quickly on your phone?
+do actor_change("Julian", "sus")
 Julian: ...
 do actor_effect("Julian", "lean_in")
+do actor_change("Layla", "surprised")
+do actor_change("Julian", "sus_talk")
 Julian: Perhaps. First, tell me. Why can't you really ask your professor?
 - That's none of your business. [matters]
 	do Flags.set_level_flag("julian_refused_help", true)
 	do Flags.add_game_counter("layla_closeness", 1)
 	do actor_effect("Julian", "upright")
+	do actor_change("Layla", "calm")
+	do actor_change("Julian", "base")
+	do actor_change("Fiona", "suspicious")
 	Player: That's none of your business.
+	do actor_change("Julian", "talk")
 	Julian: Sure thing.
 	Julian: Then my phone is none of yours.
 	Julian: Good luck finding your dates.
+	do actor_change("Julian", "base")
+	do actor_change("Fiona", "base")
 	Player: Yeah, well. Whatever.
 	=> post_confrontation_discussion
 - Tell him about Layla's deadline. [matters]
 	do Flags.set_level_flag("julian_nearly_told_truth", true)
 	do Flags.add_game_counter("layla_closeness", -1)
 	do actor_effect("Julian", "upright")
+	do actor_change("Julian", "base")
+	do actor_change("Fiona", "base")
 	Player: Fine. Layla has some sequencing—
 	if Flags.get_level_flag("party_companion_staged") == true:
+		do actor_change("Layla", "sad")
 		do actor_effect("Layla", "tremble")
 		Layla: Fiona...!
+		do actor_change("Layla", "downcast")
 	Julian: ...
+	do actor_change("Fiona", "hands_back_sad")
 	Player: Hmm. Sorry, I forgot. We can't tell you.
+	do actor_change("Julian", "talk")
 	Julian: Right. Never mind, in that case.
+	do actor_change("Julian", "annoyed_talk")
 	Julian: Well, I'm afraid my kindness and my time run out here.
 	Julian: All the best with... whatever it is you're trying to do.
+	do actor_change("Julian", "base")
+	do actor_change("Fiona", "base")
 	Player: Yeah, well. Whatever.
 	=> post_confrontation_discussion
 
-~ keypad_password_again
-# TEMPLATE — developer fills in. replaces the full scene once Julian has shared his lead.
-Player: About those dates...
-Julian: I've told you everything I remember. The rest is your problem.
-=> hub
-
 ~ post_confrontation_discussion
 # julian walks off for good; from here it's fiona and layla alone (huddle layout).
+do actor_change("Julian", "annoyed")
 do actor_effect("Julian", "turn_away")
 Julian turns back to his work without another word.
+do SoundManager.fade_out_music(2.0)
 do party_dismiss()
 if Flags.get_level_flag("party_companion_staged") == true:
 	if Flags.get_level_flag("julian_nearly_told_truth") == true:
-		# TEMPLATE — Fiona nearly told Julian about the sequencing.
+		do actor_change("Layla", "angry_talk")
 		Layla: Fiona! You almost told him!
+		do actor_change("Layla", "angry")
+		do actor_change("Fiona", "hands_back_sad")
 		Player: I know. It slipped out. My bad.
+		do actor_change("Layla", "sad")
 		do actor_effect("Layla", "tremble")
 		Layla: He's the last person who should know I haven't finished the sequencing...
 		Layla: Or maybe, second last. I don't know...
+		do actor_change("Layla", "downcast")
+		do actor_change("Fiona", "base")
 		Player: Relax. He didn't get anything out of us.
+		if Flags.get_level_flag("layla_work_reprimanded") == true:
+			# step 2.296: the second hurt (the reprimand came first). layla is locked distant for the chapter.
+			do Flags.lock_layla_distant()
+			# step 2.375: the dimmed look is her sad eyes ("downcast", already set), held through the close-up
+			do actor_focus("Layla", 1.6, 0.4)
+			Somehow, you notice a change in Layla.
+			The light behind her eyes seems dimmer. And she's looking at you differently.
+			do actor_unfocus_all(0.3)
 	else
-		# TEMPLATE — Fiona shut Julian down.
+		do actor_change("Layla", "talking")
 		Layla: Well... that went great.
-		Player: He was never going to help. Not for free.
-	# TEMPLATE — both routes: the next lead.
+		do actor_change("Layla", "neutral")
+		Player: Don't worry. He was never going to help us.
+		do actor_change("Fiona", "shy")
+		Player: I know him...
+	do actor_change("Layla", "asking")
 	Layla: So what now? My phone's dead, and yours...
+	do actor_change("Layla", "attentive")
+	do actor_change("Fiona", "base")
 	Player: Can't get on the internet. Yes.
-	Player: Hmmm. I'm not sure.
+	do actor_change("Fiona", "thinking")
+	Player: Hmm... I'm not sure.
 	Player: All I know is that we need to find out that date one way or another.
 	Player: The date DNA was discovered.
 	if Flags.get_game_counter("layla_closeness") < 0:
+		do actor_change("Layla", "sad")
 		Layla: ...Okay.
+		do actor_change("Layla", "downcast")
 	else
+		do actor_change("Layla", "excited")
 		do actor_effect("Layla", "jump")
 		Layla: Got it. Let's do what we can!
+		do actor_change("Layla", "eager")
+	do actor_change("Fiona", "base")
 	Player: Yep.
 else
 	# step 2.227: no solo playthrough (Layla is always with Fiona). fallback only, so the branch stays valid.
@@ -168,5 +277,7 @@ do Flags.set_level_flag("dna_dates_lookup_pending", true)
 => END
 
 ~ leave
+do actor_change("Julian", "base")
 Julian: Mm.
+do SoundManager.fade_out_music(2.0)
 => END

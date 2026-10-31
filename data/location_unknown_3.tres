@@ -1,0 +1,35 @@
+[gd_resource type="Resource" script_class="MemoryGroupData" format=3]
+
+[ext_resource type="Script" path="res://data/MemoryChapterData.gd" id="1_chapter_script"]
+[ext_resource type="Script" path="res://data/MemoryGroupData.gd" id="2_group_script"]
+
+[sub_resource type="Resource" id="Resource_c1"]
+script = ExtResource("1_chapter_script")
+chapter_name = "TEMPLATE - to be written"
+unlock_flag = "chapter_location_unknown_3"
+
+[sub_resource type="Resource" id="Resource_c2"]
+script = ExtResource("1_chapter_script")
+chapter_name = "TEMPLATE - to be written"
+unlock_flag = "chapter_location_unknown_3"
+
+[sub_resource type="Resource" id="Resource_c3"]
+script = ExtResource("1_chapter_script")
+chapter_name = "TEMPLATE - to be written"
+unlock_flag = "chapter_location_unknown_3"
+
+[sub_resource type="Resource" id="Resource_c4"]
+script = ExtResource("1_chapter_script")
+chapter_name = "TEMPLATE - to be written"
+unlock_flag = "chapter_location_unknown_3"
+
+[sub_resource type="Resource" id="Resource_c5"]
+script = ExtResource("1_chapter_script")
+chapter_name = "TEMPLATE - to be written"
+unlock_flag = "chapter_location_unknown_3"
+
+[resource]
+script = ExtResource("2_group_script")
+group_name = "TEMPLATE - to be written"
+unlock_flag = "chapter_location_unknown_3"
+chapters = Array[ExtResource("1_chapter_script")]([SubResource("Resource_c1"), SubResource("Resource_c2"), SubResource("Resource_c3"), SubResource("Resource_c4"), SubResource("Resource_c5")])

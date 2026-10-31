@@ -92,6 +92,19 @@ func execute(interactable_node: Interactable) -> bool:
 	
 	await player_tween.finished
 
+	# step 2.286: an attached companion (layla) steps through right after her, the same way. a detached
+	# one (waiting outside dr. greene's office) stays put. restored under the black below.
+	var companion_cache := {}
+	var companions := _attached_companion_bodies(interactable_node)
+	if not companions.is_empty():
+		var follow_tween = interactable_node.create_tween().set_parallel(true)
+		for body in companions:
+			companion_cache[body] = body.scale
+			follow_tween.tween_property(body, "global_position:x", interactable_node.global_position.x, STEP_TIME).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+			follow_tween.tween_property(body, "modulate:a", 0.0, STEP_TIME).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+			follow_tween.tween_property(body, "scale", body.scale * PLAYER_STEP_SCALE, STEP_TIME).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+		await follow_tween.finished
+
 	# 5. Global fade to black
 	if is_instance_valid(transition_layer):
 		await transition_layer.global_fade_to_black(FADE_OUT)
@@ -118,6 +131,10 @@ func execute(interactable_node: Interactable) -> bool:
 	leaf.modulate = cached_modulate
 	player.modulate.a = 1.0
 	player.scale = Vector2.ONE
+	for body in companion_cache:
+		if is_instance_valid(body):
+			body.modulate.a = 1.0
+			body.scale = companion_cache[body]
 
 	# 7. Black hold and fade in
 	await interactable_node.get_tree().create_timer(BLACK_HOLD).timeout
@@ -130,6 +147,18 @@ func execute(interactable_node: Interactable) -> bool:
 
 	player.set_can_move(true)
 	return true
+
+
+# step 2.286: the bodies of companions that are following the player right now.
+func _attached_companion_bodies(node: Node) -> Array:
+	var bodies: Array = []
+	for follower in node.get_tree().get_nodes_in_group("companion_followers"):
+		if follower.has_method("is_attached") and follower.is_attached():
+			var body = follower.get_parent()
+			if body is Node2D:
+				bodies.append(body)
+	return bodies
+
 
 func _sfx(sound_name: String):
 	if is_instance_valid(SoundManager) and SoundManager.sfx_library.has(sound_name):

@@ -6,5 +6,5 @@
 [resource]
 script = ExtResource("2_script")
 item_id = "steel_bobby_pins"
-display_name = "Steel Bobby Pins"
+display_name = "Bobby Pins"
 icon = ExtResource("1_icon")

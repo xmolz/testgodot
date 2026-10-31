@@ -49,7 +49,8 @@ func _ready():
 		Flags.level_state_manager_registered.connect(_on_level_state_manager_registered)
 
 func _process(delta: float):
-	if GameManager and GameManager.current_game_state == GameManager.GameState.IN_GAME_PLAY:
+	# step 2.422: play time runs in play only (not while the pause menu holds the tree)
+	if GameManager and GameManager.current_game_state == GameManager.GameState.IN_GAME_PLAY and not get_tree().paused:
 		_playtime_seconds += delta
 
 func _on_dialogue_started(_resource):
@@ -62,6 +63,8 @@ func _on_dialogue_ended(_resource):
 
 func reset_transient_state() -> void:
 	_active_dialogue_depth = 0
+	# step 2.422: a new game starts the clock over (a load sets the saved time back after this runs)
+	_playtime_seconds = 0.0
 
 func _on_level_state_manager_registered(lsm: LevelStateManager):
 	_level_state_ready_emitted = false
@@ -99,10 +102,16 @@ func stash_hub_state() -> void:
 			_stashed_player_flip = GameManager.player_node.sprite_2d.flip_h
 		_has_stashed_player = true
 
+	# step 2.394: the hub's items stay in the present; the memory starts with empty pockets
+	Inventory.enter_memory()
+
 # called by ChapterLaunchSequence right before the hub scene re-instances on the way back.
 # the restore itself rides the existing _pending_* pipe: when the hub's LevelStateManager
 # registers, _on_level_state_manager_registered applies flags and npc state.
 func queue_hub_state_restore() -> void:
+	# step 2.394: the hub's own items come back (the memory's items stay in the memory). before the hub
+	# instances, so its HUD shows them from its first frame.
+	Inventory.leave_memory()
 	if not has_stashed_hub_state:
 		return
 	_pending_level_id = HUB_LEVEL_ID
@@ -260,10 +269,14 @@ func save_to_slot(slot: String) -> bool:
 	var location_label = "Hospital Room"
 	var scene_path_for_save = "res://main.tscn"
 	var chapter_id = ""
+	# step 2.417: the chapter's .tres, so a load can re-arm ChapterLaunchSequence.active_chapter
+	var chapter_resource_path = ""
 	if not in_hub:
 		location_label = "Memory"
 		if ChapterLaunchSequence and not ChapterLaunchSequence.active_chapter_name.is_empty():
 			location_label = "Memory: " + ChapterLaunchSequence.active_chapter_name
+		if ChapterLaunchSequence and ChapterLaunchSequence.active_chapter:
+			chapter_resource_path = ChapterLaunchSequence.active_chapter.resource_path
 		var cs = get_tree().current_scene
 		if is_instance_valid(cs) and not cs.scene_file_path.is_empty():
 			scene_path_for_save = cs.scene_file_path
@@ -285,7 +298,9 @@ func save_to_slot(slot: String) -> bool:
 			"is_in_hub": in_hub,
 			"current_scene_path": scene_path_for_save,
 			"chapter_id_if_memory": chapter_id,
-			"is_replay": false,
+			"chapter_resource_path": chapter_resource_path,
+			# step 2.418: a save made during a replay (the canon flags ride in hub_stash.replay_canon_flags)
+			"is_replay": ChapterLaunchSequence.is_replay if (ChapterLaunchSequence and not in_hub) else false,
 			"player_x": 0.0,
 			"player_y": 0.0,
 			"player_flip_h": false
@@ -307,7 +322,11 @@ func save_to_slot(slot: String) -> bool:
 			"player_x": _stashed_player_pos.x,
 			"player_y": _stashed_player_pos.y,
 			"player_flip_h": _stashed_player_flip,
-			"has_player": _has_stashed_player
+			"has_player": _has_stashed_player,
+			# step 2.394: the hub's set-aside items (empty for a save made in the hub)
+			"inventory": Inventory.get_hub_stash(),
+			# step 2.418: the canon game flags a replay set aside ({} outside a replay)
+			"replay_canon_flags": ChapterLaunchSequence.get_replay_canon_flags() if (ChapterLaunchSequence and not in_hub) else {}
 		}
 	}
 	
@@ -413,6 +432,30 @@ func load_from_slot(slot: String) -> bool:
 		_stashed_player_pos = Vector2(float(hub_stash.get("player_x", 0.0)), float(hub_stash.get("player_y", 0.0)))
 		_stashed_player_flip = bool(hub_stash.get("player_flip_h", false))
 		_has_stashed_player = bool(hub_stash.get("has_player", false))
+		# step 2.394: the hub's items wait aside for the return trip. a memory save from before 2.394 has
+		# none on record (its one inventory mixed both), so that list stands in for the hub's: no hub item
+		# is lost, though that one save's chapter items will come back out with it.
+		var hub_inventory = hub_stash.get("inventory", null)
+		if hub_inventory is Dictionary and hub_inventory.has("item_ids"):
+			Inventory.set_hub_stash(hub_inventory)
+		else:
+			Inventory.set_hub_stash({"item_ids": data["inventory"]["item_ids"], "counts": data["inventory"].get("counts", {})})
+
+		# step 2.417: the chapter being resumed, so finishing it still sets its completion_flag (and later
+		# saves keep the "Memory: <name>" label). a save from before 2.417 has no path on record: the first
+		# chapter in the memory box whose level scene is the saved scene stands in.
+		var chapter_data: MemoryChapterData = _resolve_chapter_data(String(loc_data.get("chapter_resource_path", "")), scene_path)
+		if ChapterLaunchSequence:
+			ChapterLaunchSequence.active_chapter = chapter_data
+			ChapterLaunchSequence.active_chapter_name = chapter_data.chapter_name if chapter_data else ""
+		if chapter_data == null:
+			push_warning("SaveManager: no memory chapter matches %s; finishing it will unlock nothing." % scene_path)
+		# step 2.418: a save made during a replay resumes the replay, canon copy and all
+		var replay_canon = hub_stash.get("replay_canon_flags", {})
+		if not (replay_canon is Dictionary):
+			replay_canon = {}
+		if ChapterLaunchSequence:
+			ChapterLaunchSequence.set_replay_state(bool(loc_data.get("is_replay", false)), replay_canon)
 
 		var chapter_packed: PackedScene = load(scene_path)
 		if chapter_packed == null:
@@ -590,3 +633,27 @@ func _apply_npcs(dict: Dictionary):
 			npc.set("_was_in_main_room", is_currently_in_main)
 			if Flags.current_level_state_manager:
 				Flags.current_level_state_manager.set_level_flag("aida_in_main_room", is_currently_in_main)
+
+
+# step 2.417: the MemoryChapterData a memory save was made in: by its .tres path when the save has one,
+# otherwise the first chapter in the memory box whose level scene is the saved scene. null = no match.
+const CHAPTER_LOCATION_PATHS: Array[String] = [
+	"res://data/location_university.tres",
+	"res://data/location_apartment.tres",
+]
+
+func _resolve_chapter_data(chapter_resource_path: String, scene_path: String) -> MemoryChapterData:
+	if not chapter_resource_path.is_empty() and ResourceLoader.exists(chapter_resource_path):
+		var by_path = load(chapter_resource_path)
+		if by_path is MemoryChapterData:
+			return by_path
+	for location_path in CHAPTER_LOCATION_PATHS:
+		if not ResourceLoader.exists(location_path):
+			continue
+		var group = load(location_path)
+		if not (group is MemoryGroupData):
+			continue
+		for chapter in group.chapters:
+			if chapter is MemoryChapterData and not chapter.scene_path_to_load.is_empty() and chapter.scene_path_to_load == scene_path:
+				return chapter
+	return null
