@@ -78,3 +78,7 @@ enum ChapterType { STORY, SPICY }
 # "counter_layla_closeness" clears that one counter. the canon run's values come back untouched when the
 # replay ends (ChapterLaunchSequence.end_replay). empty = a replay keeps every flag as it finds it.
 @export var replay_reset_prefixes: Array[String] = []
+
+# step 2.429: while unlock_flag is false, the tile is left out of the memory box entirely (no padlock), and the
+# chapters after it move up. for chapters that only exist on some saves (Layla Runs Away needs kb_layla_came_up).
+@export var hidden_until_unlocked: bool = false

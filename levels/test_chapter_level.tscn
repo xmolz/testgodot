@@ -652,14 +652,13 @@ verb_id = "use"
 required_flag_id = "greene_office_entry_pending"
 actions_to_perform = Array[ExtResource("12_action")]([SubResource("Resource_greene_keycard_talk_action")])
 
-[sub_resource type="Resource" id="Resource_greene_office_tp"]
-script = ExtResource("43_swingdoor")
-target_marker_name = "GreeneOfficeSpawnPoint"
-
 [sub_resource type="Resource" id="Resource_greene_enter_layla_flag"]
 script = ExtResource("79_setlevelflag")
 flag_name = "layla_waiting_outside_office"
-flag_value = true
+
+[sub_resource type="Resource" id="Resource_greene_office_tp"]
+script = ExtResource("43_swingdoor")
+target_marker_name = "GreeneOfficeSpawnPoint"
 
 [sub_resource type="Resource" id="Resource_greene_office_use"]
 script = ExtResource("11_response")

@@ -40,9 +40,10 @@ uniform vec4 color_bottom : source_color = vec4(0.04, 0.05, 0.08, 1.0);
 uniform vec4 dot_color : source_color = vec4(0.0, 0.0, 0.0, 0.3);
 uniform float dot_size : hint_range(0.0, 1.0) = 0.2;
 uniform float spacing : hint_range(1.0, 100.0) = 25.0;
+uniform bool horizontal = false;
 
 void fragment() {
-	vec4 bg = mix(color_top, color_bottom, UV.y);
+	vec4 bg = mix(color_top, color_bottom, horizontal ? UV.x : UV.y);
 	vec2 grid = fract(UV * spacing);
 	float dist = distance(grid, vec2(0.5));
 	float dot = smoothstep(dot_size + 0.05, dot_size, dist);

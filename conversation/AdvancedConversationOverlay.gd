@@ -1650,7 +1650,8 @@ func _apply_speaker_stance(speaker: String) -> void:
 	var speaker_name: String = speaker.strip_edges()
 	if speaker_name.is_empty():
 		return   # narration: leave the stance alone
-	_set_companion_front(speaker_name == _party_companion_id)
+	# step 2.434: she steps forward for a line she shares ("Layla & Jayce") as for her own
+	_set_companion_front(_party_companion_id in RigTalkScript.speakers(speaker_name))
 
 
 func _set_companion_front(front: bool) -> void:

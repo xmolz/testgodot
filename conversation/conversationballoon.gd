@@ -78,6 +78,7 @@ var character_colors: Dictionary = {
 }
 
 const RigPortraitsScript = preload("res://conversation/rig_portraits.gd")   # step 2.405
+const RigTalkScript = preload("res://characters/rig/rig_talk.gd")   # step 2.434: speaker splitting
 # ********************[character portrait lookup table]
 var character_portraits: Dictionary = {
 	"aiDA": preload("res://Sprites/dialogue sprites/aida_dialogue_sprite.PNG"),
@@ -217,8 +218,13 @@ func _ready() -> void:
 	# step 2.405: inside a memory chapter, the rigged cast's portraits are cut from their own neutral
 	# pictures (conversation/rig_portraits.gd); in the hub the old ones stay, as Fiona dresses differently there
 	# step 2.423: an in-place chapter (Layla Runs Away) never sets in_memory; any active chapter counts
+	# step 2.435: and the old portraits are for the hub only: no hub LevelStateManager on screen (an editor
+	# run of a chapter scene, the car ride) also means the rigged ones
+	var hub_now: bool = is_instance_valid(Flags.current_level_state_manager) \
+			and Flags.current_level_state_manager.level_id == "hospital_hub"
 	var in_chapter: bool = (Inventory and Inventory.get("in_memory") == true) \
-			or (ChapterLaunchSequence and ChapterLaunchSequence.active_chapter != null)
+			or (ChapterLaunchSequence and ChapterLaunchSequence.active_chapter != null) \
+			or not hub_now
 	if in_chapter:
 		character_portraits.merge(RigPortraitsScript.all(), true)
 	if log_button:
@@ -557,6 +563,26 @@ func apply_dialogue_line() -> void:
 		else:
 			display_name = display_name.replace("Player", "???")
 
+	# step 2.434: two (or more) speakers at once, "Layla & Jayce": each name in its own colour on the neutral
+	#plate; both portraits side by side in the one frame; the pattern mixes their colours.
+	var co_speakers: PackedStringArray = RigTalkScript.speakers(lookup_key)
+	if co_speakers.size() > 1:
+		var coloured: PackedStringArray = PackedStringArray()
+		for name in co_speakers:
+			var shown: String = name
+			if name == "Player":
+				shown = "Fiona" if (GameManager and _player_name_known()) else "???"
+			var col: Color = character_colors.get(name, Color.WHITE)
+			coloured.append("[color=#%s]%s[/color]" % [col.to_html(false), shown])
+		display_name = " & ".join(coloured)
+		if not character_portraits.has(lookup_key) and character_portraits.has(co_speakers[0]) and character_portraits.has(co_speakers[1]):
+			character_portraits[lookup_key] = _combine_portraits(character_portraits[co_speakers[0]], character_portraits[co_speakers[1]])
+		if not character_bg_colors.has(lookup_key) and character_bg_colors.has(co_speakers[0]) and character_bg_colors.has(co_speakers[1]):
+			var first: Dictionary = character_bg_colors[co_speakers[0]]
+			var second: Dictionary = character_bg_colors[co_speakers[1]]
+			# step 2.436: "top" is the left side and "bot" the right once the pattern runs horizontally
+			character_bg_colors[lookup_key] = {"top": first["top"], "bot": second["top"], "dot": first["dot"]}
+
 	# handle nameplate visibility
 	if display_name.is_empty():
 		name_panel.visible = false
@@ -609,6 +635,8 @@ func apply_dialogue_line() -> void:
 		# *******************[swap shader colors]
 		var bg_pattern = portrait_container.get_node("BackgroundPattern")
 		if bg_pattern and bg_pattern.material is ShaderMaterial:
+			# step 2.436: a shared line splits the pattern left/right, under the two faces
+			bg_pattern.material.set_shader_parameter("horizontal", co_speakers.size() > 1)
 			if character_bg_colors.has(lookup_key):
 				var colors = character_bg_colors[lookup_key]
 				bg_pattern.material.set_shader_parameter("color_top", colors["top"])
@@ -1215,6 +1243,35 @@ func _exit_tree() -> void:
 	if GameManager:
 		Settings.is_skipping = false
 		DialogueHistory.save_seen_lines()
+
+
+## step 2.434: the two portraits in one frame: the centre half of each, side by side, with a thin dark seam.
+## built once per pair (the caller caches it under the compound name).
+func _combine_portraits(a: Texture2D, b: Texture2D) -> Texture2D:
+	var ia: Image = a.get_image()
+	var ib: Image = b.get_image()
+	if ia == null or ib == null:
+		return a
+	ia = ia.duplicate()
+	ib = ib.duplicate()
+	if ia.is_compressed():
+		ia.decompress()
+	if ib.is_compressed():
+		ib.decompress()
+	var w: int = ia.get_width()
+	var h: int = ia.get_height()
+	if w < 4 or h < 4:
+		return a
+	ib.resize(w, h, Image.INTERPOLATE_BILINEAR)
+	ia.convert(Image.FORMAT_RGBA8)
+	ib.convert(Image.FORMAT_RGBA8)
+	var out: Image = Image.create(w, h, false, Image.FORMAT_RGBA8)
+	var half: int = w / 2
+	var quarter: int = w / 4
+	out.blit_rect(ia, Rect2i(quarter, 0, half, h), Vector2i(0, 0))
+	out.blit_rect(ib, Rect2i(quarter, 0, w - half, h), Vector2i(half, 0))
+	out.fill_rect(Rect2i(half - 1, 0, 2, h), Color(0.0, 0.0, 0.0, 0.7))
+	return ImageTexture.create_from_image(out)
 
 
 ## step 2.420: Fiona's name shows on her lines once the insurance form has it (first_name_correct), or once

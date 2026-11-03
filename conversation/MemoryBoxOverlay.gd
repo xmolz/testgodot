@@ -8,6 +8,7 @@ extends CanvasLayer
 @onready var panel: Panel = $Panel
 
 const LocationRowScene = preload("res://ui/LocationRow.tscn")
+const LocationRowScript = preload("res://ui/LocationRow.gd")   # step 2.429: its static row rule
 const ADVANCED_OVERLAY_SCENE = preload("res://conversation/AdvancedConversationOverlay.tscn")
 const ChapterDetailDrawerScene = preload("res://ui/ChapterDetailDrawer.tscn")
 # step 2.421: the one-time "this is where this build ends" note (see _show_build_end_note_once)
@@ -67,6 +68,9 @@ func _populate_list():
 
 	# show every memory group (category
 	for memory_group in all_memory_data:
+		# step 2.429: a location with nothing to show yet gets no row
+		if not LocationRowScript.group_shows(memory_group):
+			continue
 		var new_row = LocationRowScene.instantiate()
 		location_list_container.add_child(new_row)
 		new_row.populate(memory_group)
@@ -165,6 +169,9 @@ func _style_scrollbar() -> void:
 		margin.add_child(location_list_container)
 		scroll.add_child(margin)
 		location_list_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+
+	# step 2.431: the list only ever scrolls up and down; sideways scrolling belongs to the rows
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 
 	var vbar: VScrollBar = scroll.get_v_scroll_bar()
 	vbar.custom_minimum_size.x = 36 if is_mobile else 20

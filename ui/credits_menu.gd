@@ -90,6 +90,9 @@ func _build_patrons_tab():
 	content_vbox.add_child(_make_label("Thank you to our Patreon supporters!", _role_font_size, Color(0.75, 0.75, 0.75, 1.0)))
 	content_vbox.add_child(_make_spacer())
 	for tier in CreditsData.PATRON_TIERS:
+		# step 2.425: a tier nobody is in yet stays off the screen
+		if tier["names"].is_empty():
+			continue
 		content_vbox.add_child(_make_label(tier["tier"], _role_font_size, ACCENT))
 		for patron_name in tier["names"]:
 			content_vbox.add_child(_make_label(patron_name, _name_font_size, Color.WHITE))

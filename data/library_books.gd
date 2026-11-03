@@ -47,7 +47,7 @@ Her beauty, talent and compassion survive through her work.""",
 
 However, that is a misconception. What Watson and Crick discovered, on [b]February 28, 1953[/b], was actually DNA's double-helix structure.""",
 			"""The actual discovery was made by the Swiss physiological chemist [b]Friedrich Miescher[/b] (born [b]August 13, 1844[/b]), when he first identified what he called "nuclein" inside the nuclei of human white blood cells. (The term "nuclein" was later changed to "nucleic acid," and eventually to "deoxyribonucleic acid," or "DNA.")""",
-			"""He then completed a letter to his uncle describing his discovery. The letter was dated [b]February 26, 1869[/b].
+			"""Right after making the discovery, he sent a letter to his uncle describing it. The letter was dated [b]February 26, 1869[/b].
 
 Miescher died on [b]August 26, 1895[/b], decades before anyone truly understood what he had found.""",
 		],

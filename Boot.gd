@@ -2,6 +2,8 @@
 extends Node
 
 const LOGO_SPLASH_SCENE_PATH = "res://ui/logo_splash.tscn"
+# step 2.425: the Ascended tier teaser shown between the logo and the loading screen
+const ASCENDED_TEASER_SCRIPT_PATH = "res://ui/ascended_teaser.gd"
 
 func _ready():
 	if not GameManager:
@@ -39,6 +41,13 @@ func start_logo_splash():
 func _on_logo_splash_finished():
 	print_rich("[color=yellow]Boot: Logo splash finished. Transitioning to loading screen...[/color]")
 	
+	# step 2.425: the Ascended teaser first; the loading screen follows when it's done
+	if ResourceLoader.exists(ASCENDED_TEASER_SCRIPT_PATH):
+		var teaser = load(ASCENDED_TEASER_SCRIPT_PATH).new()
+		teaser.name = "AscendedTeaser"
+		add_child(teaser)
+		await teaser.teaser_finished
+
 	# load and instance the loading screen
 	var loading_screen_scene = load("res://ui/loading_screen.tscn")
 	var loading_instance = loading_screen_scene.instantiate()

@@ -129,6 +129,8 @@ func _resize_portraits():
 # side by side under it, and thanks again at the bottom (the footer label, under Continue). the hidden
 # BodyLabel, CaptionLabel and PortraitRow stay hidden. text lives in the constants; rewrite freely.
 const UPDATE_THANKS_TOP := "THANK YOU, PATRONS"
+# step 2.427: tiers that go on the same line as the tier listed before them
+const UPDATE_SAME_LINE_TIERS := ["Early Supporters"]
 const UPDATE_THANKS_BOTTOM := "Thank you again. This update exists because of you."
 const UPDATE_COLUMNS := [
 	["IN THIS UPDATE", "1 new puzzle level\n2 love interests introduced: Layla and Julian\n1 spicy scene with a love interest (Layla)\nA save system"],
@@ -143,17 +145,46 @@ func _build_update_page(font) -> void:
 	title_label.text = UPDATE_THANKS_TOP
 	title_label.visible = true
 
-	var names: Array[String] = []
+	# step 2.425: one line per tier, highest first; a tier nobody is in yet is left out
+	var tier_lines: Array[String] = []
 	for tier in CreditsData.PATRON_TIERS:
+		var names: Array[String] = []
 		for n in tier.get("names", []):
 			names.append(String(n))
-	patron_label.text = "  ·  ".join(names)
+		if names.is_empty():
+			continue
+		var line: String = "[color=#d5f292]%s[/color]   %s" % [String(tier.get("tier", "")).to_upper(), "  ·  ".join(names)]
+		# step 2.427: some tiers share a line with the one above them
+		if String(tier.get("tier", "")) in UPDATE_SAME_LINE_TIERS and not tier_lines.is_empty():
+			tier_lines[tier_lines.size() - 1] += "        " + line
+		else:
+			tier_lines.append(line)
+	patron_label.text = ""
+	var patron_rich := RichTextLabel.new()
+	patron_rich.name = "PatronTiers"
+	patron_rich.bbcode_enabled = true
+	patron_rich.fit_content = true
+	patron_rich.scroll_active = false
+	patron_rich.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	patron_rich.text = "[center]" + "\n".join(tier_lines) + "[/center]"
+	patron_rich.add_theme_font_override("normal_font", font)
+	patron_rich.add_theme_color_override("default_color", Color(0.87, 0.87, 0.87))
+	patron_rich.add_theme_font_size_override("normal_font_size", 26 if mobile else 22)
+	patron_rich.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	patron_label.add_sibling(patron_rich)
+	patron_label.visible = false
 	patron_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	patron_label.add_theme_color_override("font_color", Color(0.87, 0.87, 0.87))
 	patron_label.add_theme_font_size_override("font_size", 28 if mobile else 24)
-	patron_label.visible = true
-	# the names sit right under the heading (the label used to live below the portrait row)
-	column.move_child(patron_label, title_label.get_index() + 1)
+	# the tier lines sit right under the heading (the old label used to live below the portrait row)
+	column.move_child(patron_rich, title_label.get_index() + 1)
+
+	# step 2.427: air between the patron lines and the timeline
+	var breather := Control.new()
+	breather.name = "UpdateBreather"
+	breather.custom_minimum_size.y = 56 if mobile else 44
+	column.add_child(breather)
+	column.move_child(breather, patron_rich.get_index() + 1)
 
 	var row := HBoxContainer.new()
 	row.name = "UpdateRow"
@@ -181,7 +212,7 @@ func _build_update_page(font) -> void:
 		box.add_child(body)
 		row.add_child(box)
 	column.add_child(row)
-	column.move_child(row, patron_label.get_index() + 1)
+	column.move_child(row, breather.get_index() + 1)
 
 	footer_label.text = UPDATE_THANKS_BOTTOM
 	footer_label.add_theme_color_override("font_color", Color(0.87, 0.87, 0.87))

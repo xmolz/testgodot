@@ -27,6 +27,7 @@ unlock_flag = "chapter_apartment_placeholder"
 script = ExtResource("2_group_script")
 group_name = "Fiona's Apartment"
 unlock_flag = "chapter_keeping_busy_done"
+hidden_until_a_chapter_opens = true
 group_thumbnail_path = "res://Backgrounds/Apartment/apartment_living_room.png"
 category = 1
 chapters = Array[ExtResource("1_chapter_script")]([ExtResource("3_chapter1"), ExtResource("4_chapter2"), SubResource("Resource_apt3"), SubResource("Resource_apt4"), SubResource("Resource_apt5")])

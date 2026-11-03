@@ -6,27 +6,54 @@ class_name CreditsData
 # or copy a whole {
 # in the order they appear here.
 
+# step 2.425: by tier, highest first, as the tiers promise ("listed above $5 supporters", "listed first").
+# Early Supporters hold the full $7 tier for good, so they stand with The Realest. "Supporters" are members
+# who have supported before and are on the free tier now. a tier with no names is skipped by the credits.
 const PATRON_TIERS := [
 	{
-		"tier": "Patrons",
+		"tier": "The Ascended",
+		"names": []
+	},
+	{
+		"tier": "The Realest",
 		"names": [
-			"Spencer S",
-			"Varithan",
+			"Sayian_Rini"
+		]
+	},
+	{
+		"tier": "Early Supporters",
+		"names": [
+			"Marvin",
+			"Simranjit Gill",
+			"Runejazz",
+			"happywheels12",
+			"dev_pec",
+			"Ishaan Kohli"
+		]
+	},
+	{
+		"tier": "Proper Enjoyers",
+		"names": [
 			"Sagei il Cercatore",
 			"Okami",
 			"Deadshy",
 			"gamejumper80",
-			"Zvulcaain",
-			"Sayian_Rini",
-			"Tahu LordofFlame",
 			"Bicho Rojo",
-			"TheBoss BS911",
-			"Marvin",
-			"Runejazz",
-			"happywheels12",
-			"Devashish Singh",
-			"Simranjit Gill",
-			"Ishaan Kohli"
+			"TheBoss BS911"
+		]
+	},
+	{
+		"tier": "Certified Supporters",
+		"names": [
+			"Tahu LordofFlame"
+		]
+	},
+	{
+		"tier": "Supporters",
+		"names": [
+			"Spencer S",
+			"Varithan",
+			"Zvulcaain"
 		]
 	},
 ]

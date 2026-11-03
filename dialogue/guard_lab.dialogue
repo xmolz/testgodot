@@ -479,7 +479,10 @@ if Flags.get_level_flag("party_companion_staged") == true and Flags.get_game_cou
 	do actor_change("Layla", "funny_face")
 	do actor_effect("Layla", "shock")
 	Layla: So...
-	Layla and Jayce: Perfect!!!
+	# step 2.434: both at once: a punch on each as the line lands, both names in their colours, both faces
+	do actor_pop("Layla", 0.12, 0.35, false)
+	do actor_pop("Jayce", 0.12, 0.35, false)
+	Layla & Jayce: Perfect!!!
 else
 	Jayce: ...Perfect.
 	if Flags.get_level_flag("party_companion_staged") == true:

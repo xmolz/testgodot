@@ -19,5 +19,9 @@ enum MemoryCategory { STORY, SPICY }
 # a dark "?" tile for its picture, and every chapter in it as locked. empty = always open.
 @export var unlock_flag: String = ""
 
+# step 2.429: the row isn't added to the memory box until at least one of its chapters is shown AND unlocked
+# (a hidden or padlocked chapter doesn't count). for a location whose only chapters may never exist on a save.
+@export var hidden_until_a_chapter_opens: bool = false
+
 # an array that holds all
 @export var chapters: Array[MemoryChapterData] = []

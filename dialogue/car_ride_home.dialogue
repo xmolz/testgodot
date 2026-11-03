@@ -364,11 +364,10 @@ if Flags.get_game_flag("kb_jayce_camera_seen") == true:
 		do car_layla("straight regular sad_brows small_open no_blush no_face")
 		Layla: But... that camera, though...
 	else
+		# step 2.428: the janitor was already brought up above; straight to the camera
 		do car_fiona("frown")
-		do car_layla("straight glance sad_brows small_open no_blush no_face")
-		Layla: About the janitor...
 		do car_layla("straight regular sad_brows small_open no_blush no_face")
-		Layla: That camera...
+		Layla: That camera, though...
 	do car_fiona("straight open_neutral")
 	do car_layla("straight regular sad_brows flat no_blush no_face")
 	Player: Oh, yeah. That was horrendous.

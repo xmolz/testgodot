@@ -50,6 +50,9 @@ func _ready():
 		_zone_shape.position.x += ZONE_OUTWARD_SHIFT * signf(arrow_direction)
 
 	if is_instance_valid(_sign_visual):
+		# step 2.430: the zone is the exit on every platform; the arrow sprite is hidden on mobile too
+		# (the bob below is left in place for a future affordance; it runs on a hidden sprite)
+		_sign_visual.visible = false
 		if OS.has_feature("mobile"):
 			if arrow_direction < 0:
 				_sign_visual.scale.x = -1.0

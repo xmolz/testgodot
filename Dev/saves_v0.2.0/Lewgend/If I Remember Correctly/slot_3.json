@@ -1,0 +1,210 @@
+{
+	"chapters": {
+		"in_progress": {
+
+		},
+		"records": {
+
+		}
+	},
+	"clues": {
+		"found": {
+
+		}
+	},
+	"conversation_events": {
+		"asked_sergey_duration": false,
+		"asked_sergey_identity": true,
+		"has_heard_fresh_start_line": true,
+		"show_special_response": false
+	},
+	"dialogue": {
+		"visited_responses": {
+			"res://dialogue/AIda.dialogue::112": true,
+			"res://dialogue/AIda.dialogue::117": true,
+			"res://dialogue/AIda.dialogue::122": true,
+			"res://dialogue/AIda.dialogue::18": true,
+			"res://dialogue/AIda.dialogue::25": true,
+			"res://dialogue/AIda.dialogue::30": true,
+			"res://dialogue/AIda.dialogue::40": true,
+			"res://dialogue/AIda.dialogue::68": true,
+			"res://dialogue/AIda.dialogue::83": true,
+			"res://dialogue/car_ride_home.dialogue::401": true,
+			"res://dialogue/chapter2_intro.dialogue::22": true,
+			"res://dialogue/guard_lab.dialogue::30": true,
+			"res://dialogue/guard_lab.dialogue::32": true,
+			"res://dialogue/intro.dialogue::25": true,
+			"res://dialogue/intro.dialogue::49": true,
+			"res://dialogue/intro.dialogue::64": true,
+			"res://dialogue/intro.dialogue::84": true,
+			"res://dialogue/julian_intro.dialogue::64": true,
+			"res://dialogue/layla_chapter_1.dialogue::362": true,
+			"res://dialogue/layla_chapter_1.dialogue::393": true,
+			"res://dialogue/layla_chapter_1.dialogue::468": true,
+			"res://dialogue/layla_chapter_1.dialogue::584": true,
+			"res://dialogue/layla_chapter_1.dialogue::684": true,
+			"res://dialogue/layla_chapter_1.dialogue::689": true,
+			"res://dialogue/sergey_dialogue_1.dialogue::101": true,
+			"res://dialogue/sergey_dialogue_1.dialogue::107": true,
+			"res://dialogue/sergey_dialogue_1.dialogue::124": true,
+			"res://dialogue/sergey_dialogue_1.dialogue::162": true,
+			"res://dialogue/sergey_dialogue_1.dialogue::176": true,
+			"res://dialogue/sergey_dialogue_1.dialogue::221": true,
+			"res://dialogue/sergey_dialogue_1.dialogue::246": true,
+			"res://dialogue/sergey_dialogue_1.dialogue::265": true,
+			"res://dialogue/sergey_dialogue_1.dialogue::290": true,
+			"res://dialogue/sergey_dialogue_1.dialogue::318": true,
+			"res://dialogue/sergey_dialogue_1.dialogue::337": true,
+			"res://dialogue/sergey_dialogue_1.dialogue::37": true,
+			"res://dialogue/sergey_dialogue_1.dialogue::42": true,
+			"res://dialogue/sergey_dialogue_1.dialogue::53": true,
+			"res://dialogue/sergey_dialogue_1.dialogue::612": true,
+			"res://dialogue/sergey_dialogue_1.dialogue::712": true,
+			"res://dialogue/sergey_dialogue_1.dialogue::758": true,
+			"res://dialogue/sergey_dialogue_1.dialogue::78": true,
+			"res://dialogue/sergey_dialogue_1.dialogue::795": true,
+			"res://dialogue/sergey_dialogue_1.dialogue::96": true
+		}
+	},
+	"difficulty": {
+		"assisted_mode": false
+	},
+	"flags": {
+		"game_flags": {
+			"build_end_note_seen": true,
+			"chapter_keeping_busy_done": true,
+			"chapter_played:chapter_university_1": true,
+			"counter_layla_closeness": 1.0,
+			"examine_hint_seen": true,
+			"fiona_name_known": true,
+			"kb_jayce_camera_seen": false,
+			"kb_jayce_flashed": false,
+			"kb_julian_nearly_told_truth": false,
+			"kb_julian_refused_help": false,
+			"kb_layla_gift_given": false,
+			"kb_layla_gift_loved": false,
+			"kb_layla_julian_intro_encouraged": true,
+			"kb_layla_said_fee": false,
+			"kb_layla_work_comforted": false,
+			"kb_layla_work_reprimanded": false,
+			"once_choice_hint_seen": true
+		}
+	},
+	"form": {
+		"locked_fields": {
+
+		}
+	},
+	"hub_level_flags": {
+		"aida_explanation_shown": true,
+		"aida_fixing_toilet": false,
+		"aida_in_main_room": true,
+		"conversation_player_on_left": true,
+		"has_spoken_to_aida": true,
+		"has_tried_memory_box": true,
+		"insurance_button_unlocked": true,
+		"learned_techpass_from_sergey": true,
+		"mcbucket_zanopram_used": true,
+		"memory_box_unlocked": true,
+		"toilet_clogged": false,
+		"toilet_has_paper": false,
+		"toilet_scold_seen": true,
+		"zanopram_taken": true
+	},
+	"hub_stash": {
+		"has_player": true,
+		"inventory": {
+			"counts": {
+
+			},
+			"item_ids": [
+				"techpass"
+			]
+		},
+		"npcs": {
+
+		},
+		"player_flip_h": true,
+		"player_x": -65.369140625,
+		"player_y": -548.229125976563,
+		"replay_canon_flags": {
+			"build_end_note_seen": true,
+			"chapter_keeping_busy_done": true,
+			"chapter_played:chapter_university_1": true,
+			"counter_layla_closeness": 2.0,
+			"fiona_name_known": true,
+			"kb_car_apologized": false,
+			"kb_car_broke_silence": false,
+			"kb_car_stood_by": false,
+			"kb_coffee_offered": true,
+			"kb_jayce_camera_seen": false,
+			"kb_jayce_flashed": false,
+			"kb_julian_nearly_told_truth": false,
+			"kb_julian_refused_help": false,
+			"kb_layla_came_up": true,
+			"kb_layla_gift_given": false,
+			"kb_layla_gift_loved": false,
+			"kb_layla_julian_intro_encouraged": false,
+			"kb_layla_said_fee": false,
+			"kb_layla_work_comforted": true,
+			"kb_layla_work_reprimanded": false,
+			"once_choice_hint_seen": true
+		}
+	},
+	"inventory": {
+		"counts": {
+
+		},
+		"item_ids": []
+	},
+	"location": {
+		"chapter_id_if_memory": "chapter_test",
+		"chapter_resource_path": "res://data/chapter_university_1.tres",
+		"current_scene_path": "res://levels/test_chapter_level.tscn",
+		"is_in_hub": false,
+		"is_replay": true,
+		"player_flip_h": false,
+		"player_x": 5781.65576171875,
+		"player_y": 3539.96899414063
+	},
+	"memory_level_flags": {
+		"aida_in_main_room": true,
+		"conversation_player_on_left": true,
+		"fiona_said_nine_half": true,
+		"jayce_date_hint_given": true,
+		"jayce_introduced": true,
+		"julian_intro_seen": true,
+		"lab_keypad_interacted": true,
+		"layla_julian_intro_encouraged": true,
+		"layla_post_wake_intro_seen": true,
+		"party_companion_staged": true
+	},
+	"meta": {
+		"chapters_completed": 0,
+		"clues_found": 0,
+		"clues_total_known": 0,
+		"form_fields_locked": 0,
+		"location_label": "Memory: Keeping Busy",
+		"playtime_seconds": 673.472374332929,
+		"timestamp_unix": 1793690957.743
+	},
+	"npcs": {
+		"Layla": {
+			"flip_h": false,
+			"pos_x": 5613.3271484375,
+			"pos_y": 3784.9755859375
+		}
+	},
+	"verbs": {
+		"unlocked_verb_ids": [
+			"examine",
+			"talk_to",
+			"pickup",
+			"use",
+			"give",
+			"flash",
+			"think"
+		]
+	},
+	"version": 2
+}

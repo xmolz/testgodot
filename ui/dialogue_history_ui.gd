@@ -8,6 +8,7 @@ extends CanvasLayer
 const PLAYER_NAMES = ["Player"]
 var custom_font = preload("res://Fonts/VarelaRound-Regular.ttf")
 const TextFx = preload("res://conversation/text_fx.gd")
+const RigPortraitsScript = preload("res://conversation/rig_portraits.gd")   # step 2.428
 
 var character_colors: Dictionary = {
 	"aiDA": Color("#20B2AA"),
@@ -21,7 +22,10 @@ var character_colors: Dictionary = {
 	"Dread": Color("#FF00FF"),
 	"Hope": Color("#FFC8E3"),
 	"The... Toilet?": Color("#DC143C"),
-	"Player": Color("#FFD65C")
+	"Player": Color("#FFD65C"),
+	# step 2.428: the same colours the balloon gives them (step 2.423)
+	"Julian": Color("#8FD8FF"),
+	"Jayce": Color("#B07CFF")
 }
 
 var character_portraits: Dictionary = {
@@ -41,6 +45,15 @@ func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	layer = 115
 	close_button.pressed.connect(_close_log)
+	# step 2.428: inside a chapter the rigged cast's portraits replace the old ones, as in the balloon
+	# step 2.435: same rule as the balloon: the old portraits are for the hub only
+	var hub_now: bool = is_instance_valid(Flags.current_level_state_manager) \
+			and Flags.current_level_state_manager.level_id == "hospital_hub"
+	var in_chapter: bool = (Inventory and Inventory.get("in_memory") == true) \
+			or (ChapterLaunchSequence and ChapterLaunchSequence.active_chapter != null) \
+			or not hub_now
+	if in_chapter:
+		character_portraits.merge(RigPortraitsScript.all(), true)
 	_populate_log()
 
 	# **********************[ui polish: title label]

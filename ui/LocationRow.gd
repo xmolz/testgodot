@@ -9,6 +9,10 @@ signal chapter_selected(data: MemoryChapterData)
 @onready var right_arrow_button: Button = $ChaptersAreaPanel/HBoxContainer/RightArrowButton
 
 const ChapterButtonScene = preload("res://ui/ChapterButton.tscn") 
+const ChapterButtonScript = preload("res://ui/ChapterButton.gd")   # step 2.429: its static lock check
+# step 2.431 / 2.435: the size of every location picture on mobile; the info panel is as wide as this plus its
+# margins. PC uses the scene's own sizes.
+const LOCATION_IMAGE_SIZE_MOBILE := Vector2(165, 118)
 
 @export var scroll_speed: float = 0.5
 var memory_data: MemoryGroupData
@@ -54,11 +58,37 @@ func populate(data: MemoryGroupData):
 		location_name_label.text = memory_data.group_name
 		if not memory_data.group_thumbnail_path.is_empty() and ResourceLoader.exists(memory_data.group_thumbnail_path):
 			location_image_rect.texture = load(memory_data.group_thumbnail_path)
+	# step 2.430 / 2.431 / 2.435: on mobile only, every location picture is the same box (width and height);
+	# the art fills it, keeping its aspect, cropped, and the name wraps inside the panel instead of widening
+	# it. PC keeps the sizes the scene defines.
+	if OS.has_feature("mobile"):
+		location_image_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		location_image_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+		location_image_rect.custom_minimum_size = LOCATION_IMAGE_SIZE_MOBILE
+		location_name_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		location_name_label.custom_minimum_size.x = 0
+		location_name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		$LocationInfoPanel.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+
+	# step 2.430: a locked row has nothing to scroll to: no touch drag, arrows off
+	var viewport_panel = $ChaptersAreaPanel/HBoxContainer/ViewportPanel
+	if viewport_panel is ScrollContainer:
+		# step 2.431: "show never" scrolls by drag and arrows without drawing a bar.
+		# step 2.432: never "disabled": that makes the container as wide as its content and the row overflows
+		# the box. a locked row stops the touch drag by ignoring input instead.
+		viewport_panel.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
+		viewport_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE if location_locked else Control.MOUSE_FILTER_PASS
+	if location_locked:
+		left_arrow_button.disabled = true
+		right_arrow_button.disabled = true
 
 	for child in chapter_list_container.get_children():
 		child.queue_free()
 
 	for chapter_data in memory_data.chapters:
+		# step 2.429: a chapter that is hidden while locked isn't a tile at all
+		if chapter_data == null or chapter_is_hidden(chapter_data):
+			continue
 		var new_chapter_button = ChapterButtonScene.instantiate()
 		chapter_list_container.add_child(new_chapter_button)
 		new_chapter_button.populate(chapter_data, location_locked)
@@ -80,6 +110,32 @@ func is_location_locked() -> bool:
 
 func _chapter_playable(chapter: MemoryChapterData) -> bool:
 	return not chapter.scene_path_to_load.strip_edges().is_empty() or not chapter.intro_overlay_path.strip_edges().is_empty()
+
+
+## step 2.429: a chapter marked hidden_until_unlocked, while its flag is still false (the dev "unlock all" counts
+## as unlocked for playable chapters, as everywhere else)
+static func chapter_is_hidden(chapter: MemoryChapterData) -> bool:
+	if chapter == null or not chapter.hidden_until_unlocked:
+		return false
+	return ChapterButtonScript.is_chapter_locked(chapter)
+
+
+## step 2.429: does this location get a row at all? a location marked hidden_until_a_chapter_opens needs one
+## chapter that is shown and unlocked (and its own unlock_flag, if any, must already be true).
+static func group_shows(data: MemoryGroupData) -> bool:
+	if data == null:
+		return false
+	if not data.hidden_until_a_chapter_opens:
+		return true
+	if not data.unlock_flag.is_empty() and not Flags.get_game_flag(data.unlock_flag) \
+			and not Engine.get_meta("dev_unlock_all_chapters", false):
+		return false
+	for chapter in data.chapters:
+		if chapter == null or chapter_is_hidden(chapter):
+			continue
+		if not ChapterButtonScript.is_chapter_locked(chapter):
+			return true
+	return false
 
 ## step 2.308: the first chapter in this row that is newly unlocked (glowing), or null
 func get_new_chapter_button() -> Control:
@@ -120,6 +176,11 @@ func _update_arrow_state():
 	var content_width = chapter_list_container.get_combined_minimum_size().x
 	var max_scroll = max(0.0, content_width - viewport_width)
 
+	# step 2.430: a locked row keeps both arrows off
+	if is_location_locked():
+		left_arrow_button.disabled = true
+		right_arrow_button.disabled = true
+		return
 	left_arrow_button.disabled = (viewport_panel.scroll_horizontal <= 0)
 	right_arrow_button.disabled = (viewport_panel.scroll_horizontal >= max_scroll)
 

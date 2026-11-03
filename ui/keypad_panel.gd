@@ -20,6 +20,7 @@ signal panel_closed
 
 const MAX_DIGITS := 8
 const SLOT_EMPTY_ALPHA := 0.4
+var _slot_box := Vector2(44, 64)   # step 2.431: set in _ready (bigger on mobile)
 
 const COLOR_BEZEL := Color(0.32, 0.33, 0.36, 1.0)
 const COLOR_BEZEL_EDGE := Color(0.18, 0.19, 0.21, 1.0)
@@ -110,11 +111,17 @@ func _ready() -> void:
 	var slot_size := 52
 	var engraved_size := 26
 	var back_size := 30
+	# step 2.431: a thumb-sized keypad on mobile
+	var key_box := Vector2(120, 92)
+	var slot_box := Vector2(44, 64)
 	if OS.has_feature("mobile"):
-		key_size = 46
-		slot_size = 58
-		engraved_size = 30
-		back_size = 34
+		key_size = 64
+		slot_size = 76
+		engraved_size = 36
+		back_size = 44
+		key_box = Vector2(176, 136)
+		slot_box = Vector2(60, 86)
+	_slot_box = slot_box
 
 	_style_device()
 
@@ -131,7 +138,7 @@ func _ready() -> void:
 	for key_label in KEY_LAYOUT:
 		var button := Button.new()
 		button.text = key_label
-		button.custom_minimum_size = Vector2(120, 92)
+		button.custom_minimum_size = key_box
 		_style_key(button, key_size, key_label)
 		button.pressed.connect(_on_key_pressed.bind(key_label))
 		_button_grid.add_child(button)
@@ -182,7 +189,7 @@ func _build_slots(font_size: int) -> void:
 	for i in MAX_DIGITS:
 		var slot := Label.new()
 		slot.text = "_"
-		slot.custom_minimum_size = Vector2(44, 64)
+		slot.custom_minimum_size = _slot_box
 		slot.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		slot.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		slot.add_theme_font_size_override("font_size", font_size)

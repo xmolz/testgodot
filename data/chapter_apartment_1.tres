@@ -6,7 +6,8 @@
 script = ExtResource("1_chapter")
 chapter_name = "Layla Runs Away"
 thumbnail_path = "res://Memory Box Chapter Images/Chapters/layla_runs_away_cover.png"
-unlock_flag = "chapter_keeping_busy_done"
+unlock_flag = "kb_layla_came_up"
+hidden_until_unlocked = true
 chapter_type = 1
 chapter_description = "I invite Layla up for a coffee, but her visit is short-lived... wonder what happened?"
 content_tags = Array[String](["Nudity", "Lesbian", "Teasing"])

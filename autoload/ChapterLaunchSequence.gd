@@ -798,6 +798,10 @@ func _flush_new_memory_note() -> void:
 	if not _new_memory_note:
 		return
 	_new_memory_note = false
+	# step 2.429: only when a newly unlocked tile is really on screen (a chapter the player's choices kept
+	# hidden surfaces nothing)
+	if not _memory_box_has_something_new():
+		return
 	var layer := CanvasLayer.new()
 	layer.layer = 95
 	get_tree().root.add_child(layer)
@@ -810,6 +814,32 @@ func _flush_new_memory_note() -> void:
 	cleanup.timeout.connect(layer.queue_free)
 	layer.add_child(cleanup)
 	cleanup.start()
+
+
+## step 2.429: is there a chapter in the memory box that is unlocked by a flag, shown, and not opened yet (the
+## same test as the NEW glow)? the locations come from SaveManager.CHAPTER_LOCATION_PATHS.
+func _memory_box_has_something_new() -> bool:
+	var row_script = load("res://ui/LocationRow.gd")
+	var button_script = load("res://ui/ChapterButton.gd")
+	if row_script == null or button_script == null:
+		return true
+	for location_path in SaveManager.CHAPTER_LOCATION_PATHS:
+		if not ResourceLoader.exists(location_path):
+			continue
+		var group = load(location_path)
+		if not (group is MemoryGroupData) or not row_script.group_shows(group):
+			continue
+		if not group.unlock_flag.is_empty() and not Flags.get_game_flag(group.unlock_flag) \
+				and not Engine.get_meta("dev_unlock_all_chapters", false):
+			continue
+		for chapter in group.chapters:
+			if chapter == null or chapter.unlock_flag.is_empty() or row_script.chapter_is_hidden(chapter):
+				continue
+			if button_script.is_chapter_locked(chapter):
+				continue
+			if not Flags.get_game_flag(button_script.seen_key(chapter)):
+				return true
+	return false
 
 
 ## step 2.308: memory box test (Main's LevelStateManager toggle): instead of playing the chapter, a quick

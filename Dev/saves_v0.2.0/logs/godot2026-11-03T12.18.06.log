@@ -1,0 +1,177 @@
+Godot Engine v4.6.1.stable.official.14d19694e - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 610.60 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce RTX 4050 Laptop GPU
+
+WARNING: res://Interactables/Game World/University/voss_portrait.tscn:5 - ext_resource, invalid UID: uid://cqe0voss_port_01 - using text path instead: res://Backgrounds/Kit/2F Elevator Hub/voss_portrait.png
+   at: load (scene/resources/resource_format_text.cpp:500)
+WARNING: res://Interactables/Game World/University/voss_portrait_closeup.tscn:3 - ext_resource, invalid UID: uid://cqe0voss_port_01 - using text path instead: res://Backgrounds/Kit/2F Elevator Hub/voss_portrait.png
+   at: load (scene/resources/resource_format_text.cpp:500)
+If I Remember Correctly — v0.2.0
+LevelStateManager for 'TestChapterLevel' is ready.
+player: outfit res://characters/outfits/fiona_casual.tres
+  Initial Flag 'aida_in_main_room': true
+TestChapterLevel: dev unlock of 'think' (direct run).
+LevelStateManager ('TestChapterLevel'): Level Flag Set -> conversation_player_on_left = true
+LevelStateManager ('TestChapterLevel'): Level Flag Set -> layla_player_on_left = true
+--- Interactable 'Layla': attempt_interaction --- Verb: 'talk_to', ItemID: ''
+Match found at index 1 for Verb 'talk_to' and Item ''.
+StartConversationAction: Launched conversation for 'Layla'.
+ERROR: The object does not have any 'meta' values with the key 'source_texture'.
+   at: get_meta (core/object/object.cpp:1155)
+   GDScript backtrace (most recent call first):
+       [0] _update_actor_skirts (res://conversation/AdvancedConversationOverlay.gd:1476)
+       [1] _process (res://conversation/AdvancedConversationOverlay.gd:224)
+ERROR: The object does not have any 'meta' values with the key 'source_texture'.
+   at: get_meta (core/object/object.cpp:1155)
+   GDScript backtrace (most recent call first):
+       [0] _update_actor_skirts (res://conversation/AdvancedConversationOverlay.gd:1476)
+       [1] _process (res://conversation/AdvancedConversationOverlay.gd:224)
+LevelStateManager ('TestChapterLevel'): Level Flag Set -> layla_post_wake_intro_seen = true
+--- Interactable 'Layla': attempt_interaction --- Verb: 'walk_to', ItemID: ''
+No interaction response and no fallback file found for verb 'walk_to'.
+[VRAM] ACO destroyed                                324.1 MB
+--- Interactable '2F Lobby': attempt_interaction --- Verb: 'walk_to', ItemID: ''
+Match found at index 0 for Verb 'walk_to' and Item ''.
+--- Interactable 'Lab Corridor': attempt_interaction --- Verb: 'walk_to', ItemID: ''
+Match found at index 0 for Verb 'walk_to' and Item ''.
+--- Interactable 'Fiona's Locker': attempt_interaction --- Verb: 'use', ItemID: ''
+Match found at index 0 for Verb 'use' and Item ''.
+OpenZoomViewAction: Opened zoom view for 'Fiona's Locker'.
+--- Interactable 'Cash': attempt_interaction --- Verb: 'pickup', ItemID: ''
+Match found at index 1 for Verb 'pickup' and Item ''.
+AddItemAction: Requested to add item 'cash' to inventory.
+LevelStateManager ('TestChapterLevel'): Level Flag Set -> locker_cash_taken = true
+AddItemAction: Auto-set level flag 'locker_cash_taken' to true.
+DestroyAction: Destroying parent TextureButton wrapper for 'Cash'.
+--- Interactable 'Rusty Bobby Pins': attempt_interaction --- Verb: 'pickup', ItemID: ''
+Match found at index 1 for Verb 'pickup' and Item ''.
+AddItemAction: Requested to add item 'bobby_pins' to inventory.
+LevelStateManager ('TestChapterLevel'): Level Flag Set -> bobby_pins_taken = true
+AddItemAction: Auto-set level flag 'bobby_pins_taken' to true.
+DestroyAction: Destroying parent TextureButton wrapper for 'Rusty Bobby Pins'.
+--- Interactable 'Pin-Style Charger': attempt_interaction --- Verb: 'pickup', ItemID: ''
+Match found at index 1 for Verb 'pickup' and Item ''.
+AddItemAction: Requested to add item 'dumbphone_charger' to inventory.
+LevelStateManager ('TestChapterLevel'): Level Flag Set -> dumbphone_charger_taken = true
+AddItemAction: Auto-set level flag 'dumbphone_charger_taken' to true.
+DestroyAction: Destroying parent TextureButton wrapper for 'Pin-Style Charger'.
+LevelStateManager ('TestChapterLevel'): Level Flag Set -> conversation_player_on_left = false
+--- Interactable 'Keypad': attempt_interaction --- Verb: 'use', ItemID: ''
+Match found at index 1 for Verb 'use' and Item ''.
+StartConversationAction: Launched conversation for 'Keypad'.
+LevelStateManager ('TestChapterLevel'): Level Flag Set -> party_companion_staged = true
+ERROR: The object does not have any 'meta' values with the key 'source_texture'.
+   at: get_meta (core/object/object.cpp:1155)
+   GDScript backtrace (most recent call first):
+       [0] _update_actor_skirts (res://conversation/AdvancedConversationOverlay.gd:1476)
+       [1] _process (res://conversation/AdvancedConversationOverlay.gd:224)
+ERROR: The object does not have any 'meta' values with the key 'source_texture'.
+   at: get_meta (core/object/object.cpp:1155)
+   GDScript backtrace (most recent call first):
+       [0] _update_actor_skirts (res://conversation/AdvancedConversationOverlay.gd:1476)
+       [1] _process (res://conversation/AdvancedConversationOverlay.gd:224)
+LevelStateManager ('TestChapterLevel'): Level Flag Set -> lab_keypad_interacted = true
+[VRAM] ACO destroyed                                329.4 MB  (+5.4)
+LevelStateManager ('TestChapterLevel'): Level Flag Set -> conversation_player_on_left = true
+--- Interactable 'The Janitor': attempt_interaction --- Verb: 'talk_to', ItemID: ''
+Match found at index 1 for Verb 'talk_to' and Item ''.
+StartConversationAction: Launched conversation for 'The Janitor'.
+ERROR: The object does not have any 'meta' values with the key 'source_texture'.
+   at: get_meta (core/object/object.cpp:1155)
+   GDScript backtrace (most recent call first):
+       [0] _update_actor_skirts (res://conversation/AdvancedConversationOverlay.gd:1476)
+       [1] _process (res://conversation/AdvancedConversationOverlay.gd:224)
+ERROR: The object does not have any 'meta' values with the key 'source_texture'.
+   at: get_meta (core/object/object.cpp:1155)
+   GDScript backtrace (most recent call first):
+       [0] _update_actor_skirts (res://conversation/AdvancedConversationOverlay.gd:1476)
+       [1] _process (res://conversation/AdvancedConversationOverlay.gd:224)
+ERROR: The object does not have any 'meta' values with the key 'source_texture'.
+   at: get_meta (core/object/object.cpp:1155)
+   GDScript backtrace (most recent call first):
+       [0] _update_actor_skirts (res://conversation/AdvancedConversationOverlay.gd:1476)
+       [1] _process (res://conversation/AdvancedConversationOverlay.gd:224)
+LevelStateManager ('TestChapterLevel'): Level Flag Set -> jayce_introduced = true
+LevelStateManager ('TestChapterLevel'): Level Flag Set -> jayce_date_hint_given = true
+LevelStateManager ('TestChapterLevel'): Level Flag Set -> fiona_said_nine_half = true
+LevelStateManager ('TestChapterLevel'): Level Flag Set -> conversation_player_on_left = false
+LevelStateManager ('TestChapterLevel'): Level Flag Set -> layla_player_on_left = false
+--- Interactable 'Layla': attempt_interaction --- Verb: 'walk_to', ItemID: ''
+No interaction response and no fallback file found for verb 'walk_to'.
+[VRAM] ACO destroyed                                336.0 MB  (+6.5)
+--- Interactable 'Keypad': attempt_interaction --- Verb: 'use', ItemID: ''
+Match found at index 0 for Verb 'use' and Item ''.
+OpenKeypadPanelAction: opened keypad panel.
+LevelStateManager ('TestChapterLevel'): Level Flag Set -> lab_door_unlocked = true
+ERROR: The object does not have any 'meta' values with the key 'source_texture'.
+   at: get_meta (core/object/object.cpp:1155)
+   GDScript backtrace (most recent call first):
+       [0] _update_actor_skirts (res://conversation/AdvancedConversationOverlay.gd:1476)
+       [1] _process (res://conversation/AdvancedConversationOverlay.gd:224)
+ERROR: The object does not have any 'meta' values with the key 'source_texture'.
+   at: get_meta (core/object/object.cpp:1155)
+   GDScript backtrace (most recent call first):
+       [0] _update_actor_skirts (res://conversation/AdvancedConversationOverlay.gd:1476)
+       [1] _process (res://conversation/AdvancedConversationOverlay.gd:224)
+LevelStateManager ('TestChapterLevel'): Level Flag Set -> lab_entry_ready = true
+[VRAM] ACO destroyed                                329.9 MB  (-6.0)
+[VRAM] handoff: start (level loaded)                294.7 MB  (-35.2)
+TestChapterLevel: Unregistered its LevelStateManager.
+[VRAM] handoff: level freed                          98.7 MB  (-196.0)
+ERROR: Can't add child 'ExampleBalloon' to 'BookReader', already has a parent 'TransitionLayer'.
+   at: add_child (scene/main/node.cpp:1705)
+   GDScript backtrace (most recent call first):
+       [0] _start_balloon (res://addons/dialogue_manager/dialogue_manager.gd:552)
+[VRAM] handoff: next scene in                       279.6 MB  (+180.9)
+[VRAM] return: start (in chapter)                   279.6 MB  (+0.0)
+[VRAM] portal_hold_established                      308.0 MB  (+28.4)
+ERROR: Can't add child 'ExampleBalloon' to 'CarRideHome', already has a parent 'TransitionLayer'.
+   at: add_child (scene/main/node.cpp:1705)
+   GDScript backtrace (most recent call first):
+       [0] _start_balloon (res://addons/dialogue_manager/dialogue_manager.gd:552)
+WARNING: res://characters/mcbucket.tscn:84 - ext_resource, invalid UID: uid://gp2e3ibp4t5g - using text path instead: res://Animations/Mcbucket/Sleeping/Mcbucket_sleeping_0007.png
+   at: load (scene/resources/resource_format_text.cpp:500)
+[VRAM] return: hub loaded, before swap              548.9 MB  (+240.9)
+ERROR: There is no animation with name ''.
+   at: set_animation (scene/2d/animated_sprite_2d.cpp:565)
+   GDScript backtrace (most recent call first):
+       [0] return_to_hub (res://autoload/ChapterLaunchSequence.gd:539)
+ERROR: There is no animation with name ''.
+   at: set_animation (scene/2d/animated_sprite_2d.cpp:565)
+   GDScript backtrace (most recent call first):
+       [0] return_to_hub (res://autoload/ChapterLaunchSequence.gd:539)
+Interactable 'Old Man' (ID: mcbucket): Category CHARACTER but no 'character_conversation_overlay_scene'!
+player: outfit res://characters/outfits/fiona_gown.tres
+LevelStateManager for 'LevelStateManager' is ready.
+GameUI: hud visible=true (state=5 interaction=0 dialogue=false)
+  Initial Flag 'aida_in_main_room': true
+Toilet State: NORMAL
+GameUI: hud visible=true (state=5 interaction=0 dialogue=false)
+[VRAM] return: after swap to hub                    398.0 MB  (-150.8)
+SaveManager Diagnostic: HUB SURVIVES? false
+GameUI: hud visible=true (state=5 interaction=0 dialogue=false)
+GameUI: hud visible=false (state=5 interaction=1 dialogue=false)
+[VRAM] return: memory box reopened                  412.4 MB  (+14.4)
+[VRAM] portal_exit end                              401.9 MB  (-10.5)
+[VRAM] return: done                                 401.9 MB  (+0.0)
+[VRAM] ======== session report (peak 548.9 MB) ========
+[VRAM] ACO destroyed                                324.1 MB
+[VRAM] ACO destroyed                                329.4 MB  (+5.4)
+[VRAM] ACO destroyed                                336.0 MB  (+6.5)
+[VRAM] ACO destroyed                                329.9 MB  (-6.0)
+[VRAM] handoff: start (level loaded)                294.7 MB  (-35.2)
+[VRAM] handoff: level freed                          98.7 MB  (-196.0)
+[VRAM] handoff: next scene in                       279.6 MB  (+180.9)
+[VRAM] return: start (in chapter)                   279.6 MB  (+0.0)
+[VRAM] portal_hold_established                      308.0 MB  (+28.4)
+[VRAM] return: hub loaded, before swap              548.9 MB  (+240.9)
+[VRAM] return: after swap to hub                    398.0 MB  (-150.8)
+[VRAM] return: memory box reopened                  412.4 MB  (+14.4)
+[VRAM] portal_exit end                              401.9 MB  (-10.5)
+[VRAM] return: done                                 401.9 MB  (+0.0)
+[VRAM] ======== end report ========
+GameUI: hud visible=true (state=5 interaction=0 dialogue=false)
+Back button pressed, closing overlay.
+[VRAM] memory box closed                            403.3 MB  (+1.4)
+GameUI: hud visible=false (state=6 interaction=0 dialogue=false)
+LevelStateManager: Unregistered its LevelStateManager.
+MainMenu: Quit Button Pressed

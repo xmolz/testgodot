@@ -43,6 +43,7 @@ const REPLAY_BUTTON_TEXT := "Replay"
 const REPLAY_NOTE_TEXT := "You've already relived this one. Playing it again won't change what happened, or what comes after."
 var _begin_text_default: String = ""
 var _replay_note: Label = null
+var _button_row: HBoxContainer = null   # step 2.430: Back + Begin on mobile; null on desktop
 var _is_mobile: bool = false
 
 # step 2.314: what each info row means, shown in a small callout when its label is clicked or tapped
@@ -104,11 +105,15 @@ func _setup_desktop_layout():
 	await get_tree().process_frame
 	drawer_panel.position.x = get_viewport_rect().size.x
 
+# step 2.430: on a phone the sheet rises to this much of the screen; the rest of the box shows above it
+const MOBILE_SHEET_RATIO := 0.95
+const BACK_BUTTON_TEXT := "Back"
+
 func _setup_mobile_layout():
 	drawer_panel.anchors_preset = Control.PRESET_BOTTOM_WIDE
 	drawer_panel.anchor_left = 0.0
 	drawer_panel.anchor_right = 1.0
-	drawer_panel.anchor_top = 1.0 - 0.60
+	drawer_panel.anchor_top = 1.0 - MOBILE_SHEET_RATIO
 	drawer_panel.anchor_bottom = 1.0
 	drawer_panel.offset_left = 0
 	drawer_panel.offset_right = 0
@@ -122,10 +127,54 @@ func _setup_mobile_layout():
 	description_label.add_theme_font_size_override("font_size", 32)
 	begin_button.add_theme_font_size_override("font_size", 44)
 	begin_button.custom_minimum_size.y = 100
+
+	# step 2.430: Back beside Begin. Back is the quiet one (dark, outlined, grey, narrower) on the left;
+	# Begin keeps its look on the right, where the thumb ends. the row takes Begin's place in the column.
+	var vbox: Node = begin_button.get_parent()
+	var slot: int = begin_button.get_index()
+	_button_row = HBoxContainer.new()
+	_button_row.name = "ButtonRow"
+	_button_row.add_theme_constant_override("separation", 20)
+	vbox.add_child(_button_row)
+	vbox.move_child(_button_row, slot)
+	vbox.remove_child(begin_button)
+	var back := Button.new()
+	back.name = "BackButton"
+	back.text = BACK_BUTTON_TEXT
+	back.custom_minimum_size.y = 100
+	back.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	back.size_flags_stretch_ratio = 1.0
+	back.focus_mode = Control.FOCUS_NONE
+	back.add_theme_font_size_override("font_size", 40)
+	back.add_theme_color_override("font_color", Color(0.72, 0.75, 0.82))
+	back.add_theme_color_override("font_pressed_color", Color(0.9, 0.92, 0.96))
+	back.add_theme_color_override("font_hover_color", Color(0.72, 0.75, 0.82))
+	var back_style := StyleBoxFlat.new()
+	back_style.bg_color = Color(0.09, 0.10, 0.15, 0.95)
+	back_style.set_border_width_all(2)
+	back_style.border_color = Color(0.55, 0.6, 0.7, 0.55)
+	back_style.set_corner_radius_all(6)
+	var back_pressed := back_style.duplicate()
+	back_pressed.bg_color = Color(0.16, 0.18, 0.25, 1.0)
+	back.add_theme_stylebox_override("normal", back_style)
+	back.add_theme_stylebox_override("hover", back_style)
+	back.add_theme_stylebox_override("pressed", back_pressed)
+	back.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+	back.pressed.connect(_on_back_pressed)
+	_button_row.add_child(back)
+	_button_row.add_child(begin_button)
+	begin_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	begin_button.size_flags_stretch_ratio = 1.5
 	
 	# Position fully off-screen below initially
 	await get_tree().process_frame
 	drawer_panel.position.y = get_viewport_rect().size.y
+
+
+func _on_back_pressed() -> void:
+	if SoundManager and SoundManager.has_method("play_sfx"):
+		SoundManager.play_sfx("ui_click")
+	close()
 
 # step 2.316: the text comes first. everything else in the column (description, info rows, begin button) is
 # measured, and the image gets the height that's left - never more than the art's own shape at this width,
@@ -353,9 +402,11 @@ func _set_replay_note(show: bool) -> void:
 		_replay_note.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		_replay_note.add_theme_color_override("font_color", Color(0.75, 0.78, 0.85))
 		_replay_note.add_theme_font_size_override("font_size", 22 if _is_mobile else 16)
-		var vbox: Node = begin_button.get_parent()
+		# step 2.430: on mobile the button sits in a row; the note goes above the row, not inside it
+		var anchor: Control = _button_row if is_instance_valid(_button_row) else begin_button
+		var vbox: Node = anchor.get_parent()
 		vbox.add_child(_replay_note)
-		vbox.move_child(_replay_note, begin_button.get_index())
+		vbox.move_child(_replay_note, anchor.get_index())
 	_replay_note.visible = true
 
 
@@ -613,7 +664,7 @@ func open():
 	# Slide in panel
 	var viewport_size = get_viewport_rect().size
 	if _is_mobile:
-		var target_y = viewport_size.y * 0.40
+		var target_y = viewport_size.y * (1.0 - MOBILE_SHEET_RATIO)
 		_tween.tween_property(drawer_panel, "position:y", target_y, 0.45).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
 	else:
 		var target_x = viewport_size.x * (1.0 - _desktop_drawer_ratio())
